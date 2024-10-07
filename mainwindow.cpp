@@ -265,7 +265,6 @@ void MainWindow::initUiMainVLayout()
 	switchStandState = MANUAL_STAND;
 }
 
-
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
 	int newWidth = geometry().width();
@@ -302,7 +301,6 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 	selectFileButton->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_FILE_SEL_BUTTON));
 	selectFileButton->setFixedHeight(MIN_FILE_SEL_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_FILE_SEL_BUTTON));
-
 }
 
 void MainWindow::switchStandButtons()
@@ -312,22 +310,28 @@ void MainWindow::switchStandButtons()
 		outTestManualStandButton->hide();
 		inTestManualStandButton->hide();
 
-		outManualTestManualStandButton->show();
-		inManualTestManualStandButton->show();
-		outAutoTestManualStandButton->show();
-		inAutoTestManualStandButton->show();
-		fullTestManualStandButton->show();
+		outManualTestAutoStandButton->show();
+		inManualTestAutoStandButton->show();
+		outAutoTestAutoStandButton->show();
+		inAutoTestAutoStandButton->show();
+		fullTestAutoStandButton->show();
+
+		autoStandButton->setStyleSheet(lightStyles.activeButton);
+		manualStandButton->setStyleSheet(lightStyles.standartButton);
 	}
 	else if (switchStandState == MANUAL_STAND)
 	{
 		outTestManualStandButton->show();
 		inTestManualStandButton->show();
 
-		outManualTestManualStandButton->hide();
-		inManualTestManualStandButton->hide();
-		outAutoTestManualStandButton->hide();
-		inAutoTestManualStandButton->hide();
-		fullTestManualStandButton->hide();
+		outManualTestAutoStandButton->hide();
+		inManualTestAutoStandButton->hide();
+		outAutoTestAutoStandButton->hide();
+		inAutoTestAutoStandButton->hide();
+		fullTestAutoStandButton->hide();
+
+		autoStandButton->setStyleSheet(lightStyles.standartButton);
+		manualStandButton->setStyleSheet(lightStyles.activeButton);
 	}
 }
 
