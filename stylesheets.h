@@ -5,9 +5,9 @@
 
 struct Styles
 {
-	QString standTypeButtons;
 	QString screenColor;
 	QString standartButton;
+	QString activeButton;
 };
 
 extern Styles darkStyles;
