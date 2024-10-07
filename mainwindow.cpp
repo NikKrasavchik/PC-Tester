@@ -67,7 +67,7 @@ void MainWindow::initUiTopHLayout()
 	manualStandButton->setObjectName("manualStandButton");
 	manualStandButton->setText("Manual");
 	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	manualStandButton->setStyleSheet(lightStyles.standartButton);
+	manualStandButton->setStyleSheet(lightStyles.activeButton);
 	switchHLayout->addWidget(manualStandButton);
 	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
 
@@ -206,12 +206,14 @@ void MainWindow::initUiMainVLayout()
 	outTestAutoStandButton = new QPushButton(mainLayoutWidget);
 	outTestAutoStandButton->setObjectName("outTestAutoStandButton");
 	outTestAutoStandButton->setText("Out");
+	outTestAutoStandButton->setStyleSheet(lolol.standartButton);
 	mainVLayout->addWidget(outTestAutoStandButton);
 
 	// in test auto stand
 	inTestAutoStandButton = new QPushButton(mainLayoutWidget);
 	inTestAutoStandButton->setObjectName("inTestAutoStandButton");
 	inTestAutoStandButton->setText("In");
+	inTestAutoStandButton->setStyleSheet(lolol.standartButton);
 	mainVLayout->addWidget(inTestAutoStandButton);
 
 	manualTestManualStandHLayout = new QHBoxLayout();
@@ -221,6 +223,7 @@ void MainWindow::initUiMainVLayout()
 	outManualTestManualStandButton = new QPushButton(mainLayoutWidget);
 	outManualTestManualStandButton->setObjectName("outManualTestManualStandButton");
 	outManualTestManualStandButton->setText("Out");
+	outManualTestManualStandButton->setStyleSheet(lolol.standartButton);
 	outManualTestManualStandButton->hide();
 	manualTestManualStandHLayout->addWidget(outManualTestManualStandButton);
 
@@ -228,6 +231,7 @@ void MainWindow::initUiMainVLayout()
 	inManualTestManualStandButton = new QPushButton(mainLayoutWidget);
 	inManualTestManualStandButton->setObjectName("inManualTestManualStandButton");
 	inManualTestManualStandButton->setText("In");
+	inManualTestManualStandButton->setStyleSheet(lolol.standartButton);
 	inManualTestManualStandButton->hide();
 	manualTestManualStandHLayout->addWidget(inManualTestManualStandButton);
 
@@ -240,6 +244,7 @@ void MainWindow::initUiMainVLayout()
 	outAutoTestManualStandButton = new QPushButton(mainLayoutWidget);
 	outAutoTestManualStandButton->setObjectName("outAutoTestManualStandButton");
 	outAutoTestManualStandButton->setText("Out");
+	outAutoTestManualStandButton->setStyleSheet(lolol.standartButton);
 	outAutoTestManualStandButton->hide();
 	autoTestManualStandHLayout->addWidget(outAutoTestManualStandButton);
 
@@ -247,6 +252,7 @@ void MainWindow::initUiMainVLayout()
 	inAutoTestManualStandButton = new QPushButton(mainLayoutWidget);
 	inAutoTestManualStandButton->setObjectName("inAutoTestManualStandButton");
 	inAutoTestManualStandButton->setText("In");
+	inAutoTestManualStandButton->setStyleSheet(lolol.standartButton);
 	inAutoTestManualStandButton->hide();
 	autoTestManualStandHLayout->addWidget(inAutoTestManualStandButton);
 
@@ -256,6 +262,7 @@ void MainWindow::initUiMainVLayout()
 	fullTestManualStandButton = new QPushButton(mainLayoutWidget);
 	fullTestManualStandButton->setObjectName("fullTestManualStandButton");
 	fullTestManualStandButton->setText("Out");
+	fullTestManualStandButton->setStyleSheet(lolol.standartButton);
 	fullTestManualStandButton->hide();
 	mainVLayout->addWidget(fullTestManualStandButton);
 
@@ -298,6 +305,9 @@ void MainWindow::switchStandButtons()
 		outAutoTestManualStandButton->show();
 		inAutoTestManualStandButton->show();
 		fullTestManualStandButton->show();
+
+		autoStandButton->setStyleSheet(lightStyles.activeButton);
+		manualStandButton->setStyleSheet(lightStyles.standartButton);
 	}
 	else if (switchStandState == MANUAL_STAND)
 	{
@@ -309,6 +319,9 @@ void MainWindow::switchStandButtons()
 		outAutoTestManualStandButton->hide();
 		inAutoTestManualStandButton->hide();
 		fullTestManualStandButton->hide();
+
+		autoStandButton->setStyleSheet(lightStyles.standartButton);
+		manualStandButton->setStyleSheet(lightStyles.activeButton);
 	}
 }
 
