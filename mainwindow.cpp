@@ -206,37 +206,33 @@ void MainWindow::initUiMainVLayout()
 	mainVLayout->setObjectName("autoStandMainVLayout");
 
 	// out test auto stand
-	outTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	outTestAutoStandButton->setObjectName("outTestAutoStandButton");
-	outTestAutoStandButton->setText("Out");
-	outTestAutoStandButton->setStyleSheet(lolol.standartButton);
-	mainVLayout->addWidget(outTestAutoStandButton);
+	outTestManualStandButton = new QPushButton(mainLayoutWidget);
+	outTestManualStandButton->setObjectName("outTestManualStandButton");
+	outTestManualStandButton->setText("Out");
+	mainVLayout->addWidget(outTestManualStandButton);
 
 	// in test auto stand
-	inTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	inTestAutoStandButton->setObjectName("inTestAutoStandButton");
-	inTestAutoStandButton->setText("In");
-	inTestAutoStandButton->setStyleSheet(lolol.standartButton);
-	mainVLayout->addWidget(inTestAutoStandButton);
+	inTestManualStandButton = new QPushButton(mainLayoutWidget);
+	inTestManualStandButton->setObjectName("inTestManualStandButton");
+	inTestManualStandButton->setText("In");
+	mainVLayout->addWidget(inTestManualStandButton);
 
 	manualTestAutoStandHLayout = new QHBoxLayout();
 	manualTestAutoStandHLayout->setObjectName("manualTestAutoStandHLayout");
 
 	// out manual test manual stand
-	outManualTestManualStandButton = new QPushButton(mainLayoutWidget);
-	outManualTestManualStandButton->setObjectName("outManualTestManualStandButton");
-	outManualTestManualStandButton->setText("Out");
-	outManualTestManualStandButton->setStyleSheet(lolol.standartButton);
-	outManualTestManualStandButton->hide();
-	manualTestManualStandHLayout->addWidget(outManualTestManualStandButton);
+	outManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	outManualTestAutoStandButton->setObjectName("outManualTestAutoStandButton");
+	outManualTestAutoStandButton->setText("Out");
+	outManualTestAutoStandButton->hide();
+	manualTestAutoStandHLayout->addWidget(outManualTestAutoStandButton);
 
 	// in manual test manual stand
-	inManualTestManualStandButton = new QPushButton(mainLayoutWidget);
-	inManualTestManualStandButton->setObjectName("inManualTestManualStandButton");
-	inManualTestManualStandButton->setText("In");
-	inManualTestManualStandButton->setStyleSheet(lolol.standartButton);
-	inManualTestManualStandButton->hide();
-	manualTestManualStandHLayout->addWidget(inManualTestManualStandButton);
+	inManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	inManualTestAutoStandButton->setObjectName("inManualTestAutoStandButton");
+	inManualTestAutoStandButton->setText("In");
+	inManualTestAutoStandButton->hide();
+	manualTestAutoStandHLayout->addWidget(inManualTestAutoStandButton);
 
 	mainVLayout->addLayout(manualTestAutoStandHLayout);
 
@@ -244,30 +240,27 @@ void MainWindow::initUiMainVLayout()
 	autoTestAutoStandHLayout->setObjectName("autoTestAutoStandHLayout");
 
 	// out auto test manual stand
-	outAutoTestManualStandButton = new QPushButton(mainLayoutWidget);
-	outAutoTestManualStandButton->setObjectName("outAutoTestManualStandButton");
-	outAutoTestManualStandButton->setText("Out");
-	outAutoTestManualStandButton->setStyleSheet(lolol.standartButton);
-	outAutoTestManualStandButton->hide();
-	autoTestManualStandHLayout->addWidget(outAutoTestManualStandButton);
+	outAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	outAutoTestAutoStandButton->setObjectName("outAutoTestAutoStandButton");
+	outAutoTestAutoStandButton->setText("Out");
+	outAutoTestAutoStandButton->hide();
+	autoTestAutoStandHLayout->addWidget(outAutoTestAutoStandButton);
 
 	// in auto test manual stand
-	inAutoTestManualStandButton = new QPushButton(mainLayoutWidget);
-	inAutoTestManualStandButton->setObjectName("inAutoTestManualStandButton");
-	inAutoTestManualStandButton->setText("In");
-	inAutoTestManualStandButton->setStyleSheet(lolol.standartButton);
-	inAutoTestManualStandButton->hide();
-	autoTestManualStandHLayout->addWidget(inAutoTestManualStandButton);
+	inAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	inAutoTestAutoStandButton->setObjectName("inAutoTestAutoStandButton");
+	inAutoTestAutoStandButton->setText("In");
+	inAutoTestAutoStandButton->hide();
+	autoTestAutoStandHLayout->addWidget(inAutoTestAutoStandButton);
 
 	mainVLayout->addLayout(autoTestAutoStandHLayout);
 
 	// full test manual stand
-	fullTestManualStandButton = new QPushButton(mainLayoutWidget);
-	fullTestManualStandButton->setObjectName("fullTestManualStandButton");
-	fullTestManualStandButton->setText("Out");
-	fullTestManualStandButton->setStyleSheet(lolol.standartButton);
-	fullTestManualStandButton->hide();
-	mainVLayout->addWidget(fullTestManualStandButton);
+	fullTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	fullTestAutoStandButton->setObjectName("fullTestAutoStandButton");
+	fullTestAutoStandButton->setText("Out");
+	fullTestAutoStandButton->hide();
+	mainVLayout->addWidget(fullTestAutoStandButton);
 
 	switchStandState = MANUAL_STAND;
 }
@@ -309,18 +302,6 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 	selectFileButton->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_FILE_SEL_BUTTON));
 	selectFileButton->setFixedHeight(MIN_FILE_SEL_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_FILE_SEL_BUTTON));
-
-	//manualStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
-	//autoStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
-	switchStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_SWITCHER_WIDTH, newHeight * COEFFICIENT_STAND_SWITCHER_HEIGHT);
-	switchThemeButton->setFixedSize((newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE, (newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE);
-
-	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
-	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
-	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
-	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
-	switchStandButton->setFixedWidth(MIN_STAND_SWITCH_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
-	switchStandButton->setFixedHeight(MIN_STAND_SWITCH_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
 }
 
 void MainWindow::switchStandButtons()
@@ -330,11 +311,11 @@ void MainWindow::switchStandButtons()
 		outTestManualStandButton->hide();
 		inTestManualStandButton->hide();
 
-		outManualTestManualStandButton->show();
-		inManualTestManualStandButton->show();
-		outAutoTestManualStandButton->show();
-		inAutoTestManualStandButton->show();
-		fullTestManualStandButton->show();
+		outManualTestAutoStandButton->show();
+		inManualTestAutoStandButton->show();
+		outAutoTestAutoStandButton->show();
+		inAutoTestAutoStandButton->show();
+		fullTestAutoStandButton->show();
 
 		autoStandButton->setStyleSheet(lightStyles.activeButton);
 		manualStandButton->setStyleSheet(lightStyles.standartButton);
@@ -344,11 +325,11 @@ void MainWindow::switchStandButtons()
 		outTestManualStandButton->show();
 		inTestManualStandButton->show();
 
-		outManualTestManualStandButton->hide();
-		inManualTestManualStandButton->hide();
-		outAutoTestManualStandButton->hide();
-		inAutoTestManualStandButton->hide();
-		fullTestManualStandButton->hide();
+		outManualTestAutoStandButton->hide();
+		inManualTestAutoStandButton->hide();
+		outAutoTestAutoStandButton->hide();
+		inAutoTestAutoStandButton->hide();
+		fullTestAutoStandButton->hide();
 
 		autoStandButton->setStyleSheet(lightStyles.standartButton);
 		manualStandButton->setStyleSheet(lightStyles.activeButton);
