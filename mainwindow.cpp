@@ -289,7 +289,6 @@ void MainWindow::initUiMainVLayout()
 	mainVLayout->addWidget(fullTestAutoStandButton);
 }
 
-
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
 	int newWidth = geometry().width();
