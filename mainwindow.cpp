@@ -13,8 +13,8 @@ MainWindow::~MainWindow()
 
 void MainWindow::initUi()
 {
-	resize(MINIMUM_SCREEN_WIDTH, MINIMUM_SCREEN_HEIGHT);
-	setMinimumSize(QSize(MINIMUM_SCREEN_WIDTH, MINIMUM_SCREEN_HEIGHT));
+	resize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT);
+	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
 
 	ui.centralWidget->setStyleSheet(lightStyles.screenColor);
 
@@ -22,7 +22,7 @@ void MainWindow::initUi()
 
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("MainFormLayoutWidget");
-	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MINIMUM_SCREEN_WIDTH - (BORDER_INDENT * 2), MINIMUM_SCREEN_HEIGHT - (BORDER_INDENT * 2));
+	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
 
 	initStyles();
 	initUiLogo();
@@ -66,29 +66,29 @@ void MainWindow::initUiTopHLayout()
 	manualStandButton = new QPushButton(mainLayoutWidget);
 	manualStandButton->setObjectName("manualStandButton");
 	manualStandButton->setText("Manual");
-	manualStandButton->setFixedSize(MINIMUM_SCREEN_WIDTH * COEFFICIENT_STAND_BUTTONS_WIDTH, MINIMUM_SCREEN_HEIGHT * COEFFICIENT_STAND_BUTTONS_HEIGHT);
+	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
 	manualStandButton->setStyleSheet(lightStyles.standartButton);
 	switchHLayout->addWidget(manualStandButton);
 	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
 
-	leftSwitchStandSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed);
+	leftSwitchStandSpacer = new QSpacerItem(105, 0, QSizePolicy::Preferred);
 	switchHLayout->addItem(leftSwitchStandSpacer);
 
 	// Switch stand
 	switchStandButton = new QPushButton(mainLayoutWidget);
 	switchStandButton->setObjectName("switchStandButton");
-	switchStandButton->setFixedSize(MINIMUM_SCREEN_WIDTH * COEFFICIENT_STAND_SWITCHER_WIDTH, MINIMUM_SCREEN_HEIGHT * COEFFICIENT_STAND_SWITCHER_HEIGHT);
+	switchStandButton->setFixedSize(MIN_STAND_SWITCH_BUTTON_WIDTH, MIN_STAND_SWITCH_BUTTON_HEIGHT);
 	switchHLayout->addWidget(switchStandButton);
 	connect(switchStandButton, &QPushButton::clicked, this, &MainWindow::on_switchStandButton_clicked);
 
-	rightSwitchStandSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed);
+	rightSwitchStandSpacer = new QSpacerItem(105, 0, QSizePolicy::Preferred);
 	switchHLayout->addItem(rightSwitchStandSpacer);
 
 	// Auto
 	autoStandButton = new QPushButton(mainLayoutWidget);
 	autoStandButton->setObjectName("autoStandButton");
 	autoStandButton->setText("Auto");
-	autoStandButton->setFixedSize(MINIMUM_SCREEN_WIDTH * COEFFICIENT_STAND_BUTTONS_WIDTH, MINIMUM_SCREEN_HEIGHT * COEFFICIENT_STAND_BUTTONS_HEIGHT);
+	autoStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
 	autoStandButton->setStyleSheet(lightStyles.standartButton);
 	switchHLayout->addWidget(autoStandButton);
 	connect(autoStandButton, &QPushButton::clicked, this, &MainWindow::on_autoStandButton_clicked);
@@ -104,7 +104,7 @@ void MainWindow::initUiTopHLayout()
 	// Theme
 	switchThemeButton = new QPushButton(mainLayoutWidget);
 	switchThemeButton->setObjectName("switchThemeButton");
-	switchThemeButton->setFixedSize(MINIMUM_SCREEN_WIDTH * COEFFICIENT_THEME_BUTTON_SIZE, MINIMUM_SCREEN_HEIGHT * COEFFICIENT_THEME_BUTTON_SIZE);
+	switchThemeButton->setFixedSize(MIN_SCREEN_WIDTH * COEFFICIENT_THEME_BUTTON_SIZE, MIN_SCREEN_HEIGHT * COEFFICIENT_THEME_BUTTON_SIZE);
 	switchThemeLanguageVLayout->addWidget(switchThemeButton);
 
 	// Language
@@ -129,11 +129,6 @@ void MainWindow::initUiLeftVLayout()
 	findAdapterHLayout = new QHBoxLayout();
 	findAdapterHLayout->setObjectName("findAdapterHLayout");
 
-	// Adapter combo box
-	selectAdapterComboBox = new QComboBox(mainLayoutWidget);
-	selectAdapterComboBox->setObjectName("selectAdapterComboBox");
-	findAdapterHLayout->addWidget(selectAdapterComboBox);
-
 	// Adapter button
 	checkAdaptersButton = new QPushButton(mainLayoutWidget);
 	checkAdaptersButton->setObjectName("checkAdaptersButton");
@@ -147,6 +142,11 @@ void MainWindow::initUiLeftVLayout()
 	selectAdapterVLayout->addWidget(selectAdapterLabel);
 
 	leftVLayout->addLayout(selectAdapterVLayout);
+
+	// Adapter combo box
+	selectAdapterComboBox = new QComboBox(mainLayoutWidget);
+	selectAdapterComboBox->setObjectName("selectAdapterComboBox");
+	findAdapterHLayout->addWidget(selectAdapterComboBox);
 
 	topFrequencySpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	leftVLayout->addItem(topFrequencySpacer);
@@ -273,10 +273,17 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	//QPixmap logoPixmapp(*logoPixmap);
 	//logoLabel->setPixmap(logoPixmapp.scaled(logoLabel->width() - 0.1, logoLabel->height() - 0.1, Qt::KeepAspectRatio));
 
-	manualStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
-	autoStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
+	//manualStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
+	//autoStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
 	switchStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_SWITCHER_WIDTH, newHeight * COEFFICIENT_STAND_SWITCHER_HEIGHT);
 	switchThemeButton->setFixedSize((newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE, (newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE);
+
+	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
+	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
+	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+	switchStandButton->setFixedWidth(MIN_STAND_SWITCH_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
+	switchStandButton->setFixedHeight(MIN_STAND_SWITCH_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
 }
 
 void MainWindow::switchStandButtons()
