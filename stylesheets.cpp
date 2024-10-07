@@ -11,7 +11,7 @@ void MainWindow::initStyles()
 		R"(
 		.QPushButton {
 			border-radius :20px;
-			background-color: #D9D9D9;
+			background-color: #D9D9;
 		}
 		.QPushButton:hover {
 			background-color: #B7B6B6;
