@@ -71,7 +71,7 @@ void MainWindow::initUiTopHLayout()
 	switchHLayout->addWidget(manualStandButton);
 	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
 
-	leftSwitchStandSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed);
+	leftSwitchStandSpacer = new QSpacerItem(105, 0, QSizePolicy::Preferred);
 	switchHLayout->addItem(leftSwitchStandSpacer);
 
 	// Switch stand
@@ -81,7 +81,7 @@ void MainWindow::initUiTopHLayout()
 	switchHLayout->addWidget(switchStandButton);
 	connect(switchStandButton, &QPushButton::clicked, this, &MainWindow::on_switchStandButton_clicked);
 
-	rightSwitchStandSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed);
+	rightSwitchStandSpacer = new QSpacerItem(105, 0, QSizePolicy::Preferred);
 	switchHLayout->addItem(rightSwitchStandSpacer);
 
 	// Auto
