@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/MainWindow">
+        <file>Recources/Logo_Light.png</file>
+    </qresource>
+</RCC>
