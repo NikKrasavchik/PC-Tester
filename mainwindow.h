@@ -42,22 +42,24 @@
 #define MIN_STAND_BUTTON_HEIGHT			62
 #define MIN_STAND_SWITCH_BUTTON_WIDTH	88
 #define MIN_STAND_SWITCH_BUTTON_HEIGHT	46
-#define MIN_THEME_LANG_BUTTON_WIDTH		
-#define MIN_THEME_LANG_BUTTON_HEIGHT	
+#define MIN_THEME_LANG_BUTTON			30
 #define MIN_ADAPTER_COMBO_WIDTH			
 #define MIN_ADAPTER_COMBO_HEIGHT		
 #define MIN_ADAPTER_BUTTON_WIDTH		
 #define MIN_ADAPTER_BUTTON_HEIGHT		
 #define MIN_FREQUENCY_COMBO_WIDTH		
 #define MIN_FREQUENCY_COMBO_HEIGHT		
-#define MIN_CONFIGURATOR_BUTTON_WIDTH	
-#define MIN_CONFIGURATOR_BUTTON_HEIGHT	
-#define MIN_FILE_SEL_BUTTON_WIDTH		
-#define MIN_FILE_SEL_BUTTON_HEIGHT		
+#define MIN_CONFIGURATOR_BUTTON_WIDTH	144
+#define MIN_CONFIGURATOR_BUTTON_HEIGHT	62
+#define MIN_FILE_SEL_BUTTON_WIDTH		144
+#define MIN_FILE_SEL_BUTTON_HEIGHT		62
 #define MIN_FILE_SEL_LABEL_WIDTH		
 #define MIN_FILE_SEL_LABEL_HEIGHT		
 
-#define COEF_STAND_BUTTON				0.103
+#define COEF_STAND_BUTTON				0.1
+#define COEF_THEME_LANG_BUTTON			0.1
+#define COEF_CONFIGURATOR_BUTTON		0.05
+#define COEF_FILE_SEL_BUTTON			0.05
 
 
 #define MANUAL_STAND    0
@@ -80,8 +82,8 @@ private:
 	QHBoxLayout* topHLayout;
 	QHBoxLayout* switchHLayout;
 	QHBoxLayout* findAdapterHLayout;
-	QHBoxLayout* autoTestManualStandHLayout;
-	QHBoxLayout* manualTestManualStandHLayout;
+	QHBoxLayout* autoTestAutoStandHLayout;
+	QHBoxLayout* manualTestAutoStandHLayout;
 	QVBoxLayout* leftVLayout;
 	QVBoxLayout* selectAdapterVLayout;
 	QVBoxLayout* selectFrequencyVLayout;
@@ -102,13 +104,13 @@ private:
 	QPushButton* selectFileButton;
 	QPushButton* manualStandButton;
 	QPushButton* autoStandButton;
-	QPushButton* outManualTestManualStandButton;
-	QPushButton* outAutoTestManualStandButton;
-	QPushButton* inManualTestManualStandButton;
-	QPushButton* inAutoTestManualStandButton;
-	QPushButton* fullTestManualStandButton;
-	QPushButton* outTestAutoStandButton;
-	QPushButton* inTestAutoStandButton;
+	QPushButton* outTestManualStandButton;
+	QPushButton* inTestManualStandButton;
+	QPushButton* outManualTestAutoStandButton;
+	QPushButton* inManualTestAutoStandButton;
+	QPushButton* outAutoTestAutoStandButton;
+	QPushButton* inAutoTestAutoStandButton;
+	QPushButton* fullTestAutoStandButton;
 	QComboBox* selectAdapterComboBox;
 	QComboBox* selectFrequencyComboBox;
 	QSpacerItem* rightAutoStandSpacer;
