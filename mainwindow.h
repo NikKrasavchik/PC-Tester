@@ -40,79 +40,80 @@
 
 class MainWindow : public QMainWindow
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    MainWindow(QWidget *parent = nullptr);
-    ~MainWindow();
+	MainWindow(QWidget* parent = nullptr);
+	~MainWindow();
 
 private:
-    Ui::MainWindowClass ui;
+	Ui::MainWindowClass ui;
 
-    QWidget* mainLayoutWidget;
-    QGridLayout* mainGridLayout;
-    QHBoxLayout* logoHLayout;
-    QHBoxLayout* topHLayout;
-    QHBoxLayout* switchHLayout;
-    QHBoxLayout* findAdapterHLayout;
-    QHBoxLayout* autoTestManualStandHLayout;
-    QHBoxLayout* manualTestManualStandHLayout;
-    QVBoxLayout* leftVLayout;
-    QVBoxLayout* selectAdapterVLayout;
-    QVBoxLayout* selectFrequencyVLayout;
-    QVBoxLayout* selectFileVLayout;
-    QVBoxLayout* mainVLayout;
-    QVBoxLayout* switchThemeLanguageVLayout;
-    QLabel* logoLabel;
-    QLabel* manualStandLabel;
-    QLabel* autoStandLabel;
-    QLabel* selectAdapterLabel;
-    QLabel* selectFrequencyLabel;
-    QLabel* selectFileLabel;
-    QPushButton* switchStandButton;
-    QPushButton* switchThemeButton;
-    QPushButton* switchLanguageButton;
-    QPushButton* checkAdaptersButton;
-    QPushButton* configuratorButton;
-    QPushButton* selectFileButton;
-    QPushButton* manualStandButton;
-    QPushButton* autoStandButton;
-    QPushButton* outManualTestManualStandButton;
-    QPushButton* outAutoTestManualStandButton;
-    QPushButton* inManualTestManualStandButton;
-    QPushButton* inAutoTestManualStandButton;
-    QPushButton* fullTestManualStandButton;
-    QPushButton* outTestAutoStandButton;
-    QPushButton* inTestAutoStandButton;
-    QComboBox* selectAdapterComboBox;
-    QComboBox* selectFrequencyComboBox;
-    QSpacerItem* switchThemeSpacer;
-    QSpacerItem* leftManualStandSpacer;
-    QSpacerItem* leftSwitchStandSpacer;
-    QSpacerItem* rightSwitchStandSpacer;
-    QSpacerItem* topAdapterSpacer;
-    QSpacerItem* topFrequencySpacer;
-    QSpacerItem* topConfiguratorSpacer;
-    QSpacerItem* topSelectFileSpacer;
-    QSpacerItem* bottomSpacer;
+	QWidget* mainLayoutWidget;
+	QGridLayout* mainGridLayout;
+	QHBoxLayout* logoHLayout;
+	QHBoxLayout* topHLayout;
+	QHBoxLayout* switchHLayout;
+	QHBoxLayout* findAdapterHLayout;
+	QHBoxLayout* autoTestManualStandHLayout;
+	QHBoxLayout* manualTestManualStandHLayout;
+	QVBoxLayout* leftVLayout;
+	QVBoxLayout* selectAdapterVLayout;
+	QVBoxLayout* selectFrequencyVLayout;
+	QVBoxLayout* selectFileVLayout;
+	QVBoxLayout* mainVLayout;
+	QVBoxLayout* switchThemeLanguageVLayout;
+	QLabel* logoLabel;
+	QLabel* manualStandLabel;
+	QLabel* autoStandLabel;
+	QLabel* selectAdapterLabel;
+	QLabel* selectFrequencyLabel;
+	QLabel* selectFileLabel;
+	QPushButton* switchStandButton;
+	QPushButton* switchThemeButton;
+	QPushButton* switchLanguageButton;
+	QPushButton* checkAdaptersButton;
+	QPushButton* configuratorButton;
+	QPushButton* selectFileButton;
+	QPushButton* manualStandButton;
+	QPushButton* autoStandButton;
+	QPushButton* outManualTestManualStandButton;
+	QPushButton* outAutoTestManualStandButton;
+	QPushButton* inManualTestManualStandButton;
+	QPushButton* inAutoTestManualStandButton;
+	QPushButton* fullTestManualStandButton;
+	QPushButton* outTestAutoStandButton;
+	QPushButton* inTestAutoStandButton;
+	QComboBox* selectAdapterComboBox;
+	QComboBox* selectFrequencyComboBox;
+	QSpacerItem* rightAutoStandSpacer;
+	QSpacerItem* leftManualStandSpacer;
+	QSpacerItem* leftManualStandSpacer1;
+	QSpacerItem* leftSwitchStandSpacer;
+	QSpacerItem* rightSwitchStandSpacer;
+	QSpacerItem* topAdapterSpacer;
+	QSpacerItem* topFrequencySpacer;
+	QSpacerItem* topConfiguratorSpacer;
+	QSpacerItem* topSelectFileSpacer;
+	QSpacerItem* bottomSpacer;
 
-    QPixmap* logoPixmap;
+	QPixmap* logoPixmap;
 
-    bool switchStandState;
+	bool switchStandState;
 
-    void initStyles();
-    void initUi();
-    void initUiLogo();
-    void initUiTopHLayout();
-    void initUiLeftVLayout();
-    void initUiMainVLayout();
+	void initStyles();
+	void initUi();
+	void initUiLogo();
+	void initUiTopHLayout();
+	void initUiLeftVLayout();
+	void initUiMainVLayout();
 
-    void switchStandButtons();
+	void switchStandButtons();
 
-    void resizeEvent(QResizeEvent* event);
+	void resizeEvent(QResizeEvent* event);
 
 private slots:
-    void on_switchStandButton_clicked();
-    void on_manualStandButton_clicked();
-    void on_autoStandButton_clicked();
+	void on_switchStandButton_clicked();
+	void on_manualStandButton_clicked();
+	void on_autoStandButton_clicked();
 };
