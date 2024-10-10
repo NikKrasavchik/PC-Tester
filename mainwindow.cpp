@@ -67,7 +67,7 @@ void MainWindow::initUiTopHLayout()
 	manualStandButton->setObjectName("manualStandButton");
 	manualStandButton->setText("Manual");
 	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	manualStandButton->setStyleSheet(lightStyles.standartButton);
+	manualStandButton->setStyleSheet(lightStyles.activeButton);
 	switchHLayout->addWidget(manualStandButton);
 	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
 
@@ -302,13 +302,12 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 	selectFileButton->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_FILE_SEL_BUTTON));
 	selectFileButton->setFixedHeight(MIN_FILE_SEL_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_FILE_SEL_BUTTON));
-
+	switchStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_SWITCHER_WIDTH, newHeight * COEFFICIENT_STAND_SWITCHER_HEIGHT);
+	switchThemeButton->setFixedSize((newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE, (newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE);
+	switchStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_SWITCHER_WIDTH, newHeight * COEFFICIENT_STAND_SWITCHER_HEIGHT);
+	switchThemeButton->setFixedSize((newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE, (newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE);
 }
 
-void MainWindow::switchStandButtons()
-{
-	if (switchStandState == AUTO_STAND)
-	{
 		outTestManualStandButton->hide();
 		inTestManualStandButton->hide();
 
@@ -317,9 +316,12 @@ void MainWindow::switchStandButtons()
 		outAutoTestAutoStandButton->show();
 		inAutoTestAutoStandButton->show();
 		fullTestAutoStandButton->show();
-	}
-	else if (switchStandState == MANUAL_STAND)
-	{
+	if (switchStandState == AUTO_STAND)
+		autoStandButton->setStyleSheet(lightStyles.activeButton);
+		manualStandButton->setStyleSheet(lightStyles.standartButton);
+		inManualTestManualStandButton->show();
+		outAutoTestManualStandButton->show();
+		inAutoTestManualStandButton->show();
 		outTestManualStandButton->show();
 		inTestManualStandButton->show();
 
@@ -328,6 +330,13 @@ void MainWindow::switchStandButtons()
 		outAutoTestAutoStandButton->hide();
 		inAutoTestAutoStandButton->hide();
 		fullTestAutoStandButton->hide();
+	else if (switchStandState == MANUAL_STAND)
+		autoStandButton->setStyleSheet(lightStyles.standartButton);
+		manualStandButton->setStyleSheet(lightStyles.activeButton);
+		inManualTestManualStandButton->hide();
+		outAutoTestManualStandButton->hide();
+		inAutoTestManualStandButton->hide();
+		fullTestManualStandButton->hide();
 	}
 }
 
