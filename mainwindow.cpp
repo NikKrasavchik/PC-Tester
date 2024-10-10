@@ -104,12 +104,13 @@ void MainWindow::initUiTopHLayout()
 	// Theme
 	switchThemeButton = new QPushButton(mainLayoutWidget);
 	switchThemeButton->setObjectName("switchThemeButton");
-	switchThemeButton->setFixedSize(MIN_SCREEN_WIDTH * COEFFICIENT_THEME_BUTTON_SIZE, MIN_SCREEN_HEIGHT * COEFFICIENT_THEME_BUTTON_SIZE);
+	switchThemeButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
 	switchThemeLanguageVLayout->addWidget(switchThemeButton);
 
 	// Language
 	switchLanguageButton = new QPushButton(mainLayoutWidget);
 	switchLanguageButton->setObjectName("switchLanguageButton");
+	switchLanguageButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
 	switchThemeLanguageVLayout->addWidget(switchLanguageButton);
 
 	topHLayout->addLayout(switchThemeLanguageVLayout);
@@ -172,7 +173,8 @@ void MainWindow::initUiLeftVLayout()
 	// Configurator
 	configuratorButton = new QPushButton(mainLayoutWidget);
 	configuratorButton->setObjectName("configuratorButton");
-	configuratorButton->setText("Configurator");
+	configuratorButton->setText("configurator");
+	configuratorButton->setFixedSize(MIN_CONFIGURATOR_BUTTON_WIDTH, MIN_CONFIGURATOR_BUTTON_HEIGHT);
 	leftVLayout->addWidget(configuratorButton);
 
 	topSelectFileSpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -184,6 +186,7 @@ void MainWindow::initUiLeftVLayout()
 
 	selectFileButton = new QPushButton(mainLayoutWidget);
 	selectFileButton->setObjectName("selectFileButton");
+	selectFileButton->setFixedSize(MIN_FILE_SEL_BUTTON_WIDTH, MIN_FILE_SEL_BUTTON_HEIGHT);
 	selectFileVLayout->addWidget(selectFileButton);
 
 	selectFileLabel = new QLabel(mainLayoutWidget);
@@ -203,64 +206,65 @@ void MainWindow::initUiMainVLayout()
 	mainVLayout->setObjectName("autoStandMainVLayout");
 
 	// out test auto stand
-	outTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	outTestAutoStandButton->setObjectName("outTestAutoStandButton");
-	outTestAutoStandButton->setText("Out");
-	mainVLayout->addWidget(outTestAutoStandButton);
+	outTestManualStandButton = new QPushButton(mainLayoutWidget);
+	outTestManualStandButton->setObjectName("outTestManualStandButton");
+	outTestManualStandButton->setText("Out");
+	mainVLayout->addWidget(outTestManualStandButton);
 
 	// in test auto stand
-	inTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	inTestAutoStandButton->setObjectName("inTestAutoStandButton");
-	inTestAutoStandButton->setText("In");
-	mainVLayout->addWidget(inTestAutoStandButton);
+	inTestManualStandButton = new QPushButton(mainLayoutWidget);
+	inTestManualStandButton->setObjectName("inTestManualStandButton");
+	inTestManualStandButton->setText("In");
+	mainVLayout->addWidget(inTestManualStandButton);
 
-	manualTestManualStandHLayout = new QHBoxLayout();
-	manualTestManualStandHLayout->setObjectName("manualTestManualStandHLayout");
+	manualTestAutoStandHLayout = new QHBoxLayout();
+	manualTestAutoStandHLayout->setObjectName("manualTestAutoStandHLayout");
 
 	// out manual test manual stand
-	outManualTestManualStandButton = new QPushButton(mainLayoutWidget);
-	outManualTestManualStandButton->setObjectName("outManualTestManualStandButton");
-	outManualTestManualStandButton->setText("Out");
-	outManualTestManualStandButton->hide();
-	manualTestManualStandHLayout->addWidget(outManualTestManualStandButton);
+	outManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	outManualTestAutoStandButton->setObjectName("outManualTestAutoStandButton");
+	outManualTestAutoStandButton->setText("Out");
+	outManualTestAutoStandButton->hide();
+	manualTestAutoStandHLayout->addWidget(outManualTestAutoStandButton);
 
 	// in manual test manual stand
-	inManualTestManualStandButton = new QPushButton(mainLayoutWidget);
-	inManualTestManualStandButton->setObjectName("inManualTestManualStandButton");
-	inManualTestManualStandButton->setText("In");
-	inManualTestManualStandButton->hide();
-	manualTestManualStandHLayout->addWidget(inManualTestManualStandButton);
+	inManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	inManualTestAutoStandButton->setObjectName("inManualTestAutoStandButton");
+	inManualTestAutoStandButton->setText("In");
+	inManualTestAutoStandButton->hide();
+	manualTestAutoStandHLayout->addWidget(inManualTestAutoStandButton);
 
-	mainVLayout->addLayout(manualTestManualStandHLayout);
+	mainVLayout->addLayout(manualTestAutoStandHLayout);
 
-	autoTestManualStandHLayout = new QHBoxLayout();
-	autoTestManualStandHLayout->setObjectName("autoTestManualStandHLayout");
+	autoTestAutoStandHLayout = new QHBoxLayout();
+	autoTestAutoStandHLayout->setObjectName("autoTestAutoStandHLayout");
 
 	// out auto test manual stand
-	outAutoTestManualStandButton = new QPushButton(mainLayoutWidget);
-	outAutoTestManualStandButton->setObjectName("outAutoTestManualStandButton");
-	outAutoTestManualStandButton->setText("Out");
-	outAutoTestManualStandButton->hide();
-	autoTestManualStandHLayout->addWidget(outAutoTestManualStandButton);
+	outAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	outAutoTestAutoStandButton->setObjectName("outAutoTestAutoStandButton");
+	outAutoTestAutoStandButton->setText("Out");
+	outAutoTestAutoStandButton->hide();
+	autoTestAutoStandHLayout->addWidget(outAutoTestAutoStandButton);
 
 	// in auto test manual stand
-	inAutoTestManualStandButton = new QPushButton(mainLayoutWidget);
-	inAutoTestManualStandButton->setObjectName("inAutoTestManualStandButton");
-	inAutoTestManualStandButton->setText("In");
-	inAutoTestManualStandButton->hide();
-	autoTestManualStandHLayout->addWidget(inAutoTestManualStandButton);
+	inAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	inAutoTestAutoStandButton->setObjectName("inAutoTestAutoStandButton");
+	inAutoTestAutoStandButton->setText("In");
+	inAutoTestAutoStandButton->hide();
+	autoTestAutoStandHLayout->addWidget(inAutoTestAutoStandButton);
 
-	mainVLayout->addLayout(autoTestManualStandHLayout);
+	mainVLayout->addLayout(autoTestAutoStandHLayout);
 
 	// full test manual stand
-	fullTestManualStandButton = new QPushButton(mainLayoutWidget);
-	fullTestManualStandButton->setObjectName("fullTestManualStandButton");
-	fullTestManualStandButton->setText("Out");
-	fullTestManualStandButton->hide();
-	mainVLayout->addWidget(fullTestManualStandButton);
+	fullTestAutoStandButton = new QPushButton(mainLayoutWidget);
+	fullTestAutoStandButton->setObjectName("fullTestAutoStandButton");
+	fullTestAutoStandButton->setText("Out");
+	fullTestAutoStandButton->hide();
+	mainVLayout->addWidget(fullTestAutoStandButton);
 
 	switchStandState = MANUAL_STAND;
 }
+
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
@@ -269,46 +273,61 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, newWidth - (BORDER_INDENT * 2), newHeight - (BORDER_INDENT * 2));
 
-	//logoLabel->setGeometry(BORDER_INDENT, BORDER_INDENT - TOOLBAR_SIZE, newWidth * COEFFICIENT_WIDTH_LOGO, newHeight * COEFFICIENT_HEIGHT_LOGO);
-	//QPixmap logoPixmapp(*logoPixmap);
-	//logoLabel->setPixmap(logoPixmapp.scaled(logoLabel->width() - 0.1, logoLabel->height() - 0.1, Qt::KeepAspectRatio));
-
-	//manualStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
-	//autoStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_BUTTONS_WIDTH, newHeight * COEFFICIENT_STAND_BUTTONS_HEIGHT);
-	switchStandButton->setFixedSize(newWidth * COEFFICIENT_STAND_SWITCHER_WIDTH, newHeight * COEFFICIENT_STAND_SWITCHER_HEIGHT);
-	switchThemeButton->setFixedSize((newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE, (newHeight <= newWidth - 200 ? newHeight : newWidth - 200) * COEFFICIENT_THEME_BUTTON_SIZE);
-
 	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
 	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+
 	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
 	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+
 	switchStandButton->setFixedWidth(MIN_STAND_SWITCH_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
 	switchStandButton->setFixedHeight(MIN_STAND_SWITCH_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+
+	//if (newHeight + 200 <= newWidth)
+	//{
+	//	switchThemeButton->setFixedHeight(MIN_THEME_LANG_BUTTON + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_THEME_LANG_BUTTON));
+	//	switchThemeButton->setFixedWidth(MIN_THEME_LANG_BUTTON + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_THEME_LANG_BUTTON));
+	//	switchLanguageButton->setFixedHeight(MIN_THEME_LANG_BUTTON + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_THEME_LANG_BUTTON));
+	//	switchLanguageButton->setFixedWidth(MIN_THEME_LANG_BUTTON + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_THEME_LANG_BUTTON));
+	//}
+	//else
+	//{
+	//	switchThemeButton->setFixedHeight(MIN_THEME_LANG_BUTTON + ((newWidth - MIN_SCREEN_WIDTH) * COEF_THEME_LANG_BUTTON));
+	//	switchThemeButton->setFixedWidth(MIN_THEME_LANG_BUTTON + ((newWidth - MIN_SCREEN_WIDTH) * COEF_THEME_LANG_BUTTON));
+	//	switchLanguageButton->setFixedHeight(MIN_THEME_LANG_BUTTON + ((newWidth - MIN_SCREEN_WIDTH) * COEF_THEME_LANG_BUTTON));
+	//	switchLanguageButton->setFixedWidth(MIN_THEME_LANG_BUTTON + ((newWidth - MIN_SCREEN_WIDTH) * COEF_THEME_LANG_BUTTON));
+	//}
+
+	configuratorButton->setFixedWidth(MIN_CONFIGURATOR_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_CONFIGURATOR_BUTTON));
+	configuratorButton->setFixedHeight(MIN_CONFIGURATOR_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_CONFIGURATOR_BUTTON));
+
+	selectFileButton->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_FILE_SEL_BUTTON));
+	selectFileButton->setFixedHeight(MIN_FILE_SEL_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_FILE_SEL_BUTTON));
+
 }
 
 void MainWindow::switchStandButtons()
 {
 	if (switchStandState == AUTO_STAND)
 	{
-		outTestAutoStandButton->hide();
-		inTestAutoStandButton->hide();
+		outTestManualStandButton->hide();
+		inTestManualStandButton->hide();
 
-		outManualTestManualStandButton->show();
-		inManualTestManualStandButton->show();
-		outAutoTestManualStandButton->show();
-		inAutoTestManualStandButton->show();
-		fullTestManualStandButton->show();
+		outManualTestAutoStandButton->show();
+		inManualTestAutoStandButton->show();
+		outAutoTestAutoStandButton->show();
+		inAutoTestAutoStandButton->show();
+		fullTestAutoStandButton->show();
 	}
 	else if (switchStandState == MANUAL_STAND)
 	{
-		outTestAutoStandButton->show();
-		inTestAutoStandButton->show();
+		outTestManualStandButton->show();
+		inTestManualStandButton->show();
 
-		outManualTestManualStandButton->hide();
-		inManualTestManualStandButton->hide();
-		outAutoTestManualStandButton->hide();
-		inAutoTestManualStandButton->hide();
-		fullTestManualStandButton->hide();
+		outManualTestAutoStandButton->hide();
+		inManualTestAutoStandButton->hide();
+		outAutoTestAutoStandButton->hide();
+		inAutoTestAutoStandButton->hide();
+		fullTestAutoStandButton->hide();
 	}
 }
 
