@@ -7,7 +7,7 @@
 #include <QComboBox>
 
 #include "ui_mainwindow.h"
-//#include "qsliderbutton.h"
+#include "qsliderbutton.h"
 #include "stylesheets.h"
 
 #include <QDebug>
@@ -29,13 +29,10 @@
 #define COEFFICIENT_WIDTH_LOGO              220 / MINIMUM_SCREEN_WIDTH
 #define COEFFICIENT_HEIGHT_LOGO             55 / MINIMUM_SCREEN_HEIGHT
 #define COEFFICIENT_GRID_0_ROW_HEIGHT       80 / MINIMUM_SCREEN_HEIGHT
-
 #define COEFFICIENT_STAND_BUTTONS_WIDTH     0.1
 #define COEFFICIENT_STAND_BUTTONS_HEIGHT    0.05
-
 #define COEFFICIENT_STAND_SWITCHER_WIDTH    0.11
 #define COEFFICIENT_STAND_SWITCHER_HEIGHT   0.07
-
 #define COEFFICIENT_THEME_BUTTON_SIZE        0.08
 
 #define MIN_STAND_BUTTON_WIDTH			144
@@ -83,6 +80,7 @@ private:
 	QHBoxLayout* findAdapterHLayout;
 	QHBoxLayout* autoTestAutoStandHLayout;
 	QHBoxLayout* manualTestAutoStandHLayout;
+	QHBoxLayout* selectFileHLayout;
 	QVBoxLayout* leftVLayout;
 	QVBoxLayout* selectAdapterVLayout;
 	QVBoxLayout* selectFrequencyVLayout;
@@ -95,7 +93,7 @@ private:
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
 	QLabel* selectFileLabel;
-	QPushButton* switchStandButton;
+	QSliderButton* switchStandSlider; //
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* checkAdaptersButton;
@@ -114,7 +112,6 @@ private:
 	QComboBox* selectFrequencyComboBox;
 	QSpacerItem* rightAutoStandSpacer;
 	QSpacerItem* leftManualStandSpacer;
-	QSpacerItem* leftManualStandSpacer1;
 	QSpacerItem* leftSwitchStandSpacer;
 	QSpacerItem* rightSwitchStandSpacer;
 	QSpacerItem* topAdapterSpacer;
@@ -122,6 +119,8 @@ private:
 	QSpacerItem* topConfiguratorSpacer;
 	QSpacerItem* topSelectFileSpacer;
 	QSpacerItem* bottomSpacer;
+	QSpacerItem* selectFileLeftSpacer;
+	QSpacerItem* selectFileRightSpacer;
 
 	QPixmap* logoPixmap;
 
@@ -139,7 +138,11 @@ private:
 	void resizeEvent(QResizeEvent* event);
 
 private slots:
-	void on_switchStandButton_clicked();
+	void on_sliderSwitchStand_click();
 	void on_manualStandButton_clicked();
 	void on_autoStandButton_clicked();
+	void on_selectFileButton_clicked();
+
+signals:
+	void resizeStandSlider(int width, int height);
 };
