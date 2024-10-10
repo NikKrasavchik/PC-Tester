@@ -7,7 +7,7 @@
 #include <QComboBox>
 
 #include "ui_mainwindow.h"
-//#include "qsliderbutton.h"
+#include "qsliderbutton.h"
 #include "stylesheets.h"
 
 #include <QDebug>
@@ -29,36 +29,40 @@
 #define COEFFICIENT_WIDTH_LOGO              220 / MINIMUM_SCREEN_WIDTH
 #define COEFFICIENT_HEIGHT_LOGO             55 / MINIMUM_SCREEN_HEIGHT
 #define COEFFICIENT_GRID_0_ROW_HEIGHT       80 / MINIMUM_SCREEN_HEIGHT
-
 #define COEFFICIENT_STAND_BUTTONS_WIDTH     0.1
 #define COEFFICIENT_STAND_BUTTONS_HEIGHT    0.05
-
 #define COEFFICIENT_STAND_SWITCHER_WIDTH    0.11
 #define COEFFICIENT_STAND_SWITCHER_HEIGHT   0.07
-
 #define COEFFICIENT_THEME_BUTTON_SIZE        0.08
 
 #define MIN_STAND_BUTTON_WIDTH			144
 #define MIN_STAND_BUTTON_HEIGHT			62
-#define MIN_STAND_SWITCH_BUTTON_WIDTH	88
-#define MIN_STAND_SWITCH_BUTTON_HEIGHT	46
-#define MIN_THEME_LANG_BUTTON_WIDTH		
-#define MIN_THEME_LANG_BUTTON_HEIGHT	
-#define MIN_ADAPTER_COMBO_WIDTH			
-#define MIN_ADAPTER_COMBO_HEIGHT		
-#define MIN_ADAPTER_BUTTON_WIDTH		
-#define MIN_ADAPTER_BUTTON_HEIGHT		
-#define MIN_FREQUENCY_COMBO_WIDTH		
-#define MIN_FREQUENCY_COMBO_HEIGHT		
-#define MIN_CONFIGURATOR_BUTTON_WIDTH	
-#define MIN_CONFIGURATOR_BUTTON_HEIGHT	
-#define MIN_FILE_SEL_BUTTON_WIDTH		
-#define MIN_FILE_SEL_BUTTON_HEIGHT		
-#define MIN_FILE_SEL_LABEL_WIDTH		
-#define MIN_FILE_SEL_LABEL_HEIGHT		
+#define MIN_STAND_SWITCH_SLIDER_WIDTH	88
+#define MIN_STAND_SWITCH_SLIDER_HEIGHT	46
+#define MIN_THEME_LANG_BUTTON			30
+#define MIN_ADAPTER_COMBO_WIDTH
+#define MIN_ADAPTER_COMBO_HEIGHT
+#define MIN_ADAPTER_BUTTON_WIDTH
+#define MIN_ADAPTER_BUTTON_HEIGHT
+#define MIN_FREQUENCY_COMBO_WIDTH
+#define MIN_FREQUENCY_COMBO_HEIGHT
+#define MIN_CONFIGURATOR_BUTTON_WIDTH	160
+#define MIN_CONFIGURATOR_BUTTON_HEIGHT	66
+#define MIN_FILE_SEL_BUTTON_WIDTH		166
+#define MIN_FILE_SEL_BUTTON_HEIGHT		66
+#define MIN_FILE_SEL_LABEL_WIDTH
+#define MIN_FILE_SEL_LABEL_HEIGHT
+#define MIN_MAIN_IN_OUT_BUTTON_WIDTH			145
+#define MIN_MAIN_IN_OUT_BUTTON_HEIGHT			46
+#define MIN_MAIN_FUL_BUTTON_WIDTH				198
+#define MIN_MAIN_FUL_BUTTON_HEIGHT				61
 
-#define COEF_STAND_BUTTON				0.103
-
+#define COEF_STAND_BUTTON				0.1
+#define COEF_STAND_SLIDER				0.06
+#define COEF_THEME_LANG_BUTTON			0.1
+#define COEF_CONFIGURATOR_BUTTON		0.05
+#define COEF_FILE_SEL_BUTTON			0.05
+#define COEF_MAIN_BUTTON				0.05
 
 #define MANUAL_STAND    0
 #define AUTO_STAND      1
@@ -80,8 +84,9 @@ private:
 	QHBoxLayout* topHLayout;
 	QHBoxLayout* switchHLayout;
 	QHBoxLayout* findAdapterHLayout;
-	QHBoxLayout* autoTestManualStandHLayout;
-	QHBoxLayout* manualTestManualStandHLayout;
+	QHBoxLayout* autoTestAutoStandHLayout;
+	QHBoxLayout* manualTestAutoStandHLayout;
+	QHBoxLayout* selectFileHLayout;
 	QVBoxLayout* leftVLayout;
 	QVBoxLayout* selectAdapterVLayout;
 	QVBoxLayout* selectFrequencyVLayout;
@@ -94,7 +99,7 @@ private:
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
 	QLabel* selectFileLabel;
-	QPushButton* switchStandButton;
+	QSliderButton* switchStandSlider; //
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* checkAdaptersButton;
@@ -102,18 +107,17 @@ private:
 	QPushButton* selectFileButton;
 	QPushButton* manualStandButton;
 	QPushButton* autoStandButton;
-	QPushButton* outManualTestManualStandButton;
-	QPushButton* outAutoTestManualStandButton;
-	QPushButton* inManualTestManualStandButton;
-	QPushButton* inAutoTestManualStandButton;
-	QPushButton* fullTestManualStandButton;
-	QPushButton* outTestAutoStandButton;
-	QPushButton* inTestAutoStandButton;
+	QPushButton* outTestManualStandButton;
+	QPushButton* inTestManualStandButton;
+	QPushButton* outManualTestAutoStandButton;
+	QPushButton* inManualTestAutoStandButton;
+	QPushButton* outAutoTestAutoStandButton;
+	QPushButton* inAutoTestAutoStandButton;
+	QPushButton* fullTestAutoStandButton;
 	QComboBox* selectAdapterComboBox;
 	QComboBox* selectFrequencyComboBox;
 	QSpacerItem* rightAutoStandSpacer;
 	QSpacerItem* leftManualStandSpacer;
-	QSpacerItem* leftManualStandSpacer1;
 	QSpacerItem* leftSwitchStandSpacer;
 	QSpacerItem* rightSwitchStandSpacer;
 	QSpacerItem* topAdapterSpacer;
@@ -121,6 +125,8 @@ private:
 	QSpacerItem* topConfiguratorSpacer;
 	QSpacerItem* topSelectFileSpacer;
 	QSpacerItem* bottomSpacer;
+	QSpacerItem* selectFileLeftSpacer;
+	QSpacerItem* selectFileRightSpacer;
 
 	QPixmap* logoPixmap;
 
@@ -138,7 +144,11 @@ private:
 	void resizeEvent(QResizeEvent* event);
 
 private slots:
-	void on_switchStandButton_clicked();
+	void on_sliderSwitchStand_click();
 	void on_manualStandButton_clicked();
 	void on_autoStandButton_clicked();
+	void on_selectFileButton_clicked();
+
+signals:
+	void resizeStandSlider(int width, int height);
 };

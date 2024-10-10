@@ -11,60 +11,42 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
 
+	QColor roundColor = QColor(ROUND_COLOR); // ÷вет кружка
+	QColor bgColor = QColor(BG_COLOR);		 // ÷вет фона
+
 	painter.setPen(QPen(Qt::black, 3));
-
 	painter.setRenderHint(QPainter::Antialiasing, true);
-
 	painter.setPen(QPen(QColor("#fff"), 0.1));
 
-	QString bgColorTxt = "#ffffff";
-	QColor bgColor = QColor(bgColorTxt);
-
+	// –исуем фон
 	painter.setBrush(bgColor);
+	painter.drawRoundedRect(0, 0, sizeWidth, sizeHeight, sizeHeight / 2, sizeHeight / 2);
 
-	painter.drawRoundedRect(0, 0, 2000, 50, 10, 10);
-	this->resize(200,100);
-	//this->setGeometry(0,0,20,20);
+	//–исуем шарик
+	if (this->status == MANUAL)
+	{
+		painter.setBrush(roundColor);
 
-	// QString onColor = "#444";
-	// QColor mainColorOn = QColor(onColor);
-	// QColor subColorOn = QColor(onColor);
-	// subColorOn.setHsl(100, 100, 95, 100);
-
-	// //–исуем шарик
-	// if (this->status == ON)
-	// {
-	// 	QLinearGradient linearGrad(QPointF(32, 2), QPointF(46, 16));
-	// 	linearGrad.setColorAt(0, subColorOn);
-	// 	linearGrad.setColorAt(1, mainColorOn);
-
-	// 	painter.setBrush(linearGrad);
-
-	// 	painter.drawEllipse(60, 20, 30, 30);
-	// }
-	// else
-	// {
-	// 	QLinearGradient linearGrad(QPointF(2, 2), QPointF(16, 16));
-	// 	linearGrad.setColorAt(0, subColorOn);
-	// 	linearGrad.setColorAt(1, mainColorOn);
-
-	// 	painter.setBrush(linearGrad);
-
-	// 	painter.drawEllipse(10, 20, 20, 20);
-	// }
+		painter.drawEllipse(0, 0, sizeHeight, sizeHeight);
+	}
+	else
+	{
+		painter.setBrush(roundColor);
+		painter.drawEllipse(sizeWidth - sizeHeight, 0, sizeHeight, sizeHeight);
+	}
 }
-QSize QSliderButton::sizeHint() const
-{
-	return QSize(50, 20);
-}
+
 void QSliderButton::mousePressEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton)
 	{
 		if (this->status)
-			this->status = OFF;
+			this->status = MANUAL;
 		else
-			this->status = ON;
+			this->status = AUTO;
+
+		on_sliderSwitchStand_click();
+
 		repaint();
 	}
 }
@@ -73,8 +55,15 @@ int QSliderButton::getStatus()
 	return status;
 }
 
-void QSliderButton::setStatus(int value)
+void QSliderButton::setStatus(int newValue)
 {
-	status = value;
+	if (newValue == MANUAL || newValue == AUTO)
+		status = newValue;
 	repaint();
+}
+
+void QSliderButton::resizeSlider(int newWidth, int newHeight)
+{
+	sizeWidth = newWidth;
+	sizeHeight = newHeight;
 }

@@ -5,9 +5,13 @@
 
 struct Styles
 {
-	QString screenColor;
 	QString standartButton;
-	QString activeButton;
+	QString settingButton;
+	QString mainButton;
+	QString mainButtonNoActive;
+	QString alwaysActiveButton;
+	QString screenColor;
+	QString selectFileText;
 };
 
 extern Styles darkStyles;
