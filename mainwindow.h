@@ -6,6 +6,9 @@
 #include <QPushButton>
 #include <QComboBox>
 
+#include "canlib.h"
+#include "chai.h"
+
 #include "ui_mainwindow.h"
 #include "qsliderbutton.h"
 #include "stylesheets.h"
@@ -26,45 +29,42 @@
 #define BORDER_INDENT   25
 #define TOOLBAR_SIZE    20
 
-#define COEFFICIENT_WIDTH_LOGO              220 / MINIMUM_SCREEN_WIDTH
-#define COEFFICIENT_HEIGHT_LOGO             55 / MINIMUM_SCREEN_HEIGHT
-#define COEFFICIENT_GRID_0_ROW_HEIGHT       80 / MINIMUM_SCREEN_HEIGHT
-#define COEFFICIENT_STAND_BUTTONS_WIDTH     0.1
-#define COEFFICIENT_STAND_BUTTONS_HEIGHT    0.05
-#define COEFFICIENT_STAND_SWITCHER_WIDTH    0.11
-#define COEFFICIENT_STAND_SWITCHER_HEIGHT   0.07
-#define COEFFICIENT_THEME_BUTTON_SIZE        0.08
-
 #define MIN_STAND_BUTTON_WIDTH			144
 #define MIN_STAND_BUTTON_HEIGHT			62
 #define MIN_STAND_SWITCH_SLIDER_WIDTH	88
 #define MIN_STAND_SWITCH_SLIDER_HEIGHT	46
 #define MIN_THEME_LANG_BUTTON			30
-#define MIN_ADAPTER_COMBO_WIDTH
-#define MIN_ADAPTER_COMBO_HEIGHT
-#define MIN_ADAPTER_BUTTON_WIDTH
-#define MIN_ADAPTER_BUTTON_HEIGHT
-#define MIN_FREQUENCY_COMBO_WIDTH
-#define MIN_FREQUENCY_COMBO_HEIGHT
+#define MIN_ADAPTER_COMBO_WIDTH			120
+#define MIN_ADAPTER_COMBO_HEIGHT		35
+#define MIN_ADAPTER_BUTTON_SIZE			35
+#define MIN_FREQUENCY_COMBO_WIDTH		170
+#define MIN_FREQUENCY_COMBO_HEIGHT		35
 #define MIN_CONFIGURATOR_BUTTON_WIDTH	160
 #define MIN_CONFIGURATOR_BUTTON_HEIGHT	66
 #define MIN_FILE_SEL_BUTTON_WIDTH		166
 #define MIN_FILE_SEL_BUTTON_HEIGHT		66
-#define MIN_FILE_SEL_LABEL_WIDTH
-#define MIN_FILE_SEL_LABEL_HEIGHT
-#define MIN_MAIN_IN_OUT_BUTTON_WIDTH			145
-#define MIN_MAIN_IN_OUT_BUTTON_HEIGHT			46
-#define MIN_MAIN_FUL_BUTTON_WIDTH				198
-#define MIN_MAIN_FUL_BUTTON_HEIGHT				61
+#define MIN_MAIN_IN_OUT_BUTTON_WIDTH	145
+#define MIN_MAIN_IN_OUT_BUTTON_HEIGHT	46
+#define MIN_MAIN_FUL_BUTTON_WIDTH		200
+#define MIN_MAIN_FUL_BUTTON_HEIGHT		60
 
 #define COEF_STAND_BUTTON				0.1
 #define COEF_STAND_SLIDER				0.06
-#define COEF_THEME_LANG_BUTTON			0.1
+#define COEF_THEME_LANG_BUTTON			0.03
+#define COEF_ADAPTER_GROUP				0.05
+#define COEF_FREQUENC_COMBO				0.05
 #define COEF_CONFIGURATOR_BUTTON		0.05
 #define COEF_FILE_SEL_BUTTON			0.05
+#define COEF_MAIN_BUTTON				0.05
 
 #define MANUAL_STAND    0
 #define AUTO_STAND      1
+
+#define LIGHT_THEME		0
+#define DARK_THEME		1
+
+#define RUSSIAN_LANG	0
+#define ENGLISH_LANG	1
 
 class MainWindow : public QMainWindow
 {
@@ -78,27 +78,38 @@ private:
 	Ui::MainWindowClass ui;
 
 	QWidget* mainLayoutWidget;
+	QWidget* manualTestAutoStandWidget;
+	QWidget* autoTestAutoStandWidget;
+	QWidget* manualStandWidget;
 	QGridLayout* mainGridLayout;
 	QHBoxLayout* logoHLayout;
 	QHBoxLayout* topHLayout;
 	QHBoxLayout* switchHLayout;
+	QHBoxLayout* selectAdapterHLayout;
 	QHBoxLayout* findAdapterHLayout;
-	QHBoxLayout* autoTestAutoStandHLayout;
-	QHBoxLayout* manualTestAutoStandHLayout;
 	QHBoxLayout* selectFileHLayout;
+	QHBoxLayout* configuratorHLayout;
+	QHBoxLayout* partitionTestAutoStandHLayout;
+	QHBoxLayout* manualStandMainHLayout;
+	QHBoxLayout* fullAutoStandMainHLayout;
 	QVBoxLayout* leftVLayout;
 	QVBoxLayout* selectAdapterVLayout;
 	QVBoxLayout* selectFrequencyVLayout;
 	QVBoxLayout* selectFileVLayout;
 	QVBoxLayout* mainVLayout;
 	QVBoxLayout* switchThemeLanguageVLayout;
+	QVBoxLayout* manualTestAutoStandVLayout;
+	QVBoxLayout* autoTestAutoStandVLayout;
+	QVBoxLayout* manualStandMainVLayout;
+	QVBoxLayout* manualStandVLayout;
 	QLabel* logoLabel;
-	QLabel* manualStandLabel;
-	QLabel* autoStandLabel;
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
 	QLabel* selectFileLabel;
-	QSliderButton* switchStandSlider; //
+	QLabel* manualStandLabel;
+	QLabel* manualTestAutoStandLabel;
+	QLabel* autoTestAutoStandLabel;
+	QSliderButton* switchStandSlider;
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* checkAdaptersButton;
@@ -124,29 +135,73 @@ private:
 	QSpacerItem* topConfiguratorSpacer;
 	QSpacerItem* topSelectFileSpacer;
 	QSpacerItem* bottomSpacer;
+	QSpacerItem* adapterLeftSpacer;
+	QSpacerItem* adapterRightSpacer;
+	QSpacerItem* findAdapterCenterSpacer;
+	QSpacerItem* selectAdapterMiddleSpacer;
+	QSpacerItem* configuratorLeftSpacer;
+	QSpacerItem* configuratorRightSpacer;
 	QSpacerItem* selectFileLeftSpacer;
 	QSpacerItem* selectFileRightSpacer;
+	QSpacerItem* manualTestAutoStandSpacer;
+	QSpacerItem* autoTestAutoStandSpacer;
+	QSpacerItem* manualStandMainLeftSpacer;
+	QSpacerItem* manualStandMainRightSpacer;
+	QSpacerItem* manualStaneMainUpSpacer;
+	QSpacerItem* manualStandMainMiddleSpacer;
+	QSpacerItem* manualStaneMainBottomSpacer;
+	QSpacerItem* fullAutoStandMainLeftSpacer;
+	QSpacerItem* fullAutoStandMainRightSpacer;
+	QSpacerItem* manualTestAutoStandLeftSpacer;
+	QSpacerItem* manualTestAutoStandRightSpacer;
+	QSpacerItem* manualTestAutoStandMiddleSpacer;
+	QSpacerItem* manualTestAutoStandFooterSpacer;
 
-	QPixmap* logoPixmap;
+	QPixmap* logoLightPixmap;
+	QPixmap* logoDarkPixmap;
+	QPixmap* themeLightPixmap;
+	QPixmap* themeDarkPixmap;
+	QPixmap* checkAdapterLightPixmap;
+	QPixmap* checkAdapterDarkPixmap;
+	QPixmap* languageLightPixmap;
+	QPixmap* languageDarkPixmap;
 
-	bool switchStandState;
+	bool appTheme;
+	bool appLanguage;
+	bool isFrequencySet;
+	bool isAdapterSet;
+	bool initAll = false;
 
 	void initStyles();
+	void initRecources();
 	void initUi();
 	void initUiLogo();
 	void initUiTopHLayout();
 	void initUiLeftVLayout();
 	void initUiMainVLayout();
+	void initCanAdapter();
+
+	void deinitCanAdapter();
 
 	void switchStandButtons();
+	void switchTheme();
+	void switchLanguage();
+	void switchStyleMainButton();
 
 	void resizeEvent(QResizeEvent* event);
 
 private slots:
+	// Button
 	void on_sliderSwitchStand_click();
 	void on_manualStandButton_clicked();
 	void on_autoStandButton_clicked();
 	void on_selectFileButton_clicked();
+	void on_switchThemeButton_clicked();
+	void on_switchLanguageButton_clicked();
+	void on_checkAdaptersButton_clicked();
+	// ComboBox
+	void on_selectFrequencyComboBox_changed(int index);
+	void on_selectAdapterComboBox_changed(int index);
 
 signals:
 	void resizeStandSlider(int width, int height);

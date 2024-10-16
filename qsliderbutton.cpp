@@ -23,7 +23,7 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 	painter.drawRoundedRect(0, 0, sizeWidth, sizeHeight, sizeHeight / 2, sizeHeight / 2);
 
 	//Рисуем шарик
-	if (this->status == MANUAL)
+	if (this->status == MANUAL_STAND)
 	{
 		painter.setBrush(roundColor);
 
@@ -41,9 +41,9 @@ void QSliderButton::mousePressEvent(QMouseEvent* event)
 	if (event->button() == Qt::LeftButton)
 	{
 		if (this->status)
-			this->status = MANUAL;
+			this->status = MANUAL_STAND;
 		else
-			this->status = AUTO;
+			this->status = AUTO_STAND;
 
 		on_sliderSwitchStand_click();
 
@@ -57,7 +57,7 @@ int QSliderButton::getStatus()
 
 void QSliderButton::setStatus(int newValue)
 {
-	if (newValue == MANUAL || newValue == AUTO)
+	if (newValue == MANUAL_STAND || newValue == AUTO_STAND)
 		status = newValue;
 	repaint();
 }

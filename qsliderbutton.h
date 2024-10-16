@@ -3,8 +3,8 @@
 
 #include <QWidget>
 
-#define MANUAL 0
-#define AUTO  1
+#define MANUAL_STAND	0
+#define AUTO_STAND		1
 
 #define ROUND_COLOR "#979797"
 #define BG_COLOR    "#E8E8E8"
