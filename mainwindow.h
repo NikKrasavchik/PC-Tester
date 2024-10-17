@@ -6,12 +6,10 @@
 #include <QPushButton>
 #include <QComboBox>
 
-#include "canlib.h"
-#include "chai.h"
-
 #include "ui_mainwindow.h"
 #include "qsliderbutton.h"
 #include "stylesheets.h"
+#include "can.h"
 
 #include <QDebug>
 
@@ -165,6 +163,8 @@ private:
 	QPixmap* checkAdapterDarkPixmap;
 	QPixmap* languageLightPixmap;
 	QPixmap* languageDarkPixmap;
+
+	Can* can;
 
 	bool appTheme;
 	bool appLanguage;

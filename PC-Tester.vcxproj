@@ -112,6 +112,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="can.cpp" />
     <ClCompile Include="qsliderbutton.cpp" />
     <ClCompile Include="stylesheets.cpp" />
     <QtRcc Include="mainwindow.qrc" />
@@ -124,6 +125,7 @@
     <QtMoc Include="qsliderbutton.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="can.h" />
     <ClInclude Include="stylesheets.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

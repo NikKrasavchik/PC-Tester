@@ -44,9 +44,11 @@ void MainWindow::initUi()
 	switchStandSlider->setStatus(MANUAL_STAND);
 	switchStandButtons();
 
-	on_checkAdaptersButton_clicked();
+	can = new Can();
 
 	initAll = true;
+
+	on_checkAdaptersButton_clicked();
 }
 
 void MainWindow::initUiLogo()
@@ -746,42 +748,16 @@ void MainWindow::on_selectAdapterComboBox_changed(int index)
 
 void MainWindow::on_checkAdaptersButton_clicked()
 {
+	if (!initAll)
+		return;
 	selectAdapterComboBox->clear();
 
 	selectAdapterComboBox->addItem("...");
-	canHandle hndTmp;		// Переменная, в которой хранится идентификатор CAN-сессии
-	int chanCount;             // Кол-во адаптеров kvaser
-	char charNameAdapter[255];     // Название адаптера
 
-	canInitializeLibrary();
-	hndTmp = canOpenChannel(0, canOPEN_ACCEPT_VIRTUAL);
-	canSetBusParams(hndTmp, canBITRATE_10K, 0, 0, 0, 0, 0);
-	canBusOn(hndTmp);
-	canGetNumberOfChannels(&chanCount);
+	std::vector<QString> nameAdapters = can->getNameAdapters();
 
-	QString strNameAdapter;
-	for (int i = 0; i < chanCount; i++) {
-		canGetChannelData(i, canCHANNELDATA_DEVDESCR_ASCII, charNameAdapter, sizeof(charNameAdapter));
-		if (charNameAdapter[0] == 0)
-			continue;
-		strNameAdapter = QString::fromStdString(charNameAdapter);
-		QString str;
-		bool isHaveTransfer = false;
-		for (int j = 0; j < strNameAdapter.size(); j++)
-		{
-			if (j > 10 && strNameAdapter[j] == ' ' && !isHaveTransfer)
-			{
-				str += '\n';
-				isHaveTransfer = true;
-				continue;
-			}
-			str += strNameAdapter[j];
-		}
-		selectAdapterComboBox->addItem(str);
-	}
-
-	canBusOff(hndTmp); // Закрытие канала связи
-	canClose(hndTmp); // Завершение работы с api
+	for (int i = 0; i < nameAdapters.size(); i++)
+		selectAdapterComboBox->addItem(nameAdapters[i]);
 }
 
 void MainWindow::initCanAdapter()
