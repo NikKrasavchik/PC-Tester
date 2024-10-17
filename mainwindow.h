@@ -9,6 +9,7 @@
 #include "ui_mainwindow.h"
 #include "qsliderbutton.h"
 #include "stylesheets.h"
+#include "can.h"
 
 #include <QDebug>
 
@@ -32,10 +33,10 @@
 #define MIN_STAND_SWITCH_SLIDER_HEIGHT	46
 #define MIN_THEME_LANG_BUTTON			30
 #define MIN_ADAPTER_COMBO_WIDTH			120
-#define MIN_ADAPTER_COMBO_HEIGHT		30
-#define MIN_ADAPTER_BUTTON_SIZE			30
+#define MIN_ADAPTER_COMBO_HEIGHT		35
+#define MIN_ADAPTER_BUTTON_SIZE			35
 #define MIN_FREQUENCY_COMBO_WIDTH		170
-#define MIN_FREQUENCY_COMBO_HEIGHT		30
+#define MIN_FREQUENCY_COMBO_HEIGHT		35
 #define MIN_CONFIGURATOR_BUTTON_WIDTH	160
 #define MIN_CONFIGURATOR_BUTTON_HEIGHT	66
 #define MIN_FILE_SEL_BUTTON_WIDTH		166
@@ -47,7 +48,7 @@
 
 #define COEF_STAND_BUTTON				0.1
 #define COEF_STAND_SLIDER				0.06
-#define COEF_THEME_LANG_BUTTON			0.1
+#define COEF_THEME_LANG_BUTTON			0.03
 #define COEF_ADAPTER_GROUP				0.05
 #define COEF_FREQUENC_COMBO				0.05
 #define COEF_CONFIGURATOR_BUTTON		0.05
@@ -163,9 +164,13 @@ private:
 	QPixmap* languageLightPixmap;
 	QPixmap* languageDarkPixmap;
 
-	bool switchStandState;
+	Can* can;
+
 	bool appTheme;
 	bool appLanguage;
+	bool isFrequencySet;
+	bool isAdapterSet;
+	bool initAll = false;
 
 	void initStyles();
 	void initRecources();
@@ -174,20 +179,29 @@ private:
 	void initUiTopHLayout();
 	void initUiLeftVLayout();
 	void initUiMainVLayout();
+	void initCanAdapter();
+
+	void deinitCanAdapter();
 
 	void switchStandButtons();
 	void switchTheme();
 	void switchLanguage();
+	void switchStyleMainButton();
 
 	void resizeEvent(QResizeEvent* event);
 
 private slots:
+	// Button
 	void on_sliderSwitchStand_click();
 	void on_manualStandButton_clicked();
 	void on_autoStandButton_clicked();
 	void on_selectFileButton_clicked();
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
+	void on_checkAdaptersButton_clicked();
+	// ComboBox
+	void on_selectFrequencyComboBox_changed(int index);
+	void on_selectAdapterComboBox_changed(int index);
 
 signals:
 	void resizeStandSlider(int width, int height);

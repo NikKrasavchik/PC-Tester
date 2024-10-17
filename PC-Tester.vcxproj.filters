@@ -46,6 +46,9 @@
     <ClCompile Include="stylesheets.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="can.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
@@ -54,6 +57,9 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="stylesheets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="can.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
