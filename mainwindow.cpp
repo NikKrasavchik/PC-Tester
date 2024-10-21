@@ -764,7 +764,7 @@ void MainWindow::on_selectFileButton_clicked()
 	selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
 
 	fileSelected = true;
-	switchStyleMainButtons();
+	switchStyleMainButtons(); //
 }
 
 void MainWindow::on_switchThemeButton_clicked()
