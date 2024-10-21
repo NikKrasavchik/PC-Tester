@@ -17,6 +17,7 @@ public:
 
 	int getStatus();
 	void setStatus(int newValue);
+	void setStyleSheet(QString roundColor, QString bgColor);
 
 private:
 	virtual void paintEvent(QPaintEvent* event);
@@ -25,6 +26,9 @@ private:
 	int status = 0; // Положение слайдера. 0 - кружок слевва (manual) / 1 - кружок справа (auto)
 	int sizeWidth;
 	int sizeHeight;
+
+	QColor roundColor;
+	QColor bgColor;
 
 public slots:
 	void resizeSlider(int newWidth, int newHeight);

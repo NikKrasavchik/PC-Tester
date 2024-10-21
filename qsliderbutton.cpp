@@ -5,14 +5,13 @@
 QSliderButton::QSliderButton(QWidget* parent)
 {
 	this->setParent(parent);
+	roundColor = QColor(ROUND_COLOR); // Цвет кружка
+	bgColor = QColor(BG_COLOR);		 // Цвет фона
 }
 
 void QSliderButton::paintEvent(QPaintEvent* event)
 {
 	QPainter painter(this);
-
-	QColor roundColor = QColor(ROUND_COLOR); // Цвет кружка
-	QColor bgColor = QColor(BG_COLOR);		 // Цвет фона
 
 	painter.setPen(QPen(Qt::black, 3));
 	painter.setRenderHint(QPainter::Antialiasing, true);
@@ -66,4 +65,10 @@ void QSliderButton::resizeSlider(int newWidth, int newHeight)
 {
 	sizeWidth = newWidth;
 	sizeHeight = newHeight;
+}
+
+void QSliderButton::setStyleSheet(QString roundColor, QString bgColor)
+{
+	this->roundColor = roundColor;
+	this->bgColor = bgColor;
 }

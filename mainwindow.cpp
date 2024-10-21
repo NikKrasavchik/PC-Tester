@@ -5,6 +5,9 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	ui.setupUi(this);
 
+	fileSelected = false;
+	initAll = false;
+
 	initUi();
 }
 
@@ -15,8 +18,6 @@ void MainWindow::initUi()
 {
 	resize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT);
 	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
-
-	ui.centralWidget->setStyleSheet(lightStyles.screenColor);
 
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("MainFormLayoutWidget");
@@ -49,6 +50,7 @@ void MainWindow::initUi()
 	initAll = true;
 
 	on_checkAdaptersButton_clicked();
+	switchTheme();
 }
 
 void MainWindow::initUiLogo()
@@ -77,7 +79,6 @@ void MainWindow::initUiTopHLayout()
 	manualStandButton->setObjectName("manualStandButton");
 	manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
 	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	manualStandButton->setStyleSheet(lightStyles.alwaysActiveButton);
 	switchHLayout->addWidget(manualStandButton);
 	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
 
@@ -86,7 +87,6 @@ void MainWindow::initUiTopHLayout()
 
 	// Switch stand
 	switchStandSlider = new QSliderButton(mainLayoutWidget);
-	switchStandSlider->setStyleSheet("background-color: #979797;");
 	switchStandSlider->setObjectName("switchStandButton");
 	switchStandSlider->setFixedSize(MIN_STAND_SWITCH_SLIDER_WIDTH, MIN_STAND_SWITCH_SLIDER_HEIGHT);
 	switchHLayout->addWidget(switchStandSlider);
@@ -101,7 +101,6 @@ void MainWindow::initUiTopHLayout()
 	autoStandButton->setObjectName("autoStandButton");
 	autoStandButton->setText(QString::fromLocal8Bit("Автомат."));
 	autoStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	autoStandButton->setStyleSheet(lightStyles.standartButton);
 	switchHLayout->addWidget(autoStandButton);
 	connect(autoStandButton, &QPushButton::clicked, this, &MainWindow::on_autoStandButton_clicked);
 
@@ -118,7 +117,6 @@ void MainWindow::initUiTopHLayout()
 	switchThemeButton->setObjectName("switchThemeButton");
 	switchThemeButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
 	switchThemeButton->setIcon(QIcon(*themeLightPixmap));
-	switchThemeButton->setStyleSheet(lightStyles.ThemaLangButton);
 	connect(switchThemeButton, &QPushButton::clicked, this, &MainWindow::on_switchThemeButton_clicked);
 	switchThemeLanguageVLayout->addWidget(switchThemeButton);
 
@@ -127,7 +125,6 @@ void MainWindow::initUiTopHLayout()
 	switchLanguageButton->setObjectName("switchLanguageButton");
 	switchLanguageButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
 	switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
-	switchLanguageButton->setStyleSheet(lightStyles.ThemaLangButton);
 	switchThemeLanguageVLayout->addWidget(switchLanguageButton);
 	connect(switchLanguageButton, &QPushButton::clicked, this, &MainWindow::on_switchLanguageButton_clicked);
 	topHLayout->addLayout(switchThemeLanguageVLayout);
@@ -168,7 +165,6 @@ void MainWindow::initUiLeftVLayout()
 	selectAdapterComboBox = new QComboBox(mainLayoutWidget);
 	selectAdapterComboBox->setObjectName("selectAdapterComboBox");
 	selectAdapterComboBox->setFixedSize(MIN_ADAPTER_COMBO_WIDTH, MIN_ADAPTER_COMBO_HEIGHT);
-	selectAdapterComboBox->setStyleSheet(lightStyles.selectText);
 	selectAdapterComboBox->addItem("...");
 	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
 	findAdapterHLayout->addWidget(selectAdapterComboBox);
@@ -181,7 +177,6 @@ void MainWindow::initUiLeftVLayout()
 	selectAdapterLabel = new QLabel(mainLayoutWidget);
 	selectAdapterLabel->setObjectName("selectAdapterLabel");
 	selectAdapterLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите адаптер"));
-	selectAdapterLabel->setStyleSheet(lightStyles.selectText);
 	selectAdapterVLayout->addWidget(selectAdapterLabel);
 
 	selectAdapterHLayout->addLayout(selectAdapterVLayout);
@@ -201,13 +196,11 @@ void MainWindow::initUiLeftVLayout()
 	selectFrequencyComboBox = new QComboBox(mainLayoutWidget);
 	selectFrequencyComboBox->setObjectName("selectAdapterComboBox");
 	selectFrequencyComboBox->setFixedSize(MIN_FREQUENCY_COMBO_WIDTH, MIN_FREQUENCY_COMBO_HEIGHT);
-	selectFrequencyComboBox->setStyleSheet(lightStyles.selectText);
 	//connect(selectFrequencyComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::on_selectFrequencyComboBox_changed);// так у меня почему то не получилось
 	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
 	selectFrequencyVLayout->addWidget(selectFrequencyComboBox);
 	// как то красиво это преобразовать надо
 	selectFrequencyComboBox->addItem("...");
-	selectFrequencyComboBox->addItem("10 000 pbs");
 	selectFrequencyComboBox->addItem("50 000 pbs");
 	selectFrequencyComboBox->addItem("100 000 pbs");
 	selectFrequencyComboBox->addItem("125 000 pbs");
@@ -219,7 +212,6 @@ void MainWindow::initUiLeftVLayout()
 	selectFrequencyLabel = new QLabel(mainLayoutWidget);
 	selectFrequencyLabel->setObjectName("selectFrequencyLabel");
 	selectFrequencyLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите частоту"));
-	selectFrequencyLabel->setStyleSheet(lightStyles.selectText);
 	selectFrequencyVLayout->addWidget(selectFrequencyLabel);
 
 	leftVLayout->addLayout(selectFrequencyVLayout);
@@ -231,7 +223,6 @@ void MainWindow::initUiLeftVLayout()
 	configuratorButton = new QPushButton(mainLayoutWidget);
 	configuratorButton->setObjectName("configuratorButton");
 	configuratorButton->setText(QString::fromLocal8Bit("Конфигуратор"));
-	configuratorButton->setStyleSheet(lightStyles.settingButton);
 	configuratorButton->setFixedSize(MIN_CONFIGURATOR_BUTTON_WIDTH, MIN_CONFIGURATOR_BUTTON_HEIGHT);
 	leftVLayout->addWidget(configuratorButton, Qt::AlignHCenter);
 
@@ -245,7 +236,6 @@ void MainWindow::initUiLeftVLayout()
 	selectFileButton = new QPushButton(mainLayoutWidget);
 	selectFileButton->setObjectName("selectFileButton");
 	selectFileButton->setText(QString::fromLocal8Bit("Выбрать файл"));
-	selectFileButton->setStyleSheet(lightStyles.settingButton);
 	selectFileButton->setFixedSize(MIN_FILE_SEL_BUTTON_WIDTH, MIN_FILE_SEL_BUTTON_HEIGHT);
 	connect(selectFileButton, &QPushButton::clicked, this, &MainWindow::on_selectFileButton_clicked);
 	selectFileVLayout->addWidget(selectFileButton, Qt::AlignHCenter);
@@ -253,7 +243,6 @@ void MainWindow::initUiLeftVLayout()
 	selectFileLabel = new QLabel(mainLayoutWidget);
 	selectFileLabel->setObjectName("selectFileLabel");
 	selectFileLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите файл"));
-	selectFileLabel->setStyleSheet(lightStyles.selectText);
 	selectFileLabel->setAlignment(Qt::AlignHCenter);
 	selectFileLabel->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH);
 	selectFileVLayout->addWidget(selectFileLabel, Qt::AlignHCenter);
@@ -285,7 +274,7 @@ void MainWindow::initUiMainVLayout()
 	outTestManualStandButton = new QPushButton(mainLayoutWidget);
 	outTestManualStandButton->setObjectName("outTestManualStandButton");
 	outTestManualStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+	connect(outTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_outTestManualStandButton_changed);
 	manualStandMainVLayout->addWidget(outTestManualStandButton);
 
 	manualStandMainMiddleSpacer = new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -295,7 +284,6 @@ void MainWindow::initUiMainVLayout()
 	inTestManualStandButton = new QPushButton(mainLayoutWidget);
 	inTestManualStandButton->setObjectName("inTestManualStandButton");
 	inTestManualStandButton->setText(QString::fromLocal8Bit("Входы"));
-	inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 	manualStandMainVLayout->addWidget(inTestManualStandButton);
 
 	manualStaneMainBottomSpacer = new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
@@ -316,7 +304,6 @@ void MainWindow::initUiMainVLayout()
 
 	manualTestAutoStandWidget = new QWidget(mainLayoutWidget);
 	manualTestAutoStandWidget->setObjectName("manualTestAutoStandWidget");
-	manualTestAutoStandWidget->setStyleSheet("background-color: red;");
 
 	manualTestAutoStandVLayout = new QVBoxLayout(manualTestAutoStandWidget);
 	manualTestAutoStandVLayout->setObjectName("manualTestAutoStandVLayout");
@@ -332,7 +319,6 @@ void MainWindow::initUiMainVLayout()
 	outManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
 	outManualTestAutoStandButton->setObjectName("outManualTestAutoStandButton");
 	outManualTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 	outManualTestAutoStandButton->hide();
 	manualTestAutoStandVLayout->addWidget(outManualTestAutoStandButton);
 
@@ -343,7 +329,6 @@ void MainWindow::initUiMainVLayout()
 	inManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
 	inManualTestAutoStandButton->setObjectName("inManualTestAutoStandButton");
 	inManualTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
-	inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 	inManualTestAutoStandButton->hide();
 	manualTestAutoStandVLayout->addWidget(inManualTestAutoStandButton);
 
@@ -355,7 +340,6 @@ void MainWindow::initUiMainVLayout()
 
 	autoTestAutoStandWidget = new QWidget(mainLayoutWidget);
 	autoTestAutoStandWidget->setObjectName("autoTestAutoStandWidget");
-	autoTestAutoStandWidget->setStyleSheet("background-color: blue;");
 
 	autoTestAutoStandVLayout = new QVBoxLayout(autoTestAutoStandWidget);
 	autoTestAutoStandVLayout->setObjectName("autoTestAutoStandVLayout");
@@ -371,7 +355,6 @@ void MainWindow::initUiMainVLayout()
 	outAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
 	outAutoTestAutoStandButton->setObjectName("outAutoTestAutoStandButton");
 	outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 	outAutoTestAutoStandButton->hide();
 	autoTestAutoStandVLayout->addWidget(outAutoTestAutoStandButton);
 
@@ -382,7 +365,6 @@ void MainWindow::initUiMainVLayout()
 	inAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
 	inAutoTestAutoStandButton->setObjectName("inAutoTestAutoStandButton");
 	inAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
-	inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 	inAutoTestAutoStandButton->hide();
 	autoTestAutoStandVLayout->addWidget(inAutoTestAutoStandButton);
 
@@ -404,7 +386,6 @@ void MainWindow::initUiMainVLayout()
 	fullTestAutoStandButton = new QPushButton(mainLayoutWidget);
 	fullTestAutoStandButton->setObjectName("fullTestAutoStandButton");
 	fullTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы/Входы"));
-	fullTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 	fullTestAutoStandButton->hide();
 	fullAutoStandMainHLayout->addWidget(fullTestAutoStandButton, Qt::AlignHCenter);
 
@@ -523,8 +504,7 @@ void MainWindow::switchStandButtons()
 		manualStandMainMiddleSpacer->changeSize(0, 0, QSizePolicy::Fixed);
 		manualStaneMainBottomSpacer->changeSize(0, 0, QSizePolicy::Fixed);
 
-		autoStandButton->setStyleSheet(lightStyles.alwaysActiveButton);
-		manualStandButton->setStyleSheet(lightStyles.standartButton);
+		switchTheme();
 		break;
 
 	case MANUAL_STAND:
@@ -549,8 +529,7 @@ void MainWindow::switchStandButtons()
 		manualStandMainMiddleSpacer->changeSize(0, 1, QSizePolicy::Expanding);
 		manualStaneMainBottomSpacer->changeSize(0, 1, QSizePolicy::Expanding);
 
-		autoStandButton->setStyleSheet(lightStyles.standartButton);
-		manualStandButton->setStyleSheet(lightStyles.alwaysActiveButton);
+		switchTheme();
 		break;
 
 	default:
@@ -583,12 +562,14 @@ void MainWindow::on_manualStandButton_clicked()
 
 void MainWindow::on_selectFileButton_clicked()
 {
+	fileSelected = true;
+	switchStyleMainButton();
 }
 
 void MainWindow::initRecources()
 {
 	logoLightPixmap = new QPixmap(":/Light/Recources/Logo_Light.png");
-	logoDarkPixmap = new QPixmap("");
+	logoDarkPixmap = new QPixmap(":/Dark/Recources/Logo_Dark.png");
 	themeLightPixmap = new QPixmap(":/Light/Recources/Moon_Dark.png");
 	themeDarkPixmap = new QPixmap(":/Dark/Recources/Sun_Light.png");
 	checkAdapterLightPixmap = new QPixmap(":/Light/Recources/Update_Dark.png");
@@ -615,15 +596,94 @@ void MainWindow::switchTheme()
 		switchThemeButton->setIcon(QIcon(*themeLightPixmap));
 		switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
 		checkAdaptersButton->setIcon(QIcon(*checkAdapterLightPixmap));
+		logoLabel->setPixmap(*logoLightPixmap);
+
+		ui.centralWidget->setStyleSheet(lightStyles.screenColor);
+		switchThemeButton->setStyleSheet(lightStyles.ThemaLangButton);
+		switchLanguageButton->setStyleSheet(lightStyles.ThemaLangButton);
+
+		// левая часть
+		// адаптер
+		checkAdaptersButton->setStyleSheet(lightStyles.ThemaLangButton); // button обновления
+		selectAdapterLabel->setStyleSheet(lightStyles.selectText); // lable адаптера
+		selectAdapterComboBox->setStyleSheet(lightStyles.comboBox); // comboBox
+
+		// частота
+		selectFrequencyLabel->setStyleSheet(lightStyles.selectText);  // lable частоты
+		selectFrequencyComboBox->setStyleSheet(lightStyles.comboBox); // comboBox
+
+		// конфигуратор
+		configuratorButton->setStyleSheet(lightStyles.settingButton); // button конфигуратор
+
+		// файл
+		selectFileButton->setStyleSheet(lightStyles.settingButton); // button файл
+		selectFileLabel->setStyleSheet(lightStyles.selectText);  // lable файла
+
+		// header
+		// Слайдер
+		switchStandSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider);
+		// выбор стенда
+		if (switchStandSlider->getStatus() == AUTO_STAND)
+		{
+			autoStandButton->setStyleSheet(lightStyles.alwaysActiveButton);
+			manualStandButton->setStyleSheet(lightStyles.standartButton);
+		}
+		else
+		{
+			autoStandButton->setStyleSheet(lightStyles.standartButton);
+			manualStandButton->setStyleSheet(lightStyles.alwaysActiveButton);
+		}
+
+		// main
+		switchStyleMainButton();
+
 		break;
 
 	case DARK_THEME:
 		switchThemeButton->setIcon(QIcon(*themeDarkPixmap));
 		switchLanguageButton->setIcon(QIcon(*languageDarkPixmap));
 		checkAdaptersButton->setIcon(QIcon(*checkAdapterDarkPixmap));
+		logoLabel->setPixmap(*logoDarkPixmap);
 
-		//
 		ui.centralWidget->setStyleSheet(darkStyles.screenColor);
+		switchThemeButton->setStyleSheet(darkStyles.ThemaLangButton);
+		switchLanguageButton->setStyleSheet(darkStyles.ThemaLangButton);
+
+		// левая часть
+		// адаптер
+		checkAdaptersButton->setStyleSheet(darkStyles.ThemaLangButton); // button обновления
+		selectAdapterLabel->setStyleSheet(darkStyles.selectText); // lable адаптера
+		selectAdapterComboBox->setStyleSheet(darkStyles.comboBox); // comboBox
+		//selectAdapterComboBox->
+
+		// частота
+		selectFrequencyLabel->setStyleSheet(darkStyles.selectText);  // lable частоты
+		selectFrequencyComboBox->setStyleSheet(darkStyles.comboBox); // comboBox
+
+		// конфигуратор
+		configuratorButton->setStyleSheet(darkStyles.settingButton); // button конфигуратор
+
+		// файл
+		selectFileButton->setStyleSheet(darkStyles.settingButton);  // button файл
+		selectFileLabel->setStyleSheet(darkStyles.selectText);  // lable файла
+
+		// header
+		// слайдер
+		switchStandSlider->setStyleSheet(darkStyles.roundSlider, darkStyles.bgSlider);
+		// выбор стенда
+		if (switchStandSlider->getStatus() == AUTO_STAND)
+		{
+			autoStandButton->setStyleSheet(darkStyles.alwaysActiveButton);
+			manualStandButton->setStyleSheet(darkStyles.standartButton);
+		}
+		else
+		{
+			autoStandButton->setStyleSheet(darkStyles.standartButton);
+			manualStandButton->setStyleSheet(darkStyles.alwaysActiveButton);
+		}
+
+		// main
+		switchStyleMainButton();
 
 		break;
 
@@ -659,9 +719,9 @@ void MainWindow::switchLanguage()
 		outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
 		fullTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы/Входы"));
 
-		if (!isAdapterSet)
+		if (!can->getAdapterSelected())
 			selectAdapterLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите адаптер"));
-		if (!isFrequencySet)
+		if (!can->getFrequencySelected())
 			selectFrequencyLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите частоту"));
 		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
 		autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
@@ -682,9 +742,9 @@ void MainWindow::switchLanguage()
 		outAutoTestAutoStandButton->setText(QString("Out"));
 		fullTestAutoStandButton->setText(QString("Full"));
 
-		if (!isAdapterSet)
+		if (!can->getAdapterSelected())
 			selectAdapterLabel->setText(QString("Please, select adapter"));
-		if (!isFrequencySet)
+		if (!can->getFrequencySelected())
 			selectFrequencyLabel->setText(QString("Please, select frequency"));
 		manualTestAutoStandLabel->setText(QString("Manual"));
 		autoTestAutoStandLabel->setText(QString("Auto"));
@@ -695,7 +755,7 @@ void MainWindow::switchLanguage()
 	default:
 		break;
 	}
-	if (isFrequencySet)
+	if (can->getFrequencySelected())
 		on_selectFrequencyComboBox_changed(1);
 }
 
@@ -704,24 +764,18 @@ void MainWindow::on_selectFrequencyComboBox_changed(int index)
 	if (!initAll)
 		return;
 
+	can->setFrequency(selectFrequencyComboBox->currentText());
+	switchStyleMainButton();
+
 	if (index == 0)
-	{
-		isFrequencySet = false; // Частота не выбранна
 		switchLanguage(); // Ставим предупреждающий lable согласно языку
-		deinitCanAdapter();
-	}
 	else if (index > 0)
 	{
-		isFrequencySet = true; // Частота выбранна
 		if (appLanguage == RUSSIAN_LANG)
 			selectFrequencyLabel->setText(QString::fromLocal8Bit("Частота: ") + selectFrequencyComboBox->currentText());
 		else if (appLanguage == ENGLISH_LANG)
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
-
-		initCanAdapter(); // Инитим can или переинитим
 	}
-
-	switchStyleMainButton();
 }
 
 void MainWindow::on_selectAdapterComboBox_changed(int index)
@@ -729,29 +783,21 @@ void MainWindow::on_selectAdapterComboBox_changed(int index)
 	if (!initAll)
 		return;
 
-	if (index == 0)
-	{
-		isAdapterSet = false; // Частота не выбранна
-		switchLanguage(); // Ставим предупреждающий lable согласно языку
-		deinitCanAdapter();
-	}
-	else if (index > 0)
-	{
-		isAdapterSet = true; // Частота выбранна
-		selectAdapterLabel->setText("");
-
-		initCanAdapter(); // Инитим can или переинитим
-	}
-
+	can->setAdapterNeme(selectAdapterComboBox->currentText()); // Адаптер не выбранна
 	switchStyleMainButton();
+
+	if (index == 0)
+		switchLanguage(); // Ставим предупреждающий lable согласно языку
+	else if (index > 0)
+		selectAdapterLabel->setText("");
 }
 
 void MainWindow::on_checkAdaptersButton_clicked()
 {
 	if (!initAll)
 		return;
-	selectAdapterComboBox->clear();
 
+	selectAdapterComboBox->clear();
 	selectAdapterComboBox->addItem("...");
 
 	std::vector<QString> nameAdapters = can->getNameAdapters();
@@ -760,35 +806,67 @@ void MainWindow::on_checkAdaptersButton_clicked()
 		selectAdapterComboBox->addItem(nameAdapters[i]);
 }
 
-void MainWindow::initCanAdapter()
-{
-	int pop = selectFrequencyComboBox->currentIndex();
-}
-
-void MainWindow::deinitCanAdapter()
-{
-}
-
 void MainWindow::switchStyleMainButton()
 {
-	if (isFrequencySet && isAdapterSet)
+	if (fileSelected && can->getFrequencySelected() && can->getAdapterSelected())
 	{
-		outTestManualStandButton->setStyleSheet(lightStyles.mainButton);
-		inTestManualStandButton->setStyleSheet(lightStyles.mainButton);
-		outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-		inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-		outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-		inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-		fullTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+		if (appTheme == LIGHT_THEME)
+		{
+			outTestManualStandButton->setStyleSheet(lightStyles.mainButton);
+			inTestManualStandButton->setStyleSheet(lightStyles.mainButton);
+			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			fullTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+		}
+		else
+		{
+			outTestManualStandButton->setStyleSheet(darkStyles.mainButton);
+			inTestManualStandButton->setStyleSheet(darkStyles.mainButton);
+			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			inAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			fullTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+		}
 	}
 	else
 	{
-		outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-		inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-		outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-		inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-		outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-		inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-		fullTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+		if (appTheme == LIGHT_THEME)
+		{
+			outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			fullTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+		}
+		else
+		{
+			outTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			inTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			inAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			fullTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+		}
+	}
+}
+
+void MainWindow::on_outTestManualStandButton_changed()
+{
+	if (fileSelected && can->getAdapterSelected() && can->getFrequencySelected())
+	{
+		int u = 0;
+		can->initCan();
+		int msg[8] = { 0,0,0,0,0,0,0,0 };
+		while (u == 0)
+		{
+			can->sendCan(100, msg);
+		}
+		can->deinitCan();
 	}
 }

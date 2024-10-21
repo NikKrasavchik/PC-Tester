@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
+#include <QMessageBox>
 
 #include "ui_mainwindow.h"
 #include "qsliderbutton.h"
@@ -54,9 +55,6 @@
 #define COEF_CONFIGURATOR_BUTTON		0.05
 #define COEF_FILE_SEL_BUTTON			0.05
 #define COEF_MAIN_BUTTON				0.05
-
-#define MANUAL_STAND    0
-#define AUTO_STAND      1
 
 #define LIGHT_THEME		0
 #define DARK_THEME		1
@@ -168,9 +166,8 @@ private:
 
 	bool appTheme;
 	bool appLanguage;
-	bool isFrequencySet;
-	bool isAdapterSet;
-	bool initAll = false;
+	bool fileSelected;
+	bool initAll;
 
 	void initStyles();
 	void initRecources();
@@ -179,9 +176,6 @@ private:
 	void initUiTopHLayout();
 	void initUiLeftVLayout();
 	void initUiMainVLayout();
-	void initCanAdapter();
-
-	void deinitCanAdapter();
 
 	void switchStandButtons();
 	void switchTheme();
@@ -202,6 +196,8 @@ private slots:
 	// ComboBox
 	void on_selectFrequencyComboBox_changed(int index);
 	void on_selectAdapterComboBox_changed(int index);
+	// main
+	void on_outTestManualStandButton_changed();
 
 signals:
 	void resizeStandSlider(int width, int height);

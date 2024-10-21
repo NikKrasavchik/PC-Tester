@@ -3,7 +3,6 @@
 
 Styles darkStyles;
 Styles lightStyles;
-Styles lolol;
 
 void MainWindow::initStyles()
 {
@@ -107,110 +106,106 @@ void MainWindow::initStyles()
 			font-size: 11px;
 			font-weight: 600;
 	)";
-
-	lolol.standartButton =
+	lightStyles.comboBox =
 		R"(
-		.QPushButton {
-			margin-right: 40px;
-			margin-left: 40px;
-			height: 100 px;
-			width:200px;
-
-			border-radius: 20px;
 			background-color: #D9D9D9;
-		}
-		.QPushButton:hover {
-			background-color: #B7B6B6;
-		}
-		.QPushButton:hover:pressed {
-			background-color: #979797;
-		}
+			border-radius: 10px;
+
+			font-family: Kartika;
+			font-size: 11px;
+			font-weight: 600;
 	)";
+	lightStyles.roundSlider = "#939393";
+	lightStyles.bgSlider = "#E8E8E8";
 
 	// Dark
 	darkStyles.standartButton =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
-			background-color: #D9D9D9;
+			background-color: #807F7F;
 
+			color: #D8D8D8;
 			font-family: Kartika;
 			font-size: 25px;
 			font-weight: 700;
 		}
 		.QPushButton:hover {
-			background-color: #B7B6B6;
+			background-color: #707070;
 		}
 		.QPushButton:hover:pressed {
-			background-color: #979797;
+			background-color: #585858;
 		}
 	)";
 	darkStyles.settingButton =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
-			background-color: #D9D9D9;
+			background-color: #807F7F;
 
+			color: #D8D8D8;
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 600;
 		}
 		.QPushButton:hover {
-			background-color: #B7B6B6;
+			background-color: #707070;
 		}
 		.QPushButton:hover:pressed {
-			background-color: #979797;
+			background-color: #585858;
 		}
 	)";
 	darkStyles.mainButton =
 		R"(
 		.QPushButton {
 			border-radius: 20px;
-			background-color: #999898;
+			background-color: #807F7F;
 
+			color: #D8D8D8;
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 600;
 		}
 		.QPushButton:hover {
-			background-color: #4E4C4C;
+			background-color: #707070;
 		}
 		.QPushButton:hover:pressed {
-			background-color: #373737;
+			background-color: #585858;
 		}
 	)";
 	darkStyles.ThemaLangButton =
 		R"(
 		.QPushButton {
 			border-radius: 10px;
-			background-color: #DCDCDC;
+			background-color: #797777;
 			margin-top: 5px;
 		}
 		.QPushButton:hover {
-			background-color: #B9B5B5;
+			background-color: #6F6E6E;
 		}
 		.QPushButton:hover:pressed {
-			background-color: #989898;
+			background-color: #939393;
 		}
 	)";
 	darkStyles.mainButtonNoActive =
 		R"(
 		.QPushButton {
 			border-radius: 20px;
-			background-color: #D9D9D9;
+			background-color: #929292;
 
+			color: #A7A7A7;
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 600;
-			color: #7A7878;
 		}
 	)";
 	darkStyles.alwaysActiveButton =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
-			background-color: #979797;
+			background-color: #585858;
 
+			color: #D8D8D8;
 			font-family: Kartika;
 			font-size: 25px;
 			font-weight: 700;
@@ -219,13 +214,26 @@ void MainWindow::initStyles()
 	)";
 	darkStyles.screenColor =
 		R"(
-	background-color: #404040;
+	background-color: #282828;
 	)";
 	darkStyles.selectText =
 		R"(
+			color: #D8D8D8;
 			line-height: 1px;
 			font-family: Kartika;
 			font-size: 11px;
 			font-weight: 600;
 	)";
+	darkStyles.comboBox =
+		R"(
+			background-color: #807F7F;
+			border-radius: 10px;
+
+			color: #D8D8D8;
+			font-family: Kartika;
+			font-size: 11px;
+			font-weight: 600;
+	)";
+	darkStyles.roundSlider = "#585858";
+	darkStyles.bgSlider = "#777777";
 }

@@ -13,6 +13,9 @@ struct Styles
 	QString screenColor;
 	QString selectText;
 	QString ThemaLangButton;
+	QString roundSlider;
+	QString bgSlider;
+	QString comboBox;
 };
 
 extern Styles darkStyles;
