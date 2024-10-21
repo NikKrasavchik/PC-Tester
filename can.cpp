@@ -46,6 +46,10 @@ void Can::sendCan(int id, int* msg)
 	}
 }
 
+void Can::receiveCan()
+{
+}
+
 void Can::setAdapterNeme(QString adapter)
 {
 	kvaser->activeAdapter = -1;

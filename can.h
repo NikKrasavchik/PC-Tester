@@ -18,9 +18,8 @@ public:
 	void deinitCan();
 
 	void sendCan(int id, int* msg);
+	void receiveCan();
 
-	//void setAdapterSelected(bool statusSelected) { adapterSelected = statusSelected; }
-	//void setFrequencySelected(bool statusSelected) { frequencySelected = statusSelected; }
 	void setAdapterNeme(QString adapter);
 	void setFrequency(QString frequency);
 
