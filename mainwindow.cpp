@@ -220,6 +220,7 @@ void MainWindow::initUiAdapter()
 	selectAdapterComboBox->setObjectName("selectAdapterComboBox");
 	selectAdapterComboBox->setFixedHeight(MIN_ADAPTER_COMBO_HEIGHT);
 	selectAdapterComboBox->setMaximumWidth(MAX_ADAPTER_COMBO_WIDTH);
+	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
 	findAdapterHLayout->addWidget(selectAdapterComboBox);
 
 	selectAdapterMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
@@ -241,6 +242,7 @@ void MainWindow::initUiFrequency()
 	selectFrequencyComboBox->setObjectName("selectAdapterComboBox");
 	selectFrequencyComboBox->setFixedHeight(MIN_FREQUENCY_COMBO_HEIGHT);
 	selectFrequencyComboBox->setMaximumWidth(MAX_FREQUENCY_COMBO_WIDTH);
+	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
 	selectFrequencyVLayout->addWidget(selectFrequencyComboBox);
 
 	frequencyMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
@@ -631,7 +633,7 @@ void MainWindow::initRecources()
 	languageDarkPixmap = new QPixmap(":/Dark/Recources/Language_Light.png");
 }
 
-void MainWindow::switchStyleMainButton()
+void MainWindow::switchStyleMainButtons()
 {
 	if (fileSelected && can->getFrequencySelected() && can->getAdapterSelected())
 	{
@@ -762,7 +764,7 @@ void MainWindow::on_selectFileButton_clicked()
 	selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
 
 	fileSelected = true;
-	switchStyleMainButton();
+	switchStyleMainButtons();
 }
 
 void MainWindow::on_switchThemeButton_clicked()
@@ -786,12 +788,12 @@ void MainWindow::switchTheme()
 		logoLabel->setPixmap(*logoLightPixmap);
 
 		ui.centralWidget->setStyleSheet(lightStyles.screenColor);
-		switchThemeButton->setStyleSheet(lightStyles.ThemaLangButton);
-		switchLanguageButton->setStyleSheet(lightStyles.ThemaLangButton);
+		switchThemeButton->setStyleSheet(lightStyles.themeLangButton);
+		switchLanguageButton->setStyleSheet(lightStyles.themeLangButton);
 
 		// левая часть
 		// адаптер
-		checkAdaptersButton->setStyleSheet(lightStyles.ThemaLangButton); // button обновления
+		checkAdaptersButton->setStyleSheet(lightStyles.themeLangButton); // button обновления
 		selectAdapterLabel->setStyleSheet(lightStyles.selectText); // lable адаптера
 		selectAdapterComboBox->setStyleSheet(lightStyles.comboBox); // comboBox
 
@@ -822,7 +824,7 @@ void MainWindow::switchTheme()
 		}
 
 		// main
-		switchStyleMainButton();
+		switchStyleMainButtons();
 
 		break;
 
@@ -833,12 +835,12 @@ void MainWindow::switchTheme()
 		logoLabel->setPixmap(*logoDarkPixmap);
 
 		ui.centralWidget->setStyleSheet(darkStyles.screenColor);
-		switchThemeButton->setStyleSheet(darkStyles.ThemaLangButton);
-		switchLanguageButton->setStyleSheet(darkStyles.ThemaLangButton);
+		switchThemeButton->setStyleSheet(darkStyles.themeLangButton);
+		switchLanguageButton->setStyleSheet(darkStyles.themeLangButton);
 
 		// левая часть
 		// адаптер
-		checkAdaptersButton->setStyleSheet(darkStyles.ThemaLangButton); // button обновления
+		checkAdaptersButton->setStyleSheet(darkStyles.themeLangButton); // button обновления
 		selectAdapterLabel->setStyleSheet(darkStyles.selectText); // lable адаптера
 		selectAdapterComboBox->setStyleSheet(darkStyles.comboBox); // comboBox
 		//selectAdapterComboBox->
@@ -870,7 +872,7 @@ void MainWindow::switchTheme()
 		}
 
 		// main
-		switchStyleMainButton();
+		switchStyleMainButtons();
 
 		break;
 
@@ -988,7 +990,7 @@ void MainWindow::on_selectFrequencyComboBox_changed(int index)
 		return;
 
 	can->setFrequency(selectFrequencyComboBox->currentText());
-	switchStyleMainButton();
+	switchStyleMainButtons();
 
 	if (index == 0)
 		switchLanguage(); // Ставим предупреждающий lable согласно языку
@@ -1007,7 +1009,7 @@ void MainWindow::on_selectAdapterComboBox_changed(int index)
 		return;
 
 	can->setAdapterNeme(selectAdapterComboBox->currentText()); // Адаптер не выбранна
-	switchStyleMainButton();
+	switchStyleMainButtons();
 
 	if (index == 0)
 		switchLanguage(); // Ставим предупреждающий lable согласно языку

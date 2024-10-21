@@ -42,8 +42,8 @@
 #define MIN_MAIN_FUL_BUTTON_WIDTH		200
 #define MIN_MAIN_FUL_BUTTON_HEIGHT		60
 
-//#define MAX_ADAPTER_COMBO_WIDTH			263
-//#define MAX_FREQUENCY_COMBO_WIDTH		300
+#define MAX_ADAPTER_COMBO_WIDTH			263
+#define MAX_FREQUENCY_COMBO_WIDTH		300
 
 #define COEF_STAND_BUTTON				0.1
 #define COEF_STAND_SLIDER				0.06
@@ -60,7 +60,7 @@
 #define RUSSIAN_LANG	0
 #define ENGLISH_LANG	1
 
-#define OVERCROWDED_SEL_FILE_LABEL		30
+#define OVERCROWDED_SEL_FILE_LABEL		26
 #define CFG_EXTENSION_LETTERS_COUNT		4
 
 class MainWindow : public QMainWindow
@@ -218,8 +218,7 @@ private:
 
 	bool appTheme;
 	bool appLanguage;
-	//bool isFrequencySet;
-	//bool isAdapterSet;
+	bool fileSelected;
 	bool initAll = false;
 	bool selectedStand;
 
