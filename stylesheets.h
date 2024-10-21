@@ -12,7 +12,8 @@ struct Styles
 	QString alwaysActiveButton;
 	QString screenColor;
 	QString selectText;
-	QString ThemaLangButton;
+	QString themeLangButton;
+	QString testButtonBackground;
 };
 
 extern Styles darkStyles;

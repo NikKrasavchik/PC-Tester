@@ -5,6 +5,7 @@
 #include <QLabel>
 #include <QPushButton>
 #include <QComboBox>
+#include <QFileDialog>
 
 #include "ui_mainwindow.h"
 #include "qsliderbutton.h"
@@ -15,9 +16,6 @@
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
-
-#define LOGO_LIGHT_QRC  ":/MainWindow/Recources/Logo_Light.png"
-#define LOGO_DARK_QRC  ":/MainWindow/Recources/Logo_Light.png"
 
 #define GRID_COLOUMN_0  0
 #define GRID_COLOUMN_1  1
@@ -32,10 +30,8 @@
 #define MIN_STAND_SWITCH_SLIDER_WIDTH	88
 #define MIN_STAND_SWITCH_SLIDER_HEIGHT	46
 #define MIN_THEME_LANG_BUTTON			30
-#define MIN_ADAPTER_COMBO_WIDTH			120
 #define MIN_ADAPTER_COMBO_HEIGHT		35
 #define MIN_ADAPTER_BUTTON_SIZE			35
-#define MIN_FREQUENCY_COMBO_WIDTH		170
 #define MIN_FREQUENCY_COMBO_HEIGHT		35
 #define MIN_CONFIGURATOR_BUTTON_WIDTH	160
 #define MIN_CONFIGURATOR_BUTTON_HEIGHT	66
@@ -45,6 +41,9 @@
 #define MIN_MAIN_IN_OUT_BUTTON_HEIGHT	46
 #define MIN_MAIN_FUL_BUTTON_WIDTH		200
 #define MIN_MAIN_FUL_BUTTON_HEIGHT		60
+
+#define MAX_ADAPTER_COMBO_WIDTH			263
+#define MAX_FREQUENCY_COMBO_WIDTH		300
 
 #define COEF_STAND_BUTTON				0.1
 #define COEF_STAND_SLIDER				0.06
@@ -64,6 +63,9 @@
 #define RUSSIAN_LANG	0
 #define ENGLISH_LANG	1
 
+#define OVERCROWDED_SEL_FILE_LABEL		30
+#define CFG_EXTENSION_LETTERS_COUNT		4
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -76,28 +78,43 @@ private:
 	Ui::MainWindowClass ui;
 
 	QWidget* mainLayoutWidget;
+	QWidget* switchStandWidget;
+	QWidget* manualStandWidget;
+	QWidget* autoStandWidget;
+	QWidget* fullTestAutoStandWidget;
 	QWidget* manualTestAutoStandWidget;
 	QWidget* autoTestAutoStandWidget;
-	QWidget* manualStandWidget;
+	QWidget* backgroundManualStandWidget;
 	QGridLayout* mainGridLayout;
 	QHBoxLayout* logoHLayout;
 	QHBoxLayout* topHLayout;
-	QHBoxLayout* switchHLayout;
-	QHBoxLayout* selectAdapterHLayout;
+	QHBoxLayout* switchStandHLayout;
 	QHBoxLayout* findAdapterHLayout;
-	QHBoxLayout* selectFileHLayout;
 	QHBoxLayout* configuratorHLayout;
 	QHBoxLayout* partitionTestAutoStandHLayout;
 	QHBoxLayout* manualStandMainHLayout;
 	QHBoxLayout* fullAutoStandMainHLayout;
+	QHBoxLayout* leftHLayout;
+	QHBoxLayout* selectFileHLayout;
+	QHBoxLayout* backgroundManualStandHLayout;
+	QHBoxLayout* autoStandMainHLayout;
+	QHBoxLayout* manualTestAutoStandHLayout;
+	QHBoxLayout* autoTestAutoStandHLayout;
+	QHBoxLayout* fullTestAutoStandHLayout;
+	QHBoxLayout* fullTestAutoStandMiddleHLayout;
+	QVBoxLayout* fullTestAutoStandVLayout;
+	QVBoxLayout* autoTestAutoStandVLayout;
+	QVBoxLayout* manualTestAutoStandVLayout;
+	QVBoxLayout* autoStandMainVLayout;
+	QVBoxLayout* testManualStandVLayout;
+	QVBoxLayout* backgroundManualStandVLayout;
 	QVBoxLayout* leftVLayout;
+	QVBoxLayout* leftSettingsVLayout;
 	QVBoxLayout* selectAdapterVLayout;
 	QVBoxLayout* selectFrequencyVLayout;
 	QVBoxLayout* selectFileVLayout;
 	QVBoxLayout* mainVLayout;
 	QVBoxLayout* switchThemeLanguageVLayout;
-	QVBoxLayout* manualTestAutoStandVLayout;
-	QVBoxLayout* autoTestAutoStandVLayout;
 	QVBoxLayout* manualStandMainVLayout;
 	QVBoxLayout* manualStandVLayout;
 	QLabel* logoLabel;
@@ -130,8 +147,10 @@ private:
 	QSpacerItem* rightSwitchStandSpacer;
 	QSpacerItem* topAdapterSpacer;
 	QSpacerItem* topFrequencySpacer;
-	QSpacerItem* topConfiguratorSpacer;
+	QSpacerItem* topSettingsSpacer;
+	QSpacerItem* botSettingsSpacer;
 	QSpacerItem* topSelectFileSpacer;
+	QSpacerItem* topConfiguratorSpacer;
 	QSpacerItem* bottomSpacer;
 	QSpacerItem* adapterLeftSpacer;
 	QSpacerItem* adapterRightSpacer;
@@ -139,21 +158,55 @@ private:
 	QSpacerItem* selectAdapterMiddleSpacer;
 	QSpacerItem* configuratorLeftSpacer;
 	QSpacerItem* configuratorRightSpacer;
-	QSpacerItem* selectFileLeftSpacer;
-	QSpacerItem* selectFileRightSpacer;
 	QSpacerItem* manualTestAutoStandSpacer;
 	QSpacerItem* autoTestAutoStandSpacer;
 	QSpacerItem* manualStandMainLeftSpacer;
 	QSpacerItem* manualStandMainRightSpacer;
-	QSpacerItem* manualStaneMainUpSpacer;
+	QSpacerItem* manualStandMainUpSpacer;
 	QSpacerItem* manualStandMainMiddleSpacer;
-	QSpacerItem* manualStaneMainBottomSpacer;
+	QSpacerItem* manualStandMainBottomSpacer;
+	QSpacerItem* backgroundManualStandMainUpSpacer;
+	QSpacerItem* backgroundManualStandMainBottomSpacer;
+	QSpacerItem* backgroundManualStandMainRightSpacer;
+	QSpacerItem* backgroundManualStandMainLeftSpacer;
 	QSpacerItem* fullAutoStandMainLeftSpacer;
 	QSpacerItem* fullAutoStandMainRightSpacer;
 	QSpacerItem* manualTestAutoStandLeftSpacer;
 	QSpacerItem* manualTestAutoStandRightSpacer;
 	QSpacerItem* manualTestAutoStandMiddleSpacer;
 	QSpacerItem* manualTestAutoStandFooterSpacer;
+	QSpacerItem* frequencyMiddleSpacer;
+	QSpacerItem* selectFileMiddleSpacer;
+	QSpacerItem* selectFileLeftSpacer;
+	QSpacerItem* selectFileRightSpacer;
+	QSpacerItem* testManualStandUpSpacer;
+	QSpacerItem* testManualStandMiddleUpSpacer;
+	QSpacerItem* testManualStandMiddleBottomSpacer;
+	QSpacerItem* testManualStandBottomSpacer;
+	QSpacerItem* autoStandMainLeftSpacer;
+	QSpacerItem* autoStandMainRightSpacer;
+	QSpacerItem* autoStandMainUpSpacer;
+	QSpacerItem* autoStandMainMiddleSpacer;
+	QSpacerItem* autoStandMainBottomSpacer;
+	QSpacerItem* partitionTestAutoStandSpacer;
+	QSpacerItem* manualTestAutoStandUpSpacer;
+	QSpacerItem* manualTestAutoStandBottomSpacer;
+	QSpacerItem* manualTestAutoStandMiddleUpSpacer;
+	QSpacerItem* manualTestAutoStandMiddleBottomSpacer;
+	QSpacerItem* autoTestAutoStandLeftSpacer;
+	QSpacerItem* autoTestAutoStandRightSpacer;
+	QSpacerItem* autoTestAutoStandUpSpacer;
+	QSpacerItem* autoTestAutoStandBottomSpacer;
+	QSpacerItem* autoTestAutoStandMiddleUpSpacer;
+	QSpacerItem* autoTestAutoStandMiddleBottomSpacer;
+	QSpacerItem* fullTestAutoStandOuterLeftSpacer;
+	QSpacerItem* fullTestAutoStandOuterRightSpacer;
+	QSpacerItem* fullTestAutoStandLeftSpacer;
+	QSpacerItem* fullTestAutoStandRightSpacer;
+	QSpacerItem* fullTestAutoStandUpSpacer;
+	QSpacerItem* fullTestAutoStandBottomSpacer;
+	QFrame* selectFileLine;
+
 
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
@@ -171,22 +224,43 @@ private:
 	bool isFrequencySet;
 	bool isAdapterSet;
 	bool initAll = false;
+	bool selectedStand;
 
-	void initStyles();
+	QString selectedFullFileName;
+
+	void initStyleSheets();
 	void initRecources();
+	void initStyles();
+	void initTexts();
+	void initIcons();
+
 	void initUi();
 	void initUiLogo();
 	void initUiTopHLayout();
-	void initUiLeftVLayout();
+	void initUiLeftHLayout();
 	void initUiMainVLayout();
-	void initCanAdapter();
 
+	void initUiSwitchStand();
+	void initUiSwitchThemeLang();
+	void initUiAdapter();
+	void initUiFrequency();
+	void initUiSelectFile();
+	void initUiConfigurator();
+	void initUiAutoStand();
+	void initUiManualStand();
+	void initUiAutoStandManualTest();
+	void initUiAutoStandAutoTest();
+	void initUiAutoStandFullTest();
+
+	void fillComboBoxes();
+
+	void initCanAdapter();
 	void deinitCanAdapter();
 
 	void switchStandButtons();
 	void switchTheme();
 	void switchLanguage();
-	void switchStyleMainButton();
+	void switchStyleMainButtons();
 
 	void resizeEvent(QResizeEvent* event);
 

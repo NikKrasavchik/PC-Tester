@@ -5,7 +5,7 @@ Styles darkStyles;
 Styles lightStyles;
 Styles lolol;
 
-void MainWindow::initStyles()
+void MainWindow::initStyleSheets()
 {
 	lightStyles.standartButton =
 		R"(
@@ -58,7 +58,7 @@ void MainWindow::initStyles()
 			background-color: #373737;
 		}
 	)";
-	lightStyles.ThemaLangButton =
+	lightStyles.themeLangButton =
 		R"(
 		.QPushButton {
 			border-radius: 10px;
@@ -127,6 +127,12 @@ void MainWindow::initStyles()
 		}
 	)";
 
+	lightStyles.testButtonBackground =
+		R"(
+		background-color: #EEEEEE;
+		border-radius: 20px;
+	)";
+
 	// Dark
 	darkStyles.standartButton =
 		R"(
@@ -179,7 +185,7 @@ void MainWindow::initStyles()
 			background-color: #373737;
 		}
 	)";
-	darkStyles.ThemaLangButton =
+	darkStyles.themeLangButton =
 		R"(
 		.QPushButton {
 			border-radius: 10px;

@@ -5,6 +5,7 @@
 QSliderButton::QSliderButton(QWidget* parent)
 {
 	this->setParent(parent);
+	status = AUTO_STAND;
 }
 
 void QSliderButton::paintEvent(QPaintEvent* event)
