@@ -244,7 +244,7 @@ void MainWindow::initUiFrequency()
 	selectFrequencyComboBox->setMaximumWidth(MAX_FREQUENCY_COMBO_WIDTH);
 	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
 	selectFrequencyVLayout->addWidget(selectFrequencyComboBox);
-
+	//iehejifejfje
 	frequencyMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
 	selectFrequencyVLayout->addItem(frequencyMiddleSpacer);
 
