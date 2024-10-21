@@ -12,10 +12,11 @@ struct Styles
 	QString alwaysActiveButton;
 	QString screenColor;
 	QString selectText;
-	QString ThemaLangButton;
 	QString roundSlider;
 	QString bgSlider;
 	QString comboBox;
+	QString themeLangButton;
+	QString testButtonBackground;
 };
 
 extern Styles darkStyles;

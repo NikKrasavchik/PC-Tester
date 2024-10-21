@@ -23,7 +23,7 @@ private:
 	virtual void paintEvent(QPaintEvent* event);
 	virtual void mousePressEvent(QMouseEvent* event);
 
-	int status = 0; // Положение слайдера. 0 - кружок слевва (manual) / 1 - кружок справа (auto)
+	int status; // Положение слайдера. 0 - кружок слевва (manual) / 1 - кружок справа (auto)
 	int sizeWidth;
 	int sizeHeight;
 

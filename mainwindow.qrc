@@ -1,5 +1,7 @@
 <RCC>
-    <qresource prefix="/MainWindow"/>
+    <qresource prefix="/">
+        <file>Recources/App_Logo.png</file>
+    </qresource>
     <qresource prefix="/Light">
         <file>Recources/Moon_Dark.png</file>
         <file>Recources/Update_Dark.png</file>

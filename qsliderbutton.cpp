@@ -5,8 +5,7 @@
 QSliderButton::QSliderButton(QWidget* parent)
 {
 	this->setParent(parent);
-	roundColor = QColor(ROUND_COLOR); // Цвет кружка
-	bgColor = QColor(BG_COLOR);		 // Цвет фона
+	status = AUTO_STAND;
 }
 
 void QSliderButton::paintEvent(QPaintEvent* event)

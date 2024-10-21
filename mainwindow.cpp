@@ -5,9 +5,6 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	ui.setupUi(this);
 
-	fileSelected = false;
-	initAll = false;
-
 	initUi();
 }
 
@@ -19,16 +16,20 @@ void MainWindow::initUi()
 	resize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT);
 	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
 
+	ui.centralWidget->setStyleSheet(lightStyles.screenColor);
+
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("MainFormLayoutWidget");
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
 
-	initStyles();
+	initStyleSheets();
 	initRecources();
 	initUiLogo();
 	initUiTopHLayout();
-	initUiLeftVLayout();
+	initUiLeftHLayout();
 	initUiMainVLayout();
+
+	autoStandWidget->show();
 
 	mainGridLayout = new QGridLayout(mainLayoutWidget);
 	mainGridLayout->setObjectName("MainFormLayout");
@@ -40,10 +41,14 @@ void MainWindow::initUi()
 	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLOUMN_0);
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLOUMN_1);
 
-	switchStandSlider->setStatus(AUTO_STAND);
-	switchStandButtons();
-	switchStandSlider->setStatus(MANUAL_STAND);
-	switchStandButtons();
+	selectedStand = AUTO_STAND;
+	appTheme = LIGHT_THEME;
+	appLanguage = RUSSIAN_LANG;
+
+	initStyles();
+	initTexts();
+	initIcons();
+	fillComboBoxes();
 
 	can = new Can();
 
@@ -59,7 +64,6 @@ void MainWindow::initUiLogo()
 	logoLabel->setObjectName("LogoLabel");
 	logoLabel->setText("");
 	logoLabel->setEnabled(true);
-	logoLabel->setPixmap(*logoLightPixmap);
 }
 
 void MainWindow::initUiTopHLayout()
@@ -67,48 +71,55 @@ void MainWindow::initUiTopHLayout()
 	topHLayout = new QHBoxLayout();
 	topHLayout->setObjectName("topHLayout");
 
-	switchHLayout = new QHBoxLayout();
-	switchHLayout->setObjectName("switchHLayout");
+	initUiSwitchStand();
+	topHLayout->addItem(switchStandHLayout);
+
+	initUiSwitchThemeLang();
+	topHLayout->addItem(switchThemeLanguageVLayout);
+}
+
+void MainWindow::initUiSwitchStand()
+{
+	switchStandHLayout = new QHBoxLayout();
+	switchStandHLayout->setObjectName("switchStandHLayout");
 
 	leftManualStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
-
-	switchHLayout->addItem(leftManualStandSpacer);
+	switchStandHLayout->addItem(leftManualStandSpacer);
 
 	// Manual
 	manualStandButton = new QPushButton(mainLayoutWidget);
 	manualStandButton->setObjectName("manualStandButton");
-	manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
 	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	switchHLayout->addWidget(manualStandButton);
+	switchStandHLayout->addWidget(manualStandButton);
 	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
 
-	leftSwitchStandSpacer = new QSpacerItem(105, 0, QSizePolicy::Preferred);
-	switchHLayout->addItem(leftSwitchStandSpacer);
+	leftSwitchStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Preferred);
+	switchStandHLayout->addItem(leftSwitchStandSpacer);
 
 	// Switch stand
 	switchStandSlider = new QSliderButton(mainLayoutWidget);
 	switchStandSlider->setObjectName("switchStandButton");
 	switchStandSlider->setFixedSize(MIN_STAND_SWITCH_SLIDER_WIDTH, MIN_STAND_SWITCH_SLIDER_HEIGHT);
-	switchHLayout->addWidget(switchStandSlider);
+	switchStandHLayout->addWidget(switchStandSlider);
 	connect(switchStandSlider, &QSliderButton::on_sliderSwitchStand_click, this, &MainWindow::on_sliderSwitchStand_click);
 	connect(this, &MainWindow::resizeStandSlider, switchStandSlider, &QSliderButton::resizeSlider);
 
-	rightSwitchStandSpacer = new QSpacerItem(105, 0, QSizePolicy::Preferred);
-	switchHLayout->addItem(rightSwitchStandSpacer);
+	rightSwitchStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Preferred);
+	switchStandHLayout->addItem(rightSwitchStandSpacer);
 
 	// Auto
 	autoStandButton = new QPushButton(mainLayoutWidget);
 	autoStandButton->setObjectName("autoStandButton");
-	autoStandButton->setText(QString::fromLocal8Bit("Автомат."));
 	autoStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	switchHLayout->addWidget(autoStandButton);
+	switchStandHLayout->addWidget(autoStandButton);
 	connect(autoStandButton, &QPushButton::clicked, this, &MainWindow::on_autoStandButton_clicked);
 
 	rightAutoStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
-	switchHLayout->addItem(rightAutoStandSpacer);
+	switchStandHLayout->addItem(rightAutoStandSpacer);
+}
 
-	topHLayout->addLayout(switchHLayout);
-
+void MainWindow::initUiSwitchThemeLang()
+{
 	switchThemeLanguageVLayout = new QVBoxLayout();
 	switchThemeLanguageVLayout->setObjectName("switchThemeLanguageVLayout");
 
@@ -116,46 +127,89 @@ void MainWindow::initUiTopHLayout()
 	switchThemeButton = new QPushButton(mainLayoutWidget);
 	switchThemeButton->setObjectName("switchThemeButton");
 	switchThemeButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
-	switchThemeButton->setIcon(QIcon(*themeLightPixmap));
-	connect(switchThemeButton, &QPushButton::clicked, this, &MainWindow::on_switchThemeButton_clicked);
 	switchThemeLanguageVLayout->addWidget(switchThemeButton);
+	connect(switchThemeButton, &QPushButton::clicked, this, &MainWindow::on_switchThemeButton_clicked);
 
 	// Language
 	switchLanguageButton = new QPushButton(mainLayoutWidget);
 	switchLanguageButton->setObjectName("switchLanguageButton");
 	switchLanguageButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
-	switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
 	switchThemeLanguageVLayout->addWidget(switchLanguageButton);
 	connect(switchLanguageButton, &QPushButton::clicked, this, &MainWindow::on_switchLanguageButton_clicked);
-	topHLayout->addLayout(switchThemeLanguageVLayout);
 }
 
-void MainWindow::initUiLeftVLayout()
+void MainWindow::initUiLeftHLayout()
 {
+	leftHLayout = new QHBoxLayout();
+	leftHLayout->setObjectName("leftHLayout");
+
 	leftVLayout = new QVBoxLayout();
 	leftVLayout->setObjectName("leftVLayout");
+	leftHLayout->addItem(leftVLayout);
 
-	topAdapterSpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	leftVLayout->addItem(topAdapterSpacer);
+	topConfiguratorSpacer = new QSpacerItem(0, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
+	leftVLayout->addItem(topConfiguratorSpacer);
 
-	selectAdapterHLayout = new QHBoxLayout();
-	selectAdapterHLayout->setObjectName("selectAdapterVLayout");
+	initUiConfigurator();
+	leftVLayout->addItem(configuratorHLayout);
 
-	adapterLeftSpacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	selectAdapterHLayout->addItem(adapterLeftSpacer);
+	topSettingsSpacer = new QSpacerItem(0, 100, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	leftVLayout->addItem(topSettingsSpacer);
 
+	leftSettingsVLayout = new QVBoxLayout();
+	leftSettingsVLayout->setObjectName("leftSettingsVLayout");
+	leftVLayout->addItem(leftSettingsVLayout);
+
+	initUiAdapter();
+	leftSettingsVLayout->addItem(selectAdapterVLayout);
+
+	topFrequencySpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	leftSettingsVLayout->addItem(topFrequencySpacer);
+
+	initUiFrequency();
+	leftSettingsVLayout->addItem(selectFrequencyVLayout);
+
+	topSelectFileSpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	leftSettingsVLayout->addItem(topSelectFileSpacer);
+
+	initUiSelectFile();
+	leftSettingsVLayout->addItem(selectFileHLayout);
+
+	botSettingsSpacer = new QSpacerItem(0, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
+	leftVLayout->addItem(botSettingsSpacer);
+}
+
+void MainWindow::initUiConfigurator()
+{
+	configuratorHLayout = new QHBoxLayout();
+	configuratorHLayout->setObjectName("configuratorHLayout");
+
+	configuratorLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Maximum);
+	configuratorHLayout->addItem(configuratorLeftSpacer);
+
+	// Configurator
+	configuratorButton = new QPushButton(mainLayoutWidget);
+	configuratorButton->setObjectName("configuratorButton");
+	configuratorButton->setFixedSize(MIN_CONFIGURATOR_BUTTON_WIDTH, MIN_CONFIGURATOR_BUTTON_HEIGHT);
+	configuratorHLayout->addWidget(configuratorButton);
+
+	configuratorLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Maximum);
+	configuratorHLayout->addItem(configuratorLeftSpacer);
+}
+
+void MainWindow::initUiAdapter()
+{
 	selectAdapterVLayout = new QVBoxLayout();
 	selectAdapterVLayout->setObjectName("selectAdapterVLayout");
 
 	findAdapterHLayout = new QHBoxLayout();
 	findAdapterHLayout->setObjectName("findAdapterHLayout");
+	selectAdapterVLayout->addItem(findAdapterHLayout);
 
 	// Adapter button
 	checkAdaptersButton = new QPushButton(mainLayoutWidget);
 	checkAdaptersButton->setObjectName("checkAdaptersButton");
 	checkAdaptersButton->setFixedSize(MIN_ADAPTER_BUTTON_SIZE, MIN_ADAPTER_BUTTON_SIZE);
-	checkAdaptersButton->setIcon(QIcon(*checkAdapterLightPixmap));
-	connect(checkAdaptersButton, &QPushButton::clicked, this, &MainWindow::on_checkAdaptersButton_clicked);
 	findAdapterHLayout->addWidget(checkAdaptersButton);
 
 	findAdapterCenterSpacer = new QSpacerItem(2, 0, QSizePolicy::Fixed);
@@ -164,238 +218,467 @@ void MainWindow::initUiLeftVLayout()
 	// Adapter combo box
 	selectAdapterComboBox = new QComboBox(mainLayoutWidget);
 	selectAdapterComboBox->setObjectName("selectAdapterComboBox");
-	selectAdapterComboBox->setFixedSize(MIN_ADAPTER_COMBO_WIDTH, MIN_ADAPTER_COMBO_HEIGHT);
-	selectAdapterComboBox->addItem("...");
-	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
+	selectAdapterComboBox->setFixedHeight(MIN_ADAPTER_COMBO_HEIGHT);
+	selectAdapterComboBox->setMaximumWidth(MAX_ADAPTER_COMBO_WIDTH);
 	findAdapterHLayout->addWidget(selectAdapterComboBox);
 
-	selectAdapterVLayout->addLayout(findAdapterHLayout);
-
-	selectAdapterMiddleSpacer = new QSpacerItem(2, 0, QSizePolicy::Fixed);
+	selectAdapterMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
 	selectAdapterVLayout->addItem(selectAdapterMiddleSpacer);
 
+	// Adapter label
 	selectAdapterLabel = new QLabel(mainLayoutWidget);
 	selectAdapterLabel->setObjectName("selectAdapterLabel");
-	selectAdapterLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите адаптер"));
+	selectAdapterLabel->setMaximumWidth(MAX_ADAPTER_COMBO_WIDTH);
 	selectAdapterVLayout->addWidget(selectAdapterLabel);
+}
 
-	selectAdapterHLayout->addLayout(selectAdapterVLayout);
-
-	adapterRightSpacer = new QSpacerItem(0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	selectAdapterHLayout->addItem(adapterRightSpacer);
-
-	leftVLayout->addLayout(selectAdapterHLayout);
-
-	topFrequencySpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	leftVLayout->addItem(topFrequencySpacer);
-
-	// Frequency
+void MainWindow::initUiFrequency()
+{
 	selectFrequencyVLayout = new QVBoxLayout();
 	selectFrequencyVLayout->setObjectName("selectFrequencyVLayout");
 
 	selectFrequencyComboBox = new QComboBox(mainLayoutWidget);
 	selectFrequencyComboBox->setObjectName("selectAdapterComboBox");
-	selectFrequencyComboBox->setFixedSize(MIN_FREQUENCY_COMBO_WIDTH, MIN_FREQUENCY_COMBO_HEIGHT);
-	//connect(selectFrequencyComboBox, &QComboBox::currentIndexChanged, this, &MainWindow::on_selectFrequencyComboBox_changed);// так у меня почему то не получилось
-	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
+	selectFrequencyComboBox->setFixedHeight(MIN_FREQUENCY_COMBO_HEIGHT);
+	selectFrequencyComboBox->setMaximumWidth(MAX_FREQUENCY_COMBO_WIDTH);
 	selectFrequencyVLayout->addWidget(selectFrequencyComboBox);
-	// как то красиво это преобразовать надо
+
+	frequencyMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
+	selectFrequencyVLayout->addItem(frequencyMiddleSpacer);
+
+	selectFrequencyLabel = new QLabel(mainLayoutWidget);
+	selectFrequencyLabel->setObjectName("selectFrequencyLabel");
+	selectFrequencyVLayout->addWidget(selectFrequencyLabel);
+}
+
+void MainWindow::initUiSelectFile()
+{
+	selectFileHLayout = new QHBoxLayout();
+	selectFileHLayout->setObjectName("selectFileVLayout");
+
+	selectFileLeftSpacer = new QSpacerItem(50, 0, QSizePolicy::Maximum);
+	selectFileHLayout->addItem(selectFileLeftSpacer);
+
+	selectFileVLayout = new QVBoxLayout();
+	selectFileVLayout->setObjectName("selectFileHLayout");
+	selectFileHLayout->addItem(selectFileVLayout);
+
+	selectFileButton = new QPushButton(mainLayoutWidget);
+	selectFileButton->setObjectName("selectFileButton");
+	selectFileButton->setFixedSize(MIN_FILE_SEL_BUTTON_WIDTH, MIN_FILE_SEL_BUTTON_HEIGHT);
+	connect(selectFileButton, &QPushButton::clicked, this, &MainWindow::on_selectFileButton_clicked);
+	selectFileVLayout->addWidget(selectFileButton);
+
+	selectFileMiddleSpacer = new QSpacerItem(0, 5, QSizePolicy::Fixed);
+	selectFileVLayout->addItem(selectFileMiddleSpacer);
+
+	selectFileLabel = new QLabel(mainLayoutWidget);
+	selectFileLabel->setObjectName("selectFileLabel");
+	selectFileLabel->setAlignment(Qt::AlignHCenter);
+	selectFileLabel->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH);
+	selectFileVLayout->addWidget(selectFileLabel);
+
+	selectFileLine = new QFrame(mainLayoutWidget);
+	selectFileLine->setObjectName("selectFileLine");
+	selectFileLine->setFrameShape(QFrame::HLine);
+	selectFileVLayout->addWidget(selectFileLine);
+
+	selectFileRightSpacer = new QSpacerItem(50, 0, QSizePolicy::Maximum);
+	selectFileHLayout->addItem(selectFileRightSpacer);
+}
+
+void MainWindow::initUiMainVLayout()
+{
+	mainVLayout = new QVBoxLayout();
+	mainVLayout->setObjectName("mainVLayout");
+
+	initUiManualStand();
+	mainVLayout->addWidget(manualStandWidget);
+	manualStandWidget->hide();
+
+	initUiAutoStand();
+	mainVLayout->addWidget(autoStandWidget);
+	autoStandWidget->hide();
+}
+
+void MainWindow::initUiAutoStand()
+{
+	autoStandWidget = new QWidget(mainLayoutWidget);
+	autoStandWidget->setObjectName("autoStandWidget");
+
+	autoStandMainHLayout = new QHBoxLayout(autoStandWidget);
+	autoStandMainHLayout->setObjectName("autoStandMainHLayout");
+
+	autoStandMainLeftSpacer = new QSpacerItem(50, 0, QSizePolicy::Expanding);
+	autoStandMainHLayout->addItem(autoStandMainLeftSpacer);
+
+	autoStandMainVLayout = new QVBoxLayout();
+	autoStandMainVLayout->setObjectName("autoStandMainVLayout");
+	autoStandMainHLayout->addItem(autoStandMainVLayout);
+
+	autoStandMainUpSpacer = new QSpacerItem(0, 50, QSizePolicy::Expanding);
+	autoStandMainVLayout->addItem(autoStandMainUpSpacer);
+
+	partitionTestAutoStandHLayout = new QHBoxLayout();
+	partitionTestAutoStandHLayout->setObjectName("partitionTestAutoStandHLayout");
+	autoStandMainVLayout->addItem(partitionTestAutoStandHLayout);
+
+	initUiAutoStandManualTest();
+	partitionTestAutoStandHLayout->addWidget(manualTestAutoStandWidget);
+
+	partitionTestAutoStandSpacer = new QSpacerItem(20, 0, QSizePolicy::Expanding);
+	partitionTestAutoStandHLayout->addItem(partitionTestAutoStandSpacer);
+
+	initUiAutoStandAutoTest();
+	partitionTestAutoStandHLayout->addWidget(autoTestAutoStandWidget);
+
+	autoStandMainMiddleSpacer = new QSpacerItem(0, 30, QSizePolicy::Expanding);
+	autoStandMainVLayout->addItem(autoStandMainMiddleSpacer);
+
+	fullTestAutoStandMiddleHLayout = new QHBoxLayout();
+	fullTestAutoStandMiddleHLayout->setObjectName("fullTestAutoStandHLayout");
+	autoStandMainVLayout->addItem(fullTestAutoStandMiddleHLayout);
+
+	fullTestAutoStandOuterLeftSpacer = new QSpacerItem(30, 0, QSizePolicy::Expanding);
+	fullTestAutoStandMiddleHLayout->addItem(fullTestAutoStandOuterLeftSpacer);
+
+	initUiAutoStandFullTest();
+	fullTestAutoStandMiddleHLayout->addWidget(fullTestAutoStandWidget);
+
+	fullTestAutoStandOuterRightSpacer = new QSpacerItem(30, 0, QSizePolicy::Expanding);
+	fullTestAutoStandMiddleHLayout->addItem(fullTestAutoStandOuterRightSpacer);
+
+	autoStandMainBottomSpacer = new QSpacerItem(0, 50, QSizePolicy::Expanding);
+	autoStandMainVLayout->addItem(autoStandMainBottomSpacer);
+
+	autoStandMainRightSpacer = new QSpacerItem(50, 0, QSizePolicy::Expanding);
+	autoStandMainHLayout->addItem(autoStandMainRightSpacer);
+}
+
+void MainWindow::initUiAutoStandManualTest()
+{
+	manualTestAutoStandWidget = new QWidget(autoStandWidget);
+	manualTestAutoStandWidget->setObjectName("autoTestAutoStandWidget");
+
+	manualTestAutoStandHLayout = new QHBoxLayout(manualTestAutoStandWidget);
+	manualTestAutoStandHLayout->setObjectName("manualTestAutoStandHLayout");
+
+	manualTestAutoStandLeftSpacer = new QSpacerItem(25, 0, QSizePolicy::Fixed);
+	manualTestAutoStandHLayout->addItem(manualTestAutoStandLeftSpacer);
+
+	manualTestAutoStandVLayout = new QVBoxLayout();
+	manualTestAutoStandVLayout->setObjectName("manualTestAutoStandHLayout");
+	manualTestAutoStandHLayout->addItem(manualTestAutoStandVLayout);
+
+	manualTestAutoStandUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	manualTestAutoStandVLayout->addItem(manualTestAutoStandUpSpacer);
+
+	// manual test auto stand label
+	manualTestAutoStandLabel = new QLabel(manualTestAutoStandWidget);
+	manualTestAutoStandLabel->setObjectName("manualTestAutoStandLabel");
+	manualTestAutoStandLabel->setAlignment(Qt::AlignHCenter);
+	manualTestAutoStandVLayout->addWidget(manualTestAutoStandLabel);
+
+	manualTestAutoStandMiddleUpSpacer = new QSpacerItem(0, 20, QSizePolicy::Fixed);
+	manualTestAutoStandVLayout->addItem(manualTestAutoStandMiddleUpSpacer);
+
+	// out manual test auto stand button
+	outManualTestAutoStandButton = new QPushButton(manualTestAutoStandWidget);
+	outManualTestAutoStandButton->setObjectName("outManualTestAutoStandButton");
+	manualTestAutoStandVLayout->addWidget(outManualTestAutoStandButton);
+
+	manualTestAutoStandMiddleBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	manualTestAutoStandVLayout->addItem(manualTestAutoStandMiddleBottomSpacer);
+
+	// in manual test auto stand button
+	inManualTestAutoStandButton = new QPushButton(manualTestAutoStandWidget);
+	inManualTestAutoStandButton->setObjectName("inManualTestAutoStandButton");
+	manualTestAutoStandVLayout->addWidget(inManualTestAutoStandButton);
+
+	manualTestAutoStandBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	manualTestAutoStandVLayout->addItem(manualTestAutoStandBottomSpacer);
+
+	manualTestAutoStandRightSpacer = new QSpacerItem(25, 0, QSizePolicy::Fixed);
+	manualTestAutoStandHLayout->addItem(manualTestAutoStandRightSpacer);
+}
+
+void MainWindow::initUiAutoStandAutoTest()
+{
+	autoTestAutoStandWidget = new QWidget(autoStandWidget);
+	autoTestAutoStandWidget->setObjectName("autoTestAutoStandWidget");
+
+	autoTestAutoStandHLayout = new QHBoxLayout(autoTestAutoStandWidget);
+	autoTestAutoStandHLayout->setObjectName("autoTestAutoStandHLayout");
+
+	autoTestAutoStandLeftSpacer = new QSpacerItem(25, 0, QSizePolicy::Fixed);
+	autoTestAutoStandHLayout->addItem(autoTestAutoStandLeftSpacer);
+
+	autoTestAutoStandVLayout = new QVBoxLayout();
+	autoTestAutoStandVLayout->setObjectName("autoTestAutoStandHLayout");
+	autoTestAutoStandHLayout->addItem(autoTestAutoStandVLayout);
+
+	autoTestAutoStandUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	autoTestAutoStandVLayout->addItem(autoTestAutoStandUpSpacer);
+
+	// auto test auto stand label
+	autoTestAutoStandLabel = new QLabel(autoTestAutoStandWidget);
+	autoTestAutoStandLabel->setObjectName("autoTestAutoStandLabel");
+	autoTestAutoStandLabel->setAlignment(Qt::AlignHCenter);
+	autoTestAutoStandVLayout->addWidget(autoTestAutoStandLabel);
+
+	autoTestAutoStandMiddleUpSpacer = new QSpacerItem(0, 20, QSizePolicy::Fixed);
+	autoTestAutoStandVLayout->addItem(autoTestAutoStandMiddleUpSpacer);
+
+	// out auto test auto stand button
+	outAutoTestAutoStandButton = new QPushButton(autoTestAutoStandWidget);
+	outAutoTestAutoStandButton->setObjectName("outManualTestAutoStandButton");
+	autoTestAutoStandVLayout->addWidget(outAutoTestAutoStandButton);
+
+	autoTestAutoStandMiddleBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	autoTestAutoStandVLayout->addItem(autoTestAutoStandMiddleBottomSpacer);
+
+	// in auto test auto stand button
+	inAutoTestAutoStandButton = new QPushButton(autoTestAutoStandWidget);
+	inAutoTestAutoStandButton->setObjectName("inManualTestAutoStandButton");
+	autoTestAutoStandVLayout->addWidget(inAutoTestAutoStandButton);
+
+	autoTestAutoStandBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	autoTestAutoStandVLayout->addItem(autoTestAutoStandBottomSpacer);
+
+	autoTestAutoStandRightSpacer = new QSpacerItem(25, 0, QSizePolicy::Fixed);
+	autoTestAutoStandHLayout->addItem(autoTestAutoStandRightSpacer);
+}
+
+void MainWindow::initUiAutoStandFullTest()
+{
+	fullTestAutoStandWidget = new QWidget(autoStandWidget);
+	fullTestAutoStandWidget->setObjectName("fullTestAutoStandWidget");
+
+	fullTestAutoStandHLayout = new QHBoxLayout(fullTestAutoStandWidget);
+	fullTestAutoStandHLayout->setObjectName("fullTestAutoStandHLayout");
+
+	fullTestAutoStandLeftSpacer = new QSpacerItem(20, 0, QSizePolicy::Preferred);
+	fullTestAutoStandHLayout->addItem(fullTestAutoStandLeftSpacer);
+
+	fullTestAutoStandVLayout = new QVBoxLayout();
+	fullTestAutoStandVLayout->setObjectName("fullTestAutoStandVLayout");
+	fullTestAutoStandHLayout->addItem(fullTestAutoStandVLayout);
+
+	fullTestAutoStandUpSpacer = new QSpacerItem(0, 20, QSizePolicy::Preferred);
+	fullTestAutoStandVLayout->addItem(fullTestAutoStandUpSpacer);
+
+	// full test auto stand button
+	fullTestAutoStandButton = new QPushButton(fullTestAutoStandWidget);
+	fullTestAutoStandButton->setObjectName("fullTestAutoStandButton");
+	fullTestAutoStandVLayout->addWidget(fullTestAutoStandButton);
+
+	fullTestAutoStandBottomSpacer = new QSpacerItem(0, 20, QSizePolicy::Preferred);
+	fullTestAutoStandVLayout->addItem(fullTestAutoStandBottomSpacer);
+
+	fullTestAutoStandRightSpacer = new QSpacerItem(20, 0, QSizePolicy::Preferred);
+	fullTestAutoStandHLayout->addItem(fullTestAutoStandRightSpacer);
+}
+
+void MainWindow::initUiManualStand()
+{
+	manualStandWidget = new QWidget(mainLayoutWidget);
+	manualStandWidget->setObjectName("manualStandWidget");
+
+	manualStandMainHLayout = new QHBoxLayout(manualStandWidget);
+	manualStandMainHLayout->setObjectName("manualStandMainHLayout");
+
+	manualStandMainLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
+	manualStandMainHLayout->addItem(manualStandMainLeftSpacer);
+
+	manualStandMainVLayout = new QVBoxLayout();
+	manualStandMainVLayout->setObjectName("manualStandMainVLayout");
+	manualStandMainHLayout->addItem(manualStandMainVLayout);
+
+	manualStandMainUpSpacer = new QSpacerItem(0, 100, QSizePolicy::Expanding);
+	manualStandMainVLayout->addItem(manualStandMainUpSpacer);
+
+	backgroundManualStandWidget = new QWidget(manualStandWidget);
+	backgroundManualStandWidget->setObjectName("backgroundManualStandWidget");
+
+	backgroundManualStandHLayout = new QHBoxLayout(backgroundManualStandWidget);
+	backgroundManualStandHLayout->setObjectName("backgroundManualStandHLayout");
+	manualStandMainVLayout->addWidget(backgroundManualStandWidget);
+
+	backgroundManualStandMainLeftSpacer = new QSpacerItem(25, 0, QSizePolicy::Fixed);
+	backgroundManualStandHLayout->addItem(backgroundManualStandMainLeftSpacer);
+
+	testManualStandVLayout = new QVBoxLayout();
+	testManualStandVLayout->setObjectName("testManualStandVLayout");
+	backgroundManualStandHLayout->addItem(testManualStandVLayout);
+
+	backgroundManualStandMainUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	testManualStandVLayout->addItem(backgroundManualStandMainUpSpacer);
+
+	manualStandLabel = new QLabel(backgroundManualStandWidget);
+	manualStandLabel->setObjectName("manualStandLabel");
+	manualStandLabel->setMaximumHeight(15);
+	manualStandLabel->setAlignment(Qt::AlignCenter);
+	testManualStandVLayout->addWidget(manualStandLabel);
+
+	testManualStandMiddleUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	testManualStandVLayout->addItem(testManualStandMiddleUpSpacer);
+
+	//// out test manual stand
+	outTestManualStandButton = new QPushButton(backgroundManualStandWidget);
+	outTestManualStandButton->setObjectName("outTestManualStandButton");
+	outTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
+	testManualStandVLayout->addWidget(outTestManualStandButton);
+
+	testManualStandMiddleBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	testManualStandVLayout->addItem(testManualStandMiddleBottomSpacer);
+
+	//// in test manual stand
+	inTestManualStandButton = new QPushButton(backgroundManualStandWidget);
+	inTestManualStandButton->setObjectName("inTestManualStandButton");
+	inTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
+	testManualStandVLayout->addWidget(inTestManualStandButton);
+
+	backgroundManualStandMainBottomSpacer = new QSpacerItem(0, 40, QSizePolicy::Fixed);
+	testManualStandVLayout->addItem(backgroundManualStandMainBottomSpacer);
+
+	backgroundManualStandMainRightSpacer = new QSpacerItem(25, 0, QSizePolicy::Fixed);
+	backgroundManualStandHLayout->addItem(backgroundManualStandMainRightSpacer);
+
+	manualStandMainBottomSpacer = new QSpacerItem(0, 100, QSizePolicy::Expanding);
+	manualStandMainVLayout->addItem(manualStandMainBottomSpacer);
+
+	manualStandMainRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding); 
+	manualStandMainHLayout->addItem(manualStandMainRightSpacer);
+}
+
+void MainWindow::initStyles()
+{
+	switchThemeButton->setStyleSheet(lightStyles.mainButton);
+	switchLanguageButton->setStyleSheet(lightStyles.mainButton);
+	checkAdaptersButton->setStyleSheet(lightStyles.mainButton);
+	configuratorButton->setStyleSheet(lightStyles.mainButton);
+	selectFileButton->setStyleSheet(lightStyles.mainButton);
+	manualStandButton->setStyleSheet(lightStyles.mainButton);
+	autoStandButton->setStyleSheet(lightStyles.mainButton);
+	outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+	inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+	outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+	inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+	outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+	inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+	fullTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+
+	backgroundManualStandWidget->setStyleSheet(lightStyles.testButtonBackground);
+	autoTestAutoStandWidget->setStyleSheet(lightStyles.testButtonBackground);
+	manualTestAutoStandWidget->setStyleSheet(lightStyles.testButtonBackground);
+	fullTestAutoStandWidget->setStyleSheet(lightStyles.testButtonBackground);
+
+	ui.centralWidget->setStyleSheet(lightStyles.screenColor);
+}
+
+void MainWindow::initTexts()
+{
+	manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
+	autoStandButton->setText(QString::fromLocal8Bit("Автомат."));
+	configuratorButton->setText(QString::fromLocal8Bit("Конфигуратор"));
+	selectFileButton->setText(QString::fromLocal8Bit("Выбрать файл"));
+	inTestManualStandButton->setText(QString::fromLocal8Bit("Входы"));
+	outTestManualStandButton->setText(QString::fromLocal8Bit("Выходы"));
+	inManualTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
+	outManualTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
+	inAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
+	outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
+	fullTestAutoStandButton->setText(QString::fromLocal8Bit("Полная"));
+	selectAdapterLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите адаптер"));
+	selectFrequencyLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите частоту"));
+	manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
+	autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
+	manualStandLabel->setText(QString::fromLocal8Bit("Ручная"));
+	selectFileLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите файл"));
+}
+
+void MainWindow::fillComboBoxes()
+{
 	selectFrequencyComboBox->addItem("...");
+	selectFrequencyComboBox->addItem("10 000 pbs");
 	selectFrequencyComboBox->addItem("50 000 pbs");
 	selectFrequencyComboBox->addItem("100 000 pbs");
 	selectFrequencyComboBox->addItem("125 000 pbs");
 	selectFrequencyComboBox->addItem("250 000 pbs");
 	selectFrequencyComboBox->addItem("500 000 pbs");
 	selectFrequencyComboBox->addItem("1 000 000 pbs");
-	//
 
-	selectFrequencyLabel = new QLabel(mainLayoutWidget);
-	selectFrequencyLabel->setObjectName("selectFrequencyLabel");
-	selectFrequencyLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите частоту"));
-	selectFrequencyVLayout->addWidget(selectFrequencyLabel);
-
-	leftVLayout->addLayout(selectFrequencyVLayout);
-
-	topConfiguratorSpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	leftVLayout->addItem(topConfiguratorSpacer);
-
-	// Configurator
-	configuratorButton = new QPushButton(mainLayoutWidget);
-	configuratorButton->setObjectName("configuratorButton");
-	configuratorButton->setText(QString::fromLocal8Bit("Конфигуратор"));
-	configuratorButton->setFixedSize(MIN_CONFIGURATOR_BUTTON_WIDTH, MIN_CONFIGURATOR_BUTTON_HEIGHT);
-	leftVLayout->addWidget(configuratorButton, Qt::AlignHCenter);
-
-	topSelectFileSpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	leftVLayout->addItem(topSelectFileSpacer);
-
-	// Select file
-	selectFileVLayout = new QVBoxLayout();
-	selectFileVLayout->setObjectName("selectFileVLayout");
-
-	selectFileButton = new QPushButton(mainLayoutWidget);
-	selectFileButton->setObjectName("selectFileButton");
-	selectFileButton->setText(QString::fromLocal8Bit("Выбрать файл"));
-	selectFileButton->setFixedSize(MIN_FILE_SEL_BUTTON_WIDTH, MIN_FILE_SEL_BUTTON_HEIGHT);
-	connect(selectFileButton, &QPushButton::clicked, this, &MainWindow::on_selectFileButton_clicked);
-	selectFileVLayout->addWidget(selectFileButton, Qt::AlignHCenter);
-
-	selectFileLabel = new QLabel(mainLayoutWidget);
-	selectFileLabel->setObjectName("selectFileLabel");
-	selectFileLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите файл"));
-	selectFileLabel->setAlignment(Qt::AlignHCenter);
-	selectFileLabel->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH);
-	selectFileVLayout->addWidget(selectFileLabel, Qt::AlignHCenter);
-
-	leftVLayout->addLayout(selectFileVLayout);
-
-	bottomSpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	leftVLayout->addItem(bottomSpacer);
+	selectAdapterComboBox->addItem("...");
 }
 
-void MainWindow::initUiMainVLayout()
+void MainWindow::initIcons()
 {
-	mainVLayout = new QVBoxLayout();
-	mainVLayout->setObjectName("autoStandMainVLayout");
+	switchThemeButton->setIcon(QIcon(*themeLightPixmap));
+	switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
+	checkAdaptersButton->setIcon(QIcon(*checkAdapterLightPixmap));
+	logoLabel->setPixmap(*logoLightPixmap);
+}
 
-	manualStandMainHLayout = new QHBoxLayout();
-	manualStandMainHLayout->setObjectName("manualStandMainHLayout");
+void MainWindow::initRecources()
+{
+	logoLightPixmap = new QPixmap(":/Light/Recources/Logo_Light.png");
+	logoDarkPixmap = new QPixmap(":/Dark/Recources/Logo_Dark.png");
+	themeLightPixmap = new QPixmap(":/Light/Recources/Moon_Dark.png");
+	themeDarkPixmap = new QPixmap(":/Dark/Recources/Sun_Light.png");
+	checkAdapterLightPixmap = new QPixmap(":/Light/Recources/Update_Dark.png");
+	checkAdapterDarkPixmap = new QPixmap(":/Dark/Recources/Update_Light.png");
+	languageLightPixmap = new QPixmap(":/Light/Recources/Language_Dark.png");
+	languageDarkPixmap = new QPixmap(":/Dark/Recources/Language_Light.png");
+}
 
-	manualStandMainLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	manualStandMainHLayout->addItem(manualStandMainLeftSpacer);
-
-	manualStandMainVLayout = new QVBoxLayout();
-	manualStandMainVLayout->setObjectName("manualStandMainVLayout");
-
-	manualStaneMainUpSpacer = new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	manualStandMainVLayout->addItem(manualStaneMainUpSpacer);
-
-	// out test auto stand
-	outTestManualStandButton = new QPushButton(mainLayoutWidget);
-	outTestManualStandButton->setObjectName("outTestManualStandButton");
-	outTestManualStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	connect(outTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_outTestManualStandButton_changed);
-	manualStandMainVLayout->addWidget(outTestManualStandButton);
-
-	manualStandMainMiddleSpacer = new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	manualStandMainVLayout->addItem(manualStandMainMiddleSpacer);
-
-	// in test auto stand
-	inTestManualStandButton = new QPushButton(mainLayoutWidget);
-	inTestManualStandButton->setObjectName("inTestManualStandButton");
-	inTestManualStandButton->setText(QString::fromLocal8Bit("Входы"));
-	manualStandMainVLayout->addWidget(inTestManualStandButton);
-
-	manualStaneMainBottomSpacer = new QSpacerItem(0, 1, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	manualStandMainVLayout->addItem(manualStaneMainBottomSpacer);
-
-	manualStandMainHLayout->addLayout(manualStandMainVLayout);
-
-	manualStandMainRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	manualStandMainHLayout->addItem(manualStandMainRightSpacer);
-
-	mainVLayout->addLayout(manualStandMainHLayout);
-
-	partitionTestAutoStandHLayout = new QHBoxLayout();
-	partitionTestAutoStandHLayout->setObjectName("partitionTestAutoStandHLayout");
-
-	manualTestAutoStandLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
-	partitionTestAutoStandHLayout->addItem(manualTestAutoStandLeftSpacer);
-
-	manualTestAutoStandWidget = new QWidget(mainLayoutWidget);
-	manualTestAutoStandWidget->setObjectName("manualTestAutoStandWidget");
-
-	manualTestAutoStandVLayout = new QVBoxLayout(manualTestAutoStandWidget);
-	manualTestAutoStandVLayout->setObjectName("manualTestAutoStandVLayout");
-
-	manualTestAutoStandLabel = new QLabel(manualTestAutoStandWidget);
-	manualTestAutoStandLabel->setObjectName("manualTestAutoStandLabel");
-	manualTestAutoStandLabel->setText("Manual");
-	manualTestAutoStandLabel->setMaximumHeight(15);
-	manualTestAutoStandLabel->setAlignment(Qt::AlignHCenter);
-	manualTestAutoStandVLayout->addWidget(manualTestAutoStandLabel);
-
-	// out manual test manual stand
-	outManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	outManualTestAutoStandButton->setObjectName("outManualTestAutoStandButton");
-	outManualTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	outManualTestAutoStandButton->hide();
-	manualTestAutoStandVLayout->addWidget(outManualTestAutoStandButton);
-
-	manualTestAutoStandSpacer = new QSpacerItem(0, 0, QSizePolicy::Fixed);
-	manualTestAutoStandVLayout->addItem(manualTestAutoStandSpacer);
-
-	// in manual test manual stand
-	inManualTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	inManualTestAutoStandButton->setObjectName("inManualTestAutoStandButton");
-	inManualTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
-	inManualTestAutoStandButton->hide();
-	manualTestAutoStandVLayout->addWidget(inManualTestAutoStandButton);
-
-	manualTestAutoStandWidget->hide();
-	partitionTestAutoStandHLayout->addWidget(manualTestAutoStandWidget);
-
-	manualTestAutoStandMiddleSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
-	partitionTestAutoStandHLayout->addItem(manualTestAutoStandMiddleSpacer);
-
-	autoTestAutoStandWidget = new QWidget(mainLayoutWidget);
-	autoTestAutoStandWidget->setObjectName("autoTestAutoStandWidget");
-
-	autoTestAutoStandVLayout = new QVBoxLayout(autoTestAutoStandWidget);
-	autoTestAutoStandVLayout->setObjectName("autoTestAutoStandVLayout");
-
-	autoTestAutoStandLabel = new QLabel(manualTestAutoStandWidget);
-	autoTestAutoStandLabel->setObjectName("autoTestAutoStandLabel");
-	autoTestAutoStandLabel->setText("Auto");
-	autoTestAutoStandLabel->setMaximumHeight(15);
-	autoTestAutoStandLabel->setAlignment(Qt::AlignHCenter);
-	autoTestAutoStandVLayout->addWidget(autoTestAutoStandLabel);
-
-	// out auto test manual stand
-	outAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	outAutoTestAutoStandButton->setObjectName("outAutoTestAutoStandButton");
-	outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	outAutoTestAutoStandButton->hide();
-	autoTestAutoStandVLayout->addWidget(outAutoTestAutoStandButton);
-
-	autoTestAutoStandSpacer = new QSpacerItem(0, 0, QSizePolicy::Fixed);
-	autoTestAutoStandVLayout->addItem(autoTestAutoStandSpacer);
-
-	// in auto test manual stand
-	inAutoTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	inAutoTestAutoStandButton->setObjectName("inAutoTestAutoStandButton");
-	inAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
-	inAutoTestAutoStandButton->hide();
-	autoTestAutoStandVLayout->addWidget(inAutoTestAutoStandButton);
-
-	autoTestAutoStandWidget->hide();
-	partitionTestAutoStandHLayout->addWidget(autoTestAutoStandWidget);
-
-	manualTestAutoStandRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
-	partitionTestAutoStandHLayout->addItem(manualTestAutoStandRightSpacer);
-
-	mainVLayout->addLayout(partitionTestAutoStandHLayout);
-
-	fullAutoStandMainHLayout = new QHBoxLayout();
-	fullAutoStandMainHLayout->setObjectName("fullAutoStandMainHLayout");
-
-	fullAutoStandMainLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
-	fullAutoStandMainHLayout->addItem(fullAutoStandMainLeftSpacer);
-
-	// full test manual stand
-	fullTestAutoStandButton = new QPushButton(mainLayoutWidget);
-	fullTestAutoStandButton->setObjectName("fullTestAutoStandButton");
-	fullTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы/Входы"));
-	fullTestAutoStandButton->hide();
-	fullAutoStandMainHLayout->addWidget(fullTestAutoStandButton, Qt::AlignHCenter);
-
-	fullAutoStandMainRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
-	fullAutoStandMainHLayout->addItem(fullAutoStandMainRightSpacer);
-
-	mainVLayout->addItem(fullAutoStandMainHLayout);
-
-	manualTestAutoStandFooterSpacer = new QSpacerItem(0, 0, QSizePolicy::Expanding);
-	mainVLayout->addItem(manualTestAutoStandFooterSpacer);
+void MainWindow::switchStyleMainButton()
+{
+	if (fileSelected && can->getFrequencySelected() && can->getAdapterSelected())
+	{
+		if (appTheme == LIGHT_THEME)
+		{
+			outTestManualStandButton->setStyleSheet(lightStyles.mainButton);
+			inTestManualStandButton->setStyleSheet(lightStyles.mainButton);
+			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+			fullTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
+		}
+		else
+		{
+			outTestManualStandButton->setStyleSheet(darkStyles.mainButton);
+			inTestManualStandButton->setStyleSheet(darkStyles.mainButton);
+			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			inAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+			fullTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
+		}
+	}
+	else
+	{
+		if (appTheme == LIGHT_THEME)
+		{
+			outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			fullTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+		}
+		else
+		{
+			outTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			inTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			inAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			fullTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+		}
+	}
 }
 
 void MainWindow::resizeEvent(QResizeEvent* event)
@@ -405,7 +688,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, newWidth - (BORDER_INDENT * 2), newHeight - (BORDER_INDENT * 2));
 
-	// header
+	// Выбор стенда
 	// manual
 	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
 	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
@@ -418,34 +701,6 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
 	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
 	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
-
-	// Язык
-	switchLanguageButton->setFixedWidth(MIN_THEME_LANG_BUTTON + ((newWidth - MIN_SCREEN_WIDTH) * COEF_THEME_LANG_BUTTON));
-	switchLanguageButton->setFixedHeight(MIN_THEME_LANG_BUTTON + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_THEME_LANG_BUTTON));
-
-	// Тема
-	switchThemeButton->setFixedWidth(MIN_THEME_LANG_BUTTON + ((newWidth - MIN_SCREEN_WIDTH) * COEF_THEME_LANG_BUTTON));
-	switchThemeButton->setFixedHeight(MIN_THEME_LANG_BUTTON + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_THEME_LANG_BUTTON));
-
-	// Настройка
-	// adapter
-	selectAdapterComboBox->setFixedWidth(MIN_ADAPTER_COMBO_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_ADAPTER_GROUP));
-	selectAdapterComboBox->setFixedHeight(MIN_ADAPTER_COMBO_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_ADAPTER_GROUP));
-	checkAdaptersButton->setFixedWidth(MIN_ADAPTER_BUTTON_SIZE + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_ADAPTER_GROUP));
-	checkAdaptersButton->setFixedHeight(MIN_ADAPTER_BUTTON_SIZE + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_ADAPTER_GROUP));
-
-	// frequency
-	selectFrequencyComboBox->setFixedWidth(MIN_FREQUENCY_COMBO_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_FREQUENC_COMBO));
-	selectFrequencyComboBox->setFixedHeight(MIN_FREQUENCY_COMBO_HEIGHT + ((newHeight - MIN_SCREEN_WIDTH) * COEF_FREQUENC_COMBO));
-
-	// configurator
-	configuratorButton->setFixedWidth(MIN_CONFIGURATOR_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_CONFIGURATOR_BUTTON));
-	configuratorButton->setFixedHeight(MIN_CONFIGURATOR_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_CONFIGURATOR_BUTTON));
-
-	// file
-	selectFileButton->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_FILE_SEL_BUTTON));
-	selectFileButton->setFixedHeight(MIN_FILE_SEL_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_FILE_SEL_BUTTON));
-	selectFileLabel->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH);
 
 	// Main
 	// out stend manual
@@ -477,105 +732,37 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 }
 
-void MainWindow::switchStandButtons()
-{
-	switch (switchStandSlider->getStatus())
-	{
-	case AUTO_STAND:
-		outTestManualStandButton->hide();
-		inTestManualStandButton->hide();
-
-		outManualTestAutoStandButton->show();
-		inManualTestAutoStandButton->show();
-		outAutoTestAutoStandButton->show();
-		inAutoTestAutoStandButton->show();
-		fullTestAutoStandButton->show();
-
-		manualTestAutoStandWidget->show();
-		autoTestAutoStandWidget->show();
-
-		manualTestAutoStandSpacer->changeSize(0, 10, QSizePolicy::Expanding);
-		autoTestAutoStandSpacer->changeSize(0, 10, QSizePolicy::Expanding);
-		manualTestAutoStandFooterSpacer->changeSize(0, 10, QSizePolicy::Expanding);
-
-		manualStandMainLeftSpacer->changeSize(0, 0, QSizePolicy::Fixed);
-		manualStandMainRightSpacer->changeSize(0, 0, QSizePolicy::Fixed);
-		manualStaneMainUpSpacer->changeSize(0, 0, QSizePolicy::Fixed);
-		manualStandMainMiddleSpacer->changeSize(0, 0, QSizePolicy::Fixed);
-		manualStaneMainBottomSpacer->changeSize(0, 0, QSizePolicy::Fixed);
-
-		switchTheme();
-		break;
-
-	case MANUAL_STAND:
-		outTestManualStandButton->show();
-		inTestManualStandButton->show();
-
-		outManualTestAutoStandButton->hide();
-		inManualTestAutoStandButton->hide();
-		outAutoTestAutoStandButton->hide();
-		inAutoTestAutoStandButton->hide();
-		fullTestAutoStandButton->hide();
-
-		manualTestAutoStandWidget->hide();
-		autoTestAutoStandWidget->hide();
-
-		manualTestAutoStandSpacer->changeSize(0, 0, QSizePolicy::Fixed);
-		autoTestAutoStandSpacer->changeSize(0, 0, QSizePolicy::Fixed);
-
-		manualStandMainLeftSpacer->changeSize(1, 0, QSizePolicy::Expanding);
-		manualStandMainRightSpacer->changeSize(1, 0, QSizePolicy::Expanding);
-		manualStaneMainUpSpacer->changeSize(0, 1, QSizePolicy::Expanding);
-		manualStandMainMiddleSpacer->changeSize(0, 1, QSizePolicy::Expanding);
-		manualStaneMainBottomSpacer->changeSize(0, 1, QSizePolicy::Expanding);
-
-		switchTheme();
-		break;
-
-	default:
-		break;
-	}
-}
-
-void MainWindow::on_sliderSwitchStand_click()
-{
-	switchStandButtons();
-}
-
-void MainWindow::on_autoStandButton_clicked()
-{
-	if (switchStandSlider->getStatus() != AUTO_STAND)
-	{
-		switchStandSlider->setStatus(AUTO_STAND);
-		switchStandButtons();
-	}
-}
-
-void MainWindow::on_manualStandButton_clicked()
-{
-	if (switchStandSlider->getStatus() != MANUAL_STAND)
-	{
-		switchStandSlider->setStatus(MANUAL_STAND);
-		switchStandButtons();
-	}
-}
-
 void MainWindow::on_selectFileButton_clicked()
 {
+	selectedFullFileName = QFileDialog::getOpenFileName(this, "Open File", "", "Text (*.cfg)");
+	int localFileNameInd = selectedFullFileName.lastIndexOf("/");
+	QString printedFileName;
+	QString fullPrintedFileName;
+	int overcrowdedFileNameCount = 0;
+	bool isFileNameOvercrowded = false;
+	for (int i = localFileNameInd + 1, j = 0; i < selectedFullFileName.size() - CFG_EXTENSION_LETTERS_COUNT; i++, j++)
+	{
+		if (j <= OVERCROWDED_SEL_FILE_LABEL)
+		{
+			printedFileName += selectedFullFileName[i];
+			fullPrintedFileName += selectedFullFileName[i];
+		}
+		else
+		{
+			overcrowdedFileNameCount++;
+			if (overcrowdedFileNameCount == 3)
+			{
+				isFileNameOvercrowded = true;
+				printedFileName += "...";
+				break;
+			}
+			fullPrintedFileName += selectedFullFileName[i];
+		}
+	}
+	selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
+
 	fileSelected = true;
 	switchStyleMainButton();
-}
-
-void MainWindow::initRecources()
-{
-	logoLightPixmap = new QPixmap(":/Light/Recources/Logo_Light.png");
-	logoDarkPixmap = new QPixmap(":/Dark/Recources/Logo_Dark.png");
-	themeLightPixmap = new QPixmap(":/Light/Recources/Moon_Dark.png");
-	themeDarkPixmap = new QPixmap(":/Dark/Recources/Sun_Light.png");
-	checkAdapterLightPixmap = new QPixmap(":/Light/Recources/Update_Dark.png");
-	checkAdapterDarkPixmap = new QPixmap(":/Dark/Recources/Update_Light.png");
-	languageLightPixmap = new QPixmap(":/Light/Recources/Language_Dark.png");
-	languageDarkPixmap = new QPixmap(":/Dark/Recources/Language_Light.png");
 }
 
 void MainWindow::on_switchThemeButton_clicked()
@@ -692,6 +879,45 @@ void MainWindow::switchTheme()
 	}
 }
 
+void MainWindow::on_sliderSwitchStand_click()
+{
+	switchStandButtons();
+}
+
+void MainWindow::on_autoStandButton_clicked()
+{
+	if (switchStandSlider->getStatus() != AUTO_STAND)
+	{
+		switchStandSlider->setStatus(AUTO_STAND);
+		switchStandButtons();
+	}
+}
+
+void MainWindow::on_manualStandButton_clicked()
+{
+	if (switchStandSlider->getStatus() != MANUAL_STAND)
+	{
+		switchStandSlider->setStatus(MANUAL_STAND);
+		switchStandButtons();
+	}
+}
+
+void MainWindow::switchStandButtons()
+{
+	switch (switchStandSlider->getStatus())
+	{
+	case AUTO_STAND:
+		manualStandWidget->hide();
+		autoStandWidget->show();
+		break;
+
+	case MANUAL_STAND:
+		autoStandWidget->hide();
+		manualStandWidget->show();
+		break;
+	}
+}
+
 void MainWindow::on_switchLanguageButton_clicked()
 {
 	if (appLanguage == RUSSIAN_LANG)
@@ -717,7 +943,7 @@ void MainWindow::switchLanguage()
 		outManualTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
 		inAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
 		outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
-		fullTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы/Входы"));
+		fullTestAutoStandButton->setText(QString::fromLocal8Bit("Полная"));
 
 		if (!can->getAdapterSelected())
 			selectAdapterLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите адаптер"));
@@ -750,9 +976,6 @@ void MainWindow::switchLanguage()
 		autoTestAutoStandLabel->setText(QString("Auto"));
 
 		selectFileLabel->setText(QString("Selected file"));	// Должно стоять условие, что после того, как файл будет выбрать не перезаписывать
-		break;
-
-	default:
 		break;
 	}
 	if (can->getFrequencySelected())
@@ -804,56 +1027,6 @@ void MainWindow::on_checkAdaptersButton_clicked()
 
 	for (int i = 0; i < nameAdapters.size(); i++)
 		selectAdapterComboBox->addItem(nameAdapters[i]);
-}
-
-void MainWindow::switchStyleMainButton()
-{
-	if (fileSelected && can->getFrequencySelected() && can->getAdapterSelected())
-	{
-		if (appTheme == LIGHT_THEME)
-		{
-			outTestManualStandButton->setStyleSheet(lightStyles.mainButton);
-			inTestManualStandButton->setStyleSheet(lightStyles.mainButton);
-			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-			inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-			fullTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
-		}
-		else
-		{
-			outTestManualStandButton->setStyleSheet(darkStyles.mainButton);
-			inTestManualStandButton->setStyleSheet(darkStyles.mainButton);
-			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
-			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
-			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
-			inAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
-			fullTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
-		}
-	}
-	else
-	{
-		if (appTheme == LIGHT_THEME)
-		{
-			outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			fullTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-		}
-		else
-		{
-			outTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			inTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			inAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			fullTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
-		}
-	}
 }
 
 void MainWindow::on_outTestManualStandButton_changed()
