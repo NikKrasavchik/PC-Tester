@@ -549,7 +549,7 @@ void MainWindow::initUiManualStand()
 	manualStandMainBottomSpacer = new QSpacerItem(0, 100, QSizePolicy::Expanding);
 	manualStandMainVLayout->addItem(manualStandMainBottomSpacer);
 
-	manualStandMainRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding); 
+	manualStandMainRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
 	manualStandMainHLayout->addItem(manualStandMainRightSpacer);
 }
 
