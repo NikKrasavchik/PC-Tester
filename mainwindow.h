@@ -8,8 +8,9 @@
 #include <QFileDialog>
 
 #include "ui_mainwindow.h"
+#include "TestWindow.h"
 #include "qsliderbutton.h"
-#include "stylesheets.h"
+#include "StyleSheets.h"
 #include "can.h"
 
 #include <QDebug>
@@ -17,13 +18,13 @@
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
 
+#define BORDER_INDENT   25
+#define TOOLBAR_SIZE    20
+
 #define GRID_COLOUMN_0  0
 #define GRID_COLOUMN_1  1
 #define GRID_ROW_0      0
 #define GRID_ROW_1      1
-
-#define BORDER_INDENT   25
-#define TOOLBAR_SIZE    20
 
 #define MIN_STAND_BUTTON_WIDTH			144
 #define MIN_STAND_BUTTON_HEIGHT			62
@@ -75,7 +76,6 @@ private:
 	Ui::MainWindowClass ui;
 
 	QWidget* mainLayoutWidget;
-	QWidget* switchStandWidget;
 	QWidget* manualStandWidget;
 	QWidget* autoStandWidget;
 	QWidget* fullTestAutoStandWidget;
@@ -83,14 +83,12 @@ private:
 	QWidget* autoTestAutoStandWidget;
 	QWidget* backgroundManualStandWidget;
 	QGridLayout* mainGridLayout;
-	QHBoxLayout* logoHLayout;
 	QHBoxLayout* topHLayout;
 	QHBoxLayout* switchStandHLayout;
 	QHBoxLayout* findAdapterHLayout;
 	QHBoxLayout* configuratorHLayout;
 	QHBoxLayout* partitionTestAutoStandHLayout;
 	QHBoxLayout* manualStandMainHLayout;
-	QHBoxLayout* fullAutoStandMainHLayout;
 	QHBoxLayout* leftHLayout;
 	QHBoxLayout* selectFileHLayout;
 	QHBoxLayout* backgroundManualStandHLayout;
@@ -104,7 +102,6 @@ private:
 	QVBoxLayout* manualTestAutoStandVLayout;
 	QVBoxLayout* autoStandMainVLayout;
 	QVBoxLayout* testManualStandVLayout;
-	QVBoxLayout* backgroundManualStandVLayout;
 	QVBoxLayout* leftVLayout;
 	QVBoxLayout* leftSettingsVLayout;
 	QVBoxLayout* selectAdapterVLayout;
@@ -113,7 +110,6 @@ private:
 	QVBoxLayout* mainVLayout;
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* manualStandMainVLayout;
-	QVBoxLayout* manualStandVLayout;
 	QLabel* logoLabel;
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
@@ -131,6 +127,7 @@ private:
 	QPushButton* autoStandButton;
 	QPushButton* outTestManualStandButton;
 	QPushButton* inTestManualStandButton;
+	QPushButton* fullTestManualStandButton;
 	QPushButton* outManualTestAutoStandButton;
 	QPushButton* inManualTestAutoStandButton;
 	QPushButton* outAutoTestAutoStandButton;
@@ -142,44 +139,31 @@ private:
 	QSpacerItem* leftManualStandSpacer;
 	QSpacerItem* leftSwitchStandSpacer;
 	QSpacerItem* rightSwitchStandSpacer;
-	QSpacerItem* topAdapterSpacer;
 	QSpacerItem* topFrequencySpacer;
 	QSpacerItem* topSettingsSpacer;
 	QSpacerItem* botSettingsSpacer;
 	QSpacerItem* topSelectFileSpacer;
 	QSpacerItem* topConfiguratorSpacer;
-	QSpacerItem* bottomSpacer;
-	QSpacerItem* adapterLeftSpacer;
-	QSpacerItem* adapterRightSpacer;
 	QSpacerItem* findAdapterCenterSpacer;
 	QSpacerItem* selectAdapterMiddleSpacer;
 	QSpacerItem* configuratorLeftSpacer;
-	QSpacerItem* configuratorRightSpacer;
-	QSpacerItem* manualTestAutoStandSpacer;
-	QSpacerItem* autoTestAutoStandSpacer;
 	QSpacerItem* manualStandMainLeftSpacer;
 	QSpacerItem* manualStandMainRightSpacer;
 	QSpacerItem* manualStandMainUpSpacer;
-	QSpacerItem* manualStandMainMiddleSpacer;
 	QSpacerItem* manualStandMainBottomSpacer;
 	QSpacerItem* backgroundManualStandMainUpSpacer;
 	QSpacerItem* backgroundManualStandMainBottomSpacer;
 	QSpacerItem* backgroundManualStandMainRightSpacer;
 	QSpacerItem* backgroundManualStandMainLeftSpacer;
-	QSpacerItem* fullAutoStandMainLeftSpacer;
-	QSpacerItem* fullAutoStandMainRightSpacer;
 	QSpacerItem* manualTestAutoStandLeftSpacer;
 	QSpacerItem* manualTestAutoStandRightSpacer;
-	QSpacerItem* manualTestAutoStandMiddleSpacer;
-	QSpacerItem* manualTestAutoStandFooterSpacer;
 	QSpacerItem* frequencyMiddleSpacer;
 	QSpacerItem* selectFileMiddleSpacer;
 	QSpacerItem* selectFileLeftSpacer;
 	QSpacerItem* selectFileRightSpacer;
-	QSpacerItem* testManualStandUpSpacer;
 	QSpacerItem* testManualStandMiddleUpSpacer;
 	QSpacerItem* testManualStandMiddleBottomSpacer;
-	QSpacerItem* testManualStandBottomSpacer;
+	QSpacerItem* testManualStandMiddleFooterSpacer;
 	QSpacerItem* autoStandMainLeftSpacer;
 	QSpacerItem* autoStandMainRightSpacer;
 	QSpacerItem* autoStandMainUpSpacer;
@@ -203,8 +187,6 @@ private:
 	QSpacerItem* fullTestAutoStandUpSpacer;
 	QSpacerItem* fullTestAutoStandBottomSpacer;
 	QFrame* selectFileLine;
-
-
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
 	QPixmap* themeLightPixmap;
@@ -219,7 +201,7 @@ private:
 	bool appTheme;
 	bool appLanguage;
 	bool fileSelected;
-	bool initAll = false;
+	bool isAllInit = false;
 	bool selectedStand;
 
 	QString selectedFullFileName;
@@ -229,6 +211,7 @@ private:
 	void initStyles();
 	void initTexts();
 	void initIcons();
+	void initConnections();
 
 	void initUi();
 	void initUiLogo();
@@ -250,15 +233,14 @@ private:
 
 	void fillComboBoxes();
 
-	//void initCanAdapter();
-	//void deinitCanAdapter();
-
 	void switchStandButtons();
 	void switchTheme();
 	void switchLanguage();
 	void switchStyleMainButtons();
 
 	void resizeEvent(QResizeEvent* event);
+
+	void createTestWindow(TestWindowType testType);
 
 private slots:
 	// Button
@@ -273,7 +255,14 @@ private slots:
 	void on_selectFrequencyComboBox_changed(int index);
 	void on_selectAdapterComboBox_changed(int index);
 	// main
-	void on_outTestManualStandButton_changed();
+	void on_outTestManualStandButton_clicked();
+	void on_inTestManualStandButton_clicked();
+	void on_fullTestManualStandButton_clicked();
+	void on_inManualTestAutoStandButton_clicked();
+	void on_outManualTestAutoStandButton_clicked();
+	void on_inAutoTestAutoStandButton_clicked();
+	void on_outAutoTestAutoStandButton_clicked();
+	void on_fullTestAutoStandButton_clicked();
 
 signals:
 	void resizeStandSlider(int width, int height);

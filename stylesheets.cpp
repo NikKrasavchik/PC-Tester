@@ -1,5 +1,5 @@
 #include "stylesheets.h"
-#include "mainwindow.h"
+#include "MainWindow.h"
 
 Styles darkStyles;
 Styles lightStyles;
