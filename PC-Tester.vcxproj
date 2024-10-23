@@ -113,20 +113,31 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="can.cpp" />
+    <ClCompile Include="fullTestAutoStand_TestWindow.cpp" />
+    <ClCompile Include="fullTestManualStand_TestWindow.cpp" />
+    <ClCompile Include="inAutoTestAutoStand_TestWindow.cpp" />
+    <ClCompile Include="inManualTestAutoStand_TestWindow.cpp" />
+    <ClCompile Include="inTestManualStand_TestWindow.cpp" />
+    <ClCompile Include="main_TestWindow.cpp" />
+    <ClCompile Include="outAutoTestAutoStand_TestWindow.cpp" />
+    <ClCompile Include="outManualTestAutoStand_TestWindow.cpp" />
+    <ClCompile Include="outTestManualStand_TestWindow.cpp" />
     <ClCompile Include="qsliderbutton.cpp" />
-    <ClCompile Include="stylesheets.cpp" />
+    <ClCompile Include="StyleSheets.cpp" />
     <QtRcc Include="mainwindow.qrc" />
-    <QtUic Include="mainwindow.ui" />
-    <QtMoc Include="mainwindow.h" />
-    <ClCompile Include="mainwindow.cpp" />
+    <QtUic Include="MainWindow.ui" />
+    <QtMoc Include="MainWindow.h" />
+    <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="TestWindow.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="can.h" />
-    <ClInclude Include="stylesheets.h" />
+    <ClInclude Include="StyleSheets.h" />
+    <QtMoc Include="TestWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
