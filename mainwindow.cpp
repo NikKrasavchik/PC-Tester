@@ -235,7 +235,7 @@ void MainWindow::initUiFrequency()
 	selectFrequencyComboBox->setFixedHeight(MIN_FREQUENCY_COMBO_HEIGHT);
 	selectFrequencyComboBox->setMaximumWidth(MAX_FREQUENCY_COMBO_WIDTH);
 	selectFrequencyVLayout->addWidget(selectFrequencyComboBox);
-
+	//iehejifejfje
 	frequencyMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
 	selectFrequencyVLayout->addItem(frequencyMiddleSpacer);
 
@@ -548,7 +548,7 @@ void MainWindow::initUiManualStand()
 	manualStandMainBottomSpacer = new QSpacerItem(0, 75, QSizePolicy::Expanding);
 	manualStandMainVLayout->addItem(manualStandMainBottomSpacer);
 
-	manualStandMainRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding); 
+	manualStandMainRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
 	manualStandMainHLayout->addItem(manualStandMainRightSpacer);
 }
 
