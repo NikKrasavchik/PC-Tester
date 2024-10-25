@@ -6,12 +6,18 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QFileDialog>
+#include <QApplication>
+#include <QProxyStyle>
+#include <QStyleFactory>
+#include <QFile>
+#include <utility>
 
 #include "ui_mainwindow.h"
 #include "TestWindow.h"
 #include "qsliderbutton.h"
 #include "StyleSheets.h"
 #include "can.h"
+#include "WindowFrame.h"
 
 #include <QDebug>
 
@@ -198,13 +204,15 @@ private:
 
 	Can* can;
 
-	bool appTheme;
-	bool appLanguage;
-	bool fileSelected;
-	bool isAllInit = false;
+	WindowState *windowState;
+
+	bool isFileSelected;
+	bool isAllInit;
 	bool selectedStand;
 
-	QString selectedFullFileName;
+	QString selectedFileFullName;
+	QString fileName;
+	QString appstylePath;
 
 	void initStyleSheets();
 	void initRecources();
@@ -241,6 +249,8 @@ private:
 	void resizeEvent(QResizeEvent* event);
 
 	void createTestWindow(TestWindowType testType);
+
+	void resetWindowView();
 
 private slots:
 	// Button

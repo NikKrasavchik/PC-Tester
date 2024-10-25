@@ -2,5 +2,10 @@
 
 void TestWindow::initUiOutTestManualStand()
 {
+	initUiTableOutTestManualStand();
+}
+
+void TestWindow::initUiTableOutTestManualStand()
+{
 
 }

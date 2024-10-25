@@ -26,15 +26,15 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <QtRcc Include="mainwindow.qrc">
-      <Filter>Resource Files</Filter>
-    </QtRcc>
     <QtUic Include="MainWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
     <QtMoc Include="MainWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtRcc Include="resources\resources.qrc">
+      <Filter>Resource Files</Filter>
+    </QtRcc>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -79,12 +79,18 @@
     <ClCompile Include="StyleSheets.cpp">
       <Filter>Source Files\Ui</Filter>
     </ClCompile>
+    <ClCompile Include="WindowFrame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="TestWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="WindowFrame.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -98,6 +104,9 @@
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="TestWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="WindowFrame.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

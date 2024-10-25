@@ -9,12 +9,31 @@ MainWindow::MainWindow(QWidget* parent)
 }
 
 MainWindow::~MainWindow()
-{}
+{
+	delete mainLayoutWidget;
+	delete logoLightPixmap;
+	delete logoDarkPixmap;
+	delete themeLightPixmap;
+	delete themeDarkPixmap;
+	delete checkAdapterLightPixmap;
+	delete checkAdapterDarkPixmap;
+	delete languageLightPixmap;
+	delete languageDarkPixmap;
+	delete can;
+	delete windowState;
+}
 
 void MainWindow::initUi()
 {
+	isAllInit = false;
+
+	windowState = new WindowState;
+
 	resize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT);
 	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
+
+	windowState->appSize.width = MIN_SCREEN_WIDTH;
+	windowState->appSize.height = MIN_SCREEN_HEIGHT;
 
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("MainFormLayoutWidget");
@@ -40,8 +59,8 @@ void MainWindow::initUi()
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLOUMN_1);
 
 	selectedStand = AUTO_STAND;
-	appTheme = LIGHT_THEME;
-	appLanguage = RUSSIAN_LANG;
+	windowState->appTheme = LIGHT_THEME;
+	windowState->appLanguage = RUSSIAN_LANG;
 
 	initStyles();
 	initTexts();
@@ -626,14 +645,15 @@ void MainWindow::initIcons()
 
 void MainWindow::initRecources()
 {
-	logoLightPixmap = new QPixmap(":/Light/Recources/Logo_Light.png");
-	logoDarkPixmap = new QPixmap(":/Dark/Recources/Logo_Dark.png");
-	themeLightPixmap = new QPixmap(":/Light/Recources/Moon_Dark.png");
-	themeDarkPixmap = new QPixmap(":/Dark/Recources/Sun_Light.png");
-	checkAdapterLightPixmap = new QPixmap(":/Light/Recources/Update_Dark.png");
-	checkAdapterDarkPixmap = new QPixmap(":/Dark/Recources/Update_Light.png");
-	languageLightPixmap = new QPixmap(":/Light/Recources/Language_Dark.png");
-	languageDarkPixmap = new QPixmap(":/Dark/Recources/Language_Light.png");
+	logoLightPixmap = new QPixmap(":/Light/icons/Logo_Black.png");
+	logoDarkPixmap = new QPixmap(":/Dark/icons/Logo_White.png");
+	themeLightPixmap = new QPixmap(":/Light/icons/Moon_Black.png");
+	themeDarkPixmap = new QPixmap(":/Dark/icons/Sun_White.png");
+	checkAdapterLightPixmap = new QPixmap(":/Light/icons/Update_Black.png");
+	checkAdapterDarkPixmap = new QPixmap(":/Dark/icons/Update_White.png");
+	languageLightPixmap = new QPixmap(":/Light/icons/Language_Black.png");
+	languageDarkPixmap = new QPixmap(":/Dark/icons/Language_White.png");
+	appstylePath = ":/recources/style/appstyles.qss";
 }
 
 void MainWindow::initConnections()
@@ -662,10 +682,10 @@ void MainWindow::initConnections()
 
 void MainWindow::switchStyleMainButtons()
 {
-	//if (fileSelected && can->getFrequencySelected() && can->getAdapterSelected())
+	//if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
 	if (true)
 	{
-		if (appTheme == LIGHT_THEME)
+		if (windowState->appTheme == LIGHT_THEME)
 		{
 			outTestManualStandButton->setStyleSheet(lightStyles.mainButton);
 			inTestManualStandButton->setStyleSheet(lightStyles.mainButton);
@@ -690,7 +710,7 @@ void MainWindow::switchStyleMainButtons()
 	}
 	else
 	{
-		if (appTheme == LIGHT_THEME)
+		if (windowState->appTheme == LIGHT_THEME)
 		{
 			outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 			inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
@@ -717,105 +737,121 @@ void MainWindow::switchStyleMainButtons()
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
-	int newWidth = geometry().width();
-	int newHeight = geometry().height();
+	windowState->appSize.width = geometry().width();
+	windowState->appSize.height = geometry().height();
 
-	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, newWidth - (BORDER_INDENT * 2), newHeight - (BORDER_INDENT * 2));
+	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, windowState->appSize.width - (BORDER_INDENT * 2), windowState->appSize.height - (BORDER_INDENT * 2));
 
 	// Выбор стенда
 	// manual
-	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
-	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
+	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
 
 	// auto
-	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
-	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
+	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
 
 	// slider
-	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
-	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
-	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((newHeight - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
+	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
+	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
+	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
 
 	// Main
 	// out stend manual
-	outTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in stend manual
-	inTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// full stend manual
-	fullTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	fullTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// out manual stend auto
-	outManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in manual stend auto
-	inManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in auto stend suto
-	outAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in auto stend auto
-	inAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// full stend auto
-	fullTestAutoStandButton->setFixedWidth(MIN_MAIN_FUL_BUTTON_WIDTH + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((newWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestAutoStandButton->setFixedWidth(MIN_MAIN_FUL_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 }
 
 void MainWindow::on_selectFileButton_clicked()
 {
-	selectedFullFileName = QFileDialog::getOpenFileName(this, "Open File", "", "Text (*.cfg)");
-	int localFileNameInd = selectedFullFileName.lastIndexOf("/");
-	QString printedFileName;
-	QString fullPrintedFileName;
-	int overcrowdedFileNameCount = 0;
-	bool isFileNameOvercrowded = false;
-	for (int i = localFileNameInd + 1, j = 0; i < selectedFullFileName.size() - CFG_EXTENSION_LETTERS_COUNT; i++, j++)
-	{
-		if (j <= OVERCROWDED_SEL_FILE_LABEL)
-		{
-			printedFileName += selectedFullFileName[i];
-			fullPrintedFileName += selectedFullFileName[i];
-		}
-		else
-		{
-			overcrowdedFileNameCount++;
-			if (overcrowdedFileNameCount == 3)
-			{
-				isFileNameOvercrowded = true;
-				printedFileName += "...";
-				break;
-			}
-			fullPrintedFileName += selectedFullFileName[i];
-		}
-	}
-	selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
+	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", "", "Text (*.cfg)");
+	int localFileNameInd = selectedFileFullName.lastIndexOf("/");
 
-	fileSelected = true;
+	QString partialPrintedFileName = "";
+	fileName = "";
+
+	bool isTypeStart = false;
+	for (int i = localFileNameInd + 1; i < selectedFileFullName.size(); i++)
+	{
+		if (selectedFileFullName[i] == '.')
+			isTypeStart = true;
+
+		if (!isTypeStart)
+			partialPrintedFileName += selectedFileFullName[i];
+
+		fileName += selectedFileFullName[i];
+	}
+
+	//int overcrowdedFileNameCount = 0;
+	//bool isFileNameOvercrowded = false;
+	//for (int i = localFileNameInd + 1, j = 0; i < selectedFullFileName.size() - CFG_EXTENSION_LETTERS_COUNT; i++, j++)
+	//{
+	//	if (j <= OVERCROWDED_SEL_FILE_LABEL)
+	//	{
+	//		printedFileName += selectedFullFileName[i];
+	//		fullPrintedFileName += selectedFullFileName[i];
+	//	}
+	//	else
+	//	{
+	//		overcrowdedFileNameCount++;
+	//		if (overcrowdedFileNameCount == 3)
+	//		{
+	//			isFileNameOvercrowded = true;
+	//			printedFileName += "...";
+	//			break;
+	//		}
+	//		fullPrintedFileName += selectedFullFileName[i];
+	//	}
+	//}
+
+	//selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
+	selectFileLabel->setText(fileName);
+
+	isFileSelected = true;
 	switchStyleMainButtons(); //
 }
 
 void MainWindow::on_switchThemeButton_clicked()
 {
-	if (appTheme == LIGHT_THEME)
-		appTheme = DARK_THEME;
-	else if (appTheme == DARK_THEME)
-		appTheme = LIGHT_THEME;
+	if (windowState->appTheme == LIGHT_THEME)
+		windowState->appTheme = DARK_THEME;
+	else if (windowState->appTheme == DARK_THEME)
+		windowState->appTheme = LIGHT_THEME;
 
 	switchTheme();
 }
 
 void MainWindow::switchTheme()
 {
-	switch (appTheme)
+	switch (windowState->appTheme)
 	{
 	case LIGHT_THEME:
 		switchThemeButton->setIcon(QIcon(*themeLightPixmap));
@@ -946,7 +982,7 @@ void MainWindow::switchStandButtons()
 		manualStandWidget->hide();
 		autoStandWidget->show();
 
-		switch (appTheme)
+		switch (windowState->appTheme)
 		{
 		case LIGHT_THEME:
 			manualStandButton->setStyleSheet(lightStyles.standartButton);
@@ -964,7 +1000,7 @@ void MainWindow::switchStandButtons()
 		autoStandWidget->hide();
 		manualStandWidget->show();
 
-		switch (appTheme)
+		switch (windowState->appTheme)
 		{
 		case LIGHT_THEME:
 			autoStandButton->setStyleSheet(lightStyles.standartButton);
@@ -982,17 +1018,17 @@ void MainWindow::switchStandButtons()
 
 void MainWindow::on_switchLanguageButton_clicked()
 {
-	if (appLanguage == RUSSIAN_LANG)
-		appLanguage = ENGLISH_LANG;
-	else if (appLanguage == ENGLISH_LANG)
-		appLanguage = RUSSIAN_LANG;
+	if (windowState->appLanguage == RUSSIAN_LANG)
+		windowState->appLanguage = ENGLISH_LANG;
+	else if (windowState->appLanguage == ENGLISH_LANG)
+		windowState->appLanguage = RUSSIAN_LANG;
 
 	switchLanguage();
 }
 
 void MainWindow::switchLanguage()
 {
-	switch (appLanguage)
+	switch (windowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
 		manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
@@ -1058,9 +1094,9 @@ void MainWindow::on_selectFrequencyComboBox_changed(int index)
 		switchLanguage(); // Ставим предупреждающий lable согласно языку
 	else if (index > 0)
 	{
-		if (appLanguage == RUSSIAN_LANG)
+		if (windowState->appLanguage == RUSSIAN_LANG)
 			selectFrequencyLabel->setText(QString::fromLocal8Bit("Частота: ") + selectFrequencyComboBox->currentText());
-		else if (appLanguage == ENGLISH_LANG)
+		else if (windowState->appLanguage == ENGLISH_LANG)
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
 	}
 }
@@ -1135,8 +1171,21 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 
 void MainWindow::createTestWindow(TestWindowType testType)
 {
-	TestWindow testWindow(testType, this);
-	testWindow.setModal(true);
-	hide();
-	testWindow.exec();
+	TestWindow* testWindow = new TestWindow(testType, windowState, this);
+	testWindow->setFileName(fileName);
+	testWindow->setStyleSheet("background-color: white;");
+
+	WindowFrame w(nullptr, testWindow);
+	w.setTitle("App title");
+	w.show();
+	this->hide();
+	testWindow->exec();
+	resetWindowView();
+	this->show();
+}
+
+void MainWindow::resetWindowView()
+{
+	switchLanguage();
+	switchTheme();
 }

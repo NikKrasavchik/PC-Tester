@@ -2,5 +2,10 @@
 
 void TestWindow::initUiInTestManualStand()
 {
+	initUiTableInTestManualStand();
+}
+
+void TestWindow::initUiTableInTestManualStand()
+{
 
 }

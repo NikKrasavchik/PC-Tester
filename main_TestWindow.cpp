@@ -1,9 +1,12 @@
 #include "TestWindow.h"
 
-TestWindow::TestWindow(TestWindowType testType, QWidget* parent)
+TestWindow::TestWindow(TestWindowType testType, WindowState *windowState, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
+
+	this->windowState = windowState;
+	this->testType = testType;
 
 	initUiMain();
 	initUiMainHeader();
@@ -35,16 +38,36 @@ TestWindow::TestWindow(TestWindowType testType, QWidget* parent)
 		initUiInAutoTestAutoStand();
 		break;
 
-	case TestWindowType::FULL_TEST_AUTO_STAND:
+	case TestWindowType::OUT_AUTO_TEST_AUTO_STAND:
 		initUiOutAutoTestAutoStand();
+		break;
+
+	case TestWindowType::FULL_TEST_AUTO_STAND:
+		initUiFullTestAutoStand();
 		break;
 	}
 
 	initUiMainFooter();
+
+	initTexts();
+	initRecources();
+	initIcons();
+	initConnections();
+	initStyles();
 }
 
 TestWindow::~TestWindow()
-{}
+{
+	delete mainLayoutWidget;
+	delete logoLightPixmap;
+	delete logoDarkPixmap;
+	delete themeLightPixmap;
+	delete themeDarkPixmap;
+	delete languageLightPixmap;
+	delete languageDarkPixmap;
+	delete backButtonLightPixmap;
+	delete backButtonDarkPixmap;
+}
 
 void TestWindow::initUiMain()
 {
@@ -54,7 +77,6 @@ void TestWindow::initUiMain()
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("mainLayoutWidget");
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
-	//mainLayoutWidget->setStyleSheet("background-color: red;");
 
 	mainVlayout = new QVBoxLayout(mainLayoutWidget);
 	mainVlayout->setObjectName("mainVlayout");
@@ -66,7 +88,6 @@ void TestWindow::initUiMainHeader()
 	headerLayoutWidget->setObjectName("headerLayoutWidget");
 	headerLayoutWidget->setFixedHeight(FIXED_HEADER_HEIGHT);
 	mainVlayout->addWidget(headerLayoutWidget);
-	//headerLayoutWidget->setStyleSheet("background-color: green;");
 
 	headerMainHLayout = new QHBoxLayout(headerLayoutWidget);
 	headerMainHLayout->setObjectName("headerMainHLayout");
@@ -78,12 +99,10 @@ void TestWindow::initUiMainHeader()
 	usefulSpaceWidget = new QWidget(headerLayoutWidget);
 	usefulSpaceWidget->setObjectName("usefulSpaceWidget");
 	headerMainHLayout->addWidget(usefulSpaceWidget);
-	//usefulSpaceWidget->setStyleSheet("background-color: orange;");
 
 	usefulSpaceHLayout = new QHBoxLayout(usefulSpaceWidget);
 	usefulSpaceHLayout->setObjectName("usefulSpaceHLayout");
 	
-
 	initUiTripleButtons();
 	headerMainHLayout->addItem(tripleButtonsHLayout);
 
@@ -100,9 +119,6 @@ void TestWindow::initUiLogo()
 	logoLabel->setText("");
 	logoLabel->setFixedSize(FIXED_LOGO_WIDTH, FIXED_LOGO_HEIGHT);
 	logoLabel->setEnabled(true);
-
-	logoLightPixmap = new QPixmap(":/Light/Recources/Logo_Light.png");
-	logoLabel->setPixmap(*logoLightPixmap);
 }
 
 void TestWindow::initUiTripleButtons()
@@ -140,7 +156,6 @@ void TestWindow::initUiTable()
 	mainTableWidget = new QTableWidget(mainLayoutWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
 	mainVlayout->addWidget(mainTableWidget);
-	//mainTableWidget->setStyleSheet("background-color: black");
 }
 
 void TestWindow::initUiMainFooter()
@@ -154,7 +169,6 @@ void TestWindow::initUiMainFooter()
 	footerLayoutWidget->setObjectName("footerLayoutWidget");
 	footerLayoutWidget->setFixedHeight(FIXED_FOOTER_HEIGHT);
 	mainVlayout->addWidget(footerLayoutWidget);
-	//footerLayoutWidget->setStyleSheet("background-color: yellow;");
 
 	footerMainHLayout = new QHBoxLayout(footerLayoutWidget);
 
@@ -162,7 +176,6 @@ void TestWindow::initUiMainFooter()
 	fileNameLabel->setObjectName("fileNameLabel");
 	fileNameLabel->setFixedSize(FIXED_FILE_NAME_WIDTH, FIXED_FILE_NAME_HEIGHT);
 	footerMainHLayout->addWidget(fileNameLabel);
-	//fileNameLabel->setStyleSheet("background-color: pink;");
 
 	footerSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
 	footerMainHLayout->addItem(footerSpacer);
@@ -187,8 +200,226 @@ void TestWindow::initUiMainFooter()
 
 void TestWindow::resizeEvent(QResizeEvent* event)
 {
-	int newWidth = geometry().width();
-	int newHeight = geometry().height();
+	windowState->appSize.width = geometry().width();
+	windowState->appSize.height = geometry().height();
 
-	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, newWidth - (BORDER_INDENT * 2), newHeight - (BORDER_INDENT * 2));
+	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, windowState->appSize.width - (BORDER_INDENT * 2), windowState->appSize.height - (BORDER_INDENT * 2));
+}
+
+void TestWindow::initRecources()
+{
+	logoLightPixmap = new QPixmap(":/Light/icons/Logo_Black.png");
+	logoDarkPixmap = new QPixmap(":/Dark/icons/Logo_White.png");
+	themeLightPixmap = new QPixmap(":/Light/icons/Moon_Black.png");
+	themeDarkPixmap = new QPixmap(":/Dark/icons/Sun_White.png");
+	languageLightPixmap = new QPixmap(":/Light/icons/Language_Black.png");
+	languageDarkPixmap = new QPixmap(":/Dark/icons/Language_White.png");
+	backButtonLightPixmap = new QPixmap(":/Light/icons/Back_Black.png");
+	backButtonDarkPixmap = new QPixmap(":/Dark/icons/Back_White.png");
+}
+
+void TestWindow::initTexts()
+{
+	fileNameLabel->setText(fileName);
+
+	switchLanguage();
+}
+
+void TestWindow::initIcons()
+{
+	switch (windowState->appTheme)
+	{
+	case LIGHT_THEME:
+		logoLabel->setPixmap(*logoLightPixmap);
+		switchThemeButton->setIcon(QIcon(*themeLightPixmap));
+		switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
+		backButton->setIcon(QIcon(*backButtonLightPixmap));
+		backButton->setIconSize(backButton->size());
+		break;
+
+	case DARK_THEME:
+		logoLabel->setPixmap(*logoDarkPixmap);
+		switchThemeButton->setIcon(QIcon(*themeDarkPixmap));
+		switchLanguageButton->setIcon(QIcon(*languageDarkPixmap));
+		backButton->setIcon(QIcon(*backButtonDarkPixmap));
+		backButton->setIconSize(backButton->size());
+		break;
+	}
+}
+
+void TestWindow::initConnections()
+{
+	connect(backButton,				&QPushButton::clicked, this, &TestWindow::on_backButton_clicked);
+	connect(switchThemeButton,		&QPushButton::clicked, this, &TestWindow::on_switchThemeButton_clicked);
+	connect(switchLanguageButton,	&QPushButton::clicked, this, &TestWindow::on_switchLanguageButton_clicked);
+	connect(reportButton,			&QPushButton::clicked, this, &TestWindow::on_reportButton_clicked);
+}
+
+void TestWindow::initStyles()
+{
+
+}
+
+void TestWindow::setFileName(QString fileName)
+{
+	this->fileName = fileName;
+	fileNameLabel->setText(this->fileName);
+}
+
+void TestWindow::on_backButton_clicked()
+{
+	this->close();
+}
+
+void TestWindow::on_switchThemeButton_clicked()
+{
+	switch (windowState->appTheme)
+	{
+	case LIGHT_THEME:
+		windowState->appTheme = DARK_THEME;
+		break;
+
+	case DARK_THEME:
+		windowState->appTheme = LIGHT_THEME;
+		break;
+	}
+	switchTheme();
+}
+
+void TestWindow::on_switchLanguageButton_clicked()
+{
+	switch (windowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		windowState->appLanguage = ENGLISH_LANG;
+		break;
+		
+	case ENGLISH_LANG:
+		windowState->appLanguage = RUSSIAN_LANG;
+		break;
+	}
+	switchLanguage();
+}
+
+void TestWindow::on_reportButton_clicked()
+{
+
+}
+
+void TestWindow::switchTheme()
+{
+	switch (windowState->appTheme)
+	{
+	case LIGHT_THEME:
+		logoLabel->setPixmap(*logoLightPixmap);
+		switchThemeButton->setIcon(QIcon(*themeLightPixmap));
+		switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
+		backButton->setIcon(QIcon(*backButtonLightPixmap));
+		backButton->setIconSize(backButton->size());
+		break;
+
+	case DARK_THEME:
+		logoLabel->setPixmap(*logoDarkPixmap);
+		switchThemeButton->setIcon(QIcon(*themeDarkPixmap));
+		switchLanguageButton->setIcon(QIcon(*languageDarkPixmap));
+		backButton->setIcon(QIcon(*backButtonDarkPixmap));
+		backButton->setIconSize(backButton->size());
+		break;
+	}
+}
+
+void TestWindow::switchLanguage()
+{
+	switch (windowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
+
+		switch (testType)
+		{
+		case TestWindowType::FULL_TEST_MANUAL_STAND:
+			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
+			break;
+
+		case TestWindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			outManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
+			// Добавить заполнение combo box
+			break;
+
+		case TestWindowType::IN_MANUAL_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			inManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
+			// Добавить заполнение combo box
+			break;
+
+		case TestWindowType::IN_AUTO_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			inAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
+			inAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+			break;
+
+		case TestWindowType::OUT_AUTO_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			outAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
+			outAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+			break;
+
+		case TestWindowType::FULL_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			fullTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
+			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
+			break;
+
+		default:
+			break;
+		}
+		break;
+
+	case ENGLISH_LANG:
+		reportButton->setText(QString("Report"));
+
+		switch (testType)
+		{
+		case TestWindowType::FULL_TEST_MANUAL_STAND:
+			fullTestManualStandSortButton->setText(QString("Sort: num"));
+			break;
+
+		case TestWindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			outManualTestAutoStandConnectButton->setText(QString("Stand connected"));
+			// Добавить заполнение combo box
+			break;
+
+		case TestWindowType::IN_MANUAL_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			inManualTestAutoStandConnectButton->setText(QString("Stand connected"));
+			// Добавить заполнение combo box
+			break;
+
+		case TestWindowType::IN_AUTO_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			inAutoTestAutoStandConnectButton->setText(QString("Stand connected"));
+			inAutoTestAutoStandStartTestButton->setText(QString("Start"));
+			break;
+
+		case TestWindowType::OUT_AUTO_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			outManualTestAutoStandConnectButton->setText(QString("Stand connected"));
+			outAutoTestAutoStandStartTestButton->setText(QString("Start"));
+			break;
+
+		case TestWindowType::FULL_TEST_AUTO_STAND:
+			// Добавить условие на подключение стенда
+			fullTestAutoStandConnectButton->setText(QString("Stand connected"));
+			fullTestAutoStandStartTestButton->setText(QString("Start"));
+			fullTestAutoStandSortButton->setText(QString("Sort: num"));
+			break;
+
+		default:
+			break;
+		}
+		break;
+	}
 }
