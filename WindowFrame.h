@@ -4,6 +4,9 @@
 #include <QMenuBar>
 #include <QMenu>
 
+#include "StyleSheets.h"
+#include "Components.h"
+
 namespace Ui {
 class WindowFrame;
 }
@@ -15,9 +18,9 @@ public:
     explicit WindowFrame(QWidget *parent = nullptr, QWidget *child = nullptr);
     ~WindowFrame();
 
+    void resetTheme();
+
 public:
-    /// Init frame icons
-    void initIcons();
     /// Show header menu.
     void showHeaderContextMenu(const QPoint &pos);
     /// Show or hide the window minimization button.
@@ -44,6 +47,9 @@ protected:
     /// Override event filtering function for the WindowFrame class.
     bool eventFilter(QObject *obj, QEvent *event) override;
 
+public slots:
+    void on_switchThemeButton_clicked();
+
 private slots:
     /// Handler for the "Close" button click signal.
     void on_close_clicked();
@@ -65,5 +71,22 @@ private:
     int mBorderSize;
     /// Collapse flag.
     bool mIsCollapse;
+
+    void initRecources();
+    void initLightStyleSheets();
+    void initDarkStyleSheets();
+
+    QIcon closeLightIcon;
+    QIcon collapseHideLightIcon;
+    QIcon collapseShowLightIcon;
+    QIcon maximizeLightIcon;
+    QIcon minimizeLightIcon;
+    QIcon defaultLightSizeIcon;
+    QIcon closeDarkIcon;
+    QIcon collapseHideDarkIcon;
+    QIcon collapseShowDarkIcon;
+    QIcon maximizeDarkIcon;
+    QIcon minimizeDarkIcon;
+    QIcon defaultDarkSizeIcon;
 };
 

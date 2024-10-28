@@ -17,5 +17,22 @@ void TestWindow::initUiOutManualTestAutoStand()
 
 void TestWindow::initUiTableOutManualTestAutoStand()
 {
+	mainTableWidget->setColumnCount(7);
+	mainTableWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("Разъём")
+															<< QString::fromLocal8Bit("Пин")
+															<< QString::fromLocal8Bit("Название")
+															<< QString::fromLocal8Bit("Тип")
+															<< QString::fromLocal8Bit("Стенд")
+															<< QString::fromLocal8Bit("ПК")
+															<< QString::fromLocal8Bit("Подробнее"));
+}
+
+void TestWindow::on_outManualTestAutoStandConnectButton_clicked()
+{
+
+}
+
+void TestWindow::on_outManualTestAutoStandTestTimeComboBox_changed(int ind)
+{
 
 }

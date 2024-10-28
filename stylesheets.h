@@ -5,6 +5,12 @@
 
 struct Styles
 {
+	QString mainStyle;
+	QString headerDefaultStyle;
+	QString headerCollapseStyle;
+	QString headerMaximizeStyle;
+	QString bodyStyle;
+
 	QString standartButton;
 	QString settingButton;
 	QString mainButton;

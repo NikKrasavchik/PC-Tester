@@ -18,57 +18,9 @@
 #include "StyleSheets.h"
 #include "can.h"
 #include "WindowFrame.h"
+#include "Components.h"
 
 #include <QDebug>
-
-#define MIN_SCREEN_WIDTH    800
-#define MIN_SCREEN_HEIGHT   600
-
-#define BORDER_INDENT   25
-#define TOOLBAR_SIZE    20
-
-#define GRID_COLOUMN_0  0
-#define GRID_COLOUMN_1  1
-#define GRID_ROW_0      0
-#define GRID_ROW_1      1
-
-#define MIN_STAND_BUTTON_WIDTH			144
-#define MIN_STAND_BUTTON_HEIGHT			62
-#define MIN_STAND_SWITCH_SLIDER_WIDTH	88
-#define MIN_STAND_SWITCH_SLIDER_HEIGHT	46
-#define MIN_THEME_LANG_BUTTON			30
-#define MIN_ADAPTER_COMBO_HEIGHT		35
-#define MIN_ADAPTER_BUTTON_SIZE			35
-#define MIN_FREQUENCY_COMBO_HEIGHT		35
-#define MIN_CONFIGURATOR_BUTTON_WIDTH	160
-#define MIN_CONFIGURATOR_BUTTON_HEIGHT	66
-#define MIN_FILE_SEL_BUTTON_WIDTH		166
-#define MIN_FILE_SEL_BUTTON_HEIGHT		66
-#define MIN_MAIN_IN_OUT_BUTTON_WIDTH	145
-#define MIN_MAIN_IN_OUT_BUTTON_HEIGHT	46
-#define MIN_MAIN_FUL_BUTTON_WIDTH		200
-#define MIN_MAIN_FUL_BUTTON_HEIGHT		60
-
-#define MAX_ADAPTER_COMBO_WIDTH			263
-#define MAX_FREQUENCY_COMBO_WIDTH		300
-
-#define COEF_STAND_BUTTON				0.1
-#define COEF_STAND_SLIDER				0.06
-#define COEF_THEME_LANG_BUTTON			0.03
-#define COEF_ADAPTER_GROUP				0.05
-#define COEF_FREQUENC_COMBO				0.05
-#define COEF_CONFIGURATOR_BUTTON		0.05
-#define COEF_FILE_SEL_BUTTON			0.05
-#define COEF_MAIN_BUTTON				0.05
-
-#define LIGHT_THEME		0
-#define DARK_THEME		1
-
-#define RUSSIAN_LANG	0
-#define ENGLISH_LANG	1
-
-#define OVERCROWDED_SEL_FILE_LABEL		26
-#define CFG_EXTENSION_LETTERS_COUNT		4
 
 class MainWindow : public QMainWindow
 {
@@ -78,8 +30,11 @@ public:
 	MainWindow(QWidget* parent = nullptr);
 	~MainWindow();
 
+	void setParentFrame(WindowFrame* parentFrame);
+
 private:
 	Ui::MainWindowClass ui;
+	WindowFrame* parentFrame;
 
 	QWidget* mainLayoutWidget;
 	QWidget* manualStandWidget;
@@ -204,8 +159,6 @@ private:
 
 	Can* can;
 
-	WindowState *windowState;
-
 	bool isFileSelected;
 	bool isAllInit;
 	bool selectedStand;
@@ -213,10 +166,13 @@ private:
 	QString selectedFileFullName;
 	QString fileName;
 	QString appstylePath;
+	QString darkStylePath;
+	QString lightStylePath;
 
-	void initStyleSheets();
 	void initRecources();
 	void initStyles();
+	void initLightStyleSheets();
+	void initDarkStyleSheets();
 	void initTexts();
 	void initIcons();
 	void initConnections();

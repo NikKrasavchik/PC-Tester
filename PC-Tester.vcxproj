@@ -138,6 +138,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="can.h" />
+    <ClInclude Include="Components.h" />
     <ClInclude Include="StyleSheets.h" />
     <QtMoc Include="WindowFrame.h" />
     <QtMoc Include="TestWindow.h" />

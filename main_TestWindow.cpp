@@ -1,11 +1,10 @@
 #include "TestWindow.h"
 
-TestWindow::TestWindow(TestWindowType testType, WindowState *windowState, QWidget* parent)
+TestWindow::TestWindow(TestWindowType testType, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
 
-	this->windowState = windowState;
 	this->testType = testType;
 
 	initUiMain();
@@ -200,10 +199,10 @@ void TestWindow::initUiMainFooter()
 
 void TestWindow::resizeEvent(QResizeEvent* event)
 {
-	windowState->appSize.width = geometry().width();
-	windowState->appSize.height = geometry().height();
+	viewWindowState->appSize.width = geometry().width();
+	viewWindowState->appSize.height = geometry().height();
 
-	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, windowState->appSize.width - (BORDER_INDENT * 2), windowState->appSize.height - (BORDER_INDENT * 2));
+	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, viewWindowState->appSize.width - (BORDER_INDENT * 2), viewWindowState->appSize.height - (BORDER_INDENT * 2));
 }
 
 void TestWindow::initRecources()
@@ -227,7 +226,7 @@ void TestWindow::initTexts()
 
 void TestWindow::initIcons()
 {
-	switch (windowState->appTheme)
+	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
 		logoLabel->setPixmap(*logoLightPixmap);
@@ -253,6 +252,20 @@ void TestWindow::initConnections()
 	connect(switchThemeButton,		&QPushButton::clicked, this, &TestWindow::on_switchThemeButton_clicked);
 	connect(switchLanguageButton,	&QPushButton::clicked, this, &TestWindow::on_switchLanguageButton_clicked);
 	connect(reportButton,			&QPushButton::clicked, this, &TestWindow::on_reportButton_clicked);
+
+	connect(fullTestManualStandSortButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestManualStandSortButton_clicked);
+	connect(inManualTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_inManualTestAutoStandConnectButton_clicked);
+	connect(inManualTestAutoStandTestTimeComboBox,	SIGNAL(currentIndexChanged(int)), this, SLOT(on_inManualTestAutoStandTestTimeComboBox_changed(int)));
+	connect(outManualTestAutoStandConnectButton,	&QPushButton::clicked, this, &TestWindow::on_outManualTestAutoStandConnectButton_clicked);
+	connect(outManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_outManualTestAutoStandTestTimeComboBox_changed(int)));
+	connect(inAutoTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_inAutoTestAutoStandConnectButton_clicked);
+	connect(inAutoTestAutoStandStartTestButton,		&QPushButton::clicked, this, &TestWindow::on_inAutoTestAutoStandStartTestButton_clicked);
+	connect(outAutoTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_outAutoTestAutoStandConnectButton_clicked);
+	connect(outAutoTestAutoStandStartTestButton,	&QPushButton::clicked, this, &TestWindow::on_outAutoTestAutoStandStartTestButton_clicked);
+	connect(fullTestAutoStandConnectButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandConnectButton_clicked);
+	connect(fullTestAutoStandStartTestButton,		&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandStartTestButton_clicked);
+	connect(fullTestAutoStandSortButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandSortButton_clicked);
+
 }
 
 void TestWindow::initStyles()
@@ -273,14 +286,14 @@ void TestWindow::on_backButton_clicked()
 
 void TestWindow::on_switchThemeButton_clicked()
 {
-	switch (windowState->appTheme)
+	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
-		windowState->appTheme = DARK_THEME;
+		viewWindowState->appTheme = DARK_THEME;
 		break;
 
 	case DARK_THEME:
-		windowState->appTheme = LIGHT_THEME;
+		viewWindowState->appTheme = LIGHT_THEME;
 		break;
 	}
 	switchTheme();
@@ -288,14 +301,14 @@ void TestWindow::on_switchThemeButton_clicked()
 
 void TestWindow::on_switchLanguageButton_clicked()
 {
-	switch (windowState->appLanguage)
+	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		windowState->appLanguage = ENGLISH_LANG;
+		viewWindowState->appLanguage = ENGLISH_LANG;
 		break;
 		
 	case ENGLISH_LANG:
-		windowState->appLanguage = RUSSIAN_LANG;
+		viewWindowState->appLanguage = RUSSIAN_LANG;
 		break;
 	}
 	switchLanguage();
@@ -308,7 +321,7 @@ void TestWindow::on_reportButton_clicked()
 
 void TestWindow::switchTheme()
 {
-	switch (windowState->appTheme)
+	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
 		logoLabel->setPixmap(*logoLightPixmap);
@@ -330,7 +343,7 @@ void TestWindow::switchTheme()
 
 void TestWindow::switchLanguage()
 {
-	switch (windowState->appLanguage)
+	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString::fromLocal8Bit("Îò÷¸ò"));
@@ -422,4 +435,11 @@ void TestWindow::switchLanguage()
 		}
 		break;
 	}
+}
+
+void TestWindow::setParentFrame(WindowFrame* parentFrame)
+{
+	this->parentFrame = parentFrame;
+
+	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }

@@ -2,9 +2,7 @@
 #define QSLIDERBUTTON_H
 
 #include <QWidget>
-
-#define MANUAL_STAND	0
-#define AUTO_STAND		1
+#include "Components.h"
 
 #define ROUND_COLOR "#979797"
 #define BG_COLOR    "#E8E8E8"

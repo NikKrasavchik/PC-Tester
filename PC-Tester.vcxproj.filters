@@ -80,7 +80,7 @@
       <Filter>Source Files\Ui</Filter>
     </ClCompile>
     <ClCompile Include="WindowFrame.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Ui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +99,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="can.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Components.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

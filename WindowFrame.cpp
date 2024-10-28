@@ -6,63 +6,39 @@
 
 #include <QMouseEvent>
 
-const QString title = "Custom Title Bar";
+#define BORDER_SIZE 5
 
-const QString headerDefaultStyle = QStringLiteral(
-    "#header {"
-    "    background-color: rgb(20, 20, 20);"
-    "    border: 1px solid rgb(20, 20, 20);"
-    "    border-top-left-radius: 10px;"
-    "    border-top-right-radius: 10px;"
-    "}"
-);
+const QString title = "PC-Tester";
 
-const QString headerCollapseStyle = QStringLiteral(
-    "#header {"
-    "    background-color: rgb(20, 20, 20);"
-    "    border: 2px solid rgb(20, 20, 20);"
-    "    border-top-left-radius: 10px;"
-    "    border-top-right-radius: 10px;"
-    "    border-bottom-left-radius: 10px;"
-    "    border-bottom-right-radius: 10px;"
-    "}"
-);
+const QString appDarkIconPath           = ":/Dark/icons/App_Logo_White.png";
+const QString closeDarkIconPath         = ":/Dark/icons/Close_White.png";
+const QString collapseHideDarkIconPath  = ":/Dark/icons/Collapse_Hide_White.png";
+const QString collapseShowDarkIconPath  = ":/Dark/icons/Collapse_Show_White.png";
+const QString maximizeDarkIconPath      = ":/Dark/icons/Maximize_White.png";
+const QString minimizeDarkIconPath      = ":/Dark/icons/Minimize_White.png";
+const QString defaultSizeDarkIconPath   = ":/Dark/icons/Default_Size_White.png";
 
-const QString headerMaximizeStyle = QStringLiteral(
-    "#header {"
-    "    background-color: rgb(20, 20, 20);"
-    "    border: 1px solid rgb(20, 20, 20);"
-    "    border-top-left-radius: 0px;"
-    "    border-top-right-radius: 0px;"
-    "}"
-);
-
-const QString appIconDark           = ":/Dark/icons/App_Logo_White.png";
-const QString closeIconDark         = ":/Dark/icons/Close_White.png";
-const QString collapseHideIconDark  = ":/Dark/icons/Collapse_Hide_White.png";
-const QString collapseShowIconDark  = ":/Dark/icons/Collapse_Show_White.png";
-const QString maximizeIconDark      = ":/Dark/icons/Maximize_White.png";
-const QString minimizeIconDark      = ":/Dark/icons/Minimize_White.png";
-const QString defaultSizeIconDark   = ":/Dark/icons/Default_Size_White.png";
-
-const QString appIconLight          = ":/Light/icons/App_Logo_Black.png";
-const QString closeIconLight        = ":/Light/icons/Close_Black.png";
-const QString collapseHideIconLight = ":/Light/icons/Collapse_Hide_Black.png";
-const QString collapseShowIconLight = ":/Light/icons/Collapse_Show_Black.png";
-const QString maximizeIconLight     = ":/Light/icons/Maximize_Black.png";
-const QString minimizeIconLight     = ":/Light/icons/Minimize_Black.png";
-const QString defaultSizeIconLight  = ":/Light/icons/Default_Size_Black.png";
+const QString appLightIconPath          = ":/Light/icons/App_Logo_Black.png";
+const QString closeLightIconPath        = ":/Light/icons/Close_Black.png";
+const QString collapseHideLightIconPath = ":/Light/icons/Collapse_Hide_Black.png";
+const QString collapseShowLightIconPath = ":/Light/icons/Collapse_Show_Black.png";
+const QString maximizeLightIconPath     = ":/Light/icons/Maximize_Black.png";
+const QString minimizeLightIconPath     = ":/Light/icons/Minimize_Black.png";
+const QString defaultSizeLightIconPath  = ":/Light/icons/Default_Size_Black.png";
 
 /// @brief Constructor for the WindowFrame class.
 /// @param parent The parent widget.
 /// @param child The child widget to be added to the window (optional).
 WindowFrame::WindowFrame(QWidget *parent, QWidget *child)
-    : QFrame(parent), ui(new Ui::WindowFrame){
-
+    : QFrame(parent), ui(new Ui::WindowFrame)
+{
     ui->setupUi(this);
-    mBorderSize = 5;
+    mBorderSize = BORDER_SIZE;
 
-    initIcons();
+    initRecources();
+    initLightStyleSheets();
+    initDarkStyleSheets();
+    resetTheme();
 
     ui->title->setText(title);
 
@@ -74,23 +50,63 @@ WindowFrame::WindowFrame(QWidget *parent, QWidget *child)
         mMainBody->installEventFilter(this);
         resize(child->size());
     }
-    ui->header->setStyleSheet(headerDefaultStyle);
     mIsCollapse = false;
 }
 
 /// @brief Destructor for the WindowFrame class.
-WindowFrame::~WindowFrame(){
+WindowFrame::~WindowFrame()
+{
     delete ui;
 }
 
-/// @brief Init frame icons.
-void WindowFrame::initIcons(){
-    this->setIcon(appIconLight);
+void WindowFrame::initRecources()
+{
+    closeLightIcon = QIcon(closeLightIconPath);
+    collapseHideLightIcon = QIcon(collapseHideLightIconPath);
+    collapseShowLightIcon = QIcon(collapseShowLightIconPath);
+    maximizeLightIcon = QIcon(maximizeLightIconPath);
+    minimizeLightIcon = QIcon(minimizeLightIconPath);
+    defaultLightSizeIcon = QIcon(defaultSizeLightIconPath);
 
-    ui->collapse->setIcon(QIcon(collapseHideIconLight));
-    ui->close->setIcon(QIcon(closeIconLight));
-    ui->maximum->setIcon(QIcon(maximizeIconLight));
-    ui->minimum->setIcon(QIcon(minimizeIconLight));
+    closeDarkIcon = QIcon(closeDarkIconPath);
+    collapseHideDarkIcon = QIcon(collapseHideDarkIconPath);
+    collapseShowDarkIcon = QIcon(collapseShowDarkIconPath);
+    maximizeDarkIcon = QIcon(maximizeDarkIconPath);
+    minimizeDarkIcon = QIcon(minimizeDarkIconPath);
+    defaultDarkSizeIcon = QIcon(defaultSizeDarkIconPath);
+}
+
+void WindowFrame::on_switchThemeButton_clicked()
+{
+    resetTheme();
+}
+
+void WindowFrame::resetTheme()
+{
+    switch (viewWindowState->appTheme)
+    {
+    case LIGHT_THEME:
+        this->setIcon(appLightIconPath);
+        ui->close->setIcon(closeLightIcon);
+        ui->collapse->setIcon(collapseHideLightIcon);
+        ui->maximum->setIcon(maximizeLightIcon);
+        ui->minimum->setIcon(minimizeLightIcon);
+
+        ui->header->setStyleSheet(lightStyles.headerDefaultStyle);
+        ui->body->setStyleSheet(lightStyles.bodyStyle);
+        break;
+
+    case DARK_THEME:
+        this->setIcon(appDarkIconPath);
+        ui->close->setIcon(closeDarkIcon);
+        ui->collapse->setIcon(collapseHideDarkIcon);
+        ui->maximum->setIcon(maximizeDarkIcon);
+        ui->minimum->setIcon(minimizeDarkIcon);
+
+        ui->header->setStyleSheet(darkStyles.headerDefaultStyle);
+        ui->body->setStyleSheet(darkStyles.bodyStyle);
+        break;
+    }
 }
 
 /// @brief Show header menu.
@@ -113,12 +129,34 @@ void WindowFrame::on_close_clicked(){
 /// @brief Handler for the "Maximize/Restore" button click signal.
 void WindowFrame::on_maximum_clicked(){
     if(isMaximized()) {
-        ui->maximum->setIcon(QIcon(maximizeIconLight));
-        mIsCollapse ? ui->header->setStyleSheet(headerCollapseStyle) : ui->header->setStyleSheet(headerDefaultStyle);
+        switch (viewWindowState->appTheme)
+        {
+        case LIGHT_THEME:
+            ui->maximum->setIcon(maximizeLightIcon);
+            mIsCollapse ? ui->header->setStyleSheet(lightStyles.headerCollapseStyle) : ui->header->setStyleSheet(lightStyles.headerDefaultStyle);
+            break;
+
+        case DARK_THEME:
+            ui->maximum->setIcon(maximizeDarkIcon);
+            mIsCollapse ? ui->header->setStyleSheet(darkStyles.headerCollapseStyle) : ui->header->setStyleSheet(darkStyles.headerDefaultStyle);
+            break;
+        }
+
         showNormal();
     } else {
-        ui->maximum->setIcon(QIcon(defaultSizeIconLight));
-        ui->header->setStyleSheet(headerMaximizeStyle);
+
+        switch (viewWindowState->appTheme)
+        {
+        case LIGHT_THEME:
+            ui->maximum->setIcon(defaultLightSizeIcon);
+            ui->header->setStyleSheet(lightStyles.headerMaximizeStyle);
+            break;
+
+        case DARK_THEME:
+            ui->maximum->setIcon(defaultDarkSizeIcon);
+            ui->header->setStyleSheet(darkStyles.headerMaximizeStyle);
+            break;
+        }
         showMaximized();
     }
 }
@@ -133,13 +171,35 @@ void WindowFrame::on_collapse_clicked() {
     if (mIsCollapse) {
         ui->body->setVisible(true);
         mIsCollapse = false;
-        ui->collapse->setIcon(QIcon(collapseHideIconLight));
-        isMaximized() ? ui->header->setStyleSheet(headerMaximizeStyle) : ui->header->setStyleSheet(headerDefaultStyle);
+
+        switch (viewWindowState->appTheme)
+        {
+        case LIGHT_THEME:
+            ui->collapse->setIcon(collapseHideLightIcon);
+            isMaximized() ? ui->header->setStyleSheet(lightStyles.headerMaximizeStyle) : ui->header->setStyleSheet(lightStyles.headerDefaultStyle);
+            break;
+
+        case DARK_THEME:
+            ui->collapse->setIcon(collapseHideDarkIcon);
+            isMaximized() ? ui->header->setStyleSheet(darkStyles.headerMaximizeStyle) : ui->header->setStyleSheet(darkStyles.headerDefaultStyle);
+            break;
+        }
     } else {
         ui->body->setVisible(false);
         mIsCollapse = true;
-        ui->collapse->setIcon(QIcon(collapseShowIconLight));
-        isMaximized() ? ui->header->setStyleSheet(headerMaximizeStyle) : ui->header->setStyleSheet(headerCollapseStyle);
+
+        switch (viewWindowState->appTheme)
+        {
+        case LIGHT_THEME:
+            ui->collapse->setIcon(collapseShowLightIcon);
+            isMaximized() ? ui->header->setStyleSheet(lightStyles.headerMaximizeStyle) : ui->header->setStyleSheet(lightStyles.headerCollapseStyle);
+            break;
+
+        case DARK_THEME:
+            ui->collapse->setIcon(collapseShowDarkIcon);
+            isMaximized() ? ui->header->setStyleSheet(darkStyles.headerMaximizeStyle) : ui->header->setStyleSheet(darkStyles.headerCollapseStyle);
+            break;
+        }
     }
 }
 
@@ -187,13 +247,36 @@ void WindowFrame::mouseDoubleClickEvent(QMouseEvent *event) {
     if (event->buttons() == Qt::LeftButton) {
         QWidget* widget = childAt(event->x(), event->y());
         if(widget == ui->LHeader) {
-            if(isMaximized()) {
-                ui->maximum->setIcon(QIcon(maximizeIconLight));
-                ui->header->setStyleSheet(headerDefaultStyle);
+            if (isMaximized()) {
+                switch (viewWindowState->appTheme)
+                {
+                case LIGHT_THEME:
+                    ui->maximum->setIcon(maximizeLightIcon);
+                    mIsCollapse ? ui->header->setStyleSheet(lightStyles.headerCollapseStyle) : ui->header->setStyleSheet(lightStyles.headerDefaultStyle);
+                    break;
+
+                case DARK_THEME:
+                    ui->maximum->setIcon(maximizeDarkIcon);
+                    mIsCollapse ? ui->header->setStyleSheet(darkStyles.headerCollapseStyle) : ui->header->setStyleSheet(darkStyles.headerDefaultStyle);
+                    break;
+                }
+
                 showNormal();
-            } else {
-                ui->maximum->setIcon(QIcon(defaultSizeIconLight));
-                ui->header->setStyleSheet(headerMaximizeStyle);
+            }
+            else {
+
+                switch (viewWindowState->appTheme)
+                {
+                case LIGHT_THEME:
+                    ui->maximum->setIcon(defaultLightSizeIcon);
+                    ui->header->setStyleSheet(lightStyles.headerMaximizeStyle);
+                    break;
+
+                case DARK_THEME:
+                    ui->maximum->setIcon(defaultDarkSizeIcon);
+                    ui->header->setStyleSheet(darkStyles.headerMaximizeStyle);
+                    break;
+                }
                 showMaximized();
             }
         }

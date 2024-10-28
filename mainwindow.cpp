@@ -20,26 +20,24 @@ MainWindow::~MainWindow()
 	delete languageLightPixmap;
 	delete languageDarkPixmap;
 	delete can;
-	delete windowState;
 }
 
 void MainWindow::initUi()
 {
 	isAllInit = false;
 
-	windowState = new WindowState;
-
 	resize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT);
 	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
 
-	windowState->appSize.width = MIN_SCREEN_WIDTH;
-	windowState->appSize.height = MIN_SCREEN_HEIGHT;
+	viewWindowState->appSize.width = MIN_SCREEN_WIDTH;
+	viewWindowState->appSize.height = MIN_SCREEN_HEIGHT;
 
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("MainFormLayoutWidget");
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
 
-	initStyleSheets();
+	initLightStyleSheets();
+	initDarkStyleSheets();
 	initRecources();
 	initUiLogo();
 	initUiTopHLayout();
@@ -59,8 +57,8 @@ void MainWindow::initUi()
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLOUMN_1);
 
 	selectedStand = AUTO_STAND;
-	windowState->appTheme = LIGHT_THEME;
-	windowState->appLanguage = RUSSIAN_LANG;
+	viewWindowState->appTheme = LIGHT_THEME;
+	viewWindowState->appLanguage = RUSSIAN_LANG;
 
 	initStyles();
 	initTexts();
@@ -595,8 +593,6 @@ void MainWindow::initStyles()
 	autoTestAutoStandWidget->setStyleSheet(lightStyles.testButtonBackground);
 	manualTestAutoStandWidget->setStyleSheet(lightStyles.testButtonBackground);
 	fullTestAutoStandWidget->setStyleSheet(lightStyles.testButtonBackground);
-
-	ui.centralWidget->setStyleSheet(lightStyles.screenColor);
 }
 
 void MainWindow::initTexts()
@@ -654,6 +650,8 @@ void MainWindow::initRecources()
 	languageLightPixmap = new QPixmap(":/Light/icons/Language_Black.png");
 	languageDarkPixmap = new QPixmap(":/Dark/icons/Language_White.png");
 	appstylePath = ":/recources/style/appstyles.qss";
+	lightStylePath = ":/styles/style/lightTheme.qss";
+	darkStylePath = ":/styles/style/darkTheme.qss";
 }
 
 void MainWindow::initConnections()
@@ -685,7 +683,7 @@ void MainWindow::switchStyleMainButtons()
 	//if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
 	if (true)
 	{
-		if (windowState->appTheme == LIGHT_THEME)
+		if (viewWindowState->appTheme == LIGHT_THEME)
 		{
 			outTestManualStandButton->setStyleSheet(lightStyles.mainButton);
 			inTestManualStandButton->setStyleSheet(lightStyles.mainButton);
@@ -710,7 +708,7 @@ void MainWindow::switchStyleMainButtons()
 	}
 	else
 	{
-		if (windowState->appTheme == LIGHT_THEME)
+		if (viewWindowState->appTheme == LIGHT_THEME)
 		{
 			outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 			inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
@@ -737,57 +735,57 @@ void MainWindow::switchStyleMainButtons()
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
-	windowState->appSize.width = geometry().width();
-	windowState->appSize.height = geometry().height();
+	viewWindowState->appSize.width = geometry().width();
+	viewWindowState->appSize.height = geometry().height();
 
-	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, windowState->appSize.width - (BORDER_INDENT * 2), windowState->appSize.height - (BORDER_INDENT * 2));
+	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, viewWindowState->appSize.width - (BORDER_INDENT * 2), viewWindowState->appSize.height - (BORDER_INDENT * 2));
 
 	// Выбор стенда
 	// manual
-	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
-	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
+	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
 
 	// auto
-	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
-	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
+	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
+	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
 
 	// slider
-	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
-	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
-	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((windowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
+	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
+	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
+	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
 
 	// Main
 	// out stend manual
-	outTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in stend manual
-	inTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// full stend manual
-	fullTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	fullTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// out manual stend auto
-	outManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in manual stend auto
-	inManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in auto stend suto
-	outAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in auto stend auto
-	inAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// full stend auto
-	fullTestAutoStandButton->setFixedWidth(MIN_MAIN_FUL_BUTTON_WIDTH + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((windowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestAutoStandButton->setFixedWidth(MIN_MAIN_FUL_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 }
 
 void MainWindow::on_selectFileButton_clicked()
@@ -841,17 +839,21 @@ void MainWindow::on_selectFileButton_clicked()
 
 void MainWindow::on_switchThemeButton_clicked()
 {
-	if (windowState->appTheme == LIGHT_THEME)
-		windowState->appTheme = DARK_THEME;
-	else if (windowState->appTheme == DARK_THEME)
-		windowState->appTheme = LIGHT_THEME;
-
+	switch (viewWindowState->appTheme)
+	{
+	case LIGHT_THEME:
+		viewWindowState->appTheme = DARK_THEME;
+		break;
+	case DARK_THEME:
+		viewWindowState->appTheme = LIGHT_THEME;
+		break;
+	}
 	switchTheme();
 }
 
 void MainWindow::switchTheme()
 {
-	switch (windowState->appTheme)
+	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
 		switchThemeButton->setIcon(QIcon(*themeLightPixmap));
@@ -860,7 +862,6 @@ void MainWindow::switchTheme()
 
 		logoLabel->setPixmap(*logoLightPixmap);
 
-		ui.centralWidget->setStyleSheet(lightStyles.screenColor);
 		switchThemeButton->setStyleSheet(lightStyles.themeLangButton);
 		switchLanguageButton->setStyleSheet(lightStyles.themeLangButton);
 
@@ -907,7 +908,6 @@ void MainWindow::switchTheme()
 		checkAdaptersButton->setIcon(QIcon(*checkAdapterDarkPixmap));
 		logoLabel->setPixmap(*logoDarkPixmap);
 
-		ui.centralWidget->setStyleSheet(darkStyles.screenColor);
 		switchThemeButton->setStyleSheet(darkStyles.themeLangButton);
 		switchLanguageButton->setStyleSheet(darkStyles.themeLangButton);
 
@@ -982,7 +982,7 @@ void MainWindow::switchStandButtons()
 		manualStandWidget->hide();
 		autoStandWidget->show();
 
-		switch (windowState->appTheme)
+		switch (viewWindowState->appTheme)
 		{
 		case LIGHT_THEME:
 			manualStandButton->setStyleSheet(lightStyles.standartButton);
@@ -1000,7 +1000,7 @@ void MainWindow::switchStandButtons()
 		autoStandWidget->hide();
 		manualStandWidget->show();
 
-		switch (windowState->appTheme)
+		switch (viewWindowState->appTheme)
 		{
 		case LIGHT_THEME:
 			autoStandButton->setStyleSheet(lightStyles.standartButton);
@@ -1018,17 +1018,22 @@ void MainWindow::switchStandButtons()
 
 void MainWindow::on_switchLanguageButton_clicked()
 {
-	if (windowState->appLanguage == RUSSIAN_LANG)
-		windowState->appLanguage = ENGLISH_LANG;
-	else if (windowState->appLanguage == ENGLISH_LANG)
-		windowState->appLanguage = RUSSIAN_LANG;
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		viewWindowState->appTheme = ENGLISH_LANG;
+		break;
+	case ENGLISH_LANG:
+		viewWindowState->appTheme = RUSSIAN_LANG;
+		break;
+	}
 
 	switchLanguage();
 }
 
 void MainWindow::switchLanguage()
 {
-	switch (windowState->appLanguage)
+	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
 		manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
@@ -1094,9 +1099,9 @@ void MainWindow::on_selectFrequencyComboBox_changed(int index)
 		switchLanguage(); // Ставим предупреждающий lable согласно языку
 	else if (index > 0)
 	{
-		if (windowState->appLanguage == RUSSIAN_LANG)
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
 			selectFrequencyLabel->setText(QString::fromLocal8Bit("Частота: ") + selectFrequencyComboBox->currentText());
-		else if (windowState->appLanguage == ENGLISH_LANG)
+		else if (viewWindowState->appLanguage == ENGLISH_LANG)
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
 	}
 }
@@ -1171,12 +1176,11 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 
 void MainWindow::createTestWindow(TestWindowType testType)
 {
-	TestWindow* testWindow = new TestWindow(testType, windowState, this);
+	TestWindow* testWindow = new TestWindow(testType, this);
 	testWindow->setFileName(fileName);
-	testWindow->setStyleSheet("background-color: white;");
 
 	WindowFrame w(nullptr, testWindow);
-	w.setTitle("App title");
+	testWindow->setParentFrame(&w);
 	w.show();
 	this->hide();
 	testWindow->exec();
@@ -1188,4 +1192,12 @@ void MainWindow::resetWindowView()
 {
 	switchLanguage();
 	switchTheme();
+	parentFrame->resetTheme();
+}
+
+void MainWindow::setParentFrame(WindowFrame* parentFrame)
+{
+	this->parentFrame = parentFrame;
+
+	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
