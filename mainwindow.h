@@ -22,6 +22,8 @@
 
 #include <QDebug>
 
+//#define DEBUG
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT

@@ -9,8 +9,8 @@ void WindowFrame::initLightStyleSheets()
 	lightStyles.headerDefaultStyle =
 		R"(
 		#header {
-		    background-color: #F0F0F0;
-		    border: 1px solid #F0F0F0;
+		    background-color: #A7A7A7;
+		    border: 1px solid #A7A7A7;
 		    border-top-left-radius: 10px;
 		    border-top-right-radius: 10px;
 		}
@@ -19,8 +19,8 @@ void WindowFrame::initLightStyleSheets()
 	lightStyles.headerCollapseStyle =
 		R"(
 		#header {
-			background-color: #F0F0F0;
-			border: 2px solid #F0F0F0;
+			background-color: #A7A7A7;
+			border: 2px solid #A7A7A7;
 			border-top-left-radius: 10px;
 			border-top-right-radius: 10px;
 			border-bottom-left-radius: 10px;
@@ -31,8 +31,8 @@ void WindowFrame::initLightStyleSheets()
 	lightStyles.headerMaximizeStyle =
 		R"(
 	    #header {
-		    background-color: #F0F0F0;
-		    border: 1px solid #F0F0F0;
+		    background-color: #A7A7A7;
+		    border: 1px solid #A7A7A7;
 		    border-top-left-radius: 0px;
 		    border-top-right-radius: 0px;
 		}
@@ -47,6 +47,13 @@ void WindowFrame::initLightStyleSheets()
 			border-bottom-right-radius: 10px;
 		}
 	)";
+
+	lightStyles.buttonStyle =
+		R"(
+			background-color: #B0B0B0;
+			margin: 2px;
+
+	)";
 }
 
 void WindowFrame::initDarkStyleSheets()
@@ -54,8 +61,8 @@ void WindowFrame::initDarkStyleSheets()
 	darkStyles.headerDefaultStyle =
 		R"(
 		#header {
-		    background-color: #3A3A3A;
-		    border: 1px solid #3A3A3A;
+		    background-color: #282828;
+		    border: 1px solid #282828;
 		    border-top-left-radius: 10px;
 		    border-top-right-radius: 10px;
 		}
@@ -64,8 +71,8 @@ void WindowFrame::initDarkStyleSheets()
 	darkStyles.headerCollapseStyle =
 		R"(
 		#header {
-			background-color: #3A3A3A;
-			border: 2px solid #3A3A3A;
+			background-color: #282828;
+			border: 2px solid #282828;
 			border-top-left-radius: 10px;
 			border-top-right-radius: 10px;
 			border-bottom-left-radius: 10px;
@@ -76,8 +83,8 @@ void WindowFrame::initDarkStyleSheets()
 	darkStyles.headerMaximizeStyle =
 		R"(
 	    #header {
-		    background-color: #3A3A3A;
-		    border: 1px solid #3A3A3A;
+		    background-color: #282828;
+		    border: 1px solid #282828;
 		    border-top-left-radius: 0px;
 		    border-top-right-radius: 0px;
 		}
@@ -93,18 +100,23 @@ void WindowFrame::initDarkStyleSheets()
 		}
 	)";
 
-	darkStyles.roundSlider = "#585858";
-	darkStyles.bgSlider = "#777777";
+	darkStyles.buttonStyle =
+		R"(
+			background-color: #535353;
+			margin: 2px;
+
+	)";
 }
 
 void MainWindow::initLightStyleSheets()
 {
-	lightStyles.standartButton =
+	lightStyles.standButtons =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
 			background-color: #B0B0B0;
 
+			color: black;
 			font-family: Kartika;
 			font-size: 25px;
 			font-weight: 700;
@@ -117,41 +129,21 @@ void MainWindow::initLightStyleSheets()
 		}
 	)";
 
-	lightStyles.settingButton =
+	lightStyles.alwaysActiveStandButton =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
-			background-color: #999898;
+			background-color: #767676;
 
+			color: black;
 			font-family: Kartika;
-			font-size: 20px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
-			background-color: #4E4C4C;
-		}
-		.QPushButton:hover:pressed {
-			background-color: #373737;
+			font-size: 25px;
+			font-weight: 700;
 		}
 	)";
 
-	lightStyles.mainButton =
-		R"(
-		.QPushButton {
-			border-radius: 20px;
-			background-color: #999898;
-
-			font-family: Kartika;
-			font-size: 20px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
-			background-color: #4E4C4C;
-		}
-		.QPushButton:hover:pressed {
-			background-color: #373737;
-		}
-	)";
+	lightStyles.roundSlider = "#767676";
+	lightStyles.bgSlider = "#D4D4D4";
 
 	lightStyles.themeLangButton =
 		R"(
@@ -168,43 +160,104 @@ void MainWindow::initLightStyleSheets()
 		}
 	)";
 
+	lightStyles.mainButton =
+		R"(
+		.QPushButton {
+			border-radius: 20px;
+			background-color: #999898;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #4E4C4C;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #373737;
+		}
+	)";
+
 	lightStyles.mainButtonNoActive =
 		R"(
 		.QPushButton {
 			border-radius: 20px;
-			background-color: #D9D9D9;
+			background-color: #CACACA;
 
+			color: #5B5B5B;
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 600;
-			color: #7A7878;
 		}
 	)";
 
-	lightStyles.alwaysActiveButton =
+	lightStyles.mainSubstrateButtons =
+		R"(
+		.QWidget {
+			border-radius: 10px;
+			background-color: #D3D3D3;
+		}
+	)";
+
+	lightStyles.mainText =
+		R"(
+			color: black;
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 800;
+	)";
+
+	lightStyles.settingButton =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
-			background-color: #979797;
+			background-color: #B0B0B0;
 
+			color: black;
 			font-family: Kartika;
-			font-size: 25px;
-			font-weight: 700;
+			font-size: 20px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #767676;
 		}
 	)";
 
-	lightStyles.roundSlider = "#939393";
-	lightStyles.bgSlider = "#E8E8E8";
+	lightStyles.settingComboBox =
+		R"(
+		background-color: #B0B0B0;
+		border-radius: 10px;
+
+		color: black;
+		font-family: Kartika;
+		font-size: 12px;
+		font-weight: 600;
+	)";
+
+	lightStyles.settingSelectText =
+		R"(
+			color: black;
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+	)";
 }
 
 void MainWindow::initDarkStyleSheets()
 {
-	darkStyles.standartButton =
+	darkStyles.standButtons =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
 			background-color: #535353;
 
+			color: white;
 			font-family: Kartika;
 			font-size: 25px;
 			font-weight: 700;
@@ -217,41 +270,21 @@ void MainWindow::initDarkStyleSheets()
 		}
 	)";
 
-	darkStyles.settingButton =
+	darkStyles.alwaysActiveStandButton =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
-			background-color: #535353;
-
-			font-family: Kartika;
-			font-size: 20px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
-			background-color: #6E6E6E;
-		}
-		.QPushButton:hover:pressed {
 			background-color: #858383;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 25px;
+			font-weight: 700;
 		}
 	)";
 
-	darkStyles.mainButton =
-		R"(
-		.QPushButton {
-			border-radius: 20px;
-			background-color: #535353;
-
-			font-family: Kartika;
-			font-size: 20px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
-			background-color: #6E6E6E;
-		}
-		.QPushButton:hover:pressed {
-			background-color: #858383;
-		}
-	)";
+	darkStyles.roundSlider = "#858383";
+	darkStyles.bgSlider = "#2B2A2A";
 
 	darkStyles.themeLangButton =
 		R"(
@@ -268,29 +301,91 @@ void MainWindow::initDarkStyleSheets()
 		}
 	)";
 
+	darkStyles.mainButton =
+		R"(
+		.QPushButton {
+			border-radius: 20px;
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+	)";
+
 	darkStyles.mainButtonNoActive =
 		R"(
 		.QPushButton {
 			border-radius: 20px;
 			background-color: #2B2A2A;
 
+			color: #7A7878;
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 600;
-			color: #7A7878;
 		}
 	)";
 
-	darkStyles.alwaysActiveButton =
+	darkStyles.mainSubstrateButtons =
+		R"(
+		.QWidget {
+			border-radius: 10px;
+			background-color: #414141;
+		}
+	)";
+	darkStyles.mainText =
+		R"(
+			color: white;
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 800;
+	)";
+
+	darkStyles.settingButton =
 		R"(
 		.QPushButton {
 			border-radius: 25px;
-			background-color: #2B2A2A;
+			background-color: #535353;
 
+			color: white;
 			font-family: Kartika;
-			font-size: 25px;
-			font-weight: 700;
+			font-size: 20px;
+			font-weight: 600;
 		}
+		.QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+	)";
+
+	darkStyles.settingComboBox =
+		R"(
+		background-color: #535353;
+		border-radius: 10px;
+
+		color: white;
+		font-family: Kartika;
+		font-size: 12px;
+		font-weight: 600;
+	)";
+
+	darkStyles.settingSelectText =
+		R"(
+			color: white;
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
 	)";
 }
 
@@ -392,14 +487,14 @@ void MainWindow::initDarkStyleSheets()
 	//	R"(
 	//background-color: #FFFFFF;
 	//)";
-	//lightStyles.selectText =
+	//lightStyles.settingSelectText =
 	//	R"(
 	//		line-height: 1px;
 	//		font-family: Kartika;
 	//		font-size: 11px;
 	//		font-weight: 600;
 	//)";
-	//lightStyles.comboBox =
+	//lightStyles.settingComboBox =
 	//	R"(
 	//		background-color: #D9D9D9;
 	//		border-radius: 10px;
@@ -519,7 +614,7 @@ void MainWindow::initDarkStyleSheets()
 	//	R"(
 	//background-color: #282828;
 	//)";
-	//darkStyles.selectText =
+	//darkStyles.settingSelectText =
 	//	R"(
 	//		color: #D8D8D8;
 	//		line-height: 1px;
@@ -527,7 +622,7 @@ void MainWindow::initDarkStyleSheets()
 	//		font-size: 11px;
 	//		font-weight: 600;
 	//)";
-	//darkStyles.comboBox =
+	//darkStyles.settingComboBox =
 	//	R"(
 	//		background-color: #807F7F;
 	//		border-radius: 10px;
