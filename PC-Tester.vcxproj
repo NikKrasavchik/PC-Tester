@@ -124,19 +124,23 @@
     <ClCompile Include="outTestManualStand_TestWindow.cpp" />
     <ClCompile Include="qsliderbutton.cpp" />
     <ClCompile Include="StyleSheets.cpp" />
-    <QtRcc Include="mainwindow.qrc" />
+    <ClCompile Include="WindowFrame.cpp" />
+    <QtRcc Include="resources\resources.qrc" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="TestWindow.ui" />
+    <QtUic Include="WindowFrame.ui" />
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="can.h" />
+    <ClInclude Include="Components.h" />
     <ClInclude Include="StyleSheets.h" />
+    <QtMoc Include="WindowFrame.h" />
     <QtMoc Include="TestWindow.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

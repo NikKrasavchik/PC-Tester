@@ -1,0 +1,20 @@
+#MainWindow{
+    background-color: #F0F0F0;
+    border-bottom: 2px solid #F0F0F0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#body{
+    background-color: #F0F0F0;
+    border-bottom: 2px #F0F0F0;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+#header{
+    background-color: #F0F0F0;
+    border: 1px solid #F0F0F0;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}

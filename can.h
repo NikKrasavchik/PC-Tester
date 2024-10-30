@@ -5,9 +5,7 @@
 #include "qstring.h"
 #include "canlib.h"
 #include "chai.h"
-
-#define KVASER		0
-#define MARATHON	1
+#include "Components.h"
 
 class Can
 {

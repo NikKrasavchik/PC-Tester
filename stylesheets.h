@@ -5,18 +5,37 @@
 
 struct Styles
 {
-	QString standartButton;
-	QString settingButton;
-	QString mainButton;
-	QString mainButtonNoActive;
-	QString alwaysActiveButton;
-	QString screenColor;
-	QString selectText;
+	// Frame
+	// header
+	QString headerDefaultStyle;
+	QString headerCollapseStyle;
+	QString headerMaximizeStyle;
+	QString bodyStyle;
+
+	// button
+	QString buttonStyle;
+
+	// Mainwindow
+	// Header
+	//selectStand
+	QString standButtons;
+	QString alwaysActiveStandButton;
 	QString roundSlider;
 	QString bgSlider;
-	QString comboBox;
+
+	//themeLanguage
 	QString themeLangButton;
-	QString testButtonBackground;
+
+	// Main
+	QString mainButton;
+	QString mainButtonNoActive;
+	QString mainSubstrateButtons;
+	QString mainText;
+
+	// Setting
+	QString settingButton;
+	QString settingComboBox;
+	QString settingSelectText;
 };
 
 extern Styles darkStyles;

@@ -1,0 +1,37 @@
+<RCC>
+    <qresource prefix="/app">
+        <file>style/appstyles.qss</file>
+    </qresource>
+    <qresource prefix="/Dark">
+        <file>icons/Close_White.png</file>
+        <file>icons/Collapse_Hide_White.png</file>
+        <file>icons/Collapse_Show_White.png</file>
+        <file>icons/Default_Size_White.png</file>
+        <file>icons/Language_White.png</file>
+        <file>icons/Maximize_White.png</file>
+        <file>icons/Minimize_White.png</file>
+        <file>icons/Sun_White.png</file>
+        <file>icons/Update_White.png</file>
+        <file>icons/App_Logo_White.png</file>
+        <file>icons/Back_White.png</file>
+        <file>icons/Logo_White.png</file>
+    </qresource>
+    <qresource prefix="/Light">
+        <file>icons/Close_Black.png</file>
+        <file>icons/Collapse_Hide_Black.png</file>
+        <file>icons/Collapse_Show_Black.png</file>
+        <file>icons/Default_Size_Black.png</file>
+        <file>icons/Language_Black.png</file>
+        <file>icons/Logo_Black.png</file>
+        <file>icons/Maximize_Black.png</file>
+        <file>icons/Minimize_Black.png</file>
+        <file>icons/Moon_Black.png</file>
+        <file>icons/Update_Black.png</file>
+        <file>icons/App_Logo_Black.png</file>
+        <file>icons/Back_Black.png</file>
+    </qresource>
+    <qresource prefix="/styles">
+        <file>style/darkTheme.qss</file>
+        <file>style/lightTheme.qss</file>
+    </qresource>
+</RCC>

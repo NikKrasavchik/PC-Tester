@@ -7,38 +7,11 @@
 #include <QPushButton>
 #include <QTableWidget>
 #include <QLineEdit>
+#include <QComboBox>
 
 #include "ui_TestWindow.h"
-
-#define MIN_SCREEN_WIDTH    800
-#define MIN_SCREEN_HEIGHT   600
-
-#define BORDER_INDENT   25
-#define TOOLBAR_SIZE    20
-
-#define FIXED_HEADER_HEIGHT		80
-#define FIXED_FOOTER_HEIGHT		80
-#define FIXED_LOGO_WIDTH		220
-#define FIXED_LOGO_HEIGHT		55
-#define THEME_LANG_BUTTON_SIZE	30
-#define BACK_BUTTON_SIZE		50
-#define FIXED_FILE_NAME_WIDTH		200
-#define FIXED_FILE_NAME_HEIGHT		50
-#define FIXED_TESTER_NAME_WIDTH		300
-#define FIXED_TESTER_NAME_HEIGHT	50
-#define FIXED_REPORT_BUTTON_WIDTH	100
-#define FIXED_REPORT_BUTTON_HEIGHT	50
-
-enum class TestWindowType {
-	IN_TEST_MANUAL_STAND,
-	OUT_TEST_MANUAL_STAND,
-	FULL_TEST_MANUAL_STAND,
-	IN_MANUAL_TEST_AUTO_STAND,
-	OUT_MANUAL_TEST_AUTO_STAND,
-	IN_AUTO_TEST_AUTO_STAND,
-	OUT_AUTO_TEST_AUTO_STAND,
-	FULL_TEST_AUTO_STAND
-};
+#include "WindowFrame.h"
+#include "Components.h"
 
 class TestWindow : public QDialog
 {
@@ -48,8 +21,12 @@ public:
 	TestWindow(TestWindowType testType, QWidget* parent = nullptr);
 	~TestWindow();
 
+	void setFileName(QString fileName);
+	void setParentFrame(WindowFrame* parentFrame);
+
 private:
 	Ui::TestWindowClass ui;
+	WindowFrame* parentFrame;
 
 	QWidget* mainLayoutWidget;
 	QWidget* headerLayoutWidget;
@@ -66,6 +43,18 @@ private:
 	QPushButton* switchLanguageButton;
 	QPushButton* backButton;
 	QPushButton* reportButton;
+	QPushButton* fullTestManualStandSortButton;
+	QPushButton* fullTestAutoStandSortButton;
+	QPushButton* inManualTestAutoStandConnectButton;
+	QPushButton* outManualTestAutoStandConnectButton;
+	QPushButton* inAutoTestAutoStandConnectButton;
+	QPushButton* outAutoTestAutoStandConnectButton;
+	QPushButton* fullTestAutoStandConnectButton;
+	QPushButton* inAutoTestAutoStandStartTestButton;
+	QPushButton* outAutoTestAutoStandStartTestButton;
+	QPushButton* fullTestAutoStandStartTestButton;
+	QComboBox* inManualTestAutoStandTestTimeComboBox;
+	QComboBox* outManualTestAutoStandTestTimeComboBox;
 	QSpacerItem* tripleButtonsSpacer;
 	QSpacerItem* reportSpacer;
 	QSpacerItem* footerSpacer;
@@ -73,9 +62,19 @@ private:
 	QLabel* fileNameLabel;
 	QFrame* headerLine;
 	QFrame* footerLine;
-	QPixmap* logoLightPixmap;
 	QLineEdit* testerNameLineEdit;
 	QTableWidget* mainTableWidget;
+	QPixmap* logoLightPixmap;
+	QPixmap* logoDarkPixmap;
+	QPixmap* themeLightPixmap;
+	QPixmap* themeDarkPixmap;
+	QPixmap* languageLightPixmap;
+	QPixmap* languageDarkPixmap;
+	QPixmap* backButtonLightPixmap;
+	QPixmap* backButtonDarkPixmap;
+
+	QString fileName;
+	TestWindowType testType;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -84,14 +83,59 @@ private:
 	void initUiTable();
 	void initUiMainFooter();
 
+	void initStyles();
+	void initRecources();
+	void initTexts();
+	void initIcons();
+	void initConnections();
+
 	void initUiInTestManualStand();
+	void initUiTableInTestManualStand();
+
 	void initUiOutTestManualStand();
+	void initUiTableOutTestManualStand();
+
 	void initUiFullTestManualStand();
+	void initUiTableFullTestManualStand();
+	
 	void initUiInManualTestAutoStand();
+	void initUiTableInManualTestAutoStand();
+	
 	void initUiOutManualTestAutoStand();
+	void initUiTableOutManualTestAutoStand();
+	
 	void initUiInAutoTestAutoStand();
+	void initUiTableInAutoTestAutoStand();
+	
 	void initUiOutAutoTestAutoStand();
+	void initUiTableOutAutoTestAutoStand();
+	
 	void initUiFullTestAutoStand();
+	void initUiTableFullTestAutoStand();
+
+	void switchTheme();
+	void switchLanguage();
+	void sortRows();
+	void fillTestTimeComboBoxes();
 
 	void resizeEvent(QResizeEvent* event);
+
+private slots:
+	void on_backButton_clicked();
+	void on_switchThemeButton_clicked();
+	void on_switchLanguageButton_clicked();
+	void on_reportButton_clicked();
+
+	void on_fullTestManualStandSortButton_clicked();
+	void on_inManualTestAutoStandConnectButton_clicked();
+	void on_inManualTestAutoStandTestTimeComboBox_changed(int ind);
+	void on_outManualTestAutoStandConnectButton_clicked();
+	void on_outManualTestAutoStandTestTimeComboBox_changed(int ind);
+	void on_inAutoTestAutoStandConnectButton_clicked();
+	void on_inAutoTestAutoStandStartTestButton_clicked();
+	void on_outAutoTestAutoStandConnectButton_clicked();
+	void on_outAutoTestAutoStandStartTestButton_clicked();
+	void on_fullTestAutoStandConnectButton_clicked();
+	void on_fullTestAutoStandStartTestButton_clicked();
+	void on_fullTestAutoStandSortButton_clicked();
 };
