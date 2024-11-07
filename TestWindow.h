@@ -37,7 +37,7 @@ private:
 	QHBoxLayout* usefulSpaceHLayout;
 	QHBoxLayout* footerMainHLayout;
 	QHBoxLayout* reportHLayout;
-	QVBoxLayout* mainVlayout;
+	QVBoxLayout* mainVLayout;
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
@@ -113,8 +113,8 @@ private:
 	void initUiFullTestAutoStand();
 	void initUiTableFullTestAutoStand();
 
-	void switchTheme();
-	void switchLanguage();
+	void resetTheme();
+	void resetLanguage();
 	void sortRows();
 	void fillTestTimeComboBoxes();
 

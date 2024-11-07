@@ -14,15 +14,13 @@
 
 #include "ui_mainwindow.h"
 #include "TestWindow.h"
+#include "ConfiguratorWindow.h"
 #include "qsliderbutton.h"
-#include "StyleSheets.h"
 #include "can.h"
 #include "WindowFrame.h"
 #include "Components.h"
 
 #include <QDebug>
-
-//#define DEBUG
 
 class MainWindow : public QMainWindow
 {
@@ -200,8 +198,8 @@ private:
 	void fillComboBoxes();
 
 	void switchStandButtons();
-	void switchTheme();
-	void switchLanguage();
+	void resetTheme();
+	void resetLanguage();
 	void switchStyleMainButtons();
 
 	void resizeEvent(QResizeEvent* event);
@@ -219,6 +217,7 @@ private slots:
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
 	void on_checkAdaptersButton_clicked();
+	void on_configuratorButton_clicked();
 	// ComboBox
 	void on_selectFrequencyComboBox_changed(int index);
 	void on_selectAdapterComboBox_changed(int index);

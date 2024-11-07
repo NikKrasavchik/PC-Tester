@@ -4,7 +4,6 @@
 #include <QMenuBar>
 #include <QMenu>
 
-#include "StyleSheets.h"
 #include "Components.h"
 
 namespace Ui {

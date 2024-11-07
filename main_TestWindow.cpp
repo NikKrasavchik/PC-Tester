@@ -70,15 +70,15 @@ TestWindow::~TestWindow()
 
 void TestWindow::initUiMain()
 {
-	resize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT);
+	resize(viewWindowState->appSize.width, viewWindowState->appSize.height);
 	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
 
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("mainLayoutWidget");
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
 
-	mainVlayout = new QVBoxLayout(mainLayoutWidget);
-	mainVlayout->setObjectName("mainVlayout");
+	mainVLayout = new QVBoxLayout(mainLayoutWidget);
+	mainVLayout->setObjectName("mainVLayout");
 }
 
 void TestWindow::initUiMainHeader()
@@ -86,7 +86,7 @@ void TestWindow::initUiMainHeader()
 	headerLayoutWidget = new QWidget(mainLayoutWidget);
 	headerLayoutWidget->setObjectName("headerLayoutWidget");
 	headerLayoutWidget->setFixedHeight(FIXED_HEADER_HEIGHT);
-	mainVlayout->addWidget(headerLayoutWidget);
+	mainVLayout->addWidget(headerLayoutWidget);
 
 	headerMainHLayout = new QHBoxLayout(headerLayoutWidget);
 	headerMainHLayout->setObjectName("headerMainHLayout");
@@ -108,7 +108,7 @@ void TestWindow::initUiMainHeader()
 	headerLine = new QFrame(mainLayoutWidget);
 	headerLine->setObjectName("headerLine");
 	headerLine->setFrameShape(QFrame::HLine);
-	mainVlayout->addWidget(headerLine);
+	mainVLayout->addWidget(headerLine);
 }
 
 void TestWindow::initUiLogo()
@@ -154,7 +154,7 @@ void TestWindow::initUiTable()
 {
 	mainTableWidget = new QTableWidget(mainLayoutWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
-	mainVlayout->addWidget(mainTableWidget);
+	mainVLayout->addWidget(mainTableWidget);
 }
 
 void TestWindow::initUiMainFooter()
@@ -162,12 +162,12 @@ void TestWindow::initUiMainFooter()
 	footerLine = new QFrame(mainLayoutWidget);
 	footerLine->setObjectName("footerLine");
 	footerLine->setFrameShape(QFrame::HLine);
-	mainVlayout->addWidget(footerLine);
+	mainVLayout->addWidget(footerLine);
 
 	footerLayoutWidget = new QWidget(mainLayoutWidget);
 	footerLayoutWidget->setObjectName("footerLayoutWidget");
 	footerLayoutWidget->setFixedHeight(FIXED_FOOTER_HEIGHT);
-	mainVlayout->addWidget(footerLayoutWidget);
+	mainVLayout->addWidget(footerLayoutWidget);
 
 	footerMainHLayout = new QHBoxLayout(footerLayoutWidget);
 
@@ -221,7 +221,7 @@ void TestWindow::initTexts()
 {
 	fileNameLabel->setText(fileName);
 
-	switchLanguage();
+	resetLanguage();
 }
 
 void TestWindow::initIcons()
@@ -248,24 +248,25 @@ void TestWindow::initIcons()
 
 void TestWindow::initConnections()
 {
-	connect(backButton,				&QPushButton::clicked, this, &TestWindow::on_backButton_clicked);
-	connect(switchThemeButton,		&QPushButton::clicked, this, &TestWindow::on_switchThemeButton_clicked);
-	connect(switchLanguageButton,	&QPushButton::clicked, this, &TestWindow::on_switchLanguageButton_clicked);
-	connect(reportButton,			&QPushButton::clicked, this, &TestWindow::on_reportButton_clicked);
+	//connect(backButton,				&QPushButton::clicked, this, &TestWindow::on_backButton_clicked);
+	//connect(resetThemeButton,		&QPushButton::clicked, this, &TestWindow::on_switchThemeButton_clicked);
+	//connect(resetLanguageButton,	&QPushButton::clicked, this, &TestWindow::on_switchLanguageButton_clicked);
+	//connect(reportButton,			&QPushButton::clicked, this, &TestWindow::on_reportButton_clicked);
 
-	connect(fullTestManualStandSortButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestManualStandSortButton_clicked);
-	connect(inManualTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_inManualTestAutoStandConnectButton_clicked);
-	connect(inManualTestAutoStandTestTimeComboBox,	SIGNAL(currentIndexChanged(int)), this, SLOT(on_inManualTestAutoStandTestTimeComboBox_changed(int)));
-	connect(outManualTestAutoStandConnectButton,	&QPushButton::clicked, this, &TestWindow::on_outManualTestAutoStandConnectButton_clicked);
-	connect(outManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_outManualTestAutoStandTestTimeComboBox_changed(int)));
-	connect(inAutoTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_inAutoTestAutoStandConnectButton_clicked);
-	connect(inAutoTestAutoStandStartTestButton,		&QPushButton::clicked, this, &TestWindow::on_inAutoTestAutoStandStartTestButton_clicked);
-	connect(outAutoTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_outAutoTestAutoStandConnectButton_clicked);
-	connect(outAutoTestAutoStandStartTestButton,	&QPushButton::clicked, this, &TestWindow::on_outAutoTestAutoStandStartTestButton_clicked);
-	connect(fullTestAutoStandConnectButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandConnectButton_clicked);
-	connect(fullTestAutoStandStartTestButton,		&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandStartTestButton_clicked);
-	connect(fullTestAutoStandSortButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandSortButton_clicked);
+	//connect(fullTestManualStandSortButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestManualStandSortButton_clicked);
+	//connect(inManualTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_inManualTestAutoStandConnectButton_clicked);
+	//connect(inManualTestAutoStandTestTimeComboBox,	SIGNAL(currentIndexChanged(int)), this, SLOT(on_inManualTestAutoStandTestTimeComboBox_changed(int)));
+	//connect(outManualTestAutoStandConnectButton,	&QPushButton::clicked, this, &TestWindow::on_outManualTestAutoStandConnectButton_clicked);
+	//connect(outManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_outManualTestAutoStandTestTimeComboBox_changed(int)));
+	//connect(inAutoTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_inAutoTestAutoStandConnectButton_clicked);
+	//connect(inAutoTestAutoStandStartTestButton,		&QPushButton::clicked, this, &TestWindow::on_inAutoTestAutoStandStartTestButton_clicked);
+	//connect(outAutoTestAutoStandConnectButton,		&QPushButton::clicked, this, &TestWindow::on_outAutoTestAutoStandConnectButton_clicked);
+	//connect(outAutoTestAutoStandStartTestButton,	&QPushButton::clicked, this, &TestWindow::on_outAutoTestAutoStandStartTestButton_clicked);
+	//connect(fullTestAutoStandConnectButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandConnectButton_clicked);
+	//connect(fullTestAutoStandStartTestButton,		&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandStartTestButton_clicked);
+	//connect(fullTestAutoStandSortButton,			&QPushButton::clicked, this, &TestWindow::on_fullTestAutoStandSortButton_clicked);
 
+	QMetaObject::connectSlotsByName(this);
 }
 
 void TestWindow::initStyles()
@@ -296,7 +297,7 @@ void TestWindow::on_switchThemeButton_clicked()
 		viewWindowState->appTheme = LIGHT_THEME;
 		break;
 	}
-	switchTheme();
+	resetTheme();
 }
 
 void TestWindow::on_switchLanguageButton_clicked()
@@ -311,7 +312,7 @@ void TestWindow::on_switchLanguageButton_clicked()
 		viewWindowState->appLanguage = RUSSIAN_LANG;
 		break;
 	}
-	switchLanguage();
+	resetLanguage();
 }
 
 void TestWindow::on_reportButton_clicked()
@@ -319,7 +320,7 @@ void TestWindow::on_reportButton_clicked()
 
 }
 
-void TestWindow::switchTheme()
+void TestWindow::resetTheme()
 {
 	switch (viewWindowState->appTheme)
 	{
@@ -341,7 +342,7 @@ void TestWindow::switchTheme()
 	}
 }
 
-void TestWindow::switchLanguage()
+void TestWindow::resetLanguage()
 {
 	switch (viewWindowState->appLanguage)
 	{
@@ -419,7 +420,7 @@ void TestWindow::switchLanguage()
 
 		case TestWindowType::OUT_AUTO_TEST_AUTO_STAND:
 			// Добавить условие на подключение стенда
-			outManualTestAutoStandConnectButton->setText(QString("Stand connected"));
+			outAutoTestAutoStandConnectButton->setText(QString("Stand connected"));
 			outAutoTestAutoStandStartTestButton->setText(QString("Start"));
 			break;
 
@@ -428,9 +429,6 @@ void TestWindow::switchLanguage()
 			fullTestAutoStandConnectButton->setText(QString("Stand connected"));
 			fullTestAutoStandStartTestButton->setText(QString("Start"));
 			fullTestAutoStandSortButton->setText(QString("Sort: num"));
-			break;
-
-		default:
 			break;
 		}
 		break;
