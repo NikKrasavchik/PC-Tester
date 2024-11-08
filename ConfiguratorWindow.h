@@ -10,6 +10,7 @@
 #include <QComboBox>
 #include <QDebug>
 #include <vector>
+#include <fstream>
 
 #include "ui_ConfiguratorWindow.h"
 #include "Components.h"
@@ -82,6 +83,9 @@
 #define DIRECTION_IN_RU			QString::fromLocal8Bit("Вход")
 #define DIRECTION_IN_EN			QString("In")
 
+#define CFG_SPLIT				QString(",")
+#define CFG_ENDING				QString("\n")
+
 enum class ConnectorId
 {
 	NOT_SET,
@@ -93,13 +97,13 @@ enum class ConnectorId
 	F
 };
 
-enum class RowName
+enum class ColoumnName
 {
 	CONNECTOR,
 	PIN,
 	DIRECTION,
 	CAN_ID,
-	BYTE,
+	BIT,
 	TYPE,
 	MIN_A,
 	MAX_A,
@@ -117,7 +121,6 @@ public:
 	struct PresetSettings
 	{
 		ConnectorId connector;
-		int pin;
 		int direction;
 		int type;
 		QString name;
@@ -127,8 +130,16 @@ public:
 
 	int id;
 	QComboBox* connectorComboBox;
+	int pin;
 	QComboBox* directionComboBox;
+	QString canId;
+	int bit;
 	QComboBox* typeComboBox;
+	float minA;
+	float maxA;
+	float minV;
+	float maxV;
+	QString name;
 	QPushButton* deleteButton;
 	PresetSettings* presetSettings;
 
@@ -213,6 +224,13 @@ private:
 	void resetLanguage();
 	void resetPresets();
 
+	std::vector<std::vector<QString>> parseData();
+	void deParseData();
+	void updateTableData();
+
+	bool verifyData(std::vector<std::vector<QString>> data);
+	bool verifyRow(ColoumnName coloumnName, QTableWidgetItem* data);
+
 	void resizeEvent(QResizeEvent* event);
 
 private slots:
@@ -226,3 +244,5 @@ private slots:
 	void deleteRow(int index);
 	//void on_selectStandTypeComboBox_activated(int index);
 };
+
+// Вопрос о нужности id в котором хранится индекс в tableRowProperties

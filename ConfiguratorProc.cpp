@@ -77,10 +77,10 @@ void ConfiguratorWindow::on_addRowButton_clicked()
 	deleteCellLayout->setContentsMargins(0, 0, 0, 0);
 	deleteCellWidget->setLayout(typeCellLayout);
 
-	mainTableWidget->setCellWidget(currentRowNum, (int)RowName::CONNECTOR,	connectorCellWidget);
-	mainTableWidget->setCellWidget(currentRowNum, (int)RowName::DIRECTION,	directionCellWidget);
-	mainTableWidget->setCellWidget(currentRowNum, (int)RowName::TYPE,		typeCellWidget);
-	mainTableWidget->setCellWidget(currentRowNum, (int)RowName::DELETE,		deleteCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::CONNECTOR,	connectorCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::DIRECTION,	directionCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::TYPE,		typeCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::DELETE,		deleteCellWidget);
 
 	resetPresets();
 }
@@ -275,10 +275,10 @@ void TableRowProperties::on_deleteButton_clicked()
 
 void ConfiguratorWindow::deleteRow(int index)
 {
-	mainTableWidget->removeCellWidget(index, (int)RowName::CONNECTOR);
-	mainTableWidget->removeCellWidget(index, (int)RowName::DIRECTION);
-	mainTableWidget->removeCellWidget(index, (int)RowName::TYPE);
-	mainTableWidget->removeCellWidget(index, (int)RowName::DELETE);
+	mainTableWidget->removeCellWidget(index, (int)ColoumnName::CONNECTOR);
+	mainTableWidget->removeCellWidget(index, (int)ColoumnName::DIRECTION);
+	mainTableWidget->removeCellWidget(index, (int)ColoumnName::TYPE);
+	mainTableWidget->removeCellWidget(index, (int)ColoumnName::DELETE);
 
 	mainTableWidget->removeRow(index);
 	tableRowPropertiesVector.erase(tableRowPropertiesVector.begin() + index);
@@ -416,13 +416,222 @@ void ConfiguratorWindow::resetRowPreset(TableRowProperties* currentRowProperties
 void ConfiguratorWindow::resetPresets()
 {
 	for (int row = 0; row < tableRowPropertiesVector.size(); row++)
-	{
-		
 		resetRowPreset(tableRowPropertiesVector[row]);
-	}
 }
 
 void ConfiguratorWindow::on_saveButton_clicked()
 {
+	std::vector<std::vector<QString>> parsedData = parseData();
 
+	QString configString = "cfg" + CFG_SPLIT;
+
+	if (selectStandTypeComboBox->currentIndex() == 1)
+		configString += "MANUAL" + CFG_SPLIT;
+	else if (selectStandTypeComboBox->currentIndex() == 2)
+		configString += "AUTO" + CFG_SPLIT;
+	else
+		1; // ERROR
+	configString += CFG_ENDING;
+
+	for (int row = 0; row < mainTableWidget->rowCount(); row++)
+	{
+		for (int coloumn = 0; coloumn < mainTableWidget->columnCount() - 1; coloumn++)
+			configString += parsedData[row][coloumn] + CFG_SPLIT;
+		configString += CFG_ENDING;
+	}
+
+	QString fileName = "./Config files/" + fileNameLineEdit->text() + ".cfg";
+
+	std::ofstream fout;
+	fout.open(fileName.toLocal8Bit().toStdString());
+
+	fout << configString.toStdString();
+
+	qDebug() << configString;
+}
+
+std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
+{
+	updateTableData();
+
+	std::vector<std::vector<QString>> data;
+
+	for (int row = 0; row < mainTableWidget->rowCount(); row++)
+	{
+		std::vector<QString> rowData;
+		for (int coloumn = 0; coloumn < mainTableWidget->columnCount(); coloumn++)
+		{
+			TableRowProperties* currentRowProperties = tableRowPropertiesVector[row];
+			switch ((ColoumnName)coloumn)
+			{
+			case ColoumnName::CONNECTOR:
+				rowData.push_back(QString::number((int)(currentRowProperties->presetSettings->connector)));
+				break;
+
+			case ColoumnName::PIN:
+				rowData.push_back(QString::number(currentRowProperties->pin));
+				break;
+
+			case ColoumnName::DIRECTION:
+				rowData.push_back(QString::number(currentRowProperties->presetSettings->direction));
+				break;
+
+			case ColoumnName::CAN_ID:
+				rowData.push_back(currentRowProperties->canId);
+				break;
+
+			case ColoumnName::BIT:
+				rowData.push_back(QString::number(currentRowProperties->bit));
+				break;
+
+			case ColoumnName::TYPE:
+				rowData.push_back(QString::number(currentRowProperties->presetSettings->type));
+				break;
+
+			case ColoumnName::MIN_A:
+				rowData.push_back(QString::number(currentRowProperties->minA));
+				break;
+
+			case ColoumnName::MAX_A:
+				rowData.push_back(QString::number(currentRowProperties->maxA));
+				break;
+
+			case ColoumnName::MIN_V:
+				rowData.push_back(QString::number(currentRowProperties->minV));
+				break;
+
+			case ColoumnName::MAX_V:
+				rowData.push_back(QString::number(currentRowProperties->maxV));
+				break;
+
+			case ColoumnName::NAME:
+				rowData.push_back(currentRowProperties->name);
+				break;
+
+			case ColoumnName::DELETE:
+				break;
+			}
+		}
+		data.push_back(rowData);
+	}
+	return data;
+}
+
+void ConfiguratorWindow::deParseData()
+{
+
+}
+
+void ConfiguratorWindow::updateTableData()
+{
+	for (int coloumn = 0; coloumn < mainTableWidget->columnCount(); coloumn++)
+	{
+		switch ((ColoumnName)coloumn)
+		{
+		case ColoumnName::CONNECTOR:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
+			break;
+
+		case ColoumnName::PIN:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->pin = mainTableWidget->item(row, coloumn)->text().toInt();
+			break;
+
+		case ColoumnName::DIRECTION:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
+			break;
+
+		case ColoumnName::CAN_ID:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->canId = mainTableWidget->item(row, coloumn)->text();
+			break;
+
+		case ColoumnName::BIT:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->bit = mainTableWidget->item(row, coloumn)->text().toInt();
+			break;
+
+		case ColoumnName::TYPE:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
+			break;
+
+		case ColoumnName::MIN_A:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->minA = mainTableWidget->item(row, coloumn)->text().toFloat();
+			break;
+
+		case ColoumnName::MAX_A:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->maxA = mainTableWidget->item(row, coloumn)->text().toFloat();
+			break;
+
+		case ColoumnName::MIN_V:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->minV = mainTableWidget->item(row, coloumn)->text().toFloat();
+			break;
+
+		case ColoumnName::MAX_V:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->maxV = mainTableWidget->item(row, coloumn)->text().toFloat();
+			break;
+
+		case ColoumnName::NAME:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+					tableRowPropertiesVector[row]->name = mainTableWidget->item(row, coloumn)->text();
+			break;
+
+		case ColoumnName::DELETE:
+			break;
+		}
+	}
+}
+
+bool ConfiguratorWindow::verifyData(std::vector<std::vector<QString>> data)
+{
+	return bool();
+}
+
+bool ConfiguratorWindow::verifyRow(ColoumnName coloumnName, QTableWidgetItem* data)
+{
+	switch (coloumnName)
+	{
+	case ColoumnName::PIN:
+		break;
+
+	case ColoumnName::CAN_ID:
+		break;
+
+	case ColoumnName::BIT:
+		break;
+
+	case ColoumnName::MIN_A:
+		break;
+
+	case ColoumnName::MAX_A:
+		break;
+
+	case ColoumnName::MIN_V:
+		break;
+
+	case ColoumnName::MAX_V:
+		break;
+
+	case ColoumnName::NAME:
+		break;
+
+	case ColoumnName::DELETE:
+		break;
+	}
+	return true;
 }
