@@ -238,7 +238,8 @@ void ConfiguratorWindow::resetLanguage()
 
 		break;
 	}
-	resetPreset();
+
+	resetPresets();
 }
 
 void ConfiguratorWindow::resetTheme()
@@ -261,11 +262,6 @@ void ConfiguratorWindow::resetTheme()
 		backButton->setIconSize(backButton->size());
 		break;
 	}
-}
-
-void ConfiguratorWindow::on_saveButton_clicked()
-{
-
 }
 
 void ConfiguratorWindow::on_backButton_clicked()

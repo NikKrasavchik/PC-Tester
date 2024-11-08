@@ -291,7 +291,7 @@ void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) {
 }
 
 /// @brief Handler for the native window event.
-/// @param eventType The type of event, as a byte array (QByteArray).
+/// @param eventType The typeComboBox of event, as a byte array (QByteArray).
 /// @param message Pointer to a structure containing event information (void*).
 /// @param result Pointer to a variable for returning the result (long*).
 /// @return The return value, true if the event was handled, otherwise false.
