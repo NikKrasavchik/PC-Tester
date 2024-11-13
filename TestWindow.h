@@ -83,6 +83,8 @@ private:
 	void initUiTable();
 	void initUiMainFooter();
 
+	void initLightStyleSheets();
+	void initDarkStyleSheets();
 	void initStyles();
 	void initRecources();
 	void initTexts();

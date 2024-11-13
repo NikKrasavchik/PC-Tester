@@ -96,6 +96,7 @@ void WindowFrame::resetTheme()
 		ui->collapse->setStyleSheet(lightStyles.buttonStyle);
 		ui->maximum->setStyleSheet(lightStyles.buttonStyle);
 		ui->minimum->setStyleSheet(lightStyles.buttonStyle);
+		ui->title->setStyleSheet(lightStyles.titleStyle);
 		break;
 
 	case DARK_THEME:
@@ -111,6 +112,7 @@ void WindowFrame::resetTheme()
 		ui->collapse->setStyleSheet(darkStyles.buttonStyle);
 		ui->maximum->setStyleSheet(darkStyles.buttonStyle);
 		ui->minimum->setStyleSheet(darkStyles.buttonStyle);
+		ui->title->setStyleSheet(darkStyles.titleStyle);
 		break;
 	}
 }

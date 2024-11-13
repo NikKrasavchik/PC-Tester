@@ -25,6 +25,7 @@
 struct Styles
 {
 	// Frame
+	//
 	// header
 	QString headerDefaultStyle;
 	QString headerCollapseStyle;
@@ -33,6 +34,9 @@ struct Styles
 
 	// button
 	QString buttonStyle;
+
+	// text title
+	QString titleStyle;
 
 	// Mainwindow
 	// Header
@@ -46,15 +50,22 @@ struct Styles
 	QString themeLangButton;
 
 	// Main
+	//
 	QString mainButton;
 	QString mainButtonNoActive;
 	QString mainSubstrateButtons;
 	QString mainText;
 
 	// Setting
+	//
 	QString settingButton;
 	QString settingComboBox;
 	QString settingSelectText;
+
+	// TestWindow
+	//
+	//
+	QString testwindowButtonStyle;
 };
 
 extern Styles darkStyles;

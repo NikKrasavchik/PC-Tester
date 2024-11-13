@@ -11,6 +11,9 @@ TestWindow::TestWindow(WindowType testType, QWidget* parent)
 	initUiMainHeader();
 	initUiTable();
 
+	initLightStyleSheets();
+	initDarkStyleSheets();
+
 	switch (testType)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
@@ -398,55 +401,34 @@ void TestWindow::resetTheme()
 		backButton->setIcon(QIcon(*backButtonLightPixmap));
 		backButton->setIconSize(backButton->size());
 
+		switchThemeButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+		switchLanguageButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+		backButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+		reportButton->setStyleSheet(lightStyles.testwindowButtonStyle);
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
-			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
-			parentFrame->setTitle(WindowType::FULL_TEST_MANUAL_STAND);
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
-			parentFrame->setTitle(WindowType::OUT_TEST_MANUAL_STAND);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
-			parentFrame->setTitle(WindowType::IN_TEST_MANUAL_STAND);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			// Добавить условие на подключение стенда
-			outManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
-			parentFrame->setTitle(WindowType::OUT_MANUAL_TEST_AUTO_STAND);
-			// Добавить заполнение combo box
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			// Добавить условие на подключение стенда
-			inManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
-			parentFrame->setTitle(WindowType::IN_MANUAL_TEST_AUTO_STAND);
-			// Добавить заполнение combo box
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			// Добавить условие на подключение стенда
-			outAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
-			parentFrame->setTitle(WindowType::OUT_AUTO_TEST_AUTO_STAND);
-			outAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			// Добавить условие на подключение стенда
-			inAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
-			parentFrame->setTitle(WindowType::IN_AUTO_TEST_AUTO_STAND);
-			inAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
-			// Добавить условие на подключение стенда
-			fullTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд подключён"));
-			parentFrame->setTitle(WindowType::FULL_TEST_AUTO_STAND);
-			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
-			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
 			break;
 		}
 		break;
@@ -457,6 +439,37 @@ void TestWindow::resetTheme()
 		switchLanguageButton->setIcon(QIcon(*languageDarkPixmap));
 		backButton->setIcon(QIcon(*backButtonDarkPixmap));
 		backButton->setIconSize(backButton->size());
+
+		switchThemeButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+		switchLanguageButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+		backButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+		reportButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+		switch (testType)
+		{
+		case WindowType::FULL_TEST_MANUAL_STAND:
+			break;
+
+		case WindowType::OUT_TEST_MANUAL_STAND:
+			break;
+
+		case WindowType::IN_TEST_MANUAL_STAND:
+			break;
+
+		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			break;
+
+		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+			break;
+
+		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+			break;
+
+		case WindowType::IN_AUTO_TEST_AUTO_STAND:
+			break;
+
+		case WindowType::FULL_TEST_AUTO_STAND:
+			break;
+		}
 		break;
 	}
 }

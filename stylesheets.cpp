@@ -56,6 +56,16 @@ void WindowFrame::initLightStyleSheets()
 			margin: 2px;
 
 	)";
+
+	lightStyles.titleStyle =
+		R"(
+			margin-left: 10px;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 14px;
+			font-weight: 500;
+	)";
 }
 
 void WindowFrame::initDarkStyleSheets()
@@ -107,6 +117,16 @@ void WindowFrame::initDarkStyleSheets()
 			background-color: #535353;
 			margin: 2px;
 
+	)";
+
+	darkStyles.titleStyle =
+		R"(
+			margin-left: 10px;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 14px;
+			font-weight: 500;
 	)";
 }
 
@@ -391,6 +411,53 @@ void MainWindow::initDarkStyleSheets()
 	)";
 }
 
+void TestWindow::initLightStyleSheets()
+{
+	lightStyles.testwindowButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #B0B0B0;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+	)";
+}
+
+void TestWindow::initDarkStyleSheets()
+{
+	darkStyles.testwindowButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+	)";
+}
 //void MainWindow::initStyleSheets()
 //{
 	//initLightStyles();
