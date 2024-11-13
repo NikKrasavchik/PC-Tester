@@ -144,27 +144,6 @@ void ConfiguratorWindow::initUiLogo()
 	logoLabel->setEnabled(true);
 }
 
-void ConfiguratorWindow::initUiTable()
-{
-	mainTableWidget = new QTableWidget(mainLayoutWidget);
-	mainTableWidget->setObjectName("mainTableWidget");
-
-	mainTableWidget->setColumnCount(12);
-
-	mainTableWidget->setHorizontalHeaderLabels(QStringList() << "Connector"
-		<< "Pin"
-		<< "Direction"
-		<< "Can ID"
-		<< "Bite"
-		<< "Connector type"
-		<< "Min A"
-		<< "Max A"
-		<< "Min V"
-		<< "Max V"
-		<< "Name"
-		<< "");
-}
-
 void ConfiguratorWindow::initUiFooter()
 {
 	footerLayoutWidget = new QWidget(mainLayoutWidget);
@@ -193,6 +172,27 @@ void ConfiguratorWindow::initUiFooter()
 	footerMainHLayout->addWidget(addRowButton);
 }
 
+void ConfiguratorWindow::initUiTable()
+{
+	mainTableWidget = new QTableWidget(mainLayoutWidget);
+	mainTableWidget->setObjectName("mainTableWidget");
+
+	mainTableWidget->setColumnCount(12);
+
+	mainTableWidget->setHorizontalHeaderLabels(QStringList() << "Connector"
+		<< "Pin"
+		<< "Direction"
+		<< "Can ID"
+		<< "Bit"
+		<< "Connector type"
+		<< "Min A"
+		<< "Max A"
+		<< "Min V"
+		<< "Max V"
+		<< "Name"
+		<< "");
+}
+
 void ConfiguratorWindow::initRecources()
 {
 	logoLightPixmap = new QPixmap(":/Light/icons/Logo_Black.png");
@@ -218,6 +218,13 @@ void ConfiguratorWindow::initConnections()
 
 void ConfiguratorWindow::resetLanguage()
 {
+	int standTypeState = -1;
+	if (selectStandTypeComboBox->count())
+	{
+		standTypeState = selectStandTypeComboBox->currentIndex();
+		selectStandTypeComboBox->clear();
+	}
+
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
@@ -226,6 +233,12 @@ void ConfiguratorWindow::resetLanguage()
 
 		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
 		addRowButton->setText(QString::fromLocal8Bit("Добавить элемент"));
+
+		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Тип стенда"));
+		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Ручной"));
+		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Автоматический"));
+		if (standTypeState != -1)
+			selectStandTypeComboBox->setCurrentIndex(standTypeState);
 
 		break;
 
@@ -236,9 +249,16 @@ void ConfiguratorWindow::resetLanguage()
 		saveButton->setText("Save");
 		addRowButton->setText("Add element");
 
+		selectStandTypeComboBox->addItem(QString("Stand type"));
+		selectStandTypeComboBox->addItem(QString("Manual"));
+		selectStandTypeComboBox->addItem(QString("Auto"));
+		if (standTypeState != -1)
+			selectStandTypeComboBox->setCurrentIndex(standTypeState);
+
 		break;
 	}
-	resetPreset();
+
+	resetPresets();
 }
 
 void ConfiguratorWindow::resetTheme()
@@ -261,11 +281,6 @@ void ConfiguratorWindow::resetTheme()
 		backButton->setIconSize(backButton->size());
 		break;
 	}
-}
-
-void ConfiguratorWindow::on_saveButton_clicked()
-{
-
 }
 
 void ConfiguratorWindow::on_backButton_clicked()
