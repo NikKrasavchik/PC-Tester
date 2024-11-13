@@ -24,6 +24,9 @@
     <Filter Include="Source Files\Ui">
       <UniqueIdentifier>{54207aab-1067-4bf0-857e-e12c53af896d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Proc">
+      <UniqueIdentifier>{37b6fda7-2c4f-42e9-9558-230491806d78}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="MainWindow.ui">
@@ -35,6 +38,9 @@
     <QtRcc Include="resources\resources.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
+    <QtUic Include="ConfiguratorWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -82,6 +88,12 @@
     <ClCompile Include="WindowFrame.cpp">
       <Filter>Source Files\Ui</Filter>
     </ClCompile>
+    <ClCompile Include="ConfiguratorProc.cpp">
+      <Filter>Source Files\Proc</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfiguratorWindow.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
@@ -93,11 +105,11 @@
     <QtMoc Include="WindowFrame.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ConfiguratorWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="StyleSheets.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="can.h">
       <Filter>Header Files</Filter>
     </ClInclude>

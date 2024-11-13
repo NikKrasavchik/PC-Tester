@@ -1,5 +1,42 @@
 #include "MainWindow.h"
 
+#define GRID_COLOUMN_0  0
+#define GRID_COLOUMN_1  1
+#define GRID_ROW_0      0
+#define GRID_ROW_1      1
+
+#define MIN_STAND_BUTTON_WIDTH			144
+#define MIN_STAND_BUTTON_HEIGHT			62
+#define MIN_STAND_SWITCH_SLIDER_WIDTH	88
+#define MIN_STAND_SWITCH_SLIDER_HEIGHT	46
+#define MIN_THEME_LANG_BUTTON			30
+#define MIN_ADAPTER_COMBO_HEIGHT		35
+#define MIN_ADAPTER_BUTTON_SIZE			35
+#define MIN_FREQUENCY_COMBO_HEIGHT		35
+#define MIN_CONFIGURATOR_BUTTON_WIDTH	160
+#define MIN_CONFIGURATOR_BUTTON_HEIGHT	66
+#define MIN_FILE_SEL_BUTTON_WIDTH		166
+#define MIN_FILE_SEL_BUTTON_HEIGHT		66
+#define MIN_MAIN_IN_OUT_BUTTON_WIDTH	145
+#define MIN_MAIN_IN_OUT_BUTTON_HEIGHT	46
+#define MIN_MAIN_FUL_BUTTON_WIDTH		200
+#define MIN_MAIN_FUL_BUTTON_HEIGHT		60
+
+#define MAX_ADAPTER_COMBO_WIDTH			263
+#define MAX_FREQUENCY_COMBO_WIDTH		300
+
+#define COEF_STAND_BUTTON				0.1
+#define COEF_STAND_SLIDER				0.06
+#define COEF_THEME_LANG_BUTTON			0.03
+#define COEF_ADAPTER_GROUP				0.05
+#define COEF_FREQUENC_COMBO				0.05
+#define COEF_CONFIGURATOR_BUTTON		0.05
+#define COEF_FILE_SEL_BUTTON			0.05
+#define COEF_MAIN_BUTTON				0.05
+
+#define OVERCROWDED_SEL_FILE_LABEL		26
+#define CFG_EXTENSION_LETTERS_COUNT		4
+
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
@@ -51,7 +88,7 @@ void MainWindow::initUi()
 	mainGridLayout->setSpacing(0);
 	mainGridLayout->setVerticalSpacing(0);
 
-	mainGridLayout->addWidget(logoLabel, GRID_ROW_0, GRID_COLOUMN_0);
+	mainGridLayout->addWidget(logoLabel, GRID_ROW_0, GRID_COLOUMN_0, Qt::AlignHCenter);
 	mainGridLayout->addLayout(topHLayout, GRID_ROW_0, GRID_COLOUMN_1);
 	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLOUMN_0);
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLOUMN_1);
@@ -71,7 +108,7 @@ void MainWindow::initUi()
 	isAllInit = true;
 
 	on_checkAdaptersButton_clicked();
-	switchTheme();
+	resetTheme();
 }
 
 void MainWindow::initUiLogo()
@@ -440,7 +477,7 @@ void MainWindow::initUiAutoStandAutoTest()
 
 	// out auto test auto stand button
 	outAutoTestAutoStandButton = new QPushButton(autoTestAutoStandWidget);
-	outAutoTestAutoStandButton->setObjectName("outManualTestAutoStandButton");
+	outAutoTestAutoStandButton->setObjectName("outAutoTestAutoStandButton");
 	autoTestAutoStandVLayout->addWidget(outAutoTestAutoStandButton);
 
 	autoTestAutoStandMiddleBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
@@ -448,7 +485,7 @@ void MainWindow::initUiAutoStandAutoTest()
 
 	// in auto test auto stand button
 	inAutoTestAutoStandButton = new QPushButton(autoTestAutoStandWidget);
-	inAutoTestAutoStandButton->setObjectName("inManualTestAutoStandButton");
+	inAutoTestAutoStandButton->setObjectName("inAutoTestAutoStandButton");
 	autoTestAutoStandVLayout->addWidget(inAutoTestAutoStandButton);
 
 	autoTestAutoStandBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
@@ -668,24 +705,27 @@ void MainWindow::initConnections()
 {
 	connect(this, &MainWindow::resizeStandSlider, switchStandSlider, &QSliderButton::resizeSlider);
 	connect(switchStandSlider, &QSliderButton::on_sliderSwitchStand_click, this, &MainWindow::on_sliderSwitchStand_click);
-	connect(autoStandButton, &QPushButton::clicked, this, &MainWindow::on_autoStandButton_clicked);
-	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
+	//connect(autoStandButton, &QPushButton::clicked, this, &MainWindow::on_autoStandButton_clicked);
+	//connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
 
-	connect(switchThemeButton, &QPushButton::clicked, this, &MainWindow::on_switchThemeButton_clicked);
-	connect(switchLanguageButton, &QPushButton::clicked, this, &MainWindow::on_switchLanguageButton_clicked);
+	//connect(resetThemeButton, &QPushButton::clicked, this, &MainWindow::on_resetThemeButton_clicked);
+	//connect(resetLanguageButton, &QPushButton::clicked, this, &MainWindow::on_resetLanguageButton_clicked);
 
+	//connect(configuratorButton, &QPushButton::clicked, this, &MainWindow::on_configuratorButton_clicked);
 	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
 	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
-	connect(selectFileButton, &QPushButton::clicked, this, &MainWindow::on_selectFileButton_clicked);
+	//connect(selectFileButton, &QPushButton::clicked, this, &MainWindow::on_selectFileButton_clicked);
 
-	connect(outTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_outTestManualStandButton_clicked);
-	connect(inTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_inTestManualStandButton_clicked);
-	connect(fullTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_fullTestManualStandButton_clicked);
-	connect(inManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_inManualTestAutoStandButton_clicked);
-	connect(outManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_outManualTestAutoStandButton_clicked);
-	connect(inAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_inAutoTestAutoStandButton_clicked);
-	connect(outAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_outAutoTestAutoStandButton_clicked);
-	connect(fullTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_fullTestAutoStandButton_clicked);
+	//connect(outTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_outTestManualStandButton_clicked);
+	//connect(inTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_inTestManualStandButton_clicked);
+	//connect(fullTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_fullTestManualStandButton_clicked);
+	//connect(inManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_inManualTestAutoStandButton_clicked);
+	//connect(outManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_outManualTestAutoStandButton_clicked);
+	//connect(inAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_inAutoTestAutoStandButton_clicked);
+	//connect(outAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_outAutoTestAutoStandButton_clicked);
+	//connect(fullTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_fullTestAutoStandButton_clicked);
+
+	QMetaObject::connectSlotsByName(this);
 }
 
 void MainWindow::switchStyleMainButtons()
@@ -885,10 +925,10 @@ void MainWindow::on_switchThemeButton_clicked()
 		viewWindowState->appTheme = LIGHT_THEME;
 		break;
 	}
-	switchTheme();
+	resetTheme();
 }
 
-void MainWindow::switchTheme()
+void MainWindow::resetTheme()
 {
 	switch (viewWindowState->appTheme)
 	{
@@ -1079,10 +1119,10 @@ void MainWindow::on_switchLanguageButton_clicked()
 		break;
 	}
 
-	switchLanguage();
+	resetLanguage();
 }
 
-void MainWindow::switchLanguage()
+void MainWindow::resetLanguage()
 {
 	switch (viewWindowState->appLanguage)
 	{
@@ -1138,6 +1178,18 @@ void MainWindow::switchLanguage()
 		on_selectFrequencyComboBox_changed(1);
 }
 
+void MainWindow::on_configuratorButton_clicked()
+{
+	ConfiguratorWindow* configuratorWindow = new ConfiguratorWindow(this);
+
+	WindowFrame w(WindowType::CONFIGURATOR, nullptr, configuratorWindow);
+	w.show();
+	this->hide();
+	configuratorWindow->exec();
+	resetWindowView();
+	this->show();
+}
+
 void MainWindow::on_selectFrequencyComboBox_changed(int index)
 {
 	if (!isAllInit)
@@ -1147,7 +1199,7 @@ void MainWindow::on_selectFrequencyComboBox_changed(int index)
 	switchStyleMainButtons();
 
 	if (index == 0)
-		switchLanguage(); // —тавим предупреждающий lable согласно €зыку
+		resetLanguage(); // —тавим предупреждающий lable согласно €зыку
 	else if (index > 0)
 	{
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
@@ -1166,7 +1218,7 @@ void MainWindow::on_selectAdapterComboBox_changed(int index)
 	switchStyleMainButtons();
 
 	if (index == 0)
-		switchLanguage(); // —тавим предупреждающий lable согласно €зыку
+		resetLanguage(); // —тавим предупреждающий lable согласно €зыку
 	else if (index > 0)
 		selectAdapterLabel->setText("");
 }
@@ -1187,45 +1239,45 @@ void MainWindow::on_checkAdaptersButton_clicked()
 
 void MainWindow::on_outTestManualStandButton_clicked()
 {
-	createTestWindow(TestWindowType::OUT_TEST_MANUAL_STAND);
+	createTestWindow(WindowType::OUT_TEST_MANUAL_STAND);
 }
 
 void MainWindow::on_inTestManualStandButton_clicked()
 {
-	createTestWindow(TestWindowType::IN_TEST_MANUAL_STAND);
+	createTestWindow(WindowType::IN_TEST_MANUAL_STAND);
 }
 
 void MainWindow::on_fullTestManualStandButton_clicked()
 {
-	createTestWindow(TestWindowType::FULL_TEST_MANUAL_STAND);
+	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND);
 }
 
 void MainWindow::on_inManualTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::IN_MANUAL_TEST_AUTO_STAND);
+	createTestWindow(WindowType::IN_MANUAL_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_outManualTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::OUT_MANUAL_TEST_AUTO_STAND);
+	createTestWindow(WindowType::OUT_MANUAL_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_inAutoTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::IN_AUTO_TEST_AUTO_STAND);
+	createTestWindow(WindowType::IN_AUTO_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_outAutoTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::OUT_AUTO_TEST_AUTO_STAND);
+	createTestWindow(WindowType::OUT_AUTO_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_fullTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::FULL_TEST_AUTO_STAND);
+	createTestWindow(WindowType::FULL_TEST_AUTO_STAND);
 }
 
-void MainWindow::createTestWindow(TestWindowType testType)
+void MainWindow::createTestWindow(WindowType testType)
 {
 #ifdef DEBUG
 	if (true)
@@ -1236,7 +1288,7 @@ void MainWindow::createTestWindow(TestWindowType testType)
 		TestWindow* testWindow = new TestWindow(testType, this);
 		testWindow->setFileName(fileName);
 
-		WindowFrame w(nullptr, testWindow);
+		WindowFrame w(testType, nullptr, testWindow);
 		testWindow->setParentFrame(&w);
 		w.show();
 		this->hide();
@@ -1248,8 +1300,8 @@ void MainWindow::createTestWindow(TestWindowType testType)
 
 void MainWindow::resetWindowView()
 {
-	switchLanguage();
-	switchTheme();
+	resetLanguage();
+	resetTheme();
 	parentFrame->resetTheme();
 }
 
