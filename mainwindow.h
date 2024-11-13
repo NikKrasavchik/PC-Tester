@@ -204,7 +204,7 @@ private:
 
 	void resizeEvent(QResizeEvent* event);
 
-	void createTestWindow(TestWindowType testType);
+	void createTestWindow(WindowType testType);
 
 	void resetWindowView();
 

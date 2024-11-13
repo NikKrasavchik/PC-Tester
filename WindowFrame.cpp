@@ -8,8 +8,6 @@
 
 #define BORDER_SIZE 5
 
-const QString title = "PC-Tester";
-
 const QString appDarkIconPath = ":/Dark/icons/App_Logo_White.png";
 const QString closeDarkIconPath = ":/Dark/icons/Close_White.png";
 const QString collapseHideDarkIconPath = ":/Dark/icons/Collapse_Hide_White.png";
@@ -29,7 +27,7 @@ const QString defaultSizeLightIconPath = ":/Light/icons/Default_Size_Black.png";
 /// @brief Constructor for the WindowFrame class.
 /// @param parent The parent widget.
 /// @param child The child widget to be added to the window (optional).
-WindowFrame::WindowFrame(QWidget* parent, QWidget* child)
+WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 	: QFrame(parent), ui(new Ui::WindowFrame)
 {
 	ui->setupUi(this);
@@ -40,7 +38,7 @@ WindowFrame::WindowFrame(QWidget* parent, QWidget* child)
 	initDarkStyleSheets();
 	resetTheme();
 
-	ui->title->setText(title);
+	setTitle(windowType);
 
 	setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
 	setAttribute(Qt::WA_TranslucentBackground);
@@ -374,9 +372,97 @@ void WindowFrame::setIcon(const QString& iconPath) {
 
 /// @brief set title for the window
 /// @param title
-void WindowFrame::setTitle(const QString& title) {
-	ui->title->setText(title);
-	this->setWindowTitle(title);
+void WindowFrame::setTitle(WindowType windowType) {
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		switch (windowType)
+		{
+		case WindowType::MAINWINDOW:
+			ui->title->setText("PC-Tester");
+			break;
+
+		case WindowType::CONFIGURATOR:
+			ui->title->setText(QString::fromLocal8Bit("Конфигуратор"));
+			break;
+
+		case WindowType::IN_TEST_MANUAL_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Входы | Ручной стенд"));
+			break;
+
+		case WindowType::OUT_TEST_MANUAL_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Выходы | Ручной стенд"));
+			break;
+
+		case WindowType::FULL_TEST_MANUAL_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Полная проверка | Ручной стенд"));
+			break;
+
+		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Входы ручная проверка | Автоматический стенд"));
+			break;
+
+		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Выходы ручная проверка | Автоматический стенд"));
+			break;
+
+		case WindowType::IN_AUTO_TEST_AUTO_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Входы автоматическая проверка | Автоматический стенд"));
+			break;
+
+		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Выходы автоматическаяя проверка | Автоматический стенд"));
+			break;
+
+		case WindowType::FULL_TEST_AUTO_STAND:
+			ui->title->setText(QString::fromLocal8Bit("Полная автоматическая проверка | Автоматический стенд"));
+			break;
+		}
+		break;
+	case ENGLISH_LANG:
+		switch (windowType)
+		{
+		case WindowType::MAINWINDOW:
+			ui->title->setText("PC-Tester");
+			break;
+
+		case WindowType::CONFIGURATOR:
+			ui->title->setText(QString("Configurator"));
+			break;
+
+		case WindowType::IN_TEST_MANUAL_STAND:
+			ui->title->setText(QString("In test | Manual stend"));
+			break;
+
+		case WindowType::OUT_TEST_MANUAL_STAND:
+			ui->title->setText(QString("Out test | Manual stend"));
+			break;
+
+		case WindowType::FULL_TEST_MANUAL_STAND:
+			ui->title->setText(QString("Full test | Manual stend"));
+			break;
+
+		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+			ui->title->setText(QString("In manual test | Auto stend"));
+			break;
+
+		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			ui->title->setText(QString("Out manual test | Auto stend"));
+			break;
+
+		case WindowType::IN_AUTO_TEST_AUTO_STAND:
+			ui->title->setText(QString("In auto test | Auto stend"));
+			break;
+
+		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+			ui->title->setText(QString("Out auto test | Auto stend"));
+			break;
+
+		case WindowType::FULL_TEST_AUTO_STAND:
+			ui->title->setText(QString("Full auto test | Auto stend"));
+			break;
+		}
+	}
 }
 
 /// @brief Override event filtering function for the WindowFrame class.

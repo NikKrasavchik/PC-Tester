@@ -18,7 +18,7 @@ class TestWindow : public QDialog
 	Q_OBJECT
 
 public:
-	TestWindow(TestWindowType testType, QWidget* parent = nullptr);
+	TestWindow(WindowType testType, QWidget* parent = nullptr);
 	~TestWindow();
 
 	void setFileName(QString fileName);
@@ -74,7 +74,7 @@ private:
 	QPixmap* backButtonDarkPixmap;
 
 	QString fileName;
-	TestWindowType testType;
+	WindowType testType;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -97,19 +97,19 @@ private:
 
 	void initUiFullTestManualStand();
 	void initUiTableFullTestManualStand();
-	
+
 	void initUiInManualTestAutoStand();
 	void initUiTableInManualTestAutoStand();
-	
+
 	void initUiOutManualTestAutoStand();
 	void initUiTableOutManualTestAutoStand();
-	
+
 	void initUiInAutoTestAutoStand();
 	void initUiTableInAutoTestAutoStand();
-	
+
 	void initUiOutAutoTestAutoStand();
 	void initUiTableOutAutoTestAutoStand();
-	
+
 	void initUiFullTestAutoStand();
 	void initUiTableFullTestAutoStand();
 

@@ -1182,7 +1182,7 @@ void MainWindow::on_configuratorButton_clicked()
 {
 	ConfiguratorWindow* configuratorWindow = new ConfiguratorWindow(this);
 
-	WindowFrame w(nullptr, configuratorWindow);
+	WindowFrame w(WindowType::CONFIGURATOR, nullptr, configuratorWindow);
 	w.show();
 	this->hide();
 	configuratorWindow->exec();
@@ -1239,45 +1239,45 @@ void MainWindow::on_checkAdaptersButton_clicked()
 
 void MainWindow::on_outTestManualStandButton_clicked()
 {
-	createTestWindow(TestWindowType::OUT_TEST_MANUAL_STAND);
+	createTestWindow(WindowType::OUT_TEST_MANUAL_STAND);
 }
 
 void MainWindow::on_inTestManualStandButton_clicked()
 {
-	createTestWindow(TestWindowType::IN_TEST_MANUAL_STAND);
+	createTestWindow(WindowType::IN_TEST_MANUAL_STAND);
 }
 
 void MainWindow::on_fullTestManualStandButton_clicked()
 {
-	createTestWindow(TestWindowType::FULL_TEST_MANUAL_STAND);
+	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND);
 }
 
 void MainWindow::on_inManualTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::IN_MANUAL_TEST_AUTO_STAND);
+	createTestWindow(WindowType::IN_MANUAL_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_outManualTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::OUT_MANUAL_TEST_AUTO_STAND);
+	createTestWindow(WindowType::OUT_MANUAL_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_inAutoTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::IN_AUTO_TEST_AUTO_STAND);
+	createTestWindow(WindowType::IN_AUTO_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_outAutoTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::OUT_AUTO_TEST_AUTO_STAND);
+	createTestWindow(WindowType::OUT_AUTO_TEST_AUTO_STAND);
 }
 
 void MainWindow::on_fullTestAutoStandButton_clicked()
 {
-	createTestWindow(TestWindowType::FULL_TEST_AUTO_STAND);
+	createTestWindow(WindowType::FULL_TEST_AUTO_STAND);
 }
 
-void MainWindow::createTestWindow(TestWindowType testType)
+void MainWindow::createTestWindow(WindowType testType)
 {
 #ifdef DEBUG
 	if (true)
@@ -1288,7 +1288,7 @@ void MainWindow::createTestWindow(TestWindowType testType)
 		TestWindow* testWindow = new TestWindow(testType, this);
 		testWindow->setFileName(fileName);
 
-		WindowFrame w(nullptr, testWindow);
+		WindowFrame w(testType, nullptr, testWindow);
 		testWindow->setParentFrame(&w);
 		w.show();
 		this->hide();

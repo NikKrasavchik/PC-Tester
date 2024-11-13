@@ -60,21 +60,23 @@ struct Styles
 extern Styles darkStyles;
 extern Styles lightStyles;
 
-struct Size 
+struct Size
 {
-    int width;
-    int height;
+	int width;
+	int height;
 };
 
-struct ViewWindowState 
+struct ViewWindowState
 {
-    bool appTheme;
-    bool appLanguage;
-    Size appSize;
+	bool appTheme;
+	bool appLanguage;
+	Size appSize;
 };
 
-enum class TestWindowType 
+enum class WindowType
 {
+	MAINWINDOW,
+	CONFIGURATOR,
 	IN_TEST_MANUAL_STAND,
 	OUT_TEST_MANUAL_STAND,
 	FULL_TEST_MANUAL_STAND,
