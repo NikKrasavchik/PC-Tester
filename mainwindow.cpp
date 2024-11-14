@@ -93,6 +93,7 @@ void MainWindow::initUi()
 	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLOUMN_0);
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLOUMN_1);
 
+	selectedFileStandType = CFG_STAND_NOT_SET;
 	selectedStand = AUTO_STAND;
 	viewWindowState->appTheme = LIGHT_THEME;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
@@ -562,7 +563,7 @@ void MainWindow::initUiManualStand()
 
 	manualStandLabel = new QLabel(backgroundManualStandWidget);
 	manualStandLabel->setObjectName("manualStandLabel");
-	manualStandLabel->setMaximumHeight(15);
+	manualStandLabel->setMaximumHeight(30);
 	manualStandLabel->setAlignment(Qt::AlignCenter);
 	testManualStandVLayout->addWidget(manualStandLabel);
 
@@ -867,7 +868,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 void MainWindow::on_selectFileButton_clicked()
 {
-	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", "", "Text (*.cfg)");
+	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV (*.csv)");
 	int localFileNameInd = selectedFileFullName.lastIndexOf("/");
 
 	QString partialPrintedFileName = "";
@@ -909,6 +910,8 @@ void MainWindow::on_selectFileButton_clicked()
 
 	//selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
 	selectFileLabel->setText(fileName);
+
+	proccessSelectedFile(selectedFileFullName);
 
 	isFileSelected = true;
 	switchStyleMainButtons(); //
@@ -1239,45 +1242,80 @@ void MainWindow::on_checkAdaptersButton_clicked()
 
 void MainWindow::on_outTestManualStandButton_clicked()
 {
-	createTestWindow(WindowType::OUT_TEST_MANUAL_STAND);
+	std::vector<Cable> preparedCables;
+	for (int i = 0; i < cables.size(); i++)
+		if (cables[i].direction == DIRECTION_OUT)
+			preparedCables.push_back(cables[i]);
+
+	createTestWindow(WindowType::OUT_TEST_MANUAL_STAND, preparedCables);
 }
 
 void MainWindow::on_inTestManualStandButton_clicked()
 {
-	createTestWindow(WindowType::IN_TEST_MANUAL_STAND);
+	std::vector<Cable> preparedCables;
+	for (int i = 0; i < cables.size(); i++)
+		if (cables[i].direction == DIRECTION_IN)
+			preparedCables.push_back(cables[i]);
+
+	createTestWindow(WindowType::IN_TEST_MANUAL_STAND, preparedCables);
 }
 
 void MainWindow::on_fullTestManualStandButton_clicked()
 {
-	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND);
+	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND, cables);
 }
 
 void MainWindow::on_inManualTestAutoStandButton_clicked()
 {
-	createTestWindow(WindowType::IN_MANUAL_TEST_AUTO_STAND);
+	std::vector<Cable> preparedCables;
+	for (int i = 0; i < cables.size(); i++)
+		if (cables[i].direction == DIRECTION_IN)
+			preparedCables.push_back(cables[i]);
+
+	createTestWindow(WindowType::IN_MANUAL_TEST_AUTO_STAND, preparedCables);
 }
 
 void MainWindow::on_outManualTestAutoStandButton_clicked()
 {
-	createTestWindow(WindowType::OUT_MANUAL_TEST_AUTO_STAND);
+	std::vector<Cable> preparedCables;
+	for (int i = 0; i < cables.size(); i++)
+		if (cables[i].direction == DIRECTION_OUT)
+			preparedCables.push_back(cables[i]);
+
+	createTestWindow(WindowType::OUT_MANUAL_TEST_AUTO_STAND, preparedCables);
 }
 
 void MainWindow::on_inAutoTestAutoStandButton_clicked()
 {
-	createTestWindow(WindowType::IN_AUTO_TEST_AUTO_STAND);
+	std::vector<Cable> preparedCables;
+	for (int i = 0; i < cables.size(); i++)
+		if (cables[i].direction == DIRECTION_IN)
+			preparedCables.push_back(cables[i]);
+
+	createTestWindow(WindowType::IN_AUTO_TEST_AUTO_STAND, preparedCables);
 }
 
 void MainWindow::on_outAutoTestAutoStandButton_clicked()
 {
-	createTestWindow(WindowType::OUT_AUTO_TEST_AUTO_STAND);
+	std::vector<Cable> preparedCables;
+	for (int i = 0; i < cables.size(); i++)
+		if (cables[i].direction == DIRECTION_OUT)
+			preparedCables.push_back(cables[i]);
+
+	createTestWindow(WindowType::OUT_AUTO_TEST_AUTO_STAND, preparedCables);
 }
 
 void MainWindow::on_fullTestAutoStandButton_clicked()
 {
-	createTestWindow(WindowType::FULL_TEST_AUTO_STAND);
+	std::vector<Cable> preparedCables;
+	for (int i = 0; i < cables.size(); i++)
+		if (cables[i].direction == DIRECTION_OUT)
+			preparedCables.push_back(cables[i]);
+
+	createTestWindow(WindowType::FULL_TEST_AUTO_STAND, cables);
 }
 
-void MainWindow::createTestWindow(WindowType testType)
+void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
 {
 #ifdef DEBUG
 	if (true)
@@ -1285,16 +1323,19 @@ void MainWindow::createTestWindow(WindowType testType)
 	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
 #endif // DEBUG
 	{
-		TestWindow* testWindow = new TestWindow(testType, this);
-		testWindow->setFileName(fileName);
+		if (selectedFileStandType != CFG_STAND_NOT_SET)
+		{
+			TestWindow* testWindow = new TestWindow(testType, preparedCables, can, this);
+			testWindow->setFileName(fileName);
 
-		WindowFrame w(testType, nullptr, testWindow);
-		testWindow->setParentFrame(&w);
-		w.show();
-		this->hide();
-		testWindow->exec();
-		resetWindowView();
-		this->show();
+			WindowFrame w(testType, nullptr, testWindow);
+			testWindow->setParentFrame(&w);
+			w.show();
+			this->hide();
+			testWindow->exec();
+			resetWindowView();
+			this->show();
+		}
 	}
 }
 

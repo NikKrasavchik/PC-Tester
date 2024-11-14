@@ -65,7 +65,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;26451</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -75,7 +75,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <DisableSpecificWarnings>4828</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;26451</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
@@ -113,13 +113,14 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="can.cpp" />
-    <ClCompile Include="ConfiguratorProc.cpp" />
+    <ClCompile Include="ConfiguratorWindowProc.cpp" />
     <ClCompile Include="ConfiguratorWindow.cpp" />
     <ClCompile Include="fullTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="fullTestManualStand_TestWindow.cpp" />
     <ClCompile Include="inAutoTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="inManualTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="inTestManualStand_TestWindow.cpp" />
+    <ClCompile Include="MainWindowProc.cpp" />
     <ClCompile Include="main_TestWindow.cpp" />
     <ClCompile Include="outAutoTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="outManualTestAutoStand_TestWindow.cpp" />

@@ -22,6 +22,10 @@
 
 #include <QDebug>
 
+#define CFG_STAND_NOT_SET	-1
+#define CFG_STAND_MANUAL	0
+#define CFG_STAND_AUTO		1
+
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -158,10 +162,12 @@ private:
 	QPixmap* languageDarkPixmap;
 
 	Can* can;
+	std::vector<Cable> cables;
 
 	bool isFileSelected;
 	bool isAllInit;
 	bool selectedStand;
+	int selectedFileStandType;
 
 	QString selectedFileFullName;
 	QString fileName;
@@ -202,9 +208,12 @@ private:
 	void resetLanguage();
 	void switchStyleMainButtons();
 
+	void proccessSelectedFile(QString fileName);
+
 	void resizeEvent(QResizeEvent* event);
 
-	void createTestWindow(WindowType testType);
+	std::vector<Cable> prepareArguments(WindowType testType);
+	void createTestWindow(WindowType testType, std::vector<Cable> preparedCables);
 
 	void resetWindowView();
 

@@ -1,11 +1,13 @@
 #include "TestWindow.h"
 
-TestWindow::TestWindow(WindowType testType, QWidget* parent)
+TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
 
 	this->testType = testType;
+	this->cables = cables;
+	this->can = can;
 
 	initUiMain();
 	initUiMainHeader();
@@ -46,6 +48,9 @@ TestWindow::TestWindow(WindowType testType, QWidget* parent)
 
 	case WindowType::FULL_TEST_AUTO_STAND:
 		initUiFullTestAutoStand();
+		break;
+
+	default:
 		break;
 	}
 
@@ -265,6 +270,9 @@ void TestWindow::initTexts()
 			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
 			break;
+
+		default:
+			break;
 		}
 		break;
 
@@ -306,6 +314,9 @@ void TestWindow::initTexts()
 			fullTestAutoStandConnectButton->setText(QString("Stand connected"));
 			fullTestAutoStandStartTestButton->setText(QString("Start"));
 			fullTestAutoStandSortButton->setText(QString("Sort: num"));
+			break;
+
+		default:
 			break;
 		}
 		break;
@@ -430,6 +441,9 @@ void TestWindow::resetTheme()
 
 		case WindowType::FULL_TEST_AUTO_STAND:
 			break;
+
+		default:
+			break;
 		}
 		break;
 
@@ -468,6 +482,9 @@ void TestWindow::resetTheme()
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
+			break;
+
+		default:
 			break;
 		}
 		break;
@@ -531,6 +548,9 @@ void TestWindow::resetLanguage()
 			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
 			break;
+
+		default:
+			break;
 		}
 		break;
 
@@ -586,6 +606,9 @@ void TestWindow::resetLanguage()
 			parentFrame->setTitle(WindowType::FULL_TEST_AUTO_STAND);
 			fullTestAutoStandStartTestButton->setText(QString("Start"));
 			fullTestAutoStandSortButton->setText(QString("Sort: num"));
+			break;
+
+		default:
 			break;
 		}
 		break;

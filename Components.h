@@ -98,6 +98,43 @@ enum class WindowType
 	FULL_TEST_AUTO_STAND
 };
 
+enum class ConnectorId
+{
+	NOT_SET,
+	A,
+	B,
+	C,
+	D,
+	E,
+	F
+};
+
+#define TYPE_NOT_SET			-1
+#define TYPE_DIGITAL			0
+#define TYPE_PWM				1
+#define TYPE_VNH				2
+#define TYPE_ANALOG				3
+#define TYPE_HALL				4
+
+#define DIRECTION_NOT_SET		-1
+#define DIRECTION_OUT			0
+#define DIRECTION_IN			1
+
+struct Cable
+{
+	ConnectorId connector;
+	int pin;
+	int direction;
+	int type;
+	unsigned char canId;
+	char bit;
+	double minCurrent;
+	double maxCurrent;
+	double minVoltage;
+	double maxVoltage;
+	QString name;
+};
+
 extern ViewWindowState* viewWindowState;
 
 #define FIXED_HEADER_HEIGHT			80

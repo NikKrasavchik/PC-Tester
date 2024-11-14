@@ -12,13 +12,20 @@
 #include "ui_TestWindow.h"
 #include "WindowFrame.h"
 #include "Components.h"
+#include "can.h"
+
+#define COLOUMN_CONNECTOR	0
+#define COLOUMN_PIN			1
+#define COLOUMN_NAME		2
+
+#define PRIMARY_CONNECTOR_SYMBOL	64	
 
 class TestWindow : public QDialog
 {
 	Q_OBJECT
 
 public:
-	TestWindow(WindowType testType, QWidget* parent = nullptr);
+	TestWindow(WindowType testType, std::vector<Cable> cables, Can* can, QWidget* parent = nullptr);
 	~TestWindow();
 
 	void setFileName(QString fileName);
@@ -75,6 +82,8 @@ private:
 
 	QString fileName;
 	WindowType testType;
+	Can* can;
+	std::vector<Cable> cables;
 
 	void initUiMain();
 	void initUiMainHeader();
