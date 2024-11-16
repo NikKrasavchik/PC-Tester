@@ -65,11 +65,12 @@ struct Styles
 	// TestWindow
 	//
 	//
-	QString testwindowButtonStyle;
 
 	//test window
+	QString testwindowButtonStyle;
 	QString testwindowMoveButtonStyle;
-	QString testwindowConnectButtonStyle;
+	QString testwindowConnectButtonStyleConnect;
+	QString testwindowConnectButtonStyleDisconnected;
 	QString testwindowTestTimeComboBox;
 	QString testwindowTableWidget;
 	QString testwindowNameLineEdit;
@@ -156,10 +157,10 @@ extern ViewWindowState* viewWindowState;
 #define FIXED_TESTER_NAME_HEIGHT	50
 #define FIXED_REPORT_BUTTON_WIDTH	100
 #define FIXED_REPORT_BUTTON_HEIGHT	50
-#define FIXED_HEADER_BUTTON_WIDTH	100
+#define FIXED_HEADER_BUTTON_WIDTH	120
 #define FIXED_HEADER_BUTTON_HEIGHT	50
 #define FIXED_HEADER_COMBO_WIDTH	200
-#define FIXED_HEADER_COMBO_HEIGHT	30
+#define FIXED_HEADER_COMBO_HEIGHT	40
 #define FIXED_STAND_COMBO_WIDTH		150
 #define FIXED_STAND_COMBO_HEIGHT	50
 #define FIXED_FOOTER_BUTTON_WIDTH	100

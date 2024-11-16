@@ -1317,11 +1317,7 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 
 void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
 {
-#ifdef DEBUG
-	if (true)
-#else
 	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
-#endif // DEBUG
 	{
 		if (selectedFileStandType != CFG_STAND_NOT_SET)
 		{
@@ -1336,6 +1332,27 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 			resetWindowView();
 			this->show();
 		}
+	}
+	else if (!isFileSelected)
+	{
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите конфигурационный файл перед началом работы"));
+		else
+			QMessageBox::warning(this, QString("Warning"), QString("Select a configuration file before you begin"));
+	}
+	else if (!can->getFrequencySelected())
+	{
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите частоту Can-шины перед началом работы"));
+		else
+			QMessageBox::warning(this, QString("Warning"), QString("Select Can Bus frequency before starting work"));
+	}
+	else if (!can->getAdapterSelected())
+	{
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите Can-адаптер перед началом работы"));
+		else
+			QMessageBox::warning(this, QString("Warning"), QString("Select Can Adapter before starting"));
 	}
 }
 

@@ -110,16 +110,22 @@ void TestWindow::TableRowProperties::generateInteractionButtons(int type)
 		buttons = new VNHButtons();
 		((VNHButtons*)buttons)->onButton = new QPushButton();
 		((VNHButtons*)buttons)->onButton->setObjectName("onButton");
+
 		((VNHButtons*)buttons)->offButton = new QPushButton();
 		((VNHButtons*)buttons)->offButton->setObjectName("offButton");
+		//((VNHButtons*)buttons)->offButton->setText("")
 		((VNHButtons*)buttons)->load0Button = new QPushButton();
 		((VNHButtons*)buttons)->load0Button->setObjectName("load0Button");
+
 		((VNHButtons*)buttons)->load25Button = new QPushButton();
 		((VNHButtons*)buttons)->load25Button->setObjectName("load25Button");
+
 		((VNHButtons*)buttons)->load50Button = new QPushButton();
 		((VNHButtons*)buttons)->load50Button->setObjectName("load50Button");
+
 		((VNHButtons*)buttons)->load75Button = new QPushButton();
 		((VNHButtons*)buttons)->load75Button->setObjectName("load75Button");
+
 		((VNHButtons*)buttons)->load100Button = new QPushButton();
 		((VNHButtons*)buttons)->load100Button->setObjectName("load100Button");
 		break;
@@ -129,38 +135,30 @@ void TestWindow::TableRowProperties::generateInteractionButtons(int type)
 	}
 }
 
-
 void TestWindow::TableRowProperties::on_onButton_clicked()
 {
-
 }
 
 void TestWindow::TableRowProperties::on_offButton_clicked()
 {
-
 }
 
 void TestWindow::TableRowProperties::on_load0Button_clicked()
 {
-
 }
 
 void TestWindow::TableRowProperties::on_load25Button_clicked()
 {
-
 }
 
 void TestWindow::TableRowProperties::on_load50Button_clicked()
 {
-
 }
 
 void TestWindow::TableRowProperties::on_load75Button_clicked()
 {
-
 }
 
 void TestWindow::TableRowProperties::on_load100Button_clicked()
 {
-
 }

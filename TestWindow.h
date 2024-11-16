@@ -61,6 +61,7 @@ private:
 
 	class TableRowProperties
 	{
+		//Q_OBJECT
 	public:
 		QString connector;
 		QString pin;
@@ -69,7 +70,8 @@ private:
 		QString type;
 		void* buttons;
 		QPushButton* moreButton;
-		
+
+		//public slots:
 		void generateInteractionButtons(int type);
 		void on_onButton_clicked();
 		void on_offButton_clicked();
@@ -128,6 +130,11 @@ private:
 	QPixmap* backButtonLightPixmap;
 	QPixmap* backButtonDarkPixmap;
 
+	bool fullTestManualStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
+	bool fullTestAutoStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
+
+	bool standConected; // ПОМЕНЯТЬ  Переменная хранящая в информацию о том подключен ли стенд к пк. перезаписываться она будет по сигналу со второго потока. Сейчас для отладки меняеться при нажатии на смену стиля;
+
 	QString fileName;
 	WindowType testType;
 	Can* can;
@@ -174,6 +181,8 @@ private:
 
 	void resetTheme();
 	void resetLanguage();
+	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
+	void resetLanguageRowsTable(); // Надо как то менять язык в таблице
 	void sortRows();
 	void fillTestTimeComboBoxes();
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);

@@ -10,6 +10,7 @@
 #include <QProxyStyle>
 #include <QStyleFactory>
 #include <QFile>
+#include <qmessagebox.h>
 #include <utility>
 
 #include "ui_mainwindow.h"

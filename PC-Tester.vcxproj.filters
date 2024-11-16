@@ -105,13 +105,13 @@
     <QtMoc Include="qsliderbutton.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="TestWindow.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
     <QtMoc Include="WindowFrame.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="ConfiguratorWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="TestWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
@@ -130,5 +130,8 @@
     <QtUic Include="WindowFrame.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="cpp.hint" />
   </ItemGroup>
 </Project>

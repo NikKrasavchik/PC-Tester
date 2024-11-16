@@ -11,6 +11,8 @@ void TestWindow::initUiFullTestManualStand()
 	fullTestManualStandSortButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
 	usefulSpaceHLayout->addWidget(fullTestManualStandSortButton);
 
+	fullTestManualStandTypeSort = false;
+
 	initUiTableFullTestManualStand();
 }
 
@@ -19,13 +21,13 @@ void TestWindow::initUiTableFullTestManualStand()
 	mainTableWidget->setRowCount(cableRows.size());
 	mainTableWidget->setColumnCount(8);
 	mainTableWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("Разъём")
-															<< QString::fromLocal8Bit("Пин")
-															<< QString::fromLocal8Bit("Название")
-															<< QString::fromLocal8Bit("Направленность") // ???
-															<< QString::fromLocal8Bit("Тип")
-															<< ""
-															<< QString::fromLocal8Bit("Статус")
-															<< QString::fromLocal8Bit("Подробнее"));
+		<< QString::fromLocal8Bit("Пин")
+		<< QString::fromLocal8Bit("Название")
+		<< QString::fromLocal8Bit("Направленность") // ???
+		<< QString::fromLocal8Bit("Тип")
+		<< ""
+		<< QString::fromLocal8Bit("Статус")
+		<< QString::fromLocal8Bit("Подробнее"));
 
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
@@ -53,5 +55,21 @@ void TestWindow::initUiTableFullTestManualStand()
 
 void TestWindow::on_fullTestManualStandSortButton_clicked()
 {
+	fullTestManualStandTypeSort = !fullTestManualStandTypeSort;
 
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		if (fullTestManualStandTypeSort)
+			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
+		else
+			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
+		break;
+	case ENGLISH_LANG:
+		if (fullTestManualStandTypeSort)
+			fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
+		else
+			fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
+		break;
+	}
 }

@@ -14,6 +14,7 @@ void TestWindow::initUiOutManualTestAutoStand()
 	outManualTestAutoStandTestTimeComboBox->setObjectName("outManualTestAutoStandTestTimeComboBox");
 	outManualTestAutoStandTestTimeComboBox->setFixedSize(QSize(FIXED_HEADER_COMBO_WIDTH, FIXED_HEADER_COMBO_HEIGHT));
 	usefulSpaceHLayout->addWidget(outManualTestAutoStandTestTimeComboBox);
+	createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
 
 	initUiTableOutManualTestAutoStand();
 }
@@ -23,12 +24,12 @@ void TestWindow::initUiTableOutManualTestAutoStand()
 	mainTableWidget->setRowCount(cableRows.size());
 	mainTableWidget->setColumnCount(7);
 	mainTableWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("Разъём")
-															<< QString::fromLocal8Bit("Пин")
-															<< QString::fromLocal8Bit("Название")
-															<< QString::fromLocal8Bit("Тип")
-															<< QString::fromLocal8Bit("Стенд")
-															<< QString::fromLocal8Bit("ПК")
-															<< QString::fromLocal8Bit("Подробнее"));
+		<< QString::fromLocal8Bit("Пин")
+		<< QString::fromLocal8Bit("Название")
+		<< QString::fromLocal8Bit("Тип")
+		<< QString::fromLocal8Bit("Стенд")
+		<< QString::fromLocal8Bit("ПК")
+		<< QString::fromLocal8Bit("Подробнее"));
 
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
@@ -55,10 +56,8 @@ void TestWindow::initUiTableOutManualTestAutoStand()
 
 void TestWindow::on_outManualTestAutoStandConnectButton_clicked()
 {
-
 }
 
 void TestWindow::on_outManualTestAutoStandTestTimeComboBox_changed(int ind)
 {
-
 }
