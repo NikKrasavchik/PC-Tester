@@ -59,9 +59,9 @@ public:
 
 private:
 
-	struct TableRowProperties
+	class TableRowProperties
 	{
-
+	public:
 		QString connector;
 		QString pin;
 		QString name;
@@ -69,8 +69,15 @@ private:
 		QString type;
 		void* buttons;
 		QPushButton* moreButton;
-
+		
 		void generateInteractionButtons(int type);
+		void on_onButton_clicked();
+		void on_offButton_clicked();
+		void on_load0Button_clicked();
+		void on_load25Button_clicked();
+		void on_load50Button_clicked();
+		void on_load75Button_clicked();
+		void on_load100Button_clicked();
 	};
 
 	Ui::TestWindowClass ui;

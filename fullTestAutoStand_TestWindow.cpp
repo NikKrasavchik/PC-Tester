@@ -57,6 +57,9 @@ void TestWindow::initUiTableFullTestAutoStand()
 			interactionButtonsCellVLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton);
 			interactionButtonsCellVLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton);
 
+			//connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_onButton_clicked);
+			//connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton,	&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_offButton_clicked);
+
 			mainTableWidget->setRowHeight(currentRowNum, 50);
 		}
 		else if (cableRows[currentRowNum]->type == "PWM")
@@ -67,7 +70,14 @@ void TestWindow::initUiTableFullTestAutoStand()
 			interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button);
 			interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button);
 
+			//connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load0Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load0Button_clicked);
+			//connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load25Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load25Button_clicked);
+			//connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load50Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load50Button_clicked);
+			//connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load75Button_clicked);
+			//connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button,	&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load100Button_clicked);
+
 			mainTableWidget->setRowHeight(currentRowNum, 100);
+
 		}
 		else if (cableRows[currentRowNum]->type == "VNH")
 		{
@@ -79,16 +89,17 @@ void TestWindow::initUiTableFullTestAutoStand()
 			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button);
 			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button);
 
+			//connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton,			&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_onButton_clicked);
+			//connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_offButton_clicked);
+			//connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load0Button_clicked);
+			//connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load25Button_clicked);
+			//connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load50Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load50Button_clicked);
+			//connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button,		&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load75Button_clicked);
+			//connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button,	&QPushButton::clicked, cableRows[currentRowNum], &TestWindow::TableRowProperties::on_load100Button_clicked);
+
 			mainTableWidget->setRowHeight(currentRowNum, 150);
 		}
-		else if (cableRows[currentRowNum]->type == "ANALOG")
-		{
 
-		}
-		else if (cableRows[currentRowNum]->type == "HALL")
-		{
-
-		}
 		interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
 		interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);
 
