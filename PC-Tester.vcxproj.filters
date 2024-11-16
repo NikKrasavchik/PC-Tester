@@ -97,6 +97,9 @@
     <ClCompile Include="MainWindowProc.cpp">
       <Filter>Source Files\Proc</Filter>
     </ClCompile>
+    <ClCompile Include="TestWindowProc.cpp">
+      <Filter>Source Files\Proc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">

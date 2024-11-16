@@ -2,6 +2,8 @@
 
 #define COLOUMN_DIRECTION	3
 #define COLOUMN_TYPE		4
+#define COLOUMN_STAND		5
+#define COLOUMN_MORE		7
 
 void TestWindow::initUiFullTestAutoStand()
 {
@@ -25,7 +27,7 @@ void TestWindow::initUiFullTestAutoStand()
 
 void TestWindow::initUiTableFullTestAutoStand()
 {
-	mainTableWidget->setRowCount(cables.size());
+	mainTableWidget->setRowCount(cableRows.size());
 	mainTableWidget->setColumnCount(8);
 	mainTableWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("Разъём")
 															<< QString::fromLocal8Bit("Пин")
@@ -37,49 +39,72 @@ void TestWindow::initUiTableFullTestAutoStand()
 															<< QString::fromLocal8Bit("Подробнее"));
 
 	QAbstractItemModel* model = mainTableWidget->model();
-	for (int i = 0; i < cables.size(); i++)
+	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		model->setData(model->index(i, COLOUMN_CONNECTOR), QString((char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector)));
-		model->setData(model->index(i, COLOUMN_PIN), QString::number(cables[i].pin));
-		model->setData(model->index(i, COLOUMN_NAME), cables[i].name);
+		model->setData(model->index(currentRowNum, COLOUMN_CONNECTOR), cableRows[currentRowNum]->connector);
+		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
+		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
+		model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), cableRows[currentRowNum]->direction);
+		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
-		QString direction;
-		switch (cables[i].direction)
+		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
+		interactionButtonsWidget->setObjectName("interactionButtonsWidget");
+		QVBoxLayout* interactionButtonsCellVLayout = new QVBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellVLayout->setObjectName("interactionButtonsCellVLayout");
+
+		if (cableRows[currentRowNum]->type == "DIGITAL")
 		{
-		case DIRECTION_OUT:
-			direction = "OUT";
-			break;
+			interactionButtonsCellVLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton);
+			interactionButtonsCellVLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton);
 
-		case DIRECTION_IN:
-			direction = "IN";
-			break;
+			mainTableWidget->setRowHeight(currentRowNum, 50);
 		}
-		model->setData(model->index(i, COLOUMN_NAME), direction);
-
-		QString type;
-		switch (cables[i].type)
+		else if (cableRows[currentRowNum]->type == "PWM")
 		{
-		case TYPE_DIGITAL:
-			type = "DIGITAL";
-			break;
+			interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load0Button);
+			interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load25Button);
+			interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load50Button);
+			interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button);
+			interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button);
 
-		case TYPE_PWM:
-			type = "PWM";
-			break;
-
-		case TYPE_VNH:
-			type = "VNH";
-			break;
-
-		case TYPE_ANALOG:
-			type = "ANALOG";
-			break;
-
-		case TYPE_HALL:
-			type = "HALL";
-			break;
+			mainTableWidget->setRowHeight(currentRowNum, 100);
 		}
-		model->setData(model->index(i, COLOUMN_TYPE), type);
+		else if (cableRows[currentRowNum]->type == "VNH")
+		{
+			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton);
+			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton);
+			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button);
+			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button);
+			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load50Button);
+			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button);
+			interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button);
+
+			mainTableWidget->setRowHeight(currentRowNum, 150);
+		}
+		else if (cableRows[currentRowNum]->type == "ANALOG")
+		{
+
+		}
+		else if (cableRows[currentRowNum]->type == "HALL")
+		{
+
+		}
+		interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
+		interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);
+
+		cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
+		cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
+
+		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
+		moreCellWidget->setObjectName("deleteCellWidget");
+		QHBoxLayout* moreCellHLayout = new QHBoxLayout(moreCellWidget);
+		moreCellHLayout->setObjectName("deleteCellWidget");
+		moreCellHLayout->addWidget(cableRows[currentRowNum]->moreButton);
+		moreCellHLayout->setContentsMargins(0, 0, 0, 0);
+		moreCellWidget->setLayout(moreCellHLayout);
+
+		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_STAND, interactionButtonsWidget);
+		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }
 

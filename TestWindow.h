@@ -18,7 +18,33 @@
 #define COLOUMN_PIN			1
 #define COLOUMN_NAME		2
 
-#define PRIMARY_CONNECTOR_SYMBOL	64	
+#define PRIMARY_CONNECTOR_SYMBOL	64
+
+struct DigitalButtons
+{
+	QPushButton* onButton;
+	QPushButton* offButton;
+};
+
+struct PWMButtons
+{
+	QPushButton* load0Button;
+	QPushButton* load25Button;
+	QPushButton* load50Button;
+	QPushButton* load75Button;
+	QPushButton* load100Button;
+};
+
+struct VNHButtons
+{
+	QPushButton* onButton;
+	QPushButton* offButton;
+	QPushButton* load0Button;
+	QPushButton* load25Button;
+	QPushButton* load50Button;
+	QPushButton* load75Button;
+	QPushButton* load100Button;
+};
 
 class TestWindow : public QDialog
 {
@@ -32,6 +58,21 @@ public:
 	void setParentFrame(WindowFrame* parentFrame);
 
 private:
+
+	struct TableRowProperties
+	{
+
+		QString connector;
+		QString pin;
+		QString name;
+		QString direction;
+		QString type;
+		void* buttons;
+		QPushButton* moreButton;
+
+		void generateInteractionButtons(int type);
+	};
+
 	Ui::TestWindowClass ui;
 	WindowFrame* parentFrame;
 
@@ -83,7 +124,7 @@ private:
 	QString fileName;
 	WindowType testType;
 	Can* can;
-	std::vector<Cable> cables;
+	std::vector<TableRowProperties*> cableRows;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -128,6 +169,8 @@ private:
 	void resetLanguage();
 	void sortRows();
 	void fillTestTimeComboBoxes();
+	void generateCableRows(WindowType testType, std::vector<Cable> cables);
+	void generateRowsInteractionButtons(TableRowProperties* rowTable);
 
 	void resizeEvent(QResizeEvent* event);
 

@@ -6,7 +6,6 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 	ui.setupUi(this);
 
 	this->testType = testType;
-	this->cables = cables;
 	this->can = can;
 
 	initUiMain();
@@ -15,6 +14,8 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 
 	initLightStyleSheets();
 	initDarkStyleSheets();
+
+	generateCableRows(testType, cables);
 
 	switch (testType)
 	{
@@ -74,6 +75,8 @@ TestWindow::~TestWindow()
 	delete languageDarkPixmap;
 	delete backButtonLightPixmap;
 	delete backButtonDarkPixmap;
+	for (int i = 0; i < cableRows.size(); i++)
+		delete cableRows[i];
 }
 
 void TestWindow::initUiMain()
@@ -203,6 +206,41 @@ void TestWindow::initUiMainFooter()
 	reportButton->setObjectName("reportButton");
 	reportButton->setFixedSize(FIXED_REPORT_BUTTON_WIDTH, FIXED_REPORT_BUTTON_HEIGHT);
 	reportHLayout->addWidget(reportButton);
+}
+
+void TestWindow::generateRowsInteractionButtons(TableRowProperties* rowTable)
+{
+	mainTableWidget->setRowCount(cableRows.size());
+
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+		break;
+
+	case WindowType::OUT_TEST_MANUAL_STAND:
+		break;
+
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		break;
+
+	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::IN_AUTO_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::FULL_TEST_AUTO_STAND:
+		break;
+
+	default:
+		break;
+	}
 }
 
 void TestWindow::resizeEvent(QResizeEvent* event)

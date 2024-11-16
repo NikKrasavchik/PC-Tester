@@ -127,6 +127,7 @@
     <ClCompile Include="outTestManualStand_TestWindow.cpp" />
     <ClCompile Include="qsliderbutton.cpp" />
     <ClCompile Include="StyleSheets.cpp" />
+    <ClCompile Include="TestWindowProc.cpp" />
     <ClCompile Include="WindowFrame.cpp" />
     <QtRcc Include="resources\resources.qrc" />
     <QtUic Include="ConfiguratorWindow.ui" />

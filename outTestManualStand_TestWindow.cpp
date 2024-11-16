@@ -1,6 +1,7 @@
 #include "TestWindow.h"
 
 #define COLOUMN_TYPE		3
+#define COLOUMN_MORE		7
 
 void TestWindow::initUiOutTestManualStand()
 {
@@ -9,7 +10,7 @@ void TestWindow::initUiOutTestManualStand()
 
 void TestWindow::initUiTableOutTestManualStand()
 {
-	mainTableWidget->setRowCount(cables.size());
+	mainTableWidget->setRowCount(cableRows.size());
 	mainTableWidget->setColumnCount(8);
 	mainTableWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("Разъём") 
 															<< QString::fromLocal8Bit("Пин") 
@@ -21,27 +22,24 @@ void TestWindow::initUiTableOutTestManualStand()
 															<< QString::fromLocal8Bit("Подробнее"));
 	
 	QAbstractItemModel* model = mainTableWidget->model();
-	for (int i = 0; i < cables.size(); i++)
+	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		model->setData(model->index(i, COLOUMN_CONNECTOR), QString((char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector)));
-		model->setData(model->index(i, COLOUMN_PIN), QString::number(cables[i].pin));
-		model->setData(model->index(i, COLOUMN_NAME), cables[i].name);
+		model->setData(model->index(currentRowNum, COLOUMN_CONNECTOR), cableRows[currentRowNum]->connector);
+		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
+		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
+		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
-		QString type;
-		switch (cables[i].type)
-		{
-		case TYPE_DIGITAL:
-			type = "DIGITAL";
-			break;
+		cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
+		cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
 
-		case TYPE_PWM:
-			type = "PWM";
-			break;
+		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
+		moreCellWidget->setObjectName("deleteCellWidget");
+		QHBoxLayout* moreCellLayout = new QHBoxLayout(moreCellWidget);
+		moreCellLayout->setObjectName("deleteCellWidget");
+		moreCellLayout->addWidget(cableRows[currentRowNum]->moreButton);
+		moreCellLayout->setContentsMargins(0, 0, 0, 0);
+		moreCellWidget->setLayout(moreCellLayout);
 
-		case TYPE_VNH:
-			type = "VNH";
-			break;
-		}
-		model->setData(model->index(i, COLOUMN_TYPE), type);
+		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }
