@@ -188,6 +188,7 @@ void TestWindow::initUiMainFooter()
 
 	testerNameLineEdit = new QLineEdit(footerLayoutWidget);
 	testerNameLineEdit->setObjectName("testerNameLineEdit");
+	testerNameLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
 	testerNameLineEdit->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_TESTER_NAME_HEIGHT);
 	reportHLayout->addWidget(testerNameLineEdit);
 
@@ -228,6 +229,7 @@ void TestWindow::initTexts()
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
+		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
 
 		switch (testType)
 		{
@@ -270,7 +272,7 @@ void TestWindow::initTexts()
 
 	case ENGLISH_LANG:
 		reportButton->setText(QString("Report"));
-
+		testerNameLineEdit->setText(QString("Ivanov Ivan Ivanovich"));
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
@@ -401,10 +403,12 @@ void TestWindow::resetTheme()
 		backButton->setIcon(QIcon(*backButtonLightPixmap));
 		backButton->setIconSize(backButton->size());
 
-		switchThemeButton->setStyleSheet(lightStyles.testwindowButtonStyle);
-		switchLanguageButton->setStyleSheet(lightStyles.testwindowButtonStyle);
-		backButton->setStyleSheet(lightStyles.testwindowButtonStyle);
-		reportButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+		switchThemeButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+		switchLanguageButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+		backButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+		reportButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+		mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
+		testerNameLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
@@ -417,18 +421,25 @@ void TestWindow::resetTheme()
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			outManualTestAutoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyle);
+			outManualTestAutoStandTestTimeComboBox->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+			inManualTestAutoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyle);
+			inManualTestAutoStandTestTimeComboBox->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+			outAutoTestAutoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyle);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
+			inAutoTestAutoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyle);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
+			fullTestAutoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyle);
 			break;
 		}
 		break;
@@ -440,10 +451,12 @@ void TestWindow::resetTheme()
 		backButton->setIcon(QIcon(*backButtonDarkPixmap));
 		backButton->setIconSize(backButton->size());
 
-		switchThemeButton->setStyleSheet(darkStyles.testwindowButtonStyle);
-		switchLanguageButton->setStyleSheet(darkStyles.testwindowButtonStyle);
-		backButton->setStyleSheet(darkStyles.testwindowButtonStyle);
-		reportButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+		switchThemeButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+		switchLanguageButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+		backButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+		reportButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
+		testerNameLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
@@ -456,18 +469,25 @@ void TestWindow::resetTheme()
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			outManualTestAutoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyle);
+			outManualTestAutoStandTestTimeComboBox->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+			inManualTestAutoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyle);
+			inManualTestAutoStandTestTimeComboBox->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+			outAutoTestAutoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyle);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
+			inAutoTestAutoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyle);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
+			fullTestAutoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyle);
 			break;
 		}
 		break;
@@ -480,6 +500,7 @@ void TestWindow::resetLanguage()
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
+		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
 
 		switch (testType)
 		{
@@ -536,6 +557,7 @@ void TestWindow::resetLanguage()
 
 	case ENGLISH_LANG:
 		reportButton->setText(QString("Report"));
+		testerNameLineEdit->setText(QString("Ivanov Ivan Ivanovich"));
 
 		switch (testType)
 		{

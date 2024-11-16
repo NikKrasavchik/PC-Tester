@@ -66,6 +66,13 @@ struct Styles
 	//
 	//
 	QString testwindowButtonStyle;
+
+	//test window
+	QString testwindowMoveButtonStyle;
+	QString testwindowConnectButtonStyle;
+	QString testwindowTestTimeComboBox;
+	QString testwindowTableWidget;
+	QString testwindowNameLineEdit;
 };
 
 extern Styles darkStyles;

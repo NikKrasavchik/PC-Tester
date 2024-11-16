@@ -64,7 +64,7 @@ void WindowFrame::initLightStyleSheets()
 			color: black;
 			font-family: Kartika;
 			font-size: 14px;
-			font-weight: 500;
+			font-weight: 400;
 	)";
 }
 
@@ -126,7 +126,7 @@ void WindowFrame::initDarkStyleSheets()
 			color: white;
 			font-family: Kartika;
 			font-size: 14px;
-			font-weight: 500;
+			font-weight: 400;
 	)";
 }
 
@@ -413,7 +413,7 @@ void MainWindow::initDarkStyleSheets()
 
 void TestWindow::initLightStyleSheets()
 {
-	lightStyles.testwindowButtonStyle =
+	lightStyles.testwindowMoveButtonStyle =
 		R"(
 		.QPushButton {
 			margin: 3px;
@@ -433,11 +433,66 @@ void TestWindow::initLightStyleSheets()
 			background-color: #767676;
 		}
 	)";
+
+	lightStyles.testwindowConnectButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #B0B0B0;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+		.QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+	)";
+
+	lightStyles.testwindowTestTimeComboBox =
+		R"(
+		background-color: #B0B0B0;
+		border-radius: 10px;
+
+		color: black;
+		font-family: Kartika;
+		font-size: 12px;
+		font-weight: 600;
+	)";
+
+	lightStyles.testwindowTableWidget =
+		R"(
+		background-color: #B0B0B0;
+		border-bottom-radius: 10px;
+
+		color: black;
+		font-family: Kartika;
+		font-size: 12px;
+		font-weight: 600;
+	)";
+
+	lightStyles.testwindowNameLineEdit =
+		R"(
+			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+
+	)";
 }
 
 void TestWindow::initDarkStyleSheets()
 {
-	darkStyles.testwindowButtonStyle =
+	darkStyles.testwindowMoveButtonStyle =
 		R"(
 		.QPushButton {
 			margin: 3px;
@@ -456,6 +511,95 @@ void TestWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+	)";
+
+	darkStyles.testwindowConnectButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+		.QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+	)";
+
+	darkStyles.testwindowTestTimeComboBox =
+		R"(
+		background-color: #535353;
+		border-radius: 10px;
+
+		color: white;
+		font-family: Kartika;
+		font-size: 12px;
+		font-weight: 600;
+	)";
+
+	darkStyles.testwindowTableWidget =
+		R"(
+
+		QScrollBar:horizontal {
+    		background-color: #6E6E6E;
+		}
+		QScrollBar:vertical {
+    		background-color: #6E6E6E;
+		}
+
+		QHeaderView {
+			background-color: #535353;
+		}
+		QHeaderView::section {
+			background-color: #6E6E6E;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QTableView {
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QTableView::item:selected {
+			background-color: #6E6E6E;
+		}
+
+		QComboBox {
+			background-color: #535353;
+			border-radius: 10px;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+}
+	)";
+
+	darkStyles.testwindowNameLineEdit =
+		R"(
+			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+
 	)";
 }
 //void MainWindow::initStyleSheets()

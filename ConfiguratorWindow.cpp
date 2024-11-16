@@ -207,7 +207,6 @@ void ConfiguratorWindow::initRecources()
 
 void ConfiguratorWindow::initConnections()
 {
-
 	//connect(selectStandTypeComboBox, &QComboBox::activated, this, &ConfiguratorWindow::on_selectStandTypeComboBox_activated);
 	//connect(selectStandTypeComboBox, &QComboBox::activated, this, &ConfiguratorWindow::on_selectStandTypeComboBox_activated);
 	//connect(selectStandTypeComboBox, &QComboBox::activated, this, &ConfiguratorWindow::on_selectStandTypeComboBox_activated);
@@ -271,6 +270,8 @@ void ConfiguratorWindow::resetTheme()
 		switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
 		backButton->setIcon(QIcon(*backButtonLightPixmap));
 		backButton->setIconSize(backButton->size());
+
+		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 		break;
 
 	case DARK_THEME:
@@ -332,4 +333,3 @@ void ConfiguratorWindow::resizeEvent(QResizeEvent* event)
 
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, viewWindowState->appSize.width - (BORDER_INDENT * 2), viewWindowState->appSize.height - (BORDER_INDENT * 2));
 }
-

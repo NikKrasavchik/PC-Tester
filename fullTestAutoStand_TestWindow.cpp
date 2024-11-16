@@ -24,26 +24,23 @@ void TestWindow::initUiTableFullTestAutoStand()
 {
 	mainTableWidget->setColumnCount(8);
 	mainTableWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("Разъём")
-															<< QString::fromLocal8Bit("Пин")
-															<< QString::fromLocal8Bit("Название")
-															<< QString::fromLocal8Bit("Направленность") // ???
-															<< QString::fromLocal8Bit("Тип")
-															<< QString::fromLocal8Bit("Стенд")
-															<< QString::fromLocal8Bit("ПК")
-															<< QString::fromLocal8Bit("Подробнее"));
+		<< QString::fromLocal8Bit("Пин")
+		<< QString::fromLocal8Bit("Название")
+		<< QString::fromLocal8Bit("Направленность") // ???
+		<< QString::fromLocal8Bit("Тип")
+		<< QString::fromLocal8Bit("Стенд")
+		<< QString::fromLocal8Bit("ПК")
+		<< QString::fromLocal8Bit("Подробнее"));
 }
 
 void TestWindow::on_fullTestAutoStandConnectButton_clicked()
 {
-
 }
 
 void TestWindow::on_fullTestAutoStandStartTestButton_clicked()
 {
-
 }
 
 void TestWindow::on_fullTestAutoStandSortButton_clicked()
 {
-
 }
