@@ -29,6 +29,7 @@ TableRowProperties::TableRowProperties(QObject* parent)
 	presetSettings->type = TYPE_NOT_SET;
 	presetSettings->connector = ConnectorId::NOT_SET;
 
+	connect(connectorComboBox, SIGNAL(activated(int)), this, SLOT(on_connector_activated(int)));
 	connect(directionComboBox, SIGNAL(activated(int)), this, SLOT(on_direction_activated(int)));
 	connect(typeComboBox, SIGNAL(activated(int)), this, SLOT(on_type_activated(int)));
 	connect(deleteButton, &QPushButton::clicked, this, &TableRowProperties::on_deleteButton_clicked);
@@ -80,9 +81,14 @@ void ConfiguratorWindow::on_addRowButton_clicked()
 	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::CONNECTOR,	connectorCellWidget);
 	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::DIRECTION,	directionCellWidget);
 	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::TYPE,		typeCellWidget);
-	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::DELETE,		deleteCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::DEL,		deleteCellWidget);
 
 	resetPresets();
+}
+
+void TableRowProperties::on_connector_activated(int index)
+{
+	presetSettings->connector = (ConnectorId)index;
 }
 
 void TableRowProperties::on_direction_activated(int index)
@@ -278,7 +284,7 @@ void ConfiguratorWindow::deleteRow(int index)
 	mainTableWidget->removeCellWidget(index, (int)ColoumnName::CONNECTOR);
 	mainTableWidget->removeCellWidget(index, (int)ColoumnName::DIRECTION);
 	mainTableWidget->removeCellWidget(index, (int)ColoumnName::TYPE);
-	mainTableWidget->removeCellWidget(index, (int)ColoumnName::DELETE);
+	mainTableWidget->removeCellWidget(index, (int)ColoumnName::DEL);
 
 	mainTableWidget->removeRow(index);
 	tableRowPropertiesVector.erase(tableRowPropertiesVector.begin() + index);
@@ -426,9 +432,9 @@ void ConfiguratorWindow::on_saveButton_clicked()
 	QString configString = "cfg" + CFG_SPLIT;
 
 	if (selectStandTypeComboBox->currentIndex() == 1)
-		configString += "MANUAL" + CFG_SPLIT;
+		configString += "MANUAL";
 	else if (selectStandTypeComboBox->currentIndex() == 2)
-		configString += "AUTO" + CFG_SPLIT;
+		configString += "AUTO";
 	else
 		1; // ERROR
 	configString += CFG_ENDING;
@@ -436,11 +442,11 @@ void ConfiguratorWindow::on_saveButton_clicked()
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
 		for (int coloumn = 0; coloumn < mainTableWidget->columnCount() - 1; coloumn++)
-			configString += parsedData[row][coloumn] + CFG_SPLIT;
-		configString += CFG_ENDING;
+			configString += parsedData[row][coloumn] + (coloumn == mainTableWidget->columnCount() - 2 ? "" : CFG_SPLIT);
+		configString += (row == mainTableWidget->rowCount() - 1 ? "" : CFG_ENDING);
 	}
 
-	QString fileName = "./Config files/" + fileNameLineEdit->text() + ".cfg";
+	QString fileName = "./Config files/" + fileNameLineEdit->text() + ".csv";
 
 	std::ofstream fout;
 	fout.open(fileName.toLocal8Bit().toStdString());
@@ -476,6 +482,10 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 				rowData.push_back(QString::number(currentRowProperties->presetSettings->direction));
 				break;
 
+			case ColoumnName::TYPE:
+				rowData.push_back(QString::number(currentRowProperties->presetSettings->type));
+				break;
+
 			case ColoumnName::CAN_ID:
 				rowData.push_back(currentRowProperties->canId);
 				break;
@@ -484,31 +494,27 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 				rowData.push_back(QString::number(currentRowProperties->bit));
 				break;
 
-			case ColoumnName::TYPE:
-				rowData.push_back(QString::number(currentRowProperties->presetSettings->type));
+			case ColoumnName::MIN_CURRENT:
+				rowData.push_back(QString::number(currentRowProperties->minCurrent));
 				break;
 
-			case ColoumnName::MIN_A:
-				rowData.push_back(QString::number(currentRowProperties->minA));
+			case ColoumnName::MAX_CURRENT:
+				rowData.push_back(QString::number(currentRowProperties->maxCurrent));
 				break;
 
-			case ColoumnName::MAX_A:
-				rowData.push_back(QString::number(currentRowProperties->maxA));
+			case ColoumnName::MIN_VOLTAGE:
+				rowData.push_back(QString::number(currentRowProperties->minVoltage));
 				break;
 
-			case ColoumnName::MIN_V:
-				rowData.push_back(QString::number(currentRowProperties->minV));
-				break;
-
-			case ColoumnName::MAX_V:
-				rowData.push_back(QString::number(currentRowProperties->maxV));
+			case ColoumnName::MAX_VOLTAGE:
+				rowData.push_back(QString::number(currentRowProperties->maxVoltage));
 				break;
 
 			case ColoumnName::NAME:
 				rowData.push_back(currentRowProperties->name);
 				break;
 
-			case ColoumnName::DELETE:
+			case ColoumnName::DEL:
 				break;
 			}
 		}
@@ -544,6 +550,11 @@ void ConfiguratorWindow::updateTableData()
 				verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
 			break;
 
+		case ColoumnName::TYPE:
+			for (int row = 0; row < mainTableWidget->rowCount(); row++)
+				verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
+			break;
+
 		case ColoumnName::CAN_ID:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
@@ -556,33 +567,28 @@ void ConfiguratorWindow::updateTableData()
 					tableRowPropertiesVector[row]->bit = mainTableWidget->item(row, coloumn)->text().toInt();
 			break;
 
-		case ColoumnName::TYPE:
-			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
-			break;
-
-		case ColoumnName::MIN_A:
+		case ColoumnName::MIN_CURRENT:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
-					tableRowPropertiesVector[row]->minA = mainTableWidget->item(row, coloumn)->text().toFloat();
+					tableRowPropertiesVector[row]->minCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
-		case ColoumnName::MAX_A:
+		case ColoumnName::MAX_CURRENT:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
-					tableRowPropertiesVector[row]->maxA = mainTableWidget->item(row, coloumn)->text().toFloat();
+					tableRowPropertiesVector[row]->maxCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
-		case ColoumnName::MIN_V:
+		case ColoumnName::MIN_VOLTAGE:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
-					tableRowPropertiesVector[row]->minV = mainTableWidget->item(row, coloumn)->text().toFloat();
+					tableRowPropertiesVector[row]->minVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
-		case ColoumnName::MAX_V:
+		case ColoumnName::MAX_VOLTAGE:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (verifyRow((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
-					tableRowPropertiesVector[row]->maxV = mainTableWidget->item(row, coloumn)->text().toFloat();
+					tableRowPropertiesVector[row]->maxVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
 		case ColoumnName::NAME:
@@ -591,7 +597,7 @@ void ConfiguratorWindow::updateTableData()
 					tableRowPropertiesVector[row]->name = mainTableWidget->item(row, coloumn)->text();
 			break;
 
-		case ColoumnName::DELETE:
+		case ColoumnName::DEL:
 			break;
 		}
 	}
@@ -615,22 +621,22 @@ bool ConfiguratorWindow::verifyRow(ColoumnName coloumnName, QTableWidgetItem* da
 	case ColoumnName::BIT:
 		break;
 
-	case ColoumnName::MIN_A:
+	case ColoumnName::MIN_CURRENT:
 		break;
 
-	case ColoumnName::MAX_A:
+	case ColoumnName::MAX_CURRENT:
 		break;
 
-	case ColoumnName::MIN_V:
+	case ColoumnName::MIN_VOLTAGE:
 		break;
 
-	case ColoumnName::MAX_V:
+	case ColoumnName::MAX_VOLTAGE:
 		break;
 
 	case ColoumnName::NAME:
 		break;
 
-	case ColoumnName::DELETE:
+	case ColoumnName::DEL:
 		break;
 	}
 	return true;

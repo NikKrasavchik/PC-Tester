@@ -85,14 +85,11 @@
     <ClCompile Include="WindowFrame.cpp">
       <Filter>Source Files\Ui</Filter>
     </ClCompile>
-    <ClCompile Include="ConfiguratorProc.cpp">
+    <ClCompile Include="ConfiguratorWindowProc.cpp">
       <Filter>Source Files\Proc</Filter>
     </ClCompile>
     <ClCompile Include="ConfiguratorWindow.cpp">
       <Filter>Source Files\Ui</Filter>
-    </ClCompile>
-    <ClCompile Include="can.cpp">
-      <Filter>Source Files\Proc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

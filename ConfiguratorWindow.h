@@ -28,19 +28,9 @@
 #define TYPE_NOT_SET_NUM		6
 
 #define TYPE_NOT_SET_DIR_SET	-2
-#define TYPE_NOT_SET			-1
-#define TYPE_DIGITAL			0
-#define TYPE_PWM				1
-#define TYPE_VNH				2
-#define TYPE_ANALOG				3
-#define TYPE_HALL				4
 
 #define DIRECTION_SET_NUM		2
 #define DIRECTION_NOT_SET_NUM	3
-
-#define DIRECTION_NOT_SET		-1
-#define DIRECTION_OUT			0
-#define DIRECTION_IN			1
 
 #define CONNECTOR_NOT_SET		-1
 
@@ -86,31 +76,20 @@
 #define CFG_SPLIT				QString(",")
 #define CFG_ENDING				QString("\n")
 
-enum class ConnectorId
-{
-	NOT_SET,
-	A,
-	B,
-	C,
-	D,
-	E,
-	F
-};
-
 enum class ColoumnName
 {
 	CONNECTOR,
 	PIN,
 	DIRECTION,
+	TYPE,
 	CAN_ID,
 	BIT,
-	TYPE,
-	MIN_A,
-	MAX_A,
-	MIN_V,
-	MAX_V,
+	MIN_CURRENT,
+	MAX_CURRENT,
+	MIN_VOLTAGE,
+	MAX_VOLTAGE,
 	NAME,
-	DELETE
+	DEL
 };
 
 class TableRowProperties : public QObject
@@ -135,15 +114,16 @@ public:
 	QString canId;
 	int bit;
 	QComboBox* typeComboBox;
-	float minA;
-	float maxA;
-	float minV;
-	float maxV;
+	float minCurrent;
+	float maxCurrent;
+	float minVoltage;
+	float maxVoltage;
 	QString name;
 	QPushButton* deleteButton;
 	PresetSettings* presetSettings;
 
 public slots:
+	void on_connector_activated(int index);
 	void on_direction_activated(int index);
 	void on_type_activated(int index);
 	void on_deleteButton_clicked();

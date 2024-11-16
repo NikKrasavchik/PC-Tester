@@ -12,19 +12,67 @@
 #include "ui_TestWindow.h"
 #include "WindowFrame.h"
 #include "Components.h"
+#include "can.h"
+
+#define COLOUMN_CONNECTOR	0
+#define COLOUMN_PIN			1
+#define COLOUMN_NAME		2
+
+#define PRIMARY_CONNECTOR_SYMBOL	64
+
+struct DigitalButtons
+{
+	QPushButton* onButton;
+	QPushButton* offButton;
+};
+
+struct PWMButtons
+{
+	QPushButton* load0Button;
+	QPushButton* load25Button;
+	QPushButton* load50Button;
+	QPushButton* load75Button;
+	QPushButton* load100Button;
+};
+
+struct VNHButtons
+{
+	QPushButton* onButton;
+	QPushButton* offButton;
+	QPushButton* load0Button;
+	QPushButton* load25Button;
+	QPushButton* load50Button;
+	QPushButton* load75Button;
+	QPushButton* load100Button;
+};
 
 class TestWindow : public QDialog
 {
 	Q_OBJECT
 
 public:
-	TestWindow(WindowType testType, QWidget* parent = nullptr);
+	TestWindow(WindowType testType, std::vector<Cable> cables, Can* can, QWidget* parent = nullptr);
 	~TestWindow();
 
 	void setFileName(QString fileName);
 	void setParentFrame(WindowFrame* parentFrame);
 
 private:
+
+	struct TableRowProperties
+	{
+
+		QString connector;
+		QString pin;
+		QString name;
+		QString direction;
+		QString type;
+		void* buttons;
+		QPushButton* moreButton;
+
+		void generateInteractionButtons(int type);
+	};
+
 	Ui::TestWindowClass ui;
 	WindowFrame* parentFrame;
 
@@ -75,6 +123,8 @@ private:
 
 	QString fileName;
 	WindowType testType;
+	Can* can;
+	std::vector<TableRowProperties*> cableRows;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -119,6 +169,8 @@ private:
 	void resetLanguage();
 	void sortRows();
 	void fillTestTimeComboBoxes();
+	void generateCableRows(WindowType testType, std::vector<Cable> cables);
+	void generateRowsInteractionButtons(TableRowProperties* rowTable);
 
 	void resizeEvent(QResizeEvent* event);
 

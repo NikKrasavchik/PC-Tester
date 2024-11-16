@@ -1,11 +1,12 @@
 #include "TestWindow.h"
 
-TestWindow::TestWindow(WindowType testType, QWidget* parent)
+TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
 
 	this->testType = testType;
+	this->can = can;
 
 	initUiMain();
 	initUiMainHeader();
@@ -13,6 +14,8 @@ TestWindow::TestWindow(WindowType testType, QWidget* parent)
 
 	initLightStyleSheets();
 	initDarkStyleSheets();
+
+	generateCableRows(testType, cables);
 
 	switch (testType)
 	{
@@ -47,6 +50,9 @@ TestWindow::TestWindow(WindowType testType, QWidget* parent)
 	case WindowType::FULL_TEST_AUTO_STAND:
 		initUiFullTestAutoStand();
 		break;
+
+	default:
+		break;
 	}
 
 	initUiMainFooter();
@@ -69,6 +75,8 @@ TestWindow::~TestWindow()
 	delete languageDarkPixmap;
 	delete backButtonLightPixmap;
 	delete backButtonDarkPixmap;
+	for (int i = 0; i < cableRows.size(); i++)
+		delete cableRows[i];
 }
 
 void TestWindow::initUiMain()
@@ -201,6 +209,41 @@ void TestWindow::initUiMainFooter()
 	reportHLayout->addWidget(reportButton);
 }
 
+void TestWindow::generateRowsInteractionButtons(TableRowProperties* rowTable)
+{
+	mainTableWidget->setRowCount(cableRows.size());
+
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+		break;
+
+	case WindowType::OUT_TEST_MANUAL_STAND:
+		break;
+
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		break;
+
+	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::IN_AUTO_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+		break;
+
+	case WindowType::FULL_TEST_AUTO_STAND:
+		break;
+
+	default:
+		break;
+	}
+}
+
 void TestWindow::resizeEvent(QResizeEvent* event)
 {
 	viewWindowState->appSize.width = geometry().width();
@@ -267,6 +310,9 @@ void TestWindow::initTexts()
 			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
 			break;
+
+		default:
+			break;
 		}
 		break;
 
@@ -308,6 +354,9 @@ void TestWindow::initTexts()
 			fullTestAutoStandConnectButton->setText(QString("Stand connected"));
 			fullTestAutoStandStartTestButton->setText(QString("Start"));
 			fullTestAutoStandSortButton->setText(QString("Sort: num"));
+			break;
+
+		default:
 			break;
 		}
 		break;
@@ -441,6 +490,9 @@ void TestWindow::resetTheme()
 		case WindowType::FULL_TEST_AUTO_STAND:
 			fullTestAutoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyle);
 			break;
+
+		default:
+			break;
 		}
 		break;
 
@@ -488,6 +540,9 @@ void TestWindow::resetTheme()
 
 		case WindowType::FULL_TEST_AUTO_STAND:
 			fullTestAutoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyle);
+			break;
+
+		default:
 			break;
 		}
 		break;
@@ -552,6 +607,9 @@ void TestWindow::resetLanguage()
 			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка: по нумерации"));
 			break;
+
+		default:
+			break;
 		}
 		break;
 
@@ -608,6 +666,9 @@ void TestWindow::resetLanguage()
 			parentFrame->setTitle(WindowType::FULL_TEST_AUTO_STAND);
 			fullTestAutoStandStartTestButton->setText(QString("Start"));
 			fullTestAutoStandSortButton->setText(QString("Sort: num"));
+			break;
+
+		default:
 			break;
 		}
 		break;
