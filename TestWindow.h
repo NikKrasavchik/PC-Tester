@@ -15,6 +15,8 @@
 #include "can.h"
 #include "twoThread.h"
 
+#include <QDebug>
+
 #define COLOUMN_CONNECTOR	0
 #define COLOUMN_PIN			1
 #define COLOUMN_NAME		2
@@ -192,6 +194,7 @@ private:
 	void fillTestTimeComboBoxes();
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void generateRowsInteractionButtons(TestTableRowProperties* rowTable);
+	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget, QWidget* moreCellWidget);
 
 	void resizeEvent(QResizeEvent* event);
 

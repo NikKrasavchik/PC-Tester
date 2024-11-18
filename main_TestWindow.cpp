@@ -796,3 +796,90 @@ void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboB
 		comboBox->addItem(QString("Check duration: 30 seconds"));
 	}
 }
+
+void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget, QWidget* moreCellWidget)
+{	
+	interactionButtonsWidget->setObjectName("interactionButtonsWidget");
+	QVBoxLayout* interactionButtonsCellVLayout = new QVBoxLayout(interactionButtonsWidget);
+	interactionButtonsCellVLayout->setObjectName("interactionButtonsCellVLayout");
+
+	if (cableRows[currentRowNum]->type == "DIGITAL")
+	{
+		QHBoxLayout* interactionButtonsCellHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellHLayout->setObjectName("interactionButtonsCellHLayout");
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellHLayout);
+		interactionButtonsCellHLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton);
+		interactionButtonsCellHLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton);
+
+		connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
+		connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
+
+		mainTableWidget->setRowHeight(currentRowNum, 50);
+	}
+	else if (cableRows[currentRowNum]->type == "PWM")
+	{
+		QHBoxLayout* interactionButtonsCellFirstHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellFirstHLayout->setObjectName("interactionButtonsCellFirstHLayout");
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellFirstHLayout);
+		QHBoxLayout* interactionButtonsCellSecondHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellSecondHLayout->setObjectName("interactionButtonsCellSecondHLayout");
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellSecondHLayout);
+
+		interactionButtonsCellFirstHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load0Button);
+		interactionButtonsCellFirstHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load25Button);
+		interactionButtonsCellSecondHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load50Button);
+		interactionButtonsCellSecondHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button);
+		interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button);
+
+		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load0Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load0Button_clicked);
+		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load25Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load25Button_clicked);
+		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load50Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load50Button_clicked);
+		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load75Button_clicked);
+		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load100Button_clicked);
+
+		mainTableWidget->setRowHeight(currentRowNum, 100);
+	}
+	else if (cableRows[currentRowNum]->type == "VNH")
+	{
+		QHBoxLayout* interactionButtonsCellFirstHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellFirstHLayout->setObjectName("interactionButtonsCellFirstHLayout");
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellFirstHLayout);
+		QHBoxLayout* interactionButtonsCellSecondHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellSecondHLayout->setObjectName("interactionButtonsCellSecondHLayout");
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellSecondHLayout);
+		QHBoxLayout* interactionButtonsCellThirdHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellThirdHLayout->setObjectName("interactionButtonsCellThirdHLayout");
+
+		interactionButtonsCellFirstHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button);
+		interactionButtonsCellFirstHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button);
+		interactionButtonsCellSecondHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load50Button);
+		interactionButtonsCellSecondHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button);
+		interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button);
+		interactionButtonsCellThirdHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton);
+		interactionButtonsCellThirdHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton);
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellThirdHLayout);
+
+		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load0Button_clicked);
+		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load25Button_clicked);
+		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load50Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load50Button_clicked);
+		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load75Button_clicked);
+		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load100Button_clicked);
+		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
+		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
+
+		mainTableWidget->setRowHeight(currentRowNum, 150);
+	}
+
+	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
+	interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);
+
+	cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
+	cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
+
+	moreCellWidget->setObjectName("deleteCellWidget");
+	QHBoxLayout* moreCellHLayout = new QHBoxLayout(moreCellWidget);
+	moreCellHLayout->setObjectName("deleteCellWidget");
+	moreCellHLayout->addWidget(cableRows[currentRowNum]->moreButton);
+	moreCellHLayout->setContentsMargins(0, 0, 0, 0);
+	moreCellWidget->setLayout(moreCellHLayout);
+}
