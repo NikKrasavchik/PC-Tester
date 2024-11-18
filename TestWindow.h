@@ -47,6 +47,32 @@ struct VNHButtons
 	QPushButton* load100Button;
 };
 
+
+class TestTableRowProperties : public QObject
+{
+	Q_OBJECT
+
+public:
+	QString connector;
+	QString pin;
+	QString name;
+	QString direction;
+	QString type;
+	void* buttons;
+	QPushButton* moreButton;
+
+	void generateInteractionButtons(int type);
+
+public slots:
+	void on_onButton_clicked();
+	void on_offButton_clicked();
+	void on_load0Button_clicked();
+	void on_load25Button_clicked();
+	void on_load50Button_clicked();
+	void on_load75Button_clicked();
+	void on_load100Button_clicked();
+};
+
 class TestWindow : public QDialog
 {
 	Q_OBJECT
@@ -59,29 +85,6 @@ public:
 	void setParentFrame(WindowFrame* parentFrame);
 
 private:
-
-	class TableRowProperties
-	{
-		//Q_OBJECT
-	public:
-		QString connector;
-		QString pin;
-		QString name;
-		QString direction;
-		QString type;
-		void* buttons;
-		QPushButton* moreButton;
-
-		//public slots:
-		void generateInteractionButtons(int type);
-		void on_onButton_clicked();
-		void on_offButton_clicked();
-		void on_load0Button_clicked();
-		void on_load25Button_clicked();
-		void on_load50Button_clicked();
-		void on_load75Button_clicked();
-		void on_load100Button_clicked();
-	};
 
 	Ui::TestWindowClass ui;
 	WindowFrame* parentFrame;
@@ -139,7 +142,7 @@ private:
 	QString fileName;
 	WindowType testType;
 	Can* can;
-	std::vector<TableRowProperties*> cableRows;
+	std::vector<TestTableRowProperties*> cableRows;
 	autoStandTwoThread* th;
 
 	void initUiMain();
@@ -188,7 +191,7 @@ private:
 	void sortRows();
 	void fillTestTimeComboBoxes();
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
-	void generateRowsInteractionButtons(TableRowProperties* rowTable);
+	void generateRowsInteractionButtons(TestTableRowProperties* rowTable);
 
 	void resizeEvent(QResizeEvent* event);
 

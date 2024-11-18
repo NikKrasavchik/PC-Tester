@@ -214,7 +214,7 @@ void TestWindow::initUiMainFooter()
 	reportHLayout->addWidget(reportButton);
 }
 
-void TestWindow::generateRowsInteractionButtons(TableRowProperties* rowTable)
+void TestWindow::generateRowsInteractionButtons(TestTableRowProperties* rowTable)
 {
 	mainTableWidget->setRowCount(cableRows.size());
 
