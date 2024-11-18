@@ -13,6 +13,7 @@
 #include "WindowFrame.h"
 #include "Components.h"
 #include "can.h"
+#include "twoThread.h"
 
 #define COLOUMN_CONNECTOR	0
 #define COLOUMN_PIN			1
@@ -139,6 +140,7 @@ private:
 	WindowType testType;
 	Can* can;
 	std::vector<TableRowProperties*> cableRows;
+	autoStandTwoThread* th;
 
 	void initUiMain();
 	void initUiMainHeader();

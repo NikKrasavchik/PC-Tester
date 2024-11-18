@@ -128,6 +128,7 @@
     <ClCompile Include="qsliderbutton.cpp" />
     <ClCompile Include="StyleSheets.cpp" />
     <ClCompile Include="TestWindowProc.cpp" />
+    <ClCompile Include="twoThread.cpp" />
     <ClCompile Include="WindowFrame.cpp" />
     <QtRcc Include="resources\resources.qrc" />
     <QtUic Include="ConfiguratorWindow.ui" />
@@ -144,6 +145,7 @@
   <ItemGroup>
     <ClInclude Include="can.h" />
     <ClInclude Include="Components.h" />
+    <QtMoc Include="twoThread.h" />
     <QtMoc Include="ConfiguratorWindow.h" />
     <QtMoc Include="WindowFrame.h" />
     <QtMoc Include="TestWindow.h" />

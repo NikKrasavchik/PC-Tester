@@ -100,6 +100,9 @@
     <ClCompile Include="can.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="twoThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
@@ -112,6 +115,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="TestWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="twoThread.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

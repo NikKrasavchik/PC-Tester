@@ -15,8 +15,19 @@ public:
 	void initCan();
 	void deinitCan();
 
-	void sendCan(int id, int* msg);
-	void receiveCan();
+	void writeCan(int id, int* msg);
+	// ------------------------------------
+	// Name: readWaitCan
+	// Varibals:
+	//			int* id - указатель на переменную в которую запишеться id пришедшего can-сообщения.
+	//			int* msg - указатель на переменную в которую запишеться сообщение пришедшее из can.
+	//			int  timeout - время в миллисикундах сколько мы будем ждать сообщение из can-шыны.
+	// Return: bool
+	//			false - в случае если за время timeout не пришло сообщение на can-шину.
+	//			true  - в случае если за время timeout пришло сообшение на can-шину.
+	// ------------------------------------
+	bool readWaitCan(int* id, int* msg, int timeout);
+	//bool readWaitCan(int* id, std::vector<int>* msg, int timeout);
 
 	void setAdapterNeme(QString adapter);
 	void setFrequency(QString frequency);

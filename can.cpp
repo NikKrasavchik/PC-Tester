@@ -35,19 +35,67 @@ void Can::deinitCan()
 	}
 }
 
-void Can::sendCan(int id, int* msg)
+void Can::writeCan(int id, int* msg)
 {
 	if (kvaser->activeAdapter != -1) // kvaser
 	{
-		canWrite(hnd, id, msg, 8, 0);
+		unsigned char msgSendKvase[8];
+		for (int i = 0; i < 8; i++)
+			msgSendKvase[i] = msg[i];
+
+		canWrite(hnd, id, msgSendKvase, 8, 0);
 	}
 	else
 	{
 	}
 }
 
-void Can::receiveCan()
+//bool Can::readWaitCan(int* id, std::vector<int>* msg, int timeout)
+//{
+//	if (kvaser->activeAdapter != -1) // kvaser
+//	{
+//		unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
+//		unsigned long* timestamp = new unsigned long();
+//		unsigned char msgReceive[8] = { 0, };
+//
+//		*id = -1;
+//		canReadWait(hnd, (long*)id, msgReceive, dlc, flags, timestamp, timeout);
+//		if (*id != -1)
+//		{
+//			for (int i = 0; i < 8; i++)
+//				msg->push_back(msgReceive[i]);
+//			return true;
+//		}
+//		else
+//			return false;
+//	}
+//	else
+//	{
+//	}
+//}
+
+bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
+	if (kvaser->activeAdapter != -1) // kvaser
+	{
+		unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
+		unsigned long* timestamp = new unsigned long();
+		unsigned char msgReceive[8] = { 0, };
+
+		*id = -1;
+		canReadWait(hnd, (long*)id, msgReceive, dlc, flags, timestamp, timeout);
+		if (*id != -1)
+		{
+			for (int i = 0; i < 8; i++)
+				msg[i] = msgReceive[i];
+			return true;
+		}
+		else
+			return false;
+	}
+	else
+	{
+	}
 }
 
 void Can::setAdapterNeme(QString adapter)

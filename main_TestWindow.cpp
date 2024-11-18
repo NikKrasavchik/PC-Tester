@@ -63,6 +63,9 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 	initIcons();
 	initConnections();
 	initStyles();
+
+	th = new autoStandTwoThread(can);
+	th->start();
 }
 
 TestWindow::~TestWindow()
@@ -78,6 +81,7 @@ TestWindow::~TestWindow()
 	delete backButtonDarkPixmap;
 	for (int i = 0; i < cableRows.size(); i++)
 		delete cableRows[i];
+	th->terminate();
 }
 
 void TestWindow::initUiMain()
