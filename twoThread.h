@@ -27,9 +27,12 @@ public:
 
 	explicit AutoStandTwoThread(Can* can);
 
-	//autoStandTwoThread(Can* can);
+	//AutoStandTwoThread(Can* can);
 
 	void run();
+
+public slots:
+	void msgToTwoThreadStartTest(int pad, int pin, int digValue, int pwmValue);
 
 signals:
 	void msgToTestWindowStatusConnect(bool statusConnect);

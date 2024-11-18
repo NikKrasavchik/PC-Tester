@@ -78,3 +78,12 @@ void AutoStandTwoThread::run()
 		}
 	}
 }
+
+void AutoStandTwoThread::msgToTwoThreadStartTest(int pad, int pin, int digValue, int pwmValue)
+{
+	if (standConected)
+	{
+		int msgSendConnect[8] = { pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
+		can->writeCan(SEND_ID_CAN, msgSendConnect);
+	}
+}

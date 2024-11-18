@@ -9,6 +9,9 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 	this->can = can;
 	standConected = false;
 
+	th = new AutoStandTwoThread(can);
+	connect(th, &AutoStandTwoThread::msgToTestWindowStatusConnect, this, &TestWindow::msgToTestWindowStatusConnect);
+
 	initUiMain();
 	initUiMainHeader();
 	initUiTable();
@@ -63,11 +66,6 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 	initIcons();
 	initConnections();
 	initStyles();
-
-	th = new AutoStandTwoThread(can);
-	connect(th, &AutoStandTwoThread::msgToTestWindowStatusConnect, this, &TestWindow::msgToTestWindowStatusConnect);
-
-	th->start();
 }
 
 TestWindow::~TestWindow()
@@ -802,7 +800,7 @@ void TestWindow::msgToTestWindowStatusConnect(bool statusConnect)
 }
 
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget, QWidget* moreCellWidget)
-{	
+{
 	interactionButtonsWidget->setObjectName("interactionButtonsWidget");
 	QVBoxLayout* interactionButtonsCellVLayout = new QVBoxLayout(interactionButtonsWidget);
 	interactionButtonsCellVLayout->setObjectName("interactionButtonsCellVLayout");
@@ -873,6 +871,9 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 		mainTableWidget->setRowHeight(currentRowNum, 150);
 	}
+
+	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest, th, &AutoStandTwoThread::msgToTwoThreadStartTest);
+	th->start();
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
 	interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);

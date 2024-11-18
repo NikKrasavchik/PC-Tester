@@ -49,7 +49,6 @@ struct VNHButtons
 	QPushButton* load100Button;
 };
 
-
 class TestTableRowProperties : public QObject
 {
 	Q_OBJECT
@@ -73,6 +72,9 @@ public slots:
 	void on_load50Button_clicked();
 	void on_load75Button_clicked();
 	void on_load100Button_clicked();
+
+signals:
+	void msgToTwoThreadStartTest(int pad, int pin, int digValue, int pwmValue);
 };
 
 class TestWindow : public QDialog
@@ -145,7 +147,7 @@ private:
 	WindowType testType;
 	Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
-	autoStandTwoThread* th;
+	AutoStandTwoThread* th;
 
 	void initUiMain();
 	void initUiMainHeader();

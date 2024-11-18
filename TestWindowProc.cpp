@@ -156,29 +156,35 @@ void TestTableRowProperties::generateInteractionButtons(int type)
 
 void TestTableRowProperties::on_onButton_clicked()
 {
-	QString t = this->pin;
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), 1, -1);
 }
 
 void TestTableRowProperties::on_offButton_clicked()
 {
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), 0, -1);
 }
 
 void TestTableRowProperties::on_load0Button_clicked()
 {
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 0);
 }
 
 void TestTableRowProperties::on_load25Button_clicked()
 {
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 64);
 }
 
 void TestTableRowProperties::on_load50Button_clicked()
 {
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 128);
 }
 
 void TestTableRowProperties::on_load75Button_clicked()
 {
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 192);
 }
 
 void TestTableRowProperties::on_load100Button_clicked()
 {
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 255);
 }

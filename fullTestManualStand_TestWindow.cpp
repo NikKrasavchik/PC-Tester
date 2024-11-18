@@ -2,6 +2,7 @@
 
 #define COLOUMN_DIRECTION	3
 #define COLOUMN_TYPE		4
+#define COLOUMN_CHECK		5
 #define COLOUMN_MORE		7
 
 void TestWindow::initUiFullTestManualStand()
@@ -25,30 +26,25 @@ void TestWindow::initUiTableFullTestManualStand()
 		<< QString::fromLocal8Bit("Название")
 		<< QString::fromLocal8Bit("Направленность") // ???
 		<< QString::fromLocal8Bit("Тип")
-		<< ""
+		<< QString::fromLocal8Bit("Проверка")
 		<< QString::fromLocal8Bit("Статус")
 		<< QString::fromLocal8Bit("Подробнее"));
 
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
+		qDebug() << cableRows[currentRowNum]->connector << cableRows[currentRowNum]->pin << cableRows[currentRowNum]->name << cableRows[currentRowNum]->direction << cableRows[currentRowNum]->type;
+
 		model->setData(model->index(currentRowNum, COLOUMN_CONNECTOR), cableRows[currentRowNum]->connector);
 		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), cableRows[currentRowNum]->direction);
 		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
-		cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
-		cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
-
+		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		moreCellWidget->setObjectName("deleteCellWidget");
-		QHBoxLayout* moreCellLayout = new QHBoxLayout(moreCellWidget);
-		moreCellLayout->setObjectName("deleteCellWidget");
-		moreCellLayout->addWidget(cableRows[currentRowNum]->moreButton);
-		moreCellLayout->setContentsMargins(0, 0, 0, 0);
-		moreCellWidget->setLayout(moreCellLayout);
-
+		initTableRowButtons(currentRowNum, interactionButtonsWidget, moreCellWidget);
+		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }
