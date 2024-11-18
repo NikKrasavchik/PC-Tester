@@ -731,11 +731,7 @@ void MainWindow::initConnections()
 
 void MainWindow::switchStyleMainButtons()
 {
-#ifdef DEBUG
-	if (true)
-#else
 	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
-#endif // DEBUG
 	{
 		if (viewWindowState->appTheme == LIGHT_THEME)
 		{

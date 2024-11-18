@@ -64,7 +64,9 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 	initConnections();
 	initStyles();
 
-	th = new autoStandTwoThread(can);
+	th = new AutoStandTwoThread(can);
+	connect(th, &AutoStandTwoThread::msgToTestWindowStatusConnect, this, &TestWindow::msgToTestWindowStatusConnect);
+
 	th->start();
 }
 
@@ -446,11 +448,6 @@ void TestWindow::on_switchLanguageButton_clicked()
 
 void TestWindow::on_reportButton_clicked()
 {
-	// ѕ≈–≈ƒ≈Ћј“№ - надо перенести в слот срабатывающий от сигнала второго потока о том что стенд подключЄн или откючен
-	standConected = !standConected;
-	resetLanguage();
-	resetTheme();
-	//
 }
 
 void TestWindow::resetTheme()
@@ -795,4 +792,11 @@ void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboB
 		comboBox->addItem(QString("Check duration: 25 seconds"));
 		comboBox->addItem(QString("Check duration: 30 seconds"));
 	}
+}
+
+void TestWindow::msgToTestWindowStatusConnect(bool statusConnect)
+{
+	standConected = !standConected;
+	resetLanguage();
+	resetTheme();
 }

@@ -12,17 +12,27 @@
 
 class TestWindow;
 
-class autoStandTwoThread : public QThread
+enum MsgType
+{
+	CONNECT,
+	DISCONNECT,
+	TEST
+};
+
+class AutoStandTwoThread : public QThread
 {
 	Q_OBJECT
 
 public:
 
-	explicit autoStandTwoThread(Can* can);
+	explicit AutoStandTwoThread(Can* can);
 
 	//autoStandTwoThread(Can* can);
 
 	void run();
+
+signals:
+	void msgToTestWindowStatusConnect(bool statusConnect);
 
 private:
 

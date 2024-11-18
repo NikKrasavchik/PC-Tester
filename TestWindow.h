@@ -140,7 +140,7 @@ private:
 	WindowType testType;
 	Can* can;
 	std::vector<TableRowProperties*> cableRows;
-	autoStandTwoThread* th;
+	AutoStandTwoThread* th;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -210,4 +210,7 @@ private slots:
 	void on_fullTestAutoStandConnectButton_clicked();
 	void on_fullTestAutoStandStartTestButton_clicked();
 	void on_fullTestAutoStandSortButton_clicked();
+
+	// twoThread
+	void msgToTestWindowStatusConnect(bool statusConnect);
 };
