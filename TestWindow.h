@@ -8,6 +8,7 @@
 #include <QTableWidget>
 #include <QLineEdit>
 #include <QComboBox>
+#include <QHeaderView>
 
 #include "ui_TestWindow.h"
 #include "WindowFrame.h"
@@ -20,6 +21,16 @@
 #define COLOUMN_CONNECTOR	0
 #define COLOUMN_PIN			1
 #define COLOUMN_NAME		2
+
+#define COLOUMN_CONNECTOR_WIDTH	60
+#define COLOUMN_PIN_WIDTH		40
+#define COLOUMN_DIRECTION_WIDTH	90
+#define COLOUMN_TYPE_WIDTH		60
+#define COLOUMN_CHECK_WIDTH		160
+#define COLOUMN_STATUS_WIDTH	60
+#define COLOUMN_STAND_WIDTH		60
+#define COLOUMN_PC_WIDTH		60
+#define COLOUMN_MORE_WIDTH		25
 
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
@@ -184,27 +195,43 @@ private:
 
 	void initUiInTestManualStand();
 	void initUiTableInTestManualStand();
+	void initUiTableHeaderInTestManualStand();
+	void initUiTableRowsInTestManualStand();
 
 	void initUiOutTestManualStand();
 	void initUiTableOutTestManualStand();
+	void initUiTableHeaderOutTestManualStand();
+	void initUiTableRowsOutTestManualStand();
 
 	void initUiFullTestManualStand();
 	void initUiTableFullTestManualStand();
+	void initUiTableHeaderFullTestManualStand();
+	void initUiTableRowsFullTestManualStand();
 
 	void initUiInManualTestAutoStand();
 	void initUiTableInManualTestAutoStand();
+	void initUiTableHeaderInManualTestAutoStand();
+	void initUiTableRowsInManualTestAutoStand();
 
 	void initUiOutManualTestAutoStand();
 	void initUiTableOutManualTestAutoStand();
+	void initUiTableHeaderOutManualTestAutoStand();
+	void initUiTableRowsOutManualTestAutoStand();
 
 	void initUiInAutoTestAutoStand();
 	void initUiTableInAutoTestAutoStand();
+	void initUiTableHeaderInAutoTestAutoStand();
+	void initUiTableRowsInAutoTestAutoStand();
 
 	void initUiOutAutoTestAutoStand();
 	void initUiTableOutAutoTestAutoStand();
+	void initUiTableHeaderOutAutoTestAutoStand();
+	void initUiTableRowsOutAutoTestAutoStand();
 
 	void initUiFullTestAutoStand();
 	void initUiTableFullTestAutoStand();
+	void initUiTableHeaderFullTestAutoStand();
+	void initUiTableRowsFullTestAutoStand();
 
 	void resetTheme();
 	void resetLanguage();
