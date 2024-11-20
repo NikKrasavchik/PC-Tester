@@ -807,7 +807,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 	QVBoxLayout* interactionButtonsCellVLayout = new QVBoxLayout(interactionButtonsWidget);
 	interactionButtonsCellVLayout->setObjectName("interactionButtonsCellVLayout");
 
-	if (cableRows[currentRowNum]->type == "DIGITAL")
+	if (cableRows[currentRowNum]->type == "DIGITAL" && cableRows[currentRowNum]->direction == "OUT")
 	{
 		QHBoxLayout* interactionButtonsCellHLayout = new QHBoxLayout(interactionButtonsWidget);
 		interactionButtonsCellHLayout->setObjectName("interactionButtonsCellHLayout");

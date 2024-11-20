@@ -1,8 +1,11 @@
 #include "TestWindow.h"
 
+#define COLOUMN_COUNT		8
+
 #define COLOUMN_DIRECTION	3
 #define COLOUMN_TYPE		4
 #define COLOUMN_CHECK		5
+#define COLOUMN_STATUS		6
 #define COLOUMN_MORE		7
 
 void TestWindow::initUiFullTestManualStand()
@@ -19,19 +22,44 @@ void TestWindow::initUiFullTestManualStand()
 
 void TestWindow::initUiTableFullTestManualStand()
 {
+	initUiTableHeaderFullTestManualStand();
+	initUiTableRowsFullTestManualStand();
+}
+
+void TestWindow::initUiTableHeaderFullTestManualStand()
+{
 	mainTableWidget->setRowCount(cableRows.size());
-	mainTableWidget->setColumnCount(8);
-	mainTableWidget->setHorizontalHeaderLabels(QStringList() << QString::fromLocal8Bit("Разъём")
+	mainTableWidget->setColumnCount(COLOUMN_COUNT);
+	mainTableWidget->setHorizontalHeaderLabels(QStringList() 
+		<< QString::fromLocal8Bit("Разъём")
 		<< QString::fromLocal8Bit("Пин")
 		<< QString::fromLocal8Bit("Название")
-		<< QString::fromLocal8Bit("Направленность") // ???
+		<< QString::fromLocal8Bit("Направление") // ???
 		<< QString::fromLocal8Bit("Тип")
 		<< QString::fromLocal8Bit("Проверка")
 		<< QString::fromLocal8Bit("Статус")
 		<< "");
+	 
+	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_DIRECTION,	COLOUMN_DIRECTION_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_CHECK_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_STATUS,		COLOUMN_STATUS_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
 
-	mainTableWidget->setColumnWidth(COLOUMN_MORE, 25);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CONNECTOR,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PIN,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_NAME,			QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_DIRECTION,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_TYPE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CHECK,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_STATUS,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
+}
 
+void TestWindow::initUiTableRowsFullTestManualStand()
+{
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{

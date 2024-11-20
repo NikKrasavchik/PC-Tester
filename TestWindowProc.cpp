@@ -85,6 +85,8 @@ void TestTableRowProperties::generateInteractionButtons(int type)
 	switch (type)
 	{
 	case TYPE_DIGITAL:
+		if (direction == "OUT")
+		{
 		buttons = new DigitalButtons();
 
 		((DigitalButtons*)buttons)->onButton = new QPushButton();
@@ -98,6 +100,7 @@ void TestTableRowProperties::generateInteractionButtons(int type)
 		((DigitalButtons*)buttons)->offButton->setText("off");
 		((DigitalButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 		((DigitalButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+		}
 		break;
 
 	case TYPE_PWM:
