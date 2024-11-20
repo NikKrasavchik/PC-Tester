@@ -86,67 +86,98 @@ void TestTableRowProperties::generateInteractionButtons(int type)
 	{
 	case TYPE_DIGITAL:
 		buttons = new DigitalButtons();
+
 		((DigitalButtons*)buttons)->onButton = new QPushButton();
 		((DigitalButtons*)buttons)->onButton->setObjectName("onButton");
 		((DigitalButtons*)buttons)->onButton->setText("on");
+		((DigitalButtons*)buttons)->onButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((DigitalButtons*)buttons)->onButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((DigitalButtons*)buttons)->offButton = new QPushButton();
 		((DigitalButtons*)buttons)->offButton->setObjectName("offButton");
 		((DigitalButtons*)buttons)->offButton->setText("off");
+		((DigitalButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((DigitalButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 		break;
 
 	case TYPE_PWM:
 		buttons = new PWMButtons();
+
 		((PWMButtons*)buttons)->load0Button = new QPushButton();
 		((PWMButtons*)buttons)->load0Button->setObjectName("load0Button");
 		((PWMButtons*)buttons)->load0Button->setText("0");
+		((PWMButtons*)buttons)->load0Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((PWMButtons*)buttons)->load0Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((PWMButtons*)buttons)->load25Button = new QPushButton();
 		((PWMButtons*)buttons)->load25Button->setObjectName("load25Button");
 		((PWMButtons*)buttons)->load25Button->setText("25");
+		((PWMButtons*)buttons)->load25Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((PWMButtons*)buttons)->load25Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((PWMButtons*)buttons)->load50Button = new QPushButton();
 		((PWMButtons*)buttons)->load50Button->setObjectName("load50Button");
 		((PWMButtons*)buttons)->load50Button->setText("50");
+		((PWMButtons*)buttons)->load50Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((PWMButtons*)buttons)->load50Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((PWMButtons*)buttons)->load75Button = new QPushButton();
 		((PWMButtons*)buttons)->load75Button->setObjectName("load75Button");
 		((PWMButtons*)buttons)->load75Button->setText("75");
+		((PWMButtons*)buttons)->load75Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((PWMButtons*)buttons)->load75Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((PWMButtons*)buttons)->load100Button = new QPushButton();
 		((PWMButtons*)buttons)->load100Button->setObjectName("load100Button");
 		((PWMButtons*)buttons)->load100Button->setText("100");
+		((PWMButtons*)buttons)->load100Button->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
+		((PWMButtons*)buttons)->load100Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 		break;
 
 	case TYPE_VNH:
 		buttons = new VNHButtons();
-		((VNHButtons*)buttons)->onButton = new QPushButton();
-		((VNHButtons*)buttons)->onButton->setObjectName("onButton");
-		((VNHButtons*)buttons)->onButton->setText("on");
-
-		((VNHButtons*)buttons)->offButton = new QPushButton();
-		((VNHButtons*)buttons)->offButton->setObjectName("offButton");
-		((DigitalButtons*)buttons)->offButton->setText("off");
 
 		((VNHButtons*)buttons)->load0Button = new QPushButton();
 		((VNHButtons*)buttons)->load0Button->setObjectName("load0Button");
 		((VNHButtons*)buttons)->load0Button->setText("0");
+		((VNHButtons*)buttons)->load0Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((VNHButtons*)buttons)->load0Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((VNHButtons*)buttons)->load25Button = new QPushButton();
 		((VNHButtons*)buttons)->load25Button->setObjectName("load25Button");
 		((VNHButtons*)buttons)->load25Button->setText("25");
+		((VNHButtons*)buttons)->load25Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((VNHButtons*)buttons)->load25Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((VNHButtons*)buttons)->load50Button = new QPushButton();
 		((VNHButtons*)buttons)->load50Button->setObjectName("load50Button");
 		((VNHButtons*)buttons)->load50Button->setText("50");
+		((VNHButtons*)buttons)->load50Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((VNHButtons*)buttons)->load50Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((VNHButtons*)buttons)->load75Button = new QPushButton();
 		((VNHButtons*)buttons)->load75Button->setObjectName("load75Button");
 		((VNHButtons*)buttons)->load75Button->setText("75");
+		((VNHButtons*)buttons)->load75Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((VNHButtons*)buttons)->load75Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
 		((VNHButtons*)buttons)->load100Button = new QPushButton();
 		((VNHButtons*)buttons)->load100Button->setObjectName("load100Button");
 		((VNHButtons*)buttons)->load100Button->setText("100");
+		((VNHButtons*)buttons)->load100Button->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
+		((VNHButtons*)buttons)->load100Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+		((VNHButtons*)buttons)->onButton = new QPushButton();
+		((VNHButtons*)buttons)->onButton->setObjectName("onButton");
+		((VNHButtons*)buttons)->onButton->setText("on");
+		((VNHButtons*)buttons)->onButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((VNHButtons*)buttons)->onButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+		((VNHButtons*)buttons)->offButton = new QPushButton();
+		((VNHButtons*)buttons)->offButton->setObjectName("offButton");
+		((VNHButtons*)buttons)->offButton->setText("off");
+		((VNHButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+		((VNHButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 		break;
 
 	default:

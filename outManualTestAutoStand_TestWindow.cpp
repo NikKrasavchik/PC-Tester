@@ -31,7 +31,9 @@ void TestWindow::initUiTableOutManualTestAutoStand()
 		<< QString::fromLocal8Bit("Проверка")
 		<< QString::fromLocal8Bit("Стенд")
 		<< QString::fromLocal8Bit("ПК")
-		<< QString::fromLocal8Bit("Подробнее"));
+		<< "");
+
+	mainTableWidget->setColumnWidth(COLOUMN_MORE, 25);
 
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)

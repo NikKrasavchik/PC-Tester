@@ -18,6 +18,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 
 	initLightStyleSheets();
 	initDarkStyleSheets();
+	initRecources();
 
 	generateCableRows(testType, cables);
 
@@ -62,7 +63,6 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 	initUiMainFooter();
 
 	initTexts();
-	initRecources();
 	initIcons();
 	initConnections();
 	initStyles();
@@ -267,6 +267,8 @@ void TestWindow::initRecources()
 	languageDarkPixmap = new QPixmap(":/Dark/icons/Language_White.png");
 	backButtonLightPixmap = new QPixmap(":/Light/icons/Back_Black.png");
 	backButtonDarkPixmap = new QPixmap(":/Dark/icons/Back_White.png");
+	moreButtonLightPixmap = new QPixmap(":/Light/icons/More_Black.svg");
+	moreButtonDarkPixmap = new QPixmap(":/Dark/icons/More_White.svg");
 }
 
 void TestWindow::initTexts()
@@ -810,8 +812,16 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 		QHBoxLayout* interactionButtonsCellHLayout = new QHBoxLayout(interactionButtonsWidget);
 		interactionButtonsCellHLayout->setObjectName("interactionButtonsCellHLayout");
 		interactionButtonsCellVLayout->addLayout(interactionButtonsCellHLayout);
+
+		QSpacerItem* leftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+		QSpacerItem* middleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+		QSpacerItem* rightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+
+		interactionButtonsCellHLayout->addItem(leftSpacer);
 		interactionButtonsCellHLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton);
+		interactionButtonsCellHLayout->addItem(middleSpacer);
 		interactionButtonsCellHLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton);
+		interactionButtonsCellHLayout->addItem(rightSpacer);
 
 		connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
 		connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
@@ -826,12 +836,28 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 		QHBoxLayout* interactionButtonsCellSecondHLayout = new QHBoxLayout(interactionButtonsWidget);
 		interactionButtonsCellSecondHLayout->setObjectName("interactionButtonsCellSecondHLayout");
 		interactionButtonsCellVLayout->addLayout(interactionButtonsCellSecondHLayout);
+		QHBoxLayout* interactionButtonsCellThirdHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellThirdHLayout->setObjectName("interactionButtonsCellThirdHLayout");
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellThirdHLayout);
 
+		QSpacerItem* firstLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+		QSpacerItem* firstMiddleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+		QSpacerItem* firstRightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+		QSpacerItem* secondLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+		QSpacerItem* secondMiddleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+		QSpacerItem* secondRightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+
+		interactionButtonsCellFirstHLayout->addItem(firstLeftSpacer);
 		interactionButtonsCellFirstHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load0Button);
+		interactionButtonsCellFirstHLayout->addItem(firstMiddleSpacer);
 		interactionButtonsCellFirstHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load25Button);
+		interactionButtonsCellFirstHLayout->addItem(firstRightSpacer);
+		interactionButtonsCellSecondHLayout->addItem(secondLeftSpacer);
 		interactionButtonsCellSecondHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load50Button);
+		interactionButtonsCellSecondHLayout->addItem(secondMiddleSpacer);
 		interactionButtonsCellSecondHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button);
-		interactionButtonsCellVLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button);
+		interactionButtonsCellSecondHLayout->addItem(secondRightSpacer);
+		interactionButtonsCellThirdHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button);
 
 		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load0Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load0Button_clicked);
 		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load25Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load25Button_clicked);
@@ -839,7 +865,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load75Button_clicked);
 		connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load100Button_clicked);
 
-		mainTableWidget->setRowHeight(currentRowNum, 100);
+		mainTableWidget->setRowHeight(currentRowNum, 128);
 	}
 	else if (cableRows[currentRowNum]->type == "VNH")
 	{
@@ -851,15 +877,37 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 		interactionButtonsCellVLayout->addLayout(interactionButtonsCellSecondHLayout);
 		QHBoxLayout* interactionButtonsCellThirdHLayout = new QHBoxLayout(interactionButtonsWidget);
 		interactionButtonsCellThirdHLayout->setObjectName("interactionButtonsCellThirdHLayout");
-
-		interactionButtonsCellFirstHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button);
-		interactionButtonsCellFirstHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button);
-		interactionButtonsCellSecondHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load50Button);
-		interactionButtonsCellSecondHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button);
-		interactionButtonsCellVLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button);
-		interactionButtonsCellThirdHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton);
-		interactionButtonsCellThirdHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton);
 		interactionButtonsCellVLayout->addLayout(interactionButtonsCellThirdHLayout);
+		QHBoxLayout* interactionButtonsCellFourthHLayout = new QHBoxLayout(interactionButtonsWidget);
+		interactionButtonsCellFourthHLayout->setObjectName("interactionButtonsCellFourthHLayout");
+		interactionButtonsCellVLayout->addLayout(interactionButtonsCellFourthHLayout);
+
+		QSpacerItem* firstLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
+		QSpacerItem* firstMiddleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+		QSpacerItem* firstRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
+		QSpacerItem* secondLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
+		QSpacerItem* secondMiddleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+		QSpacerItem* secondRightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+		QSpacerItem* thirdLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+		QSpacerItem* thirdMiddleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
+		QSpacerItem* thirdRightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+
+		interactionButtonsCellFirstHLayout->addItem(firstLeftSpacer);
+		interactionButtonsCellFirstHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button);
+		interactionButtonsCellFirstHLayout->addItem(firstMiddleSpacer);
+		interactionButtonsCellFirstHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button);
+		interactionButtonsCellFirstHLayout->addItem(firstRightSpacer);
+		interactionButtonsCellSecondHLayout->addItem(secondLeftSpacer);
+		interactionButtonsCellSecondHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load50Button);
+		interactionButtonsCellSecondHLayout->addItem(secondMiddleSpacer);
+		interactionButtonsCellSecondHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button);
+		interactionButtonsCellSecondHLayout->addItem(secondRightSpacer);
+		interactionButtonsCellThirdHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button);
+		interactionButtonsCellFourthHLayout->addItem(thirdLeftSpacer);
+		interactionButtonsCellFourthHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton);
+		interactionButtonsCellFourthHLayout->addItem(thirdMiddleSpacer);
+		interactionButtonsCellFourthHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton);
+		interactionButtonsCellFourthHLayout->addItem(thirdRightSpacer);
 
 		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load0Button_clicked);
 		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load25Button_clicked);
@@ -869,7 +917,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
 		connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
 
-		mainTableWidget->setRowHeight(currentRowNum, 150);
+		mainTableWidget->setRowHeight(currentRowNum, 169);
 	}
 
 	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest, th, &AutoStandTwoThread::msgToTwoThreadStartTest);
@@ -880,6 +928,9 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 	cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
 	cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
+	cableRows[currentRowNum]->moreButton->setIcon(QIcon(*moreButtonLightPixmap));
+	cableRows[currentRowNum]->moreButton->setIconSize(QSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE));
+	cableRows[currentRowNum]->moreButton->setFixedSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE);
 
 	moreCellWidget->setObjectName("deleteCellWidget");
 	QHBoxLayout* moreCellHLayout = new QHBoxLayout(moreCellWidget);

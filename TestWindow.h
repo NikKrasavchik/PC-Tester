@@ -137,6 +137,8 @@ private:
 	QPixmap* languageDarkPixmap;
 	QPixmap* backButtonLightPixmap;
 	QPixmap* backButtonDarkPixmap;
+	QPixmap* moreButtonLightPixmap;
+	QPixmap* moreButtonDarkPixmap;
 
 	bool fullTestManualStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
 	bool fullTestAutoStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
