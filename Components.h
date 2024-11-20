@@ -92,6 +92,12 @@ struct ViewWindowState
 	Size appSize;
 };
 
+struct StandStatusFlags
+{
+	bool StatusConnected; // false - стенд отключён			true - стенд подключён
+	bool StatusTest;	  // false - тест не выполняеться	false - тест выполняется
+};
+
 enum class WindowType
 {
 	MAINWINDOW,

@@ -7,6 +7,7 @@
 //#define SEND_MSG_CONNECT(msg) {msg[0] = 0xAA, msg[1] = 0x0, msg[2] = 0xAA, msg[3] = 0x0, msg[4] = 0xAA, msg[5] = 0x0, msg[6] = 0xAA, msg[7] = 0x0}
 #define SEND_MSG_CONNECT				{0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, }
 #define SEND_MSG_CONNECT_PERIODICALLY	{0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0xFF, }
+#define SEND_MSG_DISCONNECT				{0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, }
 
 #define RECEIVE_ID_CAN 0x51
 
@@ -25,21 +26,25 @@ class AutoStandTwoThread : public QThread
 
 public:
 
-	explicit AutoStandTwoThread(Can* can);
-
-	//AutoStandTwoThread(Can* can);
+	explicit AutoStandTwoThread(Can* can, StandStatusFlags* statusFlags);
+	~AutoStandTwoThread();
 
 	void run();
 
+private:
+
+	struct nowTesting
+	{
+		int pad;
+		int pin;
+	};
+
+	nowTesting nowTesting;
+	Can* can;
+	StandStatusFlags* statusFlags;
 public slots:
 	void msgToTwoThreadStartTest(int pad, int pin, int digValue, int pwmValue);
 
 signals:
-	void msgToTestWindowStatusConnect(bool statusConnect);
-
-private:
-
-	Can* can;
-
-	bool standConected;
+	void msgToTestWindowStatusConnect(bool statusConnect, bool statusTest);
 };

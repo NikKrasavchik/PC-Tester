@@ -9,6 +9,8 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->connector = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
 		cableRows[i]->pin = QString::number(cables[i].pin);
 		cableRows[i]->name = cables[i].name;
+		cableRows[i]->stateDigital = -1;
+		cableRows[i]->statePWM = -1;
 
 		if (testType == WindowType::FULL_TEST_AUTO_STAND ||
 			testType == WindowType::FULL_TEST_MANUAL_STAND)
@@ -187,35 +189,71 @@ void TestTableRowProperties::generateInteractionButtons(int type)
 
 void TestTableRowProperties::on_onButton_clicked()
 {
-	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), 1, -1);
+	if (stateDigital == ON_BUTTON_PRESSED)
+		return;
+	// меняем стиль
+	stateDigital = ON_BUTTON_PRESSED;
+	sendSignal();
 }
 
 void TestTableRowProperties::on_offButton_clicked()
 {
-	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), 0, -1);
+	if (stateDigital == OFF_BUTTON_PRESSED)
+		return;
+	// меняем стиль
+	stateDigital = OFF_BUTTON_PRESSED;
+	sendSignal();
 }
 
 void TestTableRowProperties::on_load0Button_clicked()
 {
-	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 0);
+	if (statePWM == LOAD0_BUTTON_PRESSED)
+		return;
+	// меняем стиль
+	statePWM = LOAD0_BUTTON_PRESSED;
+	sendSignal();
 }
 
 void TestTableRowProperties::on_load25Button_clicked()
 {
-	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 64);
+	if (statePWM == LOAD25_BUTTON_PRESSED)
+		return;
+	// меняем стиль
+	statePWM = LOAD25_BUTTON_PRESSED;
+	sendSignal();
 }
 
 void TestTableRowProperties::on_load50Button_clicked()
 {
-	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 128);
+	if (statePWM == LOAD50_BUTTON_PRESSED)
+		return;
+	// меняем стиль
+	statePWM = LOAD50_BUTTON_PRESSED;
+	sendSignal();
 }
 
 void TestTableRowProperties::on_load75Button_clicked()
 {
-	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 192);
+	if (statePWM == LOAD75_BUTTON_PRESSED)
+		return;
+	// меняем стиль
+	statePWM = LOAD75_BUTTON_PRESSED;
+	sendSignal();
 }
 
 void TestTableRowProperties::on_load100Button_clicked()
 {
-	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), -1, 255);
+	if (statePWM == LOAD100_BUTTON_PRESSED)
+		return;
+	// меняем стиль
+	statePWM = LOAD100_BUTTON_PRESSED;
+	sendSignal();
+}
+
+void TestTableRowProperties::sendSignal()
+{
+	msgToTwoThreadStartTest(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), stateDigital == -1 ? 0 : stateDigital, statePWM == -1 ? 0 : statePWM);
+}
+void TestTableRowProperties::msgFromTwoThreadAfterTest(int pad, int pin, float voltage, float curent)
+{
 }

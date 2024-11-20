@@ -9,8 +9,8 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 	this->can = can;
 	standConected = false;
 
-	th = new AutoStandTwoThread(can);
-	connect(th, &AutoStandTwoThread::msgToTestWindowStatusConnect, this, &TestWindow::msgToTestWindowStatusConnect);
+	statusFlags = new StandStatusFlags;
+	th = new AutoStandTwoThread(can, statusFlags);
 
 	initUiMain();
 	initUiMainHeader();
@@ -82,6 +82,7 @@ TestWindow::~TestWindow()
 	for (int i = 0; i < cableRows.size(); i++)
 		delete cableRows[i];
 	th->terminate();
+	delete th;
 }
 
 void TestWindow::initUiMain()
@@ -398,6 +399,7 @@ void TestWindow::initIcons()
 void TestWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
+	connect(th, &AutoStandTwoThread::msgToTestWindowStatusConnect, this, &TestWindow::msgToTestWindowStatusConnect);
 }
 
 void TestWindow::initStyles()
@@ -794,9 +796,23 @@ void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboB
 	}
 }
 
-void TestWindow::msgToTestWindowStatusConnect(bool statusConnect)
+void TestWindow::msgToTestWindowStatusConnect(bool statusConnect, bool statusTest)
 {
-	standConected = !standConected;
+	for (int i = 0; i < cableRows.size(); i++)
+	{
+		if (statusConnect && statusTest)
+		{
+		}
+		else
+		{
+			if (cableRows[i]->type == "DIGITAL")
+			{
+				((DigitalButtons*)(cableRows[i]->buttons))->onButton->setAttribute(Qt::WA_Disabled);
+				((DigitalButtons*)(cableRows[i]->buttons))->offButton->setAttribute(Qt::WA_Disabled);
+			}
+		}
+	}
+	standConected = statusConnect;
 	resetLanguage();
 	resetTheme();
 }
@@ -921,6 +937,8 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 	}
 
 	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest, th, &AutoStandTwoThread::msgToTwoThreadStartTest);
+	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest, th, &AutoStandTwoThread::msgToTwoThreadStartTest);
+
 	th->start();
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);

@@ -23,6 +23,14 @@
 
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
+#define OFF_BUTTON_PRESSED		0
+#define ON_BUTTON_PRESSED		1
+#define LOAD0_BUTTON_PRESSED	0
+#define LOAD25_BUTTON_PRESSED	64
+#define LOAD50_BUTTON_PRESSED	128
+#define LOAD75_BUTTON_PRESSED	192
+#define LOAD100_BUTTON_PRESSED	255
+
 struct DigitalButtons
 {
 	QPushButton* onButton;
@@ -59,10 +67,15 @@ public:
 	QString name;
 	QString direction;
 	QString type;
+
 	void* buttons;
 	QPushButton* moreButton;
 
+	int stateDigital;
+	int statePWM;
+
 	void generateInteractionButtons(int type);
+	void sendSignal();
 
 public slots:
 	void on_onButton_clicked();
@@ -72,6 +85,8 @@ public slots:
 	void on_load50Button_clicked();
 	void on_load75Button_clicked();
 	void on_load100Button_clicked();
+
+	void msgFromTwoThreadAfterTest(int pad, int pin, float voltage, float curent);
 
 signals:
 	void msgToTwoThreadStartTest(int pad, int pin, int digValue, int pwmValue);
@@ -148,6 +163,7 @@ private:
 	QString fileName;
 	WindowType testType;
 	Can* can;
+	StandStatusFlags* statusFlags;
 	std::vector<TestTableRowProperties*> cableRows;
 	AutoStandTwoThread* th;
 
@@ -222,5 +238,5 @@ private slots:
 	void on_fullTestAutoStandSortButton_clicked();
 
 	// twoThread
-	void msgToTestWindowStatusConnect(bool statusConnect);
+	void msgToTestWindowStatusConnect(bool statusConnect, bool statusTest);
 };
