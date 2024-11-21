@@ -74,6 +74,12 @@ struct Styles
 	QString testwindowTestTimeComboBox;
 	QString testwindowTableWidget;
 	QString testwindowNameLineEdit;
+
+	// TableButtons
+	//
+	//
+	QString activeTableButton;
+	QString inactiveTableButton;
 };
 
 extern Styles darkStyles;
@@ -121,6 +127,13 @@ enum class ConnectorId
 	D,
 	E,
 	F
+};
+
+enum class TypeResetTableButtonsTheme
+{
+	STAND_DISCONNECTED,
+	STAND_CONNECTED,
+	STAND_TEST
 };
 
 #define TYPE_NOT_SET			-1

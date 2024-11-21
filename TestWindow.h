@@ -97,10 +97,11 @@ public slots:
 	void on_load75Button_clicked();
 	void on_load100Button_clicked();
 
-	void msgFromTwoThreadAfterTest(int pad, int pin, float voltage, float curent);
+	void msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent);
 
 signals:
-	void msgToTwoThreadStartTest(int pad, int pin, int digValue, int pwmValue);
+	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
+	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 };
 
 class TestWindow : public QDialog
@@ -176,7 +177,7 @@ private:
 	Can* can;
 	StandStatusFlags* statusFlags;
 	std::vector<TestTableRowProperties*> cableRows;
-	AutoStandTwoThread* th;
+	QThread* th;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -188,6 +189,7 @@ private:
 	void initLightStyleSheets();
 	void initDarkStyleSheets();
 	void initStyles();
+	void resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetTheme, int pad, int pin);
 	void initRecources();
 	void initTexts();
 	void initIcons();
@@ -242,7 +244,7 @@ private:
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void generateRowsInteractionButtons(TestTableRowProperties* rowTable);
 	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget, QWidget* moreCellWidget);
-
+	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);
 
 private slots:
@@ -264,6 +266,11 @@ private slots:
 	void on_fullTestAutoStandStartTestButton_clicked();
 	void on_fullTestAutoStandSortButton_clicked();
 
-	// twoThread
-	void msgToTestWindowStatusConnect(bool statusConnect, bool statusTest);
+	void switchActiveTableButton(void* activeButton, void* inactiveButton);
+
+	// manualtwoThread
+	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
+
+	//void msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin);
+	//void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value);
 };

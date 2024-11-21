@@ -43,8 +43,36 @@ private:
 	Can* can;
 	StandStatusFlags* statusFlags;
 public slots:
-	void msgToTwoThreadStartTest(int pad, int pin, int digValue, int pwmValue);
+	void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin, int digValue, int pwmValue);
 
 signals:
-	void msgToTestWindowStatusConnect(bool statusConnect, bool statusTest);
+	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
+
+	void msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin);
+	void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value);
+};
+
+class ManualStandTwoThread : public QThread
+{
+	Q_OBJECT
+
+public:
+
+	explicit ManualStandTwoThread(Can* can, std::vector<Cable> cables, StandStatusFlags* statusFlags);
+	~ManualStandTwoThread();
+
+	void run();
+
+private:
+
+	Can* can;
+	std::vector<Cable> cables;
+
+	StandStatusFlags* statusFlags;
+
+public slots:
+	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
+
+signals:
+	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
 };
