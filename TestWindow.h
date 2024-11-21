@@ -32,8 +32,6 @@
 #define COLOUMN_PC_WIDTH		60
 #define COLOUMN_MORE_WIDTH		25
 
-#define PRIMARY_CONNECTOR_SYMBOL	64
-
 #define OFF_BUTTON_PRESSED		0
 #define ON_BUTTON_PRESSED		1
 #define LOAD0_BUTTON_PRESSED	0
@@ -41,6 +39,19 @@
 #define LOAD50_BUTTON_PRESSED	128
 #define LOAD75_BUTTON_PRESSED	192
 #define LOAD100_BUTTON_PRESSED	255
+
+#define PRIMARY_CONNECTOR_SYMBOL	64
+
+enum class TestButtons
+{
+	BUTTON_ON,
+	BUTTON_OFF,
+	BUTTON_LOAD_0,
+	BUTTON_LOAD_25,
+	BUTTON_LOAD_50,
+	BUTTON_LOAD_75,
+	BUTTON_LOAD_100
+};
 
 struct DigitalButtons
 {
@@ -68,6 +79,11 @@ struct VNHButtons
 	QPushButton* load100Button;
 };
 
+struct CheckButton
+{
+	QPushButton* checkButton;
+};
+
 class TestTableRowProperties : public QObject
 {
 	Q_OBJECT
@@ -87,6 +103,9 @@ public:
 
 	void generateInteractionButtons(int type);
 	void sendSignal();
+
+private:
+	void switchButtonState(TestButtons testButton);
 
 public slots:
 	void on_onButton_clicked();
@@ -137,6 +156,9 @@ private:
 	QPushButton* reportButton;
 	QPushButton* fullTestManualStandSortButton;
 	QPushButton* fullTestAutoStandSortButton;
+	QPushButton* inTestManualStandConnectButton;
+	QPushButton* outTestManualStandConnectButton;
+	QPushButton* fullTestManualStandConnectButton;
 	QPushButton* inManualTestAutoStandConnectButton;
 	QPushButton* outManualTestAutoStandConnectButton;
 	QPushButton* inAutoTestAutoStandConnectButton;
@@ -243,7 +265,8 @@ private:
 	void fillTestTimeComboBoxes();
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void generateRowsInteractionButtons(TestTableRowProperties* rowTable);
-	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget, QWidget* moreCellWidget);
+	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget);
+	void initMoreButton(int currentRowNum, QWidget* moreCellWidget);
 	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);
 

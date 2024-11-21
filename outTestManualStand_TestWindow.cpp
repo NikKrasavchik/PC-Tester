@@ -3,18 +3,23 @@
 #define COLOUMN_COUNT		6
 
 #define COLOUMN_TYPE		3
-#define COLOUMN_MORE		5
 #define COLOUMN_CHECK		4
+#define COLOUMN_MORE		5
 
 void TestWindow::initUiOutTestManualStand()
 {
+	outTestManualStandConnectButton = new QPushButton(usefulSpaceWidget);
+	outTestManualStandConnectButton->setObjectName("outTestManualStandConnectButton");
+	outTestManualStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(outTestManualStandConnectButton);
+
 	initUiTableOutTestManualStand();
 }
 
 void TestWindow::initUiTableOutTestManualStand()
 {
-	initUiTableHeaderFullTestManualStand();
-	initUiTableRowsFullTestManualStand();
+	initUiTableHeaderOutTestManualStand();
+	initUiTableRowsOutTestManualStand();
 
 }
 
@@ -33,7 +38,7 @@ void TestWindow::initUiTableHeaderOutTestManualStand()
 	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_STATUS_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_CHECK_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
 
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CONNECTOR,	QHeaderView::Fixed);
@@ -58,7 +63,8 @@ void TestWindow::initUiTableRowsOutTestManualStand()
 
 		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		initTableRowButtons(currentRowNum, interactionButtonsWidget, moreCellWidget);
+		initTableRowButtons(currentRowNum, interactionButtonsWidget);
+		initMoreButton(currentRowNum, moreCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}

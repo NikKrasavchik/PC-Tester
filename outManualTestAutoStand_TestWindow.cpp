@@ -76,7 +76,8 @@ void TestWindow::initUiTableRowsOutManualTestAutoStand()
 
 		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		initTableRowButtons(currentRowNum, interactionButtonsWidget, moreCellWidget);
+		initTableRowButtons(currentRowNum, interactionButtonsWidget);
+		initMoreButton(currentRowNum, moreCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}

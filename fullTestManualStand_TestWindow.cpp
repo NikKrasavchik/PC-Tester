@@ -10,6 +10,11 @@
 
 void TestWindow::initUiFullTestManualStand()
 {
+	fullTestManualStandConnectButton = new QPushButton(usefulSpaceWidget);
+	fullTestManualStandConnectButton->setObjectName("fullTestManualStandConnectButton");
+	fullTestManualStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(fullTestManualStandConnectButton);
+
 	fullTestManualStandSortButton = new QPushButton(usefulSpaceWidget);
 	fullTestManualStandSortButton->setObjectName("fullTestManualStandSortButton");
 	fullTestManualStandSortButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
@@ -63,8 +68,6 @@ void TestWindow::initUiTableRowsFullTestManualStand()
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		qDebug() << cableRows[currentRowNum]->connector << cableRows[currentRowNum]->pin << cableRows[currentRowNum]->name << cableRows[currentRowNum]->direction << cableRows[currentRowNum]->type;
-
 		model->setData(model->index(currentRowNum, COLOUMN_CONNECTOR), cableRows[currentRowNum]->connector);
 		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
@@ -73,7 +76,8 @@ void TestWindow::initUiTableRowsFullTestManualStand()
 
 		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		initTableRowButtons(currentRowNum, interactionButtonsWidget, moreCellWidget);
+		initTableRowButtons(currentRowNum, interactionButtonsWidget);
+		initMoreButton(currentRowNum, moreCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}

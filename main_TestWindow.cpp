@@ -188,6 +188,8 @@ void TestWindow::initUiTable()
 {
 	mainTableWidget = new QTableWidget(mainLayoutWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
+	mainTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	mainTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
 	mainVLayout->addWidget(mainTableWidget);
 }
 
@@ -891,28 +893,31 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 	statusButton = !statusButton;
 	for (int i = 0; i < cableRows.size(); i++)
 	{
-		if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+		if (cableRows[i]->direction == "OUT")
 		{
-			((DigitalButtons*)(cableRows[i]->buttons))->onButton->setDisabled(statusButton);
-			((DigitalButtons*)(cableRows[i]->buttons))->offButton->setDisabled(statusButton);
-		}
-		if (cableRows[i]->type == "PWM" && cableRows[i]->direction == "OUT")
-		{
-			((PWMButtons*)(cableRows[i]->buttons))->load0Button->setDisabled(statusButton);
-			((PWMButtons*)(cableRows[i]->buttons))->load25Button->setDisabled(statusButton);
-			((PWMButtons*)(cableRows[i]->buttons))->load50Button->setDisabled(statusButton);
-			((PWMButtons*)(cableRows[i]->buttons))->load75Button->setDisabled(statusButton);
-			((PWMButtons*)(cableRows[i]->buttons))->load100Button->setDisabled(statusButton);
-		}
-		if (cableRows[i]->type == "VNH" && cableRows[i]->direction == "OUT")
-		{
-			((VNHButtons*)(cableRows[i]->buttons))->onButton->setDisabled(statusButton);
-			((VNHButtons*)(cableRows[i]->buttons))->offButton->setDisabled(statusButton);
-			((VNHButtons*)(cableRows[i]->buttons))->load0Button->setDisabled(statusButton);
-			((VNHButtons*)(cableRows[i]->buttons))->load25Button->setDisabled(statusButton);
-			((VNHButtons*)(cableRows[i]->buttons))->load50Button->setDisabled(statusButton);
-			((VNHButtons*)(cableRows[i]->buttons))->load75Button->setDisabled(statusButton);
-			((VNHButtons*)(cableRows[i]->buttons))->load100Button->setDisabled(statusButton);
+			if (cableRows[i]->type == "DIGITAL")
+			{
+				((DigitalButtons*)(cableRows[i]->buttons))->onButton->setDisabled(statusButton);
+				((DigitalButtons*)(cableRows[i]->buttons))->offButton->setDisabled(statusButton);
+			}
+			if (cableRows[i]->type == "PWM")
+			{
+				((PWMButtons*)(cableRows[i]->buttons))->load0Button->setDisabled(statusButton);
+				((PWMButtons*)(cableRows[i]->buttons))->load25Button->setDisabled(statusButton);
+				((PWMButtons*)(cableRows[i]->buttons))->load50Button->setDisabled(statusButton);
+				((PWMButtons*)(cableRows[i]->buttons))->load75Button->setDisabled(statusButton);
+				((PWMButtons*)(cableRows[i]->buttons))->load100Button->setDisabled(statusButton);
+			}
+			if (cableRows[i]->type == "VNH")
+			{
+				((VNHButtons*)(cableRows[i]->buttons))->onButton->setDisabled(statusButton);
+				((VNHButtons*)(cableRows[i]->buttons))->offButton->setDisabled(statusButton);
+				((VNHButtons*)(cableRows[i]->buttons))->load0Button->setDisabled(statusButton);
+				((VNHButtons*)(cableRows[i]->buttons))->load25Button->setDisabled(statusButton);
+				((VNHButtons*)(cableRows[i]->buttons))->load50Button->setDisabled(statusButton);
+				((VNHButtons*)(cableRows[i]->buttons))->load75Button->setDisabled(statusButton);
+				((VNHButtons*)(cableRows[i]->buttons))->load100Button->setDisabled(statusButton);
+			}
 		}
 	}
 }
@@ -941,7 +946,7 @@ void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect
 //	//// установить новые значения в таблицу
 //}
 
-void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget, QWidget* moreCellWidget)
+void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)
 {
 	interactionButtonsWidget->setObjectName("interactionButtonsWidget");
 	QVBoxLayout* interactionButtonsCellVLayout = new QVBoxLayout(interactionButtonsWidget);
@@ -1061,26 +1066,25 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			mainTableWidget->setRowHeight(currentRowNum, 169);
 		}
 	}
-	else if (testType == WindowType::IN_MANUAL_TEST_AUTO_STAND || testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND)
-	{
-	}
-
 	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
 	connect(cableRows[currentRowNum], &TestTableRowProperties::switchActiveTableButton, this, &TestWindow::switchActiveTableButton);
 	//connect(cableRows[currentRowNum], &TestTableRowProperties::msgToAutoTwoThreadStartTest, th, &AutoStandTwoThread::msgToAutoTwoThreadStartTest);
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
 	interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);
+}
 
+void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
+{
 	cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
 	cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
 	cableRows[currentRowNum]->moreButton->setIcon(QIcon(*moreButtonLightPixmap));
 	cableRows[currentRowNum]->moreButton->setIconSize(QSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE));
 	cableRows[currentRowNum]->moreButton->setFixedSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE);
 
-	moreCellWidget->setObjectName("deleteCellWidget");
+	moreCellWidget->setObjectName("moreCellWidget");
 	QHBoxLayout* moreCellHLayout = new QHBoxLayout(moreCellWidget);
-	moreCellHLayout->setObjectName("deleteCellWidget");
+	moreCellHLayout->setObjectName("moreCellHLayout");
 	moreCellHLayout->addWidget(cableRows[currentRowNum]->moreButton);
 	moreCellHLayout->setContentsMargins(0, 0, 0, 0);
 	moreCellWidget->setLayout(moreCellHLayout);

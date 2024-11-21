@@ -8,6 +8,11 @@
 
 void TestWindow::initUiInTestManualStand()
 {
+	inTestManualStandConnectButton = new QPushButton(usefulSpaceWidget);
+	inTestManualStandConnectButton->setObjectName("inTestManualStandConnectButton");
+	inTestManualStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(inTestManualStandConnectButton);
+
 	initUiTableInTestManualStand();
 }
 
@@ -53,17 +58,8 @@ void TestWindow::initUiTableRowsInTestManualStand()
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
-		cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
-		cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
-
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		moreCellWidget->setObjectName("deleteCellWidget");
-		QHBoxLayout* moreCellLayout = new QHBoxLayout(moreCellWidget);
-		moreCellLayout->setObjectName("deleteCellWidget");
-		moreCellLayout->addWidget(cableRows[currentRowNum]->moreButton);
-		moreCellLayout->setContentsMargins(0, 0, 0, 0);
-		moreCellWidget->setLayout(moreCellLayout);
-
+		initMoreButton(currentRowNum, moreCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }

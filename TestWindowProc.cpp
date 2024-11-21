@@ -199,13 +199,170 @@ void TestTableRowProperties::generateInteractionButtons(int type)
 	}
 }
 
+void TestTableRowProperties::switchButtonState(TestButtons testButton)
+{
+	Styles* currentStyles = nullptr;
+	switch (viewWindowState->appTheme)
+	{
+	case (LIGHT_THEME):
+		currentStyles = &lightStyles;
+		break;
+
+	case (DARK_THEME):
+		currentStyles = &darkStyles;
+		break;
+	}
+
+	if (type == "DIGITAL")
+	{
+		((DigitalButtons*)buttons)->onButton->setStyleSheet(currentStyles->inactiveTableButton);
+		((DigitalButtons*)buttons)->offButton->setStyleSheet(currentStyles->inactiveTableButton);
+
+		((DigitalButtons*)buttons)->onButton->setDisabled(false);
+		((DigitalButtons*)buttons)->offButton->setDisabled(false);
+
+		switch (testButton)
+		{
+		case TestButtons::BUTTON_ON:
+			((DigitalButtons*)buttons)->onButton->setStyleSheet(currentStyles->activeTableButton);
+			((DigitalButtons*)buttons)->onButton->setDisabled(true);
+			break;
+
+		case TestButtons::BUTTON_OFF:
+			((DigitalButtons*)buttons)->offButton->setStyleSheet(currentStyles->activeTableButton);
+			((DigitalButtons*)buttons)->offButton->setDisabled(true);
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if (type == "PWM")
+	{
+		((PWMButtons*)buttons)->load0Button->setStyleSheet(currentStyles->inactiveTableButton);
+		((PWMButtons*)buttons)->load25Button->setStyleSheet(currentStyles->inactiveTableButton);
+		((PWMButtons*)buttons)->load50Button->setStyleSheet(currentStyles->inactiveTableButton);
+		((PWMButtons*)buttons)->load75Button ->setStyleSheet(currentStyles->inactiveTableButton);
+		((PWMButtons*)buttons)->load100Button->setStyleSheet(currentStyles->inactiveTableButton);
+
+		((PWMButtons*)buttons)->load0Button->setDisabled(false);
+		((PWMButtons*)buttons)->load25Button->setDisabled(false);
+		((PWMButtons*)buttons)->load50Button->setDisabled(false);
+		((PWMButtons*)buttons)->load75Button->setDisabled(false);
+		((PWMButtons*)buttons)->load100Button->setDisabled(false);
+
+		switch (testButton)
+		{
+		case TestButtons::BUTTON_LOAD_0:
+			((PWMButtons*)buttons)->load0Button->setStyleSheet(currentStyles->activeTableButton);
+			((PWMButtons*)buttons)->load0Button->setDisabled(true);
+			break;
+
+		case TestButtons::BUTTON_LOAD_25:
+			((PWMButtons*)buttons)->load25Button->setStyleSheet(currentStyles->activeTableButton);
+			((PWMButtons*)buttons)->load25Button->setDisabled(true);
+			break;
+
+		case TestButtons::BUTTON_LOAD_50:
+			((PWMButtons*)buttons)->load50Button->setStyleSheet(currentStyles->activeTableButton);
+			((PWMButtons*)buttons)->load50Button->setDisabled(true);
+			break;
+
+		case TestButtons::BUTTON_LOAD_75:
+			((PWMButtons*)buttons)->load75Button->setStyleSheet(currentStyles->activeTableButton);
+			((PWMButtons*)buttons)->load75Button->setDisabled(true);
+			break;
+
+		case TestButtons::BUTTON_LOAD_100:
+			((PWMButtons*)buttons)->load100Button->setStyleSheet(currentStyles->activeTableButton);
+			((PWMButtons*)buttons)->load100Button->setDisabled(true);
+			break;
+
+		default:
+			break;
+		}
+	}
+	else if (type == "VNH")
+	{
+		switch (testButton)
+		{
+		case TestButtons::BUTTON_ON:
+			((VNHButtons*)buttons)->onButton->setStyleSheet(currentStyles->activeTableButton);
+			((VNHButtons*)buttons)->onButton->setDisabled(true);
+
+			((VNHButtons*)buttons)->offButton->setStyleSheet(currentStyles->inactiveTableButton);
+			((VNHButtons*)buttons)->offButton->setDisabled(false);
+			break;
+
+		case TestButtons::BUTTON_OFF:
+			((VNHButtons*)buttons)->offButton->setStyleSheet(currentStyles->activeTableButton);
+			((VNHButtons*)buttons)->offButton->setDisabled(true);
+
+			((VNHButtons*)buttons)->onButton->setStyleSheet(currentStyles->inactiveTableButton);
+			((VNHButtons*)buttons)->onButton->setDisabled(false);
+			break;
+
+		case TestButtons::BUTTON_LOAD_0:
+		case TestButtons::BUTTON_LOAD_25:
+		case TestButtons::BUTTON_LOAD_50:
+		case TestButtons::BUTTON_LOAD_75:
+		case TestButtons::BUTTON_LOAD_100:
+			((VNHButtons*)buttons)->load0Button->setStyleSheet(currentStyles->inactiveTableButton);
+			((VNHButtons*)buttons)->load25Button->setStyleSheet(currentStyles->inactiveTableButton);
+			((VNHButtons*)buttons)->load50Button->setStyleSheet(currentStyles->inactiveTableButton);
+			((VNHButtons*)buttons)->load75Button->setStyleSheet(currentStyles->inactiveTableButton);
+			((VNHButtons*)buttons)->load100Button->setStyleSheet(currentStyles->inactiveTableButton);
+
+			((VNHButtons*)buttons)->load0Button->setDisabled(false);
+			((VNHButtons*)buttons)->load25Button->setDisabled(false);
+			((VNHButtons*)buttons)->load50Button->setDisabled(false);
+			((VNHButtons*)buttons)->load75Button->setDisabled(false);
+			((VNHButtons*)buttons)->load100Button->setDisabled(false);
+
+			switch (testButton)
+			{
+			case TestButtons::BUTTON_LOAD_0:
+				((VNHButtons*)buttons)->load0Button->setStyleSheet(currentStyles->activeTableButton);
+				((VNHButtons*)buttons)->load0Button->setDisabled(true);
+				break;
+
+			case TestButtons::BUTTON_LOAD_25:
+				((VNHButtons*)buttons)->load25Button->setStyleSheet(currentStyles->activeTableButton);
+				((VNHButtons*)buttons)->load25Button->setDisabled(true);
+				break;
+
+			case TestButtons::BUTTON_LOAD_50:
+				((VNHButtons*)buttons)->load50Button->setStyleSheet(currentStyles->activeTableButton);
+				((VNHButtons*)buttons)->load50Button->setDisabled(true);
+				break;
+
+			case TestButtons::BUTTON_LOAD_75:
+				((VNHButtons*)buttons)->load75Button->setStyleSheet(currentStyles->activeTableButton);
+				((VNHButtons*)buttons)->load75Button->setDisabled(true);
+				break;
+
+			case TestButtons::BUTTON_LOAD_100:
+				((VNHButtons*)buttons)->load100Button->setStyleSheet(currentStyles->activeTableButton);
+				((VNHButtons*)buttons)->load100Button->setDisabled(true);
+				break;
+
+			default:
+				break;
+			}
+			break;
+		}
+
+	}
+}
+
 void TestTableRowProperties::on_onButton_clicked()
 {
 	if (stateDigital == ON_BUTTON_PRESSED)
 		return;
-	//switchActiveTableButton((VNHButtons*)buttons)->offButton, buttons);
-	// меняем стиль
+
+	switchButtonState(TestButtons::BUTTON_ON);
 	stateDigital = ON_BUTTON_PRESSED;
+
 	sendSignal();
 }
 
@@ -213,8 +370,10 @@ void TestTableRowProperties::on_offButton_clicked()
 {
 	if (stateDigital == OFF_BUTTON_PRESSED)
 		return;
-	// меняем стиль
+
+	switchButtonState(TestButtons::BUTTON_OFF);
 	stateDigital = OFF_BUTTON_PRESSED;
+
 	sendSignal();
 }
 
@@ -222,8 +381,10 @@ void TestTableRowProperties::on_load0Button_clicked()
 {
 	if (statePWM == LOAD0_BUTTON_PRESSED)
 		return;
-	// меняем стиль
+
+	switchButtonState(TestButtons::BUTTON_LOAD_0);
 	statePWM = LOAD0_BUTTON_PRESSED;
+
 	sendSignal();
 }
 
@@ -231,8 +392,10 @@ void TestTableRowProperties::on_load25Button_clicked()
 {
 	if (statePWM == LOAD25_BUTTON_PRESSED)
 		return;
-	// меняем стиль
+
+	switchButtonState(TestButtons::BUTTON_LOAD_25);
 	statePWM = LOAD25_BUTTON_PRESSED;
+
 	sendSignal();
 }
 
@@ -240,8 +403,10 @@ void TestTableRowProperties::on_load50Button_clicked()
 {
 	if (statePWM == LOAD50_BUTTON_PRESSED)
 		return;
-	// меняем стиль
+
+	switchButtonState(TestButtons::BUTTON_LOAD_50);
 	statePWM = LOAD50_BUTTON_PRESSED;
+
 	sendSignal();
 }
 
@@ -249,8 +414,10 @@ void TestTableRowProperties::on_load75Button_clicked()
 {
 	if (statePWM == LOAD75_BUTTON_PRESSED)
 		return;
-	// меняем стиль
+
+	switchButtonState(TestButtons::BUTTON_LOAD_75);
 	statePWM = LOAD75_BUTTON_PRESSED;
+
 	sendSignal();
 }
 
@@ -258,8 +425,10 @@ void TestTableRowProperties::on_load100Button_clicked()
 {
 	if (statePWM == LOAD100_BUTTON_PRESSED)
 		return;
-	// меняем стиль
+
+	switchButtonState(TestButtons::BUTTON_LOAD_100);
 	statePWM = LOAD100_BUTTON_PRESSED;
+
 	sendSignal();
 }
 

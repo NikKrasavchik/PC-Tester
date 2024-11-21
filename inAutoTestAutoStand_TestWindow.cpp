@@ -67,17 +67,8 @@ void TestWindow::initUiTableRowsInAutoTestAutoStand()
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
-		cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
-		cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
-
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		moreCellWidget->setObjectName("deleteCellWidget");
-		QHBoxLayout* moreCellLayout = new QHBoxLayout(moreCellWidget);
-		moreCellLayout->setObjectName("deleteCellWidget");
-		moreCellLayout->addWidget(cableRows[currentRowNum]->moreButton);
-		moreCellLayout->setContentsMargins(0, 0, 0, 0);
-		moreCellWidget->setLayout(moreCellLayout);
-
+		initMoreButton(currentRowNum, moreCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }
