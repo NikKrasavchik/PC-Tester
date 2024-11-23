@@ -188,5 +188,4 @@ extern ViewWindowState* viewWindowState;
 #define FIXED_CHECK_BUTTON_WIDTH	65
 #define FIXED_CHECK_WBUTTON_WIDTH	148
 #define	FIXED_CHECK_BUTTON_HEIGHT	30
-
-// сделать фиксированный размер колонки "подробнее" и тестовых кнопок
+#define FIXED_HALF_BUTTON_WIDTH		60	

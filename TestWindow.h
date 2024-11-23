@@ -22,16 +22,22 @@
 #define COLOUMN_PIN			1
 #define COLOUMN_NAME		2
 
+#define COLOUMN_DIGITAL_HEIGHT	50
+#define COLOUMN_PWM_HEIGHT		128
+#define COLOUMN_VNH_HEIGHT		169
+
 #define COLOUMN_CONNECTOR_WIDTH	60
 #define COLOUMN_PIN_WIDTH		40
 #define COLOUMN_DIRECTION_WIDTH	90
 #define COLOUMN_TYPE_WIDTH		60
 #define COLOUMN_CHECK_WIDTH		160
+#define COLOUMN_AUTOCHECK_WIDTH	60
 #define COLOUMN_STATUS_WIDTH	60
 #define COLOUMN_STAND_WIDTH		60
 #define COLOUMN_PC_WIDTH		60
 #define COLOUMN_MORE_WIDTH		25
 
+#define BUTTON_NOT_SET			-1
 #define OFF_BUTTON_PRESSED		0
 #define ON_BUTTON_PRESSED		1
 #define LOAD0_BUTTON_PRESSED	0
@@ -101,7 +107,7 @@ public:
 	int stateDigital;
 	int statePWM;
 
-	void generateInteractionButtons(int type);
+	void generateInteractionButtons(WindowType testType, int type);
 	void sendSignal();
 
 private:
@@ -264,8 +270,8 @@ private:
 	void sortRows();
 	void fillTestTimeComboBoxes();
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
-	void generateRowsInteractionButtons(TestTableRowProperties* rowTable);
 	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget);
+	void initAutoCheckButton(int currentRowNum, QWidget* autoChechButtonWidget);
 	void initMoreButton(int currentRowNum, QWidget* moreCellWidget);
 	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);

@@ -234,41 +234,6 @@ void TestWindow::initUiMainFooter()
 	reportHLayout->addWidget(reportButton);
 }
 
-void TestWindow::generateRowsInteractionButtons(TestTableRowProperties* rowTable)
-{
-	mainTableWidget->setRowCount(cableRows.size());
-
-	switch (testType)
-	{
-	case WindowType::IN_TEST_MANUAL_STAND:
-		break;
-
-	case WindowType::OUT_TEST_MANUAL_STAND:
-		break;
-
-	case WindowType::FULL_TEST_MANUAL_STAND:
-		break;
-
-	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-		break;
-
-	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-		break;
-
-	case WindowType::IN_AUTO_TEST_AUTO_STAND:
-		break;
-
-	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-		break;
-
-	case WindowType::FULL_TEST_AUTO_STAND:
-		break;
-
-	default:
-		break;
-	}
-}
-
 void TestWindow::resizeEvent(QResizeEvent* event)
 {
 	viewWindowState->appSize.width = geometry().width();
@@ -438,56 +403,66 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 	case TypeResetTableButtonsTheme::STAND_DISCONNECTED:
 		for (int i = 0; i < cableRows.size(); i++)
 		{
-			if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+			if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
+				testType == WindowType::IN_TEST_MANUAL_STAND ||
+				testType == WindowType::FULL_TEST_MANUAL_STAND)
 			{
-				((DigitalButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
-				((DigitalButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.inactiveTableButton);
-			}
-			if (cableRows[i]->type == "PWM" && cableRows[i]->direction == "OUT")
-			{
-				((PWMButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
-			}
-			if (cableRows[i]->type == "VNH" && cableRows[i]->direction == "OUT")
-			{
-				((VNHButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
+				if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+				{
+					((DigitalButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((DigitalButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.inactiveTableButton);
+				}
+				if (cableRows[i]->type == "PWM" && cableRows[i]->direction == "OUT")
+				{
+					((PWMButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
+				}
+				if (cableRows[i]->type == "VNH" && cableRows[i]->direction == "OUT")
+				{
+					((VNHButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
+				}
 			}
 		}
 		break;
 	case TypeResetTableButtonsTheme::STAND_CONNECTED:
 		for (int i = 0; i < cableRows.size(); i++)
 		{
-			if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+			if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
+				testType == WindowType::IN_TEST_MANUAL_STAND ||
+				testType == WindowType::FULL_TEST_MANUAL_STAND)
 			{
-				((DigitalButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
-				((DigitalButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.activeTableButton);
-			}
-			if (cableRows[i]->type == "PWM" && cableRows[i]->direction == "OUT")
-			{
-				((PWMButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.activeTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((PWMButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
-			}
-			if (cableRows[i]->type == "VNH" && cableRows[i]->direction == "OUT")
-			{
-				((VNHButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.activeTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.activeTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
-				((VNHButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
+				if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+				{
+					((DigitalButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((DigitalButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.activeTableButton);
+				}
+				if (cableRows[i]->type == "PWM" && cableRows[i]->direction == "OUT")
+				{
+					((PWMButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.activeTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((PWMButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
+				}
+				if (cableRows[i]->type == "VNH" && cableRows[i]->direction == "OUT")
+				{
+					((VNHButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.activeTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.activeTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load50Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
+					((VNHButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
+				}
 			}
 		}
 		break;
@@ -566,15 +541,28 @@ void TestWindow::resetTheme()
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
+			if (standConected)
+				fullTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
+			else
+				fullTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
+			fullTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			fullTestManualStandSortButton->setStyleSheet(lightStyles.testwindowButtonStyle);
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
-
+			if (standConected)
+				outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
+			else
+				outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
+			outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
-
+			if (standConected)
+				inTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
+			else
+				inTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
+			inTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
@@ -640,15 +628,28 @@ void TestWindow::resetTheme()
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
+			if (standConected)
+				fullTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleConnect);
+			else
+				fullTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
+			fullTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
 			fullTestManualStandSortButton->setStyleSheet(darkStyles.testwindowButtonStyle);
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
-
+			if (standConected)
+				outTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleConnect);
+			else
+				outTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
+			outTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
-
+			if (standConected)
+				inTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleConnect);
+			else
+				inTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
+			inTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
@@ -893,14 +894,17 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 	statusButton = !statusButton;
 	for (int i = 0; i < cableRows.size(); i++)
 	{
-		if (cableRows[i]->direction == "OUT")
+
+		if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
+			testType == WindowType::IN_TEST_MANUAL_STAND ||
+			testType == WindowType::FULL_TEST_MANUAL_STAND)
 		{
-			if (cableRows[i]->type == "DIGITAL")
+			if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
 			{
 				((DigitalButtons*)(cableRows[i]->buttons))->onButton->setDisabled(statusButton);
 				((DigitalButtons*)(cableRows[i]->buttons))->offButton->setDisabled(statusButton);
 			}
-			if (cableRows[i]->type == "PWM")
+			if (cableRows[i]->type == "PWM" && cableRows[i]->direction == "OUT")
 			{
 				((PWMButtons*)(cableRows[i]->buttons))->load0Button->setDisabled(statusButton);
 				((PWMButtons*)(cableRows[i]->buttons))->load25Button->setDisabled(statusButton);
@@ -908,7 +912,7 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 				((PWMButtons*)(cableRows[i]->buttons))->load75Button->setDisabled(statusButton);
 				((PWMButtons*)(cableRows[i]->buttons))->load100Button->setDisabled(statusButton);
 			}
-			if (cableRows[i]->type == "VNH")
+			if (cableRows[i]->type == "VNH" && cableRows[i]->direction == "OUT")
 			{
 				((VNHButtons*)(cableRows[i]->buttons))->onButton->setDisabled(statusButton);
 				((VNHButtons*)(cableRows[i]->buttons))->offButton->setDisabled(statusButton);
@@ -972,7 +976,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
 			connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
 
-			mainTableWidget->setRowHeight(currentRowNum, 50);
+			mainTableWidget->setRowHeight(currentRowNum, COLOUMN_DIGITAL_HEIGHT);
 		}
 		else if (cableRows[currentRowNum]->type == "PWM")
 		{
@@ -1011,7 +1015,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load75Button_clicked);
 			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load100Button_clicked);
 
-			mainTableWidget->setRowHeight(currentRowNum, 128);
+			mainTableWidget->setRowHeight(currentRowNum, COLOUMN_PWM_HEIGHT);
 		}
 		else if (cableRows[currentRowNum]->type == "VNH")
 		{
@@ -1028,10 +1032,10 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			interactionButtonsCellFourthHLayout->setObjectName("interactionButtonsCellFourthHLayout");
 			interactionButtonsCellVLayout->addLayout(interactionButtonsCellFourthHLayout);
 
-			QSpacerItem* firstLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
+			QSpacerItem* firstLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
 			QSpacerItem* firstMiddleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
-			QSpacerItem* firstRightSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
-			QSpacerItem* secondLeftSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
+			QSpacerItem* firstRightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+			QSpacerItem* secondLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
 			QSpacerItem* secondMiddleSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed, QSizePolicy::Maximum);
 			QSpacerItem* secondRightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
 			QSpacerItem* thirdLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
@@ -1063,7 +1067,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
 			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
 
-			mainTableWidget->setRowHeight(currentRowNum, 169);
+			mainTableWidget->setRowHeight(currentRowNum, COLOUMN_VNH_HEIGHT);
 		}
 	}
 	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
@@ -1074,13 +1078,20 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 	interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);
 }
 
+void TestWindow::initAutoCheckButton(int currentRowNum, QWidget* autoCheckCellWidget)
+{
+	autoCheckCellWidget->setObjectName("autoCheckCellWidget");
+	QHBoxLayout* autoCheckCellHLayout = new QHBoxLayout(autoCheckCellWidget);
+	autoCheckCellHLayout->setObjectName("autoCheckCellHLayout");
+	autoCheckCellHLayout->addWidget(((CheckButton*)cableRows[currentRowNum]->buttons)->checkButton);
+	autoCheckCellHLayout->setContentsMargins(0, 0, 0, 0);
+	autoCheckCellWidget->setLayout(autoCheckCellHLayout);
+}
+
 void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
 {
-	cableRows[currentRowNum]->moreButton = new QPushButton(mainLayoutWidget);
-	cableRows[currentRowNum]->moreButton->setObjectName("moreButton");
 	cableRows[currentRowNum]->moreButton->setIcon(QIcon(*moreButtonLightPixmap));
 	cableRows[currentRowNum]->moreButton->setIconSize(QSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE));
-	cableRows[currentRowNum]->moreButton->setFixedSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE);
 
 	moreCellWidget->setObjectName("moreCellWidget");
 	QHBoxLayout* moreCellHLayout = new QHBoxLayout(moreCellWidget);

@@ -44,7 +44,7 @@ void TestWindow::initUiTableHeaderOutAutoTestAutoStand()
 	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_STAND,		COLOUMN_STAND_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_STAND,		COLOUMN_AUTOCHECK_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_PC,			COLOUMN_PC_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
 
@@ -67,8 +67,13 @@ void TestWindow::initUiTableRowsOutAutoTestAutoStand()
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
+		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
+
+		initAutoCheckButton(currentRowNum, autoCheckCellWidget);
 		initMoreButton(currentRowNum, moreCellWidget);
+
+		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_STAND, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }

@@ -4,7 +4,6 @@
 
 #define COLOUMN_DIRECTION	3
 #define COLOUMN_TYPE		4
-#define COLOUMN_STAND		5
 #define COLOUMN_CHECK		5
 #define COLOUMN_STATUS		6
 #define COLOUMN_MORE		7
@@ -54,7 +53,7 @@ void TestWindow::initUiTableHeaderFullTestAutoStand()
 	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_DIRECTION,	COLOUMN_DIRECTION_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_CHECK_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_AUTOCHECK_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_STATUS,		COLOUMN_STATUS_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
 
@@ -81,11 +80,13 @@ void TestWindow::initUiTableRowsFullTestAutoStand()
 		model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), cableRows[currentRowNum]->direction);
 		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
-		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
+		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		initTableRowButtons(currentRowNum, interactionButtonsWidget);
+
+		initAutoCheckButton(currentRowNum, autoCheckCellWidget);
 		initMoreButton(currentRowNum, moreCellWidget);
-		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_STAND, interactionButtonsWidget);
+
+		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }

@@ -9,6 +9,8 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QDebug>
+#include <QFile>
+#include <QFileDialog>
 #include <vector>
 #include <fstream>
 
@@ -106,6 +108,7 @@ public:
 	};
 
 	TableRowProperties(QObject* parent = nullptr);
+	~TableRowProperties();
 
 	int id;
 	QComboBox* connectorComboBox;
@@ -155,16 +158,19 @@ private:
 	QHBoxLayout* tripleButtonsHLayout;
 	QHBoxLayout* footerMainHLayout;
 	QHBoxLayout* footerCombosHLayout;
+	QHBoxLayout* saveLoadHLayout;
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* mainVLayout;
 	QPushButton* clearPresetButton;
 	QPushButton* saveButton;
+	QPushButton* loadButton;
 	QPushButton* addRowButton;
 	QPushButton* backButton;
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QSpacerItem* tripleButtonsSpacer;
 	QSpacerItem* footerSpacer;
+	QSpacerItem* saveLoadSpacer;
 	QTableWidget* mainTableWidget;
 	QLineEdit* fileNameLineEdit;
 	QComboBox* selectStandTypeComboBox;
@@ -186,6 +192,8 @@ private:
 
 	bool isAllInit;
 	bool canReselectStandType;
+	QString selectedFileFullName;
+	QString fileName;
 
 	std::vector<TableRowProperties*> tableRowPropertiesVector;
 
@@ -204,17 +212,18 @@ private:
 	void resetLanguage();
 	void resetPresets();
 
+	void proccessSelectedFile(QString fileName);
 	std::vector<std::vector<QString>> parseData();
-	void deParseData();
 	void updateTableData();
 
-	bool verifyData(std::vector<std::vector<QString>> data);
-	bool verifyRow(ColoumnName coloumnName, QTableWidgetItem* data);
+	bool verifyTableData(ColoumnName coloumnName, QTableWidgetItem* data);
+	void createNewRow();
 
 	void resizeEvent(QResizeEvent* event);
 
 private slots:
 	void on_saveButton_clicked();
+	void on_loadButton_clicked();
 	void on_backButton_clicked();
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
@@ -224,5 +233,3 @@ private slots:
 	void deleteRow(int index);
 	//void on_selectStandTypeComboBox_activated(int index);
 };
-
-// ¬опрос о нужности id в котором хранитс€ индекс в tableRowProperties

@@ -8,8 +8,6 @@ ConfiguratorWindow::ConfiguratorWindow(QWidget* parent)
 	isAllInit = false;
 
 	initUi();
-
-	QMetaObject::connectSlotsByName(this);
 }
 
 ConfiguratorWindow::~ConfiguratorWindow()
@@ -99,10 +97,22 @@ void ConfiguratorWindow::initUiUsefulSpace()
 	fileNameLineEdit->setFixedSize(FIXED_FILE_NAME_WIDTH, FIXED_FILE_NAME_HEIGHT);
 	usefulSpaceHLayout->addWidget(fileNameLineEdit);
 
+	QHBoxLayout* saveLoadHLayout = new QHBoxLayout(usefulSpaceWidget);
+	saveLoadHLayout->setObjectName("saveLoadHLayout");
+	usefulSpaceHLayout->addLayout(saveLoadHLayout);
+
 	saveButton = new QPushButton(usefulSpaceWidget);
 	saveButton->setObjectName("saveButton");
-	saveButton->setFixedSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT);
-	usefulSpaceHLayout->addWidget(saveButton);
+	saveButton->setFixedSize(FIXED_HALF_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT);
+	saveLoadHLayout->addWidget(saveButton);
+
+	saveLoadSpacer = new QSpacerItem(5, 0, QSizePolicy::Fixed);
+	saveLoadHLayout->addItem(saveLoadSpacer);
+
+	loadButton = new QPushButton(usefulSpaceWidget);
+	loadButton->setObjectName("loadButton");
+	loadButton->setFixedSize(FIXED_HALF_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT);
+	saveLoadHLayout->addWidget(loadButton);
 }
 
 void ConfiguratorWindow::initUiTripleButtons()
@@ -207,12 +217,7 @@ void ConfiguratorWindow::initRecources()
 
 void ConfiguratorWindow::initConnections()
 {
-	//connect(selectStandTypeComboBox, &QComboBox::activated, this, &ConfiguratorWindow::on_selectStandTypeComboBox_activated);
-	//connect(selectStandTypeComboBox, &QComboBox::activated, this, &ConfiguratorWindow::on_selectStandTypeComboBox_activated);
-	//connect(selectStandTypeComboBox, &QComboBox::activated, this, &ConfiguratorWindow::on_selectStandTypeComboBox_activated);
-	//connect(selectStandTypeComboBox, SIGNAL(activated(int)), this, SLOT(on_selectStandTypeComboBox_activated(int)));
-	//connect(selectTestTypeComboBox, SIGNAL(activated(int)), this, SLOT(on_selectTestTypeComboBox_activated(int)));
-	//connect(selectDirectionComboBox, SIGNAL(activated(int)), this, SLOT(on_selectDirectionComboBox_activated(int)));
+	QMetaObject::connectSlotsByName(this);
 }
 
 void ConfiguratorWindow::resetLanguage()
