@@ -153,8 +153,8 @@ struct Cable
 	int pin;
 	int direction;
 	int type;
-	unsigned char canId;
-	char bit;
+	int canId;
+	int bit;
 	double minCurrent;
 	double maxCurrent;
 	double minVoltage;

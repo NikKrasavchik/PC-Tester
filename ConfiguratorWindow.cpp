@@ -7,6 +7,8 @@ ConfiguratorWindow::ConfiguratorWindow(QWidget* parent)
 
 	isAllInit = false;
 
+	initLightStyleSheets();
+	initDarkStyleSheets();
 	initUi();
 }
 

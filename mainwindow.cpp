@@ -110,6 +110,10 @@ void MainWindow::initUi()
 
 	on_checkAdaptersButton_clicked();
 	resetTheme();
+
+#ifdef DEBUG
+	selectFileButton->click();
+#endif // DEBUG
 }
 
 void MainWindow::initUiLogo()
@@ -864,6 +868,11 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 void MainWindow::on_selectFileButton_clicked()
 {
+#ifdef DEBUG
+	fileName = QString::fromLocal8Bit("И пиздец...");
+	selectedFileFullName = "C:/Users/zahar.mormil/Desktop/PC-Tester/Config files/test_1.csv";
+	//C: / Users / zahar.mormil / Desktop / PC - Tester / Config files / t.csv
+#else
 	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV (*.csv)");
 	int localFileNameInd = selectedFileFullName.lastIndexOf("/");
 
@@ -881,6 +890,7 @@ void MainWindow::on_selectFileButton_clicked()
 
 		fileName += selectedFileFullName[i];
 	}
+#endif // DEBUG
 
 	//int overcrowdedFileNameCount = 0;
 	//bool isFileNameOvercrowded = false;
@@ -1313,6 +1323,11 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 
 void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
 {
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+#endif // DEBUG
+
 	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
 	{
 		if (selectedFileStandType != CFG_STAND_NOT_SET)

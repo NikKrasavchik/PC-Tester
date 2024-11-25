@@ -13,8 +13,8 @@ void WindowFrame::initLightStyleSheets()
 		#header {
 		    background-color: #A7A7A7;
 		    border: 1px solid #A7A7A7;
-		    border-top-left-radius: 10px;
-		    border-top-right-radius: 10px;
+		    border-top-left-radius: 5px;
+		    border-top-right-radius: 5px;
 		}
 	)";
 
@@ -35,8 +35,7 @@ void WindowFrame::initLightStyleSheets()
 	    #header {
 		    background-color: #A7A7A7;
 		    border: 1px solid #A7A7A7;
-		    border-top-left-radius: 0px;
-		    border-top-right-radius: 0px;
+		    border-radius: 0px;
 		}
 	)";
 
@@ -75,8 +74,8 @@ void WindowFrame::initDarkStyleSheets()
 		#header {
 		    background-color: #282828;
 		    border: 1px solid #282828;
-		    border-top-left-radius: 10px;
-		    border-top-right-radius: 10px;
+		    border-top-left-radius: 5px;
+		    border-top-right-radius: 5px;
 		}
 	)";
 
@@ -97,8 +96,7 @@ void WindowFrame::initDarkStyleSheets()
 	    #header {
 		    background-color: #282828;
 		    border: 1px solid #282828;
-		    border-top-left-radius: 0px;
-		    border-top-right-radius: 0px;
+		    border-radius: 0px;
 		}
 	)";
 
@@ -512,16 +510,16 @@ void TestWindow::initLightStyleSheets()
 		QHeaderView::section {
 			background-color: #9D9D9D;
 
-			color: white;
+			color: black;
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
 		}
 
 		QTableView {
-			background-color: #414141;
+			background-color: #B0B0B0;
 
-			color: white;
+			color: black;
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
@@ -538,26 +536,6 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
-		}
-
-		QPushButton {
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #B0B0B0;
-
-			color: white;
-			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
-			background-color: #9D9D9D;
-		}
-		.QPushButton:hover:pressed {
-			background-color: #767676;
-		}
 		}
 
 	)";
@@ -595,7 +573,7 @@ void TestWindow::initLightStyleSheets()
 			margin: 3px;
 
 			border-radius: 10px;
-			background-color: #B0B0B0;
+			background-color: #949494;
 
 			color: black;
 			font-family: Kartika;
@@ -737,7 +715,37 @@ void TestWindow::initDarkStyleSheets()
 			font-weight: 600;
 		}
 
-		QPushButton {
+	)";
+
+	darkStyles.testwindowNameLineEdit =
+		R"(
+			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+
+	)";
+
+	darkStyles.activeTableButton =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #858383;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+	)";
+
+	darkStyles.inactiveTableButton =
+		R"(
 		.QPushButton {
 			margin: 3px;
 
@@ -755,6 +763,313 @@ void TestWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+	)";
+}
+
+void ConfiguratorWindow::initLightStyleSheets()
+{
+	lightStyles.testwindowMoveButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #B0B0B0;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+	)";
+
+	lightStyles.testwindowConnectButtonStyleConnect =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #7CC770  ;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+	)";
+	lightStyles.testwindowConnectButtonStyleDisconnected =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #FF8686;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+	)";
+
+	lightStyles.testwindowButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #B0B0B0;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+	)";
+
+	lightStyles.testwindowTestTimeComboBox =
+		R"(
+		background-color: #B0B0B0;
+		border-radius: 10px;
+
+		color: black;
+		font-family: Kartika;
+		font-size: 12px;
+		font-weight: 600;
+	)";
+
+	lightStyles.testwindowTableWidget =
+		R"(
+		QScrollBar:horizontal {
+    		background-color: #6E6E6E;
+		}
+		QScrollBar:vertical {
+    		background-color: #6E6E6E;
+		}
+
+		QHeaderView {
+			background-color: #D3D3D3;
+		}
+		QHeaderView::section {
+			background-color: #9D9D9D;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QTableView {
+			background-color: #B0B0B0;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QTableView::item:selected {
+			background-color: #6E6E6E;
+		}
+
+		QComboBox {
+			background-color: #B0B0B0;
+			border-radius: 10px;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+	)";
+
+	lightStyles.testwindowNameLineEdit =
+		R"(
+			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+
+	)";
+
+	lightStyles.activeTableButton =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #767676;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+	)";
+
+	lightStyles.inactiveTableButton =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #949494;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+		.QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+	)";
+}
+
+void ConfiguratorWindow::initDarkStyleSheets()
+{
+	darkStyles.testwindowMoveButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 20px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+	)";
+
+	darkStyles.testwindowConnectButtonStyleConnect =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #7CC770;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+	)";
+	darkStyles.testwindowConnectButtonStyleDisconnected =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #FF8686;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+
+	)";
+
+	darkStyles.testwindowButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+		.QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+	)";
+
+	darkStyles.testwindowTestTimeComboBox =
+		R"(
+		background-color: #535353;
+		border-radius: 10px;
+
+		color: white;
+		font-family: Kartika;
+		font-size: 12px;
+		font-weight: 600;
+	)";
+
+	darkStyles.testwindowTableWidget =
+		R"(
+
+		QScrollBar:horizontal {
+    		background-color: #6E6E6E;
+		}
+		QScrollBar:vertical {
+    		background-color: #6E6E6E;
+		}
+		QHeaderView::section {
+			background-color: #414141;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QTableView {
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QTableView::item:selected {
+			background-color: #9D9D9D;
+		}
+
+		QComboBox {
+			background-color: #535353;
+			border-radius: 10px;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
 		}
 
 	)";
@@ -779,9 +1094,9 @@ void TestWindow::initDarkStyleSheets()
 			border-radius: 10px;
 			background-color: #858383;
 
-			color: black;
+			color: white;
 			font-family: Kartika;
-			font-size: 20px;
+			font-size: 13px;
 			font-weight: 600;
 		}
 	)";
@@ -794,9 +1109,9 @@ void TestWindow::initDarkStyleSheets()
 			border-radius: 10px;
 			background-color: #535353;
 
-			color: black;
+			color: white;
 			font-family: Kartika;
-			font-size: 20px;
+			font-size: 13px;
 			font-weight: 600;
 		}
 		.QPushButton:hover {

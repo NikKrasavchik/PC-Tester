@@ -269,34 +269,40 @@ void TestWindow::initTexts()
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
+			fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
 			if (fullTestManualStandTypeSort)
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
 			else
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
 			break;
-
+		case WindowType::IN_TEST_MANUAL_STAND:
+			inTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
+			break;
+		case WindowType::OUT_TEST_MANUAL_STAND:
+			outTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
+			break;
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			outManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+			outManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			inManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+			inManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			outAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+			outAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			outAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			inAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+			inAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			inAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
-			fullTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+			fullTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			if (fullTestAutoStandTypeSort)
 				fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
@@ -315,12 +321,18 @@ void TestWindow::initTexts()
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
+			fullTestManualStandConnectButton->setText(QString("ECU\ndeconnected"));
 			if (fullTestManualStandTypeSort)
 				fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
 			else
 				fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
 			break;
-
+		case WindowType::IN_TEST_MANUAL_STAND:
+			inTestManualStandConnectButton->setText(QString("ECU\ndeconnected"));
+			break;
+		case WindowType::OUT_TEST_MANUAL_STAND:
+			outTestManualStandConnectButton->setText(QString("ECU\ndeconnected"));
+			break;
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 			outManualTestAutoStandConnectButton->setText(QString("Stand\ndeconnected"));
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
@@ -545,7 +557,6 @@ void TestWindow::resetTheme()
 				fullTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
 			else
 				fullTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
-			fullTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			fullTestManualStandSortButton->setStyleSheet(lightStyles.testwindowButtonStyle);
 			break;
 
@@ -554,7 +565,6 @@ void TestWindow::resetTheme()
 				outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
 			else
 				outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
-			outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -632,7 +642,6 @@ void TestWindow::resetTheme()
 				fullTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleConnect);
 			else
 				fullTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
-			fullTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
 			fullTestManualStandSortButton->setStyleSheet(darkStyles.testwindowButtonStyle);
 			break;
 
@@ -641,7 +650,6 @@ void TestWindow::resetTheme()
 				outTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleConnect);
 			else
 				outTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
-			outTestManualStandConnectButton->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -711,6 +719,10 @@ void TestWindow::resetLanguage()
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
+			if (standConected)
+				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
+			else
+				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
 			if (fullTestManualStandTypeSort)
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
 			else
@@ -719,10 +731,18 @@ void TestWindow::resetLanguage()
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
+			if (standConected)
+				outTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
+			else
+				outTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
 			parentFrame->setTitle(WindowType::OUT_TEST_MANUAL_STAND);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
+			if (standConected)
+				inTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
+			else
+				inTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
 			parentFrame->setTitle(WindowType::IN_TEST_MANUAL_STAND);
 			break;
 
@@ -730,7 +750,7 @@ void TestWindow::resetLanguage()
 			if (standConected)
 				outManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
 			else
-				outManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+				outManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::OUT_MANUAL_TEST_AUTO_STAND);
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
 			break;
@@ -739,7 +759,7 @@ void TestWindow::resetLanguage()
 			if (standConected)
 				inManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
 			else
-				inManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+				inManualTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::IN_MANUAL_TEST_AUTO_STAND);
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
 			break;
@@ -748,7 +768,7 @@ void TestWindow::resetLanguage()
 			if (standConected)
 				outAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
 			else
-				outAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+				outAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::OUT_AUTO_TEST_AUTO_STAND);
 			outAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			break;
@@ -757,7 +777,7 @@ void TestWindow::resetLanguage()
 			if (standConected)
 				inAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
 			else
-				inAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+				inAutoTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::IN_AUTO_TEST_AUTO_STAND);
 			inAutoTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			break;
@@ -766,7 +786,7 @@ void TestWindow::resetLanguage()
 			if (standConected)
 				fullTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
 			else
-				fullTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nнеподключён"));
+				fullTestAutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::FULL_TEST_AUTO_STAND);
 			fullTestAutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			if (fullTestAutoStandTypeSort)
@@ -787,6 +807,10 @@ void TestWindow::resetLanguage()
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
+			if (standConected)
+				fullTestManualStandConnectButton->setText(QString("ECU\nconnected"));
+			else
+				fullTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
 			if (fullTestManualStandTypeSort)
 				fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
 			else
@@ -795,10 +819,18 @@ void TestWindow::resetLanguage()
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
+			if (standConected)
+				outTestManualStandConnectButton->setText(QString("ECU\nconnected"));
+			else
+				outTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
 			parentFrame->setTitle(WindowType::OUT_TEST_MANUAL_STAND);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
+			if (standConected)
+				inTestManualStandConnectButton->setText(QString("ECU\nconnected"));
+			else
+				inTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
 			parentFrame->setTitle(WindowType::IN_TEST_MANUAL_STAND);
 			break;
 
@@ -894,7 +926,6 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 	statusButton = !statusButton;
 	for (int i = 0; i < cableRows.size(); i++)
 	{
-
 		if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
 			testType == WindowType::IN_TEST_MANUAL_STAND ||
 			testType == WindowType::FULL_TEST_MANUAL_STAND)
@@ -936,6 +967,7 @@ void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect
 	standConected = statusConnect;
 	resetLanguage();
 	resetTheme();
+	//outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
 }
 
 //void TestWindow::msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin)

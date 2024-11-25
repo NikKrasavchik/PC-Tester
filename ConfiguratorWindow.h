@@ -141,7 +141,7 @@ class ConfiguratorWindow : public QDialog
 	Q_OBJECT
 
 public:
-	ConfiguratorWindow(QWidget *parent = nullptr);
+	ConfiguratorWindow(QWidget* parent = nullptr);
 	~ConfiguratorWindow();
 
 	void setParentFrame(WindowFrame* parentFrame);
@@ -205,6 +205,8 @@ private:
 	void initUiTable();
 	void initUiFooter();
 
+	void initLightStyleSheets();
+	void initDarkStyleSheets();
 	void initRecources();
 	void initConnections();
 
@@ -228,7 +230,7 @@ private slots:
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
 	void on_addRowButton_clicked();
-	
+
 	void resetRowPreset(TableRowProperties* currentRowProperties);
 	void deleteRow(int index);
 	//void on_selectStandTypeComboBox_activated(int index);
