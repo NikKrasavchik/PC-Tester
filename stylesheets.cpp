@@ -538,6 +538,22 @@ void TestWindow::initLightStyleSheets()
 			font-weight: 600;
 		}
 
+		QPushButton {
+			border-radius: 4px;
+			background-color: #949494;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+		QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+
 	)";
 
 	lightStyles.testwindowNameLineEdit =
@@ -714,6 +730,21 @@ void TestWindow::initDarkStyleSheets()
 			font-size: 12px;
 			font-weight: 600;
 		}
+		QPushButton {
+			border-radius: 4px;
+			background-color: #474747;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 13px;
+			font-weight: 600;
+		}
+		QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		QPushButton:hover:pressed {
+			background-color: #858383;
+		}
 
 	)";
 
@@ -768,7 +799,7 @@ void TestWindow::initDarkStyleSheets()
 
 void ConfiguratorWindow::initLightStyleSheets()
 {
-	lightStyles.testwindowMoveButtonStyle =
+	lightStyles.configuratorButton =
 		R"(
 		.QPushButton {
 			margin: 3px;
@@ -777,6 +808,25 @@ void ConfiguratorWindow::initLightStyleSheets()
 			background-color: #B0B0B0;
 
 			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 500;
+		}
+		.QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+	)";
+	lightStyles.configuratorMoveButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #B0B0B0;
+
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 600;
@@ -788,60 +838,19 @@ void ConfiguratorWindow::initLightStyleSheets()
 			background-color: #767676;
 		}
 	)";
-
-	lightStyles.testwindowConnectButtonStyleConnect =
+	lightStyles.configuratorLineEdit =
 		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #7CC770  ;
-
 			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
 			font-family: Kartika;
-			font-size: 13px;
+			font-size: 12px;
 			font-weight: 600;
-		}
-
-	)";
-	lightStyles.testwindowConnectButtonStyleDisconnected =
-		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #FF8686;
-
-			color: black;
-			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
-		}
 
 	)";
 
-	lightStyles.testwindowButtonStyle =
-		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #B0B0B0;
-
-			color: black;
-			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
-			background-color: #9D9D9D;
-		}
-		.QPushButton:hover:pressed {
-			background-color: #767676;
-		}
-	)";
-
-	lightStyles.testwindowTestTimeComboBox =
+	lightStyles.configuratorComboBox =
 		R"(
 		background-color: #B0B0B0;
 		border-radius: 10px;
@@ -852,7 +861,7 @@ void ConfiguratorWindow::initLightStyleSheets()
 		font-weight: 600;
 	)";
 
-	lightStyles.testwindowTableWidget =
+	lightStyles.configuratorTableWidget =
 		R"(
 		QScrollBar:horizontal {
     		background-color: #6E6E6E;
@@ -882,54 +891,31 @@ void ConfiguratorWindow::initLightStyleSheets()
 			font-weight: 600;
 		}
 		QTableView::item:selected {
-			background-color: #6E6E6E;
+			background-color: #9D9D9D;
 		}
 
 		QComboBox {
-			background-color: #B0B0B0;
-			border-radius: 10px;
+			margin: 2px;
+			padding: 4px;
 
-			color: white;
-			font-family: Kartika;
-			font-size: 12px;
-			font-weight: 600;
-		}
-
-	)";
-
-	lightStyles.testwindowNameLineEdit =
-		R"(
-			color: black;
-			background-color: #D3D3D3;
-
-			line-height: 1px;
-			font-family: Kartika;
-			font-size: 12px;
-			font-weight: 600;
-
-	)";
-
-	lightStyles.activeTableButton =
-		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #767676;
+			background-color: #949494;
+			border-radius: 4px;
 
 			color: black;
 			font-family: Kartika;
 			font-size: 12px;
-			font-weight: 400;
+			font-weight: 600;
 		}
-	)";
+		QComboBox::drop-down {
+		}
+		QComboBox QAbstractItemView {
+			background-color: #949494;
+		}
 
-	lightStyles.inactiveTableButton =
-		R"(
-		.QPushButton {
-			margin: 3px;
+		QPushButton {
+			margin: 4px;
 
-			border-radius: 10px;
+			border-radius: 4px;
 			background-color: #949494;
 
 			color: black;
@@ -937,18 +923,19 @@ void ConfiguratorWindow::initLightStyleSheets()
 			font-size: 12px;
 			font-weight: 400;
 		}
-		.QPushButton:hover {
+		QPushButton:hover {
 			background-color: #9D9D9D;
 		}
-		.QPushButton:hover:pressed {
+		QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+
 	)";
 }
 
 void ConfiguratorWindow::initDarkStyleSheets()
 {
-	darkStyles.testwindowMoveButtonStyle =
+	darkStyles.configuratorButton =
 		R"(
 		.QPushButton {
 			margin: 3px;
@@ -957,6 +944,26 @@ void ConfiguratorWindow::initDarkStyleSheets()
 			background-color: #535353;
 
 			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 500;
+		}
+		.QPushButton:hover {
+			background-color: #6E6E6E;
+		}
+		.QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+	)";
+
+	darkStyles.configuratorMoveButtonStyle =
+		R"(
+		.QPushButton {
+			margin: 3px;
+
+			border-radius: 10px;
+			background-color: #535353;
+
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 600;
@@ -969,59 +976,19 @@ void ConfiguratorWindow::initDarkStyleSheets()
 		}
 	)";
 
-	darkStyles.testwindowConnectButtonStyleConnect =
+	darkStyles.configuratorLineEdit =
 		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #7CC770;
-
 			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
 			font-family: Kartika;
-			font-size: 13px;
+			font-size: 12px;
 			font-weight: 600;
-		}
-
-	)";
-	darkStyles.testwindowConnectButtonStyleDisconnected =
-		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #FF8686;
-
-			color: white;
-			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
-		}
 
 	)";
 
-	darkStyles.testwindowButtonStyle =
-		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #535353;
-
-			color: white;
-			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
-			background-color: #6E6E6E;
-		}
-		.QPushButton:hover:pressed {
-			background-color: #858383;
-		}
-	)";
-
-	darkStyles.testwindowTestTimeComboBox =
+	darkStyles.configuratorComboBox =
 		R"(
 		background-color: #535353;
 		border-radius: 10px;
@@ -1032,7 +999,7 @@ void ConfiguratorWindow::initDarkStyleSheets()
 		font-weight: 600;
 	)";
 
-	darkStyles.testwindowTableWidget =
+	darkStyles.configuratorTableWidget =
 		R"(
 
 		QScrollBar:horizontal {
@@ -1059,11 +1026,14 @@ void ConfiguratorWindow::initDarkStyleSheets()
 			font-weight: 600;
 		}
 		QTableView::item:selected {
-			background-color: #9D9D9D;
+			background-color: #6E6E6E;
 		}
 
 		QComboBox {
-			background-color: #535353;
+			margin: 2px;
+			padding: 4px;
+
+			background-color: #474747;
 			border-radius: 10px;
 
 			color: white;
@@ -1071,55 +1041,30 @@ void ConfiguratorWindow::initDarkStyleSheets()
 			font-size: 12px;
 			font-weight: 600;
 		}
+		QComboBox::drop-down {
+		}
+		QComboBox QAbstractItemView {
+			background-color: #474747;
+		}
 
-	)";
+		QPushButton {
+			margin: 4px;
 
-	darkStyles.testwindowNameLineEdit =
-		R"(
-			color: white;
-			background-color: #414141;
-
-			line-height: 1px;
-			font-family: Kartika;
-			font-size: 12px;
-			font-weight: 600;
-
-	)";
-
-	darkStyles.activeTableButton =
-		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #858383;
+			border-radius: 4px;
+			background-color: #474747;
 
 			color: white;
 			font-family: Kartika;
 			font-size: 13px;
 			font-weight: 600;
 		}
-	)";
-
-	darkStyles.inactiveTableButton =
-		R"(
-		.QPushButton {
-			margin: 3px;
-
-			border-radius: 10px;
-			background-color: #535353;
-
-			color: white;
-			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
-		}
-		.QPushButton:hover {
+		QPushButton:hover {
 			background-color: #6E6E6E;
 		}
-		.QPushButton:hover:pressed {
+		QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+
 	)";
 }
 //void MainWindow::initStyleSheets()

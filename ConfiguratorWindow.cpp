@@ -61,7 +61,7 @@ void ConfiguratorWindow::initUi()
 	initConnections();
 
 	resetTheme();
-	resetLanguage();
+	initText();
 }
 
 void ConfiguratorWindow::initUiHeader()
@@ -203,6 +203,31 @@ void ConfiguratorWindow::initUiTable()
 		<< "Max V"
 		<< "Name"
 		<< "");
+
+	mainTableWidget->setColumnWidth((int)ColoumnName::CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::PIN,			COLOUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::DIRECTION,	COLOUMN_DIRECTION_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::TYPE,			COLOUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::CAN_ID,		COLOUMN_CANID_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::BIT,			COLOUMN_BIT_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::MIN_CURRENT,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::MAX_CURRENT,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::MIN_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::MAX_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
+	//mainTableWidget->setColumnWidth((int)ColoumnName::NAME,			COLOUMN_MORE_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::DEL,			COLOUMN_REMUVE_WIDTH);
+
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::CONNECTOR,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::PIN,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::DIRECTION,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::TYPE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::CAN_ID,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::BIT,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::MIN_CURRENT,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::MIN_VOLTAGE,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::MAX_VOLTAGE,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::NAME,			QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::DEL,			QHeaderView::Fixed);
 }
 
 void ConfiguratorWindow::initRecources()
@@ -222,6 +247,52 @@ void ConfiguratorWindow::initConnections()
 	QMetaObject::connectSlotsByName(this);
 }
 
+void ConfiguratorWindow::initText()
+{
+	int standTypeState = -1;
+	if (selectStandTypeComboBox->count())
+	{
+		standTypeState = selectStandTypeComboBox->currentIndex();
+		selectStandTypeComboBox->clear();
+	}
+
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		if (fileNameLineEdit->text() == "" || fileNameLineEdit->text() == "Write file name")
+			fileNameLineEdit->setText(QString::fromLocal8Bit("Введите имя файла"));
+
+		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
+		loadButton->setText(QString::fromLocal8Bit("Открыть"));
+		addRowButton->setText(QString::fromLocal8Bit("Добавить элемент"));
+
+		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Тип стенда"));
+		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Ручной"));
+		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Автоматический"));
+		if (standTypeState != -1)
+			selectStandTypeComboBox->setCurrentIndex(standTypeState);
+
+		break;
+
+	case ENGLISH_LANG:
+		if (fileNameLineEdit->text() == "" || fileNameLineEdit->text() == QString::fromLocal8Bit("Введите имя файла"))
+			fileNameLineEdit->setText("Write file name");
+
+		saveButton->setText("Save");
+		loadButton->setText("Open");
+		addRowButton->setText("Add element");
+
+		selectStandTypeComboBox->addItem(QString("Stand type"));
+		selectStandTypeComboBox->addItem(QString("Manual"));
+		selectStandTypeComboBox->addItem(QString("Auto"));
+		if (standTypeState != -1)
+			selectStandTypeComboBox->setCurrentIndex(standTypeState);
+
+		break;
+	}
+	resetPresets();
+}
+
 void ConfiguratorWindow::resetLanguage()
 {
 	int standTypeState = -1;
@@ -238,6 +309,7 @@ void ConfiguratorWindow::resetLanguage()
 			fileNameLineEdit->setText(QString::fromLocal8Bit("Введите имя файла"));
 
 		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
+		loadButton->setText(QString::fromLocal8Bit("Открыть"));
 		addRowButton->setText(QString::fromLocal8Bit("Добавить элемент"));
 
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Тип стенда"));
@@ -253,6 +325,7 @@ void ConfiguratorWindow::resetLanguage()
 			fileNameLineEdit->setText("Write file name");
 
 		saveButton->setText("Save");
+		loadButton->setText("Open");
 		addRowButton->setText("Add element");
 
 		selectStandTypeComboBox->addItem(QString("Stand type"));
@@ -263,7 +336,7 @@ void ConfiguratorWindow::resetLanguage()
 
 		break;
 	}
-
+	parentFrame->setTitle(WindowType::CONFIGURATOR);
 	resetPresets();
 }
 
@@ -278,7 +351,15 @@ void ConfiguratorWindow::resetTheme()
 		backButton->setIcon(QIcon(*backButtonLightPixmap));
 		backButton->setIconSize(backButton->size());
 
-		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
+		saveButton->setStyleSheet(lightStyles.configuratorButton);
+		loadButton->setStyleSheet(lightStyles.configuratorButton);
+		addRowButton->setStyleSheet(lightStyles.configuratorButton);
+		backButton->setStyleSheet(lightStyles.configuratorMoveButtonStyle);
+		switchThemeButton->setStyleSheet(lightStyles.configuratorMoveButtonStyle);
+		switchLanguageButton->setStyleSheet(lightStyles.configuratorMoveButtonStyle);
+		fileNameLineEdit->setStyleSheet(lightStyles.configuratorLineEdit);
+		selectStandTypeComboBox->setStyleSheet(lightStyles.configuratorComboBox);
+		mainTableWidget->setStyleSheet(lightStyles.configuratorTableWidget);
 		break;
 
 	case DARK_THEME:
@@ -287,6 +368,16 @@ void ConfiguratorWindow::resetTheme()
 		switchLanguageButton->setIcon(QIcon(*languageDarkPixmap));
 		backButton->setIcon(QIcon(*backButtonDarkPixmap));
 		backButton->setIconSize(backButton->size());
+
+		saveButton->setStyleSheet(darkStyles.configuratorButton);
+		loadButton->setStyleSheet(darkStyles.configuratorButton);
+		addRowButton->setStyleSheet(darkStyles.configuratorButton);
+		backButton->setStyleSheet(darkStyles.configuratorMoveButtonStyle);
+		switchThemeButton->setStyleSheet(darkStyles.configuratorMoveButtonStyle);
+		switchLanguageButton->setStyleSheet(darkStyles.configuratorMoveButtonStyle);
+		fileNameLineEdit->setStyleSheet(darkStyles.configuratorLineEdit);
+		selectStandTypeComboBox->setStyleSheet(darkStyles.configuratorComboBox);
+		mainTableWidget->setStyleSheet(darkStyles.configuratorTableWidget);
 		break;
 	}
 }

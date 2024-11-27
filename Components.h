@@ -24,7 +24,7 @@
 
 struct Styles
 {
-	// Frame
+	// FRAME
 	//
 	// header
 	QString headerDefaultStyle;
@@ -38,7 +38,7 @@ struct Styles
 	// text title
 	QString titleStyle;
 
-	// Mainwindow
+	// MAINWINDOW
 	// Header
 	//selectStand
 	QString standButtons;
@@ -62,11 +62,18 @@ struct Styles
 	QString settingComboBox;
 	QString settingSelectText;
 
-	// TestWindow
+	// CONFIGURATOR
 	//
 	//
+	QString configuratorButton;
+	QString configuratorMoveButtonStyle;
+	QString configuratorLineEdit;
+	QString configuratorComboBox;
+	QString configuratorTableWidget;
 
-	//test window
+	// TESTWINDOW
+	//
+	//
 	QString testwindowButtonStyle;
 	QString testwindowMoveButtonStyle;
 	QString testwindowConnectButtonStyleConnect;
@@ -75,7 +82,7 @@ struct Styles
 	QString testwindowTableWidget;
 	QString testwindowNameLineEdit;
 
-	// TableButtons
+	// TABLEBUTTON
 	//
 	//
 	QString activeTableButton;
@@ -182,10 +189,10 @@ extern ViewWindowState* viewWindowState;
 #define FIXED_HEADER_COMBO_HEIGHT	40
 #define FIXED_STAND_COMBO_WIDTH		150
 #define FIXED_STAND_COMBO_HEIGHT	50
-#define FIXED_FOOTER_BUTTON_WIDTH	100
+#define FIXED_FOOTER_BUTTON_WIDTH	150
 #define FIXED_FOOTER_BUTTON_HEIGHT	50
 #define FIXED_MORE_BUTTON_SIZE		25
 #define FIXED_CHECK_BUTTON_WIDTH	65
 #define FIXED_CHECK_WBUTTON_WIDTH	148
 #define	FIXED_CHECK_BUTTON_HEIGHT	30
-#define FIXED_HALF_BUTTON_WIDTH		60	
+#define FIXED_HALF_BUTTON_WIDTH		80	

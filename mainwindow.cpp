@@ -1192,6 +1192,7 @@ void MainWindow::on_configuratorButton_clicked()
 	ConfiguratorWindow* configuratorWindow = new ConfiguratorWindow(this);
 
 	WindowFrame w(WindowType::CONFIGURATOR, nullptr, configuratorWindow);
+	configuratorWindow->setParentFrame(&w);
 	w.show();
 	this->hide();
 	configuratorWindow->exec();

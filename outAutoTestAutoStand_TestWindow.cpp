@@ -41,20 +41,20 @@ void TestWindow::initUiTableHeaderOutAutoTestAutoStand()
 		<< QString::fromLocal8Bit("ой")
 		<< "");
 
-	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_STAND,		COLOUMN_AUTOCHECK_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_PC,			COLOUMN_PC_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR, COLOUMN_CONNECTOR_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_PIN, COLOUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_TYPE, COLOUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_STAND, COLOUMN_AUTOCHECK_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_PC, COLOUMN_PC_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_MORE, COLOUMN_MORE_WIDTH);
 
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CONNECTOR,	QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PIN,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_NAME,			QHeaderView::Stretch);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_TYPE,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_STAND,		QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PC,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CONNECTOR, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PIN, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_NAME, QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_TYPE, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_STAND, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PC, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE, QHeaderView::Fixed);
 }
 
 void TestWindow::initUiTableRowsOutAutoTestAutoStand()
@@ -80,10 +80,8 @@ void TestWindow::initUiTableRowsOutAutoTestAutoStand()
 
 void TestWindow::on_outAutoTestAutoStandConnectButton_clicked()
 {
-
 }
 
 void TestWindow::on_outAutoTestAutoStandStartTestButton_clicked()
 {
-
 }

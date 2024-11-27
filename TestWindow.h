@@ -267,6 +267,7 @@ private:
 	void resetLanguage();
 	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
 	void resetLanguageRowsTable(); // Надо как то менять язык в таблице
+	void resetIconMoreButton(bool theme);
 	void sortRows();
 	void fillTestTimeComboBoxes();
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
@@ -299,6 +300,7 @@ private slots:
 
 	// manualtwoThread
 	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
+	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 
 	//void msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin);
 	//void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value);

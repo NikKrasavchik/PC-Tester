@@ -397,6 +397,7 @@ void TestWindow::initConnections()
 	QMetaObject::connectSlotsByName(this);
 	// manualThread
 	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
+	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
 
 	//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowBeforeTest_AutoTwoThread, this, &TestWindow::msgToTestWindowBeforeTest_AutoTwoThread);
 	//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowAfterTest_AutoTwoThread, this, &TestWindow::msgToTestWindowAfterTest_AutoTwoThread);
@@ -550,6 +551,8 @@ void TestWindow::resetTheme()
 		mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 		testerNameLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
 		fileNameLabel->setStyleSheet(lightStyles.testwindowNameLineEdit);
+		resetIconMoreButton(LIGHT_THEME);
+
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
@@ -635,6 +638,8 @@ void TestWindow::resetTheme()
 		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 		testerNameLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
 		fileNameLabel->setStyleSheet(darkStyles.testwindowNameLineEdit);
+		resetIconMoreButton(DARK_THEME);
+
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
@@ -970,6 +975,36 @@ void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect
 	//outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
 }
 
+static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProperties*> cableRows)
+{
+	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
+		if ((int)(cableRows[currentRowNum]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL) == pad && cableRows[currentRowNum]->pin.toInt() == pin)
+			return currentRowNum;
+	return -1;
+}
+
+void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue)
+{
+	int currentColoumnNum = -1;
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+		currentColoumnNum = 4;
+		break;
+
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		currentColoumnNum = 6;
+		break;
+
+	default:
+		// ERROR
+		break;
+	}
+	int currentRowNum = determineCurrentRowNum(pad, pin, cableRows);
+	QAbstractItemModel* model = mainTableWidget->model();
+	model->setData(model->index(currentRowNum, currentColoumnNum), QString::number(newValue));
+}
+
 //void TestWindow::msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin)
 //{
 //	//setStatusTableButtons(false);
@@ -1131,4 +1166,15 @@ void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
 	moreCellHLayout->addWidget(cableRows[currentRowNum]->moreButton);
 	moreCellHLayout->setContentsMargins(0, 0, 0, 0);
 	moreCellWidget->setLayout(moreCellHLayout);
+}
+
+void TestWindow::resetIconMoreButton(bool theme)
+{
+	for (int row = 0; row < cableRows.size(); row++)
+	{
+		if (theme)
+			cableRows[row]->moreButton->setIcon(QIcon(*moreButtonDarkPixmap));
+		else
+			cableRows[row]->moreButton->setIcon(QIcon(*moreButtonLightPixmap));
+	}
 }

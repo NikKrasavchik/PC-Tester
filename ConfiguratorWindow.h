@@ -13,6 +13,7 @@
 #include <QFileDialog>
 #include <vector>
 #include <fstream>
+#include <QHeaderView>
 
 #include "ui_ConfiguratorWindow.h"
 #include "Components.h"
@@ -77,6 +78,16 @@
 
 #define CFG_SPLIT				QString(",")
 #define CFG_ENDING				QString("\n")
+
+#define COLOUMN_CONNECTOR_WIDTH	120
+#define COLOUMN_PIN_WIDTH		35
+#define COLOUMN_DIRECTION_WIDTH	140
+#define COLOUMN_TYPE_WIDTH		120
+#define COLOUMN_CANID_WIDTH		70
+#define COLOUMN_BIT_WIDTH		35
+#define COLOUMN_RAPIDS_WIDTH	45
+#define COLOUMN_REMUVE_WIDTH	80
+
 
 enum class ColoumnName
 {
@@ -162,12 +173,12 @@ private:
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* mainVLayout;
 	QPushButton* clearPresetButton;
-	QPushButton* saveButton;
-	QPushButton* loadButton;
-	QPushButton* addRowButton;
-	QPushButton* backButton;
-	QPushButton* switchThemeButton;
-	QPushButton* switchLanguageButton;
+	QPushButton* saveButton;//
+	QPushButton* loadButton;//
+	QPushButton* addRowButton;//
+	QPushButton* backButton;//
+	QPushButton* switchThemeButton;//
+	QPushButton* switchLanguageButton;//
 	QSpacerItem* tripleButtonsSpacer;
 	QSpacerItem* footerSpacer;
 	QSpacerItem* saveLoadSpacer;
@@ -209,6 +220,8 @@ private:
 	void initDarkStyleSheets();
 	void initRecources();
 	void initConnections();
+
+	void initText();
 
 	void resetTheme();
 	void resetLanguage();

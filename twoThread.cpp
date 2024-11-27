@@ -182,11 +182,11 @@ void ManualStandTwoThread::run()
 
 			for (int i = 0; i < cables.size(); i++)
 			{
-				TestCables cable = *cables[i];
-				if (cable.canId == id && cable.oldValue != msgReceive[cable.byte])
+				TestCables* cable = cables[i];
+				if (cable->canId == id && cable->oldValue != msgReceive[cable->byte])
 				{
-					cable.oldValue = msgReceive[cable.byte];
-					msgToTestWindowChangeValue_ManualTwoThread(cable.pad, cable.pin, cable.oldValue);
+					cable->oldValue = msgReceive[cable->byte];
+					msgToTestWindowChangeValue_ManualTwoThread(cable->pad, cable->pin, cable->oldValue);
 				}
 			}
 		}
