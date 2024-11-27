@@ -20,18 +20,18 @@ void TestWindow::initUiFullTestManualStand()
 	fullTestManualStandSortButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
 	usefulSpaceHLayout->addWidget(fullTestManualStandSortButton);
 
-	fullTestManualStandTypeSort = false;
+	fullTestManualStandSortType = SORT_TYPE_INDEX;
 
 	initUiTableFullTestManualStand();
 }
 
 void TestWindow::initUiTableFullTestManualStand()
 {
-	initUiTableHeaderFullTestManualStand();
-	initUiTableRowsFullTestManualStand();
+	resetTableHeaderFullTestManualStand();
+	resetTableRowsFullTestManualStand();
 }
 
-void TestWindow::initUiTableHeaderFullTestManualStand()
+void TestWindow::resetTableHeaderFullTestManualStand()
 {
 	mainTableWidget->setRowCount(cableRows.size());
 	mainTableWidget->setColumnCount(COLOUMN_COUNT);
@@ -63,7 +63,7 @@ void TestWindow::initUiTableHeaderFullTestManualStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
 }
 
-void TestWindow::initUiTableRowsFullTestManualStand()
+void TestWindow::resetTableRowsFullTestManualStand()
 {
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
@@ -83,23 +83,116 @@ void TestWindow::initUiTableRowsFullTestManualStand()
 	}
 }
 
-void TestWindow::on_fullTestManualStandSortButton_clicked()
+static void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType)
 {
-	fullTestManualStandTypeSort = !fullTestManualStandTypeSort;
+	std::vector<TestTableRowProperties*> tmpCableRows(*cableRows);
 
-	switch (viewWindowState->appLanguage)
+	switch (sortType)
 	{
-	case RUSSIAN_LANG:
-		if (fullTestManualStandTypeSort)
-			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
-		else
-			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
+	case SORT_TYPE_INDEX:
+		for (int i = 0; i < cableRows->size(); i++)
+		{
+			bool flag = true;
+			for (int j = 0; j < cableRows->size() - (i + 1); j++) {
+				if ((*cableRows)[j]->id > (*cableRows)[j + 1]->id) {
+					flag = false;
+					std::swap((*cableRows)[j], (*cableRows)[j + 1]);
+				}
+			}
+			if (flag) {
+				break;
+			}
+		}
 		break;
-	case ENGLISH_LANG:
-		if (fullTestManualStandTypeSort)
-			fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
-		else
-			fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
+
+	case SORT_TYPE_DIRECTION_OUT:
+		cableRows->clear();
+		for (int i = 0; i < tmpCableRows.size(); i++)
+			if (tmpCableRows[i]->direction == "OUT")
+			{
+				cableRows->push_back(new TestTableRowProperties());
+				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
+			}
+		for (int i = 0; i < tmpCableRows.size(); i++)
+			if (tmpCableRows[i]->direction == "IN")
+			{
+				cableRows->push_back(new TestTableRowProperties());
+				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
+			}
+		break;
+
+	case SORT_TYPE_DIRECTION_IN:
+		cableRows->clear();
+		for (int i = 0; i < tmpCableRows.size(); i++)
+			if (tmpCableRows[i]->direction == "IN")
+			{
+				cableRows->push_back(new TestTableRowProperties());
+				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
+			}
+		for (int i = 0; i < tmpCableRows.size(); i++)
+			if (tmpCableRows[i]->direction == "OUT")
+			{
+				cableRows->push_back(new TestTableRowProperties());
+				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
+			}
 		break;
 	}
+}
+
+void TestWindow::on_fullTestManualStandSortButton_clicked()
+{
+	switch (fullTestManualStandSortType)
+	{
+	case SORT_TYPE_INDEX:
+		fullTestManualStandSortType = SORT_TYPE_DIRECTION_OUT;
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо выходам"));
+			break;
+
+		case ENGLISH_LANG:
+			fullTestManualStandSortButton->setText(QString("Sort:\nout first"));
+			break;
+		}
+		break;
+
+	case SORT_TYPE_DIRECTION_OUT:
+		fullTestManualStandSortType = SORT_TYPE_DIRECTION_IN;
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо входам"));
+			break;
+
+		case ENGLISH_LANG:
+			fullTestManualStandSortButton->setText(QString("Sort:\nin first"));
+			break;
+		}
+		break;
+
+	case SORT_TYPE_DIRECTION_IN:
+		fullTestManualStandSortType = SORT_TYPE_INDEX;
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
+			break;
+
+		case ENGLISH_LANG:
+			fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
+			break;
+		}
+		break;
+	}
+
+	rewriteCableRows(&cableRows, fullTestManualStandSortType);
+
+	mainTableWidget->clear();
+	resetTableHeaderFullTestManualStand();
+	resetTableRowsFullTestManualStand();
+
 }

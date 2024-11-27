@@ -101,6 +101,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 
 	cables.clear();
 	bool isFileCorrect = true;
+	int id = 0;
 	while (!file.atEnd())
 	{
 		QString dataLine = file.readLine();
@@ -136,6 +137,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 		else
 		{
 			Cable cable;
+			cable.id = id++;
 			for (int coloumn = 0; coloumn < COLOUMN_COUNT && isFileCorrect; coloumn++)
 			{
 				QString currentProperty = dataList[coloumn];

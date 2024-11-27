@@ -149,6 +149,7 @@ enum class TypeResetTableButtonsTheme
 
 struct Cable
 {
+	int id;
 	ConnectorId connector;
 	int pin;
 	int direction;

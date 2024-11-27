@@ -6,6 +6,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 	{
 		cableRows.push_back(new TestTableRowProperties());
 
+		cableRows[i]->id = cables[i].id;
 		cableRows[i]->connector = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
 		cableRows[i]->pin = QString::number(cables[i].pin);
 		cableRows[i]->name = cables[i].name;

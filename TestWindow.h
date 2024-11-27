@@ -46,6 +46,10 @@
 #define LOAD75_BUTTON_PRESSED	192
 #define LOAD100_BUTTON_PRESSED	255
 
+#define SORT_TYPE_INDEX			0
+#define SORT_TYPE_DIRECTION_OUT	1
+#define SORT_TYPE_DIRECTION_IN	2
+
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
 enum class TestButtons
@@ -95,6 +99,7 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
+	int id;
 	QString connector;
 	QString pin;
 	QString name;
@@ -195,8 +200,8 @@ private:
 	QPixmap* moreButtonLightPixmap;
 	QPixmap* moreButtonDarkPixmap;
 
-	bool fullTestManualStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
-	bool fullTestAutoStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
+	int fullTestManualStandSortType; // false - сортировка по нумерации / true - сортировка по типу
+	int fullTestAutoStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
 
 	bool standConected; // ѕќћ≈Ќя“№  ѕеременна€ хран€ща€ в информацию о том подключен ли стенд к пк. перезаписыватьс€ она будет по сигналу со второго потока. —ейчас дл€ отладки мен€етьс€ при нажатии на смену стил€;
 
@@ -235,8 +240,8 @@ private:
 
 	void initUiFullTestManualStand();
 	void initUiTableFullTestManualStand();
-	void initUiTableHeaderFullTestManualStand();
-	void initUiTableRowsFullTestManualStand();
+	void resetTableHeaderFullTestManualStand();
+	void resetTableRowsFullTestManualStand();
 
 	void initUiInManualTestAutoStand();
 	void initUiTableInManualTestAutoStand();
@@ -299,7 +304,7 @@ private slots:
 
 	// manualtwoThread
 	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
-
+	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 	//void msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin);
 	//void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value);
 };

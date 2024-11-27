@@ -94,27 +94,20 @@ void ConfiguratorWindow::initUiUsefulSpace()
 	usefulSpaceHLayout = new QHBoxLayout(usefulSpaceWidget);
 	usefulSpaceHLayout->setObjectName("usefulSpaceHLayout");
 
+	loadButton = new QPushButton(usefulSpaceWidget);
+	loadButton->setObjectName("loadButton");
+	loadButton->setFixedSize(FIXED_HALF_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT);
+	usefulSpaceHLayout->addWidget(loadButton);
+
 	fileNameLineEdit = new QLineEdit(usefulSpaceWidget);
 	fileNameLineEdit->setObjectName("fileNameLineEdit");
 	fileNameLineEdit->setFixedSize(FIXED_FILE_NAME_WIDTH, FIXED_FILE_NAME_HEIGHT);
 	usefulSpaceHLayout->addWidget(fileNameLineEdit);
 
-	QHBoxLayout* saveLoadHLayout = new QHBoxLayout(usefulSpaceWidget);
-	saveLoadHLayout->setObjectName("saveLoadHLayout");
-	usefulSpaceHLayout->addLayout(saveLoadHLayout);
-
 	saveButton = new QPushButton(usefulSpaceWidget);
 	saveButton->setObjectName("saveButton");
 	saveButton->setFixedSize(FIXED_HALF_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT);
-	saveLoadHLayout->addWidget(saveButton);
-
-	saveLoadSpacer = new QSpacerItem(5, 0, QSizePolicy::Fixed);
-	saveLoadHLayout->addItem(saveLoadSpacer);
-
-	loadButton = new QPushButton(usefulSpaceWidget);
-	loadButton->setObjectName("loadButton");
-	loadButton->setFixedSize(FIXED_HALF_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT);
-	saveLoadHLayout->addWidget(loadButton);
+	usefulSpaceHLayout->addWidget(saveButton);
 }
 
 void ConfiguratorWindow::initUiTripleButtons()
@@ -220,6 +213,8 @@ void ConfiguratorWindow::initRecources()
 void ConfiguratorWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
+
+	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
 
 void ConfiguratorWindow::resetLanguage()
@@ -329,8 +324,6 @@ void ConfiguratorWindow::on_switchLanguageButton_clicked()
 void ConfiguratorWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;
-
-	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
 
 void ConfiguratorWindow::resizeEvent(QResizeEvent* event)

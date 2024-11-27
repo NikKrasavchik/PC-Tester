@@ -270,7 +270,7 @@ void TestWindow::initTexts()
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
 			else
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
@@ -322,7 +322,7 @@ void TestWindow::initTexts()
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			fullTestManualStandConnectButton->setText(QString("ECU\ndeconnected"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
 			else
 				fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
@@ -397,6 +397,7 @@ void TestWindow::initConnections()
 	QMetaObject::connectSlotsByName(this);
 	// manualThread
 	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
+	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
 
 	//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowBeforeTest_AutoTwoThread, this, &TestWindow::msgToTestWindowBeforeTest_AutoTwoThread);
 	//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowAfterTest_AutoTwoThread, this, &TestWindow::msgToTestWindowAfterTest_AutoTwoThread);
@@ -723,7 +724,7 @@ void TestWindow::resetLanguage()
 				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
 			else
 				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
 			else
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
@@ -811,7 +812,7 @@ void TestWindow::resetLanguage()
 				fullTestManualStandConnectButton->setText(QString("ECU\nconnected"));
 			else
 				fullTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
 			else
 				fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
@@ -970,17 +971,35 @@ void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect
 	//outTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
 }
 
-//void TestWindow::msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin)
-//{
-//	//setStatusTableButtons(false);
-//	//resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
-//}
-//
-//void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value)
-//{
-//	//setStatusTableButtons(true);
-//	//// установить новые значения в таблицу
-//}
+static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProperties*> cableRows)
+{
+	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
+		if ((int)(cableRows[currentRowNum]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL) == pad && cableRows[currentRowNum]->pin.toInt() == pin)
+			return currentRowNum;
+	return -1;
+}
+
+void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue)
+{
+	int currentColoumnNum = -1;
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+		currentColoumnNum = 4;
+		break;
+
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		currentColoumnNum = 6;
+		break;
+
+	default:
+		// ERROR
+		break;
+	}
+	int currentRowNum = determineCurrentRowNum(pad, pin, cableRows);
+	QAbstractItemModel* model = mainTableWidget->model();
+	model->setData(model->index(currentRowNum, currentColoumnNum), QString::number(newValue));
+}
 
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)
 {
