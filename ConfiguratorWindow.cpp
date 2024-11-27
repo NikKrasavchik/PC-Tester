@@ -33,7 +33,6 @@ void ConfiguratorWindow::initUi()
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("mainLayoutWidget");
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
-	//mainLayoutWidget->setStyleSheet("background-color: red;");
 
 	mainVLayout = new QVBoxLayout(mainLayoutWidget);
 	mainVLayout->setObjectName("mainVLayout");
@@ -213,8 +212,6 @@ void ConfiguratorWindow::initRecources()
 void ConfiguratorWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
-
-	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
 
 void ConfiguratorWindow::resetLanguage()
@@ -324,6 +321,8 @@ void ConfiguratorWindow::on_switchLanguageButton_clicked()
 void ConfiguratorWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;
+
+	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
 
 void ConfiguratorWindow::resizeEvent(QResizeEvent* event)
