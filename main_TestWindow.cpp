@@ -270,7 +270,7 @@ void TestWindow::initTexts()
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
 			else
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
@@ -322,7 +322,7 @@ void TestWindow::initTexts()
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			fullTestManualStandConnectButton->setText(QString("ECU\ndeconnected"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
 			else
 				fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
@@ -728,7 +728,7 @@ void TestWindow::resetLanguage()
 				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
 			else
 				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
 			else
 				fullTestManualStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
@@ -816,7 +816,7 @@ void TestWindow::resetLanguage()
 				fullTestManualStandConnectButton->setText(QString("ECU\nconnected"));
 			else
 				fullTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
-			if (fullTestManualStandTypeSort)
+			if (fullTestManualStandSortType)
 				fullTestManualStandSortButton->setText(QString("Sort:\ntype"));
 			else
 				fullTestManualStandSortButton->setText(QString("Sort:\nnum"));
@@ -1004,18 +1004,6 @@ void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, in
 	QAbstractItemModel* model = mainTableWidget->model();
 	model->setData(model->index(currentRowNum, currentColoumnNum), QString::number(newValue));
 }
-
-//void TestWindow::msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin)
-//{
-//	//setStatusTableButtons(false);
-//	//resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
-//}
-//
-//void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value)
-//{
-//	//setStatusTableButtons(true);
-//	//// установить новые значения в таблицу
-//}
 
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)
 {
