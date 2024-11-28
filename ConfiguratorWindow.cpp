@@ -1,5 +1,19 @@
 #include "ConfiguratorWindow.h"
 
+#define COLOUMN_COUNT_FULL			12
+#define COLOUMN_COUNT_MANUAL		8
+#define COLOUMN_COUNT_AUTO			10
+
+#define COLOUMN_CONNECTOR_WIDTH		120
+#define COLOUMN_PIN_WIDTH			35
+#define COLOUMN_DIRECTION_WIDTH		140
+#define COLOUMN_TYPE_WIDTH			120
+#define COLOUMN_CANID_WIDTH         70
+#define COLOUMN_BIT_WIDTH			35
+#define COLOUMN_RAPIDS_WIDTH		45
+#define COLOUMN_NAME_WIDTH			45
+#define COLOUMN_REMUVE_WIDTH		80
+
 ConfiguratorWindow::ConfiguratorWindow(QWidget* parent)
 	: QDialog(parent)
 {
@@ -180,21 +194,7 @@ void ConfiguratorWindow::initUiTable()
 {
 	mainTableWidget = new QTableWidget(mainLayoutWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
-
-	mainTableWidget->setColumnCount(12);
-
-	mainTableWidget->setHorizontalHeaderLabels(QStringList() << "Connector"
-		<< "Pin"
-		<< "Direction"
-		<< "Connector type"
-		<< "Can ID"
-		<< "Bit"
-		<< "Min A"
-		<< "Max A"
-		<< "Min V"
-		<< "Max V"
-		<< "Name"
-		<< "");
+	resetFullTable();
 }
 
 void ConfiguratorWindow::initRecources()
@@ -212,6 +212,123 @@ void ConfiguratorWindow::initRecources()
 void ConfiguratorWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
+}
+
+void ConfiguratorWindow::resetFullTable()
+{
+	mainTableWidget->setColumnCount(COLOUMN_COUNT_FULL);
+
+	mainTableWidget->setHorizontalHeaderLabels(QStringList() 
+		<< "Connector"
+		<< "Pin"
+		<< "Direction"
+		<< "Connector type"
+		<< "Can ID"
+		<< "Bit"
+		<< "Min A"
+		<< "Max A"
+		<< "Min V"
+		<< "Max V"
+		<< "Name"
+		<< "");
+
+	mainTableWidget->setColumnWidth((int)FullColoumnName::CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::PIN,			COLOUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::DIRECTION,	COLOUMN_DIRECTION_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::TYPE,			COLOUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::CAN_ID,		COLOUMN_CANID_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::BYTE,			COLOUMN_BIT_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::MIN_CURRENT,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::MAX_CURRENT,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::MIN_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::MAX_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::NAME,			COLOUMN_NAME_WIDTH);
+	mainTableWidget->setColumnWidth((int)FullColoumnName::DEL,			COLOUMN_REMUVE_WIDTH);
+
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::CONNECTOR,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::PIN,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::DIRECTION,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::TYPE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::CAN_ID,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::BYTE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::MIN_CURRENT,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::MAX_CURRENT,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::MIN_VOLTAGE,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::MAX_VOLTAGE,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::NAME,			QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)FullColoumnName::DEL,			QHeaderView::Fixed);
+}
+
+void ConfiguratorWindow::resetManualTable()
+{
+	mainTableWidget->setColumnCount(COLOUMN_COUNT_MANUAL);
+
+	mainTableWidget->setHorizontalHeaderLabels(QStringList() 
+		<< "Connector"
+		<< "Pin"
+		<< "Direction"
+		<< "Connector type"
+		<< "Can ID"
+		<< "Bit"
+		<< "Name"
+		<< "");
+
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::PIN,		COLOUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::DIRECTION,	COLOUMN_DIRECTION_WIDTH);
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::TYPE,		COLOUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::CAN_ID,		COLOUMN_CANID_WIDTH);
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::BYTE,		COLOUMN_BIT_WIDTH);
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::NAME,		COLOUMN_NAME_WIDTH);
+	mainTableWidget->setColumnWidth((int)ManualColoumnName::DEL,		COLOUMN_REMUVE_WIDTH);
+
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::CONNECTOR,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::PIN,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::DIRECTION,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::TYPE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::CAN_ID,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::BYTE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::NAME,			QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ManualColoumnName::DEL,			QHeaderView::Fixed);
+}
+
+void ConfiguratorWindow::resetAutoTable()
+{
+	mainTableWidget->setColumnCount(COLOUMN_COUNT_AUTO);
+
+	mainTableWidget->setHorizontalHeaderLabels(QStringList() 
+		<< "Connector"
+		<< "Pin"
+		<< "Direction"
+		<< "Connector type"
+		<< "Min A"
+		<< "Max A"
+		<< "Min V"
+		<< "Max V"
+		<< "Name"
+		<< "");
+
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::PIN,			COLOUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::DIRECTION,	COLOUMN_DIRECTION_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::TYPE,			COLOUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::MIN_CURRENT,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::MAX_CURRENT,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::MIN_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::MAX_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::NAME,			COLOUMN_NAME_WIDTH);
+	mainTableWidget->setColumnWidth((int)AutoColoumnName::DEL,			COLOUMN_REMUVE_WIDTH);
+
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::CONNECTOR,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::PIN,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::DIRECTION,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::TYPE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::MIN_CURRENT,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::MAX_CURRENT,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::MIN_VOLTAGE,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::MAX_VOLTAGE,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::NAME,			QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)AutoColoumnName::DEL,			QHeaderView::Fixed);
 }
 
 void ConfiguratorWindow::resetLanguage()

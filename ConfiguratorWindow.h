@@ -13,6 +13,7 @@
 #include <QFileDialog>
 #include <vector>
 #include <fstream>
+#include <QHeaderView>
 
 #include "ui_ConfiguratorWindow.h"
 #include "Components.h"
@@ -78,14 +79,40 @@
 #define CFG_SPLIT				QString(",")
 #define CFG_ENDING				QString("\n")
 
-enum class ColoumnName
+enum class FullColoumnName
 {
 	CONNECTOR,
 	PIN,
 	DIRECTION,
 	TYPE,
 	CAN_ID,
-	BIT,
+	BYTE,
+	MIN_CURRENT,
+	MAX_CURRENT,
+	MIN_VOLTAGE,
+	MAX_VOLTAGE,
+	NAME,
+	DEL
+};
+
+enum class ManualColoumnName
+{
+	CONNECTOR,
+	PIN,
+	DIRECTION,
+	TYPE,
+	CAN_ID,
+	BYTE,
+	NAME,
+	DEL
+};
+
+enum class AutoColoumnName
+{
+	CONNECTOR,
+	PIN,
+	DIRECTION,
+	TYPE,
 	MIN_CURRENT,
 	MAX_CURRENT,
 	MIN_VOLTAGE,
@@ -174,8 +201,6 @@ private:
 	QTableWidget* mainTableWidget;
 	QLineEdit* fileNameLineEdit;
 	QComboBox* selectStandTypeComboBox;
-	QComboBox* selectTestTypeComboBox;
-	QComboBox* selectDirectionComboBox;
 	QLabel* logoLabel;
 	QFrame* headerLine;
 	QFrame* footerLine;
@@ -213,12 +238,15 @@ private:
 	void resetTheme();
 	void resetLanguage();
 	void resetPresets();
+	void resetFullTable();
+	void resetManualTable();
+	void resetAutoTable();
 
 	void proccessSelectedFile(QString fileName);
 	std::vector<std::vector<QString>> parseData();
 	void updateTableData();
 
-	bool verifyTableData(ColoumnName coloumnName, QTableWidgetItem* data);
+	bool verifyTableData(FullColoumnName coloumnName, QTableWidgetItem* data);
 	void createNewRow();
 
 	void resizeEvent(QResizeEvent* event);
@@ -230,6 +258,7 @@ private slots:
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
 	void on_addRowButton_clicked();
+	void on_selectStandTypeComboBox_currentIndexChanged(int index);
 
 	void resetRowPreset(TableRowProperties* currentRowProperties);
 	void deleteRow(int index);
