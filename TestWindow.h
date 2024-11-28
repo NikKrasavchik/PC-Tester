@@ -9,6 +9,7 @@
 #include <QLineEdit>
 #include <QComboBox>
 #include <QHeaderView>
+#include <qmessagebox.h>
 
 #include "ui_TestWindow.h"
 #include "WindowFrame.h"
@@ -165,7 +166,7 @@ private:
 	QPushButton* switchLanguageButton;
 	QPushButton* backButton;
 	QPushButton* reportButton;
-	QPushButton* fullTestManualStandSortButton;
+	QPushButton* fullTestSortButton;
 	QPushButton* fullTestAutoStandSortButton;
 	QPushButton* inTestManualStandConnectButton;
 	QPushButton* outTestManualStandConnectButton;
@@ -175,9 +176,7 @@ private:
 	QPushButton* inAutoTestAutoStandConnectButton;
 	QPushButton* outAutoTestAutoStandConnectButton;
 	QPushButton* fullTestAutoStandConnectButton;
-	QPushButton* inAutoTestAutoStandStartTestButton;
-	QPushButton* outAutoTestAutoStandStartTestButton;
-	QPushButton* fullTestAutoStandStartTestButton;
+	QPushButton* AutoStandStartTestButton;
 	QComboBox* inManualTestAutoStandTestTimeComboBox;
 	QComboBox* outManualTestAutoStandTestTimeComboBox;
 	QSpacerItem* tripleButtonsSpacer;
@@ -200,10 +199,9 @@ private:
 	QPixmap* moreButtonLightPixmap;
 	QPixmap* moreButtonDarkPixmap;
 
-	int fullTestManualStandSortType; // false - сортировка по нумерации / true - сортировка по типу
-	int fullTestAutoStandTypeSort; // false - сортировка по нумерации / true - сортировка по типу
-
-	bool standConected; // ѕќћ≈Ќя“№  ѕеременна€ хран€ща€ в информацию о том подключен ли стенд к пк. перезаписыватьс€ она будет по сигналу со второго потока. —ейчас дл€ отладки мен€етьс€ при нажатии на смену стил€;
+	int fullTestSortType; // false - сортировка по нумерации / true - сортировка по типу
+	
+	bool isFullTestEnabled; 
 
 	QString fileName;
 	WindowType testType;
@@ -288,18 +286,15 @@ private slots:
 	void on_switchLanguageButton_clicked();
 	void on_reportButton_clicked();
 
-	void on_fullTestManualStandSortButton_clicked();
 	void on_inManualTestAutoStandConnectButton_clicked();
 	void on_inManualTestAutoStandTestTimeComboBox_changed(int ind);
 	void on_outManualTestAutoStandConnectButton_clicked();
 	void on_outManualTestAutoStandTestTimeComboBox_changed(int ind);
 	void on_inAutoTestAutoStandConnectButton_clicked();
-	void on_inAutoTestAutoStandStartTestButton_clicked();
+	void on_AutoStandStartTestButton_clicked();
 	void on_outAutoTestAutoStandConnectButton_clicked();
-	void on_outAutoTestAutoStandStartTestButton_clicked();
 	void on_fullTestAutoStandConnectButton_clicked();
-	void on_fullTestAutoStandStartTestButton_clicked();
-	void on_fullTestAutoStandSortButton_clicked();
+	void on_fullTestSortButton_clicked();
 
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 

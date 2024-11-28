@@ -15,16 +15,16 @@ void TestWindow::initUiFullTestAutoStand()
 	fullTestAutoStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
 	usefulSpaceHLayout->addWidget(fullTestAutoStandConnectButton);
 
-	fullTestAutoStandStartTestButton = new QPushButton(usefulSpaceWidget);
-	fullTestAutoStandStartTestButton->setObjectName("fullTestAutoStandStartTestButton");
-	fullTestAutoStandStartTestButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
-	usefulSpaceHLayout->addWidget(fullTestAutoStandStartTestButton);
+	AutoStandStartTestButton = new QPushButton(usefulSpaceWidget);
+	AutoStandStartTestButton->setObjectName("AutoStandStartTestButton");
+	AutoStandStartTestButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(AutoStandStartTestButton);
 
-	fullTestAutoStandSortButton = new QPushButton(usefulSpaceWidget);
-	fullTestAutoStandSortButton->setObjectName("fullTestAutoStandSortButton");
-	fullTestAutoStandSortButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
-	usefulSpaceHLayout->addWidget(fullTestAutoStandSortButton);
-	fullTestAutoStandTypeSort = false;
+	fullTestSortButton = new QPushButton(usefulSpaceWidget);
+	fullTestSortButton->setObjectName("fullTestSortButton");
+	fullTestSortButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(fullTestSortButton);
+	fullTestSortType = SORT_TYPE_INDEX;
 	
 	initUiTableFullTestAutoStand();
 }
@@ -94,27 +94,3 @@ void TestWindow::on_fullTestAutoStandConnectButton_clicked()
 {
 }
 
-void TestWindow::on_fullTestAutoStandStartTestButton_clicked()
-{
-}
-
-void TestWindow::on_fullTestAutoStandSortButton_clicked()
-{
-	fullTestAutoStandTypeSort = !fullTestAutoStandTypeSort;
-
-	switch (viewWindowState->appLanguage)
-	{
-	case RUSSIAN_LANG:
-		if (fullTestAutoStandTypeSort)
-			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
-		else
-			fullTestAutoStandSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
-		break;
-	case ENGLISH_LANG:
-		if (fullTestAutoStandTypeSort)
-			fullTestAutoStandSortButton->setText(QString("Sort:\ntype"));
-		else
-			fullTestAutoStandSortButton->setText(QString("Sort:\nnum"));
-		break;
-	}
-}
