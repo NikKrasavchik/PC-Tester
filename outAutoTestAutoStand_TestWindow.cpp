@@ -70,7 +70,6 @@ void TestWindow::initUiTableRowsOutAutoTestAutoStand()
 		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
 
-		initAutoCheckButton(currentRowNum, autoCheckCellWidget);
 		initMoreButton(currentRowNum, moreCellWidget);
 
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_STAND, autoCheckCellWidget);

@@ -207,7 +207,7 @@ void ConfiguratorWindow::initUiTable()
 	mainTableWidget->setColumnWidth((int)ColoumnName::MAX_CURRENT,	COLOUMN_RAPIDS_WIDTH);
 	mainTableWidget->setColumnWidth((int)ColoumnName::MIN_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
 	mainTableWidget->setColumnWidth((int)ColoumnName::MAX_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
-	//mainTableWidget->setColumnWidth((int)ColoumnName::NAME,			COLOUMN_MORE_WIDTH);
+	mainTableWidget->setColumnWidth((int)ColoumnName::NAME,			COLOUMN_NAME_WIDTH);
 	mainTableWidget->setColumnWidth((int)ColoumnName::DEL,			COLOUMN_REMUVE_WIDTH);
 
 	mainTableWidget->horizontalHeader()->setSectionResizeMode((int)ColoumnName::CONNECTOR,		QHeaderView::Fixed);
@@ -239,7 +239,7 @@ void ConfiguratorWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
 
-	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
+	
 }
 
 void ConfiguratorWindow::initText()
@@ -415,6 +415,7 @@ void ConfiguratorWindow::on_switchLanguageButton_clicked()
 void ConfiguratorWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;
+	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
 
 void ConfiguratorWindow::resizeEvent(QResizeEvent* event)
