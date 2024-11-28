@@ -97,10 +97,10 @@ void ConfiguratorWindow::createNewRow()
 	deleteCellLayout->setContentsMargins(0, 0, 0, 0);
 	deleteCellWidget->setLayout(typeCellLayout);
 
-	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::CONNECTOR, connectorCellWidget);
-	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::DIRECTION, directionCellWidget);
-	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::TYPE, typeCellWidget);
-	mainTableWidget->setCellWidget(currentRowNum, (int)ColoumnName::DEL, deleteCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)FullColoumnName::CONNECTOR, connectorCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)FullColoumnName::DIRECTION, directionCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)FullColoumnName::TYPE, typeCellWidget);
+	mainTableWidget->setCellWidget(currentRowNum, (int)FullColoumnName::DEL, deleteCellWidget);
 
 	resetPresets();
 }
@@ -305,10 +305,10 @@ void TableRowProperties::on_deleteButton_clicked()
 
 void ConfiguratorWindow::deleteRow(int index)
 {
-	mainTableWidget->removeCellWidget(index, (int)ColoumnName::CONNECTOR);
-	mainTableWidget->removeCellWidget(index, (int)ColoumnName::DIRECTION);
-	mainTableWidget->removeCellWidget(index, (int)ColoumnName::TYPE);
-	mainTableWidget->removeCellWidget(index, (int)ColoumnName::DEL);
+	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::CONNECTOR);
+	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::DIRECTION);
+	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::TYPE);
+	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::DEL);
 
 	mainTableWidget->removeRow(index);
 	tableRowPropertiesVector.erase(tableRowPropertiesVector.begin() + index);
@@ -492,53 +492,53 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 		for (int coloumn = 0; coloumn < mainTableWidget->columnCount(); coloumn++)
 		{
 			TableRowProperties* currentRowProperties = tableRowPropertiesVector[row];
-			switch ((ColoumnName)coloumn)
+			switch ((FullColoumnName)coloumn)
 			{
-			case ColoumnName::CONNECTOR:
+			case FullColoumnName::CONNECTOR:
 				rowData.push_back(QString::number((int)(currentRowProperties->presetSettings->connector)));
 				break;
 
-			case ColoumnName::PIN:
+			case FullColoumnName::PIN:
 				rowData.push_back(QString::number(currentRowProperties->pin));
 				break;
 
-			case ColoumnName::DIRECTION:
+			case FullColoumnName::DIRECTION:
 				rowData.push_back(QString::number(currentRowProperties->presetSettings->direction));
 				break;
 
-			case ColoumnName::TYPE:
+			case FullColoumnName::TYPE:
 				rowData.push_back(QString::number(currentRowProperties->presetSettings->type));
 				break;
 
-			case ColoumnName::CAN_ID:
+			case FullColoumnName::CAN_ID:
 				rowData.push_back(currentRowProperties->canId);
 				break;
 
-			case ColoumnName::BIT:
+			case FullColoumnName::BYTE:
 				rowData.push_back(QString::number(currentRowProperties->bit));
 				break;
 
-			case ColoumnName::MIN_CURRENT:
+			case FullColoumnName::MIN_CURRENT:
 				rowData.push_back(QString::number(currentRowProperties->minCurrent));
 				break;
 
-			case ColoumnName::MAX_CURRENT:
+			case FullColoumnName::MAX_CURRENT:
 				rowData.push_back(QString::number(currentRowProperties->maxCurrent));
 				break;
 
-			case ColoumnName::MIN_VOLTAGE:
+			case FullColoumnName::MIN_VOLTAGE:
 				rowData.push_back(QString::number(currentRowProperties->minVoltage));
 				break;
 
-			case ColoumnName::MAX_VOLTAGE:
+			case FullColoumnName::MAX_VOLTAGE:
 				rowData.push_back(QString::number(currentRowProperties->maxVoltage));
 				break;
 
-			case ColoumnName::NAME:
+			case FullColoumnName::NAME:
 				rowData.push_back(currentRowProperties->name);
 				break;
 
-			case ColoumnName::DEL:
+			case FullColoumnName::DEL:
 				break;
 			}
 		}
@@ -551,122 +551,122 @@ void ConfiguratorWindow::updateTableData()
 {
 	for (int coloumn = 0; coloumn < mainTableWidget->columnCount(); coloumn++)
 	{
-		switch ((ColoumnName)coloumn)
+		switch ((FullColoumnName)coloumn)
 		{
-		case ColoumnName::CONNECTOR:
+		case FullColoumnName::CONNECTOR:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
+				verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn));
 			break;
 
-		case ColoumnName::PIN:
+		case FullColoumnName::PIN:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->pin = mainTableWidget->item(row, coloumn)->text().toInt();
 			break;
 
-		case ColoumnName::DIRECTION:
+		case FullColoumnName::DIRECTION:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
+				verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn));
 			break;
 
-		case ColoumnName::TYPE:
+		case FullColoumnName::TYPE:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn));
+				verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn));
 			break;
 
-		case ColoumnName::CAN_ID:
+		case FullColoumnName::CAN_ID:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->canId = mainTableWidget->item(row, coloumn)->text();
 			break;
 
-		case ColoumnName::BIT:
+		case FullColoumnName::BYTE:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->bit = mainTableWidget->item(row, coloumn)->text().toInt();
 			break;
 
-		case ColoumnName::MIN_CURRENT:
+		case FullColoumnName::MIN_CURRENT:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->minCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
-		case ColoumnName::MAX_CURRENT:
+		case FullColoumnName::MAX_CURRENT:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->maxCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
-		case ColoumnName::MIN_VOLTAGE:
+		case FullColoumnName::MIN_VOLTAGE:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->minVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
-		case ColoumnName::MAX_VOLTAGE:
+		case FullColoumnName::MAX_VOLTAGE:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->maxVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
 			break;
 
-		case ColoumnName::NAME:
+		case FullColoumnName::NAME:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
-				if (verifyTableData((ColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
+				if (verifyTableData((FullColoumnName)coloumn, mainTableWidget->item(row, coloumn)))
 					tableRowPropertiesVector[row]->name = mainTableWidget->item(row, coloumn)->text();
 			break;
 
-		case ColoumnName::DEL:
+		case FullColoumnName::DEL:
 			break;
 		}
 	}
 }
 
-bool ConfiguratorWindow::verifyTableData(ColoumnName coloumnName, QTableWidgetItem* data)
+bool ConfiguratorWindow::verifyTableData(FullColoumnName coloumnName, QTableWidgetItem* data)
 {
 	switch (coloumnName)
 	{
-	case ColoumnName::PIN:
+	case FullColoumnName::PIN:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::CAN_ID:
+	case FullColoumnName::CAN_ID:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::BIT:
+	case FullColoumnName::BYTE:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MIN_CURRENT:
+	case FullColoumnName::MIN_CURRENT:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MAX_CURRENT:
+	case FullColoumnName::MAX_CURRENT:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MIN_VOLTAGE:
+	case FullColoumnName::MIN_VOLTAGE:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MAX_VOLTAGE:
+	case FullColoumnName::MAX_VOLTAGE:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::NAME:
+	case FullColoumnName::NAME:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::DEL:
+	case FullColoumnName::DEL:
 		if (false)
 			return false;
 		break;
@@ -674,61 +674,61 @@ bool ConfiguratorWindow::verifyTableData(ColoumnName coloumnName, QTableWidgetIt
 	return true;
 }
 
-static bool verifyFileData(ColoumnName coloumn, QString data)
+static bool verifyFileData(FullColoumnName coloumn, QString data)
 {
 	switch (coloumn)
 	{
-	case ColoumnName::CONNECTOR:
+	case FullColoumnName::CONNECTOR:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::PIN:
+	case FullColoumnName::PIN:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::DIRECTION:
+	case FullColoumnName::DIRECTION:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::TYPE:
+	case FullColoumnName::TYPE:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::CAN_ID:
+	case FullColoumnName::CAN_ID:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::BIT:
+	case FullColoumnName::BYTE:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MIN_CURRENT:
+	case FullColoumnName::MIN_CURRENT:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MAX_CURRENT:
+	case FullColoumnName::MAX_CURRENT:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MIN_VOLTAGE:
+	case FullColoumnName::MIN_VOLTAGE:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::MAX_VOLTAGE:
+	case FullColoumnName::MAX_VOLTAGE:
 		if (false)
 			return false;
 		break;
 
-	case ColoumnName::NAME:
+	case FullColoumnName::NAME:
 		if (false)
 			return false;
 		break;
@@ -815,8 +815,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 
 				switch (currentColoumnNum)
 				{
-				case (int)ColoumnName::CONNECTOR:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::CONNECTOR:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 						tableRowPropertiesVector[currentRowNum]->connectorComboBox->setCurrentIndex(currentData.toInt() + 1);
 					else
 					{
@@ -825,8 +825,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::PIN:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::PIN:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->pin = currentData.toInt();
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -838,8 +838,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::DIRECTION:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::DIRECTION:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 						tableRowPropertiesVector[currentRowNum]->on_direction_activated(currentData.toInt() + 1);
 					else
 					{
@@ -848,8 +848,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::TYPE:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::TYPE:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 						tableRowPropertiesVector[currentRowNum]->on_type_activated(currentData.toInt() + 1);
 					else
 					{
@@ -858,8 +858,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::CAN_ID:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::CAN_ID:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->canId = currentData;
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -871,8 +871,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::BIT:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::BYTE:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->bit = currentData.toInt();
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -884,8 +884,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::MIN_CURRENT:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::MIN_CURRENT:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->minCurrent = currentData.toFloat();
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -897,8 +897,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::MAX_CURRENT:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::MAX_CURRENT:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->maxCurrent = currentData.toFloat();
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -910,8 +910,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::MIN_VOLTAGE:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::MIN_VOLTAGE:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->minVoltage = currentData.toFloat();
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -923,8 +923,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::MAX_VOLTAGE:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::MAX_VOLTAGE:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->maxVoltage = currentData.toFloat();
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -936,8 +936,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					}
 					break;
 
-				case (int)ColoumnName::NAME:
-					if (verifyFileData((ColoumnName)currentColoumnNum, currentData))
+				case (int)FullColoumnName::NAME:
+					if (verifyFileData((FullColoumnName)currentColoumnNum, currentData))
 					{
 						tableRowPropertiesVector[currentRowNum]->name = currentData;
 						model->setData(model->index(currentRowNum, currentColoumnNum), currentData);
@@ -959,4 +959,23 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 	}
 
 	file.close();
+}
+
+void ConfiguratorWindow::on_selectStandTypeComboBox_currentIndexChanged(int index)
+{
+	mainTableWidget->setRowCount(0);
+	switch (index)
+	{
+	case STAND_NOT_SET:
+		resetFullTable();
+		break;
+		
+	case STAND_MANUAL:
+		resetManualTable();
+		break;
+		
+	case STAND_AUTO:
+		resetAutoTable();
+		break;
+	}
 }

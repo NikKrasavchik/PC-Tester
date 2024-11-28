@@ -1,12 +1,11 @@
 #include "TestWindow.h"
 
-#define COLOUMN_COUNT		8
+#define COLOUMN_COUNT		7
 
 #define COLOUMN_DIRECTION	3
 #define COLOUMN_TYPE		4
 #define COLOUMN_CHECK		5
 #define COLOUMN_STATUS		6
-#define COLOUMN_MORE		7
 
 void TestWindow::initUiFullTestManualStand()
 {
@@ -51,7 +50,6 @@ void TestWindow::resetTableHeaderFullTestManualStand()
 	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_CHECK_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_STATUS,		COLOUMN_STATUS_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
 
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CONNECTOR,	QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PIN,			QHeaderView::Fixed);
@@ -60,7 +58,6 @@ void TestWindow::resetTableHeaderFullTestManualStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_TYPE,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CHECK,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_STATUS,		QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
 }
 
 void TestWindow::resetTableRowsFullTestManualStand()
@@ -75,11 +72,8 @@ void TestWindow::resetTableRowsFullTestManualStand()
 		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
 		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
-		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
 		initTableRowButtons(currentRowNum, interactionButtonsWidget);
-		initMoreButton(currentRowNum, moreCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, interactionButtonsWidget);
-		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 }
 
