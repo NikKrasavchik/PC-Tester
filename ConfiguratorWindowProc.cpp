@@ -45,6 +45,11 @@ void TableRowProperties::initComboBoxes()
 	typeComboBox = new QComboBox();
 	deleteButton = new QPushButton();
 
+	connectorComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	directionComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	typeComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
+
+
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:

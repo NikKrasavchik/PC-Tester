@@ -211,6 +211,7 @@ private:
 	QSpacerItem* footerSpacer;
 	QSpacerItem* saveLoadSpacer;
 	QTableWidget* mainTableWidget;
+	QStringList* mainTableHeaderLabels;
 	QLineEdit* fileNameLineEdit;
 	QComboBox* selectStandTypeComboBox;
 	QLabel* logoLabel;
@@ -252,6 +253,7 @@ private:
 
 	void resetTheme();
 	void resetLanguage();
+	void resetHeaderLanguage(int standType);
 	void resetPresets();
 	void resetFullTable();
 	void resetManualTable();
