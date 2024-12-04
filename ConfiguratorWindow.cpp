@@ -20,6 +20,7 @@ ConfiguratorWindow::ConfiguratorWindow(QWidget* parent)
 	ui.setupUi(this);
 
 	isAllInit = false;
+	standTypeSelected = STAND_NOT_SET;
 
 	initLightStyleSheets();
 	initDarkStyleSheets();

@@ -14,6 +14,7 @@
 #include <vector>
 #include <fstream>
 #include <QHeaderView>
+#include <QMessageBox>
 
 #include "ui_ConfiguratorWindow.h"
 #include "Components.h"
@@ -142,7 +143,7 @@ public:
 	int pin;
 	QComboBox* directionComboBox;
 	QString canId;
-	int bit;
+	int byte;
 	QComboBox* typeComboBox;
 	float minCurrent;
 	float maxCurrent;
@@ -151,6 +152,17 @@ public:
 	QString name;
 	QPushButton* deleteButton;
 	PresetSettings* presetSettings;
+
+	QWidget* connectorCellWidget;
+	QWidget* directionCellWidget;
+	QWidget* typeCellWidget;
+	QWidget* deleteCellWidget;
+	QHBoxLayout* connectorCellLayout;
+	QHBoxLayout* directionCellLayout;
+	QHBoxLayout* typeCellLayout;
+	QHBoxLayout* deleteCellLayout;
+
+	void initComboBoxes();
 
 public slots:
 	void on_connector_activated(int index);
@@ -219,6 +231,7 @@ private:
 	bool canReselectStandType;
 	QString selectedFileFullName;
 	QString fileName;
+	int standTypeSelected;
 
 	std::vector<TableRowProperties*> tableRowPropertiesVector;
 
@@ -243,12 +256,17 @@ private:
 	void resetFullTable();
 	void resetManualTable();
 	void resetAutoTable();
+	void cleanRowProperties();
+
+	void resetedFill(int standType);
 
 	void proccessSelectedFile(QString fileName);
 	std::vector<std::vector<QString>> parseData();
-	void updateTableData();
+	bool updateTableData(bool unverifiable);
 
-	bool verifyTableData(FullColoumnName coloumnName, QTableWidgetItem* data);
+	Errors::Configurator verifyTableData(int coloumnName, QTableWidgetItem* data, QComboBox* comboBox = nullptr);
+	bool generateError(int row, Errors::Configurator error);
+	void createNewRowProperties();
 	void createNewRow();
 
 	void resizeEvent(QResizeEvent* event);
