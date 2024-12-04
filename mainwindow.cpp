@@ -1326,6 +1326,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
+	selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
 
 	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())

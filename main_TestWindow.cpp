@@ -426,9 +426,8 @@ void TestWindow::initIcons()
 
 void TestWindow::initConnections()
 {
-	//QMetaObject::connectSlotsByName(this);
+	QMetaObject::connectSlotsByName(this);
 	// manualTwoThread
-	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::abbc, this, &TestWindow::abc);
 	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
 	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
 	// autoTwoThread
@@ -1040,27 +1039,43 @@ void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect
 {
 	setStatusTableButtons(statusConnect);
 	if (statusConnect)
+	{
 		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_CONNECTED, 0, 0);
+		for (int i = 0; i < cableRows.size(); i++)
+		{
+			if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+			{
+				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
+				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
+			}
+			else if (cableRows[i]->type == "PWM")
+			{
+				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
+				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
+			}
+			else if (cableRows[i]->type == "VNH")
+			{
+				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
+				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
+				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
+				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
+			}
+
+		}
+	}
 	else
+	{
 		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
+
+
+	}
 	statusFlags->StatusConnected = statusConnect;
 	resetLanguage();
 	resetTheme();
 
 }
 
-void TestWindow::abc(bool statusConnect)
-{
-	setStatusTableButtons(statusConnect);
-	if (statusConnect)
-		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_CONNECTED, 0, 0);
-	else
-		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
-	statusFlags->StatusConnected = statusConnect;
-	resetLanguage();
-	resetTheme();
 
-}
 
 void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue)
 {
@@ -1076,10 +1091,6 @@ void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, in
 		break;
 
 	default:
-		if (1)
-		{
-			1;
-		}
 		// ERROR
 		break;
 	}

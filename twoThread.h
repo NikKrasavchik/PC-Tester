@@ -99,6 +99,5 @@ public slots:
 
 signals:
 	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
-	void abbc(bool statusConnect);
 	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 };

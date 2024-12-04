@@ -1209,7 +1209,7 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 	{
 		QString dataLine = file.readLine();
 		dataLine.remove("\n");
-		QStringList dataList = dataLine.split(",");
+		QStringList dataList = dataLine.split(";");
 
 		if (dataList.size() == FILE_CFG_COUNT)
 		{
@@ -1248,7 +1248,7 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 				{
 				case (int)FullColoumnName::CONNECTOR:
 					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
-						tableRowPropertiesVector[currentRowNum]->presetSettings->connector = (ConnectorId)(currentData.toInt() + 1);
+						tableRowPropertiesVector[currentRowNum]->presetSettings->connector = (ConnectorId)(currentData.toInt());
 					else
 						isFileCorrect = false;
 					break;

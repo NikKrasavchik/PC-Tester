@@ -118,10 +118,10 @@ public:
 	int statePWM;
 
 	void generateInteractionButtons(WindowType testType, int type);
+	void switchButtonState(TestButtons testButton);
 	void sendSignal();
 
 private:
-	void switchButtonState(TestButtons testButton);
 
 public slots:
 	void on_onButton_clicked();
@@ -298,7 +298,6 @@ public slots:
 
 	// manualTwoThread
 	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
-	void abc(bool statusConnect);
 	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 
 	// autoTwoThread

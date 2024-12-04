@@ -194,8 +194,8 @@ void ManualStandTwoThread::run()
 		}
 		if (std::chrono::system_clock::now() - timeStartSentConnect > std::chrono::milliseconds(300) && statusFlags->StatusConnected) // Если стенд не отвечает 100 мс
 		{
-			//statusFlags->StatusConnected = false;
-			//msgToTestWindowStatusConnect_ManualTwoThread(false);
+			statusFlags->StatusConnected = false;
+			msgToTestWindowStatusConnect_ManualTwoThread(false);
 		}
 	}
 }
