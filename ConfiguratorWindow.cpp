@@ -20,6 +20,7 @@ ConfiguratorWindow::ConfiguratorWindow(QWidget* parent)
 	ui.setupUi(this);
 
 	isAllInit = false;
+	standTypeSelected = STAND_NOT_SET;
 
 	initLightStyleSheets();
 	initDarkStyleSheets();
@@ -194,6 +195,7 @@ void ConfiguratorWindow::initUiTable()
 {
 	mainTableWidget = new QTableWidget(mainLayoutWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
+	mainTableHeaderLabels = new QStringList();
 	resetFullTable();
 }
 
@@ -218,19 +220,7 @@ void ConfiguratorWindow::resetFullTable()
 {
 	mainTableWidget->setColumnCount(COLOUMN_COUNT_FULL);
 
-	mainTableWidget->setHorizontalHeaderLabels(QStringList() 
-		<< "Connector"
-		<< "Pin"
-		<< "Direction"
-		<< "Connector type"
-		<< "Can ID"
-		<< "Bit"
-		<< "Min A"
-		<< "Max A"
-		<< "Min V"
-		<< "Max V"
-		<< "Name"
-		<< "");
+	resetHeaderLanguage(STAND_NOT_SET);
 
 	mainTableWidget->setColumnWidth((int)FullColoumnName::CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth((int)FullColoumnName::PIN,			COLOUMN_PIN_WIDTH);
@@ -263,15 +253,7 @@ void ConfiguratorWindow::resetManualTable()
 {
 	mainTableWidget->setColumnCount(COLOUMN_COUNT_MANUAL);
 
-	mainTableWidget->setHorizontalHeaderLabels(QStringList() 
-		<< "Connector"
-		<< "Pin"
-		<< "Direction"
-		<< "Connector type"
-		<< "Can ID"
-		<< "Bit"
-		<< "Name"
-		<< "");
+	resetHeaderLanguage(STAND_MANUAL);
 
 	mainTableWidget->setColumnWidth((int)ManualColoumnName::CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth((int)ManualColoumnName::PIN,		COLOUMN_PIN_WIDTH);
@@ -296,17 +278,7 @@ void ConfiguratorWindow::resetAutoTable()
 {
 	mainTableWidget->setColumnCount(COLOUMN_COUNT_AUTO);
 
-	mainTableWidget->setHorizontalHeaderLabels(QStringList() 
-		<< "Connector"
-		<< "Pin"
-		<< "Direction"
-		<< "Connector type"
-		<< "Min A"
-		<< "Max A"
-		<< "Min V"
-		<< "Max V"
-		<< "Name"
-		<< "");
+	resetHeaderLanguage(STAND_AUTO);
 
 	mainTableWidget->setColumnWidth((int)AutoColoumnName::CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth((int)AutoColoumnName::PIN,			COLOUMN_PIN_WIDTH);
@@ -318,8 +290,106 @@ void ConfiguratorWindow::resetAutoTable()
 	mainTableWidget->setColumnWidth((int)AutoColoumnName::MAX_VOLTAGE,	COLOUMN_RAPIDS_WIDTH);
 	mainTableWidget->setColumnWidth((int)AutoColoumnName::NAME,			COLOUMN_NAME_WIDTH);
 	mainTableWidget->setColumnWidth((int)AutoColoumnName::DEL,			COLOUMN_REMUVE_WIDTH);
+}
 
-	
+void ConfiguratorWindow::resetHeaderLanguage(int standType)
+{
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		delete mainTableHeaderLabels;
+		mainTableHeaderLabels = new QStringList();
+		switch (standType)
+		{
+		case STAND_NOT_SET:
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Коннектор"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Направление"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Тип"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Can ID"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Бит"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Мин A"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Макс A"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Мин V"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Макс V"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit(""));
+			break;
+
+		case STAND_MANUAL:
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Коннектор"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Направление"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Тип"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Can ID"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Бит"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit(""));
+			break;
+
+		case STAND_AUTO:
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Коннектор"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Направление"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Тип"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Мин A"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Макс A"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Мин V"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Макс V"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
+			mainTableHeaderLabels->push_back(QString::fromLocal8Bit(""));
+			break;
+		}
+		mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
+		break;
+
+	case ENGLISH_LANG:
+		delete mainTableHeaderLabels;
+		mainTableHeaderLabels = new QStringList();
+		switch (standType)
+		{
+		case STAND_NOT_SET:
+			mainTableHeaderLabels->push_back("Connector");
+			mainTableHeaderLabels->push_back("Pin");
+			mainTableHeaderLabels->push_back("Direction");
+			mainTableHeaderLabels->push_back("Connector type");
+			mainTableHeaderLabels->push_back("Can ID");
+			mainTableHeaderLabels->push_back("Bit");
+			mainTableHeaderLabels->push_back("Min A");
+			mainTableHeaderLabels->push_back("Max A");
+			mainTableHeaderLabels->push_back("Min V");
+			mainTableHeaderLabels->push_back("Max V");
+			mainTableHeaderLabels->push_back("Name");
+			mainTableHeaderLabels->push_back("");
+			break;
+
+		case STAND_MANUAL:
+			mainTableHeaderLabels->push_back("Connector");
+			mainTableHeaderLabels->push_back("Pin");
+			mainTableHeaderLabels->push_back("Direction");
+			mainTableHeaderLabels->push_back("Connector type");
+			mainTableHeaderLabels->push_back("Can ID");
+			mainTableHeaderLabels->push_back("Bit");
+			mainTableHeaderLabels->push_back("Name");
+			mainTableHeaderLabels->push_back("");
+			break;
+
+		case STAND_AUTO:
+			mainTableHeaderLabels->push_back("Connector");
+			mainTableHeaderLabels->push_back("Pin");
+			mainTableHeaderLabels->push_back("Direction");
+			mainTableHeaderLabels->push_back("Connector type");
+			mainTableHeaderLabels->push_back("Min A");
+			mainTableHeaderLabels->push_back("Max A");
+			mainTableHeaderLabels->push_back("Min V");
+			mainTableHeaderLabels->push_back("Max V");
+			mainTableHeaderLabels->push_back("Name");
+			mainTableHeaderLabels->push_back("");
+			break;
+		}
+		mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
+		break;
+	}
 }
 
 void ConfiguratorWindow::initText()
@@ -346,7 +416,6 @@ void ConfiguratorWindow::initText()
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Автоматический"));
 		if (standTypeState != -1)
 			selectStandTypeComboBox->setCurrentIndex(standTypeState);
-
 		break;
 
 	case ENGLISH_LANG:
@@ -362,9 +431,9 @@ void ConfiguratorWindow::initText()
 		selectStandTypeComboBox->addItem(QString("Auto"));
 		if (standTypeState != -1)
 			selectStandTypeComboBox->setCurrentIndex(standTypeState);
-
 		break;
 	}
+	resetHeaderLanguage(selectStandTypeComboBox->currentIndex());
 	resetPresets();
 }
 
@@ -411,6 +480,7 @@ void ConfiguratorWindow::resetLanguage()
 
 		break;
 	}
+	resetHeaderLanguage(selectStandTypeComboBox->currentIndex());
 	parentFrame->setTitle(WindowType::CONFIGURATOR);
 	resetPresets();
 }
