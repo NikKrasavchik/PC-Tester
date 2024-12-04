@@ -9,10 +9,10 @@
 
 void TestWindow::initUiOutAutoTestAutoStand()
 {
-	outAutoTestAutoStandConnectButton = new QPushButton(usefulSpaceWidget);
-	outAutoTestAutoStandConnectButton->setObjectName("outAutoTestAutoStandConnectButton");
-	outAutoTestAutoStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
-	usefulSpaceHLayout->addWidget(outAutoTestAutoStandConnectButton);
+	AutoStandConnectButton = new QPushButton(usefulSpaceWidget);
+	AutoStandConnectButton->setObjectName("AutoStandConnectButton");
+	AutoStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(AutoStandConnectButton);
 
 	AutoStandStartTestButton = new QPushButton(usefulSpaceWidget);
 	AutoStandStartTestButton->setObjectName("AutoStandStartTestButton");
@@ -75,8 +75,4 @@ void TestWindow::initUiTableRowsOutAutoTestAutoStand()
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_STAND, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
-}
-
-void TestWindow::on_outAutoTestAutoStandConnectButton_clicked()
-{
 }

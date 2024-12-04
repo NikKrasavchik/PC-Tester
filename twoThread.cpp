@@ -71,11 +71,11 @@ void AutoStandTwoThread::run()
 				{
 					timeStartReceiveConnect = std::chrono::system_clock::now();
 				}
-				if (id == RECEIVE_ID_CAN_AUTO_STAND && // переодическое сообшение о конекте
+				if (id == RECEIVE_ID_CAN_AUTO_STAND && 
 					msgReceive[0] == nowTesting.pad &&
 					msgReceive[1] == nowTesting.pin)
 				{
-					msgToTestWindowAfterTest_AutoTwoThread(nowTesting.pad, nowTesting.pin, 0.1, 0.1, 0x10);
+					msgToTestWindowAfterTest_AutoTwoThread(nowTesting.pad, nowTesting.pin, msgReceive[2], msgReceive[3]);
 					nowTesting.pad = 0;
 					nowTesting.pin = 0;
 					statusFlags->StatusTest = false;
@@ -99,7 +99,7 @@ void AutoStandTwoThread::run()
 	}
 }
 
-void AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin, int digValue, int pwmValue)
+void AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin)
 {
 	if (statusFlags->StatusConnected && !statusFlags->StatusTest)
 	{
@@ -108,9 +108,9 @@ void AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin,
 		nowTesting.pad = pad;
 		nowTesting.pin = pin;
 
-		msgToTestWindowBeforeTest_AutoTwoThread(nowTesting.pad, nowTesting.pin);
 
-		int msgSendConnect[8] = { pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
+
+		int msgSendConnect[8] = { pad, pin, 0, 0, 0, 0, 0, 0 };
 		can->writeCan(SEND_ID_CAN, msgSendConnect);
 	}
 }
@@ -160,6 +160,7 @@ ManualStandTwoThread::~ManualStandTwoThread()
 
 void ManualStandTwoThread::run()
 {
+	Sleep(50);
 	std::chrono::system_clock::time_point timeStartSentConnect = std::chrono::system_clock::now();
 	while (true)
 	{
@@ -186,14 +187,15 @@ void ManualStandTwoThread::run()
 				if (cable->canId == id && cable->oldValue != msgReceive[cable->byte])
 				{
 					cable->oldValue = msgReceive[cable->byte];
+					
 					msgToTestWindowChangeValue_ManualTwoThread(cable->pad, cable->pin, cable->oldValue);
 				}
 			}
 		}
-		if (std::chrono::system_clock::now() - timeStartSentConnect > std::chrono::milliseconds(100) && statusFlags->StatusConnected) // Если стенд не отвечает 100 мс
+		if (std::chrono::system_clock::now() - timeStartSentConnect > std::chrono::milliseconds(300) && statusFlags->StatusConnected) // Если стенд не отвечает 100 мс
 		{
-			statusFlags->StatusConnected = false;
-			msgToTestWindowStatusConnect_ManualTwoThread(false);
+			//statusFlags->StatusConnected = false;
+			//msgToTestWindowStatusConnect_ManualTwoThread(false);
 		}
 	}
 }

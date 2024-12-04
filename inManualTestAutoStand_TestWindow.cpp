@@ -9,10 +9,10 @@
 
 void TestWindow::initUiInManualTestAutoStand()
 {
-	inManualTestAutoStandConnectButton = new QPushButton(usefulSpaceWidget);
-	inManualTestAutoStandConnectButton->setObjectName("inManualTestAutoStandConnectButton");
-	inManualTestAutoStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
-	usefulSpaceHLayout->addWidget(inManualTestAutoStandConnectButton);
+	AutoStandConnectButton = new QPushButton(usefulSpaceWidget);
+	AutoStandConnectButton->setObjectName("AutoStandConnectButton");
+	AutoStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(AutoStandConnectButton);
 
 	inManualTestAutoStandTestTimeComboBox = new QComboBox(usefulSpaceWidget);
 	inManualTestAutoStandTestTimeComboBox->setObjectName("inManualTestAutoStandTestTimeComboBox");
@@ -75,9 +75,6 @@ void TestWindow::initUiTableRowsInManualTestAutoStand()
 	}
 }
 
-void TestWindow::on_inManualTestAutoStandConnectButton_clicked()
-{
-}
 
 void TestWindow::on_inManualTestAutoStandTestTimeComboBox_changed(int ind)
 {

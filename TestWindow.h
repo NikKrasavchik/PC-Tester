@@ -107,6 +107,10 @@ public:
 	QString direction;
 	QString type;
 
+	double minCurrent;
+	double maxCurrent;
+	double minVoltage;
+	double maxVoltage;
 	void* buttons;
 	QPushButton* moreButton;
 
@@ -171,11 +175,7 @@ private:
 	QPushButton* inTestManualStandConnectButton;
 	QPushButton* outTestManualStandConnectButton;
 	QPushButton* fullTestManualStandConnectButton;
-	QPushButton* inManualTestAutoStandConnectButton;
-	QPushButton* outManualTestAutoStandConnectButton;
-	QPushButton* inAutoTestAutoStandConnectButton;
-	QPushButton* outAutoTestAutoStandConnectButton;
-	QPushButton* fullTestAutoStandConnectButton;
+	QPushButton* AutoStandConnectButton;
 	QPushButton* AutoStandStartTestButton;
 	QComboBox* inManualTestAutoStandTestTimeComboBox;
 	QComboBox* outManualTestAutoStandTestTimeComboBox;
@@ -273,6 +273,7 @@ private:
 	void resetIconMoreButton(bool theme);
 	void sortRows();
 	void fillTestTimeComboBoxes();
+	void ProcAutoTest(int pad = 0, int pin = 0);
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget);
 	void initAutoCheckButton(int currentRowNum, QWidget* autoChechButtonWidget);
@@ -280,28 +281,31 @@ private:
 	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);
 
-private slots:
+public slots:
 	void on_backButton_clicked();
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
 	void on_reportButton_clicked();
 
-	void on_inManualTestAutoStandConnectButton_clicked();
+	void on_AutoStandConnectButton_clicked();
 	void on_inManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void on_outManualTestAutoStandConnectButton_clicked();
 	void on_outManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void on_inAutoTestAutoStandConnectButton_clicked();
 	void on_AutoStandStartTestButton_clicked();
-	void on_outAutoTestAutoStandConnectButton_clicked();
-	void on_fullTestAutoStandConnectButton_clicked();
+
 	void on_fullTestSortButton_clicked();
 
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
-	// manualtwoThread
+	// manualTwoThread
 	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
+	void abc(bool statusConnect);
 	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 
-	//void msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin);
-	//void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value);
+	// autoTwoThread
+	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
+	void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, float voltage, float current);
+
+signals:
+	// autoTwoThread
+	void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin);
 };

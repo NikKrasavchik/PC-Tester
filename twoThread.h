@@ -3,10 +3,12 @@
 
 #include "can.h"
 
-#define SEND_ID_CAN 0x50
+#define SEND_ID_CAN 0x55
 #define SEND_MSG_CONNECT_AUTO_STAND				{0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, }
 #define SEND_MSG_CONNECT_PERIODICALLY			{0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0xFF, }
 #define SEND_MSG_DISCONNECT						{0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, }
+
+#define RECEIVE_MSG_CONNECT						{0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, }
 
 #define RECEIVE_ID_CAN_AUTO_STAND 0x51
 #define RECEIVE_ID_CAN_CONNECT_MANUAL_STAND		0x100
@@ -49,13 +51,11 @@ private:
 	Can* can;
 	StandStatusFlags* statusFlags;
 public slots:
-	void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin, int digValue, int pwmValue);
+	void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin);
 
 signals:
 	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
-
-	void msgToTestWindowBeforeTest_AutoTwoThread(int pad, int pin);
-	void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current, int value);
+	void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current);
 };
 
 class ManualStandTwoThread : public QThread
@@ -99,5 +99,6 @@ public slots:
 
 signals:
 	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
+	void abbc(bool statusConnect);
 	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 };
