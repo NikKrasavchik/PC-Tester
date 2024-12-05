@@ -427,13 +427,26 @@ void TestWindow::initIcons()
 void TestWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
-	// manualTwoThread
-	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
-	connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
-	// autoTwoThread
-	//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowStatusConnect_AutoTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_AutoTwoThread);
-	//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowAfterTest_AutoTwoThread, this, &TestWindow::msgToTestWindowAfterTest_AutoTwoThread);
-	//connect(this, &TestWindow::msgToTwoThreadStartTest_AutoTwoThread, (AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread);
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+	case WindowType::OUT_TEST_MANUAL_STAND:
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		// manualTwoThread
+		connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
+		connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
+		break;
+	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+	case WindowType::IN_AUTO_TEST_AUTO_STAND:
+	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+	case WindowType::FULL_TEST_AUTO_STAND:
+		// autoTwoThread
+		connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowStatusConnect_AutoTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_AutoTwoThread);
+		connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowAfterTest_AutoTwoThread, this, &TestWindow::msgToTestWindowAfterTest_AutoTwoThread);
+		connect(this, &TestWindow::msgToTwoThreadStartTest_AutoTwoThread, (AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread);
+		break;
+	}
 
 }
 
