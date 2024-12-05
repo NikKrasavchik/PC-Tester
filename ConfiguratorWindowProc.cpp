@@ -9,7 +9,7 @@
 #define IND_CFG         0
 #define IND_STAND_TYPE  1
 
-#define MASK_CFG				"cfg"
+#define MASK_CFG				"CFG"
 #define MASK_STAND_MIXED		"MIXED"
 #define MASK_STAND_MANUAL		"MANUAL"
 #define MASK_STAND_AUTO			"AUTO"
@@ -45,9 +45,9 @@ void TableRowProperties::initComboBoxes()
 	typeComboBox = new QComboBox();
 	deleteButton = new QPushButton();
 
-	connectorComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
-	directionComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
-	typeComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	//connectorComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	//directionComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
+	//typeComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
 
 
 	switch (viewWindowState->appLanguage)
@@ -501,7 +501,7 @@ void ConfiguratorWindow::on_saveButton_clicked()
 	if (!parsedData.size())
 		return;
 
-	QString configString = "cfg" + CFG_SPLIT;
+	QString configString = "CFG" + CFG_SPLIT;
 	switch (selectStandTypeComboBox->currentIndex())
 	{
 	case 0:
@@ -1326,7 +1326,10 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 			}
 		}
 		else
+		{ 
 			generateError(EMPTY_FILLING, Errors::Configurator::FILE_DATA_AMOUNT);
+			break;
+		}
 
 		row++;
 	}

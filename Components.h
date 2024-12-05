@@ -14,8 +14,8 @@
 #define RUSSIAN_LANG	0
 #define ENGLISH_LANG	1
 
-#define KVASER		0
-#define MARATHON	1
+#define KVASER			0
+#define MARATHON		1
 
 #define MANUAL_STAND	0
 #define AUTO_STAND		1

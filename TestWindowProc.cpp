@@ -80,6 +80,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			cableRows[i]->direction = "";
 
 		cableRows[i]->generateInteractionButtons(testType, cables[i].type);
+		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
 	}
 }
 
@@ -205,6 +206,13 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 	moreButton = new QPushButton();
 	moreButton->setObjectName("moreButton");
 	moreButton->setFixedSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE);
+}
+
+void TestWindow::selectCurrentCell(QString connector, QString pin)
+{
+	for (int i = 0; i < cableRows.size(); i++)
+		if (cableRows[i]->connector == connector && cableRows[i]->pin == pin)
+			mainTableWidget->setCurrentCell(i, 0);
 }
 
 void TestTableRowProperties::switchButtonState(TestButtons testButton)
@@ -367,6 +375,8 @@ void TestTableRowProperties::on_onButton_clicked()
 	if (stateDigital == ON_BUTTON_PRESSED)
 		return;
 
+	selectCurrentCell(connector, pin);
+
 	switchButtonState(TestButtons::BUTTON_ON);
 	stateDigital = ON_BUTTON_PRESSED;
 
@@ -377,6 +387,8 @@ void TestTableRowProperties::on_offButton_clicked()
 {
 	if (stateDigital == OFF_BUTTON_PRESSED)
 		return;
+
+	selectCurrentCell(connector, pin);
 
 	switchButtonState(TestButtons::BUTTON_OFF);
 	stateDigital = OFF_BUTTON_PRESSED;
@@ -389,6 +401,8 @@ void TestTableRowProperties::on_load0Button_clicked()
 	if (statePWM == LOAD0_BUTTON_PRESSED)
 		return;
 
+	selectCurrentCell(connector, pin);
+
 	switchButtonState(TestButtons::BUTTON_LOAD_0);
 	statePWM = LOAD0_BUTTON_PRESSED;
 
@@ -399,6 +413,8 @@ void TestTableRowProperties::on_load25Button_clicked()
 {
 	if (statePWM == LOAD25_BUTTON_PRESSED)
 		return;
+
+	selectCurrentCell(connector, pin);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_25);
 	statePWM = LOAD25_BUTTON_PRESSED;
@@ -411,6 +427,8 @@ void TestTableRowProperties::on_load50Button_clicked()
 	if (statePWM == LOAD50_BUTTON_PRESSED)
 		return;
 
+	selectCurrentCell(connector, pin);
+
 	switchButtonState(TestButtons::BUTTON_LOAD_50);
 	statePWM = LOAD50_BUTTON_PRESSED;
 
@@ -422,6 +440,8 @@ void TestTableRowProperties::on_load75Button_clicked()
 	if (statePWM == LOAD75_BUTTON_PRESSED)
 		return;
 
+	selectCurrentCell(connector, pin);
+
 	switchButtonState(TestButtons::BUTTON_LOAD_75);
 	statePWM = LOAD75_BUTTON_PRESSED;
 
@@ -432,6 +452,8 @@ void TestTableRowProperties::on_load100Button_clicked()
 {
 	if (statePWM == LOAD100_BUTTON_PRESSED)
 		return;
+
+	selectCurrentCell(connector, pin);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_100);
 	statePWM = LOAD100_BUTTON_PRESSED;

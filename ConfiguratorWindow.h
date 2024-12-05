@@ -77,7 +77,7 @@
 #define DIRECTION_IN_RU			QString::fromLocal8Bit("¬ход")
 #define DIRECTION_IN_EN			QString("In")
 
-#define CFG_SPLIT				QString(",")
+#define CFG_SPLIT				QString(";")
 #define CFG_ENDING				QString("\n")
 
 enum class FullColoumnName

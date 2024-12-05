@@ -16,7 +16,7 @@
 #define IND_MAX_VOLTAGE     9
 #define IND_NAME            10
 
-#define MASK_CFG            "cfg"
+#define MASK_CFG            "CFG"
 #define MASK_STAND_MANUAL   "MANUAL"
 #define MASK_STAND_AUTO     "AUTO"
 
@@ -106,7 +106,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 	{
 		QString dataLine = file.readLine();
 		dataLine.remove("\n");
-		QStringList dataList = dataLine.split(",");
+		QStringList dataList = dataLine.split(";");
 
 		if (dataList.size() == 2)
 		{
