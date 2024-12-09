@@ -1,5 +1,9 @@
 #include "TestWindow.h"
 
+#define STATUS_NOT_SET		-1
+#define STATUS_IN_TEST		5
+#define STATUS_FULL_TEST	7
+
 TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can, QWidget* parent)
 	: QDialog(parent)
 {
@@ -1111,15 +1115,15 @@ void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect
 
 void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue)
 {
-	int currentColoumnNum = -1;
+	int currentColoumnNum = STATUS_NOT_SET;
 	switch (testType)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
-		currentColoumnNum = 4;
+		currentColoumnNum = STATUS_IN_TEST;
 		break;
 
 	case WindowType::FULL_TEST_MANUAL_STAND:
-		currentColoumnNum = 6;
+		currentColoumnNum = STATUS_FULL_TEST;
 		break;
 
 	default:

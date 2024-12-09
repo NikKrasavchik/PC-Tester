@@ -34,7 +34,7 @@
 #define COEF_FILE_SEL_BUTTON			0.05
 #define COEF_MAIN_BUTTON				0.05
 
-#define OVERCROWDED_SEL_FILE_LABEL		26
+#define OVERCROWDED_SEL_FILE_LABEL		20
 #define CFG_EXTENSION_LETTERS_COUNT		4
 
 MainWindow::MainWindow(QWidget* parent)
@@ -663,10 +663,10 @@ void MainWindow::initTexts()
 	fullTestAutoStandButton->setText(QString::fromLocal8Bit("Полная"));
 	manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
 	autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
-	selectAdapterLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите адаптер"));
-	selectFrequencyLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите частоту"));
+	selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
+	selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
 	manualStandLabel->setText(QString::fromLocal8Bit("Ручная"));
-	selectFileLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите файл"));
+	selectFileLabel->setText(QString::fromLocal8Bit("Выберите файл"));
 }
 
 void MainWindow::fillComboBoxes()
@@ -891,30 +891,18 @@ void MainWindow::on_selectFileButton_clicked()
 	}
 #endif // DEBUG
 
-	//int overcrowdedFileNameCount = 0;
-	//bool isFileNameOvercrowded = false;
-	//for (int i = localFileNameInd + 1, j = 0; i < selectedFullFileName.size() - CFG_EXTENSION_LETTERS_COUNT; i++, j++)
-	//{
-	//	if (j <= OVERCROWDED_SEL_FILE_LABEL)
-	//	{
-	//		printedFileName += selectedFullFileName[i];
-	//		fullPrintedFileName += selectedFullFileName[i];
-	//	}
-	//	else
-	//	{
-	//		overcrowdedFileNameCount++;
-	//		if (overcrowdedFileNameCount == 3)
-	//		{
-	//			isFileNameOvercrowded = true;
-	//			printedFileName += "...";
-	//			break;
-	//		}
-	//		fullPrintedFileName += selectedFullFileName[i];
-	//	}
-	//}
-
+	
 	//selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
-	selectFileLabel->setText(fileName);
+	if (partialPrintedFileName.size() <= OVERCROWDED_SEL_FILE_LABEL)
+		selectFileLabel->setText(partialPrintedFileName);
+	else
+	{
+		QString printedFileName = "";
+		for (int i = 0; i < OVERCROWDED_SEL_FILE_LABEL - 3; i++)
+			printedFileName += partialPrintedFileName[i];
+		printedFileName += "...";
+		selectFileLabel->setText(printedFileName);
+	}
 
 	proccessSelectedFile(selectedFileFullName);
 
@@ -1149,13 +1137,13 @@ void MainWindow::resetLanguage()
 		fullTestAutoStandButton->setText(QString::fromLocal8Bit("Полная"));
 
 		if (!can->getAdapterSelected())
-			selectAdapterLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите адаптер"));
+			selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
 		if (!can->getFrequencySelected())
-			selectFrequencyLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите частоту"));
+			selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
 		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
 		autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
 
-		selectFileLabel->setText(QString::fromLocal8Bit("Пожалуйста, выберите файл"));	// Должно стоять условие, что после того, как файл будет выбрать не перезаписывать
+		selectFileLabel->setText(QString::fromLocal8Bit("Выберите файл"));	// Должно стоять условие, что после того, как файл будет выбрать не перезаписывать
 		break;
 
 	case ENGLISH_LANG:
@@ -1173,13 +1161,13 @@ void MainWindow::resetLanguage()
 		fullTestAutoStandButton->setText(QString("Full"));
 
 		if (!can->getAdapterSelected())
-			selectAdapterLabel->setText(QString("Please, select adapter"));
+			selectAdapterLabel->setText(QString("Select adapter"));
 		if (!can->getFrequencySelected())
-			selectFrequencyLabel->setText(QString("Please, select frequency"));
+			selectFrequencyLabel->setText(QString("Select frequency"));
 		manualTestAutoStandLabel->setText(QString("Manual"));
 		autoTestAutoStandLabel->setText(QString("Auto"));
 
-		selectFileLabel->setText(QString("Selected file"));	// Должно стоять условие, что после того, как файл будет выбрать не перезаписывать
+		selectFileLabel->setText(QString("Select file"));	// Должно стоять условие, что после того, как файл будет выбрать не перезаписывать
 		break;
 	}
 	if (can->getFrequencySelected())
