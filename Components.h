@@ -168,6 +168,7 @@ struct Cable
 	double minVoltage;
 	double maxVoltage;
 	QString name;
+	QString component;
 };
 
 extern ViewWindowState* viewWindowState;

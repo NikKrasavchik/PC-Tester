@@ -191,6 +191,7 @@ void TestWindow::initUiTable()
 	mainTableWidget->setObjectName("mainTableWidget");
 	mainTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	mainTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+	mainTableHeaderLabels = new QStringList();
 	mainVLayout->addWidget(mainTableWidget);
 }
 
@@ -788,6 +789,7 @@ void TestWindow::resetLanguage()
 				break;
 			}
 			parentFrame->setTitle(WindowType::FULL_TEST_MANUAL_STAND);
+			resetTableHeaderLanguageFullTestManualStand();
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
@@ -796,6 +798,7 @@ void TestWindow::resetLanguage()
 			else
 				outTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
 			parentFrame->setTitle(WindowType::OUT_TEST_MANUAL_STAND);
+			resetTableHeaderLanguageOutTestManualStand();
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -804,6 +807,7 @@ void TestWindow::resetLanguage()
 			else
 				inTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
 			parentFrame->setTitle(WindowType::IN_TEST_MANUAL_STAND);
+			resetTableHeaderLanguageInTestManualStand();
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
@@ -813,6 +817,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::OUT_MANUAL_TEST_AUTO_STAND);
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
+			resetTableHeaderLanguageOutManualTestAutoStand();
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -822,6 +827,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::IN_MANUAL_TEST_AUTO_STAND);
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
+			resetTableHeaderLanguageInManualTestAutoStand();
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
@@ -831,6 +837,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::OUT_AUTO_TEST_AUTO_STAND);
 			AutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+			resetTableHeaderLanguageOutAutoTestAutoStand();
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -840,6 +847,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
 			parentFrame->setTitle(WindowType::IN_AUTO_TEST_AUTO_STAND);
 			AutoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+			resetTableHeaderLanguageInAutoTestAutoStand();
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
@@ -861,6 +869,7 @@ void TestWindow::resetLanguage()
 				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо входам"));
 				break;
 			}
+			resetTableHeaderLanguageFullTestAutoStand();
 			break;
 
 		default:
@@ -892,6 +901,7 @@ void TestWindow::resetLanguage()
 				break;
 			}
 			parentFrame->setTitle(WindowType::FULL_TEST_MANUAL_STAND);
+			resetTableHeaderLanguageFullTestManualStand();
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
@@ -900,6 +910,7 @@ void TestWindow::resetLanguage()
 			else
 				outTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
 			parentFrame->setTitle(WindowType::OUT_TEST_MANUAL_STAND);
+			resetTableHeaderLanguageOutTestManualStand();
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -908,6 +919,7 @@ void TestWindow::resetLanguage()
 			else
 				inTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
 			parentFrame->setTitle(WindowType::IN_TEST_MANUAL_STAND);
+			resetTableHeaderLanguageInTestManualStand();
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
@@ -917,6 +929,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString("Stand\ndisconnected"));
 			parentFrame->setTitle(WindowType::OUT_MANUAL_TEST_AUTO_STAND);
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
+			resetTableHeaderLanguageOutManualTestAutoStand();
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -926,6 +939,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString("Stand\ndisconnected"));
 			parentFrame->setTitle(WindowType::IN_MANUAL_TEST_AUTO_STAND);
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
+			resetTableHeaderLanguageInManualTestAutoStand();
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
@@ -935,6 +949,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString("Stand\ndisconnected"));
 			parentFrame->setTitle(WindowType::OUT_AUTO_TEST_AUTO_STAND);
 			AutoStandStartTestButton->setText(QString("Start"));
+			resetTableHeaderLanguageOutAutoTestAutoStand();
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -944,6 +959,7 @@ void TestWindow::resetLanguage()
 				AutoStandConnectButton->setText(QString("Stand\disconnected"));
 			parentFrame->setTitle(WindowType::IN_AUTO_TEST_AUTO_STAND);
 			AutoStandStartTestButton->setText(QString("Start"));
+			resetTableHeaderLanguageInAutoTestAutoStand();
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
@@ -965,6 +981,7 @@ void TestWindow::resetLanguage()
 				fullTestSortButton->setText(QString("Sort:\nin first"));
 				break;
 			}
+			resetTableHeaderLanguageFullTestAutoStand();
 			break;
 
 		default:

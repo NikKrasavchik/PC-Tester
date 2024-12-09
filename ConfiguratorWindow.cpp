@@ -372,7 +372,6 @@ void ConfiguratorWindow::resetHeaderLanguage(int standType)
 			mainTableHeaderLabels->push_back(QString::fromLocal8Bit(""));
 			break;
 		}
-		mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
 		break;
 
 	case ENGLISH_LANG:
@@ -421,9 +420,9 @@ void ConfiguratorWindow::resetHeaderLanguage(int standType)
 			mainTableHeaderLabels->push_back("");
 			break;
 		}
-		mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
 		break;
 	}
+	mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
 }
 
 void ConfiguratorWindow::initText()

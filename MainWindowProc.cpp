@@ -3,7 +3,7 @@
 #define IND_CFG             0
 #define IND_STAND_TYPE      1
 
-#define COLOUMN_COUNT       11
+#define COLOUMN_COUNT       12
 #define IND_CONNECTOR_ID    0
 #define IND_PIN             1
 #define IND_DIRECTION       2
@@ -15,6 +15,7 @@
 #define IND_MIN_VOLTAGE     8
 #define IND_MAX_VOLTAGE     9
 #define IND_NAME            10
+#define IND_COMPONENT       11
 
 #define MASK_CFG            "CFG"
 #define MASK_STAND_MANUAL   "MANUAL"
@@ -247,6 +248,16 @@ void MainWindow::proccessSelectedFile(QString fileName)
 				case IND_NAME:
 					if (verifyData(coloumn, currentProperty))
 						cable.name = currentProperty;
+					else
+					{
+						isFileCorrect = false;
+						// ERROR
+					}
+					break;
+
+				case IND_COMPONENT:
+					if (verifyData(coloumn, currentProperty))
+						cable.component = currentProperty;
 					else
 					{
 						isFileCorrect = false;

@@ -34,15 +34,8 @@ void TestWindow::initUiTableHeaderOutManualTestAutoStand()
 {
 	mainTableWidget->setRowCount(cableRows.size());
 	mainTableWidget->setColumnCount(COLOUMN_COUNT);
-	mainTableWidget->setHorizontalHeaderLabels(QStringList()
-		<< QString::fromLocal8Bit("Разъём")
-		<< QString::fromLocal8Bit("Пин")
-		<< QString::fromLocal8Bit("Название")
-		<< QString::fromLocal8Bit("Тип")
-		<< QString::fromLocal8Bit("Проверка")
-		<< QString::fromLocal8Bit("Стенд")
-		<< QString::fromLocal8Bit("ПК")
-		<< "");
+
+	resetTableHeaderLanguageOutManualTestAutoStand();
 
 	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
@@ -60,6 +53,40 @@ void TestWindow::initUiTableHeaderOutManualTestAutoStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_STAND,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PC,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
+}
+
+void TestWindow::resetTableHeaderLanguageOutManualTestAutoStand()
+{
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		delete mainTableHeaderLabels;
+		mainTableHeaderLabels = new QStringList();
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Разъём"));
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Тип"));
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Проверка"));
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Стенд"));
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("ПК"));
+		mainTableHeaderLabels->push_back("");
+		break;
+
+	case ENGLISH_LANG:
+		delete mainTableHeaderLabels;
+		mainTableHeaderLabels = new QStringList();
+		mainTableHeaderLabels->push_back("Connector");
+		mainTableHeaderLabels->push_back("Pin");
+		mainTableHeaderLabels->push_back("Name");
+		mainTableHeaderLabels->push_back("Direction");
+		mainTableHeaderLabels->push_back("Type");
+		mainTableHeaderLabels->push_back("Check");
+		mainTableHeaderLabels->push_back("Stand");
+		mainTableHeaderLabels->push_back("PC");
+		mainTableHeaderLabels->push_back("");
+		break;
+	}
+	mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
 }
 
 void TestWindow::initUiTableRowsOutManualTestAutoStand()

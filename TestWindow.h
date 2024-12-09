@@ -30,6 +30,7 @@
 #define COLOUMN_CONNECTOR_WIDTH	60
 #define COLOUMN_PIN_WIDTH		40
 #define COLOUMN_DIRECTION_WIDTH	90
+#define COLOUMN_COMPONENT_WIDTH	60
 #define COLOUMN_TYPE_WIDTH		60
 #define COLOUMN_CHECK_WIDTH		160
 #define COLOUMN_AUTOCHECK_WIDTH	60
@@ -104,6 +105,7 @@ public:
 	QString connector;
 	QString pin;
 	QString name;
+	QString component;
 	QString direction;
 	QString type;
 
@@ -190,6 +192,7 @@ private:
 	QFrame* footerLine;
 	QLineEdit* testerNameLineEdit;
 	QTableWidget* mainTableWidget;
+	QStringList* mainTableHeaderLabels;
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
 	QPixmap* themeLightPixmap;
@@ -231,41 +234,49 @@ private:
 	void initUiInTestManualStand();
 	void initUiTableInTestManualStand();
 	void initUiTableHeaderInTestManualStand();
+	void resetTableHeaderLanguageInTestManualStand();
 	void initUiTableRowsInTestManualStand();
 
 	void initUiOutTestManualStand();
 	void initUiTableOutTestManualStand();
 	void initUiTableHeaderOutTestManualStand();
+	void resetTableHeaderLanguageOutTestManualStand();
 	void initUiTableRowsOutTestManualStand();
 
 	void initUiFullTestManualStand();
 	void initUiTableFullTestManualStand();
 	void resetTableHeaderFullTestManualStand();
+	void resetTableHeaderLanguageFullTestManualStand();
 	void resetTableRowsFullTestManualStand();
 
 	void initUiInManualTestAutoStand();
 	void initUiTableInManualTestAutoStand();
 	void initUiTableHeaderInManualTestAutoStand();
+	void resetTableHeaderLanguageInManualTestAutoStand();
 	void initUiTableRowsInManualTestAutoStand();
 
 	void initUiOutManualTestAutoStand();
 	void initUiTableOutManualTestAutoStand();
 	void initUiTableHeaderOutManualTestAutoStand();
+	void resetTableHeaderLanguageOutManualTestAutoStand();
 	void initUiTableRowsOutManualTestAutoStand();
 
 	void initUiInAutoTestAutoStand();
 	void initUiTableInAutoTestAutoStand();
 	void initUiTableHeaderInAutoTestAutoStand();
+	void resetTableHeaderLanguageInAutoTestAutoStand();
 	void initUiTableRowsInAutoTestAutoStand();
 
 	void initUiOutAutoTestAutoStand();
 	void initUiTableOutAutoTestAutoStand();
 	void initUiTableHeaderOutAutoTestAutoStand();
+	void resetTableHeaderLanguageOutAutoTestAutoStand();
 	void initUiTableRowsOutAutoTestAutoStand();
 
 	void initUiFullTestAutoStand();
 	void initUiTableFullTestAutoStand();
 	void initUiTableHeaderFullTestAutoStand();
+	void resetTableHeaderLanguageFullTestAutoStand();
 	void initUiTableRowsFullTestAutoStand();
 
 	void resetTheme();

@@ -10,6 +10,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->connector = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
 		cableRows[i]->pin = QString::number(cables[i].pin);
 		cableRows[i]->name = cables[i].name;
+		cableRows[i]->component = cables[i].component;
 		cableRows[i]->minCurrent = cables[i].minCurrent;
 		cableRows[i]->maxCurrent = cables[i].maxCurrent;
 		cableRows[i]->minVoltage = cables[i].minVoltage;
