@@ -172,6 +172,7 @@ private:
 
 	QString selectedFileFullName;
 	QString fileName;
+	QString printedfileName;
 	QString appstylePath;
 	QString darkStylePath;
 	QString lightStylePath;

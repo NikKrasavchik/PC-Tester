@@ -109,7 +109,6 @@ TestWindow::~TestWindow()
 
 void TestWindow::initUiMain()
 {
-	resize(viewWindowState->appSize.width, viewWindowState->appSize.height);
 	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
 
 	mainLayoutWidget = new QWidget(this);

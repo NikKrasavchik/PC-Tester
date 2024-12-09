@@ -875,7 +875,7 @@ void MainWindow::on_selectFileButton_clicked()
 	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV (*.csv)");
 	int localFileNameInd = selectedFileFullName.lastIndexOf("/");
 
-	QString partialPrintedFileName = "";
+	QString fullPrintedFileName = "";
 	fileName = "";
 
 	bool isTypeStart = false;
@@ -885,24 +885,24 @@ void MainWindow::on_selectFileButton_clicked()
 			isTypeStart = true;
 
 		if (!isTypeStart)
-			partialPrintedFileName += selectedFileFullName[i];
+			fullPrintedFileName += selectedFileFullName[i];
 
 		fileName += selectedFileFullName[i];
 	}
 #endif // DEBUG
 
-	
+
 	//selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
-	if (partialPrintedFileName.size() <= OVERCROWDED_SEL_FILE_LABEL)
-		selectFileLabel->setText(partialPrintedFileName);
+	if (fullPrintedFileName.size() <= OVERCROWDED_SEL_FILE_LABEL)
+		printedfileName = fullPrintedFileName;
 	else
 	{
-		QString printedFileName = "";
+		printedfileName = "";
 		for (int i = 0; i < OVERCROWDED_SEL_FILE_LABEL - 3; i++)
-			printedFileName += partialPrintedFileName[i];
-		printedFileName += "...";
-		selectFileLabel->setText(printedFileName);
+			printedfileName += fullPrintedFileName[i];
+		printedfileName += "...";
 	}
+	selectFileLabel->setText(printedfileName);
 
 	proccessSelectedFile(selectedFileFullName);
 
@@ -1361,6 +1361,7 @@ void MainWindow::resetWindowView()
 	resetLanguage();
 	resetTheme();
 	parentFrame->resetTheme();
+	selectFileLabel->setText(printedfileName);
 }
 
 void MainWindow::setParentFrame(WindowFrame* parentFrame)
