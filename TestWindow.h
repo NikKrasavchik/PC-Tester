@@ -234,49 +234,67 @@ private:
 	void initUiInTestManualStand();
 	void initUiTableInTestManualStand();
 	void initUiTableHeaderInTestManualStand();
+	void resetLanguageInTestManualStand();
 	void resetTableHeaderLanguageInTestManualStand();
+	void resetTableTypeLanguageInTestManualStand();
 	void initUiTableRowsInTestManualStand();
 
 	void initUiOutTestManualStand();
 	void initUiTableOutTestManualStand();
 	void initUiTableHeaderOutTestManualStand();
+	void resetLanguageOutTestManualStand();
 	void resetTableHeaderLanguageOutTestManualStand();
+	void resetTableTypeLanguageOutTestManualStand();
 	void initUiTableRowsOutTestManualStand();
 
 	void initUiFullTestManualStand();
 	void initUiTableFullTestManualStand();
 	void resetTableHeaderFullTestManualStand();
+	void resetLanguageFullTestManualStand();
 	void resetTableHeaderLanguageFullTestManualStand();
+	void resetTableTypeLanguageFullTestManualStand();
+	void resetTableDirectionLanguageFullTestManualStand();
 	void resetTableRowsFullTestManualStand();
 
 	void initUiInManualTestAutoStand();
 	void initUiTableInManualTestAutoStand();
 	void initUiTableHeaderInManualTestAutoStand();
+	void resetLanguageInManualTestAutoStand();
 	void resetTableHeaderLanguageInManualTestAutoStand();
+	void resetTableTypeLanguageInManualTestAutoStand();
 	void initUiTableRowsInManualTestAutoStand();
 
 	void initUiOutManualTestAutoStand();
 	void initUiTableOutManualTestAutoStand();
 	void initUiTableHeaderOutManualTestAutoStand();
+	void resetLanguageOutManualTestAutoStand();
 	void resetTableHeaderLanguageOutManualTestAutoStand();
+	void resetTableTypeLanguageOutManualTestAutoStand();
 	void initUiTableRowsOutManualTestAutoStand();
 
 	void initUiInAutoTestAutoStand();
 	void initUiTableInAutoTestAutoStand();
 	void initUiTableHeaderInAutoTestAutoStand();
+	void resetLanguageInAutoTestAutoStand();
 	void resetTableHeaderLanguageInAutoTestAutoStand();
+	void resetTableTypeLanguageInAutoTestAutoStand();
 	void initUiTableRowsInAutoTestAutoStand();
 
 	void initUiOutAutoTestAutoStand();
 	void initUiTableOutAutoTestAutoStand();
 	void initUiTableHeaderOutAutoTestAutoStand();
+	void resetLanguageOutAutoTestAutoStand();
 	void resetTableHeaderLanguageOutAutoTestAutoStand();
+	void resetTableTypeLanguageOutAutoTestAutoStand();
 	void initUiTableRowsOutAutoTestAutoStand();
 
 	void initUiFullTestAutoStand();
 	void initUiTableFullTestAutoStand();
 	void initUiTableHeaderFullTestAutoStand();
+	void resetLanguageFullTestAutoStand();
 	void resetTableHeaderLanguageFullTestAutoStand();
+	void resetTableTypeLanguageFullTestAutoStand();
+	void resetTableDirectionLanguageFullTestAutoStand();
 	void initUiTableRowsFullTestAutoStand();
 
 	void resetTheme();

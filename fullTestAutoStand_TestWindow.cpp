@@ -60,6 +60,13 @@ void TestWindow::initUiTableHeaderFullTestAutoStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
 }
 
+void TestWindow::resetLanguageFullTestAutoStand()
+{
+	resetTableHeaderLanguageFullTestAutoStand();
+	resetTableTypeLanguageFullTestAutoStand();
+	resetTableDirectionLanguageFullTestAutoStand();
+}
+
 void TestWindow::resetTableHeaderLanguageFullTestAutoStand()
 {
 	switch (viewWindowState->appLanguage)
@@ -93,6 +100,66 @@ void TestWindow::resetTableHeaderLanguageFullTestAutoStand()
 	mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
 }
 
+void TestWindow::resetTableDirectionLanguageFullTestAutoStand()
+{
+	QAbstractItemModel* model = mainTableWidget->model();
+	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
+	{
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[currentRowNum]->direction == "OUT")
+				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), QString::fromLocal8Bit("Выход"));
+			else if (cableRows[currentRowNum]->direction == "IN")
+				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), QString::fromLocal8Bit("Вход"));
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[currentRowNum]->direction == "OUT")
+				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), "Out");
+			else if (cableRows[currentRowNum]->direction == "IN")
+				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), "In");
+			break;
+		}
+	}
+}
+
+void TestWindow::resetTableTypeLanguageFullTestAutoStand()
+{
+	QAbstractItemModel* model = mainTableWidget->model();
+	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
+	{
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[currentRowNum]->type == "DIGITAL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("Цифровой"));
+			else if (cableRows[currentRowNum]->type == "PWM")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("ШИМ"));
+			else if (cableRows[currentRowNum]->type == "VNH")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("VNH"));
+			else if (cableRows[currentRowNum]->type == "ANALOG")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("Аналоговый"));
+			else if (cableRows[currentRowNum]->type == "HALL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("HALL"));
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[currentRowNum]->type == "DIGITAL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "Digital");
+			else if (cableRows[currentRowNum]->type == "PWM")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "PWM");
+			else if (cableRows[currentRowNum]->type == "VNH")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "VNH");
+			else if (cableRows[currentRowNum]->type == "ANALOG")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "Analog");
+			else if (cableRows[currentRowNum]->type == "HALL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "HALL");
+			break;
+		}
+	}
+}
+
 void TestWindow::initUiTableRowsFullTestAutoStand()
 {
 	QAbstractItemModel* model = mainTableWidget->model();
@@ -103,8 +170,6 @@ void TestWindow::initUiTableRowsFullTestAutoStand()
 		model->setData(model->index(currentRowNum, COLOUMN_CONNECTOR), cableRows[currentRowNum]->connector);
 		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
-		model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), cableRows[currentRowNum]->direction);
-		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
 		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
@@ -114,9 +179,10 @@ void TestWindow::initUiTableRowsFullTestAutoStand()
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
+	resetTableDirectionLanguageFullTestAutoStand();
+	resetTableTypeLanguageFullTestAutoStand();
 }
 
 void TestWindow::on_AutoStandConnectButton_clicked()
 {
 }
-

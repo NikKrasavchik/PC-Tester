@@ -55,6 +55,12 @@ void TestWindow::initUiTableHeaderOutManualTestAutoStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
 }
 
+void TestWindow::resetLanguageOutManualTestAutoStand()
+{
+	resetTableHeaderLanguageOutManualTestAutoStand();
+	resetTableTypeLanguageOutManualTestAutoStand();
+}
+
 void TestWindow::resetTableHeaderLanguageOutManualTestAutoStand()
 {
 	switch (viewWindowState->appLanguage)
@@ -89,6 +95,42 @@ void TestWindow::resetTableHeaderLanguageOutManualTestAutoStand()
 	mainTableWidget->setHorizontalHeaderLabels(*mainTableHeaderLabels);
 }
 
+void TestWindow::resetTableTypeLanguageOutManualTestAutoStand()
+{
+	QAbstractItemModel* model = mainTableWidget->model();
+	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
+	{
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[currentRowNum]->type == "DIGITAL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("Öטפנמגמי"));
+			else if (cableRows[currentRowNum]->type == "PWM")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("ØÈÌ"));
+			else if (cableRows[currentRowNum]->type == "VNH")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("VNH"));
+			else if (cableRows[currentRowNum]->type == "ANALOG")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("Àםאכמדמגûי"));
+			else if (cableRows[currentRowNum]->type == "HALL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("HALL"));
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[currentRowNum]->type == "DIGITAL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "Digital");
+			else if (cableRows[currentRowNum]->type == "PWM")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "PWM");
+			else if (cableRows[currentRowNum]->type == "VNH")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "VNH");
+			else if (cableRows[currentRowNum]->type == "ANALOG")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "Analog");
+			else if (cableRows[currentRowNum]->type == "HALL")
+				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "HALL");
+			break;
+		}
+	}
+}
+
 void TestWindow::initUiTableRowsOutManualTestAutoStand()
 {
 	QAbstractItemModel* model = mainTableWidget->model();
@@ -99,7 +141,6 @@ void TestWindow::initUiTableRowsOutManualTestAutoStand()
 		model->setData(model->index(currentRowNum, COLOUMN_CONNECTOR), cableRows[currentRowNum]->connector);
 		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
-		model->setData(model->index(currentRowNum, COLOUMN_TYPE), cableRows[currentRowNum]->type);
 
 		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
@@ -110,6 +151,7 @@ void TestWindow::initUiTableRowsOutManualTestAutoStand()
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
+	resetTableTypeLanguageOutManualTestAutoStand();
 }
 
 
