@@ -1,22 +1,20 @@
 #include "ConfiguratorWindow.h"
 
-#define VERIFIABLE		true
-#define UNVERIFIABLE	false	
+#define VERIFIABLE				true
+#define UNVERIFIABLE			false	
 
-#define FILE_CFG_COUNT	2
-#define FILE_DATA_COUNT	11
+#define FILE_CFG_COUNT			2
+#define FILE_DATA_COUNT			12
 
-#define IND_CFG         0
-#define IND_STAND_TYPE  1
+#define COLOUMN_COUNT_FULL		13
+
+#define IND_CFG					0
+#define IND_STAND_TYPE			1
 
 #define MASK_CFG				"CFG"
 #define MASK_STAND_MIXED		"MIXED"
 #define MASK_STAND_MANUAL		"MANUAL"
 #define MASK_STAND_AUTO			"AUTO"
-
-#define FULL_COLOUMN_COUNT		12
-#define MANUAL_COLOUMN_COUNT	8
-#define AUOT_COLOUMN_COUNT		10
 
 #define EMPTY_FILLING			-1
 
@@ -44,11 +42,6 @@ void TableRowProperties::initComboBoxes()
 	directionComboBox = new QComboBox();
 	typeComboBox = new QComboBox();
 	deleteButton = new QPushButton();
-
-	//connectorComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
-	//directionComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
-	//typeComboBox->setAttribute(Qt::WA_TransparentForMouseEvents);
-
 
 	switch (viewWindowState->appLanguage)
 	{
@@ -337,29 +330,6 @@ void TableRowProperties::on_type_activated(int index)
 	resetRowPreset(this);
 }
 
-void TableRowProperties::on_deleteButton_clicked()
-{
-	delete directionComboBox;
-	delete typeComboBox;
-	delete presetSettings;
-	delete deleteButton;
-
-	deleteRow(id);
-}
-
-void ConfiguratorWindow::deleteRow(int index)
-{
-	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::CONNECTOR);
-	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::DIRECTION);
-	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::TYPE);
-	mainTableWidget->removeCellWidget(index, (int)FullColoumnName::DEL);
-
-	mainTableWidget->removeRow(index);
-	tableRowPropertiesVector.erase(tableRowPropertiesVector.begin() + index);
-
-	for (int i = index; i < tableRowPropertiesVector.size(); i++)
-		tableRowPropertiesVector[i]->id--;
-}
 
 void ConfiguratorWindow::resetRowPreset(TableRowProperties* currentRowProperties)
 {
@@ -410,17 +380,11 @@ void ConfiguratorWindow::resetRowPreset(TableRowProperties* currentRowProperties
 			break;
 
 		case TYPE_PWM:
-			currentRowProperties->typeComboBox->setCurrentIndex(1);
-			break;
-
-		case TYPE_VNH:
-			currentRowProperties->typeComboBox->setCurrentIndex(2);
-			break;
-
 		case TYPE_ANALOG:
 			currentRowProperties->typeComboBox->setCurrentIndex(1);
 			break;
 
+		case TYPE_VNH:
 		case TYPE_HALL:
 			currentRowProperties->typeComboBox->setCurrentIndex(2);
 			break;
@@ -470,23 +434,60 @@ void ConfiguratorWindow::resetRowPreset(TableRowProperties* currentRowProperties
 			break;
 
 		case TYPE_PWM:
-			currentRowProperties->typeComboBox->setCurrentIndex(1);
-			break;
-
-		case TYPE_VNH:
-			currentRowProperties->typeComboBox->setCurrentIndex(2);
-			break;
-
 		case TYPE_ANALOG:
 			currentRowProperties->typeComboBox->setCurrentIndex(1);
 			break;
 
+		case TYPE_VNH:
 		case TYPE_HALL:
 			currentRowProperties->typeComboBox->setCurrentIndex(2);
 			break;
 		}
 		break;
 	}
+}
+
+void TableRowProperties::on_deleteButton_clicked()
+{
+	delete directionComboBox;
+	delete typeComboBox;
+	delete presetSettings;
+	delete deleteButton;
+
+	deleteRow(id);
+}
+
+void ConfiguratorWindow::deleteRow(int index)
+{
+	switch (selectStandTypeComboBox->currentIndex())
+	{
+	case STAND_NOT_SET:
+		mainTableWidget->removeCellWidget(index, (int)FullColoumnName::CONNECTOR);
+		mainTableWidget->removeCellWidget(index, (int)FullColoumnName::DIRECTION);
+		mainTableWidget->removeCellWidget(index, (int)FullColoumnName::TYPE);
+		mainTableWidget->removeCellWidget(index, (int)FullColoumnName::DEL);
+		break;
+
+	case STAND_MANUAL:
+		mainTableWidget->removeCellWidget(index, (int)ManualColoumnName::CONNECTOR);
+		mainTableWidget->removeCellWidget(index, (int)ManualColoumnName::DIRECTION);
+		mainTableWidget->removeCellWidget(index, (int)ManualColoumnName::TYPE);
+		mainTableWidget->removeCellWidget(index, (int)ManualColoumnName::DEL);
+		break;
+
+	case STAND_AUTO:
+		mainTableWidget->removeCellWidget(index, (int)AutoColoumnName::CONNECTOR);
+		mainTableWidget->removeCellWidget(index, (int)AutoColoumnName::DIRECTION);
+		mainTableWidget->removeCellWidget(index, (int)AutoColoumnName::TYPE);
+		mainTableWidget->removeCellWidget(index, (int)AutoColoumnName::DEL);
+		break;
+	}
+
+	mainTableWidget->removeRow(index);
+	tableRowPropertiesVector.erase(tableRowPropertiesVector.begin() + index);
+
+	for (int i = index; i < tableRowPropertiesVector.size(); i++)
+		tableRowPropertiesVector[i]->id--;
 }
 
 void ConfiguratorWindow::resetPresets()
@@ -520,8 +521,8 @@ void ConfiguratorWindow::on_saveButton_clicked()
 
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
-		for (int coloumn = 0; coloumn < FULL_COLOUMN_COUNT - 1; coloumn++)
-			configString += parsedData[row][coloumn] + (coloumn == FULL_COLOUMN_COUNT - 2 ? "" : CFG_SPLIT);
+		for (int coloumn = 0; coloumn < COLOUMN_COUNT_FULL - 1; coloumn++)
+			configString += parsedData[row][coloumn] + (coloumn == COLOUMN_COUNT_FULL - 2 ? "" : CFG_SPLIT);
 		configString += (row == mainTableWidget->rowCount() - 1 ? "" : CFG_ENDING);
 	}
 
@@ -529,8 +530,13 @@ void ConfiguratorWindow::on_saveButton_clicked()
 
 	std::ofstream fout;
 	fout.open(fileName.toLocal8Bit().toStdString());
-
 	fout << configString.toStdString();
+	fout.close();
+
+	if (viewWindowState->appLanguage == RUSSIAN_LANG)
+		QMessageBox::warning(this, QString::fromLocal8Bit("Уведомление"), QString::fromLocal8Bit("Файл создан"));
+	else
+		QMessageBox::warning(this, QString("Notification"), QString("File was created"));
 
 	qDebug() << configString;
 }
@@ -545,7 +551,7 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
 		std::vector<QString> rowData;
-		for (int coloumn = 0; coloumn < FULL_COLOUMN_COUNT; coloumn++)
+		for (int coloumn = 0; coloumn < COLOUMN_COUNT_FULL; coloumn++)
 		{
 			TableRowProperties* currentRowProperties = tableRowPropertiesVector[row];
 			switch ((FullColoumnName)coloumn)
@@ -592,6 +598,10 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 
 			case FullColoumnName::NAME:
 				rowData.push_back(currentRowProperties->name);
+				break;
+
+			case FullColoumnName::COMPONENT:
+				rowData.push_back(currentRowProperties->component);
 				break;
 
 			case FullColoumnName::DEL:
@@ -739,6 +749,19 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
 				break;
 
+			case (int)FullColoumnName::COMPONENT:
+				for (int row = 0; row < mainTableWidget->rowCount(); row++)
+					if (needVerify)
+					{
+						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
+							tableRowPropertiesVector[row]->component = mainTableWidget->item(row, coloumn)->text();
+						else
+							return false;
+					}
+					else
+						tableRowPropertiesVector[row]->component = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+				break;
+
 			case (int)FullColoumnName::DEL:
 				break;
 			}
@@ -784,6 +807,19 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					}
 					else
 						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+				break;
+				
+			case (int)ManualColoumnName::COMPONENT:
+				for (int row = 0; row < mainTableWidget->rowCount(); row++)
+					if (needVerify)
+					{
+						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
+							tableRowPropertiesVector[row]->component = mainTableWidget->item(row, coloumn)->text();
+						else
+							return false;
+					}
+					else
+						tableRowPropertiesVector[row]->component = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
 				break;
 
 			case (int)ManualColoumnName::DEL:
@@ -971,6 +1007,11 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 			if (data == NULL)
 				return Errors::Configurator::SAVE_NAME_NULL;
 			break;
+			
+		case FullColoumnName::COMPONENT:
+			if (data == NULL)
+				return Errors::Configurator::SAVE_COMPONENT_NULL;
+			break;
 
 		case FullColoumnName::DEL:
 			break;
@@ -1016,6 +1057,11 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 		case ManualColoumnName::NAME:
 			if (data == NULL)
 				return Errors::Configurator::SAVE_NAME_NULL;
+			break;
+			
+		case ManualColoumnName::COMPONENT:
+			if (data == NULL)
+				return Errors::Configurator::SAVE_COMPONENT_NULL;
 			break;
 
 		case ManualColoumnName::DEL:
@@ -1081,7 +1127,7 @@ static Errors::Configurator verifyFileData(FullColoumnName coloumn, QString data
 	{
 	case FullColoumnName::CONNECTOR:
 		connector = data.toInt(&isOk, 10);
-		if (!isOk || (connector != STAND_NOT_SET && connector != STAND_MANUAL && connector != STAND_AUTO))
+		if (!isOk || !((int)ConnectorId::A <= connector && connector <= (int)ConnectorId::F))
 			return Errors::Configurator::FILE_DATA_CONNECTOR_INCORRECT;
 		break;
 
@@ -1160,6 +1206,11 @@ static Errors::Configurator verifyFileData(FullColoumnName coloumn, QString data
 		if (!data.size())
 			return Errors::Configurator::FILE_DATA_NAME_EMPTY;
 		break;
+	
+	case FullColoumnName::COMPONENT:
+		if (!data.size())
+			return Errors::Configurator::FILE_DATA_COMPONENT_EMPTY;
+		break;
 	}
 
 	return Errors::Configurator::CORRECT;
@@ -1185,7 +1236,7 @@ void ConfiguratorWindow::on_loadButton_clicked()
 		fileName += selectedFileFullName[i];
 	}
 
-	fileNameLineEdit->setText(fileName);
+	fileNameLineEdit->setText(partialPrintedFileName);
 
 	proccessSelectedFile(selectedFileFullName);
 }
@@ -1196,6 +1247,11 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		generateError(EMPTY_FILLING, Errors::Configurator::FILE_OPEN);
+		mainTableWidget->clear();
+		cleanRowProperties();
+		tableRowPropertiesVector.clear();
+		mainTableWidget->setRowCount(0);
+		fileNameLineEdit->setText("");
 		return;
 	}
 
@@ -1255,7 +1311,9 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 
 				case (int)FullColoumnName::PIN:
 					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
+					{
 						tableRowPropertiesVector[currentRowNum]->pin = currentData.toInt();
+					}
 					else
 						isFileCorrect = false;
 					break;
@@ -1269,7 +1327,7 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 
 				case (int)FullColoumnName::TYPE:
 					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
-						tableRowPropertiesVector[currentRowNum]->presetSettings->type = currentData.toInt() + 1;
+						tableRowPropertiesVector[currentRowNum]->presetSettings->type = currentData.toInt();
 					else
 						isFileCorrect = false;
 					break;
@@ -1322,6 +1380,13 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 					else
 						isFileCorrect = false;
 					break;
+
+				case (int)FullColoumnName::COMPONENT:
+					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
+						tableRowPropertiesVector[currentRowNum]->component = currentData;
+					else
+						isFileCorrect = false;
+					break;
 				}
 			}
 		}
@@ -1338,6 +1403,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 		mainTableWidget->clear();
 		cleanRowProperties();
 		tableRowPropertiesVector.clear();
+		mainTableWidget->setRowCount(0);
+		fileNameLineEdit->setText("");
 	}
 
 	file.close();
@@ -1354,9 +1421,27 @@ void ConfiguratorWindow::resetedFill(int standType)
 		currentRowProperties->connectorComboBox->setCurrentIndex((int)(currentRowProperties->presetSettings->connector));
 		if (currentRowProperties->pin != -1)
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::PIN), QString::number(currentRowProperties->pin));
-		currentRowProperties->directionComboBox->setCurrentIndex(currentRowProperties->presetSettings->direction);
-		currentRowProperties->typeComboBox->setCurrentIndex(currentRowProperties->presetSettings->type);
+		if (currentRowProperties->presetSettings->direction != -1)
+		{
+			currentRowProperties->on_direction_activated(currentRowProperties->presetSettings->direction);
+			//currentRowProperties->directionComboBox->setCurrentIndex(currentRowProperties->presetSettings->direction);
+		}
 
+		switch (currentRowProperties->presetSettings->type)
+		{
+		case TYPE_DIGITAL:
+		case TYPE_PWM:
+		case TYPE_VNH:
+			currentRowProperties->on_type_activated(currentRowProperties->presetSettings->type);
+			//currentRowProperties->typeComboBox->setCurrentIndex(currentRowProperties->presetSettings->type);
+			break;
+
+		case TYPE_ANALOG:
+		case TYPE_HALL:
+			currentRowProperties->on_type_activated(currentRowProperties->presetSettings->type - 2);
+			//currentRowProperties->typeComboBox->setCurrentIndex(currentRowProperties->presetSettings->type - 2);
+			break;
+		}
 		switch (standType)
 		{
 		case STAND_NOT_SET:
@@ -1372,6 +1457,7 @@ void ConfiguratorWindow::resetedFill(int standType)
 			if (currentRowProperties->maxVoltage != -1)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::MAX_VOLTAGE), QString::number(currentRowProperties->maxVoltage));
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::NAME), currentRowProperties->name);
+			model->setData(model->index(currentRowNum, (int)FullColoumnName::COMPONENT), currentRowProperties->component);
 			break;
 
 		case STAND_MANUAL:
@@ -1379,6 +1465,7 @@ void ConfiguratorWindow::resetedFill(int standType)
 			if (currentRowProperties->byte != -1)
 				model->setData(model->index(currentRowNum, (int)ManualColoumnName::BYTE), QString::number(currentRowProperties->byte));
 			model->setData(model->index(currentRowNum, (int)ManualColoumnName::NAME), currentRowProperties->name);
+			model->setData(model->index(currentRowNum, (int)ManualColoumnName::COMPONENT), currentRowProperties->component);
 			break;
 
 		case STAND_AUTO:
@@ -1423,8 +1510,6 @@ void ConfiguratorWindow::cleanRowProperties()
 void ConfiguratorWindow::on_selectStandTypeComboBox_currentIndexChanged(int index)
 {
 	updateTableData(UNVERIFIABLE);
-
-	mainTableWidget->setRowCount(0);
 
 	switch (index)
 	{
@@ -1530,6 +1615,10 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 		case Errors::Configurator::SAVE_NAME_NULL:
 			QMessageBox::critical(this, "Error saving file", "Name on row " + QString::number(row) + " is not filled", "Ok");
 			return false;
+			
+		case Errors::Configurator::SAVE_COMPONENT_NULL:
+			QMessageBox::critical(this, "Error saving file", "Component on row " + QString::number(row) + " is not filled", "Ok");
+			return false;
 
 		case Errors::Configurator::FILE_OPEN:
 			QMessageBox::critical(this, "Error loading file", "Unable to open file", "Ok");
@@ -1590,6 +1679,10 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 
 		case Errors::Configurator::FILE_DATA_NAME_EMPTY:
 			QMessageBox::critical(this, "Error loading file", "Name data on row" + QString::number(row) + " is empty", "Ok");
+			return false;
+
+		case Errors::Configurator::FILE_DATA_COMPONENT_EMPTY:
+			QMessageBox::critical(this, "Error loading file", "Component data on row" + QString::number(row) + " is empty", "Ok");
 			return false;
 		}
 		break;
@@ -1672,6 +1765,10 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 		case Errors::Configurator::SAVE_NAME_NULL:
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Название в строке ") + QString::number(row) + QString::fromLocal8Bit(" не заполнено"), QString::fromLocal8Bit("Ок"));
 			return false;
+			
+		case Errors::Configurator::SAVE_COMPONENT_NULL:
+			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Компонент в строке ") + QString::number(row) + QString::fromLocal8Bit(" не заполнено"), QString::fromLocal8Bit("Ок"));
+			return false;
 
 		case Errors::Configurator::FILE_OPEN:
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при загрузке"), QString::fromLocal8Bit("Невозможно открыть файл"), QString::fromLocal8Bit("Ок"));
@@ -1735,6 +1832,10 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 
 		case Errors::Configurator::FILE_DATA_NAME_EMPTY:
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при загрузке"), QString::fromLocal8Bit("Название в строке ") + QString::number(row) + QString::fromLocal8Bit(" не заполнено"), QString::fromLocal8Bit("Ок"));
+			return false;
+
+		case Errors::Configurator::FILE_DATA_COMPONENT_EMPTY:
+			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при загрузке"), QString::fromLocal8Bit("Компонент в строке ") + QString::number(row) + QString::fromLocal8Bit(" не заполнено"), QString::fromLocal8Bit("Ок"));
 			return false;
 		}
 		break;

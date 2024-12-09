@@ -93,6 +93,7 @@ enum class FullColoumnName
 	MIN_VOLTAGE,
 	MAX_VOLTAGE,
 	NAME,
+	COMPONENT,
 	DEL
 };
 
@@ -105,6 +106,7 @@ enum class ManualColoumnName
 	CAN_ID,
 	BYTE,
 	NAME,
+	COMPONENT,
 	DEL
 };
 
@@ -150,6 +152,7 @@ public:
 	float minVoltage;
 	float maxVoltage;
 	QString name;
+	QString component;
 	QPushButton* deleteButton;
 	PresetSettings* presetSettings;
 
