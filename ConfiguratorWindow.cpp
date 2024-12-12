@@ -479,6 +479,8 @@ void ConfiguratorWindow::resetLanguage()
 		selectStandTypeComboBox = new QComboBox(footerLayoutWidget);
 		selectStandTypeComboBox->setObjectName("selectStandTypeComboBox");
 		selectStandTypeComboBox->setFixedSize(FIXED_STAND_COMBO_WIDTH, FIXED_STAND_COMBO_HEIGHT);
+
+		initConnections();
 		resetTheme();
 
 		footerMainHLayout->insertWidget(0,selectStandTypeComboBox);
