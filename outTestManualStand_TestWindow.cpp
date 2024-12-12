@@ -42,6 +42,16 @@ void TestWindow::initUiTableHeaderOutTestManualStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_COMPONENT,	QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_TYPE,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CHECK,		QHeaderView::Fixed);
+
+	QTableWidgetItem* protoitem = new QTableWidgetItem();
+	protoitem->setTextAlignment(Qt::AlignCenter);
+	for (int row = 0; row < mainTableWidget->rowCount(); row++)
+	{
+		mainTableWidget->setItem(row, COLOUMN_CONNECTOR, protoitem->clone());
+		mainTableWidget->setItem(row, COLOUMN_PIN, protoitem->clone());
+		mainTableWidget->setItem(row, COLOUMN_COMPONENT, protoitem->clone());
+		mainTableWidget->setItem(row, COLOUMN_TYPE, protoitem->clone());
+	}
 }
 
 void TestWindow::resetLanguageOutTestManualStand()

@@ -10,7 +10,7 @@
 #define COLOUMN_TYPE_WIDTH			120
 #define COLOUMN_CANID_WIDTH         70
 #define COLOUMN_BIT_WIDTH			35
-#define COLOUMN_THRESHOLDS_WIDTH	45
+#define COLOUMN_THRESHOLDS_WIDTH	60
 #define COLOUMN_NAME_WIDTH			45
 #define COLOUMN_COMPONENT_WIDTH		80
 #define COLOUMN_REMUVE_WIDTH		80
@@ -480,7 +480,7 @@ void ConfiguratorWindow::resetLanguage()
 		selectStandTypeComboBox->setObjectName("selectStandTypeComboBox");
 		selectStandTypeComboBox->setFixedSize(FIXED_STAND_COMBO_WIDTH, FIXED_STAND_COMBO_HEIGHT);
 
-		initConnections();
+		connect(selectStandTypeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
 		resetTheme();
 
 		footerMainHLayout->insertWidget(0,selectStandTypeComboBox);

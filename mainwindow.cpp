@@ -710,25 +710,8 @@ void MainWindow::initConnections()
 {
 	connect(this, &MainWindow::resizeStandSlider, switchStandSlider, &QSliderButton::resizeSlider);
 	connect(switchStandSlider, &QSliderButton::on_sliderSwitchStand_click, this, &MainWindow::on_sliderSwitchStand_click);
-	//connect(autoStandButton, &QPushButton::clicked, this, &MainWindow::on_autoStandButton_clicked);
-	//connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::on_manualStandButton_clicked);
-
-	//connect(resetThemeButton, &QPushButton::clicked, this, &MainWindow::on_resetThemeButton_clicked);
-	//connect(resetLanguageButton, &QPushButton::clicked, this, &MainWindow::on_resetLanguageButton_clicked);
-
-	//connect(configuratorButton, &QPushButton::clicked, this, &MainWindow::on_configuratorButton_clicked);
 	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
 	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
-	//connect(selectFileButton, &QPushButton::clicked, this, &MainWindow::on_selectFileButton_clicked);
-
-	//connect(outTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_outTestManualStandButton_clicked);
-	//connect(inTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_inTestManualStandButton_clicked);
-	//connect(fullTestManualStandButton, &QPushButton::clicked, this, &MainWindow::on_fullTestManualStandButton_clicked);
-	//connect(inManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_inManualTestAutoStandButton_clicked);
-	//connect(outManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_outManualTestAutoStandButton_clicked);
-	//connect(inAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_inAutoTestAutoStandButton_clicked);
-	//connect(outAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_outAutoTestAutoStandButton_clicked);
-	//connect(fullTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::on_fullTestAutoStandButton_clicked);
 
 	QMetaObject::connectSlotsByName(this);
 }
