@@ -573,11 +573,14 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 				break;
 
 			case FullColoumnName::CAN_ID:
-				rowData.push_back(currentRowProperties->canId);
+				if (currentRowProperties->canId != -1 || currentRowProperties->canId == "-")
+					rowData.push_back("");
+				else
+					rowData.push_back(currentRowProperties->canId);
 				break;
 
 			case FullColoumnName::BYTE:
-				rowData.push_back(QString::number(currentRowProperties->byte));
+				rowData.push_back(currentRowProperties->byte != -1 ? QString::number(currentRowProperties->byte) : "");
 				break;
 
 			case FullColoumnName::MIN_CURRENT:
@@ -631,7 +634,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 				if (needVerify)
 				{
 					if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-						tableRowPropertiesVector[row]->pin = mainTableWidget->item(row, coloumn)->text().toInt();
+						tableRowPropertiesVector[row]->pin = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toInt() : -1);
 					else
 						return false;
 				}
@@ -663,7 +666,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					if (needVerify)
 					{
 						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->canId = mainTableWidget->item(row, coloumn)->text();
+							tableRowPropertiesVector[row]->canId = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
 						else
 							return false;
 					}
@@ -676,7 +679,11 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					if (needVerify)
 					{
 						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
+							if (mainTableWidget->item(row, coloumn) == NULL || mainTableWidget->item(row, coloumn)->text() == "-")
+								tableRowPropertiesVector[row]->byte = -1;
+							else
+								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
+
 						else
 							return false;
 					}
@@ -775,7 +782,10 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					if (needVerify)
 					{
 						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->canId = mainTableWidget->item(row, coloumn)->text();
+							if (mainTableWidget->item(row, coloumn) == NULL || mainTableWidget->item(row, coloumn)->text() == "-")
+								tableRowPropertiesVector[row]->byte = -1;
+							else
+								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
 						else
 							return false;
 					}
@@ -788,7 +798,10 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					if (needVerify)
 					{
 						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
+							if (mainTableWidget->item(row, coloumn) == NULL || mainTableWidget->item(row, coloumn)->text() == "-")
+								tableRowPropertiesVector[row]->byte = -1;
+							else
+								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
 						else
 							return false;
 					}
@@ -939,9 +952,9 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 		switch ((FullColoumnName)coloumnName)
 		{
 		case FullColoumnName::CAN_ID:
-			if (data == NULL)
-				return Errors::Configurator::SAVE_CAN_ID_NULL;
-			if (data->text()[0] == hexPrefix[0] && data->text()[1] == hexPrefix[1])
+			if (data == NULL || data->text() == "-1" || data->text() == "-")
+				break;
+			else if (data->text()[0] == hexPrefix[0] && data->text()[1] == hexPrefix[1])
 			{
 				QString id = "";
 				for (int i = 2; i < data->text().size(); i++)
@@ -964,8 +977,8 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 			break;
 
 		case FullColoumnName::BYTE:
-			if (data == NULL)
-				return Errors::Configurator::SAVE_BYTE_NULL;
+			if (data == NULL || data->text() == "-")
+				break;
 			data->text().toInt(&isOk);
 			if (!isOk)
 				return Errors::Configurator::SAVE_BYTE_INCORRECT;
@@ -1022,9 +1035,9 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 		switch ((ManualColoumnName)coloumnName)
 		{
 		case ManualColoumnName::CAN_ID:
-			if (data == NULL)
-				return Errors::Configurator::SAVE_CAN_ID_NULL;
-			if (data->text()[0] == hexPrefix[0] && data->text()[1] == hexPrefix[1])
+			if (data == NULL || data->text() == "-1" || data->text() == "-")
+				break;
+			else if (data->text()[0] == hexPrefix[0] && data->text()[1] == hexPrefix[1])
 			{
 				QString id = "";
 				for (int i = 2; i < data->text().size(); i++)
@@ -1047,8 +1060,8 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 			break;
 
 		case ManualColoumnName::BYTE:
-			if (data == NULL)
-				return Errors::Configurator::SAVE_BYTE_NULL;
+			if (data == NULL || data->text() == "-")
+				break;
 			data->text().toInt(&isOk);
 			if (!isOk)
 				return Errors::Configurator::SAVE_BYTE_INCORRECT;
@@ -1150,7 +1163,9 @@ static Errors::Configurator verifyFileData(FullColoumnName coloumn, QString data
 		break;
 
 	case FullColoumnName::CAN_ID:
-		if (data[0] == hexPrefix[0] && data[1] == hexPrefix[1])
+		if (data == "" || data == "-1" || data == "-")
+			break;
+		else if (data[0] == hexPrefix[0] && data[1] == hexPrefix[1])
 		{
 			QString id = "";
 			for (int i = 2; i < data.size(); i++)
@@ -1173,6 +1188,8 @@ static Errors::Configurator verifyFileData(FullColoumnName coloumn, QString data
 		break;
 
 	case FullColoumnName::BYTE:
+		if (data == "")
+			break;
 		data.toInt(&isOk, 10);
 		if (!isOk)
 			return Errors::Configurator::FILE_DATA_BYTE_INCORRECT;
@@ -1341,7 +1358,7 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 
 				case (int)FullColoumnName::BYTE:
 					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
-						tableRowPropertiesVector[currentRowNum]->byte = currentData.toInt();
+						tableRowPropertiesVector[currentRowNum]->byte = (currentData != "" ? currentData.toInt() : -1);
 					else
 						isFileCorrect = false;
 					break;
@@ -1422,10 +1439,7 @@ void ConfiguratorWindow::resetedFill(int standType)
 		if (currentRowProperties->pin != -1)
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::PIN), QString::number(currentRowProperties->pin));
 		if (currentRowProperties->presetSettings->direction != -1)
-		{
 			currentRowProperties->on_direction_activated(currentRowProperties->presetSettings->direction);
-			//currentRowProperties->directionComboBox->setCurrentIndex(currentRowProperties->presetSettings->direction);
-		}
 
 		switch (currentRowProperties->presetSettings->type)
 		{
@@ -1433,19 +1447,18 @@ void ConfiguratorWindow::resetedFill(int standType)
 		case TYPE_PWM:
 		case TYPE_VNH:
 			currentRowProperties->on_type_activated(currentRowProperties->presetSettings->type);
-			//currentRowProperties->typeComboBox->setCurrentIndex(currentRowProperties->presetSettings->type);
 			break;
 
 		case TYPE_ANALOG:
 		case TYPE_HALL:
 			currentRowProperties->on_type_activated(currentRowProperties->presetSettings->type - 2);
-			//currentRowProperties->typeComboBox->setCurrentIndex(currentRowProperties->presetSettings->type - 2);
 			break;
 		}
 		switch (standType)
 		{
 		case STAND_NOT_SET:
-			model->setData(model->index(currentRowNum, (int)FullColoumnName::CAN_ID), currentRowProperties->canId);
+			if (currentRowProperties->canId != -1)
+				model->setData(model->index(currentRowNum, (int)FullColoumnName::CAN_ID), currentRowProperties->canId);
 			if (currentRowProperties->byte != -1)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::BYTE), QString::number(currentRowProperties->byte));
 			if (currentRowProperties->minCurrent != -1)
@@ -1461,7 +1474,8 @@ void ConfiguratorWindow::resetedFill(int standType)
 			break;
 
 		case STAND_MANUAL:
-			model->setData(model->index(currentRowNum, (int)ManualColoumnName::CAN_ID), currentRowProperties->canId);
+			if (currentRowProperties->canId != -1)
+				model->setData(model->index(currentRowNum, (int)ManualColoumnName::CAN_ID), currentRowProperties->canId);
 			if (currentRowProperties->byte != -1)
 				model->setData(model->index(currentRowNum, (int)ManualColoumnName::BYTE), QString::number(currentRowProperties->byte));
 			model->setData(model->index(currentRowNum, (int)ManualColoumnName::NAME), currentRowProperties->name);
@@ -1563,17 +1577,9 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 			QMessageBox::critical(this, "Error saving file", "Type on row " + QString::number(row) + " not selected", "Ok");
 			return false;
 
-		case Errors::Configurator::SAVE_CAN_ID_NULL:
-			QMessageBox::critical(this, "Error saving file", "Can_id on row " + QString::number(row) + " is not filled", "Ok");
-			return false;
-
 		case Errors::Configurator::SAVE_CAN_ID_INCORRECT_HEX:
 		case Errors::Configurator::SAVE_CAN_ID_INCORRECT_DEC:
 			QMessageBox::critical(this, "Error saving file", "Can_id on row " + QString::number(row) + " is incorrect\n Write heximal or decimal number", "Ok");
-			return false;
-
-		case Errors::Configurator::SAVE_BYTE_NULL:
-			QMessageBox::critical(this, "Error saving file", "Byte on row " + QString::number(row) + " is not filled", "Ok");
 			return false;
 
 		case Errors::Configurator::SAVE_BYTE_INCORRECT:
@@ -1698,11 +1704,11 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 			return false; 
 
 		case Errors::Configurator::SAVE_PIN_NULL:
-			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Пин в строке") + QString::number(row) + QString::fromLocal8Bit(" не заполнен"), QString::fromLocal8Bit("Ок"));
+			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Пин в строке ") + QString::number(row) + QString::fromLocal8Bit(" не заполнен"), QString::fromLocal8Bit("Ок"));
 			return false;
 
 		case Errors::Configurator::SAVE_PIN_INCORRECT:
-			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Пин в строке") + QString::number(row) + QString::fromLocal8Bit(" не корректен\n Введите десятичное число"), QString::fromLocal8Bit("Ок"));
+			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Пин в строке ") + QString::number(row) + QString::fromLocal8Bit(" не корректен\n Введите десятичное число"), QString::fromLocal8Bit("Ок"));
 			return false;
 
 		case Errors::Configurator::SAVE_DIRECTION_NOT_SET:
@@ -1710,21 +1716,13 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 			return false;
 
 		case Errors::Configurator::SAVE_TYPE_NOT_SET:
-			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Тип в строке") + QString::number(row) + QString::fromLocal8Bit(" не выбран"), QString::fromLocal8Bit("Ок"));
-			return false;
-
-		case Errors::Configurator::SAVE_CAN_ID_NULL:
-			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Can_id в строке ") + QString::number(row) + QString::fromLocal8Bit(" не заполнен"), QString::fromLocal8Bit("Ок"));
+			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Тип в строке ") + QString::number(row) + QString::fromLocal8Bit(" не выбран"), QString::fromLocal8Bit("Ок"));
 			return false;
 
 		case Errors::Configurator::SAVE_CAN_ID_INCORRECT_HEX:
 		case Errors::Configurator::SAVE_CAN_ID_INCORRECT_DEC:
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Can_id в строке ") + QString::number(row) + QString::fromLocal8Bit(" не корректен\n Введите шестнадцатеричное или десятичное число"), QString::fromLocal8Bit("Ок"));
-			return false;
-
-		case Errors::Configurator::SAVE_BYTE_NULL:
-			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Байт в строке ") + QString::number(row) + QString::fromLocal8Bit(" не заполнен"), QString::fromLocal8Bit("Ок"));
-			return false;
+			return false;	
 
 		case Errors::Configurator::SAVE_BYTE_INCORRECT:
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Байт в строке ") + QString::number(row) + QString::fromLocal8Bit(" не корректен\n Введите десятичную цифру от 0 до 7"), QString::fromLocal8Bit("Ок"));
