@@ -870,9 +870,11 @@ void MainWindow::on_selectFileButton_clicked()
 {
 #ifdef DEBUG
 	fileName = QString::fromLocal8Bit("И пиздец...");
-	selectedFileFullName = "C:\Users\nikita.stachinskiy\Desktop\PC-tester\PC-tester\Config files/test_1.csv";
+	selectedFileFullName = "C:/Users/zahar.mormil/Desktop/PC-Tester/Config files/t.csv";
+	//C:/Users/zahar.mormil/Desktop/PC-Tester/Config files/test_1.csv
 #else
 	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV (*.csv)");
+#endif // DEBUG
 	int localFileNameInd = selectedFileFullName.lastIndexOf("/");
 
 	QString fullPrintedFileName = "";
@@ -889,7 +891,6 @@ void MainWindow::on_selectFileButton_clicked()
 
 		fileName += selectedFileFullName[i];
 	}
-#endif // DEBUG
 
 
 	//selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
