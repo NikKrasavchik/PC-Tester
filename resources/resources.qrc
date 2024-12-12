@@ -1,6 +1,7 @@
 <RCC>
     <qresource prefix="/app">
         <file>style/appstyles.qss</file>
+        <file>icons/App_Logo.png</file>
     </qresource>
     <qresource prefix="/Dark">
         <file>icons/Close_White.png</file>

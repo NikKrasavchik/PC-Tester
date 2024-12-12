@@ -1163,6 +1163,7 @@ void MainWindow::on_configuratorButton_clicked()
 	ConfiguratorWindow* configuratorWindow = new ConfiguratorWindow(this);
 
 	WindowFrame w(WindowType::CONFIGURATOR, nullptr, configuratorWindow);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	configuratorWindow->setParentFrame(&w);
 	w.show();
 	this->hide();
@@ -1309,6 +1310,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 			testWindow->setFileName(fileName);
 
 			WindowFrame w(testType, nullptr, testWindow);
+			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 			testWindow->setParentFrame(&w);
 			w.show();
 			this->hide();

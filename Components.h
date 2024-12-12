@@ -243,3 +243,7 @@ namespace Errors
 		FILE_DATA_COMPONENT_EMPTY
 	};
 }
+
+const QString style = "Fusion";
+const QString appstylePath = ":/recources/style/appstyles.qss";
+const QString appLogoPath = ":/Dark/icons/App_Logo_White.png";

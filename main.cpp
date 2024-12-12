@@ -7,9 +7,6 @@
 
 ViewWindowState* viewWindowState;
 
-const QString style = "Fusion";
-const QString appstylePath = ":/recources/style/appstyles.qss";
-
 int main(int argc, char* argv[])
 {
 	viewWindowState = new ViewWindowState;
@@ -23,6 +20,7 @@ int main(int argc, char* argv[])
 
 	MainWindow* mainWindow = new MainWindow();
 	WindowFrame w(WindowType::MAINWINDOW, nullptr, mainWindow);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	mainWindow->setParentFrame(&w);
 	w.show();
 	return a.exec();
