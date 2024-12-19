@@ -14,12 +14,17 @@ void Can::initCan()
 	if (kvaser->activeAdapter != -1) // kvaser
 	{
 		canInitializeLibrary(); // Инициализация api kvaser
-		hnd = canOpenChannel(0, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
+		hnd = canOpenChannel(kvaser->activeAdapter, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
 		canSetBusParams(hnd, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Установка параматров на CAN-шину.
 		canBusOn(hnd); // Запуск CAN-шины
 	}
 	else
 	{
+		CiInit();
+		CiOpen(marathon->activeAdapter, CIO_CAN11);
+		CiSetBaud(0, marathon->p_frequency.first, marathon->p_frequency.second);
+		//CiSetFilter
+		CiStart(marathon->activeAdapter);
 	}
 }
 
@@ -32,6 +37,8 @@ void Can::deinitCan()
 	}
 	else
 	{
+		CiStop(marathon->activeAdapter);
+		CiClose(marathon->activeAdapter);
 	}
 }
 
@@ -47,32 +54,13 @@ void Can::writeCan(int id, int* msg)
 	}
 	else
 	{
+		//canmsg_t msgReceive;
+		//msgReceive.id = id;
+		//for (int i = 0; i < 8; i++)
+		//	msgReceive.data[i] = msg[i];
+		//CiTransmit(marathon->activeAdapter, &msgReceive);
 	}
 }
-
-//bool Can::readWaitCan(int* id, std::vector<int>* msg, int timeout)
-//{
-//	if (kvaser->activeAdapter != -1) // kvaser
-//	{
-//		unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
-//		unsigned long* timestamp = new unsigned long();
-//		unsigned char msgReceive[8] = { 0, };
-//
-//		*id = -1;
-//		canReadWait(hnd, (long*)id, msgReceive, dlc, flags, timestamp, timeout);
-//		if (*id != -1)
-//		{
-//			for (int i = 0; i < 8; i++)
-//				msg->push_back(msgReceive[i]);
-//			return true;
-//		}
-//		else
-//			return false;
-//	}
-//	else
-//	{
-//	}
-//}
 
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
@@ -95,6 +83,19 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 	}
 	else
 	{
+		canmsg_t msgReceive;
+		msgReceive.id = 0;
+		CiRead(marathon->activeAdapter, &msgReceive, 1);
+		if (msgReceive.id != 0)
+		{
+			*id = msgReceive.id;
+			for (int i = 0; i < 8; i++)
+				msg[i] = msgReceive.data[i];
+			return true;
+		}
+		else
+			return false;
+
 	}
 }
 
@@ -188,6 +189,8 @@ std::vector<QString> Can::getNameAdapters()
 		kvaser->nameAdapters.push_back(str);
 		resultVector.push_back(str);
 	}
+	canBusOff(hnd);
+	canClose(hnd);
 
 	// marathon
 
