@@ -116,6 +116,7 @@ void ConfiguratorWindow::initUiUsefulSpace()
 	fileNameLineEdit = new QLineEdit(usefulSpaceWidget);
 	fileNameLineEdit->setObjectName("fileNameLineEdit");
 	fileNameLineEdit->setFixedSize(FIXED_FILE_NAME_WIDTH, FIXED_FILE_NAME_HEIGHT);
+	fileNameLineEdit->setReadOnly(true);
 	usefulSpaceHLayout->addWidget(fileNameLineEdit);
 
 	saveButton = new QPushButton(usefulSpaceWidget);
@@ -436,8 +437,8 @@ void ConfiguratorWindow::initText()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		if (fileNameLineEdit->text() == "" || fileNameLineEdit->text() == "Write file name")
-			fileNameLineEdit->setText(QString::fromLocal8Bit("Введите имя файла"));
+		if (fileNameLineEdit->text() == "" || fileNameLineEdit->text() == "New config")
+			fileNameLineEdit->setText(QString::fromLocal8Bit("Новая конфигурация"));
 
 		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
 		loadButton->setText(QString::fromLocal8Bit("Открыть"));
@@ -451,8 +452,8 @@ void ConfiguratorWindow::initText()
 		break;
 
 	case ENGLISH_LANG:
-		if (fileNameLineEdit->text() == "" || fileNameLineEdit->text() == QString::fromLocal8Bit("Введите имя файла"))
-			fileNameLineEdit->setText("Write file name");
+		if (fileNameLineEdit->text() == "" || fileNameLineEdit->text() == QString::fromLocal8Bit("Новая конфигурация"))
+			fileNameLineEdit->setText("New config");
 
 		saveButton->setText("Save");
 		loadButton->setText("Open");
