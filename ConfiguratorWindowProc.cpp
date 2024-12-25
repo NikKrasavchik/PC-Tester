@@ -543,7 +543,6 @@ void ConfiguratorWindow::on_saveButton_clicked()
 
 std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 {
-
 	std::vector<std::vector<QString>> data;
 	if (!updateTableData(VERIFIABLE))
 		return data;
@@ -627,19 +626,16 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 				if (needVerify)
 					if (!generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn), tableRowPropertiesVector[row]->connectorComboBox)))
 						return false;
+				
 			break;
 
 		case FullColoumnName::PIN:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (needVerify)
-				{
 					if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
 						tableRowPropertiesVector[row]->pin = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toInt() : -1);
 					else
 						return false;
-				}
-				else
-					tableRowPropertiesVector[row]->pin = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toInt() : -1);
 			break;
 
 		case FullColoumnName::DIRECTION:
@@ -1272,9 +1268,8 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 		return;
 	}
 
-	mainTableWidget->clear();
-	cleanRowProperties();
-	tableRowPropertiesVector.clear();
+	while (mainTableWidget->rowCount())
+		deleteRow(0);
 
 	bool isFileCorrect = true;
 	int row = 1;
@@ -1337,7 +1332,7 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 
 				case (int)FullColoumnName::DIRECTION:
 					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
-						tableRowPropertiesVector[currentRowNum]->presetSettings->direction = currentData.toInt() + 1;
+						tableRowPropertiesVector[currentRowNum]->presetSettings->direction = currentData.toInt();
 					else
 						isFileCorrect = false;
 					break;
@@ -1439,7 +1434,8 @@ void ConfiguratorWindow::resetedFill(int standType)
 		if (currentRowProperties->pin != -1)
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::PIN), QString::number(currentRowProperties->pin));
 		if (currentRowProperties->presetSettings->direction != -1)
-			currentRowProperties->on_direction_activated(currentRowProperties->presetSettings->direction);
+			currentRowProperties->directionComboBox->setCurrentIndex(currentRowProperties->presetSettings->direction);
+			//currentRowProperties->on_direction_activated(currentRowProperties->presetSettings->direction);
 
 		switch (currentRowProperties->presetSettings->type)
 		{
@@ -1523,6 +1519,7 @@ void ConfiguratorWindow::cleanRowProperties()
 
 void ConfiguratorWindow::on_selectStandTypeComboBox_currentIndexChanged(int index)
 {
+	resetPresets();
 	updateTableData(UNVERIFIABLE);
 
 	switch (index)
