@@ -20,11 +20,16 @@ void Can::initCan()
 	}
 	else
 	{
-		CiInit();
-		CiOpen(marathon->activeAdapter, CIO_CAN11);
-		CiSetBaud(0, marathon->p_frequency.first, marathon->p_frequency.second);
-		//CiSetFilter
-		CiStart(marathon->activeAdapter);
+		auto statusTmp = CiInit();
+		statusTmp = CiOpen(marathon->activeAdapter, CIO_CAN11);
+		statusTmp = CiSetBaud(marathon->activeAdapter, marathon->p_frequency.first, marathon->p_frequency.second);
+		statusTmp = CiSetFilter(marathon->activeAdapter,0,0);
+		statusTmp = CiRcQueResize(marathon->activeAdapter, 0xFA);
+		UINT16 threshold = 0xFF;
+		statusTmp = CiTrQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
+		statusTmp = CiRcQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
+		statusTmp = CiStart(marathon->activeAdapter);
+
 	}
 }
 
@@ -54,14 +59,18 @@ void Can::writeCan(int id, int* msg)
 	}
 	else
 	{
-		//canmsg_t msgReceive;
-		//msgReceive.id = id;
-		//for (int i = 0; i < 8; i++)
-		//	msgReceive.data[i] = msg[i];
-		//CiTransmit(marathon->activeAdapter, &msgReceive);
+		static canmsg_t msgTransmit;
+		msgTransmit.id = id;
+		msgTransmit.len = 8;
+		for (int i = 0; i < 8; i++)
+			msgTransmit.data[i] = msg[i];
+		
+		auto statusTmp = CiTransmit(marathon->activeAdapter, &msgTransmit);
+
 	}
 }
 
+		canmsg_t msgReceive;
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
 	if (kvaser->activeAdapter != -1) // kvaser
@@ -83,9 +92,8 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 	}
 	else
 	{
-		canmsg_t msgReceive;
 		msgReceive.id = 0;
-		CiRead(marathon->activeAdapter, &msgReceive, 1);
+		auto statusTmp = CiRead(marathon->activeAdapter, &msgReceive, 1);
 		if (msgReceive.id != 0)
 		{
 			*id = msgReceive.id;
@@ -192,7 +200,7 @@ std::vector<QString> Can::getNameAdapters()
 	canBusOff(hnd);
 	canClose(hnd);
 
-	// marathon
+	 //marathon
 
 	CiInit();
 
@@ -205,6 +213,7 @@ std::vector<QString> Can::getNameAdapters()
 		if (CiBoardInfo(&binfo) >= 0)
 		{
 			strNameAdapter += QString::fromStdString(binfo.name);
+			//strNameAdapter += QString::fromStdString("lol");
 			marathon->nameAdapters.push_back(strNameAdapter);
 			resultVector.push_back(strNameAdapter);
 		}
