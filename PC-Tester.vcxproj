@@ -122,6 +122,7 @@
     <ClCompile Include="inTestManualStand_TestWindow.cpp" />
     <ClCompile Include="MainWindowProc.cpp" />
     <ClCompile Include="main_TestWindow.cpp" />
+    <ClCompile Include="MoreWindow.cpp" />
     <ClCompile Include="outAutoTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="outManualTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="outTestManualStand_TestWindow.cpp" />
@@ -136,6 +137,7 @@
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="MoreWindow.ui" />
     <QtUic Include="TestWindow.ui" />
     <QtUic Include="WindowFrame.ui" />
   </ItemGroup>
@@ -145,6 +147,8 @@
   <ItemGroup>
     <ClInclude Include="can.h" />
     <ClInclude Include="Components.h" />
+    <QtMoc Include="MoreWindow.h" />
+    <ClInclude Include="resource.h" />
     <QtMoc Include="twoThread.h" />
     <QtMoc Include="ConfiguratorWindow.h" />
     <QtMoc Include="WindowFrame.h" />
@@ -152,6 +156,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PC-Tester.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">

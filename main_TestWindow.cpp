@@ -959,7 +959,7 @@ void TestWindow::resetLanguage()
 			if (statusFlags->StatusConnected)
 				AutoStandConnectButton->setText(QString("Stand\nconnected"));
 			else
-				AutoStandConnectButton->setText(QString("Stand\disconnected"));
+				AutoStandConnectButton->setText(QString("Stand\ndisconnected"));
 			parentFrame->setTitle(WindowType::IN_AUTO_TEST_AUTO_STAND);
 			AutoStandStartTestButton->setText(QString("Start"));
 			resetLanguageInAutoTestAutoStand();
@@ -1360,6 +1360,7 @@ void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
 	moreCellHLayout->setObjectName("moreCellHLayout");
 	moreCellHLayout->addWidget(cableRows[currentRowNum]->moreButton);
 	moreCellHLayout->setContentsMargins(0, 0, 0, 0);
+	connect(cableRows[currentRowNum]->moreButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_moreButton_clicked);
 	moreCellWidget->setLayout(moreCellHLayout);
 }
 
@@ -1486,4 +1487,29 @@ void TestWindow::on_fullTestSortButton_clicked()
 	mainTableWidget->clear();
 	resetTableHeaderFullTestManualStand();
 	resetTableRowsFullTestManualStand();
+}
+
+void TestTableRowProperties::on_moreButton_clicked()
+{
+	Cable currentCable;
+	currentCable.id = this->id;
+	currentCable.connector = (ConnectorId)this->connector.toInt();
+	currentCable.pin = this->pin.toInt();
+	currentCable.name = this->name;
+	currentCable.component = this->component;
+	currentCable.direction = this->direction.toInt();
+	currentCable.type = this->type.toInt();
+	currentCable.minCurrent = this->minCurrent;
+	currentCable.maxCurrent = this->maxCurrent;
+	currentCable.minVoltage = this->minVoltage;
+	currentCable.maxVoltage = this->maxVoltage;
+	currentCable.bit = this->bit;
+	currentCable.canId = this->canId;
+
+	MoreWindow* moreWindow = new MoreWindow(currentCable);
+
+	WindowFrame w(WindowType::MOREWINDOW, nullptr, moreWindow);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+	w.show();
+	moreWindow->exec();
 }

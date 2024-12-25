@@ -17,6 +17,8 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->maxVoltage = cables[i].maxVoltage;
 		cableRows[i]->stateDigital = BUTTON_NOT_SET;
 		cableRows[i]->statePWM = BUTTON_NOT_SET;
+		cableRows[i]->canId = cables[i].canId;
+		cableRows[i]->bit = cables[i].bit;
 
 		switch (cables[i].direction)
 		{

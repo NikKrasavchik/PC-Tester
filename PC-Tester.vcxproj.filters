@@ -41,6 +41,9 @@
     <QtUic Include="ConfiguratorWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="MoreWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -103,6 +106,9 @@
     <ClCompile Include="twoThread.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="MoreWindow.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
@@ -120,12 +126,18 @@
     <QtMoc Include="twoThread.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="MoreWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="can.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Components.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -139,5 +151,10 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="cpp.hint" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PC-Tester.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>
