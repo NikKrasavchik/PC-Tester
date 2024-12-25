@@ -526,17 +526,18 @@ void ConfiguratorWindow::on_saveButton_clicked()
 		configString += (row == mainTableWidget->rowCount() - 1 ? "" : CFG_ENDING);
 	}
 
-	QString fileName = "./Config files/" + fileNameLineEdit->text() + ".csv";
+	QString tempPath = QDir::currentPath() + "./Config files/";
+
+	QString defaultFilter("");
+	QString filters("Config files (*.csv)");
+
+	QString filePath = QFileDialog::getSaveFileName(0, "Save file", tempPath, filters, &defaultFilter);
 
 	std::ofstream fout;
-	fout.open(fileName.toLocal8Bit().toStdString());
-	fout << configString.toStdString();
-	fout.close();
+	fout.open(filePath.toStdString());
 
-	if (viewWindowState->appLanguage == RUSSIAN_LANG)
-		QMessageBox::warning(this, QString::fromLocal8Bit("Уведомление"), QString::fromLocal8Bit("Файл создан"));
-	else
-		QMessageBox::warning(this, QString("Notification"), QString("File was created"));
+	fout << configString.toStdString();
+
 
 	qDebug() << configString;
 }
@@ -572,7 +573,7 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 				break;
 
 			case FullColoumnName::CAN_ID:
-				if (currentRowProperties->canId != -1 || currentRowProperties->canId == "-")
+				if (currentRowProperties->canId == -1 || currentRowProperties->canId == "-")
 					rowData.push_back("");
 				else
 					rowData.push_back(currentRowProperties->canId);
@@ -1323,9 +1324,7 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 
 				case (int)FullColoumnName::PIN:
 					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
-					{
 						tableRowPropertiesVector[currentRowNum]->pin = currentData.toInt();
-					}
 					else
 						isFileCorrect = false;
 					break;
@@ -1434,8 +1433,7 @@ void ConfiguratorWindow::resetedFill(int standType)
 		if (currentRowProperties->pin != -1)
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::PIN), QString::number(currentRowProperties->pin));
 		if (currentRowProperties->presetSettings->direction != -1)
-			currentRowProperties->directionComboBox->setCurrentIndex(currentRowProperties->presetSettings->direction);
-			//currentRowProperties->on_direction_activated(currentRowProperties->presetSettings->direction);
+			currentRowProperties->on_direction_activated(currentRowProperties->presetSettings->direction + 1);
 
 		switch (currentRowProperties->presetSettings->type)
 		{
