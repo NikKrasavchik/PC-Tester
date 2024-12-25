@@ -152,7 +152,7 @@ class TestWindow : public QDialog
 	Q_OBJECT
 
 public:
-	TestWindow(WindowType testType, std::vector<Cable> cables, Can* can, QWidget* parent = nullptr);
+	TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* parent = nullptr);
 	~TestWindow();
 
 	void setFileName(QString fileName);

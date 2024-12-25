@@ -4,7 +4,7 @@
 #define STATUS_IN_TEST		5
 #define STATUS_FULL_TEST	7
 
-TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can, QWidget* parent)
+TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -20,7 +20,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 		testType == WindowType::OUT_TEST_MANUAL_STAND ||
 		testType == WindowType::FULL_TEST_MANUAL_STAND)
 	{
-		th = new ManualStandTwoThread(can, cables, statusFlags);
+		th = new ManualStandTwoThread(cables, statusFlags);
 	}
 	else if (testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
 		testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
@@ -28,7 +28,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, Can* can,
 		testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
 		testType == WindowType::FULL_TEST_AUTO_STAND)
 	{
-		th = new AutoStandTwoThread(can, statusFlags);
+		th = new AutoStandTwoThread(statusFlags);
 	}
 
 	initUiMain();

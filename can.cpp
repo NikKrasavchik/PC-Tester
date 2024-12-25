@@ -1,18 +1,24 @@
 #include "can.h"
 
+
+Can::modelAdapter *Can::kvaser = new modelAdapter;
+Can::modelAdapter *Can::marathon = new modelAdapter;
+canHandle Can::hnd = 0;
+
+
 Can::Can()
 {
 	b_adapterSelected = false;
 	b_frequencySelected = false;
 
-	kvaser = new modelAdapter;
-	marathon = new modelAdapter;
+
 }
 
 void Can::initCan()
 {
 	if (kvaser->activeAdapter != -1) // kvaser
 	{
+		
 		canInitializeLibrary(); // Инициализация api kvaser
 		hnd = canOpenChannel(kvaser->activeAdapter, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
 		canSetBusParams(hnd, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Установка параматров на CAN-шину.
@@ -21,7 +27,7 @@ void Can::initCan()
 	else
 	{
 		auto statusTmp = CiInit();
-		statusTmp = CiOpen(marathon->activeAdapter, CIO_CAN11);
+		statusTmp = CiOpen( marathon->activeAdapter, CIO_CAN11);
 		statusTmp = CiSetBaud(marathon->activeAdapter, marathon->p_frequency.first, marathon->p_frequency.second);
 		statusTmp = CiSetFilter(marathon->activeAdapter,0,0);
 		statusTmp = CiRcQueResize(marathon->activeAdapter, 0xFA);
@@ -70,9 +76,12 @@ void Can::writeCan(int id, int* msg)
 	}
 }
 
+
+
 		canmsg_t msgReceive;
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
+	//Can::coun++;
 	if (kvaser->activeAdapter != -1) // kvaser
 	{
 		unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
@@ -200,22 +209,27 @@ std::vector<QString> Can::getNameAdapters()
 	canBusOff(hnd);
 	canClose(hnd);
 
-	 //marathon
+	//marathon
 
 	CiInit();
-
-	for (int i = 0; i < 5; i++)
+	canboard_t binfo;
+	for (int j = 0; j < 5; j++)
 	{
-		canboard_t binfo;
-		QString strNameAdapter = "Marathon\n";
-
-		binfo.brdnum = i;
+		binfo.brdnum = j;
 		if (CiBoardInfo(&binfo) >= 0)
 		{
-			strNameAdapter += QString::fromStdString(binfo.name);
-			//strNameAdapter += QString::fromStdString("lol");
-			marathon->nameAdapters.push_back(strNameAdapter);
-			resultVector.push_back(strNameAdapter);
+			strNameAdapter = "Marathon\n";
+			for (int i = 0; i < 4; i++)
+			{
+				if (binfo.chip[i] == -1)
+					continue;
+				strNameAdapter += QString::fromStdString(binfo.name);
+				strNameAdapter += " " + QString::number(binfo.chip[i]);
+				marathon->nameAdapters.push_back(strNameAdapter);
+				resultVector.push_back(strNameAdapter);
+				strNameAdapter = "Marathon\n";
+
+			}
 		}
 	}
 

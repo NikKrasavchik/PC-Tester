@@ -34,7 +34,7 @@ class AutoStandTwoThread : public QThread
 
 public:
 
-	explicit AutoStandTwoThread(Can* can, StandStatusFlags* statusFlags);
+	explicit AutoStandTwoThread(StandStatusFlags* statusFlags);
 	~AutoStandTwoThread();
 
 	void run();
@@ -64,7 +64,7 @@ class ManualStandTwoThread : public QThread
 
 public:
 
-	explicit ManualStandTwoThread(Can* can, std::vector<Cable> cables, StandStatusFlags* statusFlags);
+	explicit ManualStandTwoThread(std::vector<Cable> cables, StandStatusFlags* statusFlags);
 	~ManualStandTwoThread();
 
 	void run();

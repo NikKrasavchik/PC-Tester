@@ -12,10 +12,10 @@ class Can
 public:
 	Can();
 
-	void initCan();
-	void deinitCan();
+	static void initCan();
+	static void deinitCan();
 
-	void writeCan(int id, int* msg);
+	static void writeCan(int id, int* msg);
 	// ------------------------------------
 	// Name: readWaitCan
 	// Varibals:
@@ -26,7 +26,7 @@ public:
 	//			false - в случае если за время timeout не пришло сообщение на can-шину.
 	//			true  - в случае если за время timeout пришло сообшение на can-шину.
 	// ------------------------------------
-	bool readWaitCan(int* id, int* msg, int timeout);
+	static bool readWaitCan(int* id, int* msg, int timeout);
 	//bool readWaitCan(int* id, std::vector<int>* msg, int timeout);
 
 	void setAdapterNeme(QString adapter);
@@ -37,15 +37,6 @@ public:
 
 	std::vector<QString> getNameAdapters();
 
-private:
-
-	canHandle hnd;
-
-	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
-
-	bool b_adapterSelected;
-	bool b_frequencySelected;
-
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;
@@ -53,6 +44,17 @@ private:
 		std::pair<int, int> p_frequency;
 	};
 
-	modelAdapter* kvaser;
-	modelAdapter* marathon;
+private:
+
+	static canHandle hnd;
+
+
+	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
+
+	bool b_adapterSelected;
+	bool b_frequencySelected;
+
+
+	static modelAdapter *kvaser;
+	static modelAdapter *marathon;
 };

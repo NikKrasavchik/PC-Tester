@@ -33,6 +33,7 @@ void TestWindow::initUiTableFullTestManualStand()
 
 void TestWindow::resetTableHeaderFullTestManualStand()
 {
+
 	mainTableWidget->setRowCount(cableRows.size());
 	mainTableWidget->setColumnCount(COLOUMN_COUNT);
 	
@@ -64,7 +65,8 @@ void TestWindow::resetTableHeaderFullTestManualStand()
 		mainTableWidget->setItem(row, COLOUMN_COMPONENT, protoitem->clone());
 		mainTableWidget->setItem(row, COLOUMN_DIRECTION, protoitem->clone());
 		mainTableWidget->setItem(row, COLOUMN_TYPE, protoitem->clone());
-		mainTableWidget->setItem(row, COLOUMN_STATUS, protoitem->clone());
+		if (mainTableWidget->item(row, COLOUMN_STATUS) == NULL)
+			mainTableWidget->setItem(row, COLOUMN_STATUS, protoitem->clone());
 	}
 }
 
@@ -73,6 +75,7 @@ void TestWindow::resetLanguageFullTestManualStand()
 	resetTableHeaderFullTestManualStand();
 	resetTableTypeLanguageFullTestManualStand();
 	resetTableDirectionLanguageFullTestManualStand();
+	resetTableRowsFullTestManualStand();
 }
 
 void TestWindow::resetTableHeaderLanguageFullTestManualStand()
@@ -185,6 +188,7 @@ void TestWindow::resetTableRowsFullTestManualStand()
 		initTableRowButtons(currentRowNum, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, interactionButtonsWidget);
 	}
+
 	resetTableDirectionLanguageFullTestManualStand();
 	resetTableTypeLanguageFullTestManualStand();
 }
