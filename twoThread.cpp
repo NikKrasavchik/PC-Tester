@@ -1,6 +1,6 @@
 #include "twoThread.h"
 
-AutoStandTwoThread::AutoStandTwoThread(Can* can, StandStatusFlags* statusFlags)
+AutoStandTwoThread::AutoStandTwoThread(StandStatusFlags* statusFlags)
 {
 	this->can = can;
 
@@ -11,14 +11,14 @@ AutoStandTwoThread::AutoStandTwoThread(Can* can, StandStatusFlags* statusFlags)
 	nowTesting.pad = 0;
 	nowTesting.pin = 0;
 
-	can->initCan();
+	Can::initCan();
 }
 
 AutoStandTwoThread::~AutoStandTwoThread()
 {
 	int msgSendDisconect[8] = SEND_MSG_DISCONNECT;
-	can->writeCan(SEND_ID_CAN, msgSendDisconect);
-	can->deinitCan();
+	Can::writeCan(SEND_ID_CAN, msgSendDisconect);
+	Can::deinitCan();
 }
 
 void AutoStandTwoThread::run()
@@ -28,11 +28,11 @@ void AutoStandTwoThread::run()
 		while (!(statusFlags->StatusConnected)) // Отправляем сообщение пока не подключимся к стенду
 		{
 			int msgSendConnect[8] = SEND_MSG_CONNECT_AUTO_STAND;
-			can->writeCan(SEND_ID_CAN, msgSendConnect);
+			Can::writeCan(SEND_ID_CAN, msgSendConnect);
 
 			int msgReceiveConnect[8];
 			int id = -2;
-			if (can->readWaitCan(&id, msgReceiveConnect, 100))
+			if (Can::readWaitCan(&id, msgReceiveConnect, 100))
 			{
 				if (id == RECEIVE_ID_CAN_AUTO_STAND &&
 					msgReceiveConnect[0] == 0x0 &&
@@ -57,7 +57,7 @@ void AutoStandTwoThread::run()
 		{
 			int id = -2;
 			int msgReceive[8];
-			if (can->readWaitCan(&id, msgReceive, 10))
+			if (Can::readWaitCan(&id, msgReceive, 10))
 			{
 				if (id == RECEIVE_ID_CAN_AUTO_STAND && // переодическое сообшение о конекте
 					msgReceive[0] == 0x0 &&
@@ -84,7 +84,7 @@ void AutoStandTwoThread::run()
 			if (std::chrono::system_clock::now() - timeStartSentConnect > std::chrono::milliseconds(100)) // Отправлять каждые 100 мс сообшение о конекте
 			{
 				int msgSendConnect[8] = SEND_MSG_CONNECT_PERIODICALLY;
-				can->writeCan(SEND_ID_CAN, msgSendConnect);
+				Can::writeCan(SEND_ID_CAN, msgSendConnect);
 
 				timeStartSentConnect = std::chrono::system_clock::now();
 			}
@@ -111,7 +111,7 @@ void AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin)
 
 
 		int msgSendConnect[8] = { pad, pin, 0, 0, 0, 0, 0, 0 };
-		can->writeCan(SEND_ID_CAN, msgSendConnect);
+		Can::writeCan(SEND_ID_CAN, msgSendConnect);
 	}
 }
 
@@ -127,9 +127,9 @@ void AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin)
 //
 //
 //
-ManualStandTwoThread::ManualStandTwoThread(Can* can, std::vector<Cable> cables, StandStatusFlags* statusFlags)
+ManualStandTwoThread::ManualStandTwoThread(std::vector<Cable> cables, StandStatusFlags* statusFlags)
 {
-	this->can = can;
+
 
 	this->statusFlags = statusFlags;
 	this->statusFlags->StatusConnected = false;
@@ -148,25 +148,30 @@ ManualStandTwoThread::ManualStandTwoThread(Can* can, std::vector<Cable> cables, 
 		this->cables.push_back(cable);
 	}
 
-	can->initCan();
 }
 
 ManualStandTwoThread::~ManualStandTwoThread()
 {
 	for (int i = 0; i < cables.size(); i++)
+	{
+		int msgSendConnect[8] = { cables[i]->pad, cables[i]->pin, 0, 0, 0, 0, 0, 0 };
+		Can::writeCan(SEND_ID_CAN, msgSendConnect);
+	}
+	for (int i = 0; i < cables.size(); i++)
 		delete cables[i];
-	can->deinitCan();
+	Can::deinitCan();
 }
 
 void ManualStandTwoThread::run()
 {
+	Can::initCan();
 	Sleep(50);
 	std::chrono::system_clock::time_point timeStartSentConnect = std::chrono::system_clock::now();
 	while (true)
 	{
 		int msgReceive[8];
 		int id = -2;
-		if (can->readWaitCan(&id, msgReceive, 10))
+		if (Can::readWaitCan(&id, msgReceive, 10))
 		{
 			if (id == RECEIVE_ID_CAN_CONNECT_MANUAL_STAND) // сообшение о конекте
 			{
@@ -207,6 +212,6 @@ void ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread(int pad, int 
 		//msgToTestWindowBeforeTest_AutoTwoThread(nowTesting.pad, nowTesting.pin);
 
 		int msgSendConnect[8] = { pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
-		can->writeCan(SEND_ID_CAN, msgSendConnect);
+		Can::writeCan(SEND_ID_CAN, msgSendConnect);
 	}
 }

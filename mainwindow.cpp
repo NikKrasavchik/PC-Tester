@@ -1301,12 +1301,30 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	selectFrequencyComboBox->setCurrentIndex(6);
 	selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
+		
+	std::vector<QString> nameAdapters = can->getNameAdapters();
+	int acceptValue = 0;
+	for(int j = 0; j < nameAdapters.size(); j++)
+		if (selectAdapterComboBox->currentText() == nameAdapters[j])
+			acceptValue = 1;
+
+	if (acceptValue == 0)
+	{
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Изменился список активных адаптеров адаптеров"));
+		else
+			QMessageBox::warning(this, QString("Warning"), QString("The list of active adapter adapters has changed"));
+		on_checkAdaptersButton_clicked();
+		return;
+	}
+
 
 	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
 	{
 		if (selectedFileStandType != CFG_STAND_NOT_SET)
 		{
-			TestWindow* testWindow = new TestWindow(testType, preparedCables, can, this);
+
+			TestWindow* testWindow = new TestWindow(testType, preparedCables, this);
 			testWindow->setFileName(fileName);
 
 			WindowFrame w(testType, nullptr, testWindow);
