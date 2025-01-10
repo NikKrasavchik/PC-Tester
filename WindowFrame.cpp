@@ -49,6 +49,7 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 		resize(child->size());
 	}
 	mIsCollapse = false;
+	ui->title->setText("");
 }
 
 /// @brief Destructor for the WindowFrame class.

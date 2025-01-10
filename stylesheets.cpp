@@ -1067,6 +1067,9 @@ void ConfiguratorWindow::initDarkStyleSheets()
 
 	)";
 }
+
+
+
 //void MainWindow::initStyleSheets()
 //{
 	//initLightStyles();
