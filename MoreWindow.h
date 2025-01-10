@@ -18,6 +18,7 @@ class MoreWindow : public QDialog
 public:
 	MoreWindow(Cable cable);
 //	MoreWindow(Cable cable, Measured measured);
+	~MoreWindow();
 //
 //private:
 	void generateTable();

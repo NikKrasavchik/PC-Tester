@@ -8,6 +8,9 @@ MoreWindow::MoreWindow(Cable cable)
 
 	generateTable();
 }
+MoreWindow::~MoreWindow()
+{
+}
 //
 //MoreWindow::MoreWindow(Cable cable, Measured measured)
 //{

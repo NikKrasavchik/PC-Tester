@@ -130,8 +130,9 @@ void WindowFrame::showHeaderContextMenu(const QPoint& pos) {
 }
 
 /// @brief Handler for the "Close" button click signal.
-void WindowFrame::on_close_clicked() {
-	close();
+void WindowFrame::on_close_clicked()
+{
+	mMainBody->close();
 }
 
 /// @brief Handler for the "Maximize/Restore" button click signal.
