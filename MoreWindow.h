@@ -5,15 +5,16 @@
 #include <qtablewidget.h>
 #include <qpushbutton.h>
 #include <QHeaderView>
+#include <qmessagebox.h>
 #include <QString>
 
 #include "ui_MoreWindow.h"
 #include "Components.h"
 #include "TestWindow.h"
 
-#define START_WINDOW_WIDTH				850
-#define START_WINDOW_HEIGHT				250
-#define START_MOREWINDOW_SIZE			START_WINDOW_WIDTH,START_WINDOW_HEIGHT
+#define START_MOREWINDOW_WIDTH			850
+#define START_MOREWINDOW_HEIGHT			250
+#define START_MOREWINDOW_SIZE			START_MOREWINDOW_WIDTH,START_MOREWINDOW_HEIGHT
 
 #define BUTTON_SIZE						100,40
 
@@ -63,9 +64,8 @@ public:
 private:
 	void initUi();
 	void initUiGenerateTable();
+	void initUiSetValueTable();
 	void initUiBottomLayout();
-
-	void resetLanguage();
 
 	void resizeEvent(QResizeEvent* event);
 
@@ -79,5 +79,10 @@ private:
 	
 	Cable cable;
 	Measured measured;
+	float changedProgs[4];
+public slots:
+	void on_mainTableWidget_cellChanged(int row, int column);
+	void on_saveChangesButton_clicked();
+	void on_startTestButton_clicked();
 };
 

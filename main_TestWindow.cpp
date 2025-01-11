@@ -1493,7 +1493,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 {
 	Cable currentCable;
 	currentCable.id = this->id;
-	currentCable.connector = (ConnectorId)this->connector.toInt();
+	currentCable.connector = (ConnectorId)this->connector.toInt(); // Здесь в currentCable.connector всегда НОЛЬ!!!!!! Вот нахера тут этот QString
 	currentCable.pin = this->pin.toInt();
 	currentCable.name = this->name;
 	currentCable.component = this->component;
