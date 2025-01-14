@@ -1202,7 +1202,7 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 				mainTableWidget->item(i, 6)->setBackgroundColor(Qt::red);
 		}
 	}
-
+	double t = floatCheck[(int)ConnectorId::A][2]->d3; // ѕример доступа
 	// запускаем следующий тест
 	ProcAutoTest(connector, pin);
 }

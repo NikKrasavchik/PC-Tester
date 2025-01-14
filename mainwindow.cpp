@@ -37,10 +37,33 @@
 #define OVERCROWDED_SEL_FILE_LABEL		20
 #define CFG_EXTENSION_LETTERS_COUNT		4
 
+std::vector<std::vector<FloatCheck*>> floatCheck;
+
+static void initFloatCheck()
+{
+	std::vector<FloatCheck*> currentConnector;
+	floatCheck.push_back(currentConnector);
+
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	floatCheck.push_back(currentConnector);
+
+	currentConnector.clear();
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
+	floatCheck.push_back(currentConnector);
+}
+
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
 	ui.setupUi(this);
+
+	initFloatCheck();
 
 	initUi();
 }

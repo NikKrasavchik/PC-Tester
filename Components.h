@@ -21,6 +21,7 @@
 #define AUTO_STAND		1
 
 #include <QString>
+#include <vector>
 
 struct Styles
 {
@@ -171,6 +172,24 @@ struct Cable
 	QString name;
 	QString component;
 };
+
+struct FloatCheck
+{
+	double d1;
+	double d2;
+	double d3;
+	double d4;
+
+	FloatCheck(double d1, double d2, double d3, double d4)
+	{
+		this->d1 = d1;
+		this->d2 = d2;
+		this->d3 = d3;
+		this->d4 = d4;
+	}
+};
+
+extern std::vector<std::vector<FloatCheck*>> floatCheck;
 
 extern ViewWindowState* viewWindowState;
 
