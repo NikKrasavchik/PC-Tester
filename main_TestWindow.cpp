@@ -30,7 +30,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* 
 	{
 		th = new AutoStandTwoThread(statusFlags);
 	}
-
+	
 	initUiMain();
 	initUiMainHeader();
 	initUiTable();
@@ -1164,7 +1164,7 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 			{
 				isFullTestEnabled = false;
 
-				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен")); // debug
+				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
 				return;
 			}
 
@@ -1231,6 +1231,8 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 
 	if(isFullTestEnabled)// запускаем следующий тест
 		ProcAutoTest(connector, pin);
+
+
 	double t = floatCheck[(int)ConnectorId::A][2]->d3; // Пример доступа
 }
 
@@ -1401,7 +1403,7 @@ void TestWindow::resetIconMoreButton(bool theme)
 	}
 }
 
-static void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType)
+void TestWindow::rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType)
 {
 	std::vector<TestTableRowProperties*> tmpCableRows(*cableRows);
 
@@ -1428,13 +1430,14 @@ static void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, in
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "OUT")
 			{
-				cableRows->push_back(new TestTableRowProperties());
+				auto p = new TestTableRowProperties(this);
+				cableRows->push_back(p);
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "IN")
 			{
-				cableRows->push_back(new TestTableRowProperties());
+				cableRows->push_back(new TestTableRowProperties(this));
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		break;
@@ -1444,13 +1447,13 @@ static void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, in
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "IN")
 			{
-				cableRows->push_back(new TestTableRowProperties());
+				cableRows->push_back(new TestTableRowProperties(this));
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "OUT")
 			{
-				cableRows->push_back(new TestTableRowProperties());
+				cableRows->push_back(new TestTableRowProperties(this));
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		break;
@@ -1532,7 +1535,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 	currentCable.bit = this->bit;
 	currentCable.canId = this->canId;
 
-	MoreWindow* moreWindow = new MoreWindow(currentCable);
+	MoreWindow* moreWindow = new MoreWindow(currentCable, testwindow);
 
 	WindowFrame w(WindowType::MOREWINDOW, nullptr, moreWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));

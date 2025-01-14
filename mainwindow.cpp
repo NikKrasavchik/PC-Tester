@@ -60,14 +60,14 @@ static void checkAddFloatCheck(ConnectorId connectorId, int pin, FloatCheck* cur
 
 static void initFloatCheck()
 {
-	checkAddFloatCheck(ConnectorId::A, 10, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::A, 2, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::B, 6, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::C, 4, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::D, 3, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::E, 7, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::F, 15, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::F, 10, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::A, 10,	new FloatCheck(4.4, 3.3, 2.2, 1.1));
+	checkAddFloatCheck(ConnectorId::A, 2,	new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::B, 6,	new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::C, 4,	new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::D, 3,	new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::E, 7,	new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::F, 15,	new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::F, 10,	new FloatCheck(4, 3, 2, 1));
 }
 
 MainWindow::MainWindow(QWidget* parent)

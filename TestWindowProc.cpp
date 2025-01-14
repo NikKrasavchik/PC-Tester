@@ -4,7 +4,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 {
 	for (int i = 0; i < cables.size(); i++)
 	{
-		cableRows.push_back(new TestTableRowProperties());
+		cableRows.push_back(new TestTableRowProperties(this));
 
 		cableRows[i]->id = cables[i].id;
 		cableRows[i]->connector = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
@@ -470,6 +470,7 @@ void TestTableRowProperties::sendSignal()
 {
 	msgToTwoThreadStartTest_ManualTwoThread(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), stateDigital == -1 ? 0 : stateDigital, statePWM == -1 ? 0 : statePWM);
 }
+
 void TestTableRowProperties::msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent)
 {
 }

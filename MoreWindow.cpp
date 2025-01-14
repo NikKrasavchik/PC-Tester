@@ -1,9 +1,10 @@
 #include "MoreWindow.h"
 
 
-MoreWindow::MoreWindow(Cable cable)
+MoreWindow::MoreWindow(Cable cable, TestWindow* testwindow)
 {
 	this->cable = cable;
+	this->testwindow = testwindow;
 	measured.current = -1;
 	measured.voltage = -1;
 	for (int i = 0; i < sizeof(changedProgs) / sizeof(changedProgs[0]); i++)
@@ -373,46 +374,29 @@ void MoreWindow::on_saveChangesButton_clicked()
 	}
 	if (msgBox.exec() == QMessageBox::Save)
 	{
-		std::vector<Cable> cablesTmp;
-		for (int i = 0; i < sizeof(changedProgs) / sizeof(changedProgs[0]); i++)
-		{
-			if (changedProgs[i] != -1)
-			{
-				Cable cableTmp;
-				cableTmp.id = cable.id;
-				cableTmp.connector = cable.connector;
-				cableTmp.pin = cable.pin;
-				cableTmp.direction = cable.direction;
-				cableTmp.type = cable.type;
-				cableTmp.canId = cable.canId;
-				cableTmp.bit = cable.bit;
-				cableTmp.name = cable.name;
-				cableTmp.component = cable.component;
 
-				switch (i)
-				{
-				case 0:
-					cableTmp.minVoltage = changedProgs[i];
-					break;
-				case 1:
-					cableTmp.maxVoltage = changedProgs[i];
-					break;
-				case 2:
-					cableTmp.minCurrent = changedProgs[i];
-					break;
-				case 3:
-					cableTmp.maxCurrent = changedProgs[i];
-					break;
-				default:
-					QMessageBox::critical(this, "error", "MoreWindow.cpp 357 on_saveChangesButton_clicked");
-					return;
-					break;
-				}
-				cablesTmp.push_back(cableTmp);
-				changedProgs[i] = -1;
-			}
-		}
-		// Надо внести изменения в конфиг файл этих кабелей cablesTmp
+		Cable cableTmp;
+		cableTmp.id = cable.id;
+		cableTmp.connector = cable.connector;
+		cableTmp.pin = cable.pin;
+		cableTmp.direction = cable.direction;
+		cableTmp.type = cable.type;
+		cableTmp.canId = cable.canId;
+		cableTmp.bit = cable.bit;
+		cableTmp.name = cable.name;
+		cableTmp.component = cable.component;
+		cableTmp.minVoltage = changedProgs[0];
+		cableTmp.maxVoltage = changedProgs[1];
+		cableTmp.minCurrent = changedProgs[2];
+		cableTmp.maxCurrent = changedProgs[3];
+
+		changedProgs[0] = -1;
+		changedProgs[1] = -1;
+		changedProgs[2] = -1;
+		changedProgs[3] = -1;
+
+
+		// Надо внести изменения в конфиг файл этого кабелея cableTmp
 		saveChangesButton->hide();
 	}
 }
@@ -420,5 +404,8 @@ void MoreWindow::on_saveChangesButton_clicked()
 void MoreWindow::on_startTestButton_clicked()
 {
 
-
+	if (!testwindow->statusFlags->StatusTest)
+	{
+		testwindow->ProcAutoTest((int)cable.connector, cable.pin);
+	}
 }
