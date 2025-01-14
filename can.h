@@ -27,7 +27,6 @@ public:
 	//			true  - в случае если за время timeout пришло сообшение на can-шину.
 	// ------------------------------------
 	static bool readWaitCan(int* id, int* msg, int timeout);
-	//bool readWaitCan(int* id, std::vector<int>* msg, int timeout);
 
 	void setAdapterNeme(QString adapter);
 	void setFrequency(QString frequency);
@@ -37,23 +36,20 @@ public:
 
 	std::vector<QString> getNameAdapters();
 
+private:
+
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;
 		int activeAdapter;
 		std::pair<int, int> p_frequency;
 	};
-
-private:
-
 	static canHandle hnd;
-
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;
-
 
 	static modelAdapter *kvaser;
 	static modelAdapter *marathon;

@@ -126,8 +126,6 @@ public:
 	void switchButtonState(TestButtons testButton);
 	void sendSignal();
 
-private:
-
 public slots:
 	void on_onButton_clicked();
 	void on_offButton_clicked();
@@ -183,8 +181,8 @@ private:
 	QPushButton* inTestManualStandConnectButton;
 	QPushButton* outTestManualStandConnectButton;
 	QPushButton* fullTestManualStandConnectButton;
-	QPushButton* AutoStandConnectButton;
-	QPushButton* AutoStandStartTestButton;
+	QPushButton* autoStandConnectButton;
+	QPushButton* autoStandStartTestButton;
 	QComboBox* inManualTestAutoStandTestTimeComboBox;
 	QComboBox* outManualTestAutoStandTestTimeComboBox;
 	QSpacerItem* tripleButtonsSpacer;

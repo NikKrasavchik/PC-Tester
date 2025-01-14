@@ -71,7 +71,7 @@ void AutoStandTwoThread::run()
 				{
 					timeStartReceiveConnect = std::chrono::system_clock::now();
 				}
-				if (id == RECEIVE_ID_CAN_AUTO_STAND && 
+				if (id == RECEIVE_ID_CAN_AUTO_STAND && // ѕришло сообщение о завершение теста 
 					msgReceive[0] == nowTesting.pad &&
 					msgReceive[1] == nowTesting.pin)
 				{
@@ -89,7 +89,7 @@ void AutoStandTwoThread::run()
 				timeStartSentConnect = std::chrono::system_clock::now();
 			}
 
-			if (std::chrono::system_clock::now() - timeStartReceiveConnect > std::chrono::milliseconds(150))
+			if (std::chrono::system_clock::now() - timeStartReceiveConnect > std::chrono::milliseconds(150)) // Ќе приходило сообщение о конекте от стенда больше 150 мс
 			{
 				statusFlags->StatusConnected = false;
 				msgToTestWindowStatusConnect_AutoTwoThread(statusFlags->StatusConnected);
