@@ -39,25 +39,35 @@
 
 std::vector<std::vector<FloatCheck*>> floatCheck;
 
+static void checkAddFloatCheck(ConnectorId connectorId, int pin, FloatCheck* currentFloatCheck)
+{
+	while (floatCheck.size() - 1 != (int)connectorId)
+	{
+		std::vector<FloatCheck*> tmpFloatCheck;
+		tmpFloatCheck.push_back(new FloatCheck());
+		floatCheck.push_back(tmpFloatCheck);
+	}
+
+	if (floatCheck[(int)connectorId].size() - 1 < pin)
+	{
+		while (floatCheck[(int)connectorId].size() != pin)
+			floatCheck[(int)connectorId].push_back(new FloatCheck());
+		floatCheck[(int)connectorId].push_back(currentFloatCheck);
+	}
+	else
+		floatCheck[(int)connectorId][pin] = currentFloatCheck;
+}
+
 static void initFloatCheck()
 {
-	std::vector<FloatCheck*> currentConnector;
-	floatCheck.push_back(currentConnector);
-
-	currentConnector.push_back(new FloatCheck());
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	floatCheck.push_back(currentConnector);
-
-	currentConnector.clear();
-	currentConnector.push_back(new FloatCheck());
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
-	floatCheck.push_back(currentConnector);
+	checkAddFloatCheck(ConnectorId::A, 10, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::A, 2, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::B, 6, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::C, 4, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::D, 3, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::E, 7, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::F, 15, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::F, 10, new FloatCheck(4, 3, 2, 1));
 }
 
 MainWindow::MainWindow(QWidget* parent)
