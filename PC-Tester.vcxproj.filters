@@ -44,6 +44,9 @@
     <QtUic Include="MoreWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="ReportWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -109,6 +112,9 @@
     <ClCompile Include="MoreWindow.cpp">
       <Filter>Source Files\Ui</Filter>
     </ClCompile>
+    <ClCompile Include="ReportWindow.cpp">
+      <Filter>Source Files\Ui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
@@ -127,6 +133,9 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="MoreWindow.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ReportWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

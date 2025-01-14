@@ -47,12 +47,6 @@
 #define CELL_VALUE_PROGS_I_MIN_TABLE			3,9
 #define CELL_VALUE_PROGS_I_MAX_TABLE			3,10
 
-struct Measured
-{
-	double current;
-	double voltage;
-};
-
 class MoreWindow : public QDialog
 {
 	Q_OBJECT
@@ -80,7 +74,7 @@ private:
 	Cable cable;
 	TestWindow* testwindow;
 	Measured measured;
-	float changedProgs[4];
+	float changedThresholds[4];
 public slots:
 	void on_mainTableWidget_cellChanged(int row, int column);
 	void on_saveChangesButton_clicked();

@@ -7,8 +7,8 @@ MoreWindow::MoreWindow(Cable cable, TestWindow* testwindow)
 	this->testwindow = testwindow;
 	measured.current = -1;
 	measured.voltage = -1;
-	for (int i = 0; i < sizeof(changedProgs) / sizeof(changedProgs[0]); i++)
-		changedProgs[i] = -1;
+	for (int i = 0; i < sizeof(changedThresholds) / sizeof(changedThresholds[0]); i++)
+		changedThresholds[i] = -1;
 
 	initUi();
 	QMetaObject::connectSlotsByName(this);
@@ -130,8 +130,8 @@ void MoreWindow::initUiSetValueTable()
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), cable.pin);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_ID_TABLE), cable.id);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), cable.name);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), measured.voltage);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), measured.current);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != -1 ? QString::number(measured.voltage) : "-"));
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), (measured.current != -1 ? QString::number(measured.current) : "-"));
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), cable.minVoltage);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), cable.maxVoltage);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), cable.minCurrent);
@@ -351,7 +351,7 @@ void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 	if (row == 3 && column >= 7)
 	{
 		saveChangesButton->show();
-		changedProgs[column - 7] = mainTableWidget->item(row, column)->text().toFloat();
+		changedThresholds[column - 7] = mainTableWidget->item(row, column)->text().toFloat();
 	}
 }
 

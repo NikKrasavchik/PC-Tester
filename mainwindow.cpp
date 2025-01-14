@@ -888,10 +888,10 @@ void MainWindow::on_selectFileButton_clicked()
 {
 #ifdef DEBUG
 	fileName = QString::fromLocal8Bit("И пиздец...");
-	selectedFileFullName = "C:/Users/zahar.mormil/Desktop/PC-Tester/Config files/t.csv";
+	selectedFileFullName = "C:/Users/nikita.stachinskiy/Desktop/PC-Tester/Config files/t.csv";
 	//C:/Users/zahar.mormil/Desktop/PC-Tester/Config files/test_1.csv
 #else
-	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", "", "CSV (*.csv)");
+	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", QDir::currentPath() + "/Config files/", "CSV (*.csv)");
 #endif // DEBUG
 	int localFileNameInd = selectedFileFullName.lastIndexOf("/");
 
