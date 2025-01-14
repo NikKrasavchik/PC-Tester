@@ -10,10 +10,10 @@
 
 void TestWindow::initUiOutManualTestAutoStand()
 {
-	AutoStandConnectButton = new QPushButton(usefulSpaceWidget);
-	AutoStandConnectButton->setObjectName("AutoStandConnectButton");
-	AutoStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
-	usefulSpaceHLayout->addWidget(AutoStandConnectButton);
+	autoStandConnectButton = new QPushButton(usefulSpaceWidget);
+	autoStandConnectButton->setObjectName("AutoStandConnectButton");
+	autoStandConnectButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	usefulSpaceHLayout->addWidget(autoStandConnectButton);
 
 	outManualTestAutoStandTestTimeComboBox = new QComboBox(usefulSpaceWidget);
 	outManualTestAutoStandTestTimeComboBox->setObjectName("outManualTestAutoStandTestTimeComboBox");
