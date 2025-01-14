@@ -20,6 +20,7 @@
 #include "can.h"
 #include "WindowFrame.h"
 #include "Components.h"
+#include "mainwindow.h"
 
 #include <QDebug>
 

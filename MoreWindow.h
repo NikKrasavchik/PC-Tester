@@ -52,7 +52,7 @@ class MoreWindow : public QDialog
 	Q_OBJECT
 
 public:
-	MoreWindow(Cable cable);
+	MoreWindow(Cable cable, TestWindow* testwindow);
 	~MoreWindow();
 
 private:
@@ -72,6 +72,7 @@ private:
 	QPushButton* saveChangesButton;
 	
 	Cable cable;
+	TestWindow* testwindow;
 	Measured measured;
 	float changedThresholds[4];
 public slots:

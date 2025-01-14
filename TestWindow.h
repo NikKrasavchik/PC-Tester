@@ -103,7 +103,8 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
-	QThread* th;
+	TestTableRowProperties(TestWindow* testwindow) { this->testwindow = testwindow; };
+
 	int id;
 	int canId;
 	int bit;
@@ -123,6 +124,8 @@ public:
 
 	int stateDigital;
 	int statePWM;
+
+	TestWindow* testwindow;
 
 	void generateInteractionButtons(WindowType testType, int type);
 	void switchButtonState(TestButtons testButton);
@@ -158,7 +161,9 @@ public:
 
 	void setFileName(QString fileName);
 	void setParentFrame(WindowFrame* parentFrame);
+	void ProcAutoTest(int pad = 0, int pin = 0);
 
+	StandStatusFlags* statusFlags;
 private:
 
 	Ui::TestWindowClass ui;
@@ -216,7 +221,6 @@ private:
 	QString fileName;
 	WindowType testType;
 	Can* can;
-	StandStatusFlags* statusFlags;
 	std::vector<TestTableRowProperties*> cableRows;
 	QThread* th;
 
@@ -309,13 +313,14 @@ private:
 	void resetIconMoreButton(bool theme);
 	void sortRows();
 	void fillTestTimeComboBoxes();
-	void ProcAutoTest(int pad = 0, int pin = 0);
+
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget);
 	void initAutoCheckButton(int currentRowNum, QWidget* autoChechButtonWidget);
 	void initMoreButton(int currentRowNum, QWidget* moreCellWidget);
 	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);
+	void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType);
 
 public slots:
 	void on_backButton_clicked();
