@@ -161,7 +161,7 @@ public:
 
 	void setFileName(QString fileName);
 	void setParentFrame(WindowFrame* parentFrame);
-	void ProcAutoTest(int pad = 0, int pin = 0);
+	void ProcAutoTest(int pad, int pin);
 
 	StandStatusFlags* statusFlags;
 private:
@@ -223,6 +223,7 @@ private:
 	Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
 	QThread* th;
+	Cable *nextCheckCable;
 
 	void initUiMain();
 	void initUiMainHeader();

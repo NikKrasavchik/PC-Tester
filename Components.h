@@ -171,6 +171,13 @@ struct Cable
 	double maxVoltage;
 	QString name;
 	QString component;
+
+	Cable() {};
+	Cable(ConnectorId connector, int pin)
+	{
+		this->connector = connector;
+		this->pin = pin;
+	}
 };
 
 struct FloatCheck
