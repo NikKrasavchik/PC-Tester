@@ -196,14 +196,16 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			break;
 		}
 	else if (testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
-		testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
-		testType == WindowType::FULL_TEST_AUTO_STAND)
+			 testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
+			 testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
+			 testType == WindowType::FULL_TEST_AUTO_STAND)
 	{
 		buttons = new CheckButton();
 
 		((CheckButton*)buttons)->checkButton = new QPushButton();
 		((CheckButton*)buttons)->checkButton->setObjectName("checkButton");
-		((CheckButton*)buttons)->checkButton->setFixedSize(FIXED_CHECK_BUTTON_WIDTH, FIXED_CHECK_BUTTON_HEIGHT);
+		((CheckButton*)buttons)->checkButton->setFixedSize(FIXED_ACHECK_BUTTON_WIDTH, FIXED_ACHECK_BUTTON_HEIGHT);
+		connect(((CheckButton*)buttons)->checkButton, &QPushButton::clicked, this, &TestTableRowProperties::on_checkButton_clicked);
 	}
 
 	moreButton = new QPushButton();

@@ -34,7 +34,7 @@
 #define COLOUMN_COMPONENT_WIDTH	80
 #define COLOUMN_TYPE_WIDTH		90
 #define COLOUMN_CHECK_WIDTH		160
-#define COLOUMN_AUTOCHECK_WIDTH	60
+#define COLOUMN_AUTOCHECK_WIDTH	70
 #define COLOUMN_STATUS_WIDTH	60
 #define COLOUMN_STAND_WIDTH		60
 #define COLOUMN_PC_WIDTH		60
@@ -134,7 +134,9 @@ public slots:
 	void on_load50Button_clicked();
 	void on_load75Button_clicked();
 	void on_load100Button_clicked();
+	void on_checkButton_clicked();
 	void on_moreButton_clicked();
+
 
 	void msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent);
 

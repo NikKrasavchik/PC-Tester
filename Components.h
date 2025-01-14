@@ -180,7 +180,7 @@ struct FloatCheck
 	double d3;
 	double d4;
 
-	FloatCheck(double d1, double d2, double d3, double d4)
+	FloatCheck(double d1 = -1, double d2 = -1 , double d3 = -1, double d4 = -1)
 	{
 		this->d1 = d1;
 		this->d2 = d2;
@@ -214,6 +214,8 @@ extern ViewWindowState* viewWindowState;
 #define FIXED_FOOTER_BUTTON_WIDTH	150
 #define FIXED_FOOTER_BUTTON_HEIGHT	50
 #define FIXED_MORE_BUTTON_SIZE		25
+#define FIXED_ACHECK_BUTTON_WIDTH	60
+#define FIXED_ACHECK_BUTTON_HEIGHT	25
 #define FIXED_CHECK_BUTTON_WIDTH	65
 #define FIXED_CHECK_WBUTTON_WIDTH	148
 #define	FIXED_CHECK_BUTTON_HEIGHT	30
