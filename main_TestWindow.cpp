@@ -1231,6 +1231,9 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 
 	if(isFullTestEnabled)// запускаем следующий тест
 		ProcAutoTest(connector, pin);
+	double t = floatCheck[(int)ConnectorId::A][2]->d3; // Пример доступа
+	// запускаем следующий тест
+	ProcAutoTest(connector, pin);
 }
 
 void TestWindow::msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect)
@@ -1518,7 +1521,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 {
 	Cable currentCable;
 	currentCable.id = this->id;
-	currentCable.connector = (ConnectorId)this->connector.toInt(); // Здесь в currentCable.connector всегда НОЛЬ!!!!!! Вот нахера тут этот QString
+	currentCable.connector = (ConnectorId)(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL);
 	currentCable.pin = this->pin.toInt();
 	currentCable.name = this->name;
 	currentCable.component = this->component;	
