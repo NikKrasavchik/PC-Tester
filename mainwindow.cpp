@@ -44,6 +44,7 @@ static void initFloatCheck()
 	std::vector<FloatCheck*> currentConnector;
 	floatCheck.push_back(currentConnector);
 
+	currentConnector.push_back(new FloatCheck());
 	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
 	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
 	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
@@ -51,6 +52,7 @@ static void initFloatCheck()
 	floatCheck.push_back(currentConnector);
 
 	currentConnector.clear();
+	currentConnector.push_back(new FloatCheck());
 	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
 	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));
 	currentConnector.push_back(new FloatCheck(0, 1, 2, 3));

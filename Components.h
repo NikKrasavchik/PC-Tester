@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG
+//#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -180,7 +180,7 @@ struct FloatCheck
 	double d3;
 	double d4;
 
-	FloatCheck(double d1, double d2, double d3, double d4)
+	FloatCheck(double d1 = -1, double d2 = -1 , double d3 = -1, double d4 = -1)
 	{
 		this->d1 = d1;
 		this->d2 = d2;
