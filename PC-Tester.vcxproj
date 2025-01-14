@@ -127,6 +127,12 @@
     <ClCompile Include="outManualTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="outTestManualStand_TestWindow.cpp" />
     <ClCompile Include="qsliderbutton.cpp" />
+    <ClCompile Include="ReportWindow.cpp">
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename).moc</QtMocFileName>
+      <DynamicSource Condition="'$(Configuration)|$(Platform)'=='Release|x64'">input</DynamicSource>
+      <QtMocFileName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename).moc</QtMocFileName>
+    </ClCompile>
     <ClCompile Include="StyleSheets.cpp" />
     <ClCompile Include="TestWindowProc.cpp" />
     <ClCompile Include="twoThread.cpp" />
@@ -138,6 +144,7 @@
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
     <QtUic Include="MoreWindow.ui" />
+    <QtUic Include="ReportWindow.ui" />
     <QtUic Include="TestWindow.ui" />
     <QtUic Include="WindowFrame.ui" />
   </ItemGroup>
@@ -148,6 +155,7 @@
     <ClInclude Include="can.h" />
     <ClInclude Include="Components.h" />
     <QtMoc Include="MoreWindow.h" />
+    <QtMoc Include="ReportWindow.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="twoThread.h" />
     <QtMoc Include="ConfiguratorWindow.h" />

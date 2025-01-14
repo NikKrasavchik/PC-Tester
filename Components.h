@@ -1,6 +1,6 @@
 #pragma once
 
-//#define DEBUG
+#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -124,7 +124,8 @@ enum class WindowType
 	IN_AUTO_TEST_AUTO_STAND,
 	OUT_AUTO_TEST_AUTO_STAND,
 	FULL_TEST_AUTO_STAND,
-	MOREWINDOW
+	MOREWINDOW,
+	REPORTWINDOW
 };
 
 enum class ConnectorId
@@ -190,6 +191,12 @@ struct FloatCheck
 };
 
 extern std::vector<std::vector<FloatCheck*>> floatCheck;
+
+struct Measured
+{
+	double current;
+	double voltage;
+};
 
 extern ViewWindowState* viewWindowState;
 

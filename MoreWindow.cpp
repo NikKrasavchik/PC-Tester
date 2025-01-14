@@ -6,8 +6,8 @@ MoreWindow::MoreWindow(Cable cable)
 	this->cable = cable;
 	measured.current = -1;
 	measured.voltage = -1;
-	for (int i = 0; i < sizeof(changedProgs) / sizeof(changedProgs[0]); i++)
-		changedProgs[i] = -1;
+	for (int i = 0; i < sizeof(changedThresholds) / sizeof(changedThresholds[0]); i++)
+		changedThresholds[i] = -1;
 
 	initUi();
 	QMetaObject::connectSlotsByName(this);
@@ -129,8 +129,8 @@ void MoreWindow::initUiSetValueTable()
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), cable.pin);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_ID_TABLE), cable.id);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), cable.name);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), measured.voltage);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), measured.current);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != -1 ? QString::number(measured.voltage) : "-"));
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), (measured.current != -1 ? QString::number(measured.current) : "-"));
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), cable.minVoltage);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), cable.maxVoltage);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), cable.minCurrent);
@@ -350,7 +350,7 @@ void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 	if (row == 3 && column >= 7)
 	{
 		saveChangesButton->show();
-		changedProgs[column - 7] = mainTableWidget->item(row, column)->text().toFloat();
+		changedThresholds[column - 7] = mainTableWidget->item(row, column)->text().toFloat();
 	}
 }
 
@@ -374,9 +374,9 @@ void MoreWindow::on_saveChangesButton_clicked()
 	if (msgBox.exec() == QMessageBox::Save)
 	{
 		std::vector<Cable> cablesTmp;
-		for (int i = 0; i < sizeof(changedProgs) / sizeof(changedProgs[0]); i++)
+		for (int i = 0; i < sizeof(changedThresholds) / sizeof(changedThresholds[0]); i++)
 		{
-			if (changedProgs[i] != -1)
+			if (changedThresholds[i] != -1)
 			{
 				Cable cableTmp;
 				cableTmp.id = cable.id;
@@ -392,16 +392,16 @@ void MoreWindow::on_saveChangesButton_clicked()
 				switch (i)
 				{
 				case 0:
-					cableTmp.minVoltage = changedProgs[i];
+					cableTmp.minVoltage = changedThresholds[i];
 					break;
 				case 1:
-					cableTmp.maxVoltage = changedProgs[i];
+					cableTmp.maxVoltage = changedThresholds[i];
 					break;
 				case 2:
-					cableTmp.minCurrent = changedProgs[i];
+					cableTmp.minCurrent = changedThresholds[i];
 					break;
 				case 3:
-					cableTmp.maxCurrent = changedProgs[i];
+					cableTmp.maxCurrent = changedThresholds[i];
 					break;
 				default:
 					QMessageBox::critical(this, "error", "MoreWindow.cpp 357 on_saveChangesButton_clicked");
@@ -409,7 +409,7 @@ void MoreWindow::on_saveChangesButton_clicked()
 					break;
 				}
 				cablesTmp.push_back(cableTmp);
-				changedProgs[i] = -1;
+				changedThresholds[i] = -1;
 			}
 		}
 		// Надо внести изменения в конфиг файл этих кабелей cablesTmp

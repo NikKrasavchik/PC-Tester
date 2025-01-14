@@ -581,6 +581,35 @@ void TestWindow::on_switchLanguageButton_clicked()
 
 void TestWindow::on_reportButton_clicked()
 {
+	std::vector<Cable> cables;
+	for (int currentCableInd = 0; currentCableInd < this->cableRows.size(); currentCableInd++)
+	{
+		TestTableRowProperties* currentTestTableRowProperties = this->cableRows[currentCableInd];
+		
+		Cable currentCable;
+		currentCable.id = currentTestTableRowProperties->id;
+		currentCable.connector = (ConnectorId)(currentTestTableRowProperties->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL);
+		currentCable.pin = currentTestTableRowProperties->pin.toInt();
+		currentCable.name = currentTestTableRowProperties->name;
+		currentCable.component = currentTestTableRowProperties->component;
+		currentCable.direction = currentTestTableRowProperties->direction.toInt();
+		currentCable.type = currentTestTableRowProperties->type.toInt();
+		currentCable.minCurrent = currentTestTableRowProperties->minCurrent;
+		currentCable.maxCurrent = currentTestTableRowProperties->maxCurrent;
+		currentCable.minVoltage = currentTestTableRowProperties->minVoltage;
+		currentCable.maxVoltage = currentTestTableRowProperties->maxVoltage;
+		currentCable.bit = currentTestTableRowProperties->bit;
+		currentCable.canId = currentTestTableRowProperties->canId;
+
+		cables.push_back(currentCable);
+	}
+
+	ReportWindow* reportWindow = new ReportWindow(cables, testType);
+
+	WindowFrame w(WindowType::REPORTWINDOW, nullptr, reportWindow);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+	w.show();
+	reportWindow->exec();
 }
 
 void TestWindow::resetTheme()

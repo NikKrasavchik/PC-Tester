@@ -17,6 +17,7 @@
 #include "can.h"
 #include "twoThread.h"
 #include "MoreWindow.h"
+#include "ReportWindow.h"
 
 #include <QDebug>
 
@@ -102,6 +103,7 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
+	QThread* th;
 	int id;
 	int canId;
 	int bit;
@@ -136,7 +138,6 @@ public slots:
 	void on_load100Button_clicked();
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
-
 
 	void msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent);
 

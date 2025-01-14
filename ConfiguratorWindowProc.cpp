@@ -521,8 +521,8 @@ void ConfiguratorWindow::on_saveButton_clicked()
 
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
-		for (int coloumn = 0; coloumn < COLOUMN_COUNT_FULL - 1; coloumn++)
-			configString += parsedData[row][coloumn] + (coloumn == COLOUMN_COUNT_FULL - 2 ? "" : CFG_SPLIT);
+		for (int column = 0; column < COLOUMN_COUNT_FULL - 1; column++)
+			configString += parsedData[row][column] + (column == COLOUMN_COUNT_FULL - 2 ? "" : CFG_SPLIT);
 		configString += (row == mainTableWidget->rowCount() - 1 ? "" : CFG_ENDING);
 	}
 
@@ -551,10 +551,10 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
 		std::vector<QString> rowData;
-		for (int coloumn = 0; coloumn < COLOUMN_COUNT_FULL; coloumn++)
+		for (int column = 0; column < COLOUMN_COUNT_FULL; column++)
 		{
 			TableRowProperties* currentRowProperties = tableRowPropertiesVector[row];
-			switch ((FullColoumnName)coloumn)
+			switch ((FullColoumnName)column)
 			{
 			case FullColoumnName::CONNECTOR:
 				rowData.push_back(QString::number((int)(currentRowProperties->presetSettings->connector)));
@@ -618,14 +618,14 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 
 bool ConfiguratorWindow::updateTableData(bool needVerify)
 {
-	for (int coloumn = 0; coloumn < mainTableWidget->columnCount(); coloumn++)
+	for (int column = 0; column < mainTableWidget->columnCount(); column++)
 	{
-		switch ((FullColoumnName)coloumn)
+		switch ((FullColoumnName)column)
 		{
 		case FullColoumnName::CONNECTOR:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (needVerify)
-					if (!generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn), tableRowPropertiesVector[row]->connectorComboBox)))
+					if (!generateError(row, verifyTableData(column, mainTableWidget->item(row, column), tableRowPropertiesVector[row]->connectorComboBox)))
 						return false;
 				
 			break;
@@ -633,8 +633,8 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 		case FullColoumnName::PIN:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (needVerify)
-					if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-						tableRowPropertiesVector[row]->pin = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toInt() : -1);
+					if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+						tableRowPropertiesVector[row]->pin = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : -1);
 					else
 						return false;
 			break;
@@ -642,128 +642,128 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 		case FullColoumnName::DIRECTION:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (needVerify)
-					if (!generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn), tableRowPropertiesVector[row]->directionComboBox)))
+					if (!generateError(row, verifyTableData(column, mainTableWidget->item(row, column), tableRowPropertiesVector[row]->directionComboBox)))
 						return false;
 			break;
 
 		case FullColoumnName::TYPE:
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (needVerify)
-					if (!generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn), tableRowPropertiesVector[row]->typeComboBox)))
+					if (!generateError(row, verifyTableData(column, mainTableWidget->item(row, column), tableRowPropertiesVector[row]->typeComboBox)))
 						return false;
 			break;
 		}
 		switch (standTypeSelected)
 		{
 		case STAND_NOT_SET:
-			switch (coloumn)
+			switch (column)
 			{
 			case (int)FullColoumnName::CAN_ID:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->canId = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->canId = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->canId = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						tableRowPropertiesVector[row]->canId = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 				break;
 
 			case (int)FullColoumnName::BYTE:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							if (mainTableWidget->item(row, coloumn) == NULL || mainTableWidget->item(row, coloumn)->text() == "-")
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							if (mainTableWidget->item(row, column) == NULL || mainTableWidget->item(row, column)->text() == "-")
 								tableRowPropertiesVector[row]->byte = -1;
 							else
-								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
+								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, column)->text().toInt();
 
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toInt() : -1);
+						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : -1);
 				break;
 
 			case (int)FullColoumnName::MIN_CURRENT:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->minCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->minCurrent = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)FullColoumnName::MAX_CURRENT:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->maxCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->maxCurrent = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)FullColoumnName::MIN_VOLTAGE:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->minVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->minVoltage = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)FullColoumnName::MAX_VOLTAGE:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->maxVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->maxVoltage = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)FullColoumnName::NAME:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->name = mainTableWidget->item(row, coloumn)->text();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->name = mainTableWidget->item(row, column)->text();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 				break;
 
 			case (int)FullColoumnName::COMPONENT:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->component = mainTableWidget->item(row, coloumn)->text();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->component = mainTableWidget->item(row, column)->text();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->component = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						tableRowPropertiesVector[row]->component = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 				break;
 
 			case (int)FullColoumnName::DEL:
@@ -772,64 +772,64 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 			break;
 
 		case STAND_MANUAL:
-			switch (coloumn)
+			switch (column)
 			{
 			case (int)ManualColoumnName::CAN_ID:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							if (mainTableWidget->item(row, coloumn) == NULL || mainTableWidget->item(row, coloumn)->text() == "-")
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							if (mainTableWidget->item(row, column) == NULL || mainTableWidget->item(row, column)->text() == "-")
 								tableRowPropertiesVector[row]->byte = -1;
 							else
-								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
+								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, column)->text().toInt();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->canId = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						tableRowPropertiesVector[row]->canId = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 				break;
 
 			case (int)ManualColoumnName::BYTE:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							if (mainTableWidget->item(row, coloumn) == NULL || mainTableWidget->item(row, coloumn)->text() == "-")
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							if (mainTableWidget->item(row, column) == NULL || mainTableWidget->item(row, column)->text() == "-")
 								tableRowPropertiesVector[row]->byte = -1;
 							else
-								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, coloumn)->text().toInt();
+								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, column)->text().toInt();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toInt() : -1);
+						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : -1);
 				break;
 
 			case (int)ManualColoumnName::NAME:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->name = mainTableWidget->item(row, coloumn)->text();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->name = mainTableWidget->item(row, column)->text();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 				break;
 				
 			case (int)ManualColoumnName::COMPONENT:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->component = mainTableWidget->item(row, coloumn)->text();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->component = mainTableWidget->item(row, column)->text();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->component = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						tableRowPropertiesVector[row]->component = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 				break;
 
 			case (int)ManualColoumnName::DEL:
@@ -838,71 +838,71 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 			break;
 
 		case STAND_AUTO:
-			switch (coloumn)
+			switch (column)
 			{
 			case (int)AutoColoumnName::MIN_CURRENT:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->minCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->minCurrent = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)AutoColoumnName::MAX_CURRENT:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->maxCurrent = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->maxCurrent = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)AutoColoumnName::MIN_VOLTAGE:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->minVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->minVoltage = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)AutoColoumnName::MAX_VOLTAGE:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->maxVoltage = mainTableWidget->item(row, coloumn)->text().toFloat();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->maxVoltage = mainTableWidget->item(row, column)->text().toFloat();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
 				break;
 
 			case (int)AutoColoumnName::NAME:
 				for (int row = 0; row < mainTableWidget->rowCount(); row++)
 					if (needVerify)
 					{
-						if (generateError(row, verifyTableData(coloumn, mainTableWidget->item(row, coloumn))))
-							tableRowPropertiesVector[row]->name = mainTableWidget->item(row, coloumn)->text();
+						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
+							tableRowPropertiesVector[row]->name = mainTableWidget->item(row, column)->text();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, coloumn) != NULL ? mainTableWidget->item(row, coloumn)->text() : "");
+						tableRowPropertiesVector[row]->name = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text() : "");
 				break;
 
 			case (int)AutoColoumnName::DEL:
@@ -1126,14 +1126,14 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 	return Errors::Configurator::CORRECT;
 }
 
-static Errors::Configurator verifyFileData(FullColoumnName coloumn, QString data)
+static Errors::Configurator verifyFileData(FullColoumnName column, QString data)
 {
 	bool isOk;
 	const char* hexPrefix = "0x";
 	int connector;
 	int direction;
 	int type;
-	switch (coloumn)
+	switch (column)
 	{
 	case FullColoumnName::CONNECTOR:
 		connector = data.toInt(&isOk, 10);

@@ -28,9 +28,9 @@
 #define MAX_VOLTAGE_NOT_SET -1
 #define NAME_NOT_SET		""
 
-static bool verifyData(int coloumn, QString data)
+static bool verifyData(int column, QString data)
 {
-	switch (coloumn)
+	switch (column)
 	{
 	case IND_CONNECTOR_ID:
 		if (false)
@@ -139,14 +139,14 @@ void MainWindow::proccessSelectedFile(QString fileName)
 		{
 			Cable cable;
 			cable.id = id++;
-			for (int coloumn = 0; coloumn < COLOUMN_COUNT && isFileCorrect; coloumn++)
+			for (int column = 0; column < COLOUMN_COUNT && isFileCorrect; column++)
 			{
-				QString currentProperty = dataList[coloumn];
+				QString currentProperty = dataList[column];
 
-				switch (coloumn)
+				switch (column)
 				{
 				case IND_CONNECTOR_ID:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.connector = (ConnectorId)currentProperty.toInt();
 					else
 					{
@@ -156,7 +156,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_PIN:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.pin = currentProperty.toInt();
 					else
 					{
@@ -166,7 +166,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_DIRECTION:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.direction = currentProperty.toInt();
 					else
 					{
@@ -176,7 +176,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_TYPE:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.type = currentProperty.toInt();
 					else
 					{
@@ -186,7 +186,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_CAN_ID:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.canId = currentProperty.toInt(nullptr, 16);
 					else
 					{
@@ -196,7 +196,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_BIT:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.bit = currentProperty.toInt();
 					else
 					{
@@ -206,7 +206,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_MIN_CURRENT:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.minCurrent = currentProperty.toDouble();
 					else
 					{
@@ -216,7 +216,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_MAX_CURRENT:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.maxCurrent = currentProperty.toDouble();
 					else
 					{
@@ -226,7 +226,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_MIN_VOLTAGE:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.minVoltage = currentProperty.toDouble();
 					else
 					{
@@ -236,7 +236,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_MAX_VOLTAGE:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.maxVoltage = currentProperty.toDouble();
 					else
 					{
@@ -246,7 +246,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_NAME:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.name = currentProperty;
 					else
 					{
@@ -256,7 +256,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 					break;
 
 				case IND_COMPONENT:
-					if (verifyData(coloumn, currentProperty))
+					if (verifyData(column, currentProperty))
 						cable.component = currentProperty;
 					else
 					{
