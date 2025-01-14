@@ -1,11 +1,12 @@
 #include "TestWindow.h"
 
-#define COLOUMN_COUNT	7
+#define COLOUMN_COUNT	8
 
 #define COLOUMN_TYPE	3
-#define COLOUMN_STAND	4
-#define COLOUMN_PC		5
-#define COLOUMN_MORE	6
+#define COLOUMN_CHECK	4
+#define COLOUMN_STAND	5
+#define COLOUMN_PC		6
+#define COLOUMN_MORE	7
 
 void TestWindow::initUiInManualTestAutoStand()
 {
@@ -39,6 +40,7 @@ void TestWindow::initUiTableHeaderInManualTestAutoStand()
 	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_AUTOCHECK_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_STAND,		COLOUMN_STAND_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_PC,			COLOUMN_PC_WIDTH);
 	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
@@ -47,6 +49,7 @@ void TestWindow::initUiTableHeaderInManualTestAutoStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PIN,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_NAME,			QHeaderView::Stretch);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_TYPE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CHECK,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_STAND,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PC,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
@@ -78,6 +81,7 @@ void TestWindow::resetTableHeaderLanguageInManualTestAutoStand()
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Тип"));
+		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Проверка"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Стенд"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("ПК"));
 		mainTableHeaderLabels->push_back("");
@@ -91,6 +95,7 @@ void TestWindow::resetTableHeaderLanguageInManualTestAutoStand()
 		mainTableHeaderLabels->push_back("Name");
 		mainTableHeaderLabels->push_back("Direction");
 		mainTableHeaderLabels->push_back("Type");
+		mainTableHeaderLabels->push_back("Check");
 		mainTableHeaderLabels->push_back("Stand");
 		mainTableHeaderLabels->push_back("PC");
 		mainTableHeaderLabels->push_back("");
@@ -144,8 +149,13 @@ void TestWindow::initUiTableRowsInManualTestAutoStand()
 		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
 
+		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
+
+		initAutoCheckButton(currentRowNum, autoCheckCellWidget);
 		initMoreButton(currentRowNum, moreCellWidget);
+
+		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
 	}
 	resetTableTypeLanguageInManualTestAutoStand();

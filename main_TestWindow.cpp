@@ -1541,3 +1541,8 @@ void TestTableRowProperties::on_moreButton_clicked()
 	w.show();
 	moreWindow->exec();
 }
+
+void TestTableRowProperties::on_checkButton_clicked()
+{
+
+}
