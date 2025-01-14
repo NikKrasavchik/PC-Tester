@@ -1232,8 +1232,6 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 	if(isFullTestEnabled)// запускаем следующий тест
 		ProcAutoTest(connector, pin);
 	double t = floatCheck[(int)ConnectorId::A][2]->d3; // Пример доступа
-	// запускаем следующий тест
-	ProcAutoTest(connector, pin);
 }
 
 void TestWindow::msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect)
