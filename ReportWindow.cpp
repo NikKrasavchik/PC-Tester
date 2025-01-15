@@ -38,6 +38,9 @@ void ReportWindow::initUi()
 	initUiColumnSetters();
 	bodyHLayout->addWidget(columnSetterWidget);
 
+	resetUiAdditionalColumns();
+	resetUiFillColumns();
+
 	initUiFooter();
 	mainVLayout->addWidget(footerWidget);
 }
@@ -45,10 +48,7 @@ void ReportWindow::initUi()
 void ReportWindow::initUiTable()
 {
 	initUiGenerateTable();
-
 	initUiSetValueTable();
-
-	connect(mainTableWidget, &QTableWidget::cellChanged, this, &ReportWindow::on_mainTableWidget_cellChanged);
 }
 
 void ReportWindow::initUiGenerateTable()
@@ -56,144 +56,241 @@ void ReportWindow::initUiGenerateTable()
 	mainTableWidget = new QTableWidget(mainWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
 	mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
-	mainTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+	//mainTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
 	mainTableWidget->horizontalHeader()->hide();
 	mainTableWidget->verticalHeader()->hide();
-	mainTableWidget->setRowCount(4);
-	mainTableWidget->setColumnCount(11);
+	mainTableWidget->setRowCount(3);
+	mainTableWidget->setColumnCount(9);
 
 	QFont font = QFont();
 	font.setBold(true);
 	font.setPointSizeF(10);
 	// Pad
-	mainTableWidget->setSpan(CEll_PAD_TABLE, 3, 1);
+	mainTableWidget->setSpan(CEll_PAD_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_PAD_TABLE), "");
 	mainTableWidget->item(CEll_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(CEll_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(0, 0)->setFont(font);
 	// Pin
-	mainTableWidget->setSpan(CELL_PIN_TABLE, 3, 1);
+	mainTableWidget->setSpan(CELL_PIN_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PIN_TABLE), "");
 	mainTableWidget->item(CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_PIN_TABLE)->setFont(font);
 	// Id
-	mainTableWidget->setSpan(CELL_ID_TABLE, 3, 1);
+	mainTableWidget->setSpan(CELL_ID_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_ID_TABLE), "");
 	mainTableWidget->item(CELL_ID_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(CELL_ID_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_ID_TABLE)->setFont(font);
 	// Type
-	mainTableWidget->setSpan(CELL_TYPE_TABLE, 3, 1);
+	mainTableWidget->setSpan(CELL_TYPE_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TYPE_TABLE), "");
 	mainTableWidget->item(CELL_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(CELL_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_TYPE_TABLE)->setFont(font);
 	// Name
-	mainTableWidget->setSpan(CELL_NAME_TABLE, 3, 1);
+	mainTableWidget->setSpan(CELL_NAME_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_NAME_TABLE), "");
 	mainTableWidget->item(CELL_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(CELL_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_NAME_TABLE)->setFont(font);
-	// Measured value
-	mainTableWidget->setSpan(CELL_MEASURED_VALUE_TABLE, 2, 2);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_MEASURED_VALUE_TABLE), "");
-	mainTableWidget->item(CELL_MEASURED_VALUE_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_MEASURED_VALUE_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_MEASURED_VALUE_TABLE)->setFont(font);
-	// Measured value U
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_MEASURED_VALUE_U_TABLE), "");
-	mainTableWidget->item(CELL_MEASURED_VALUE_U_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_MEASURED_VALUE_U_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_MEASURED_VALUE_U_TABLE)->setFont(font);
-	// Measured value I
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_MEASURED_VALUE_I_TABLE), "");
-	mainTableWidget->item(CELL_MEASURED_VALUE_I_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_MEASURED_VALUE_I_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_MEASURED_VALUE_I_TABLE)->setFont(font);
 	// Progs
-	mainTableWidget->setSpan(CELL_PROGS_TABLE, 1, 4);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PROGS_TABLE), "");
-	mainTableWidget->item(CELL_PROGS_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PROGS_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PROGS_TABLE)->setFont(font);
+	mainTableWidget->setSpan(CELL_TRESHHOLDERS_TABLE, SPAN_COUNT_1, SPAN_COUNT_4);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TRESHHOLDERS_TABLE), "");
+	mainTableWidget->item(CELL_TRESHHOLDERS_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_TRESHHOLDERS_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_TRESHHOLDERS_TABLE)->setFont(font);
 	// Progs U
-	mainTableWidget->setSpan(CELL_PROGS_U_TABLE, 1, 2);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PROGS_U_TABLE), "");
-	mainTableWidget->item(CELL_PROGS_U_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PROGS_U_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PROGS_U_TABLE)->setFont(font);
+	mainTableWidget->setSpan(CELL_TRESHHOLDERS_U_TABLE, SPAN_COUNT_1, SPAN_COUNT_2);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TRESHHOLDERS_U_TABLE), "");
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_TABLE)->setFont(font);
 	// Progs I
-	mainTableWidget->setSpan(CELL_PROGS_I_TABLE, 1, 2);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PROGS_I_TABLE), "");
-	mainTableWidget->item(CELL_PROGS_I_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PROGS_I_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PROGS_I_TABLE)->setFont(font);
+	mainTableWidget->setSpan(CELL_TRESHHOLDERS_I_TABLE, SPAN_COUNT_1, SPAN_COUNT_2);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TRESHHOLDERS_I_TABLE), "");
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_TABLE)->setFont(font);
 	// Progs U min
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PROGS_U_MIN_TABLE), "");
-	mainTableWidget->item(CELL_PROGS_U_MIN_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PROGS_U_MIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PROGS_U_MIN_TABLE)->setFont(font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TRESHHOLDERS_U_MIN_TABLE), "");
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_MIN_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_MIN_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_MIN_TABLE)->setFont(font);
 	// Progs U max
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PROGS_U_MAX_TABLE), "");
-	mainTableWidget->item(CELL_PROGS_U_MAX_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PROGS_U_MAX_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PROGS_U_MAX_TABLE)->setFont(font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TRESHHOLDERS_U_MAX_TABLE), "");
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setFont(font);
 	// Progs I min
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PROGS_I_MIN_TABLE), "");
-	mainTableWidget->item(CELL_PROGS_I_MIN_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PROGS_I_MIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PROGS_I_MIN_TABLE)->setFont(font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TRESHHOLDERS_I_MIN_TABLE), "");
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setFont(font);
 	// Progs I max
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PROGS_I_MAX_TABLE), "");
-	mainTableWidget->item(CELL_PROGS_I_MAX_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PROGS_I_MAX_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PROGS_I_MAX_TABLE)->setFont(font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TRESHHOLDERS_I_MAX_TABLE), "");
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setFont(font);
 
-	mainTableWidget->setColumnWidth(0, 75);
-	mainTableWidget->setColumnWidth(1, 75);
-	mainTableWidget->setColumnWidth(2, 75);
-	mainTableWidget->setColumnWidth(3, 75);
-	mainTableWidget->setColumnWidth(4, 75);
-	mainTableWidget->setColumnWidth(5, 50);
-	mainTableWidget->setColumnWidth(6, 50);
-	mainTableWidget->setColumnWidth(7, 50);
-	mainTableWidget->setColumnWidth(8, 50);
-	mainTableWidget->setColumnWidth(9, 50);
-	mainTableWidget->setColumnWidth(10, 50);
+	mainTableWidget->setColumnWidth(COLUMN_ID, 75);
+	mainTableWidget->setColumnWidth(COLUMN_PAD, 75);
+	mainTableWidget->setColumnWidth(COLUMN_PIN, 75);
+	mainTableWidget->setColumnWidth(COLUMN_TYPE, 75);
+	mainTableWidget->setColumnWidth(COLUMN_NAME, 75);
+	mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MIN, 50);
+	mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MAX, 50);
+	mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MIN, 50);
+	mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MAX, 50);
 
 	mainTableWidget->setRowHeight(0, 40);
 	mainTableWidget->setRowHeight(1, 40);
 	mainTableWidget->setRowHeight(2, 40);
 
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_ID, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PAD, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PIN, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME, QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS, QHeaderView::Fixed);
 
 	mainTableWidget->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
 	mainTableWidget->verticalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
 	mainTableWidget->verticalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-	mainTableWidget->verticalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+}
 
-	for (int column = 0; column < mainTableWidget->columnCount(); column++)
+void ReportWindow::initUiSetValueTable()
+{
+	QString typeTmp;
+	switch (viewWindowState->appLanguage)
 	{
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(mainTableWidget->rowCount() - 1, column), "");
-		mainTableWidget->item(mainTableWidget->rowCount() - 1, column)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(mainTableWidget->rowCount() - 1, column)->setFont(font);
+	case RUSSIAN_LANG:
+		mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
+		mainTableWidget->item(CEll_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
+		mainTableWidget->item(CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
+		mainTableWidget->item(CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
+		mainTableWidget->item(CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
+		mainTableWidget->item(CELL_TRESHHOLDERS_TABLE)->setText(QString::fromLocal8Bit("Пороги"));
+		mainTableWidget->item(CELL_TRESHHOLDERS_U_TABLE)->setText(QString::fromLocal8Bit("U, В"));
+		mainTableWidget->item(CELL_TRESHHOLDERS_I_TABLE)->setText(QString::fromLocal8Bit("I, А"));
+		mainTableWidget->item(CELL_TRESHHOLDERS_U_MIN_TABLE)->setText(QString::fromLocal8Bit("Мин"));
+		mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setText(QString::fromLocal8Bit("Макс"));
+		mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setText(QString::fromLocal8Bit("Мин"));
+		mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setText(QString::fromLocal8Bit("Макс"));
+		break;
+
+	case ENGLISH_LANG:
+		mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
+		mainTableWidget->item(CEll_PAD_TABLE)->setText("Pad");
+		mainTableWidget->item(CELL_PIN_TABLE)->setText("Pin");
+		mainTableWidget->item(CELL_TYPE_TABLE)->setText("Type");
+		mainTableWidget->item(CELL_NAME_TABLE)->setText("Name");
+		mainTableWidget->item(CELL_TRESHHOLDERS_TABLE)->setText("TRESHHOLDERS");
+		mainTableWidget->item(CELL_TRESHHOLDERS_U_TABLE)->setText("U, V");
+		mainTableWidget->item(CELL_TRESHHOLDERS_I_TABLE)->setText("I, A");
+		mainTableWidget->item(CELL_TRESHHOLDERS_U_MIN_TABLE)->setText("Min");
+		mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setText("Max");
+		mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setText("Min");
+		mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setText("Max");
+		break;
 	}
 
-	mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_ID_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_ID_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_MEASURED_VALUE_U_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_MEASURED_VALUE_I_TABLE)->setFlags(Qt::ItemIsSelectable);
+	for (int row = ROW_3; row < cables.size() + ROW_3; row++)
+	{
+		mainTableWidget->insertRow(mainTableWidget->rowCount());
+		for (int column = 0; column < CLEAR_COLUMN_COUNT; column++)
+		{
+			QAbstractItemModel* model = mainTableWidget->model();
+			switch (column)
+			{
+			case COLUMN_ID:
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].id));
+				break;
+
+			case COLUMN_PAD:
+				model->setData(model->index(row, column), QString::number((int)cables[row - ROW_3].connector));
+				break;
+
+			case COLUMN_PIN:
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].pin));
+				break;
+
+			case COLUMN_TYPE:
+				switch (viewWindowState->appLanguage)
+				{
+				case RUSSIAN_LANG:
+					switch (cables[row - ROW_3].type)
+					{
+					case TYPE_NOT_SET:
+						model->setData(model->index(row, column), QString("No set"));
+						break;
+					case TYPE_DIGITAL:
+						model->setData(model->index(row, column), QString("Digital"));
+						break;
+					case TYPE_ANALOG:
+						model->setData(model->index(row, column), QString("Analog"));
+						break;
+					case TYPE_HALL:
+						model->setData(model->index(row, column), QString("HALL"));
+						break;
+					case TYPE_PWM:
+						model->setData(model->index(row, column), QString("PWM"));
+						break;
+					case TYPE_VNH:
+						model->setData(model->index(row, column), QString("VNH"));
+						break;
+					}
+					break;
+				case ENGLISH_LANG:
+					switch (cables[row - ROW_3].type)
+					{
+					case TYPE_NOT_SET:
+						model->setData(model->index(row, column), QString::fromLocal8Bit("Не указан"));
+						break;
+					case TYPE_DIGITAL:
+						model->setData(model->index(row, column), QString::fromLocal8Bit("Цифровой"));
+						break;
+					case TYPE_ANALOG:
+						model->setData(model->index(row, column), QString::fromLocal8Bit("Аналоговый"));
+						break;
+					case TYPE_HALL:
+						model->setData(model->index(row, column), QString("HALL"));
+						break;
+					case TYPE_PWM:
+						model->setData(model->index(row, column), QString::fromLocal8Bit("ШИМ"));
+						break;
+					case TYPE_VNH:
+						model->setData(model->index(row, column), QString::fromLocal8Bit("VNH"));
+						break;
+						break;
+					}
+					break;
+				}
+				break;
+
+			case COLUMN_NAME:
+				model->setData(model->index(row, column), QString(cables[row - ROW_3].name));
+				break;
+
+			case COLUMN_TRESHHOLDERS_U_MIN:
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].minVoltage));
+				break;
+
+			case COLUMN_TRESHHOLDERS_U_MAX:
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].maxVoltage));
+				break;
+
+			case COLUMN_TRESHHOLDERS_I_MIN:
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].minCurrent));
+				break;
+
+			case COLUMN_TRESHHOLDERS_I_MAX:
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].maxCurrent));
+				break;
+			}
+		}
+	}
 }
 
 void ReportWindow::fillColumnsSetters()
@@ -271,14 +368,32 @@ void ReportWindow::initUiColumnSetters()
 
 	if (activeColumn.measured)
 	{
+		measuredHLayout = new QHBoxLayout(columnSetterWidget);
+		measuredHLayout->setObjectName("measuredHLayout");
+		columnSetterVLayout->addLayout(measuredHLayout);
+
+		measuredLabel = new QLabel(columnSetterWidget);
+		measuredLabel->setObjectName("measuredLabel");
+		measuredLabel->setText("Measured column"); // move to reset func
+		measuredHLayout->addWidget(measuredLabel);
+
 		measuredCheckBox = new QCheckBox(columnSetterWidget);
 		measuredCheckBox->setObjectName("measuredCheckBox");
 		measuredCheckBox->setChecked(true);
-		columnSetterVLayout->addWidget(measuredCheckBox, Qt::AlignRight);
+		measuredHLayout->addWidget(measuredCheckBox, Qt::AlignRight);
 	}
 
 	if (activeColumn.checkManualStand)
 	{
+		checkManualStandHLayout = new QHBoxLayout(columnSetterWidget);
+		checkManualStandHLayout->setObjectName("checkManualStandHLayout");
+		columnSetterVLayout->addLayout(checkManualStandHLayout);
+
+		checkManualStandLabel = new QLabel(columnSetterWidget);
+		checkManualStandLabel->setObjectName("checkManualStandLabel");
+		checkManualStandLabel->setText("Manual stand check column"); // move to reset func
+		checkManualStandHLayout->addWidget(checkManualStandLabel);
+
 		checkManualStandCheckBox = new QCheckBox(columnSetterWidget);
 		checkManualStandCheckBox->setObjectName("checkManualStandCheckBox");
 		checkManualStandCheckBox->setChecked(false);
@@ -287,6 +402,15 @@ void ReportWindow::initUiColumnSetters()
 
 	if (activeColumn.checkPCAutoStand)
 	{
+		checkPCAutoStandHLayout = new QHBoxLayout(columnSetterWidget);
+		checkPCAutoStandHLayout->setObjectName("checkPCAutoStandHLayout");
+		columnSetterVLayout->addLayout(checkPCAutoStandHLayout);
+
+		checkPCAutoStandLabel = new QLabel(columnSetterWidget);
+		checkPCAutoStandLabel->setObjectName("checkPCAutoStandLabel");
+		checkPCAutoStandLabel->setText("PC check in auto stand column"); // move to reset func
+		checkPCAutoStandHLayout->addWidget(checkPCAutoStandLabel);
+
 		checkPCAutoStandCheckBox = new QCheckBox(columnSetterWidget);
 		checkPCAutoStandCheckBox->setObjectName("checkPCAutoStandCheckBox");
 		checkPCAutoStandCheckBox->setChecked(false);
@@ -295,6 +419,15 @@ void ReportWindow::initUiColumnSetters()
 
 	if (activeColumn.checkStandAutoStand)
 	{
+		checkStandAutoStandHLayout = new QHBoxLayout(columnSetterWidget);
+		checkStandAutoStandHLayout->setObjectName("checkStandAutoStandHLayout");
+		columnSetterVLayout->addLayout(checkStandAutoStandHLayout);
+
+		checkStandAutoStandLabel = new QLabel(columnSetterWidget);
+		checkStandAutoStandLabel->setObjectName("checkStandAutoStandLabel");
+		checkStandAutoStandLabel->setText("Stand check in auto stand column"); // move to reset func
+		checkStandAutoStandHLayout->addWidget(checkStandAutoStandLabel);
+
 		checkStandAutoStandCheckBox = new QCheckBox(columnSetterWidget);
 		checkStandAutoStandCheckBox->setObjectName("checkStandAutoStandCheckBox");
 		checkStandAutoStandCheckBox->setChecked(false);
@@ -302,129 +435,177 @@ void ReportWindow::initUiColumnSetters()
 	}
 }
 
-void ReportWindow::initUiSetValueTable()
+void ReportWindow::resetUiAdditionalColumns()
 {
-	//QString typeTmp;
-	//switch (viewWindowState->appLanguage)
-	//{
-	//case RUSSIAN_LANG:
-	//	mainTableWidget->item(CEll_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
-	//	mainTableWidget->item(CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
-	//	mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
-	//	mainTableWidget->item(CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
-	//	mainTableWidget->item(CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
-	//	mainTableWidget->item(CELL_MEASURED_VALUE_TABLE)->setText(QString::fromLocal8Bit("Измеренное\nзначенние"));
-	//	mainTableWidget->item(CELL_MEASURED_VALUE_U_TABLE)->setText(QString::fromLocal8Bit("U, В"));
-	//	mainTableWidget->item(CELL_MEASURED_VALUE_I_TABLE)->setText(QString::fromLocal8Bit("I, А"));
-	//	mainTableWidget->item(CELL_PROGS_TABLE)->setText(QString::fromLocal8Bit("Пороги"));
-	//	mainTableWidget->item(CELL_PROGS_U_TABLE)->setText(QString::fromLocal8Bit("U, В"));
-	//	mainTableWidget->item(CELL_PROGS_I_TABLE)->setText(QString::fromLocal8Bit("I, А"));
-	//	mainTableWidget->item(CELL_PROGS_U_MIN_TABLE)->setText(QString::fromLocal8Bit("Мин."));
-	//	mainTableWidget->item(CELL_PROGS_U_MAX_TABLE)->setText(QString::fromLocal8Bit("Макс."));
-	//	mainTableWidget->item(CELL_PROGS_I_MIN_TABLE)->setText(QString::fromLocal8Bit("Мин."));
-	//	mainTableWidget->item(CELL_PROGS_I_MAX_TABLE)->setText(QString::fromLocal8Bit("Макс."));
+	while (mainTableWidget->columnCount() != CLEAR_COLUMN_COUNT)
+		mainTableWidget->removeColumn(mainTableWidget->columnCount() - 1);
 
-	//	switch (cable.type)
-	//	{
-	//	case TYPE_NOT_SET:
-	//		typeTmp = QString::fromLocal8Bit("Не указан");
-	//		break;
-	//	case TYPE_DIGITAL:
-	//		typeTmp = QString::fromLocal8Bit("Цифровой");
-	//		break;
-	//	case TYPE_ANALOG:
-	//		typeTmp = QString::fromLocal8Bit("Аналоговый");
-	//		break;
-	//	case TYPE_HALL:
-	//		typeTmp = "HALL";
-	//		break;
-	//	case TYPE_PWM:
-	//		typeTmp = "PWM";
-	//		break;
-	//	case TYPE_VNH:
-	//		typeTmp = "VNH";
-	//		break;
+	QFont font = QFont();
+	font.setBold(true);
+	font.setPointSizeF(10);
 
-	//	}
-	//	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_TYPE_TABLE), typeTmp);	
-	//	break;
+	if (measuredCheckBox->isChecked())
+	{
+		int currentColumn = mainTableWidget->columnCount();
+		int currentColumn_U = mainTableWidget->columnCount();
+		int currentColumn_I = mainTableWidget->columnCount() + 1;
 
-	//case ENGLISH_LANG:
-	//	mainTableWidget->item(CEll_PAD_TABLE)->setText("Pad");
-	//	mainTableWidget->item(CELL_PIN_TABLE)->setText("Pin");
-	//	mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
-	//	mainTableWidget->item(CELL_TYPE_TABLE)->setText("Type");
-	//	mainTableWidget->item(CELL_NAME_TABLE)->setText("Name");
-	//	mainTableWidget->item(CELL_MEASURED_VALUE_TABLE)->setText("Measured\nvalue");
-	//	mainTableWidget->item(CELL_MEASURED_VALUE_U_TABLE)->setText("U, V");
-	//	mainTableWidget->item(CELL_MEASURED_VALUE_I_TABLE)->setText("I, A");
-	//	mainTableWidget->item(CELL_PROGS_TABLE)->setText("Progs");
-	//	mainTableWidget->item(CELL_PROGS_U_TABLE)->setText("U, V");
-	//	mainTableWidget->item(CELL_PROGS_I_TABLE)->setText("I, A");
-	//	mainTableWidget->item(CELL_PROGS_U_MIN_TABLE)->setText("Min.");
-	//	mainTableWidget->item(CELL_PROGS_U_MAX_TABLE)->setText("Max.");
-	//	mainTableWidget->item(CELL_PROGS_I_MIN_TABLE)->setText("Min.");
-	//	mainTableWidget->item(CELL_PROGS_I_MAX_TABLE)->setText("Max.");
+		mainTableWidget->insertColumn(currentColumn_U);
+		mainTableWidget->insertColumn(currentColumn_I);
+
+		// Measured value
+		mainTableWidget->setSpan(ROW_0, currentColumn, SPAN_COUNT_2, SPAN_COUNT_2);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_0, currentColumn), "");
+		mainTableWidget->item(ROW_0, currentColumn)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(ROW_0, currentColumn)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(ROW_0, currentColumn)->setFont(font);
+		// Measured value U
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_2, currentColumn_U), "U, V");
+		mainTableWidget->item(ROW_2, currentColumn_U)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(ROW_2, currentColumn_U)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(ROW_2, currentColumn_U)->setFont(font);
+		// Measured value I
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_2, currentColumn_I), "I, A");
+		mainTableWidget->item(ROW_2, currentColumn_I)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(ROW_2, currentColumn_I)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(ROW_2, currentColumn_I)->setFont(font);
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString::fromLocal8Bit("Измеренное значение"));
+			break;
+
+		case ENGLISH_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString("Measured value"));
+			break;
+		}
+	}
+
+	if (checkManualStandCheckBox->isChecked())
+	{
+		int currentColumn = mainTableWidget->columnCount();
+		mainTableWidget->insertColumn(mainTableWidget->columnCount());
+		mainTableWidget->setSpan(ROW_0, currentColumn, SPAN_COUNT_3, SPAN_COUNT_1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_0, currentColumn), "");
+		mainTableWidget->item(ROW_0, currentColumn)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(ROW_0, currentColumn)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(ROW_0, currentColumn)->setFont(font);
+		mainTableWidget->setColumnWidth(currentColumn, 75);
 
 
-	//	switch (cable.type)
-	//	{
-	//	case TYPE_NOT_SET:
-	//		typeTmp = "No set";
-	//		break;
-	//	case TYPE_DIGITAL:
-	//		typeTmp = "Digital";
-	//		break;
-	//	case TYPE_ANALOG:
-	//		typeTmp = "Analog";
-	//		break;
-	//	case TYPE_HALL:
-	//		typeTmp = "HALL";
-	//		break;
-	//	case TYPE_PWM:
-	//		typeTmp = "PWM";
-	//		break;
-	//	case TYPE_VNH:
-	//		typeTmp = "VNH";
-	//		break;
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString::fromLocal8Bit("Статус ручной проверки"));
+			break;
 
-	//	}
-	//	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_TYPE_TABLE), typeTmp);
-	//	break;
-	//}
+		case ENGLISH_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString("Manual status"));
+			break;
+		}
+	}
 
-	//QString padTmp;
-	//switch (cable.connector)
-	//{
-	//case ConnectorId::A:
-	//	padTmp = "A";
-	//	break;
-	//case ConnectorId::B:
-	//	padTmp = "B";
-	//	break;
-	//case ConnectorId::C:
-	//	padTmp = "C";
-	//	break;
-	//case ConnectorId::D:
-	//	padTmp = "D";
-	//	break;
-	//default:
-	//	padTmp = "Error";
-	//	break;
-	//}
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), padTmp);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), cable.pin);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_ID_TABLE), cable.id);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), cable.name);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), measured.voltage);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), measured.current);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), cable.minVoltage);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), cable.maxVoltage);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), cable.minCurrent);
-	//mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MAX_TABLE), cable.maxCurrent);
+	if (checkPCAutoStandCheckBox->isChecked())
+	{
+		int currentColumn = mainTableWidget->columnCount();
+		mainTableWidget->insertColumn(mainTableWidget->columnCount());
+		mainTableWidget->setSpan(ROW_0, currentColumn, SPAN_COUNT_3, SPAN_COUNT_1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_0, currentColumn), "");
+		mainTableWidget->item(ROW_0, currentColumn)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(ROW_0, currentColumn)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(ROW_0, currentColumn)->setFont(font);
+		mainTableWidget->setColumnWidth(currentColumn, 75);
 
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString::fromLocal8Bit("Статус проверки ПК"));
+			break;
+
+		case ENGLISH_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString("PC status"));
+			break;
+		}
+	}
+
+	if (checkStandAutoStandCheckBox->isChecked())
+	{
+		int currentColumn = mainTableWidget->columnCount();
+		mainTableWidget->insertColumn(mainTableWidget->columnCount());
+		mainTableWidget->setSpan(ROW_0, currentColumn, SPAN_COUNT_3, SPAN_COUNT_1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_0, currentColumn), "");
+		mainTableWidget->item(ROW_0, currentColumn)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(ROW_0, currentColumn)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(ROW_0, currentColumn)->setFont(font);
+		mainTableWidget->setColumnWidth(currentColumn, 75);
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString::fromLocal8Bit("Статус проверки стенда"));
+			break;
+
+		case ENGLISH_LANG:
+			mainTableWidget->item(ROW_0, currentColumn)->setText(QString("Stand status"));
+			break;
+		}
+	}
 }
 
+void ReportWindow::resetUiFillColumns()
+{
+	int measuredAdditionalInd = -1;
+	int checkManualStandAdditionalInd = -1;
+	int checkPCAutoStandAdditionalInd = -1;
+	int checkStandAutoStandAdditionalInd = -1;
+
+	int currentAdditionalInd = 9;
+	if (measuredCheckBox->isChecked())
+	{
+		measuredAdditionalInd = currentAdditionalInd;
+		currentAdditionalInd += 2;
+	}
+	if (checkManualStandCheckBox->isChecked())
+	{
+		checkManualStandAdditionalInd = currentAdditionalInd;
+		currentAdditionalInd++;
+	}
+	if (checkPCAutoStandCheckBox->isChecked())
+	{
+		checkPCAutoStandAdditionalInd = currentAdditionalInd;
+		currentAdditionalInd++;
+	}
+	if (checkStandAutoStandCheckBox->isChecked())
+	{
+		checkStandAutoStandAdditionalInd = currentAdditionalInd;
+		currentAdditionalInd++;
+	}
+
+	QAbstractItemModel* model = mainTableWidget->model();
+	for (int row = ROW_3; row < cables.size() + ROW_3; row++)
+		for (int column = CLEAR_COLUMN_COUNT - 1; column < mainTableWidget->columnCount(); column++)
+		{
+			if (measuredAdditionalInd != -1 && measuredAdditionalInd == column)
+			{
+				model->setData(model->index(row, column), 1);
+				model->setData(model->index(row, column + 1), 1);
+				column++;
+			}
+			if (checkManualStandAdditionalInd != -1 && checkManualStandAdditionalInd == column)
+			{
+				model->setData(model->index(row, column), 2);
+			}
+			if (checkPCAutoStandAdditionalInd != -1 && checkPCAutoStandAdditionalInd == column)
+			{
+				model->setData(model->index(row, column), 3);
+			}
+			if (checkStandAutoStandAdditionalInd != -1 && checkStandAutoStandAdditionalInd == column)
+			{
+				model->setData(model->index(row, column), "4");
+			}
+		}
+}
 
 void ReportWindow::initUiFooter()
 {
@@ -460,13 +641,28 @@ void ReportWindow::resizeEvent(QResizeEvent* event1)
 	mainWidget->resize(geometry().width() - (LEFT_PADDING_MAIN_WIDGET * 2), geometry().height() - (UP_PADDING_MAIN_WIDGET * 2));
 }
 
-void ReportWindow::on_mainTableWidget_cellChanged(int row, int column)
+void ReportWindow::on_measuredCheckBox_stateChanged(int state)
 {
-	//if (row == 3 && column >= 7)
-	//{
-	//	saveChangesButton->show();
-	//	changedThresholds[column - 7] = mainTableWidget->item(row, column)->text().toFloat();
-	//}
+	resetUiAdditionalColumns();
+	resetUiFillColumns();
+}
+
+void ReportWindow::on_checkManualStandCheckBox_stateChanged(int state)
+{
+	resetUiAdditionalColumns();
+	resetUiFillColumns();
+}
+
+void ReportWindow::on_checkPCAutoStandCheckBox_stateChanged(int state)
+{
+	resetUiAdditionalColumns();
+	resetUiFillColumns();
+}
+
+void ReportWindow::on_checkStandAutoStandCheckBox_stateChanged(int state)
+{
+	resetUiAdditionalColumns();
+	resetUiFillColumns();
 }
 
 void ReportWindow::on_saveChangesButton_clicked()

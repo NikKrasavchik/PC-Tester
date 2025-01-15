@@ -56,7 +56,7 @@
 #define TYPE_DIGITAL_RU			QString::fromLocal8Bit("Öטפנמגמי")
 #define TYPE_DIGITAL_EN			QString("Digital")
 
-#define TYPE_PWM_RU				QString::fromLocal8Bit("Øטל")
+#define TYPE_PWM_RU				QString::fromLocal8Bit("ØÈÌ")
 #define TYPE_PWM_EN				QString("PWM")
 
 #define TYPE_VNH_RU				QString("VNH")

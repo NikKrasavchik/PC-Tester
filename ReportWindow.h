@@ -25,32 +25,51 @@
 #define UP_PADDING_MAIN_WIDGET			10
 #define COLUMN_SETTER_WIDTH				150
 
-#define CEll_PAD_TABLE					0, 0
-#define CELL_PIN_TABLE					0, 1
-#define CELL_ID_TABLE					0, 2
-#define CELL_TYPE_TABLE					0, 3
-#define CELL_NAME_TABLE					0, 4
-#define CELL_MEASURED_VALUE_TABLE		0, 5
-#define CELL_MEASURED_VALUE_U_TABLE		2, 5
-#define CELL_MEASURED_VALUE_I_TABLE		2, 6
-#define CELL_PROGS_TABLE				0, 7
-#define CELL_PROGS_U_TABLE				1, 7
-#define CELL_PROGS_I_TABLE				1, 9
-#define CELL_PROGS_U_MIN_TABLE			2, 7
-#define CELL_PROGS_U_MAX_TABLE			2, 8
-#define CELL_PROGS_I_MIN_TABLE			2, 9
-#define CELL_PROGS_I_MAX_TABLE			2, 10
-#define CEll_VALUE_PAD_TABLE					3, 0
-#define CELL_VALUE_PIN_TABLE					3, 1
-#define CELL_VALUE_ID_TABLE						3, 2
-#define CELL_VALUE_TYPE_TABLE					3, 3
-#define CELL_VALUE_NAME_TABLE					3, 4
-#define CELL_VALUE_MEASURED_VALUE_U_TABLE		3, 5
-#define CELL_VALUE_MEASURED_VALUE_I_TABLE		3, 6
-#define CELL_VALUE_PROGS_U_MIN_TABLE			3, 7
-#define CELL_VALUE_PROGS_U_MAX_TABLE			3, 8
-#define CELL_VALUE_PROGS_I_MIN_TABLE			3, 9
-#define CELL_VALUE_PROGS_I_MAX_TABLE			3, 10
+#define SPAN_COUNT_1	1
+#define SPAN_COUNT_2	2
+#define SPAN_COUNT_3	3
+#define SPAN_COUNT_4	4
+
+#define ROW_0			0
+#define ROW_1			1
+#define ROW_2			2
+#define ROW_3			3
+
+#define COLUMN_ID					0
+#define COLUMN_PAD					1
+#define COLUMN_PIN					2
+#define COLUMN_TYPE					3
+#define COLUMN_NAME					4
+#define COLUMN_TRESHHOLDERS			5
+#define COLUMN_TRESHHOLDERS_U		5
+#define COLUMN_TRESHHOLDERS_U_MIN	5
+#define COLUMN_TRESHHOLDERS_U_MAX	6
+#define COLUMN_TRESHHOLDERS_I		7
+#define COLUMN_TRESHHOLDERS_I_MIN	7
+#define COLUMN_TRESHHOLDERS_I_MAX	8
+
+#define CEll_PAD_TABLE							ROW_0, COLUMN_ID
+#define CELL_PIN_TABLE							ROW_0, COLUMN_PAD
+#define CELL_ID_TABLE							ROW_0, COLUMN_PIN
+#define CELL_TYPE_TABLE							ROW_0, COLUMN_TYPE
+#define CELL_NAME_TABLE							ROW_0, COLUMN_NAME
+#define CELL_TRESHHOLDERS_TABLE					ROW_0, COLUMN_TRESHHOLDERS
+#define CELL_TRESHHOLDERS_U_TABLE				ROW_1, COLUMN_TRESHHOLDERS_U
+#define CELL_TRESHHOLDERS_I_TABLE				ROW_1, COLUMN_TRESHHOLDERS_I
+#define CELL_TRESHHOLDERS_U_MIN_TABLE			ROW_2, COLUMN_TRESHHOLDERS_U_MIN
+#define CELL_TRESHHOLDERS_U_MAX_TABLE			ROW_2, COLUMN_TRESHHOLDERS_U_MAX
+#define CELL_TRESHHOLDERS_I_MIN_TABLE			ROW_2, COLUMN_TRESHHOLDERS_I_MIN
+#define CELL_TRESHHOLDERS_I_MAX_TABLE			ROW_2, COLUMN_TRESHHOLDERS_I_MAX
+
+#define CLEAR_COLUMN_COUNT		9
+
+#define SET_INVISIBLE			0
+#define SET_VISIBLE				1
+
+#define MEASURED_COLUMN			0
+#define CHECK_MANUAL_STAND		1
+#define CHECK_PC_AUTO_STAND		2
+#define CHECK_STAND_AUTO_STAND	3
 
 struct ActiveColumn
 {
@@ -75,6 +94,8 @@ private:
 	void initUiSetValueTable();
 	void initUiColumnSetters();
 	void initUiFooter();
+	void resetUiAdditionalColumns();
+	void resetUiFillColumns();
 	
 	void fillColumnsSetters();
 
@@ -90,12 +111,20 @@ private:
 	QVBoxLayout* columnSetterVLayout;
 	QHBoxLayout* bodyHLayout;
 	QHBoxLayout* bottomHLayout;
+	QHBoxLayout* measuredHLayout;
+	QHBoxLayout* checkManualStandHLayout;
+	QHBoxLayout* checkPCAutoStandHLayout;
+	QHBoxLayout* checkStandAutoStandHLayout;
 	QTableWidget* mainTableWidget;
 	QCheckBox* measuredCheckBox;
 	QCheckBox* checkManualStandCheckBox;
 	QCheckBox* checkPCAutoStandCheckBox;
 	QCheckBox* checkStandAutoStandCheckBox;
 	QSpacerItem* bottomSpacer;
+	QLabel* measuredLabel;
+	QLabel* checkManualStandLabel;
+	QLabel* checkPCAutoStandLabel;
+	QLabel* checkStandAutoStandLabel;
 	QPushButton* saveButton;
 	
 	std::vector<Cable> cables;
@@ -105,8 +134,12 @@ private:
 	ActiveColumn activeColumn;
 
 public slots:
-	void on_mainTableWidget_cellChanged(int row, int column);
 	void on_saveChangesButton_clicked();
 	void on_startTestButton_clicked();
+
+	void on_measuredCheckBox_stateChanged(int state);
+	void on_checkManualStandCheckBox_stateChanged(int state);
+	void on_checkPCAutoStandCheckBox_stateChanged(int state);
+	void on_checkStandAutoStandCheckBox_stateChanged(int state);
 };
 
