@@ -21,25 +21,26 @@
 
 #include <QDebug>
 
-#define COLOUMN_CONNECTOR	0
-#define COLOUMN_PIN			1
-#define COLOUMN_NAME		2
+#define COLUMN_CONNECTOR			0
+#define COLUMN_PIN					1
+#define COLUMN_NAME					2
 
-#define COLOUMN_DIGITAL_HEIGHT	50
-#define COLOUMN_PWM_HEIGHT		128
-#define COLOUMN_VNH_HEIGHT		169
+#define COLUMN_DIGITAL_HEIGHT		50
+#define COLUMN_PWM_HEIGHT			128
+#define COLUMN_VNH_HEIGHT			169
 
-#define COLOUMN_CONNECTOR_WIDTH	70
-#define COLOUMN_PIN_WIDTH		40
-#define COLOUMN_DIRECTION_WIDTH	90
-#define COLOUMN_COMPONENT_WIDTH	80
-#define COLOUMN_TYPE_WIDTH		90
-#define COLOUMN_CHECK_WIDTH		160
-#define COLOUMN_AUTOCHECK_WIDTH	70
-#define COLOUMN_STATUS_WIDTH	60
-#define COLOUMN_STAND_WIDTH		60
-#define COLOUMN_PC_WIDTH		60
-#define COLOUMN_MORE_WIDTH		25
+#define COLUMN_CONNECTOR_WIDTH		70
+#define COLUMN_PIN_WIDTH			40
+#define COLUMN_DIRECTION_WIDTH		90
+#define COLUMN_COMPONENT_WIDTH		80
+#define COLUMN_TYPE_WIDTH			90
+#define COLUMN_CHECK_WIDTH			160
+#define COLUMN_AUTOCHECK_WIDTH		70
+#define COLUMN_STATUS_WIDTH			60
+#define COLUMN_STAND_WIDTH			60
+#define COLUMN_PC_WIDTH				60
+#define COLUMN_MORE_WIDTH			25
+#define COLUMN_MANUAL_CHECK_WIDTH	100
 
 #define BUTTON_NOT_SET			-1
 #define OFF_BUTTON_PRESSED		0
@@ -222,6 +223,8 @@ private:
 	WindowType testType;
 	Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
+	std::vector<QCheckBox*> manualChecks;
+	std::vector<Measured*> measuredValues;
 	QThread* th;
 	Cable *nextCheckCable;
 
@@ -317,6 +320,7 @@ private:
 
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget);
+	void initTableAdditionalManualChecks(int currentRowNum, QWidget* manualChecksWidget);
 	void initAutoCheckButton(int currentRowNum, QWidget* autoChechButtonWidget);
 	void initMoreButton(int currentRowNum, QWidget* moreCellWidget);
 	void setStatusTableButtons(bool statusButton);

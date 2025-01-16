@@ -1,12 +1,12 @@
 #include "TestWindow.h"
 
-#define COLOUMN_COUNT		8
+#define COLUMN_COUNT		8
 
-#define COLOUMN_DIRECTION	3
-#define COLOUMN_TYPE		4
-#define COLOUMN_CHECK		5
-#define COLOUMN_STATUS		6
-#define COLOUMN_MORE		7
+#define COLUMN_DIRECTION	3
+#define COLUMN_TYPE		4
+#define COLUMN_CHECK		5
+#define COLUMN_STATUS		6
+#define COLUMN_MORE		7
 
 void TestWindow::initUiFullTestAutoStand()
 {
@@ -38,36 +38,36 @@ void TestWindow::initUiTableFullTestAutoStand()
 void TestWindow::initUiTableHeaderFullTestAutoStand()
 {
 	mainTableWidget->setRowCount(cableRows.size());
-	mainTableWidget->setColumnCount(COLOUMN_COUNT);
+	mainTableWidget->setColumnCount(COLUMN_COUNT);
 
 	resetTableHeaderLanguageFullTestAutoStand();
 
-	mainTableWidget->setColumnWidth(COLOUMN_CONNECTOR,	COLOUMN_CONNECTOR_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_PIN,		COLOUMN_PIN_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_DIRECTION,	COLOUMN_DIRECTION_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_TYPE,		COLOUMN_TYPE_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_CHECK,		COLOUMN_AUTOCHECK_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_STATUS,		COLOUMN_STATUS_WIDTH);
-	mainTableWidget->setColumnWidth(COLOUMN_MORE,		COLOUMN_MORE_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_CONNECTOR,	COLUMN_CONNECTOR_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_PIN,		COLUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_DIRECTION,	COLUMN_DIRECTION_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_TYPE,		COLUMN_TYPE_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_CHECK,		COLUMN_AUTOCHECK_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_STATUS,		COLUMN_STATUS_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_MORE,		COLUMN_MORE_WIDTH);
 
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CONNECTOR,	QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_PIN,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_NAME,			QHeaderView::Stretch);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_DIRECTION,	QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_TYPE,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_CHECK,		QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_STATUS,		QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLOUMN_MORE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CONNECTOR,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PIN,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME,			QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_DIRECTION,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CHECK,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_STATUS,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_MORE,			QHeaderView::Fixed);
 
 	QTableWidgetItem* protoitem = new QTableWidgetItem();
 	protoitem->setTextAlignment(Qt::AlignCenter);
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
-		mainTableWidget->setItem(row, COLOUMN_CONNECTOR, protoitem->clone());
-		mainTableWidget->setItem(row, COLOUMN_PIN, protoitem->clone());
-		mainTableWidget->setItem(row, COLOUMN_DIRECTION, protoitem->clone());
-		mainTableWidget->setItem(row, COLOUMN_TYPE, protoitem->clone());
-		mainTableWidget->setItem(row, COLOUMN_STATUS, protoitem->clone());
+		mainTableWidget->setItem(row, COLUMN_CONNECTOR, protoitem->clone());
+		mainTableWidget->setItem(row, COLUMN_PIN, protoitem->clone());
+		mainTableWidget->setItem(row, COLUMN_DIRECTION, protoitem->clone());
+		mainTableWidget->setItem(row, COLUMN_TYPE, protoitem->clone());
+		mainTableWidget->setItem(row, COLUMN_STATUS, protoitem->clone());
 	}
 }
 
@@ -120,16 +120,16 @@ void TestWindow::resetTableDirectionLanguageFullTestAutoStand()
 		{
 		case RUSSIAN_LANG:
 			if (cableRows[currentRowNum]->direction == "OUT")
-				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), QString::fromLocal8Bit("Выход"));
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString::fromLocal8Bit("Выход"));
 			else if (cableRows[currentRowNum]->direction == "IN")
-				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), QString::fromLocal8Bit("Вход"));
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString::fromLocal8Bit("Вход"));
 			break;
 
 		case ENGLISH_LANG:
 			if (cableRows[currentRowNum]->direction == "OUT")
-				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), "Out");
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), "Out");
 			else if (cableRows[currentRowNum]->direction == "IN")
-				model->setData(model->index(currentRowNum, COLOUMN_DIRECTION), "In");
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), "In");
 			break;
 		}
 	}
@@ -144,28 +144,28 @@ void TestWindow::resetTableTypeLanguageFullTestAutoStand()
 		{
 		case RUSSIAN_LANG:
 			if (cableRows[currentRowNum]->type == "DIGITAL")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("Цифровой"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Цифровой"));
 			else if (cableRows[currentRowNum]->type == "PWM")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("ШИМ"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("ШИМ"));
 			else if (cableRows[currentRowNum]->type == "VNH")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("VNH"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("VNH"));
 			else if (cableRows[currentRowNum]->type == "ANALOG")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("Аналоговый"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Аналоговый"));
 			else if (cableRows[currentRowNum]->type == "HALL")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), QString::fromLocal8Bit("HALL"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
 			break;
 
 		case ENGLISH_LANG:
 			if (cableRows[currentRowNum]->type == "DIGITAL")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "Digital");
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
 			else if (cableRows[currentRowNum]->type == "PWM")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "PWM");
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
 			else if (cableRows[currentRowNum]->type == "VNH")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "VNH");
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
 			else if (cableRows[currentRowNum]->type == "ANALOG")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "Analog");
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Analog");
 			else if (cableRows[currentRowNum]->type == "HALL")
-				model->setData(model->index(currentRowNum, COLOUMN_TYPE), "HALL");
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
 			break;
 		}
 	}
@@ -178,17 +178,17 @@ void TestWindow::initUiTableRowsFullTestAutoStand()
 	{
 		qDebug() << cableRows[currentRowNum]->connector << cableRows[currentRowNum]->pin << cableRows[currentRowNum]->name << cableRows[currentRowNum]->direction << cableRows[currentRowNum]->type;
 
-		model->setData(model->index(currentRowNum, COLOUMN_CONNECTOR), cableRows[currentRowNum]->connector);
-		model->setData(model->index(currentRowNum, COLOUMN_PIN), cableRows[currentRowNum]->pin);
-		model->setData(model->index(currentRowNum, COLOUMN_NAME), cableRows[currentRowNum]->name);
+		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connector);
+		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
+		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
 
 		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
 
 		initMoreButton(currentRowNum, moreCellWidget);
 
-		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_CHECK, autoCheckCellWidget);
-		mainTableWidget->setCellWidget(currentRowNum, COLOUMN_MORE, moreCellWidget);
+		mainTableWidget->setCellWidget(currentRowNum, COLUMN_CHECK, autoCheckCellWidget);
+		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MORE, moreCellWidget);
 	}
 	resetTableDirectionLanguageFullTestAutoStand();
 	resetTableTypeLanguageFullTestAutoStand();

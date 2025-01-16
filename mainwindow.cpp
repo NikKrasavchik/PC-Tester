@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 
-#define GRID_COLOUMN_0  0
-#define GRID_COLOUMN_1  1
+#define GRID_COLUMN_0  0
+#define GRID_COLUMN_1  1
 #define GRID_ROW_0      0
 #define GRID_ROW_1      1
 
@@ -123,10 +123,10 @@ void MainWindow::initUi()
 	mainGridLayout->setSpacing(0);
 	mainGridLayout->setVerticalSpacing(0);
 
-	mainGridLayout->addWidget(logoLabel, GRID_ROW_0, GRID_COLOUMN_0, Qt::AlignHCenter);
-	mainGridLayout->addLayout(topHLayout, GRID_ROW_0, GRID_COLOUMN_1);
-	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLOUMN_0);
-	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLOUMN_1);
+	mainGridLayout->addWidget(logoLabel, GRID_ROW_0, GRID_COLUMN_0, Qt::AlignHCenter);
+	mainGridLayout->addLayout(topHLayout, GRID_ROW_0, GRID_COLUMN_1);
+	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLUMN_0);
+	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLUMN_1);
 
 	selectedFileStandType = CFG_STAND_NOT_SET;
 	selectedStand = AUTO_STAND;

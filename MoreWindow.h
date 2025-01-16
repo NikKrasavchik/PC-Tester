@@ -21,7 +21,7 @@
 #define PADDING_MAIN_WIDGET				10
 
 #define CELL_ID_TABLE					0,0
-#define CEll_PAD_TABLE					0,1
+#define CELL_PAD_TABLE					0,1
 #define CELL_PIN_TABLE					0,2
 #define CELL_TYPE_TABLE					0,3
 #define CELL_NAME_TABLE					0,4

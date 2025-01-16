@@ -3,7 +3,7 @@
 #define IND_CFG             0
 #define IND_STAND_TYPE      1
 
-#define COLOUMN_COUNT       12
+#define COLUMN_COUNT       12
 #define IND_CONNECTOR_ID    0
 #define IND_PIN             1
 #define IND_DIRECTION       2
@@ -139,7 +139,7 @@ void MainWindow::proccessSelectedFile(QString fileName)
 		{
 			Cable cable;
 			cable.id = id++;
-			for (int column = 0; column < COLOUMN_COUNT && isFileCorrect; column++)
+			for (int column = 0; column < COLUMN_COUNT && isFileCorrect; column++)
 			{
 				QString currentProperty = dataList[column];
 

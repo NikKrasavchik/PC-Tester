@@ -605,7 +605,21 @@ void TestWindow::on_reportButton_clicked()
 		cables.push_back(currentCable);
 	}
 
-	ReportWindow* reportWindow = new ReportWindow(cables, testType);
+	std::vector<void*> additionalValues;
+	if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
+		testType == WindowType::IN_TEST_MANUAL_STAND ||
+		testType == WindowType::FULL_TEST_MANUAL_STAND)
+		for (int i = 0; i < manualChecks.size(); i++)
+			additionalValues.push_back((void*)manualChecks[i]);
+	if (testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
+		testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
+		testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
+		testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
+		testType == WindowType::FULL_TEST_AUTO_STAND)
+		for (int i = 0; i < measuredValues.size(); i++)
+			additionalValues.push_back((void*)measuredValues[i]);
+
+	ReportWindow* reportWindow = new ReportWindow(cables, additionalValues, testType);
 
 	WindowFrame w(WindowType::REPORTWINDOW, nullptr, reportWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
@@ -1303,7 +1317,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
 			connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
 
-			mainTableWidget->setRowHeight(currentRowNum, COLOUMN_DIGITAL_HEIGHT);
+			mainTableWidget->setRowHeight(currentRowNum, COLUMN_DIGITAL_HEIGHT);
 		}
 		else if (cableRows[currentRowNum]->type == "PWM")
 		{
@@ -1342,7 +1356,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load75Button_clicked);
 			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load100Button_clicked);
 
-			mainTableWidget->setRowHeight(currentRowNum, COLOUMN_PWM_HEIGHT);
+			mainTableWidget->setRowHeight(currentRowNum, COLUMN_PWM_HEIGHT);
 		}
 		else if (cableRows[currentRowNum]->type == "VNH")
 		{
@@ -1394,7 +1408,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
 			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
 
-			mainTableWidget->setRowHeight(currentRowNum, COLOUMN_VNH_HEIGHT);
+			mainTableWidget->setRowHeight(currentRowNum, COLUMN_VNH_HEIGHT);
 		}
 	}
 	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
@@ -1402,6 +1416,23 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
 	interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);
+}
+
+void TestWindow::initTableAdditionalManualChecks(int currentRowNum, QWidget* manualChecksWidget)
+{
+	manualChecksWidget->setObjectName("manualChecksWidget");
+
+	QHBoxLayout* manualChecksHLayout = new QHBoxLayout(manualChecksWidget);
+	manualChecksHLayout->setObjectName("manualChecksHLayout");
+
+	QSpacerItem* leftSpacer = new QSpacerItem(10, 1, QSizePolicy::Expanding);
+	manualChecksHLayout->addItem(leftSpacer);
+	
+	manualChecks.push_back(new QCheckBox(manualChecksWidget));
+	manualChecksHLayout->addWidget(manualChecks[manualChecks.size() - 1]);
+
+	QSpacerItem* rightSpacer = new QSpacerItem(10, 1, QSizePolicy::Expanding);
+	manualChecksHLayout->addItem(rightSpacer);
 }
 
 void TestWindow::initAutoCheckButton(int currentRowNum, QWidget* autoCheckCellWidget)

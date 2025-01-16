@@ -35,11 +35,11 @@
 #define ROW_2			2
 #define ROW_3			3
 
-#define COLUMN_ID					0
-#define COLUMN_PAD					1
-#define COLUMN_PIN					2
-#define COLUMN_TYPE					3
-#define COLUMN_NAME					4
+#define COLUMN_PAD					0
+#define COLUMN_PIN					1
+#define COLUMN_TYPE					2
+#define COLUMN_NAME					3
+#define COLUMN_COMPONENT			4
 #define COLUMN_TRESHHOLDERS			5
 #define COLUMN_TRESHHOLDERS_U		5
 #define COLUMN_TRESHHOLDERS_U_MIN	5
@@ -48,11 +48,11 @@
 #define COLUMN_TRESHHOLDERS_I_MIN	7
 #define COLUMN_TRESHHOLDERS_I_MAX	8
 
-#define CEll_PAD_TABLE							ROW_0, COLUMN_ID
-#define CELL_PIN_TABLE							ROW_0, COLUMN_PAD
-#define CELL_ID_TABLE							ROW_0, COLUMN_PIN
+#define CELL_PAD_TABLE							ROW_0, COLUMN_PAD
+#define CELL_PIN_TABLE							ROW_0, COLUMN_PIN
 #define CELL_TYPE_TABLE							ROW_0, COLUMN_TYPE
 #define CELL_NAME_TABLE							ROW_0, COLUMN_NAME
+#define CELL_COMPONENT_TABLE					ROW_0, COLUMN_COMPONENT
 #define CELL_TRESHHOLDERS_TABLE					ROW_0, COLUMN_TRESHHOLDERS
 #define CELL_TRESHHOLDERS_U_TABLE				ROW_1, COLUMN_TRESHHOLDERS_U
 #define CELL_TRESHHOLDERS_I_TABLE				ROW_1, COLUMN_TRESHHOLDERS_I
@@ -71,6 +71,10 @@
 #define CHECK_PC_AUTO_STAND		2
 #define CHECK_STAND_AUTO_STAND	3
 
+#define PRIMARY_CONNECTOR_SYMBOL	64
+
+#define ADDITIONAL_IND_NOT_SET		-1
+
 struct ActiveColumn
 {
 	bool measured;
@@ -84,7 +88,7 @@ class ReportWindow : public QDialog
 	Q_OBJECT
 
 public:
-	ReportWindow(std::vector<Cable> cables, WindowType testType);
+	ReportWindow(std::vector<Cable> cables, std::vector<void*> additionalValues, WindowType testType);
 	~ReportWindow();
 
 private:
@@ -100,7 +104,7 @@ private:
 	void fillColumnsSetters();
 
 	WindowType testType;
-
+	std::vector<void*> additionalValues;
 
 	void resizeEvent(QResizeEvent* event);
 
@@ -128,14 +132,13 @@ private:
 	QPushButton* saveButton;
 	
 	std::vector<Cable> cables;
-	Measured measured;
+
 	float changedThresholds[4];
 
 	ActiveColumn activeColumn;
 
 public slots:
-	void on_saveChangesButton_clicked();
-	void on_startTestButton_clicked();
+	void on_saveButton_clicked();
 
 	void on_measuredCheckBox_stateChanged(int state);
 	void on_checkManualStandCheckBox_stateChanged(int state);

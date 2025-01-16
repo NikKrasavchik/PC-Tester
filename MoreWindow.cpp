@@ -23,7 +23,7 @@ void MoreWindow::initUiSetValueTable()
 	{
 	case RUSSIAN_LANG:
 		mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
-		mainTableWidget->item(CEll_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
+		mainTableWidget->item(CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
 		mainTableWidget->item(CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
 		mainTableWidget->item(CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
 		mainTableWidget->item(CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
@@ -65,7 +65,7 @@ void MoreWindow::initUiSetValueTable()
 
 	case ENGLISH_LANG:
 		mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
-		mainTableWidget->item(CEll_PAD_TABLE)->setText("Pad");
+		mainTableWidget->item(CELL_PAD_TABLE)->setText("Pad");
 		mainTableWidget->item(CELL_PIN_TABLE)->setText("Pin");
 		mainTableWidget->item(CELL_TYPE_TABLE)->setText("Type");
 		mainTableWidget->item(CELL_NAME_TABLE)->setText("Name");
@@ -173,10 +173,10 @@ void MoreWindow::initUiGenerateTable()
 	mainTableWidget->item(CELL_ID_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_ID_TABLE)->setFont(font);
 	// Pad
-	mainTableWidget->setSpan(CEll_PAD_TABLE, 3, 1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_PAD_TABLE), "");
-	mainTableWidget->item(CEll_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CEll_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->setSpan(CELL_PAD_TABLE, 3, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PAD_TABLE), "");
+	mainTableWidget->item(CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(0, 0)->setFont(font);
 	// Pin
 	mainTableWidget->setSpan(CELL_PIN_TABLE, 3, 1);

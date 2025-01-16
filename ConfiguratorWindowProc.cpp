@@ -6,7 +6,7 @@
 #define FILE_CFG_COUNT			2
 #define FILE_DATA_COUNT			12
 
-#define COLOUMN_COUNT_FULL		13
+#define COLUMN_COUNT_FULL		13
 
 #define IND_CFG					0
 #define IND_STAND_TYPE			1
@@ -521,8 +521,8 @@ void ConfiguratorWindow::on_saveButton_clicked()
 
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
-		for (int column = 0; column < COLOUMN_COUNT_FULL - 1; column++)
-			configString += parsedData[row][column] + (column == COLOUMN_COUNT_FULL - 2 ? "" : CFG_SPLIT);
+		for (int column = 0; column < COLUMN_COUNT_FULL - 1; column++)
+			configString += parsedData[row][column] + (column == COLUMN_COUNT_FULL - 2 ? "" : CFG_SPLIT);
 		configString += (row == mainTableWidget->rowCount() - 1 ? "" : CFG_ENDING);
 	}
 
@@ -551,7 +551,7 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 	for (int row = 0; row < mainTableWidget->rowCount(); row++)
 	{
 		std::vector<QString> rowData;
-		for (int column = 0; column < COLOUMN_COUNT_FULL; column++)
+		for (int column = 0; column < COLUMN_COUNT_FULL; column++)
 		{
 			TableRowProperties* currentRowProperties = tableRowPropertiesVector[row];
 			switch ((FullColoumnName)column)
