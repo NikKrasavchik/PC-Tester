@@ -526,20 +526,15 @@ void ConfiguratorWindow::on_saveButton_clicked()
 		configString += (row == mainTableWidget->rowCount() - 1 ? "" : CFG_ENDING);
 	}
 
-	QString tempPath = QDir::currentPath() + "./Config files/";
-
 	QString defaultFilter("");
 	QString filters("Config files (*.csv)");
 
-	QString filePath = QFileDialog::getSaveFileName(0, "Save file", tempPath, filters, &defaultFilter);
+	QString filePath = QFileDialog::getSaveFileName(0, "Save file", QDir::currentPath() + "/Config files/", filters, &defaultFilter);
 
 	std::ofstream fout;
 	fout.open(filePath.toStdString());
 
 	fout << configString.toStdString();
-
-
-	qDebug() << configString;
 }
 
 std::vector<std::vector<QString>> ConfiguratorWindow::parseData()

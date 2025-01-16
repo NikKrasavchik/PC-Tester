@@ -55,8 +55,6 @@
 #define SORT_TYPE_DIRECTION_OUT	1
 #define SORT_TYPE_DIRECTION_IN	2
 
-#define PRIMARY_CONNECTOR_SYMBOL	64
-
 enum class TestButtons
 {
 	BUTTON_ON,
@@ -163,6 +161,7 @@ public:
 	void setFileName(QString fileName);
 	void setParentFrame(WindowFrame* parentFrame);
 	void ProcAutoTest(int pad, int pin);
+	QString getFileName() { return fileName; }
 
 	StandStatusFlags* statusFlags;
 private:

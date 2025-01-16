@@ -7,6 +7,8 @@
 #include <QHeaderView>
 #include <qmessagebox.h>
 #include <QString>
+#include <QFileDialog>
+#include <fstream>
 
 #include "ui_MoreWindow.h"
 #include "Components.h"
@@ -62,6 +64,8 @@ private:
 	void initUiBottomLayout();
 
 	void resizeEvent(QResizeEvent* event);
+
+	void resaveFile(QString fileName, Cable newCable);
 
 	QWidget* mainWidget;
 	QVBoxLayout* mainVLayout;

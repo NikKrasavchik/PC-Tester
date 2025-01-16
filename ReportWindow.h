@@ -71,9 +71,7 @@
 #define CHECK_PC_AUTO_STAND		2
 #define CHECK_STAND_AUTO_STAND	3
 
-#define PRIMARY_CONNECTOR_SYMBOL	64
-
-#define ADDITIONAL_IND_NOT_SET		-1
+#define ADDITIONAL_IND_NOT_SET	-1
 
 struct ActiveColumn
 {

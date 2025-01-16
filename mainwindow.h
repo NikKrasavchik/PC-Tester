@@ -37,6 +37,7 @@ public:
 	~MainWindow();
 
 	void setParentFrame(WindowFrame* parentFrame);
+	QString getFullFileName() { return selectedFileFullName; }
 
 private:
 	Ui::MainWindowClass ui;

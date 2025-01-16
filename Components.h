@@ -146,6 +146,8 @@ enum class TypeResetTableButtonsTheme
 	STAND_TEST
 };
 
+#define PRIMARY_CONNECTOR_SYMBOL	64
+
 #define TYPE_NOT_SET			-1
 #define TYPE_DIGITAL			0
 #define TYPE_PWM				1

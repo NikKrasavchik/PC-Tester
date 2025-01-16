@@ -1,5 +1,9 @@
 #include "MoreWindow.h"
 
+#define CELL_MIN_CURRENT	6
+#define CELL_MAX_CURRENT	7
+#define CELL_MIN_VOLTAGE	8
+#define CELL_MAX_VOLTAGE	9
 
 MoreWindow::MoreWindow(Cable cable, TestWindow* testwindow)
 {
@@ -58,7 +62,6 @@ void MoreWindow::initUiSetValueTable()
 		case TYPE_VNH:
 			typeTmp = "VNH";
 			break;
-
 		}
 		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_TYPE_TABLE), typeTmp);	
 		break;
@@ -79,7 +82,6 @@ void MoreWindow::initUiSetValueTable()
 		mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setText("Max.");
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setText("Min.");
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setText("Max.");
-
 
 		switch (cable.type)
 		{
@@ -177,7 +179,7 @@ void MoreWindow::initUiGenerateTable()
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PAD_TABLE), "");
 	mainTableWidget->item(CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(0, 0)->setFont(font);
+	mainTableWidget->item(CELL_PAD_TABLE)->setFont(font);
 	// Pin
 	mainTableWidget->setSpan(CELL_PIN_TABLE, 3, 1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PIN_TABLE), "");
@@ -374,7 +376,6 @@ void MoreWindow::on_saveChangesButton_clicked()
 	}
 	if (msgBox.exec() == QMessageBox::Save)
 	{
-
 		Cable cableTmp;
 		cableTmp.id = cable.id;
 		cableTmp.connector = cable.connector;
@@ -385,20 +386,75 @@ void MoreWindow::on_saveChangesButton_clicked()
 		cableTmp.bit = cable.bit;
 		cableTmp.name = cable.name;
 		cableTmp.component = cable.component;
-		cableTmp.minVoltage = changedThresholds[0];
-		cableTmp.maxVoltage = changedThresholds[1];
-		cableTmp.minCurrent = changedThresholds[2];
-		cableTmp.maxCurrent = changedThresholds[3];
+		cableTmp.minVoltage = (changedThresholds[0] != -1 ? changedThresholds[0] : cable.minVoltage);
+		cableTmp.maxVoltage = (changedThresholds[1] != -1 ? changedThresholds[1] : cable.maxVoltage);
+		cableTmp.minCurrent = (changedThresholds[2] != -1 ? changedThresholds[2] : cable.minCurrent);
+		cableTmp.maxCurrent = (changedThresholds[3] != -1 ? changedThresholds[3] : cable.maxCurrent);
 
 		changedThresholds[0] = -1;
 		changedThresholds[1] = -1;
 		changedThresholds[2] = -1;
 		changedThresholds[3] = -1;
 
+		resaveFile(testwindow->getFileName(), cableTmp);
 
-		// Надо внести изменения в конфиг файл этого кабелея cableTmp
 		saveChangesButton->hide();
 	}
+}
+
+void MoreWindow::resaveFile(QString fileName, Cable newCable)
+{
+	QFile file(fileName);
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		//generateError(EMPTY_FILLING, Errors::Configurator::FILE_OPEN);
+		return;
+	}
+
+	QString outputString = "";
+	while (!file.atEnd())
+	{
+		QString dataLine = file.readLine();
+		dataLine.remove("\n");
+		QStringList dataList = dataLine.split(";");
+
+		for (int i = CELL_MIN_CURRENT; i < dataList.size(); i++)
+			if (dataList[0].toInt() == (int)newCable.connector && dataList[1].toInt() == newCable.pin)
+			{
+				switch (i)
+				{
+				case CELL_MIN_CURRENT:
+					if (dataList[i].toInt() != newCable.minCurrent)
+						dataList[i] = QString::number(newCable.minCurrent);
+					break;
+
+				case CELL_MAX_CURRENT:
+					if (dataList[i].toInt() != newCable.maxCurrent)
+						dataList[i] = QString::number(newCable.maxCurrent);
+					break;
+
+				case CELL_MIN_VOLTAGE:
+					if (dataList[i].toInt() != newCable.minVoltage)
+						dataList[i] = QString::number(newCable.minVoltage);
+					break;
+
+				case CELL_MAX_VOLTAGE:
+					if (dataList[i].toInt() != newCable.maxVoltage)
+						dataList[i] = QString::number(newCable.maxVoltage);
+					break;
+				}
+			}
+
+		QString outputLine = "";
+		for (int i = 0; i < dataList.size(); i++)
+			outputLine += dataList[i] + ";";
+		outputString += outputLine.left(outputLine.lastIndexOf(";")) + "\n";
+	}
+
+	std::ofstream fout;
+	fout.open(fileName.toStdString());
+	fout << outputString.toStdString();
+	fout.close();
 }
 
 void MoreWindow::on_startTestButton_clicked()

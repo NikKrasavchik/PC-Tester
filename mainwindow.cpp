@@ -1358,9 +1358,8 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	{
 		if (selectedFileStandType != CFG_STAND_NOT_SET)
 		{
-
 			TestWindow* testWindow = new TestWindow(testType, preparedCables, this);
-			testWindow->setFileName(fileName);
+			testWindow->setFileName(selectedFileFullName);
 
 			WindowFrame w(testType, nullptr, testWindow);
 			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
