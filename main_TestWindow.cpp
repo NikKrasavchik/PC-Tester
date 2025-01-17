@@ -1196,24 +1196,10 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
-		if (i == cableRows.size() && isFullTestEnabled)
+		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
 		{
 
-		}
-		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
-			pin == cableRows[i]->pin.toInt())
-		{
-
-			if (isFullTestEnabled && i + 1 < cableRows.size())
-				nextCheckCable = new Cable((ConnectorId)(cableRows[i+1]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL), cableRows[i+1]->pin.toInt());
-			else if (isFullTestEnabled && i + 1 == cableRows.size())
-			{
-				nextCheckCable = new Cable((ConnectorId)(cableRows[0]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL), cableRows[0]->pin.toInt());
-
-				isFullTestEnabled = false;
-
-				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
-			}
+		
 
 			msgToTwoThreadStartTest_AutoTwoThread(connector, pin);
 		}
@@ -1227,6 +1213,22 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 	{
 
 		isFullTestEnabled = false;
+		for (int i = 0; i < cableRows.size(); i++)
+			if (nextCheckCable->connector == cableRows[i]->connectorInt && nextCheckCable->pin == cableRows[i]->pin.toInt())
+			{
+				if (i == cableRows.size() - 1)
+				{
+					// Тест закончен
+					nextCheckCable->connector == cableRows[0]->connectorInt;
+					nextCheckCable->pin == cableRows[0]->pin.toInt();
+					QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
+					isFullTestEnabled = false;
+					return;
+				}
+				nextCheckCable->connector = cableRows[i + 1]->connectorInt;
+				nextCheckCable->pin = cableRows[i + 1]->pin.toInt();
+				break;
+			}
 	}
 	else
 	{
@@ -1248,7 +1250,12 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 		}
 	
 		isFullTestEnabled = true;
+		for (int i = 0; i < cableRows.size(); i++)
+			if (nextCheckCable->connector == cableRows[i]->connectorInt && nextCheckCable->pin == cableRows[i]->pin.toInt())
+				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
+				
 		ProcAutoTest((int)nextCheckCable->connector, nextCheckCable->pin);
+
 	}
 
 	resetLanguage();
@@ -1271,8 +1278,28 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 			else
 				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
 
-			if(isFullTestEnabled)// запускаем следующий тест
+			if (isFullTestEnabled)// запускаем следующий тест
+			{
+				for (int i = 0; i < cableRows.size(); i++)
+					if (nextCheckCable->connector == cableRows[i]->connectorInt && nextCheckCable->pin == cableRows[i]->pin.toInt())
+					{
+						if (i == cableRows.size() - 1)
+						{
+							// Тест закончен
+							nextCheckCable->connector = cableRows[0]->connectorInt;
+							nextCheckCable->pin = cableRows[0]->pin.toInt();
+							QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
+							isFullTestEnabled = false;
+							resetLanguage();
+							return;
+						}
+						nextCheckCable->connector = cableRows[i + 1]->connectorInt;
+						nextCheckCable->pin = cableRows[i + 1]->pin.toInt();
+						break;
+					}
+				mainTableWidget->item(i+1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
 				ProcAutoTest((int)nextCheckCable->connector, nextCheckCable->pin);
+			}
 			return;
 		}
 	}
