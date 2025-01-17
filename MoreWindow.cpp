@@ -1,5 +1,6 @@
 #include "MoreWindow.h"
 
+
 #define CELL_MIN_CURRENT	6
 #define CELL_MAX_CURRENT	7
 #define CELL_MIN_VOLTAGE	8
@@ -26,7 +27,6 @@ void MoreWindow::initUiSetValueTable()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
 		mainTableWidget->item(CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
 		mainTableWidget->item(CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
 		mainTableWidget->item(CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
@@ -41,6 +41,7 @@ void MoreWindow::initUiSetValueTable()
 		mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setText(QString::fromLocal8Bit("Макс."));
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setText(QString::fromLocal8Bit("Мин."));
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setText(QString::fromLocal8Bit("Макс."));
+		mainTableWidget->item(CELL_COMMENT_TABLE)->setText(QString::fromLocal8Bit("Коментарий"));
 
 		if(row->type == "ANALOG")
 			typeTmp = QString::fromLocal8Bit("Аналоговый");
@@ -59,7 +60,6 @@ void MoreWindow::initUiSetValueTable()
 		break;
 
 	case ENGLISH_LANG:
-		mainTableWidget->item(CELL_ID_TABLE)->setText("Id");
 		mainTableWidget->item(CELL_PAD_TABLE)->setText("Pad");
 		mainTableWidget->item(CELL_PIN_TABLE)->setText("Pin");
 		mainTableWidget->item(CELL_TYPE_TABLE)->setText("Type");
@@ -74,6 +74,7 @@ void MoreWindow::initUiSetValueTable()
 		mainTableWidget->item(CELL_TRESHHOLDERS_U_MAX_TABLE)->setText("Max.");
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setText("Min.");
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setText("Max.");
+		mainTableWidget->item(CELL_COMMENT_TABLE)->setText("Comments");
 
 		if (row->type == "ANALOG")
 			typeTmp = "Analog";
@@ -92,8 +93,7 @@ void MoreWindow::initUiSetValueTable()
 		break;
 	}
 
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_ID_TABLE), row->id);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), row->connector);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), row->connectorStr);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), row->pin);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), row->name);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != -1 ? QString::number(measured.voltage) : "-"));
@@ -103,6 +103,10 @@ void MoreWindow::initUiSetValueTable()
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), row->minCurrent);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MAX_TABLE), row->maxCurrent);
 
+	commentTextEdit = new QTextEdit();
+	commentTextEdit->setText(row->comment);
+	connect(commentTextEdit, &QTextEdit::textChanged, this, &MoreWindow::on_commentTextEdit_textChanged);
+	mainTableWidget->setCellWidget(CELL_VALUE_COMMENT_TABLE, commentTextEdit);
 }
 void MoreWindow::initUi()
 {
@@ -132,12 +136,6 @@ void MoreWindow::initUiGenerateTable()
 	QFont font = QFont();
 	font.setBold(true);
 	font.setPointSizeF(10);
-	// Id
-	mainTableWidget->setSpan(CELL_ID_TABLE, 3, 1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_ID_TABLE), "");
-	mainTableWidget->item(CELL_ID_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_ID_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_ID_TABLE)->setFont(font);
 	// Pad
 	mainTableWidget->setSpan(CELL_PAD_TABLE, 3, 1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PAD_TABLE), "");
@@ -216,18 +214,24 @@ void MoreWindow::initUiGenerateTable()
 	mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setFont(font);
+	// Comment
+	mainTableWidget->setSpan(CELL_COMMENT_TABLE, 3, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_COMMENT_TABLE), "");
+	mainTableWidget->item(CELL_COMMENT_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(CELL_COMMENT_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(CELL_COMMENT_TABLE)->setFont(font);
 
-	mainTableWidget->setColumnWidth(0, 75);
-	mainTableWidget->setColumnWidth(1, 75);
+	mainTableWidget->setColumnWidth(0, 65);
+	mainTableWidget->setColumnWidth(1, 65);
 	mainTableWidget->setColumnWidth(2, 75);
-	mainTableWidget->setColumnWidth(3, 75);
-	mainTableWidget->setColumnWidth(4, 75);
+	mainTableWidget->setColumnWidth(3, 65);
+	mainTableWidget->setColumnWidth(4, 65);
 	mainTableWidget->setColumnWidth(5, 50);
 	mainTableWidget->setColumnWidth(6, 50);
 	mainTableWidget->setColumnWidth(7, 50);
 	mainTableWidget->setColumnWidth(8, 50);
 	mainTableWidget->setColumnWidth(9, 50);
-	mainTableWidget->setColumnWidth(10, 50);
+	mainTableWidget->setColumnWidth(10, 150);
 
 	mainTableWidget->setRowHeight(0, 40);
 	mainTableWidget->setRowHeight(1, 40);
@@ -236,8 +240,8 @@ void MoreWindow::initUiGenerateTable()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(4, QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(5, QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(7, QHeaderView::Fixed);
 
@@ -253,10 +257,8 @@ void MoreWindow::initUiGenerateTable()
 		mainTableWidget->item(mainTableWidget->rowCount() - 1, column)->setFont(font);
 	}
 
-	mainTableWidget->item(CELL_VALUE_ID_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_ID_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(CELL_VALUE_MEASURED_VALUE_U_TABLE)->setFlags(Qt::ItemIsSelectable);
@@ -320,6 +322,10 @@ void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 		changedThresholds[column - 7] = mainTableWidget->item(row, column)->text().toFloat();
 	}
 }
+void MoreWindow::on_commentTextEdit_textChanged()
+{
+	row->comment = commentTextEdit->toPlainText();
+}
 
 void MoreWindow::on_saveChangesButton_clicked()
 {
@@ -343,22 +349,7 @@ void MoreWindow::on_saveChangesButton_clicked()
 		Cable cableTmp;
 
 		cableTmp.id = row->id;
-
-		if (row->connector == "A")
-			cableTmp.connector = ConnectorId::A;
-		else if(row->connector == "B")
-			cableTmp.connector = ConnectorId::B;
-		else if (row->connector == "C")
-			cableTmp.connector = ConnectorId::C;
-		else if (row->connector == "D")
-			cableTmp.connector = ConnectorId::D;
-		else if (row->connector == "E")
-			cableTmp.connector = ConnectorId::E;
-		else if (row->connector == "F")
-			cableTmp.connector = ConnectorId::F;
-		else
-			cableTmp.connector = ConnectorId::NOT_SET;
-
+		cableTmp.connector = row->connectorInt;
 		cableTmp.pin = row->pin.toInt();
 
 		if (row->direction == "OUT")
@@ -463,24 +454,6 @@ void MoreWindow::resaveFile(QString fileName, Cable newCable)
 
 void MoreWindow::on_startTestButton_clicked()
 {
-
 	if (!testwindow->statusFlags->StatusTest)
-	{
-		ConnectorId connectorTmp;
-		if (row->connector == "A")
-			connectorTmp = ConnectorId::A;
-		else if (row->connector == "B")
-			connectorTmp = ConnectorId::B;
-		else if (row->connector == "C")
-			connectorTmp = ConnectorId::C;
-		else if (row->connector == "D")
-			connectorTmp = ConnectorId::D;
-		else if (row->connector == "E")
-			connectorTmp = ConnectorId::E;
-		else if (row->connector == "F")
-			connectorTmp = ConnectorId::F;
-		else
-			connectorTmp = ConnectorId::NOT_SET;
-		testwindow->ProcAutoTest((int)connectorTmp, row->pin.toInt());
-	}
+		testwindow->ProcAutoTest((int)row->connectorInt, row->pin.toInt());
 }

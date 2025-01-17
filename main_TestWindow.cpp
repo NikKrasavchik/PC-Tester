@@ -589,7 +589,7 @@ void TestWindow::on_reportButton_clicked()
 		
 		Cable currentCable;
 		currentCable.id = currentTestTableRowProperties->id;
-		currentCable.connector = (ConnectorId)(currentTestTableRowProperties->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL);
+		currentCable.connector = (ConnectorId)(currentTestTableRowProperties->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL);
 		currentCable.pin = currentTestTableRowProperties->pin.toInt();
 		currentCable.name = currentTestTableRowProperties->name;
 		currentCable.component = currentTestTableRowProperties->component;
@@ -1123,7 +1123,7 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
-		if ((int)(cableRows[currentRowNum]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL) == pad && cableRows[currentRowNum]->pin.toInt() == pin)
+		if ((int)(cableRows[currentRowNum]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL) == pad && cableRows[currentRowNum]->pin.toInt() == pin)
 			return currentRowNum;
 	return -1;
 }
@@ -1200,16 +1200,15 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 		{
 
 		}
-		int l = cableRows[i]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL;
-		if (connector == cableRows[i]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
+		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
 			pin == cableRows[i]->pin.toInt())
 		{
 
 			if (isFullTestEnabled && i + 1 < cableRows.size())
-				nextCheckCable = new Cable((ConnectorId)(cableRows[i+1]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL), cableRows[i+1]->pin.toInt());
+				nextCheckCable = new Cable((ConnectorId)(cableRows[i+1]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL), cableRows[i+1]->pin.toInt());
 			else if (isFullTestEnabled && i + 1 == cableRows.size())
 			{
-				nextCheckCable = new Cable((ConnectorId)(cableRows[0]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL), cableRows[0]->pin.toInt());
+				nextCheckCable = new Cable((ConnectorId)(cableRows[0]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL), cableRows[0]->pin.toInt());
 
 				isFullTestEnabled = false;
 
@@ -1247,8 +1246,6 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 				QMessageBox::warning(this, QString("Warning"), QString("Currently being tested"));
 			return;
 		}
-		if (isFullTestEnabled)
-			return;
 	
 		isFullTestEnabled = true;
 		ProcAutoTest((int)nextCheckCable->connector, nextCheckCable->pin);
@@ -1262,7 +1259,7 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 	//  расим нужную €чейку 
 	for (int i = 0; i < cableRows.size(); i++)
 	{
-		if (connector == cableRows[i]->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
+		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
 			pin == cableRows[i]->pin.toInt())
 		{
 			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);

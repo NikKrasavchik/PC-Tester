@@ -7,7 +7,8 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows.push_back(new TestTableRowProperties(this));
 
 		cableRows[i]->id = cables[i].id;
-		cableRows[i]->connector = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
+		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
+		cableRows[i]->connectorInt = cables[i].connector;
 		cableRows[i]->pin = QString::number(cables[i].pin);
 		cableRows[i]->name = cables[i].name;
 		cableRows[i]->component = cables[i].component;
@@ -216,7 +217,7 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 void TestWindow::selectCurrentCell(QString connector, QString pin)
 {
 	for (int i = 0; i < cableRows.size(); i++)
-		if (cableRows[i]->connector == connector && cableRows[i]->pin == pin)
+		if (cableRows[i]->connectorStr == connector && cableRows[i]->pin == pin)
 			mainTableWidget->setCurrentCell(i, 0);
 }
 
@@ -380,7 +381,7 @@ void TestTableRowProperties::on_onButton_clicked()
 	if (stateDigital == ON_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connector, pin);
+	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_ON);
 	stateDigital = ON_BUTTON_PRESSED;
@@ -393,7 +394,7 @@ void TestTableRowProperties::on_offButton_clicked()
 	if (stateDigital == OFF_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connector, pin);
+	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_OFF);
 	stateDigital = OFF_BUTTON_PRESSED;
@@ -406,7 +407,7 @@ void TestTableRowProperties::on_load0Button_clicked()
 	if (statePWM == LOAD0_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connector, pin);
+	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_0);
 	statePWM = LOAD0_BUTTON_PRESSED;
@@ -419,7 +420,7 @@ void TestTableRowProperties::on_load25Button_clicked()
 	if (statePWM == LOAD25_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connector, pin);
+	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_25);
 	statePWM = LOAD25_BUTTON_PRESSED;
@@ -432,7 +433,7 @@ void TestTableRowProperties::on_load50Button_clicked()
 	if (statePWM == LOAD50_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connector, pin);
+	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_50);
 	statePWM = LOAD50_BUTTON_PRESSED;
@@ -445,7 +446,7 @@ void TestTableRowProperties::on_load75Button_clicked()
 	if (statePWM == LOAD75_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connector, pin);
+	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_75);
 	statePWM = LOAD75_BUTTON_PRESSED;
@@ -458,7 +459,7 @@ void TestTableRowProperties::on_load100Button_clicked()
 	if (statePWM == LOAD100_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connector, pin);
+	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_100);
 	statePWM = LOAD100_BUTTON_PRESSED;
@@ -468,7 +469,7 @@ void TestTableRowProperties::on_load100Button_clicked()
 
 void TestTableRowProperties::sendSignal()
 {
-	msgToTwoThreadStartTest_ManualTwoThread(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), stateDigital == -1 ? 0 : stateDigital, statePWM == -1 ? 0 : statePWM);
+	msgToTwoThreadStartTest_ManualTwoThread(this->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), stateDigital == -1 ? 0 : stateDigital, statePWM == -1 ? 0 : statePWM);
 }
 
 void TestTableRowProperties::msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent)

@@ -107,12 +107,14 @@ public:
 	int id;
 	int canId;
 	int bit;
-	QString connector;
+	QString connectorStr;
+	ConnectorId connectorInt;
 	QString pin;
 	QString name;
 	QString component;
 	QString direction;
 	QString type;
+	QString comment;
 
 	double minCurrent;
 	double maxCurrent;

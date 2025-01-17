@@ -148,7 +148,7 @@ void TestWindow::initUiTableRowsOutTestManualStand()
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR),		cableRows[currentRowNum]->connector);
+		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR),		cableRows[currentRowNum]->connectorStr);
 		model->setData(model->index(currentRowNum, COLUMN_PIN),				cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME),			cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLUMN_COMPONENT),		cableRows[currentRowNum]->component);
