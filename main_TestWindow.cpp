@@ -1261,7 +1261,7 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 	resetLanguage();
 }
 
-void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, float voltage, float current)
+void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current)
 {
 	//  расим нужную €чейку 
 	for (int i = 0; i < cableRows.size(); i++)
@@ -1269,6 +1269,8 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
 			pin == cableRows[i]->pin.toInt())
 		{
+			cableRows[i]->measured.voltage = voltage;
+			cableRows[i]->measured.current = current;
 			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);
 			QAbstractItemModel* model = mainTableWidget->model();
 			model->setData(model->index(currentRowNum, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5), QString(""));

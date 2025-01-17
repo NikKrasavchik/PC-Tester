@@ -116,10 +116,12 @@ public:
 	QString type;
 	QString comment;
 
+	Measured measured;
 	double minCurrent;
 	double maxCurrent;
 	double minVoltage;
 	double maxVoltage;
+
 	void* buttons;
 	QPushButton* moreButton;
 
@@ -349,7 +351,7 @@ public slots:
 
 	// autoTwoThread
 	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
-	void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, float voltage, float current);
+	void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current);
 
 private slots:
 	void selectCurrentCell(QString conector, QString pin);

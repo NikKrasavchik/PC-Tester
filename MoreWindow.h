@@ -64,6 +64,7 @@ private:
 	void initUi();
 	void initUiGenerateTable();
 	void initUiSetValueTable();
+	void setValueProgs();
 	void initUiBottomLayout();
 
 	void resizeEvent(QResizeEvent* event);

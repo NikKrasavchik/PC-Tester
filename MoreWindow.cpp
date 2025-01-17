@@ -10,8 +10,8 @@ MoreWindow::MoreWindow(TestTableRowProperties* row)
 {
 	this->row = row;
 	this->testwindow = row->testwindow;
-	measured.current = -1;
-	measured.voltage = -1;
+	measured.current = row->measured.voltage;
+	measured.voltage = row->measured.current;
 	for (int i = 0; i < sizeof(changedThresholds) / sizeof(changedThresholds[0]); i++)
 		changedThresholds[i] = -1;
 
@@ -20,6 +20,42 @@ MoreWindow::MoreWindow(TestTableRowProperties* row)
 }
 MoreWindow::~MoreWindow()
 {}
+
+void MoreWindow::setValueProgs()
+{
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != -1 ? QString::number(measured.voltage) : "-"));
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), (measured.current != -1 ? QString::number(measured.current) : "-"));
+
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), row->minVoltage);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), row->maxVoltage);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), row->minCurrent);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MAX_TABLE), row->maxCurrent);
+
+	if (measured.voltage != -1)
+	{
+		// Красим пороги и измеренное значение
+		if (row->minVoltage > measured.voltage)
+		{
+			mainTableWidget->item(CELL_VALUE_PROGS_U_MIN_TABLE)->setBackgroundColor(Qt::red);
+			mainTableWidget->item(CELL_VALUE_MEASURED_VALUE_U_TABLE)->setBackgroundColor(Qt::red);
+		}
+		else if (measured.voltage > row->maxVoltage)
+		{
+			mainTableWidget->item(CELL_VALUE_PROGS_U_MAX_TABLE)->setBackgroundColor(Qt::red);
+			mainTableWidget->item(CELL_VALUE_MEASURED_VALUE_U_TABLE)->setBackgroundColor(Qt::red);
+		}
+		if (row->minCurrent > measured.current)
+		{
+			mainTableWidget->item(CELL_VALUE_PROGS_I_MIN_TABLE)->setBackgroundColor(Qt::red);
+			mainTableWidget->item(CELL_VALUE_MEASURED_VALUE_I_TABLE)->setBackgroundColor(Qt::red);
+		}
+		else if (measured.current > row->maxCurrent)
+		{
+			mainTableWidget->item(CELL_VALUE_PROGS_I_MAX_TABLE)->setBackgroundColor(Qt::red);
+			mainTableWidget->item(CELL_VALUE_MEASURED_VALUE_I_TABLE)->setBackgroundColor(Qt::red);
+		}
+	}
+}
 
 void MoreWindow::initUiSetValueTable()
 {
@@ -96,12 +132,9 @@ void MoreWindow::initUiSetValueTable()
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), row->connectorStr);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), row->pin);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), row->name);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != -1 ? QString::number(measured.voltage) : "-"));
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), (measured.current != -1 ? QString::number(measured.current) : "-"));
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), row->minVoltage);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), row->maxVoltage);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), row->minCurrent);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MAX_TABLE), row->maxCurrent);
+	setValueProgs();
+
+
 
 	commentTextEdit = new QTextEdit();
 	commentTextEdit->setText(row->comment);

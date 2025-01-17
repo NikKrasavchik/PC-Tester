@@ -55,7 +55,7 @@ public slots:
 
 signals:
 	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
-	void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, float voltage, float current);
+	void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, double voltage, double current);
 };
 
 class ManualStandTwoThread : public QThread

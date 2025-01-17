@@ -203,8 +203,8 @@ extern std::vector<std::vector<FloatCheck*>> floatCheck;
 
 struct Measured
 {
-	double current;
-	double voltage;
+	double current = -1;
+	double voltage = -1;
 };
 
 extern ViewWindowState* viewWindowState;
