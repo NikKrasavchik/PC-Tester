@@ -1587,22 +1587,9 @@ void TestWindow::on_fullTestSortButton_clicked()
 
 void TestTableRowProperties::on_moreButton_clicked()
 {
-	Cable currentCable;
-	currentCable.id = this->id;
-	currentCable.connector = (ConnectorId)(this->connector.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL);
-	currentCable.pin = this->pin.toInt();
-	currentCable.name = this->name;
-	currentCable.component = this->component;	
-	currentCable.direction = this->direction.toInt();
-	currentCable.type = this->type.toInt();
-	currentCable.minCurrent = this->minCurrent;
-	currentCable.maxCurrent = this->maxCurrent;
-	currentCable.minVoltage = this->minVoltage;
-	currentCable.maxVoltage = this->maxVoltage;
-	currentCable.bit = this->bit;
-	currentCable.canId = this->canId;
 
-	MoreWindow* moreWindow = new MoreWindow(currentCable, testwindow);
+
+	MoreWindow* moreWindow = new MoreWindow(this);
 
 	WindowFrame w(WindowType::MOREWINDOW, nullptr, moreWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));

@@ -49,12 +49,13 @@
 #define CELL_VALUE_PROGS_I_MIN_TABLE			3,9
 #define CELL_VALUE_PROGS_I_MAX_TABLE			3,10
 
+class TestTableRowProperties;
 class MoreWindow : public QDialog
 {
 	Q_OBJECT
 
 public:
-	MoreWindow(Cable cable, TestWindow* testwindow);
+	MoreWindow(TestTableRowProperties* row);
 	~MoreWindow();
 
 private:
@@ -75,7 +76,7 @@ private:
 	QPushButton* startTestButton;
 	QPushButton* saveChangesButton;
 	
-	Cable cable;
+	TestTableRowProperties* row;
 	TestWindow* testwindow;
 	Measured measured;
 	float changedThresholds[4];

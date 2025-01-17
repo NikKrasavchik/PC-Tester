@@ -5,10 +5,10 @@
 #define CELL_MIN_VOLTAGE	8
 #define CELL_MAX_VOLTAGE	9
 
-MoreWindow::MoreWindow(Cable cable, TestWindow* testwindow)
+MoreWindow::MoreWindow(TestTableRowProperties* row)
 {
-	this->cable = cable;
-	this->testwindow = testwindow;
+	this->row = row;
+	this->testwindow = row->testwindow;
 	measured.current = -1;
 	measured.voltage = -1;
 	for (int i = 0; i < sizeof(changedThresholds) / sizeof(changedThresholds[0]); i++)
@@ -42,27 +42,19 @@ void MoreWindow::initUiSetValueTable()
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setText(QString::fromLocal8Bit("Мин."));
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setText(QString::fromLocal8Bit("Макс."));
 
-		switch (cable.type)
-		{
-		case TYPE_NOT_SET:
-			typeTmp = QString::fromLocal8Bit("Не указан");
-			break;
-		case TYPE_DIGITAL:
-			typeTmp = QString::fromLocal8Bit("Цифровой");
-			break;
-		case TYPE_ANALOG:
+		if(row->type == "ANALOG")
 			typeTmp = QString::fromLocal8Bit("Аналоговый");
-			break;
-		case TYPE_HALL:
-			typeTmp = "HALL";
-			break;
-		case TYPE_PWM:
-			typeTmp = "PWM";
-			break;
-		case TYPE_VNH:
-			typeTmp = "VNH";
-			break;
-		}
+		else if(row->type == "DIGITAL")
+			typeTmp = QString::fromLocal8Bit("Цифровой");
+		else if (row->type == "HALL")
+			typeTmp = QString::fromLocal8Bit("HALL");
+		else if (row->type == "PWM")
+			typeTmp = QString::fromLocal8Bit("PWM");
+		else if (row->type == "VNH")
+			typeTmp = QString::fromLocal8Bit("VNH");
+		else
+			typeTmp = QString::fromLocal8Bit("Ошибка");
+		
 		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_TYPE_TABLE), typeTmp);	
 		break;
 
@@ -83,61 +75,33 @@ void MoreWindow::initUiSetValueTable()
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MIN_TABLE)->setText("Min.");
 		mainTableWidget->item(CELL_TRESHHOLDERS_I_MAX_TABLE)->setText("Max.");
 
-		switch (cable.type)
-		{
-		case TYPE_NOT_SET:
-			typeTmp = "No set";
-			break;
-		case TYPE_DIGITAL:
-			typeTmp = "Digital";
-			break;
-		case TYPE_ANALOG:
+		if (row->type == "ANALOG")
 			typeTmp = "Analog";
-			break;
-		case TYPE_HALL:
+		else if (row->type == "DIGITAL")
+			typeTmp = "Digital";
+		else if (row->type == "HALL")
 			typeTmp = "HALL";
-			break;
-		case TYPE_PWM:
+		else if (row->type == "PWM")
 			typeTmp = "PWM";
-			break;
-		case TYPE_VNH:
+		else if (row->type == "VNH")
 			typeTmp = "VNH";
-			break;
+		else
+			typeTmp = "Error";
 
-		}
 		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_TYPE_TABLE), typeTmp);
 		break;
 	}
 
-	QString padTmp;
-	switch (cable.connector)
-	{
-	case ConnectorId::A:
-		padTmp = "A";
-		break;
-	case ConnectorId::B:
-		padTmp = "B";
-		break;
-	case ConnectorId::C:
-		padTmp = "C";
-		break;
-	case ConnectorId::D:
-		padTmp = "D";
-		break;
-	default:
-		padTmp = "Error";
-		break;
-	}
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_ID_TABLE), cable.id);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), padTmp);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), cable.pin);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), cable.name);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_ID_TABLE), row->id);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), row->connector);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), row->pin);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), row->name);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != -1 ? QString::number(measured.voltage) : "-"));
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), (measured.current != -1 ? QString::number(measured.current) : "-"));
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), cable.minVoltage);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), cable.maxVoltage);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), cable.minCurrent);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MAX_TABLE), cable.maxCurrent);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), row->minVoltage);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), row->maxVoltage);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), row->minCurrent);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MAX_TABLE), row->maxCurrent);
 
 }
 void MoreWindow::initUi()
@@ -377,19 +341,59 @@ void MoreWindow::on_saveChangesButton_clicked()
 	if (msgBox.exec() == QMessageBox::Save)
 	{
 		Cable cableTmp;
-		cableTmp.id = cable.id;
-		cableTmp.connector = cable.connector;
-		cableTmp.pin = cable.pin;
-		cableTmp.direction = cable.direction;
-		cableTmp.type = cable.type;
-		cableTmp.canId = cable.canId;
-		cableTmp.bit = cable.bit;
-		cableTmp.name = cable.name;
-		cableTmp.component = cable.component;
-		cableTmp.minVoltage = (changedThresholds[0] != -1 ? changedThresholds[0] : cable.minVoltage);
-		cableTmp.maxVoltage = (changedThresholds[1] != -1 ? changedThresholds[1] : cable.maxVoltage);
-		cableTmp.minCurrent = (changedThresholds[2] != -1 ? changedThresholds[2] : cable.minCurrent);
-		cableTmp.maxCurrent = (changedThresholds[3] != -1 ? changedThresholds[3] : cable.maxCurrent);
+
+		cableTmp.id = row->id;
+
+		if (row->connector == "A")
+			cableTmp.connector = ConnectorId::A;
+		else if(row->connector == "B")
+			cableTmp.connector = ConnectorId::B;
+		else if (row->connector == "C")
+			cableTmp.connector = ConnectorId::C;
+		else if (row->connector == "D")
+			cableTmp.connector = ConnectorId::D;
+		else if (row->connector == "E")
+			cableTmp.connector = ConnectorId::E;
+		else if (row->connector == "F")
+			cableTmp.connector = ConnectorId::F;
+		else
+			cableTmp.connector = ConnectorId::NOT_SET;
+
+		cableTmp.pin = row->pin.toInt();
+
+		if (row->direction == "OUT")
+			cableTmp.direction = DIRECTION_OUT;
+		else if(row->direction == "IN")
+			cableTmp.direction = DIRECTION_IN;
+		else
+			cableTmp.direction = DIRECTION_NOT_SET;
+
+		if (row->type == "DIGITAL")
+			cableTmp.type = TYPE_DIGITAL;
+		else if(row->type == "ANALOG")
+			cableTmp.type = TYPE_ANALOG;
+		else if (row->type == "HALL")
+			cableTmp.type = TYPE_HALL;
+		else if (row->type == "PWM")
+			cableTmp.type = TYPE_PWM;
+		else if (row->type == "VNH")
+			cableTmp.type = TYPE_VNH;
+		else
+			cableTmp.type = TYPE_NOT_SET;
+
+		cableTmp.canId = row->canId;
+		cableTmp.bit = row->bit;
+		cableTmp.name = row->name;
+		cableTmp.component = row->component;
+		cableTmp.minVoltage = (changedThresholds[0] != -1 ? changedThresholds[0] : row->minVoltage);
+		cableTmp.maxVoltage = (changedThresholds[1] != -1 ? changedThresholds[1] : row->maxVoltage);
+		cableTmp.minCurrent = (changedThresholds[2] != -1 ? changedThresholds[2] : row->minCurrent);
+		cableTmp.maxCurrent = (changedThresholds[3] != -1 ? changedThresholds[3] : row->maxCurrent);
+
+		row->minVoltage = (changedThresholds[0] != -1 ? changedThresholds[0] : row->minVoltage);
+		row->maxVoltage = (changedThresholds[1] != -1 ? changedThresholds[1] : row->maxVoltage);
+		row->minCurrent = (changedThresholds[2] != -1 ? changedThresholds[2] : row->minCurrent);
+		row->maxCurrent = (changedThresholds[3] != -1 ? changedThresholds[3] : row->maxCurrent);
 
 		changedThresholds[0] = -1;
 		changedThresholds[1] = -1;
@@ -462,6 +466,21 @@ void MoreWindow::on_startTestButton_clicked()
 
 	if (!testwindow->statusFlags->StatusTest)
 	{
-		testwindow->ProcAutoTest((int)cable.connector, cable.pin);
+		ConnectorId connectorTmp;
+		if (row->connector == "A")
+			connectorTmp = ConnectorId::A;
+		else if (row->connector == "B")
+			connectorTmp = ConnectorId::B;
+		else if (row->connector == "C")
+			connectorTmp = ConnectorId::C;
+		else if (row->connector == "D")
+			connectorTmp = ConnectorId::D;
+		else if (row->connector == "E")
+			connectorTmp = ConnectorId::E;
+		else if (row->connector == "F")
+			connectorTmp = ConnectorId::F;
+		else
+			connectorTmp = ConnectorId::NOT_SET;
+		testwindow->ProcAutoTest((int)connectorTmp, row->pin.toInt());
 	}
 }

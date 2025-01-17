@@ -19,18 +19,18 @@ ReportWindow::ReportWindow(std::vector<Cable> cables, std::vector<void*> additio
 
 	QMetaObject::connectSlotsByName(this);
 
-	QStringList* mainTableHeaderLabels = new QStringList();
-	mainTableHeaderLabels->push_back("");
-	mainTableHeaderLabels->push_back("");
-	mainTableHeaderLabels->push_back("");
+	//QStringList* mainTableHeaderLabels = new QStringList();
+	//mainTableHeaderLabels->push_back("");
+	//mainTableHeaderLabels->push_back("");
+	//mainTableHeaderLabels->push_back("");
 
-	for (int row = ROW_3; row < mainTableWidget->rowCount(); row++)
-	{
-		mainTableHeaderLabels->push_back(QString::number(row - ROW_3));
-		mainTableWidget->verticalHeader()->setSectionResizeMode(row, QHeaderView::Interactive);
-	}
+	//for (int row = ROW_3; row < mainTableWidget->rowCount(); row++)
+	//{
+	//	mainTableHeaderLabels->push_back(QString::number(row - ROW_3));
+	//	mainTableWidget->verticalHeader()->setSectionResizeMode(row, QHeaderView::Interactive);
+	//}
 
-	mainTableWidget->setVerticalHeaderLabels(*mainTableHeaderLabels);
+	//mainTableWidget->setVerticalHeaderLabels(*mainTableHeaderLabels);
 }
 ReportWindow::~ReportWindow()
 {}
@@ -76,6 +76,7 @@ void ReportWindow::initUiGenerateTable()
 	mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 	mainTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	mainTableWidget->horizontalHeader()->hide();
+	mainTableWidget->verticalHeader()->hide();
 	mainTableWidget->setRowCount(3);
 	mainTableWidget->setColumnCount(CLEAR_COLUMN_COUNT);
 
