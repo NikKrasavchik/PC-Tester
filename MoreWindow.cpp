@@ -150,19 +150,20 @@ void MoreWindow::initUiGeneratePartTableInOut()
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), row->pin);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), row->name);
 
-	mainTableWidget->setColumnWidth(0, 65);
-	mainTableWidget->setColumnWidth(1, 65);
-	mainTableWidget->setColumnWidth(2, 75);
-	mainTableWidget->setColumnWidth(3, 75);
+	mainTableWidget->setColumnWidth(COLUMN_PAD_TABLE, 65);
+	mainTableWidget->setColumnWidth(COLUMN_PIN_TABLE, 65);
+	mainTableWidget->setColumnWidth(COLUMN_TYPE_TABLE, 75);
+	mainTableWidget->setColumnWidth(ROW_NAME_TABLE, 75);
+
 
 	mainTableWidget->setRowHeight(0, 40);
 	mainTableWidget->setRowHeight(1, 40);
 	mainTableWidget->setRowHeight(2, 40);
-
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
+	
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PAD_TABLE, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PIN_TABLE, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE_TABLE, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME_TABLE, QHeaderView::Stretch);
 
 	mainTableWidget->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
 	mainTableWidget->verticalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
@@ -230,7 +231,22 @@ void MoreWindow::initUiGeneratePartTableInOut()
 		mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + (i * 6))->setTextAlignment(Qt::AlignCenter);
 		mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + (i * 6))->setFlags(Qt::ItemIsSelectable);
 		mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + (i * 6))->setFont(*font);
+
+		mainTableWidget->setColumnWidth(COLUMN_MEASURED_VALUE_U_TABLE + (i * 6),		50);
+		mainTableWidget->setColumnWidth(COLUMN_MEASURED_VALUE_I_TABLE + (i * 6),		50);
+		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MIN_TABLE + (i * 6),	50);
+		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MAX_TABLE + (i * 6),	50);
+		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MIN_TABLE + (i * 6),	50);
+		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MAX_TABLE + (i * 6),	50);
+
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_TABLE + (i * 6),		QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_TABLE + (i * 6),		QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_MIN_TABLE + (i * 6),	QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_MAX_TABLE + (i * 6),	QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_MIN_TABLE + (i * 6),	QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_MAX_TABLE + (i * 6),	QHeaderView::Fixed);
 	}
+	
 }
 
 void MoreWindowOutDig::initUiGenerateTable()
@@ -275,6 +291,7 @@ void MoreWindowOutDig::initUiGenerateTable()
 		}
 
 	}
+	
 
 
 }

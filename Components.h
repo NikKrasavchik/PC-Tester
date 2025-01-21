@@ -1,6 +1,6 @@
 #pragma once
 
-//#define DEBUG
+#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -207,6 +207,11 @@ struct Measured
 {
 	double current = NOT_SET;
 	double voltage = NOT_SET;
+
+	double minCurrent = NOT_SET;
+	double maxCurrent = NOT_SET;
+	double minVoltage = NOT_SET;
+	double maxVoltage = NOT_SET;
 };
 
 extern ViewWindowState* viewWindowState;

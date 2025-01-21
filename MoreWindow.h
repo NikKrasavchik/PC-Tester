@@ -23,10 +23,21 @@
 
 #define PADDING_MAINWIDGET				10
 
-#define CELL_PAD_TABLE							0,0
-#define CELL_PIN_TABLE							0,1
-#define CELL_TYPE_TABLE							0,2
-#define CELL_NAME_TABLE							0,3
+#define ROW_PAD_TABLE					0
+#define COLUMN_PAD_TABLE				0
+#define CELL_PAD_TABLE							ROW_PAD_TABLE,COLUMN_PAD_TABLE
+#define ROW_PIN_TABLE					0
+#define COLUMN_PIN_TABLE				1
+#define CELL_PIN_TABLE							ROW_TYPE_TABLE,COLUMN_PIN_TABLE
+#define ROW_TYPE_TABLE					0
+#define COLUMN_TYPE_TABLE				2
+#define CELL_TYPE_TABLE							ROW_TYPE_TABLE,COLUMN_TYPE_TABLE
+#define ROW_NAME_TABLE					0
+#define COLUMN_NAME_TABLE				3
+#define CELL_NAME_TABLE							ROW_NAME_TABLE,COLUMN_NAME_TABLE
+#define ROW_SPACE_TABLE					0
+#define COLUMN_SPACE_TABLE				4
+#define CELL_SPACE_TABLE						ROW_SPACE_TABLE,COLUMN_SPACE_TABLE
 
 #define ROW_MEASURED_VALUE_TABLE				0
 #define COLUMN_MEASURED_VALUE_TABLE				4
@@ -112,7 +123,7 @@ public slots:
 class MoreWindowOutDig final : public MoreWindow
 {
 public:
-	MoreWindowOutDig(TestTableRowProperties* row) : MoreWindow(row, 1500, 250) { initUiGenerateTable(); };
+	MoreWindowOutDig(TestTableRowProperties* row) : MoreWindow(row, 1200, 250) { initUiGenerateTable(); };
 
 private:
 	void initUiGenerateTable();
@@ -124,7 +135,7 @@ class MoreWindowOutPwm final : public MoreWindow
 {
 
 public:
-	MoreWindowOutPwm(TestTableRowProperties* row) : MoreWindow(row, 1800, 250) { initUiGenerateTable(); };
+	MoreWindowOutPwm(TestTableRowProperties* row) : MoreWindow(row, 1200, 250) { initUiGenerateTable(); };
 
 private:
 	void initUiGenerateTable();
@@ -135,7 +146,7 @@ private:
 class MoreWindowOutVnh final : public MoreWindow
 {
 public:
-	MoreWindowOutVnh(TestTableRowProperties* row) : MoreWindow(row, 1500, 250) { initUiGenerateTable(); };
+	MoreWindowOutVnh(TestTableRowProperties* row) : MoreWindow(row, 1400, 250) { initUiGenerateTable(); };
 
 private:
 	void initUiGenerateTable();

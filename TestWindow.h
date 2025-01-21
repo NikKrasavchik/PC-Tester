@@ -116,11 +116,12 @@ public:
 	QString type;
 	QString comment;
 
-	Measured measured;
-	double minCurrent;
-	double maxCurrent;
-	double minVoltage;
-	double maxVoltage;
+	std::vector<Measured*> measureds;
+	Measured measured; // Удалим
+	double minCurrent; // Удалим
+	double maxCurrent; // Удалим
+	double minVoltage; // Удалим
+	double maxVoltage; // Удалим
 
 	void* buttons;
 	QPushButton* moreButton;
