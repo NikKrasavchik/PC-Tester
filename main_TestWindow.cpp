@@ -1,6 +1,6 @@
 #include "TestWindow.h"
 
-#define STATUS_NOT_SET		-1
+#define STATUS_NOT_SET		NOT_SET
 #define STATUS_IN_TEST		5
 #define STATUS_FULL_TEST	7
 
@@ -1125,7 +1125,7 @@ static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProp
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 		if ((int)(cableRows[currentRowNum]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL) == pad && cableRows[currentRowNum]->pin.toInt() == pin)
 			return currentRowNum;
-	return -1;
+	return NOT_SET;
 }
 
 void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect)

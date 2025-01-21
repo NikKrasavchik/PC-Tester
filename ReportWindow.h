@@ -71,7 +71,7 @@
 #define CHECK_PC_AUTO_STAND		2
 #define CHECK_STAND_AUTO_STAND	3
 
-#define ADDITIONAL_IND_NOT_SET	-1
+#define ADDITIONAL_IND_NOT_SET	NOT_SET
 
 struct ActiveColumn
 {
@@ -122,12 +122,15 @@ private:
 	QCheckBox* checkManualStandCheckBox;
 	QCheckBox* checkPCAutoStandCheckBox;
 	QCheckBox* checkStandAutoStandCheckBox;
-	QSpacerItem* bottomSpacer;
+	QSpacerItem* bottomRightSpacer;
+	QSpacerItem* bottomLeftSpacer;
 	QLabel* measuredLabel;
 	QLabel* checkManualStandLabel;
 	QLabel* checkPCAutoStandLabel;
 	QLabel* checkStandAutoStandLabel;
 	QPushButton* saveButton;
+	QLineEdit* testerNameLineEdit;
+	QLineEdit* testerJobLineEdit;
 	
 	std::vector<Cable> cables;
 

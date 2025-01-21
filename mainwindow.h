@@ -24,7 +24,7 @@
 
 #include <QDebug>
 
-#define CFG_STAND_NOT_SET	-1
+#define CFG_STAND_NOT_SET	NOT_SET
 #define CFG_STAND_MANUAL	0
 #define CFG_STAND_AUTO		1
 
@@ -218,6 +218,9 @@ private:
 
 	std::vector<Cable> prepareArguments(WindowType testType);
 	void createTestWindow(WindowType testType, std::vector<Cable> preparedCables);
+
+	void generateError(Errors::MainWindow error);
+	void generateWarning(Warnings::MainWindow warning);
 
 	void resetWindowView();
 

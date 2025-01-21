@@ -13,7 +13,7 @@ ReportWindow::ReportWindow(std::vector<Cable> cables, std::vector<void*> additio
 	checkStandAutoStandCheckBox = nullptr;
 
 	for (int i = 0; i < sizeof(changedThresholds) / sizeof(changedThresholds[0]); i++)
-		changedThresholds[i] = -1;
+		changedThresholds[i] = NOT_SET;
 
 	initUi();
 
@@ -617,8 +617,45 @@ void ReportWindow::initUiFooter()
 	bottomHLayout = new QHBoxLayout(footerWidget);
 	bottomHLayout->setObjectName("bottomHLayout");
 
-	bottomSpacer = new QSpacerItem(40, 0, QSizePolicy::Expanding);
-	bottomHLayout->addItem(bottomSpacer);
+	testerNameLineEdit = new QLineEdit(footerWidget);
+	testerNameLineEdit->setObjectName("testerNameLineEdit");
+	testerNameLineEdit->setFixedWidth(FIXED_TESTER_NAME_WIDTH);
+	testerNameLineEdit->setFixedHeight(FIXED_TESTER_NAME_HEIGHT);
+	bottomHLayout->addWidget(testerNameLineEdit);
+
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
+		break;
+
+	case ENGLISH_LANG:
+		testerNameLineEdit->setText("Ivanov Ivan Ivanovich");
+		break;
+	}
+
+	bottomLeftSpacer = new QSpacerItem(20, 0, QSizePolicy::Expanding);
+	bottomHLayout->addItem(bottomLeftSpacer);
+
+	testerJobLineEdit = new QLineEdit(footerWidget);
+	testerJobLineEdit->setObjectName("testerJobLineEdit");
+	testerJobLineEdit->setFixedWidth(FIXED_TESTER_JOB_WIDTH);
+	testerJobLineEdit->setFixedHeight(FIXED_TESTER_JOB_HEIGHT);
+	bottomHLayout->addWidget(testerJobLineEdit);
+
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		testerJobLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
+		break;
+
+	case ENGLISH_LANG:
+		testerJobLineEdit->setText("Ivanov Ivan Ivanovich");
+		break;
+	}
+
+	bottomRightSpacer = new QSpacerItem(40, 0, QSizePolicy::Expanding);
+	bottomHLayout->addItem(bottomRightSpacer);
 
 	saveButton = new QPushButton(footerWidget);
 	saveButton->setMinimumSize(BUTTON_SIZE);

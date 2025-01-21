@@ -16,7 +16,7 @@
 #define MASK_STAND_MANUAL		"MANUAL"
 #define MASK_STAND_AUTO			"AUTO"
 
-#define EMPTY_FILLING			-1
+#define EMPTY_FILLING			NOT_SET
 
 TableRowProperties::TableRowProperties(QObject* parent)
 {
@@ -24,7 +24,7 @@ TableRowProperties::TableRowProperties(QObject* parent)
 
 	presetSettings->direction = DIRECTION_NOT_SET;
 	presetSettings->type = TYPE_NOT_SET;
-	presetSettings->connector = ConnectorId::NOT_SET;
+	presetSettings->connector = ConnectorId::EMPTY;
 }
 
 TableRowProperties::~TableRowProperties()
@@ -568,14 +568,14 @@ std::vector<std::vector<QString>> ConfiguratorWindow::parseData()
 				break;
 
 			case FullColoumnName::CAN_ID:
-				if (currentRowProperties->canId == -1 || currentRowProperties->canId == "-")
+				if (currentRowProperties->canId == NOT_SET || currentRowProperties->canId == "-")
 					rowData.push_back("");
 				else
 					rowData.push_back(currentRowProperties->canId);
 				break;
 
 			case FullColoumnName::BYTE:
-				rowData.push_back(currentRowProperties->byte != -1 ? QString::number(currentRowProperties->byte) : "");
+				rowData.push_back(currentRowProperties->byte != NOT_SET ? QString::number(currentRowProperties->byte) : "");
 				break;
 
 			case FullColoumnName::MIN_CURRENT:
@@ -629,7 +629,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 			for (int row = 0; row < mainTableWidget->rowCount(); row++)
 				if (needVerify)
 					if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
-						tableRowPropertiesVector[row]->pin = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : -1);
+						tableRowPropertiesVector[row]->pin = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : NOT_SET);
 					else
 						return false;
 			break;
@@ -672,7 +672,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					{
 						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
 							if (mainTableWidget->item(row, column) == NULL || mainTableWidget->item(row, column)->text() == "-")
-								tableRowPropertiesVector[row]->byte = -1;
+								tableRowPropertiesVector[row]->byte = NOT_SET;
 							else
 								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, column)->text().toInt();
 
@@ -680,7 +680,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : -1);
+						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : NOT_SET);
 				break;
 
 			case (int)FullColoumnName::MIN_CURRENT:
@@ -693,7 +693,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)FullColoumnName::MAX_CURRENT:
@@ -706,7 +706,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)FullColoumnName::MIN_VOLTAGE:
@@ -719,7 +719,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)FullColoumnName::MAX_VOLTAGE:
@@ -732,7 +732,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)FullColoumnName::NAME:
@@ -775,7 +775,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					{
 						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
 							if (mainTableWidget->item(row, column) == NULL || mainTableWidget->item(row, column)->text() == "-")
-								tableRowPropertiesVector[row]->byte = -1;
+								tableRowPropertiesVector[row]->byte = NOT_SET;
 							else
 								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, column)->text().toInt();
 						else
@@ -791,14 +791,14 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 					{
 						if (generateError(row, verifyTableData(column, mainTableWidget->item(row, column))))
 							if (mainTableWidget->item(row, column) == NULL || mainTableWidget->item(row, column)->text() == "-")
-								tableRowPropertiesVector[row]->byte = -1;
+								tableRowPropertiesVector[row]->byte = NOT_SET;
 							else
 								tableRowPropertiesVector[row]->byte = mainTableWidget->item(row, column)->text().toInt();
 						else
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : -1);
+						tableRowPropertiesVector[row]->byte = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toInt() : NOT_SET);
 				break;
 
 			case (int)ManualColoumnName::NAME:
@@ -845,7 +845,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)AutoColoumnName::MAX_CURRENT:
@@ -858,7 +858,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxCurrent = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)AutoColoumnName::MIN_VOLTAGE:
@@ -871,7 +871,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->minVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)AutoColoumnName::MAX_VOLTAGE:
@@ -884,7 +884,7 @@ bool ConfiguratorWindow::updateTableData(bool needVerify)
 							return false;
 					}
 					else
-						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : -1);
+						tableRowPropertiesVector[row]->maxVoltage = (mainTableWidget->item(row, column) != NULL ? mainTableWidget->item(row, column)->text().toFloat() : NOT_SET);
 				break;
 
 			case (int)AutoColoumnName::NAME:
@@ -973,7 +973,7 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 				break;
 			data->text().toInt(&isOk);
 			if (!isOk)
-				return Errors::Configurator::SAVE_BYTE_INCORRECT;
+				return Errors::Configurator::SAVE_BIT_INCORRECT;
 			break;
 
 		case FullColoumnName::MIN_CURRENT:
@@ -1056,7 +1056,7 @@ Errors::Configurator ConfiguratorWindow::verifyTableData(int coloumnName, QTable
 				break;
 			data->text().toInt(&isOk);
 			if (!isOk)
-				return Errors::Configurator::SAVE_BYTE_INCORRECT;
+				return Errors::Configurator::SAVE_BIT_INCORRECT;
 			break;
 
 		case ManualColoumnName::NAME:
@@ -1184,7 +1184,7 @@ static Errors::Configurator verifyFileData(FullColoumnName column, QString data)
 			break;
 		data.toInt(&isOk, 10);
 		if (!isOk)
-			return Errors::Configurator::FILE_DATA_BYTE_INCORRECT;
+			return Errors::Configurator::FILE_DATA_BIT_INCORRECT;
 		break;
 
 	case FullColoumnName::MIN_CURRENT:
@@ -1347,7 +1347,7 @@ void ConfiguratorWindow::proccessSelectedFile(QString fileName)
 
 				case (int)FullColoumnName::BYTE:
 					if (generateError(row, verifyFileData((FullColoumnName)currentColoumnNum, currentData)))
-						tableRowPropertiesVector[currentRowNum]->byte = (currentData != "" ? currentData.toInt() : -1);
+						tableRowPropertiesVector[currentRowNum]->byte = (currentData != "" ? currentData.toInt() : NOT_SET);
 					else
 						isFileCorrect = false;
 					break;
@@ -1425,9 +1425,9 @@ void ConfiguratorWindow::resetedFill(int standType)
 
 		QAbstractItemModel* model = mainTableWidget->model();
 		currentRowProperties->connectorComboBox->setCurrentIndex((int)(currentRowProperties->presetSettings->connector));
-		if (currentRowProperties->pin != -1)
+		if (currentRowProperties->pin != NOT_SET)
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::PIN), QString::number(currentRowProperties->pin));
-		if (currentRowProperties->presetSettings->direction != -1)
+		if (currentRowProperties->presetSettings->direction != NOT_SET)
 			currentRowProperties->on_direction_activated(currentRowProperties->presetSettings->direction + 1);
 
 		switch (currentRowProperties->presetSettings->type)
@@ -1446,39 +1446,39 @@ void ConfiguratorWindow::resetedFill(int standType)
 		switch (standType)
 		{
 		case STAND_NOT_SET:
-			if (currentRowProperties->canId != -1)
+			if (currentRowProperties->canId != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::CAN_ID), currentRowProperties->canId);
-			if (currentRowProperties->byte != -1)
+			if (currentRowProperties->byte != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::BYTE), QString::number(currentRowProperties->byte));
-			if (currentRowProperties->minCurrent != -1)
+			if (currentRowProperties->minCurrent != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::MIN_CURRENT), QString::number(currentRowProperties->minCurrent));
-			if (currentRowProperties->maxCurrent != -1)
+			if (currentRowProperties->maxCurrent != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::MAX_CURRENT), QString::number(currentRowProperties->maxCurrent));
-			if (currentRowProperties->minVoltage != -1)
+			if (currentRowProperties->minVoltage != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::MIN_VOLTAGE), QString::number(currentRowProperties->minVoltage));
-			if (currentRowProperties->maxVoltage != -1)
+			if (currentRowProperties->maxVoltage != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)FullColoumnName::MAX_VOLTAGE), QString::number(currentRowProperties->maxVoltage));
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::NAME), currentRowProperties->name);
 			model->setData(model->index(currentRowNum, (int)FullColoumnName::COMPONENT), currentRowProperties->component);
 			break;
 
 		case STAND_MANUAL:
-			if (currentRowProperties->canId != -1)
+			if (currentRowProperties->canId != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)ManualColoumnName::CAN_ID), currentRowProperties->canId);
-			if (currentRowProperties->byte != -1)
+			if (currentRowProperties->byte != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)ManualColoumnName::BYTE), QString::number(currentRowProperties->byte));
 			model->setData(model->index(currentRowNum, (int)ManualColoumnName::NAME), currentRowProperties->name);
 			model->setData(model->index(currentRowNum, (int)ManualColoumnName::COMPONENT), currentRowProperties->component);
 			break;
 
 		case STAND_AUTO:
-			if (currentRowProperties->minCurrent != -1)
+			if (currentRowProperties->minCurrent != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)AutoColoumnName::MIN_CURRENT), QString::number(currentRowProperties->minCurrent));
-			if (currentRowProperties->maxCurrent != -1)
+			if (currentRowProperties->maxCurrent != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)AutoColoumnName::MAX_CURRENT), QString::number(currentRowProperties->maxCurrent));
-			if (currentRowProperties->minVoltage != -1)
+			if (currentRowProperties->minVoltage != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)AutoColoumnName::MIN_VOLTAGE), QString::number(currentRowProperties->minVoltage));
-			if (currentRowProperties->maxVoltage != -1)
+			if (currentRowProperties->maxVoltage != NOT_SET)
 				model->setData(model->index(currentRowNum, (int)AutoColoumnName::MAX_VOLTAGE), QString::number(currentRowProperties->maxVoltage));
 			model->setData(model->index(currentRowNum, (int)AutoColoumnName::NAME), currentRowProperties->name);
 			break;
@@ -1572,8 +1572,8 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 			QMessageBox::critical(this, "Error saving file", "Can_id on row " + QString::number(row) + " is incorrect\n Write heximal or decimal number", "Ok");
 			return false;
 
-		case Errors::Configurator::SAVE_BYTE_INCORRECT:
-			QMessageBox::critical(this, "Error saving file", "Byte on row " + QString::number(row) + " is incorrect\n Write decimal number from 0 to 7", "Ok");
+		case Errors::Configurator::SAVE_BIT_INCORRECT:
+			QMessageBox::critical(this, "Error saving file", "Bit on row " + QString::number(row) + " is incorrect\n Write decimal number from 0 to 7", "Ok");
 			return false;
 
 		case Errors::Configurator::SAVE_MIN_CURRENT_NULL:
@@ -1653,7 +1653,7 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 			QMessageBox::critical(this, "Error loading file", "Can_id data on row " + QString::number(row) + " is incorrect", "Ok");
 			return false;
 
-		case Errors::Configurator::FILE_DATA_BYTE_INCORRECT:
+		case Errors::Configurator::FILE_DATA_BIT_INCORRECT:
 			QMessageBox::critical(this, "Error loading file", "Byte data on row " + QString::number(row) + " is incorrect", "Ok");
 			return false;
 
@@ -1714,7 +1714,7 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Can_id в строке ") + QString::number(row) + QString::fromLocal8Bit(" не корректен\n Введите шестнадцатеричное или десятичное число"), QString::fromLocal8Bit("Ок"));
 			return false;	
 
-		case Errors::Configurator::SAVE_BYTE_INCORRECT:
+		case Errors::Configurator::SAVE_BIT_INCORRECT:
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при сохранении"), QString::fromLocal8Bit("Байт в строке ") + QString::number(row) + QString::fromLocal8Bit(" не корректен\n Введите десятичную цифру от 0 до 7"), QString::fromLocal8Bit("Ок"));
 			return false;
 
@@ -1798,7 +1798,7 @@ bool ConfiguratorWindow::generateError(int row, Errors::Configurator error)
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при загрузке"), QString::fromLocal8Bit("Can_id в строке ") + QString::number(row) + QString::fromLocal8Bit(" не корректен"), QString::fromLocal8Bit("Ок"));
 			return false;
 
-		case Errors::Configurator::FILE_DATA_BYTE_INCORRECT:
+		case Errors::Configurator::FILE_DATA_BIT_INCORRECT:
 			QMessageBox::critical(this, QString::fromLocal8Bit("Ошибка при загрузке"), QString::fromLocal8Bit("Байт в строке ") + QString::number(row) + QString::fromLocal8Bit(" не корректен"), QString::fromLocal8Bit("Ок"));
 			return false;
 

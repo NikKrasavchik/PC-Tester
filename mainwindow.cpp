@@ -1256,6 +1256,22 @@ void MainWindow::on_checkAdaptersButton_clicked()
 
 void MainWindow::on_outTestManualStandButton_clicked()
 {
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].direction == DIRECTION_OUT)
@@ -1266,6 +1282,22 @@ void MainWindow::on_outTestManualStandButton_clicked()
 
 void MainWindow::on_inTestManualStandButton_clicked()
 {
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].direction == DIRECTION_IN)
@@ -1276,11 +1308,43 @@ void MainWindow::on_inTestManualStandButton_clicked()
 
 void MainWindow::on_fullTestManualStandButton_clicked()
 {
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND, cables);
 }
 
 void MainWindow::on_inManualTestAutoStandButton_clicked()
 {
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].direction == DIRECTION_IN)
@@ -1291,6 +1355,27 @@ void MainWindow::on_inManualTestAutoStandButton_clicked()
 
 void MainWindow::on_outManualTestAutoStandButton_clicked()
 {
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	selectedFileStandType = CFG_STAND_MANUAL;
+#endif // DEBUG
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].direction == DIRECTION_OUT)
@@ -1301,6 +1386,27 @@ void MainWindow::on_outManualTestAutoStandButton_clicked()
 
 void MainWindow::on_inAutoTestAutoStandButton_clicked()
 {
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	selectedFileStandType = CFG_STAND_MANUAL;
+#endif // DEBUG
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].direction == DIRECTION_IN)
@@ -1311,6 +1417,27 @@ void MainWindow::on_inAutoTestAutoStandButton_clicked()
 
 void MainWindow::on_outAutoTestAutoStandButton_clicked()
 {
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	selectedFileStandType = CFG_STAND_MANUAL;
+#endif // DEBUG
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].direction == DIRECTION_OUT)
@@ -1321,6 +1448,27 @@ void MainWindow::on_outAutoTestAutoStandButton_clicked()
 
 void MainWindow::on_fullTestAutoStandButton_clicked()
 {
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	selectedFileStandType = CFG_STAND_MANUAL;
+#endif // DEBUG
+	if (!can->getAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (!isFileSelected)
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
+		return;
+	}
+
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].direction == DIRECTION_OUT)
@@ -1330,25 +1478,15 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 }
 
 void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
-{
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	selectedFileStandType = CFG_STAND_MANUAL;
-#endif // DEBUG
-		
+{		
 	std::vector<QString> nameAdapters = can->getNameAdapters();
 	int acceptValue = 0;
 	for(int j = 0; j < nameAdapters.size(); j++)
 		if (selectAdapterComboBox->currentText() == nameAdapters[j])
 			acceptValue = 1;
 
-	if (acceptValue == 0)
+	if (!acceptValue)
 	{
-		if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Изменился список активных адаптеров адаптеров"));
-		else
-			QMessageBox::warning(this, QString("Warning"), QString("The list of active adapter adapters has changed"));
 		on_checkAdaptersButton_clicked();
 		return;
 	}
@@ -1370,27 +1508,6 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 			resetWindowView();
 			this->show();
 		}
-	}
-	else if (!isFileSelected)
-	{
-		if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите конфигурационный файл перед началом работы"));
-		else
-			QMessageBox::warning(this, QString("Warning"), QString("Select a configuration file before you begin"));
-	}
-	else if (!can->getFrequencySelected())
-	{
-		if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите частоту Can-шины перед началом работы"));
-		else
-			QMessageBox::warning(this, QString("Warning"), QString("Select Can Bus frequency before starting work"));
-	}
-	else if (!can->getAdapterSelected())
-	{
-		if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите Can-адаптер перед началом работы"));
-		else
-			QMessageBox::warning(this, QString("Warning"), QString("Select Can Adapter before starting"));
 	}
 }
 

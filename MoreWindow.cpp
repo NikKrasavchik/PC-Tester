@@ -1,6 +1,5 @@
 #include "MoreWindow.h"
 
-
 #define CELL_MIN_CURRENT	6
 #define CELL_MAX_CURRENT	7
 #define CELL_MIN_VOLTAGE	8
@@ -13,7 +12,7 @@ MoreWindow::MoreWindow(TestTableRowProperties* row)
 	measured.current = row->measured.voltage;
 	measured.voltage = row->measured.current;
 	for (int i = 0; i < sizeof(changedThresholds) / sizeof(changedThresholds[0]); i++)
-		changedThresholds[i] = -1;
+		changedThresholds[i] = NOT_SET;
 
 	initUi();
 	QMetaObject::connectSlotsByName(this);
@@ -23,15 +22,15 @@ MoreWindow::~MoreWindow()
 
 void MoreWindow::setValueProgs()
 {
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != -1 ? QString::number(measured.voltage) : "-"));
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), (measured.current != -1 ? QString::number(measured.current) : "-"));
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_U_TABLE), (measured.voltage != NOT_SET ? QString::number(measured.voltage) : "-"));
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_MEASURED_VALUE_I_TABLE), (measured.current != NOT_SET ? QString::number(measured.current) : "-"));
 
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MIN_TABLE), row->minVoltage);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_U_MAX_TABLE), row->maxVoltage);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MIN_TABLE), row->minCurrent);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PROGS_I_MAX_TABLE), row->maxCurrent);
 
-	if (measured.voltage != -1)
+	if (measured.voltage != NOT_SET)
 	{
 		// Красим пороги и измеренное значение
 		if (row->minVoltage > measured.voltage)
@@ -409,20 +408,20 @@ void MoreWindow::on_saveChangesButton_clicked()
 		cableTmp.bit = row->bit;
 		cableTmp.name = row->name;
 		cableTmp.component = row->component;
-		cableTmp.minVoltage = (changedThresholds[0] != -1 ? changedThresholds[0] : row->minVoltage);
-		cableTmp.maxVoltage = (changedThresholds[1] != -1 ? changedThresholds[1] : row->maxVoltage);
-		cableTmp.minCurrent = (changedThresholds[2] != -1 ? changedThresholds[2] : row->minCurrent);
-		cableTmp.maxCurrent = (changedThresholds[3] != -1 ? changedThresholds[3] : row->maxCurrent);
+		cableTmp.minVoltage = (changedThresholds[0] != NOT_SET ? changedThresholds[0] : row->minVoltage);
+		cableTmp.maxVoltage = (changedThresholds[1] != NOT_SET ? changedThresholds[1] : row->maxVoltage);
+		cableTmp.minCurrent = (changedThresholds[2] != NOT_SET ? changedThresholds[2] : row->minCurrent);
+		cableTmp.maxCurrent = (changedThresholds[3] != NOT_SET ? changedThresholds[3] : row->maxCurrent);
 
-		row->minVoltage = (changedThresholds[0] != -1 ? changedThresholds[0] : row->minVoltage);
-		row->maxVoltage = (changedThresholds[1] != -1 ? changedThresholds[1] : row->maxVoltage);
-		row->minCurrent = (changedThresholds[2] != -1 ? changedThresholds[2] : row->minCurrent);
-		row->maxCurrent = (changedThresholds[3] != -1 ? changedThresholds[3] : row->maxCurrent);
+		row->minVoltage = (changedThresholds[0] != NOT_SET ? changedThresholds[0] : row->minVoltage);
+		row->maxVoltage = (changedThresholds[1] != NOT_SET ? changedThresholds[1] : row->maxVoltage);
+		row->minCurrent = (changedThresholds[2] != NOT_SET ? changedThresholds[2] : row->minCurrent);
+		row->maxCurrent = (changedThresholds[3] != NOT_SET ? changedThresholds[3] : row->maxCurrent);
 
-		changedThresholds[0] = -1;
-		changedThresholds[1] = -1;
-		changedThresholds[2] = -1;
-		changedThresholds[3] = -1;
+		changedThresholds[0] = NOT_SET;
+		changedThresholds[1] = NOT_SET;
+		changedThresholds[2] = NOT_SET;
+		changedThresholds[3] = NOT_SET;
 
 		resaveFile(testwindow->getFileName(), cableTmp);
 

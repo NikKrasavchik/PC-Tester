@@ -424,7 +424,7 @@ void ConfiguratorWindow::resetHeaderLanguage(int standType)
 
 void ConfiguratorWindow::initText()
 {
-	int standTypeState = -1;
+	int standTypeState = NOT_SET;
 	if (selectStandTypeComboBox->count())
 	{
 		standTypeState = selectStandTypeComboBox->currentIndex();
@@ -444,7 +444,7 @@ void ConfiguratorWindow::initText()
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Тип стенда"));
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Ручной"));
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Автоматический"));
-		if (standTypeState != -1)
+		if (standTypeState != NOT_SET)
 			selectStandTypeComboBox->setCurrentIndex(standTypeState);
 		break;
 
@@ -459,7 +459,7 @@ void ConfiguratorWindow::initText()
 		selectStandTypeComboBox->addItem(QString("Stand type"));
 		selectStandTypeComboBox->addItem(QString("Manual"));
 		selectStandTypeComboBox->addItem(QString("Auto"));
-		if (standTypeState != -1)
+		if (standTypeState != NOT_SET)
 			selectStandTypeComboBox->setCurrentIndex(standTypeState);
 		break;
 	}
@@ -469,7 +469,7 @@ void ConfiguratorWindow::initText()
 
 void ConfiguratorWindow::resetLanguage()
 {
-	int standTypeState = -1;
+	int standTypeState = NOT_SET;
 	if (selectStandTypeComboBox->count())
 	{
 		standTypeState = selectStandTypeComboBox->currentIndex();
@@ -497,7 +497,7 @@ void ConfiguratorWindow::resetLanguage()
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Тип стенда"));
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Ручной"));
 		selectStandTypeComboBox->addItem(QString::fromLocal8Bit("Автоматический"));
-		if (standTypeState != -1)
+		if (standTypeState != NOT_SET)
 			selectStandTypeComboBox->setCurrentIndex(standTypeState);
 
 		break;
@@ -513,7 +513,7 @@ void ConfiguratorWindow::resetLanguage()
 		selectStandTypeComboBox->addItem(QString("Stand type"));
 		selectStandTypeComboBox->addItem(QString("Manual"));
 		selectStandTypeComboBox->addItem(QString("Auto"));
-		if (standTypeState != -1)
+		if (standTypeState != NOT_SET)
 			selectStandTypeComboBox->setCurrentIndex(standTypeState);
 
 		break;

@@ -144,7 +144,7 @@ ManualStandTwoThread::ManualStandTwoThread(std::vector<Cable> cables, StandStatu
 		cable->canId = cables[i].canId;
 		cable->byte = cables[i].bit;
 
-		cable->oldValue = -1;
+		cable->oldValue = NOT_SET;
 		this->cables.push_back(cable);
 	}
 

@@ -36,7 +36,7 @@
 #define DIRECTION_SET_NUM		2
 #define DIRECTION_NOT_SET_NUM	3
 
-#define CONNECTOR_NOT_SET		-1
+#define CONNECTOR_NOT_SET		NOT_SET
 
 #define NO_OPTION_RU			QString::fromLocal8Bit("Нет доступных вариантов")
 #define NO_OPTION_EN			QString("No options available")

@@ -16,7 +16,7 @@ Can::Can()
 
 void Can::initCan()
 {
-	if (kvaser->activeAdapter != -1) // kvaser
+	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		
 		canInitializeLibrary(); // Инициализация api kvaser
@@ -41,7 +41,7 @@ void Can::initCan()
 
 void Can::deinitCan()
 {
-	if (kvaser->activeAdapter != -1) // kvaser
+	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		canBusOff(hnd);
 		canClose(hnd);
@@ -55,7 +55,7 @@ void Can::deinitCan()
 
 void Can::writeCan(int id, int* msg)
 {
-	if (kvaser->activeAdapter != -1) // kvaser
+	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned char msgSendKvase[8];
 		for (int i = 0; i < 8; i++)
@@ -82,15 +82,15 @@ void Can::writeCan(int id, int* msg)
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
 	//Can::coun++;
-	if (kvaser->activeAdapter != -1) // kvaser
+	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
 		unsigned long* timestamp = new unsigned long();
 		unsigned char msgReceive[8] = { 0, };
 
-		*id = -1;
+		*id = NOT_SET;
 		canReadWait(hnd, (long*)id, msgReceive, dlc, flags, timestamp, timeout);
-		if (*id != -1)
+		if (*id != NOT_SET)
 		{
 			for (int i = 0; i < 8; i++)
 				msg[i] = msgReceive[i];
@@ -118,8 +118,8 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 
 void Can::setAdapterNeme(QString adapter)
 {
-	kvaser->activeAdapter = -1;
-	marathon->activeAdapter = -1;
+	kvaser->activeAdapter = NOT_SET;
+	marathon->activeAdapter = NOT_SET;
 
 	if (adapter == "..." || adapter == "")
 	{
@@ -143,7 +143,7 @@ void Can::setAdapterNeme(QString adapter)
 		}
 	b_adapterSelected = false;
 
-	if (kvaser->activeAdapter == -1 || marathon->activeAdapter == -1)
+	if (kvaser->activeAdapter == NOT_SET || marathon->activeAdapter == NOT_SET)
 	{
 		if (1)
 		{
@@ -221,7 +221,7 @@ std::vector<QString> Can::getNameAdapters()
 			strNameAdapter = "Marathon\n";
 			for (int i = 0; i < 4; i++)
 			{
-				if (binfo.chip[i] == -1)
+				if (binfo.chip[i] == NOT_SET)
 					continue;
 				strNameAdapter += QString::fromStdString(binfo.name);
 				strNameAdapter += " " + QString::number(binfo.chip[i]);

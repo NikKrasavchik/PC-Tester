@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG
+//#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -19,6 +19,8 @@
 
 #define MANUAL_STAND	0
 #define AUTO_STAND		1
+
+#define NOT_SET			-1
 
 #include <QString>
 #include <vector>
@@ -130,7 +132,7 @@ enum class WindowType
 
 enum class ConnectorId
 {
-	NOT_SET,
+	EMPTY,
 	A,
 	B,
 	C,
@@ -148,14 +150,14 @@ enum class TypeResetTableButtonsTheme
 
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
-#define TYPE_NOT_SET			-1
+#define TYPE_NOT_SET			NOT_SET
 #define TYPE_DIGITAL			0
 #define TYPE_PWM				1
 #define TYPE_VNH				2
 #define TYPE_ANALOG				3
 #define TYPE_HALL				4
 
-#define DIRECTION_NOT_SET		-1
+#define DIRECTION_NOT_SET		NOT_SET
 #define DIRECTION_OUT			0
 #define DIRECTION_IN			1
 
@@ -190,7 +192,7 @@ struct FloatCheck
 	double d3;
 	double d4;
 
-	FloatCheck(double d1 = -1, double d2 = -1 , double d3 = -1, double d4 = -1)
+	FloatCheck(double d1 = NOT_SET, double d2 = NOT_SET , double d3 = NOT_SET, double d4 = NOT_SET)
 	{
 		this->d1 = d1;
 		this->d2 = d2;
@@ -203,8 +205,8 @@ extern std::vector<std::vector<FloatCheck*>> floatCheck;
 
 struct Measured
 {
-	double current = -1;
-	double voltage = -1;
+	double current = NOT_SET;
+	double voltage = NOT_SET;
 };
 
 extern ViewWindowState* viewWindowState;
@@ -219,6 +221,8 @@ extern ViewWindowState* viewWindowState;
 #define FIXED_FILE_NAME_HEIGHT		50
 #define FIXED_TESTER_NAME_WIDTH		300
 #define FIXED_TESTER_NAME_HEIGHT	50
+#define FIXED_TESTER_JOB_WIDTH		150
+#define FIXED_TESTER_JOB_HEIGHT		50
 #define FIXED_REPORT_BUTTON_WIDTH	100
 #define FIXED_REPORT_BUTTON_HEIGHT	50
 #define FIXED_HEADER_BUTTON_WIDTH	120
@@ -249,7 +253,7 @@ namespace Errors
 		SAVE_TYPE_NOT_SET,
 		SAVE_CAN_ID_INCORRECT_HEX,
 		SAVE_CAN_ID_INCORRECT_DEC,
-		SAVE_BYTE_INCORRECT,
+		SAVE_BIT_INCORRECT,
 		SAVE_MIN_CURRENT_NULL,
 		SAVE_MIN_CURRENT_INCORRECT,
 		SAVE_MAX_CURRENT_NULL,
@@ -270,13 +274,44 @@ namespace Errors
 		FILE_DATA_TYPE_INCORRECT,
 		FILE_DATA_CAN_ID_INCORRECT_HEX,
 		FILE_DATA_CAN_ID_INCORRECT_DEC,
-		FILE_DATA_BYTE_INCORRECT,
+		FILE_DATA_BIT_INCORRECT,
 		FILE_DATA_MIN_CURRENT_INCORRECT,
 		FILE_DATA_MAX_CURRENT_INCORRECT,
 		FILE_DATA_MIN_VOLTAGE_INCORRECT,
 		FILE_DATA_MAX_VOLTAGE_INCORRECT,
 		FILE_DATA_NAME_EMPTY,
 		FILE_DATA_COMPONENT_EMPTY
+	};
+
+	enum class MainWindow
+	{
+		FILE_OPEN,
+		FILE_MASK_CFG,
+		FILE_MASK_STAND_TYPE,
+		FILE_DATA_AMOUNT,
+		FILE_DATA_CONNECTOR_INCORRECT,
+		FILE_DATA_PIN_INCORRECT,
+		FILE_DATA_DIRECTION_INCORRECT,
+		FILE_DATA_TYPE_INCORRECT,
+		FILE_DATA_CAN_ID_INCORRECT_HEX,
+		FILE_DATA_BIT_INCORRECT,
+		FILE_DATA_MIN_CURRENT_INCORRECT,
+		FILE_DATA_MAX_CURRENT_INCORRECT,
+		FILE_DATA_MIN_VOLTAGE_INCORRECT,
+		FILE_DATA_MAX_VOLTAGE_INCORRECT,
+		FILE_DATA_NAME_EMPTY,
+		FILE_DATA_COMPONENT_EMPTY
+	};
+}
+
+namespace Warnings
+{
+	enum class MainWindow
+	{
+		TEST_ACCESS_FILE_SEL,
+		TEST_ACCESS_FREQUENCY_SEL,
+		TEST_ACCESS_ADAPTER_SEL,
+		ADAPTERS_CHANGED
 	};
 }
 
