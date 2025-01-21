@@ -1613,9 +1613,24 @@ void TestWindow::on_fullTestSortButton_clicked()
 
 void TestTableRowProperties::on_moreButton_clicked()
 {
+	MoreWindow* moreWindow = nullptr;
+	if (this->direction == "OUT")
+		if (this->type == "DIGITAL")
+			moreWindow = new MoreWindowOutDig(this);
+		else if (this->type == "PWM")
+			moreWindow = new MoreWindowOutPwm(this);
+		else if (this->type == "VNH")
+			moreWindow = new MoreWindowOutVnh(this);
+		else
+			QMessageBox::warning(testwindow, "Error","Error");
+	else if(this->direction == "OUT")
+		if(this->type == "DIGITAL")
+			moreWindow = new MoreWindowOutDig(this);
+		else
+			QMessageBox::warning(testwindow, "Error","Error");
+	else
+		QMessageBox::warning(testwindow, "Error","Error");
 
-
-	MoreWindow* moreWindow = new MoreWindow(this);
 
 	WindowFrame w(WindowType::MOREWINDOW, nullptr, moreWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
@@ -1627,3 +1642,4 @@ void TestTableRowProperties::on_checkButton_clicked()
 {
 
 }
+ 

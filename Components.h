@@ -243,7 +243,7 @@ extern ViewWindowState* viewWindowState;
 
 namespace Errors
 {
-	enum class Configurator
+	enum class Configurator // Никит, вот это было бы было кайф закоментить. Чё каждый значит
 	{
 		CORRECT,
 		SAVE_CONNECTOR_NOT_SET,
