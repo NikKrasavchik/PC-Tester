@@ -81,8 +81,6 @@ private:
 	QTextEdit* commentTextEdit;
 	
 	TestTableRowProperties* row;
-	TestWindow* testwindow;
-	Measured measured;
 	float changedThresholds[4];
 public slots:
 	void on_mainTableWidget_cellChanged(int row, int column);
