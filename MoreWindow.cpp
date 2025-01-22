@@ -84,95 +84,95 @@ void MoreWindow::initBaseUi()
 void MoreWindowOut::initUiTableOut()
 {
 	// Pad
-	mainTableWidget->setSpan(CELL_PAD_TABLE, 4, 1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PAD_TABLE), "");
-	mainTableWidget->item(CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PAD_TABLE)->setFont(*font);
+	mainTableWidget->setSpan(OUTALL_CELL_PAD_TABLE, 4, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_PAD_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setFont(*font);
 	// Pin
-	mainTableWidget->setSpan(CELL_PIN_TABLE, 4, 1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PIN_TABLE), "");
-	mainTableWidget->item(CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PIN_TABLE)->setFont(*font);
+	mainTableWidget->setSpan(OUTALL_CELL_PIN_TABLE, 4, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_PIN_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setFont(*font);
 	// Type
-	mainTableWidget->setSpan(CELL_TYPE_TABLE, 4, 1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TYPE_TABLE), "");
-	mainTableWidget->item(CELL_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_TYPE_TABLE)->setFont(*font);
+	mainTableWidget->setSpan(OUTALL_CELL_TYPE_TABLE, 4, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_TYPE_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setFont(*font);
 	// Name
-	mainTableWidget->setSpan(CELL_NAME_TABLE, 4, 1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_NAME_TABLE), "");
-	mainTableWidget->item(CELL_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_NAME_TABLE)->setFont(*font);
+	mainTableWidget->setSpan(OUTALL_CELL_NAME_TABLE, 4, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_NAME_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setFont(*font);
 	// Comment
-	mainTableWidget->setSpan(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 4, 1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders)), "");
-	mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFont(*font);
+	mainTableWidget->setSpan(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 4, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders)), "");
+	mainTableWidget->item(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFont(*font);
 
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		mainTableWidget->item(CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
-		mainTableWidget->item(CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
-		mainTableWidget->item(CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
-		mainTableWidget->item(CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
-		mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText(QString::fromLocal8Bit("Коментарий"));
+		mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
+		mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
+		mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
+		mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
+		mainTableWidget->item(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText(QString::fromLocal8Bit("Коментарий"));
 		break;
 	case ENGLISH_LANG:
-		mainTableWidget->item(CELL_PAD_TABLE)->setText("Pad");
-		mainTableWidget->item(CELL_PIN_TABLE)->setText("Pin");
-		mainTableWidget->item(CELL_TYPE_TABLE)->setText("Type");
-		mainTableWidget->item(CELL_NAME_TABLE)->setText("Name");
-		mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText("Comments");
+		mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setText("Pad");
+		mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setText("Pin");
+		mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setText("Type");
+		mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setText("Name");
+		mainTableWidget->item(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText("Comments");
 		break;
 	}
 	// Pad
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), row->connectorStr);
-	mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setFont(*font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CEll_VALUE_PAD_TABLE), row->connectorStr);
+	mainTableWidget->item(OUTALL_CEll_VALUE_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CEll_VALUE_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CEll_VALUE_PAD_TABLE)->setFont(*font);
 	// Pin
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), row->pin);
-	mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setFont(*font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_VALUE_PIN_TABLE), row->pin);
+	mainTableWidget->item(OUTALL_CELL_VALUE_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_VALUE_PIN_TABLE)->setFont(*font);
 	// Type
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_TYPE_TABLE), row->type);
-	mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setFont(*font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_VALUE_TYPE_TABLE), row->type);
+	mainTableWidget->item(OUTALL_CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_VALUE_TYPE_TABLE)->setFont(*font);
 	// Name
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), row->name);
-	mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setFont(*font);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_VALUE_NAME_TABLE), row->name);
+	mainTableWidget->item(OUTALL_CELL_VALUE_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_VALUE_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_VALUE_NAME_TABLE)->setFont(*font);
 	// Comment
 	commentTextEdit = new QTextEdit();
 	commentTextEdit->setText(row->comment);
 	connect(commentTextEdit, &QTextEdit::textChanged, this, &MoreWindow::on_commentTextEdit_textChanged);
-	mainTableWidget->setCellWidget(ROW_VALUE_COMMENT_TABLE, COLUMN_VALUE_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), commentTextEdit);
+	mainTableWidget->setCellWidget(OUTALL_ROW_VALUE_COMMENT_TABLE, OUTALL_COLUMN_VALUE_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), commentTextEdit);
 
-	mainTableWidget->setColumnWidth(COLUMN_PAD_TABLE,	65);
-	mainTableWidget->setColumnWidth(COLUMN_PIN_TABLE,	65);
-	mainTableWidget->setColumnWidth(COLUMN_TYPE_TABLE,	75);
-	mainTableWidget->setColumnWidth(ROW_NAME_TABLE,		75);
-	mainTableWidget->setColumnWidth(COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 150);
+	mainTableWidget->setColumnWidth(OUTALL_COLUMN_PAD_TABLE,	65);
+	mainTableWidget->setColumnWidth(OUTALL_COLUMN_PIN_TABLE,	65);
+	mainTableWidget->setColumnWidth(OUTALL_COLUMN_TYPE_TABLE,	75);
+	mainTableWidget->setColumnWidth(OUTALL_ROW_NAME_TABLE,		75);
+	mainTableWidget->setColumnWidth(OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 150);
 
 	mainTableWidget->setRowHeight(0, 40);
 	mainTableWidget->setRowHeight(1, 40);
 	mainTableWidget->setRowHeight(2, 40);
 	mainTableWidget->setRowHeight(3, 40);
 	
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PAD_TABLE,	 QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PIN_TABLE,	 QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE_TABLE, QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME_TABLE, QHeaderView::Stretch);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_PAD_TABLE,	 QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_PIN_TABLE,	 QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TYPE_TABLE, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_NAME_TABLE, QHeaderView::Stretch);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), QHeaderView::Fixed);
 
 	mainTableWidget->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
 	mainTableWidget->verticalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
@@ -183,107 +183,107 @@ void MoreWindowOut::initUiTableOut()
 	for (int i = 0; i < coutTrehholders; i++)
 	{
 		// Name measured
-		mainTableWidget->setSpan(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 6);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->setSpan(OUTALL_ROW_NAME_MEASURED_TABLE, OUTALL_COLUMN_NAME_MEASURED_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i), 1, 6);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_NAME_MEASURED_TABLE, OUTALL_COLUMN_NAME_MEASURED_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_NAME_MEASURED_TABLE, OUTALL_COLUMN_NAME_MEASURED_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_NAME_MEASURED_TABLE, OUTALL_COLUMN_NAME_MEASURED_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_NAME_MEASURED_TABLE, OUTALL_COLUMN_NAME_MEASURED_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Measured value
-		mainTableWidget->setSpan(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 2, 2);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->setSpan(OUTALL_ROW_MEASURED_VALUE_TABLE, OUTALL_COLUMN_MEASURED_VALUE_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i), 2, 2);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_MEASURED_VALUE_TABLE, OUTALL_COLUMN_MEASURED_VALUE_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_TABLE, OUTALL_COLUMN_MEASURED_VALUE_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_TABLE, OUTALL_COLUMN_MEASURED_VALUE_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_TABLE, OUTALL_COLUMN_MEASURED_VALUE_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Measured value U
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_MEASURED_VALUE_U_TABLE, OUTALL_COLUMN_MEASURED_VALUE_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_U_TABLE, OUTALL_COLUMN_MEASURED_VALUE_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_U_TABLE, OUTALL_COLUMN_MEASURED_VALUE_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_U_TABLE, OUTALL_COLUMN_MEASURED_VALUE_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Measured value I
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_MEASURED_VALUE_I_TABLE, OUTALL_COLUMN_MEASURED_VALUE_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_I_TABLE, OUTALL_COLUMN_MEASURED_VALUE_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_I_TABLE, OUTALL_COLUMN_MEASURED_VALUE_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_I_TABLE, OUTALL_COLUMN_MEASURED_VALUE_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Progs
-		mainTableWidget->setSpan(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 4);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->setSpan(OUTALL_ROW_TRESHHOLDERS_TABLE, OUTALL_COLUMN_TRESHHOLDERS_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i), 1, 4);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_TRESHHOLDERS_TABLE, OUTALL_COLUMN_TRESHHOLDERS_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_TABLE, OUTALL_COLUMN_TRESHHOLDERS_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_TABLE, OUTALL_COLUMN_TRESHHOLDERS_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_TABLE, OUTALL_COLUMN_TRESHHOLDERS_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Progs U
-		mainTableWidget->setSpan(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 2);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->setSpan(OUTALL_ROW_TRESHHOLDERS_U_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i), 1, 2);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_TRESHHOLDERS_U_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Progs I
-		mainTableWidget->setSpan(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 2);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->setSpan(OUTALL_ROW_TRESHHOLDERS_I_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i), 1, 2);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_TRESHHOLDERS_I_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Progs U min
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_TRESHHOLDERS_U_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Progs U max
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_TRESHHOLDERS_U_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Progs I min
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_TRESHHOLDERS_I_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 		// Progs I max
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_ROW_TRESHHOLDERS_I_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 
-		mainTableWidget->setColumnWidth(COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		50);
-		mainTableWidget->setColumnWidth(COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		50);
-		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		50);
-		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		50);
-		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		50);
-		mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		50);
+		mainTableWidget->setColumnWidth(OUTALL_COLUMN_MEASURED_VALUE_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		50);
+		mainTableWidget->setColumnWidth(OUTALL_COLUMN_MEASURED_VALUE_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		50);
+		mainTableWidget->setColumnWidth(OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		50);
+		mainTableWidget->setColumnWidth(OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		50);
+		mainTableWidget->setColumnWidth(OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		50);
+		mainTableWidget->setColumnWidth(OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		50);
 
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),		QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),		QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i),	QHeaderView::Fixed);
 
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измерение ") + QString::number(i + 1));
-			mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измеренное\nзначенние"));
-			mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("U, В"));
-			mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("I, А"));
-			mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Пороги"));
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("U, В"));
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("I, А"));
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Мин."));
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Макс."));
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Мин."));
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Макс."));
+			mainTableWidget->item(OUTALL_ROW_NAME_MEASURED_TABLE, OUTALL_COLUMN_NAME_MEASURED_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измерение ") + QString::number(i + 1));
+			mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_TABLE, OUTALL_COLUMN_MEASURED_VALUE_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измеренное\nзначенние"));
+			mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_U_TABLE, OUTALL_COLUMN_MEASURED_VALUE_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("U, В"));
+			mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_I_TABLE, OUTALL_COLUMN_MEASURED_VALUE_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("I, А"));
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_TABLE, OUTALL_COLUMN_TRESHHOLDERS_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Пороги"));
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("U, В"));
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("I, А"));
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Мин."));
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Макс."));
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Мин."));
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Макс."));
 			break;
 		case ENGLISH_LANG:
-			mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured " + QString::number(i + 1));
-			mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured\nvalue");
-			mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("U, V");
-			mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("I, A");
-			mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Progs");
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("U, V");
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("I, A");
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Min.");
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Max.");
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Min.");
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Max.");
+			mainTableWidget->item(OUTALL_ROW_NAME_MEASURED_TABLE, OUTALL_COLUMN_NAME_MEASURED_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured " + QString::number(i + 1));
+			mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_TABLE, OUTALL_COLUMN_MEASURED_VALUE_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured\nvalue");
+			mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_U_TABLE, OUTALL_COLUMN_MEASURED_VALUE_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("U, V");
+			mainTableWidget->item(OUTALL_ROW_MEASURED_VALUE_I_TABLE, OUTALL_COLUMN_MEASURED_VALUE_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("I, A");
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_TABLE, OUTALL_COLUMN_TRESHHOLDERS_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Progs");
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("U, V");
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("I, A");
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Min.");
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_U_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_U_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Max.");
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MIN_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MIN_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Min.");
+			mainTableWidget->item(OUTALL_ROW_TRESHHOLDERS_I_MAX_TABLE, OUTALL_COLUMN_TRESHHOLDERS_I_MAX_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Max.");
 			break;
 		}
 	}
@@ -294,7 +294,7 @@ MoreWindowOutDig::MoreWindowOutDig(TestTableRowProperties* row) : MoreWindowOut(
 {
 	coutTrehholders = 2;
 	mainTableWidget->setRowCount(5);
-	mainTableWidget->setColumnCount(5 + coutTrehholders * WIDTH_BLOCK_TRESHHOLDERS);
+	mainTableWidget->setColumnCount(5 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
 
 	initUiTableOut();
 }
@@ -303,7 +303,7 @@ MoreWindowOutPwm::MoreWindowOutPwm(TestTableRowProperties* row) : MoreWindowOut(
 {
 	coutTrehholders = 2;
 	mainTableWidget->setRowCount(5);
-	mainTableWidget->setColumnCount(5 + coutTrehholders * WIDTH_BLOCK_TRESHHOLDERS);
+	mainTableWidget->setColumnCount(5 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
 
 	initUiTableOut();
 }
@@ -312,7 +312,7 @@ MoreWindowOutVnh::MoreWindowOutVnh(TestTableRowProperties* row) : MoreWindowOut(
 {
 	coutTrehholders = 3;
 	mainTableWidget->setRowCount(5);
-	mainTableWidget->setColumnCount(5 + coutTrehholders * WIDTH_BLOCK_TRESHHOLDERS);
+	mainTableWidget->setColumnCount(5 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
 
 	initUiTableOut();
 }
@@ -327,206 +327,156 @@ void MoreWindowIn::initUiTableIn(TypeMoreWindow typeWindow)
 		break;
 	case TypeMoreWindow::MoreWindowInAnalog:
 		// Pad
-		mainTableWidget->setSpan(CELL_PAD_TABLE, 4, 1);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PAD_TABLE), "");
-		mainTableWidget->item(CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CELL_PAD_TABLE)->setFont(*font);
+		mainTableWidget->setSpan(INANALOG_CELL_PAD_TABLE, 3, 1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_PAD_TABLE), "");
+		mainTableWidget->item(INANALOG_CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CELL_PAD_TABLE)->setFont(*font);
 		// Pin
-		mainTableWidget->setSpan(CELL_PIN_TABLE, 4, 1);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PIN_TABLE), "");
-		mainTableWidget->item(CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CELL_PIN_TABLE)->setFont(*font);
+		mainTableWidget->setSpan(INANALOG_CELL_PIN_TABLE, 3, 1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_PIN_TABLE), "");
+		mainTableWidget->item(INANALOG_CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CELL_PIN_TABLE)->setFont(*font);
 		// Type
-		mainTableWidget->setSpan(CELL_TYPE_TABLE, 4, 1);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TYPE_TABLE), "");
-		mainTableWidget->item(CELL_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CELL_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CELL_TYPE_TABLE)->setFont(*font);
+		mainTableWidget->setSpan(INANALOG_CELL_TYPE_TABLE, 3, 1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_TYPE_TABLE), "");
+		mainTableWidget->item(INANALOG_CELL_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CELL_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CELL_TYPE_TABLE)->setFont(*font);
 		// Name
-		mainTableWidget->setSpan(CELL_NAME_TABLE, 4, 1);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_NAME_TABLE), "");
-		mainTableWidget->item(CELL_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CELL_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CELL_NAME_TABLE)->setFont(*font);
+		mainTableWidget->setSpan(INANALOG_CELL_NAME_TABLE, 3, 1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_NAME_TABLE), "");
+		mainTableWidget->item(INANALOG_CELL_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CELL_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CELL_NAME_TABLE)->setFont(*font);
 		// Comment
-		mainTableWidget->setSpan(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 4, 1);
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders)), "");
-		mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFont(*font);
+		mainTableWidget->setSpan(INANALOG_ROW_COMMENT_TABLE, INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 3, 1);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_ROW_COMMENT_TABLE, INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders)), "");
+		mainTableWidget->item(INANALOG_ROW_COMMENT_TABLE, INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_ROW_COMMENT_TABLE, INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_ROW_COMMENT_TABLE, INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setFont(*font);
 
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			mainTableWidget->item(CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
-			mainTableWidget->item(CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
-			mainTableWidget->item(CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
-			mainTableWidget->item(CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
-			mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText(QString::fromLocal8Bit("Коментарий"));
+			mainTableWidget->item(INANALOG_CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
+			mainTableWidget->item(INANALOG_CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
+			mainTableWidget->item(INANALOG_CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
+			mainTableWidget->item(INANALOG_CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
+			mainTableWidget->item(INANALOG_ROW_COMMENT_TABLE, INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText(QString::fromLocal8Bit("Коментарий"));
 			break;
 		case ENGLISH_LANG:
-			mainTableWidget->item(CELL_PAD_TABLE)->setText("Pad");
-			mainTableWidget->item(CELL_PIN_TABLE)->setText("Pin");
-			mainTableWidget->item(CELL_TYPE_TABLE)->setText("Type");
-			mainTableWidget->item(CELL_NAME_TABLE)->setText("Name");
-			mainTableWidget->item(ROW_COMMENT_TABLE, COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText("Comments");
+			mainTableWidget->item(INANALOG_CELL_PAD_TABLE)->setText("Pad");
+			mainTableWidget->item(INANALOG_CELL_PIN_TABLE)->setText("Pin");
+			mainTableWidget->item(INANALOG_CELL_TYPE_TABLE)->setText("Type");
+			mainTableWidget->item(INANALOG_CELL_NAME_TABLE)->setText("Name");
+			mainTableWidget->item(INANALOG_ROW_COMMENT_TABLE, INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText("Comments");
 			break;
 		}
 		// Pad
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CEll_VALUE_PAD_TABLE), row->connectorStr);
-		mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CEll_VALUE_PAD_TABLE)->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CEll_VALUE_PAD_TABLE), row->connectorStr);
+		mainTableWidget->item(INANALOG_CEll_VALUE_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CEll_VALUE_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CEll_VALUE_PAD_TABLE)->setFont(*font);
 		// Pin
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_PIN_TABLE), row->pin);
-		mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CELL_VALUE_PIN_TABLE)->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_VALUE_PIN_TABLE), row->pin);
+		mainTableWidget->item(INANALOG_CELL_VALUE_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CELL_VALUE_PIN_TABLE)->setFont(*font);
 		// Type
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_TYPE_TABLE), row->type);
-		mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CELL_VALUE_TYPE_TABLE)->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_VALUE_TYPE_TABLE), row->type);
+		mainTableWidget->item(INANALOG_CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CELL_VALUE_TYPE_TABLE)->setFont(*font);
 		// Name
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_VALUE_NAME_TABLE), row->name);
-		mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
-		mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
-		mainTableWidget->item(CELL_VALUE_NAME_TABLE)->setFont(*font);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_VALUE_NAME_TABLE), row->name);
+		mainTableWidget->item(INANALOG_CELL_VALUE_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
+		mainTableWidget->item(INANALOG_CELL_VALUE_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
+		mainTableWidget->item(INANALOG_CELL_VALUE_NAME_TABLE)->setFont(*font);
 		// Comment
 		commentTextEdit = new QTextEdit();
 		commentTextEdit->setText(row->comment);
 		connect(commentTextEdit, &QTextEdit::textChanged, this, &MoreWindow::on_commentTextEdit_textChanged);
-		mainTableWidget->setCellWidget(ROW_VALUE_COMMENT_TABLE, COLUMN_VALUE_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), commentTextEdit);
+		mainTableWidget->setCellWidget(INANALOG_ROW_VALUE_COMMENT_TABLE, INANALOG_COLUMN_VALUE_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), commentTextEdit);
 
-		mainTableWidget->setColumnWidth(COLUMN_PAD_TABLE, 65);
-		mainTableWidget->setColumnWidth(COLUMN_PIN_TABLE, 65);
-		mainTableWidget->setColumnWidth(COLUMN_TYPE_TABLE, 75);
-		mainTableWidget->setColumnWidth(ROW_NAME_TABLE, 75);
-		mainTableWidget->setColumnWidth(COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 150);
+		mainTableWidget->setColumnWidth(INANALOG_COLUMN_PAD_TABLE, 65);
+		mainTableWidget->setColumnWidth(INANALOG_COLUMN_PIN_TABLE, 65);
+		mainTableWidget->setColumnWidth(INANALOG_COLUMN_TYPE_TABLE, 75);
+		mainTableWidget->setColumnWidth(INANALOG_ROW_NAME_TABLE, 75);
+		mainTableWidget->setColumnWidth(INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 150);
 
 		mainTableWidget->setRowHeight(0, 40);
 		mainTableWidget->setRowHeight(1, 40);
 		mainTableWidget->setRowHeight(2, 40);
 		mainTableWidget->setRowHeight(3, 40);
 
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PAD_TABLE, QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PIN_TABLE, QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE_TABLE, QHeaderView::Fixed);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME_TABLE, QHeaderView::Stretch);
-		mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_COMMENT_TABLE + OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_PAD_TABLE, QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_PIN_TABLE, QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_TYPE_TABLE, QHeaderView::Fixed);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_NAME_TABLE, QHeaderView::Stretch);
+		mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_COMMENT_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), QHeaderView::Fixed);
 
 		mainTableWidget->verticalHeader()->setSectionResizeMode(0, QHeaderView::Fixed);
 		mainTableWidget->verticalHeader()->setSectionResizeMode(1, QHeaderView::Fixed);
 		mainTableWidget->verticalHeader()->setSectionResizeMode(2, QHeaderView::Fixed);
-		mainTableWidget->verticalHeader()->setSectionResizeMode(3, QHeaderView::Fixed);
-		mainTableWidget->verticalHeader()->setSectionResizeMode(4, QHeaderView::Stretch);
+		mainTableWidget->verticalHeader()->setSectionResizeMode(3, QHeaderView::Stretch);
 
 		for (int i = 0; i < coutTrehholders; i++)
 		{
 			// Name measured
-			mainTableWidget->setSpan(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 6);
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+			mainTableWidget->setSpan(INANALOG_ROW_NAME_MEASURED_TABLE, INANALOG_COLUMN_NAME_MEASURED_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), 1, 3);
+			mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_ROW_NAME_MEASURED_TABLE, INANALOG_COLUMN_NAME_MEASURED_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+			mainTableWidget->item(INANALOG_ROW_NAME_MEASURED_TABLE, INANALOG_COLUMN_NAME_MEASURED_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+			mainTableWidget->item(INANALOG_ROW_NAME_MEASURED_TABLE, INANALOG_COLUMN_NAME_MEASURED_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+			mainTableWidget->item(INANALOG_ROW_NAME_MEASURED_TABLE, INANALOG_COLUMN_NAME_MEASURED_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 			// Measured value
-			mainTableWidget->setSpan(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 2, 2);
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Measured value U
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Measured value I
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+			mainTableWidget->setSpan(INANALOG_ROW_MEASURED_VALUE_TABLE, INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), 2, 1);
+			mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_ROW_MEASURED_VALUE_TABLE, INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+			mainTableWidget->item(INANALOG_ROW_MEASURED_VALUE_TABLE, INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+			mainTableWidget->item(INANALOG_ROW_MEASURED_VALUE_TABLE, INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+			mainTableWidget->item(INANALOG_ROW_MEASURED_VALUE_TABLE, INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 			// Progs
-			mainTableWidget->setSpan(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 4);
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Progs U
-			mainTableWidget->setSpan(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 2);
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Progs I
-			mainTableWidget->setSpan(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 1, 2);
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Progs U min
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Progs U max
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Progs I min
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
-			// Progs I max
-			mainTableWidget->model()->setData(mainTableWidget->model()->index(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i)), "");
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
-			mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+			mainTableWidget->setSpan(INANALOG_ROW_TRESHHOLDERS_TABLE, INANALOG_COLUMN_TRESHHOLDERS_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), 1, 2);
+			mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_ROW_TRESHHOLDERS_TABLE, INANALOG_COLUMN_TRESHHOLDERS_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_TABLE, INANALOG_COLUMN_TRESHHOLDERS_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_TABLE, INANALOG_COLUMN_TRESHHOLDERS_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_TABLE, INANALOG_COLUMN_TRESHHOLDERS_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+			// Progs min
+			mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_ROW_TRESHHOLDERS_MIN_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MIN_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MIN_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MIN_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
+			// Progs max
+			mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_ROW_TRESHHOLDERS_MAX_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i)), "");
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MAX_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setTextAlignment(Qt::AlignCenter);
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MAX_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFlags(Qt::ItemIsSelectable);
+			mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MAX_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setFont(*font);
 
-			mainTableWidget->setColumnWidth(COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 50);
-			mainTableWidget->setColumnWidth(COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 50);
-			mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 50);
-			mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 50);
-			mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 50);
-			mainTableWidget->setColumnWidth(COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), 50);
+			mainTableWidget->setColumnWidth(INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), 100);
+			mainTableWidget->setColumnWidth(INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), 50);
+			mainTableWidget->setColumnWidth(INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), 50);
 
-			mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
-			mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
-			mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
-			mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
-			mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
-			mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
+
+			mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
+			mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
+			mainTableWidget->horizontalHeader()->setSectionResizeMode(INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i), QHeaderView::Fixed);
 
 			switch (viewWindowState->appLanguage)
 			{
 			case RUSSIAN_LANG:
-				mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измерение ") + QString::number(i + 1));
-				mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измеренное\nзначенние"));
-				mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("U, В"));
-				mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("I, А"));
-				mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Пороги"));
-				mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("U, В"));
-				mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("I, А"));
-				mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Мин."));
-				mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Макс."));
-				mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Мин."));
-				mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Макс."));
+				mainTableWidget->item(INANALOG_ROW_NAME_MEASURED_TABLE, INANALOG_COLUMN_NAME_MEASURED_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измерение ") + QString::number(i + 1));
+				mainTableWidget->item(INANALOG_ROW_MEASURED_VALUE_TABLE, INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Измеренное\nзначенние"));
+				mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_TABLE, INANALOG_COLUMN_TRESHHOLDERS_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Пороги"));
+				mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MIN_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Min"));
+				mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MAX_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText(QString::fromLocal8Bit("Max"));
 				break;
 			case ENGLISH_LANG:
-				mainTableWidget->item(ROW_NAME_MEASURED_TABLE, COLUMN_NAME_MEASURED_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured " + QString::number(i + 1));
-				mainTableWidget->item(ROW_MEASURED_VALUE_TABLE, COLUMN_MEASURED_VALUE_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured\nvalue");
-				mainTableWidget->item(ROW_MEASURED_VALUE_U_TABLE, COLUMN_MEASURED_VALUE_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("U, V");
-				mainTableWidget->item(ROW_MEASURED_VALUE_I_TABLE, COLUMN_MEASURED_VALUE_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("I, A");
-				mainTableWidget->item(ROW_TRESHHOLDERS_TABLE, COLUMN_TRESHHOLDERS_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Progs");
-				mainTableWidget->item(ROW_TRESHHOLDERS_U_TABLE, COLUMN_TRESHHOLDERS_U_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("U, V");
-				mainTableWidget->item(ROW_TRESHHOLDERS_I_TABLE, COLUMN_TRESHHOLDERS_I_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("I, A");
-				mainTableWidget->item(ROW_TRESHHOLDERS_U_MIN_TABLE, COLUMN_TRESHHOLDERS_U_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Min.");
-				mainTableWidget->item(ROW_TRESHHOLDERS_U_MAX_TABLE, COLUMN_TRESHHOLDERS_U_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Max.");
-				mainTableWidget->item(ROW_TRESHHOLDERS_I_MIN_TABLE, COLUMN_TRESHHOLDERS_I_MIN_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Min.");
-				mainTableWidget->item(ROW_TRESHHOLDERS_I_MAX_TABLE, COLUMN_TRESHHOLDERS_I_MAX_TABLE + OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Max.");
+				mainTableWidget->item(INANALOG_ROW_NAME_MEASURED_TABLE, INANALOG_COLUMN_NAME_MEASURED_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured " + QString::number(i + 1));
+				mainTableWidget->item(INANALOG_ROW_MEASURED_VALUE_TABLE, INANALOG_COLUMN_MEASURED_VALUE_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Measured\nvalue");
+				mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_TABLE, INANALOG_COLUMN_TRESHHOLDERS_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Progs");
+				mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MIN_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MIN_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Min");
+				mainTableWidget->item(INANALOG_ROW_TRESHHOLDERS_MAX_TABLE, INANALOG_COLUMN_TRESHHOLDERS_MAX_TABLE + INANALOG_OFFSET_BLOCK_TRESHHOLDERS(i))->setText("Max");
 				break;
 			}
 		}
@@ -542,8 +492,8 @@ MoreWindowInDig::MoreWindowInDig(TestTableRowProperties* row) : MoreWindowIn(row
 MoreWindowInAnalog::MoreWindowInAnalog(TestTableRowProperties* row) : MoreWindowIn(row, SIZE_MOREWINDOW_IN_ANALOG)
 {
 	coutTrehholders = 2;
-	mainTableWidget->setRowCount(5);
-	mainTableWidget->setColumnCount(5 + coutTrehholders * WIDTH_BLOCK_TRESHHOLDERS);
+	mainTableWidget->setRowCount(4);
+	mainTableWidget->setColumnCount(5 + coutTrehholders * INANALOG_WIDTH_BLOCK_TRESHHOLDERS);
 
 	initUiTableIn(TypeMoreWindow::MoreWindowInAnalog);
 

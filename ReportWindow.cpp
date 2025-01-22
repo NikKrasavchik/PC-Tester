@@ -84,29 +84,29 @@ void ReportWindow::initUiGenerateTable()
 	font.setBold(true);
 	font.setPointSizeF(10);
 
-	mainTableWidget->setSpan(CELL_PAD_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PAD_TABLE), "");
-	mainTableWidget->item(CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PAD_TABLE)->setFont(font);
+	mainTableWidget->setSpan(OUTALL_CELL_PAD_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_PAD_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setFont(font);
 
-	mainTableWidget->setSpan(CELL_PIN_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_PIN_TABLE), "");
-	mainTableWidget->item(CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_PIN_TABLE)->setFont(font);
+	mainTableWidget->setSpan(OUTALL_CELL_PIN_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_PIN_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setFont(font);
 
-	mainTableWidget->setSpan(CELL_TYPE_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_TYPE_TABLE), "");
-	mainTableWidget->item(CELL_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_TYPE_TABLE)->setFont(font);
+	mainTableWidget->setSpan(OUTALL_CELL_TYPE_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_TYPE_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setFont(font);
 
-	mainTableWidget->setSpan(CELL_NAME_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
-	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_NAME_TABLE), "");
-	mainTableWidget->item(CELL_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
-	mainTableWidget->item(CELL_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
-	mainTableWidget->item(CELL_NAME_TABLE)->setFont(font);
+	mainTableWidget->setSpan(OUTALL_CELL_NAME_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_NAME_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setFont(font);
 
 	mainTableWidget->setSpan(CELL_COMPONENT_TABLE, SPAN_COUNT_3, SPAN_COUNT_1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(CELL_COMPONENT_TABLE), "");
@@ -184,10 +184,10 @@ void ReportWindow::initUiSetValueTable()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		mainTableWidget->item(CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
-		mainTableWidget->item(CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
-		mainTableWidget->item(CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
-		mainTableWidget->item(CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
+		mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
+		mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
+		mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
+		mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
 		mainTableWidget->item(CELL_COMPONENT_TABLE)->setText(QString::fromLocal8Bit("Компонент"));
 		mainTableWidget->item(CELL_TRESHHOLDERS_TABLE)->setText(QString::fromLocal8Bit("Пороги"));
 		mainTableWidget->item(CELL_TRESHHOLDERS_U_TABLE)->setText(QString::fromLocal8Bit("U, В"));
@@ -199,10 +199,10 @@ void ReportWindow::initUiSetValueTable()
 		break;
 
 	case ENGLISH_LANG:
-		mainTableWidget->item(CELL_PAD_TABLE)->setText("Pad");
-		mainTableWidget->item(CELL_PIN_TABLE)->setText("Pin");
-		mainTableWidget->item(CELL_TYPE_TABLE)->setText("Type");
-		mainTableWidget->item(CELL_NAME_TABLE)->setText("Name");
+		mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setText("Pad");
+		mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setText("Pin");
+		mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setText("Type");
+		mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setText("Name");
 		mainTableWidget->item(CELL_COMPONENT_TABLE)->setText("Component");
 		mainTableWidget->item(CELL_TRESHHOLDERS_TABLE)->setText("Treshholders");
 		mainTableWidget->item(CELL_TRESHHOLDERS_U_TABLE)->setText("U, V");
