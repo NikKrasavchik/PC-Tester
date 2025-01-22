@@ -1623,9 +1623,11 @@ void TestTableRowProperties::on_moreButton_clicked()
 			moreWindow = new MoreWindowOutVnh(this);
 		else
 			QMessageBox::warning(testwindow, "Error","Error");
-	else if(this->direction == "OUT")
+	else if(this->direction == "IN")
 		if(this->type == "DIGITAL")
-			moreWindow = new MoreWindowOutDig(this);
+			moreWindow = new MoreWindowInDig(this);
+		else if(this->type == "ANALOG")
+			moreWindow = new MoreWindowInAnalog(this);
 		else
 			QMessageBox::warning(testwindow, "Error","Error");
 	else
