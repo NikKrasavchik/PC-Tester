@@ -1634,7 +1634,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 		QMessageBox::warning(testwindow, "Error","Error");
 
 
-	WindowFrame w(WindowType::MOREWINDOW, nullptr, moreWindow);
+	WindowFrame w(WindowType::MOREWINDOW, nullptr, (MoreWindow*)moreWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	w.show();
 	moreWindow->exec();

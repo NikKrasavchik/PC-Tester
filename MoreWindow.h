@@ -23,6 +23,7 @@
 
 #define PADDING_MAINWIDGET				10
 
+// BEGIN | OUT and IN_ANALOG
 #define ROW_PAD_TABLE							0
 #define COLUMN_PAD_TABLE						0
 #define CELL_PAD_TABLE							ROW_PAD_TABLE,COLUMN_PAD_TABLE
@@ -35,50 +36,49 @@
 #define ROW_NAME_TABLE							0
 #define COLUMN_NAME_TABLE						3
 #define CELL_NAME_TABLE							ROW_NAME_TABLE,COLUMN_NAME_TABLE
-#define ROW_SPACE_TABLE							0
-#define COLUMN_SPACE_TABLE						4
-#define CELL_SPACE_TABLE						ROW_SPACE_TABLE,COLUMN_SPACE_TABLE
 #define ROW_MEASURED_VALUE_TABLE				0
 #define COLUMN_MEASURED_VALUE_TABLE				4
 #define ROW_MEASURED_VALUE_U_TABLE				2
 #define COLUMN_MEASURED_VALUE_U_TABLE			4
 #define ROW_MEASURED_VALUE_I_TABLE				2
 #define COLUMN_MEASURED_VALUE_I_TABLE			5
-#define ROW_TRESHHOLDERS_TABLE					0
+#define ROW_TRESHHOLDERS_TABLE					1
 #define COLUMN_TRESHHOLDERS_TABLE				6
-#define ROW_TRESHHOLDERS_U_TABLE				1
+#define ROW_TRESHHOLDERS_U_TABLE				2
 #define COLUMN_TRESHHOLDERS_U_TABLE				6
-#define ROW_TRESHHOLDERS_I_TABLE				1
+#define ROW_TRESHHOLDERS_I_TABLE				2
 #define COLUMN_TRESHHOLDERS_I_TABLE				8
-#define ROW_TRESHHOLDERS_U_MIN_TABLE			2
+#define ROW_TRESHHOLDERS_U_MIN_TABLE			3
 #define COLUMN_TRESHHOLDERS_U_MIN_TABLE			6
-#define ROW_TRESHHOLDERS_U_MAX_TABLE			2
+#define ROW_TRESHHOLDERS_U_MAX_TABLE			3
 #define COLUMN_TRESHHOLDERS_U_MAX_TABLE			7
-#define ROW_TRESHHOLDERS_I_MIN_TABLE			2
+#define ROW_TRESHHOLDERS_I_MIN_TABLE			3
 #define COLUMN_TRESHHOLDERS_I_MIN_TABLE			8
-#define ROW_TRESHHOLDERS_I_MAX_TABLE			2
+#define ROW_TRESHHOLDERS_I_MAX_TABLE			3
 #define COLUMN_TRESHHOLDERS_I_MAX_TABLE			9
 #define ROW_COMMENT_TABLE						0
 #define COLUMN_COMMENT_TABLE					4
 #define CELL_COMMENT_TABLE						ROW_COMMENT_TABLE,COLUMN_COMMENT_TABLE
 
 
-#define CEll_VALUE_PAD_TABLE					3,0
-#define CELL_VALUE_PIN_TABLE					3,1
-#define CELL_VALUE_TYPE_TABLE					3,2
-#define CELL_VALUE_NAME_TABLE					3,3
+#define CEll_VALUE_PAD_TABLE					4,0
+#define CELL_VALUE_PIN_TABLE					4,1
+#define CELL_VALUE_TYPE_TABLE					4,2
+#define CELL_VALUE_NAME_TABLE					4,3
 #define CELL_VALUE_MEASURED_VALUE_U_TABLE		3,4
 #define CELL_VALUE_MEASURED_VALUE_I_TABLE		3,5
 #define CELL_VALUE_PROGS_U_MIN_TABLE			3,6
 #define CELL_VALUE_PROGS_U_MAX_TABLE			3,7
 #define CELL_VALUE_PROGS_I_MIN_TABLE			3,8
 #define CELL_VALUE_PROGS_I_MAX_TABLE			3,9
-#define ROW_VALUE_COMMENT_TABLE					3
+#define ROW_VALUE_COMMENT_TABLE					4
 #define COLUMN_VALUE_COMMENT_TABLE				4
 #define CELL_VALUE_COMMENT_TABLE				ROW_VALUE_COMMENT_TABLE,COLUMN_VALUE_COMMENT_TABLE
 
 #define WIDTH_BLOCK_TRESHHOLDERS				6
 #define OFFSET_BLOCK_TRESHHOLDERS(num)			num * WIDTH_BLOCK_TRESHHOLDERS
+// END | OUT and IN_ANALOG
+
 
 class TestTableRowProperties;
 class MoreWindow : public QDialog
@@ -88,6 +88,17 @@ class MoreWindow : public QDialog
 public:
 	MoreWindow(TestTableRowProperties* row, int startWidth, int startHeight);
 	~MoreWindow();
+
+	enum TypeMoreWindow
+	{
+		MoreWindowOutDig,
+		MoreWindowOutPwm,
+		MoreWindowOutVnh,
+		MoreWindowInDig,
+		MoreWindowInAnalog,
+		MoreWindowBuses,
+		MoreWindowError
+	};
 
 protected:
 	QTableWidget* mainTableWidget;
@@ -132,30 +143,25 @@ protected:
 
 };
 
-#define SIZE_MOREWINDOW_OUT_DIG		1200,250
+#define SIZE_MOREWINDOW_OUT_DIG		1200,300
 class MoreWindowOutDig final : public MoreWindowOut
 {
 public:
 	MoreWindowOutDig(TestTableRowProperties* row);
 };
 
-#define SIZE_MOREWINDOW_OUT_PWM		1200,250
+#define SIZE_MOREWINDOW_OUT_PWM		1200,300
 class MoreWindowOutPwm final : public MoreWindowOut
 {
-
 public:
 	MoreWindowOutPwm(TestTableRowProperties* row);
-
-
 };
 
-#define SIZE_MOREWINDOW_OUT_VNH		1500,250
+#define SIZE_MOREWINDOW_OUT_VNH		1500,300
 class MoreWindowOutVnh final : public MoreWindowOut
 {
 public:
 	MoreWindowOutVnh(TestTableRowProperties* row);
-
-
 };
 
 
@@ -165,7 +171,7 @@ class MoreWindowIn : public MoreWindow
 public:
 	MoreWindowIn(TestTableRowProperties* row, int startWidth, int startHeight) : MoreWindow(row, startWidth, startHeight) {};
 protected:
-	void initUiTableIn();
+	void initUiTableIn(TypeMoreWindow typeWindow);
 
 };
 
@@ -176,7 +182,7 @@ public:
 	MoreWindowInDig(TestTableRowProperties* row);
 };
 
-#define SIZE_MOREWINDOW_IN_ANALOG		1200,250
+#define SIZE_MOREWINDOW_IN_ANALOG		1200,300
 class MoreWindowInAnalog final : public MoreWindowIn
 {
 
