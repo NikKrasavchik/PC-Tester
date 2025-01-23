@@ -92,6 +92,12 @@ void MoreWindowOut::initUiTableOut()
 	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setFont(*font);
+	// Direction
+	mainTableWidget->setSpan(OUTALL_CELL_DIRECTION_TABLE, 4, 1);
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_DIRECTION_TABLE), "");
+	mainTableWidget->item(OUTALL_CELL_DIRECTION_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_DIRECTION_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_DIRECTION_TABLE)->setFont(*font);
 	// Type
 	mainTableWidget->setSpan(OUTALL_CELL_TYPE_TABLE, 4, 1);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_TYPE_TABLE), "");
@@ -116,6 +122,7 @@ void MoreWindowOut::initUiTableOut()
 	case RUSSIAN_LANG:
 		mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setText(QString::fromLocal8Bit("Колодка"));
 		mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setText(QString::fromLocal8Bit("Пин"));
+		mainTableWidget->item(OUTALL_CELL_DIRECTION_TABLE)->setText(QString::fromLocal8Bit("Направление"));
 		mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setText(QString::fromLocal8Bit("Тип"));
 		mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setText(QString::fromLocal8Bit("Название"));
 		mainTableWidget->item(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText(QString::fromLocal8Bit("Коментарий"));
@@ -123,6 +130,7 @@ void MoreWindowOut::initUiTableOut()
 	case ENGLISH_LANG:
 		mainTableWidget->item(OUTALL_CELL_PAD_TABLE)->setText("Pad");
 		mainTableWidget->item(OUTALL_CELL_PIN_TABLE)->setText("Pin");
+		mainTableWidget->item(OUTALL_CELL_DIRECTION_TABLE)->setText("Direcrion");
 		mainTableWidget->item(OUTALL_CELL_TYPE_TABLE)->setText("Type");
 		mainTableWidget->item(OUTALL_CELL_NAME_TABLE)->setText("Name");
 		mainTableWidget->item(OUTALL_ROW_COMMENT_TABLE, OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders))->setText("Comments");
@@ -138,6 +146,11 @@ void MoreWindowOut::initUiTableOut()
 	mainTableWidget->item(OUTALL_CELL_VALUE_PIN_TABLE)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(OUTALL_CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
 	mainTableWidget->item(OUTALL_CELL_VALUE_PIN_TABLE)->setFont(*font);
+	// Type
+	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_VALUE_DIRECTION_TABLE), row->direction);
+	mainTableWidget->item(OUTALL_CELL_VALUE_DIRECTION_TABLE)->setTextAlignment(Qt::AlignCenter);
+	mainTableWidget->item(OUTALL_CELL_VALUE_DIRECTION_TABLE)->setFlags(Qt::ItemIsSelectable);
+	mainTableWidget->item(OUTALL_CELL_VALUE_DIRECTION_TABLE)->setFont(*font);
 	// Type
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_VALUE_TYPE_TABLE), row->type);
 	mainTableWidget->item(OUTALL_CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
@@ -156,6 +169,7 @@ void MoreWindowOut::initUiTableOut()
 
 	mainTableWidget->setColumnWidth(OUTALL_COLUMN_PAD_TABLE, 65);
 	mainTableWidget->setColumnWidth(OUTALL_COLUMN_PIN_TABLE, 65);
+	mainTableWidget->setColumnWidth(OUTALL_COLUMN_DIRECTION_TABLE, 120);
 	mainTableWidget->setColumnWidth(OUTALL_COLUMN_TYPE_TABLE, 75);
 	mainTableWidget->setColumnWidth(OUTALL_COLUMN_NAME_TABLE, 75);
 	mainTableWidget->setColumnWidth(OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), 150);
@@ -167,6 +181,7 @@ void MoreWindowOut::initUiTableOut()
 
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_PAD_TABLE, QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_PIN_TABLE, QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_DIRECTION_TABLE, QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_TYPE_TABLE, QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_NAME_TABLE, QHeaderView::Stretch);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(OUTALL_COLUMN_COMMENT_TABLE + OUTALL_OFFSET_BLOCK_TRESHHOLDERS(coutTrehholders), QHeaderView::Fixed);
@@ -325,7 +340,7 @@ MoreWindowOutDig::MoreWindowOutDig(TestTableRowProperties* row) : MoreWindowOut(
 {
 	coutTrehholders = 2;
 	mainTableWidget->setRowCount(5);
-	mainTableWidget->setColumnCount(5 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
+	mainTableWidget->setColumnCount(6 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
 
 	initUiTableOut();
 }
@@ -334,7 +349,7 @@ MoreWindowOutPwm::MoreWindowOutPwm(TestTableRowProperties* row) : MoreWindowOut(
 {
 	coutTrehholders = 2;
 	mainTableWidget->setRowCount(5);
-	mainTableWidget->setColumnCount(5 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
+	mainTableWidget->setColumnCount(6 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
 
 	initUiTableOut();
 }
@@ -343,7 +358,7 @@ MoreWindowOutVnh::MoreWindowOutVnh(TestTableRowProperties* row) : MoreWindowOut(
 {
 	coutTrehholders = 3;
 	mainTableWidget->setRowCount(5);
-	mainTableWidget->setColumnCount(5 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
+	mainTableWidget->setColumnCount(6 + coutTrehholders * OUTALL_WIDTH_BLOCK_TRESHHOLDERS);
 
 	initUiTableOut();
 }
@@ -637,8 +652,9 @@ MoreWindowInDig::MoreWindowInDig(TestTableRowProperties* row) : MoreWindowIn(row
 
 MoreWindowInAnalog::MoreWindowInAnalog(TestTableRowProperties* row) : MoreWindowIn(row, SIZE_MOREWINDOW_IN_ANALOG)
 {
-	coutTrehholders = 5;
-	mainTableWidget->setRowCount(15);
+	coutTrehholders = 2;
+	mainTableWidget->setRowCount(4);
+	mainTableWidget->setColumnCount(11);
 
 	initUiTableIn(TypeMoreWindow::MoreWindowInAnalog);
 }
