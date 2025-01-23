@@ -5,7 +5,13 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 	for (int i = 0; i < cables.size(); i++)
 	{
 		cableRows.push_back(new TestTableRowProperties(this));
-
+		// Test
+		for (int j = 0; j < 3; j++)
+		{
+			Measured* tmpMeasured = new Measured;
+			cableRows[i]->measureds.push_back(tmpMeasured);
+		}
+		// Test
 		cableRows[i]->id = cables[i].id;
 		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
 		cableRows[i]->connectorInt = cables[i].connector;
