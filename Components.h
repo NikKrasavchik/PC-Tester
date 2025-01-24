@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG
+//#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -19,6 +19,9 @@
 
 #define MANUAL_STAND	0
 #define AUTO_STAND		1
+
+#define DM_STAND		0
+#define BCM_STAND		0
 
 #define NOT_SET			-1
 
@@ -161,29 +164,45 @@ enum class TypeResetTableButtonsTheme
 #define DIRECTION_OUT			0
 #define DIRECTION_IN			1
 
-struct Cable
-{
-	int id;
-	ConnectorId connector;
-	int pin;
-	int direction;
-	int type;
-	int canId;
-	int bit;
-	double minCurrent;
-	double maxCurrent;
-	double minVoltage;
-	double maxVoltage;
-	QString name;
-	QString component;
-
-	Cable() {};
-	Cable(ConnectorId connector, int pin)
-	{
-		this->connector = connector;
-		this->pin = pin;
-	}
-};
+//class Cable
+//{
+//	int id;
+//	ConnectorId connector;
+//	int pin;
+//	int direction;
+//	int type;
+//	int canId;
+//	int bit;
+//	double minCurrent;
+//	double maxCurrent;
+//	double minVoltage;
+//	double maxVoltage;
+//	QString name;
+//	QString component;
+//
+//	Cable() {};
+//	Cable(ConnectorId connector, int pin)
+//	{
+//		this->connector = connector;
+//		this->pin = pin;
+//	}
+//	Cable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, double minCurrent, double maxCurrent, double minVoltage, double maxVoltage, QString name, QString component)
+//	{
+//		this->id = id;
+//		this->connector = connector;
+//		this->pin = pin;
+//		this->direction = direction;
+//		this->type = type;
+//		this->canId = canId;
+//		this->bit = bit;
+//		this->minCurrent = minCurrent;
+//		this->maxCurrent = maxCurrent;
+//		this->minVoltage = minVoltage;
+//		this->maxVoltage = maxVoltage;
+//		this->name = name;
+//		this->component = component;
+//	}
+//};
 
 struct FloatCheck
 {
@@ -245,69 +264,6 @@ extern ViewWindowState* viewWindowState;
 #define FIXED_CHECK_WBUTTON_WIDTH	148
 #define	FIXED_CHECK_BUTTON_HEIGHT	30
 #define FIXED_HALF_BUTTON_WIDTH		80	
-
-namespace Errors
-{
-	enum class Configurator // Никит, вот это было бы было кайф закоментить. Чё каждый значит
-	{
-		CORRECT,
-		SAVE_CONNECTOR_NOT_SET,
-		SAVE_PIN_NULL,
-		SAVE_PIN_INCORRECT,
-		SAVE_DIRECTION_NOT_SET,
-		SAVE_TYPE_NOT_SET,
-		SAVE_CAN_ID_INCORRECT_HEX,
-		SAVE_CAN_ID_INCORRECT_DEC,
-		SAVE_BIT_INCORRECT,
-		SAVE_MIN_CURRENT_NULL,
-		SAVE_MIN_CURRENT_INCORRECT,
-		SAVE_MAX_CURRENT_NULL,
-		SAVE_MAX_CURRENT_INCORRECT,
-		SAVE_MIN_VOLTAGE_NULL,
-		SAVE_MIN_VOLTAGE_INCORRECT,
-		SAVE_MAX_VOLTAGE_NULL,
-		SAVE_MAX_VOLTAGE_INCORRECT,
-		SAVE_NAME_NULL,
-		SAVE_COMPONENT_NULL,
-		FILE_OPEN,
-		FILE_MASK_CFG,
-		FILE_MASK_STAND_TYPE,
-		FILE_DATA_AMOUNT,
-		FILE_DATA_CONNECTOR_INCORRECT,
-		FILE_DATA_PIN_INCORRECT,
-		FILE_DATA_DIRECTION_INCORRECT,
-		FILE_DATA_TYPE_INCORRECT,
-		FILE_DATA_CAN_ID_INCORRECT_HEX,
-		FILE_DATA_CAN_ID_INCORRECT_DEC,
-		FILE_DATA_BIT_INCORRECT,
-		FILE_DATA_MIN_CURRENT_INCORRECT,
-		FILE_DATA_MAX_CURRENT_INCORRECT,
-		FILE_DATA_MIN_VOLTAGE_INCORRECT,
-		FILE_DATA_MAX_VOLTAGE_INCORRECT,
-		FILE_DATA_NAME_EMPTY,
-		FILE_DATA_COMPONENT_EMPTY
-	};
-
-	enum class MainWindow
-	{
-		FILE_OPEN,
-		FILE_MASK_CFG,
-		FILE_MASK_STAND_TYPE,
-		FILE_DATA_AMOUNT,
-		FILE_DATA_CONNECTOR_INCORRECT,
-		FILE_DATA_PIN_INCORRECT,
-		FILE_DATA_DIRECTION_INCORRECT,
-		FILE_DATA_TYPE_INCORRECT,
-		FILE_DATA_CAN_ID_INCORRECT_HEX,
-		FILE_DATA_BIT_INCORRECT,
-		FILE_DATA_MIN_CURRENT_INCORRECT,
-		FILE_DATA_MAX_CURRENT_INCORRECT,
-		FILE_DATA_MIN_VOLTAGE_INCORRECT,
-		FILE_DATA_MAX_VOLTAGE_INCORRECT,
-		FILE_DATA_NAME_EMPTY,
-		FILE_DATA_COMPONENT_EMPTY
-	};
-}
 
 namespace Warnings
 {

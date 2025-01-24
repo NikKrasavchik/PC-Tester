@@ -13,7 +13,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* 
 	this->can = can;
 	isFullTestEnabled = false;
 
-	nextCheckCable = new Cable(cables[0].connector, cables[0].pin);
+	nextCheckCable = new Cable(cables[0].getConnector(), cables[0].getPin());
 	statusFlags = new StandStatusFlags;
 	statusFlags->StatusConnected = false;
 
@@ -588,19 +588,19 @@ void TestWindow::on_reportButton_clicked()
 		TestTableRowProperties* currentTestTableRowProperties = this->cableRows[currentCableInd];
 		
 		Cable currentCable;
-		currentCable.id = currentTestTableRowProperties->id;
-		currentCable.connector = (ConnectorId)(currentTestTableRowProperties->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL);
-		currentCable.pin = currentTestTableRowProperties->pin.toInt();
-		currentCable.name = currentTestTableRowProperties->name;
-		currentCable.component = currentTestTableRowProperties->component;
-		currentCable.direction = currentTestTableRowProperties->direction.toInt();
-		currentCable.type = currentTestTableRowProperties->type.toInt();
-		currentCable.minCurrent = currentTestTableRowProperties->minCurrent;
-		currentCable.maxCurrent = currentTestTableRowProperties->maxCurrent;
-		currentCable.minVoltage = currentTestTableRowProperties->minVoltage;
-		currentCable.maxVoltage = currentTestTableRowProperties->maxVoltage;
-		currentCable.bit = currentTestTableRowProperties->bit;
-		currentCable.canId = currentTestTableRowProperties->canId;
+		currentCable.setId(currentTestTableRowProperties->id);
+		currentCable.setConnector((ConnectorId)(currentTestTableRowProperties->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL));
+		currentCable.setPin(currentTestTableRowProperties->pin.toInt());
+		currentCable.setName(currentTestTableRowProperties->name);
+		currentCable.setComponent(currentTestTableRowProperties->component);
+		currentCable.setDirection(currentTestTableRowProperties->direction.toInt());
+		currentCable.setType(currentTestTableRowProperties->type.toInt());
+		currentCable.setMinCurrent(currentTestTableRowProperties->minCurrent);
+		currentCable.setMaxCurrent(currentTestTableRowProperties->maxCurrent);
+		currentCable.setMinVoltage(currentTestTableRowProperties->minVoltage);
+		currentCable.setMaxVoltage(currentTestTableRowProperties->maxVoltage);
+		currentCable.setBit(currentTestTableRowProperties->bit);
+		currentCable.setCanId(currentTestTableRowProperties->canId);
 
 		cables.push_back(currentCable);
 	}
@@ -1214,19 +1214,19 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 
 		isFullTestEnabled = false;
 		for (int i = 0; i < cableRows.size(); i++)
-			if (nextCheckCable->connector == cableRows[i]->connectorInt && nextCheckCable->pin == cableRows[i]->pin.toInt())
+			if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
 			{
 				if (i == cableRows.size() - 1)
 				{
 					// Тест закончен
-					nextCheckCable->connector == cableRows[0]->connectorInt;
-					nextCheckCable->pin == cableRows[0]->pin.toInt();
+					nextCheckCable->setConnector(cableRows[0]->connectorInt);
+					nextCheckCable->setPin(cableRows[0]->pin.toInt());
 					QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
 					isFullTestEnabled = false;
 					return;
 				}
-				nextCheckCable->connector = cableRows[i + 1]->connectorInt;
-				nextCheckCable->pin = cableRows[i + 1]->pin.toInt();
+				nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
+				nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
 				break;
 			}
 	}
@@ -1251,10 +1251,10 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 	
 		isFullTestEnabled = true;
 		for (int i = 0; i < cableRows.size(); i++)
-			if (nextCheckCable->connector == cableRows[i]->connectorInt && nextCheckCable->pin == cableRows[i]->pin.toInt())
+			if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
 				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
 				
-		ProcAutoTest((int)nextCheckCable->connector, nextCheckCable->pin);
+		ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 
 	}
 
@@ -1283,24 +1283,24 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 			if (isFullTestEnabled)// запускаем следующий тест
 			{
 				for (int i = 0; i < cableRows.size(); i++)
-					if (nextCheckCable->connector == cableRows[i]->connectorInt && nextCheckCable->pin == cableRows[i]->pin.toInt())
+					if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
 					{
 						if (i == cableRows.size() - 1)
 						{
 							// Тест закончен
-							nextCheckCable->connector = cableRows[0]->connectorInt;
-							nextCheckCable->pin = cableRows[0]->pin.toInt();
+							nextCheckCable->setConnector(cableRows[0]->connectorInt);
+							nextCheckCable->setPin(cableRows[0]->pin.toInt());
 							QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
 							isFullTestEnabled = false;
 							resetLanguage();
 							return;
 						}
-						nextCheckCable->connector = cableRows[i + 1]->connectorInt;
-						nextCheckCable->pin = cableRows[i + 1]->pin.toInt();
+						nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
+						nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
 						break;
 					}
 				mainTableWidget->item(i+1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
-				ProcAutoTest((int)nextCheckCable->connector, nextCheckCable->pin);
+				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 			}
 			return;
 		}

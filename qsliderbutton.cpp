@@ -2,10 +2,14 @@
 #include <QPainter>
 #include <QMouseEvent>
 
-QSliderButton::QSliderButton(QWidget* parent)
+QSliderButton::QSliderButton(bool isHorizontal, QWidget* parent)
 {
 	this->setParent(parent);
 	status = AUTO_STAND;
+	type = DM_STAND;
+	type = BCM_STAND;
+
+	this->isHorizontal = isHorizontal;
 }
 
 void QSliderButton::paintEvent(QPaintEvent* event)
@@ -18,7 +22,10 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 
 	// Рисуем фон
 	painter.setBrush(bgColor);
-	painter.drawRoundedRect(0, 0, sizeWidth, sizeHeight, sizeHeight / 2, sizeHeight / 2);
+	if (isHorizontal)
+		painter.drawRoundedRect(0, 0, sizeWidth, sizeHeight, sizeHeight / 2, sizeHeight / 2);
+	else
+		painter.drawRoundedRect(0, 0, sizeHeight, sizeWidth, sizeHeight / 2, sizeHeight / 2);
 
 	//Рисуем шарик
 	if (this->status == MANUAL_STAND)
@@ -30,7 +37,10 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 	else
 	{
 		painter.setBrush(roundColor);
-		painter.drawEllipse(sizeWidth - sizeHeight, 0, sizeHeight, sizeHeight);
+		if (isHorizontal)
+			painter.drawEllipse(sizeWidth - sizeHeight, 0, sizeHeight, sizeHeight);
+		else
+			painter.drawEllipse(0, sizeWidth - sizeHeight, sizeHeight, sizeHeight);
 	}
 }
 

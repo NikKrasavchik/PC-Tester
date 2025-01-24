@@ -60,14 +60,14 @@ static void checkAddFloatCheck(ConnectorId connectorId, int pin, FloatCheck* cur
 
 static void initFloatCheck()
 {
-	checkAddFloatCheck(ConnectorId::A, 10,	new FloatCheck(4.4, 3.3, 2.2, 1.1));
-	checkAddFloatCheck(ConnectorId::A, 2,	new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::B, 6,	new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::C, 4,	new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::D, 3,	new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::E, 7,	new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::F, 15,	new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::F, 10,	new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::A, 10, new FloatCheck(4.4, 3.3, 2.2, 1.1));
+	checkAddFloatCheck(ConnectorId::A, 2, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::B, 6, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::C, 4, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::D, 3, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::E, 7, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::F, 15, new FloatCheck(4, 3, 2, 1));
+	checkAddFloatCheck(ConnectorId::F, 10, new FloatCheck(4, 3, 2, 1));
 }
 
 MainWindow::MainWindow(QWidget* parent)
@@ -75,9 +75,13 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	ui.setupUi(this);
 
+	this->selectedStand = STAND_MANUAL;
+
 	initFloatCheck();
+	initCables();
 
 	initUi();
+	switchTypeSlider->repaint();
 }
 
 MainWindow::~MainWindow()
@@ -128,7 +132,6 @@ void MainWindow::initUi()
 	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLUMN_0);
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLUMN_1);
 
-	selectedFileStandType = CFG_STAND_NOT_SET;
 	selectedStand = AUTO_STAND;
 	viewWindowState->appTheme = LIGHT_THEME;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
@@ -145,10 +148,6 @@ void MainWindow::initUi()
 
 	on_checkAdaptersButton_clicked();
 	resetTheme();
-
-#ifdef DEBUG
-	selectFileButton->click();
-#endif // DEBUG
 }
 
 void MainWindow::initUiLogo()
@@ -164,47 +163,47 @@ void MainWindow::initUiTopHLayout()
 	topHLayout = new QHBoxLayout();
 	topHLayout->setObjectName("topHLayout");
 
-	initUiSwitchStand();
-	topHLayout->addItem(switchStandHLayout);
+	initUiSwitchType();
+	topHLayout->addItem(switchTypeHLayout);
 
 	initUiSwitchThemeLang();
 	topHLayout->addItem(switchThemeLanguageVLayout);
 }
 
-void MainWindow::initUiSwitchStand()
+void MainWindow::initUiSwitchType()
 {
-	switchStandHLayout = new QHBoxLayout();
-	switchStandHLayout->setObjectName("switchStandHLayout");
+	switchTypeHLayout = new QHBoxLayout();
+	switchTypeHLayout->setObjectName("switchStandHLayout");
 
 	leftManualStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
-	switchStandHLayout->addItem(leftManualStandSpacer);
+	switchTypeHLayout->addItem(leftManualStandSpacer);
 
 	// Manual
 	manualStandButton = new QPushButton(mainLayoutWidget);
 	manualStandButton->setObjectName("manualStandButton");
 	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	switchStandHLayout->addWidget(manualStandButton);
+	switchTypeHLayout->addWidget(manualStandButton);
 
 	leftSwitchStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Preferred);
-	switchStandHLayout->addItem(leftSwitchStandSpacer);
+	switchTypeHLayout->addItem(leftSwitchStandSpacer);
 
 	// Switch stand
-	switchStandSlider = new QSliderButton(mainLayoutWidget);
+	switchStandSlider = new QSliderButton(true, mainLayoutWidget);
 	switchStandSlider->setObjectName("switchStandButton");
 	switchStandSlider->setFixedSize(MIN_STAND_SWITCH_SLIDER_WIDTH, MIN_STAND_SWITCH_SLIDER_HEIGHT);
-	switchStandHLayout->addWidget(switchStandSlider);
+	switchTypeHLayout->addWidget(switchStandSlider);
 
 	rightSwitchStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Preferred);
-	switchStandHLayout->addItem(rightSwitchStandSpacer);
+	switchTypeHLayout->addItem(rightSwitchStandSpacer);
 
 	// Auto
 	autoStandButton = new QPushButton(mainLayoutWidget);
 	autoStandButton->setObjectName("autoStandButton");
 	autoStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
-	switchStandHLayout->addWidget(autoStandButton);
+	switchTypeHLayout->addWidget(autoStandButton);
 
 	rightAutoStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
-	switchStandHLayout->addItem(rightAutoStandSpacer);
+	switchTypeHLayout->addItem(rightAutoStandSpacer);
 }
 
 void MainWindow::initUiSwitchThemeLang()
@@ -234,11 +233,8 @@ void MainWindow::initUiLeftHLayout()
 	leftVLayout->setObjectName("leftVLayout");
 	leftHLayout->addItem(leftVLayout);
 
-	topConfiguratorSpacer = new QSpacerItem(0, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
-	leftVLayout->addItem(topConfiguratorSpacer);
-
-	initUiConfigurator();
-	leftVLayout->addItem(configuratorHLayout);
+	initUiSwitchStand();
+	leftVLayout->addLayout(leftSwitchStandHLayout);
 
 	topSettingsSpacer = new QSpacerItem(0, 100, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	leftVLayout->addItem(topSettingsSpacer);
@@ -256,32 +252,33 @@ void MainWindow::initUiLeftHLayout()
 	initUiFrequency();
 	leftSettingsVLayout->addItem(selectFrequencyVLayout);
 
-	topSelectFileSpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
-	leftSettingsVLayout->addItem(topSelectFileSpacer);
-
-	initUiSelectFile();
-	leftSettingsVLayout->addItem(selectFileHLayout);
-
 	botSettingsSpacer = new QSpacerItem(0, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
 	leftVLayout->addItem(botSettingsSpacer);
 }
 
-void MainWindow::initUiConfigurator()
+void MainWindow::initUiSwitchStand()
 {
-	configuratorHLayout = new QHBoxLayout();
-	configuratorHLayout->setObjectName("configuratorHLayout");
+	leftSwitchStandHLayout = new QHBoxLayout();
+	leftSwitchStandHLayout->setObjectName("leftSwitchStandHLayout");
 
-	configuratorLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Maximum);
-	configuratorHLayout->addItem(configuratorLeftSpacer);
+	switchTypeSlider = new QSliderButton(false, mainLayoutWidget);
+	switchTypeSlider->setObjectName("switchTypeSlider");
+	switchTypeSlider->setFixedSize(MIN_STAND_SWITCH_SLIDER_HEIGHT, MIN_STAND_SWITCH_SLIDER_WIDTH);
+	leftSwitchStandHLayout->addWidget(switchTypeSlider);
 
-	// Configurator
-	configuratorButton = new QPushButton(mainLayoutWidget);
-	configuratorButton->setObjectName("configuratorButton");
-	configuratorButton->setFixedSize(MIN_CONFIGURATOR_BUTTON_WIDTH, MIN_CONFIGURATOR_BUTTON_HEIGHT);
-	configuratorHLayout->addWidget(configuratorButton);
+	leftSwitchStandVLayout = new QVBoxLayout();
+	leftSwitchStandVLayout->setObjectName("leftSwitchStandVLayout");
+	leftSwitchStandHLayout->addItem(leftSwitchStandVLayout);
 
-	configuratorLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Maximum);
-	configuratorHLayout->addItem(configuratorLeftSpacer);
+	leftStandBCMButton = new QPushButton();
+	leftStandBCMButton->setObjectName("standBCMButton");
+	leftStandBCMButton->setText("BCM");
+	leftSwitchStandVLayout->addWidget(leftStandBCMButton);
+
+	leftStandDMButton = new QPushButton();
+	leftStandDMButton->setObjectName("standDMButton");
+	leftStandDMButton->setText("DM");
+	leftSwitchStandVLayout->addWidget(leftStandDMButton);
 }
 
 void MainWindow::initUiAdapter()
@@ -336,41 +333,6 @@ void MainWindow::initUiFrequency()
 	selectFrequencyLabel = new QLabel(mainLayoutWidget);
 	selectFrequencyLabel->setObjectName("selectFrequencyLabel");
 	selectFrequencyVLayout->addWidget(selectFrequencyLabel);
-}
-
-void MainWindow::initUiSelectFile()
-{
-	selectFileHLayout = new QHBoxLayout();
-	selectFileHLayout->setObjectName("selectFileVLayout");
-
-	selectFileLeftSpacer = new QSpacerItem(50, 0, QSizePolicy::Maximum);
-	selectFileHLayout->addItem(selectFileLeftSpacer);
-
-	selectFileVLayout = new QVBoxLayout();
-	selectFileVLayout->setObjectName("selectFileHLayout");
-	selectFileHLayout->addItem(selectFileVLayout);
-
-	selectFileButton = new QPushButton(mainLayoutWidget);
-	selectFileButton->setObjectName("selectFileButton");
-	selectFileButton->setFixedSize(MIN_FILE_SEL_BUTTON_WIDTH, MIN_FILE_SEL_BUTTON_HEIGHT);
-	selectFileVLayout->addWidget(selectFileButton);
-
-	selectFileMiddleSpacer = new QSpacerItem(0, 5, QSizePolicy::Fixed);
-	selectFileVLayout->addItem(selectFileMiddleSpacer);
-
-	selectFileLabel = new QLabel(mainLayoutWidget);
-	selectFileLabel->setObjectName("selectFileLabel");
-	selectFileLabel->setAlignment(Qt::AlignHCenter);
-	selectFileLabel->setFixedWidth(MIN_FILE_SEL_BUTTON_WIDTH);
-	selectFileVLayout->addWidget(selectFileLabel);
-
-	selectFileLine = new QFrame(mainLayoutWidget);
-	selectFileLine->setObjectName("selectFileLine");
-	selectFileLine->setFrameShape(QFrame::HLine);
-	selectFileVLayout->addWidget(selectFileLine);
-
-	selectFileRightSpacer = new QSpacerItem(50, 0, QSizePolicy::Maximum);
-	selectFileHLayout->addItem(selectFileRightSpacer);
 }
 
 void MainWindow::initUiMainVLayout()
@@ -653,6 +615,7 @@ void MainWindow::initStyles()
 	manualStandButton->setStyleSheet(lightStyles.standButtons); // manualButton
 	autoStandButton->setStyleSheet(lightStyles.standButtons); // autoButton
 	switchStandSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider); // slider
+	switchTypeSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider);
 
 	// themeLanguage
 	switchThemeButton->setStyleSheet(lightStyles.mainButton);
@@ -678,16 +641,12 @@ void MainWindow::initStyles()
 	//Setting
 	//
 	checkAdaptersButton->setStyleSheet(lightStyles.mainButton);
-	configuratorButton->setStyleSheet(lightStyles.mainButton);
-	selectFileButton->setStyleSheet(lightStyles.mainButton);
 }
 
 void MainWindow::initTexts()
 {
 	manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
 	autoStandButton->setText(QString::fromLocal8Bit("Автомат."));
-	configuratorButton->setText(QString::fromLocal8Bit("Конфигуратор"));
-	selectFileButton->setText(QString::fromLocal8Bit("Выбрать файл"));
 	inTestManualStandButton->setText(QString::fromLocal8Bit("Входы"));
 	outTestManualStandButton->setText(QString::fromLocal8Bit("Выходы"));
 	fullTestManualStandButton->setText(QString::fromLocal8Bit("Полная"));
@@ -701,7 +660,6 @@ void MainWindow::initTexts()
 	selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
 	selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
 	manualStandLabel->setText(QString::fromLocal8Bit("Ручная"));
-	selectFileLabel->setText(QString::fromLocal8Bit("Выберите файл"));
 }
 
 void MainWindow::fillComboBoxes()
@@ -753,7 +711,7 @@ void MainWindow::initConnections()
 
 void MainWindow::switchStyleMainButtons()
 {
-	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
+	if (can->getFrequencySelected() && can->getAdapterSelected())
 	{
 		if (viewWindowState->appTheme == LIGHT_THEME)
 		{
@@ -845,10 +803,15 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	autoStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
 	autoStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
 
-	// slider
+	// stand slider slider 
 	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
 	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
 	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
+	
+	// type slider slider 
+	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
+	switchTypeSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
+	switchTypeSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
 
 	// Main
 	// out stend manual
@@ -884,51 +847,6 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 }
 
-void MainWindow::on_selectFileButton_clicked()
-{
-#ifdef DEBUG
-	fileName = QString::fromLocal8Bit("И пиздец...");
-	selectedFileFullName = "C:/Users/zahar.mormil/Desktop/PC-Tester/Config files/t.csv";
-	//C:/Users/zahar.mormil/Desktop/PC-Tester/Config files/test_1.csv
-#else
-	selectedFileFullName = QFileDialog::getOpenFileName(this, "Open File", QDir::currentPath() + "/Config files/", "CSV (*.csv)");
-#endif // DEBUG
-	int localFileNameInd = selectedFileFullName.lastIndexOf("/");
-
-	QString fullPrintedFileName = "";
-	fileName = "";
-
-	bool isTypeStart = false;
-	for (int i = localFileNameInd + 1; i < selectedFileFullName.size(); i++)
-	{
-		if (selectedFileFullName[i] == '.')
-			isTypeStart = true;
-
-		if (!isTypeStart)
-			fullPrintedFileName += selectedFileFullName[i];
-
-		fileName += selectedFileFullName[i];
-	}
-
-
-	//selectFileLabel->setText((isFileNameOvercrowded ? printedFileName : fullPrintedFileName));
-	if (fullPrintedFileName.size() <= OVERCROWDED_SEL_FILE_LABEL)
-		printedfileName = fullPrintedFileName;
-	else
-	{
-		printedfileName = "";
-		for (int i = 0; i < OVERCROWDED_SEL_FILE_LABEL - 3; i++)
-			printedfileName += fullPrintedFileName[i];
-		printedfileName += "...";
-	}
-	selectFileLabel->setText(printedfileName);
-
-	proccessSelectedFile(selectedFileFullName);
-
-	isFileSelected = true;
-	switchStyleMainButtons(); //
-}
-
 void MainWindow::on_switchThemeButton_clicked()
 {
 	switch (viewWindowState->appTheme)
@@ -957,6 +875,7 @@ void MainWindow::resetTheme()
 		// Header
 		// selectStand
 		switchStandSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider); // slider
+		switchTypeSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider); // slider
 		if (switchStandSlider->getStatus() == AUTO_STAND) // button
 		{
 			autoStandButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
@@ -982,14 +901,6 @@ void MainWindow::resetTheme()
 		selectFrequencyComboBox->setStyleSheet(lightStyles.settingComboBox); // settingComboBox
 		selectFrequencyLabel->setStyleSheet(lightStyles.settingSelectText);  // lable частоты
 
-		// конфигуратор
-		configuratorButton->setStyleSheet(lightStyles.settingButton); // button конфигуратор
-
-		// файл
-		selectFileButton->setStyleSheet(lightStyles.settingButton); // button файл
-		selectFileLabel->setStyleSheet(lightStyles.settingSelectText);  // lable файла
-		selectFileLine->setStyleSheet(lightStyles.settingSelectText); // line
-
 		// Main
 		// button
 		switchStyleMainButtons();
@@ -1011,6 +922,7 @@ void MainWindow::resetTheme()
 		// Header
 		// selectStand
 		switchStandSlider->setStyleSheet(darkStyles.roundSlider, darkStyles.bgSlider); // slider
+		switchTypeSlider->setStyleSheet(darkStyles.roundSlider, darkStyles.bgSlider); // slider
 		if (switchStandSlider->getStatus() == AUTO_STAND) // button
 		{
 			autoStandButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
@@ -1036,14 +948,6 @@ void MainWindow::resetTheme()
 		selectFrequencyComboBox->setStyleSheet(darkStyles.settingComboBox); // settingComboBox
 		selectFrequencyLabel->setStyleSheet(darkStyles.settingSelectText);  // lable частоты
 
-		// конфигуратор
-		configuratorButton->setStyleSheet(darkStyles.settingButton); // button конфигуратор
-
-		// файл
-		selectFileButton->setStyleSheet(darkStyles.settingButton);  // button файл
-		selectFileLabel->setStyleSheet(darkStyles.settingSelectText);  // lable файла
-		selectFileLine->setStyleSheet(darkStyles.settingSelectText); // line
-
 		// Main
 		// button
 		switchStyleMainButtons();
@@ -1064,8 +968,9 @@ void MainWindow::on_sliderSwitchStand_click()
 
 void MainWindow::on_autoStandButton_clicked()
 {
-	if (switchStandSlider->getStatus() != AUTO_STAND)
+	if (selectedStand != AUTO_STAND)
 	{
+		selectedStand = AUTO_STAND;
 		switchStandSlider->setStatus(AUTO_STAND);
 		switchStandButtons();
 	}
@@ -1073,8 +978,9 @@ void MainWindow::on_autoStandButton_clicked()
 
 void MainWindow::on_manualStandButton_clicked()
 {
-	if (switchStandSlider->getStatus() != MANUAL_STAND)
+	if (selectedStand != MANUAL_STAND)
 	{
+		selectedStand = MANUAL_STAND;
 		switchStandSlider->setStatus(MANUAL_STAND);
 		switchStandButtons();
 	}
@@ -1144,8 +1050,6 @@ void MainWindow::resetLanguage()
 	case RUSSIAN_LANG:
 		manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
 		autoStandButton->setText(QString::fromLocal8Bit("Автомат."));
-		configuratorButton->setText(QString::fromLocal8Bit("Конфигуратор"));
-		selectFileButton->setText(QString::fromLocal8Bit("Выбрать файл"));
 		inTestManualStandButton->setText(QString::fromLocal8Bit("Входы"));
 		outTestManualStandButton->setText(QString::fromLocal8Bit("Выходы"));
 		fullTestManualStandButton->setText(QString::fromLocal8Bit("Полная"));
@@ -1161,15 +1065,11 @@ void MainWindow::resetLanguage()
 			selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
 		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
 		autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
-
-		selectFileLabel->setText(QString::fromLocal8Bit("Выберите файл"));	// Должно стоять условие, что после того, как файл будет выбрать не перезаписывать
 		break;
 
 	case ENGLISH_LANG:
 		manualStandButton->setText(QString("Manual"));
 		autoStandButton->setText(QString("Auto"));
-		configuratorButton->setText(QString("Configurator"));
-		selectFileButton->setText(QString("Selct file"));
 		inTestManualStandButton->setText(QString("In"));
 		outTestManualStandButton->setText(QString("Out"));
 		fullTestManualStandButton->setText(QString("Full"));
@@ -1184,27 +1084,11 @@ void MainWindow::resetLanguage()
 		if (!can->getFrequencySelected())
 			selectFrequencyLabel->setText(QString("Select frequency"));
 		manualTestAutoStandLabel->setText(QString("Manual"));
-		autoTestAutoStandLabel->setText(QString("Auto"));
-
-		selectFileLabel->setText(QString("Select file"));	// Должно стоять условие, что после того, как файл будет выбрать не перезаписывать
+		
 		break;
 	}
 	if (can->getFrequencySelected())
 		on_selectFrequencyComboBox_changed(1);
-}
-
-void MainWindow::on_configuratorButton_clicked()
-{
-	ConfiguratorWindow* configuratorWindow = new ConfiguratorWindow(this);
-
-	WindowFrame w(WindowType::CONFIGURATOR, nullptr, configuratorWindow);
-	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
-	configuratorWindow->setParentFrame(&w);
-	w.show();
-	this->hide();
-	configuratorWindow->exec();
-	resetWindowView();
-	this->show();
 }
 
 void MainWindow::on_selectFrequencyComboBox_changed(int index)
@@ -1266,15 +1150,10 @@ void MainWindow::on_outTestManualStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
-		return;
-	}
 
-	std::vector<Cable> preparedCables;
+	std::vector<Cable> preparedCables = {};
 	for (int i = 0; i < cables.size(); i++)
-		if (cables[i].direction == DIRECTION_OUT)
+		if (cables[i].getDirection() == DIRECTION_OUT)
 			preparedCables.push_back(cables[i]);
 
 	createTestWindow(WindowType::OUT_TEST_MANUAL_STAND, preparedCables);
@@ -1292,15 +1171,10 @@ void MainWindow::on_inTestManualStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
-		return;
-	}
 
-	std::vector<Cable> preparedCables;
+	std::vector<Cable> preparedCables = {};
 	for (int i = 0; i < cables.size(); i++)
-		if (cables[i].direction == DIRECTION_IN)
+		if (cables[i].getDirection() == DIRECTION_IN)
 			preparedCables.push_back(cables[i]);
 
 	createTestWindow(WindowType::IN_TEST_MANUAL_STAND, preparedCables);
@@ -1316,11 +1190,6 @@ void MainWindow::on_fullTestManualStandButton_clicked()
 	if (!can->getFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
 		return;
 	}
 
@@ -1339,15 +1208,10 @@ void MainWindow::on_inManualTestAutoStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
-		return;
-	}
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
-		if (cables[i].direction == DIRECTION_IN)
+		if (cables[i].getDirection() == DIRECTION_IN)
 			preparedCables.push_back(cables[i]);
 
 	createTestWindow(WindowType::IN_MANUAL_TEST_AUTO_STAND, preparedCables);
@@ -1370,15 +1234,10 @@ void MainWindow::on_outManualTestAutoStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
-		return;
-	}
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
-		if (cables[i].direction == DIRECTION_OUT)
+		if (cables[i].getDirection() == DIRECTION_OUT)
 			preparedCables.push_back(cables[i]);
 
 	createTestWindow(WindowType::OUT_MANUAL_TEST_AUTO_STAND, preparedCables);
@@ -1401,15 +1260,10 @@ void MainWindow::on_inAutoTestAutoStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
-		return;
-	}
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
-		if (cables[i].direction == DIRECTION_IN)
+		if (cables[i].getDirection() == DIRECTION_IN)
 			preparedCables.push_back(cables[i]);
 
 	createTestWindow(WindowType::IN_AUTO_TEST_AUTO_STAND, preparedCables);
@@ -1432,15 +1286,10 @@ void MainWindow::on_outAutoTestAutoStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
-		return;
-	}
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
-		if (cables[i].direction == DIRECTION_OUT)
+		if (cables[i].getDirection() == DIRECTION_OUT)
 			preparedCables.push_back(cables[i]);
 
 	createTestWindow(WindowType::OUT_AUTO_TEST_AUTO_STAND, preparedCables);
@@ -1463,16 +1312,6 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (!isFileSelected)
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FILE_SEL);
-		return;
-	}
-
-	std::vector<Cable> preparedCables;
-	for (int i = 0; i < cables.size(); i++)
-		if (cables[i].direction == DIRECTION_OUT)
-			preparedCables.push_back(cables[i]);
 
 	createTestWindow(WindowType::FULL_TEST_AUTO_STAND, cables);
 }
@@ -1492,12 +1331,11 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	}
 
 
-	if (isFileSelected && can->getFrequencySelected() && can->getAdapterSelected())
+	if (can->getFrequencySelected() && can->getAdapterSelected())
 	{
-		if (selectedFileStandType != CFG_STAND_NOT_SET)
+		if (selectedStand != STAND_NOT_SET)
 		{
 			TestWindow* testWindow = new TestWindow(testType, preparedCables, this);
-			testWindow->setFileName(selectedFileFullName);
 
 			WindowFrame w(testType, nullptr, testWindow);
 			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
@@ -1516,7 +1354,6 @@ void MainWindow::resetWindowView()
 	resetLanguage();
 	resetTheme();
 	parentFrame->resetTheme();
-	selectFileLabel->setText(printedfileName);
 }
 
 void MainWindow::setParentFrame(WindowFrame* parentFrame)
@@ -1524,4 +1361,36 @@ void MainWindow::setParentFrame(WindowFrame* parentFrame)
 	this->parentFrame = parentFrame;
 
 	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
+}
+
+static Cable fillCable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, double minCurrent, double maxCurrent, double minVoltage, double maxVoltage, QString name, QString component)
+{
+	Cable cable;
+	cable.setId(id);
+	cable.setConnector(connector);
+	cable.setPin(pin);
+	cable.setDirection(direction);
+	cable.setType(type);
+	cable.setCanId(canId);
+	cable.setBit(bit);
+	cable.setMinCurrent(minCurrent);
+	cable.setMaxCurrent(maxCurrent);
+	cable.setMinVoltage(minVoltage);
+	cable.setMaxVoltage(maxVoltage);
+	cable.setName(name);
+	cable.setComponent(component);
+	return cable;
+}
+
+void MainWindow::initCables()
+{
+	// ID	PIN		DIRECTION		TYPE	CAN_ID		BIT		MIN_CURRENT		MAX_CURRENT		MIN_VOLTAGE		MAX_VOLTAGE		NAME	COMPONENT
+	cables.push_back(fillCable(0, ConnectorId::A, 6,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, 2, 20, 1, 12, "HSO_XP1_6", "LOUT2"));
+	cables.push_back(fillCable(0, ConnectorId::A, 7,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "DIGN_XP1_7", "Sw24"));
+	cables.push_back(fillCable(0, ConnectorId::A, 8,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "DIGN_XP1_8", "Sw16"));
+	cables.push_back(fillCable(0, ConnectorId::A, 9,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "HI_XP1_9", "IHall3"));
+	cables.push_back(fillCable(0, ConnectorId::A, 10,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "DIGN_XP1_10", "Sw6"));
+	cables.push_back(fillCable(0, ConnectorId::A, 14,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, 2, 20, 1, 12, "HSO_XP1_14", "LOUT1"));
+	cables.push_back(fillCable(0, ConnectorId::A, 15,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, 2, 20, 1, 12, "HSO_XP1_15", "HSD2"));
+	cables.push_back(fillCable(0, ConnectorId::A, 16,	DIRECTION_OUT,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "HSO_XP1_16", "LOUT4"));
 }

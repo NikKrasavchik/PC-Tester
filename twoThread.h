@@ -2,6 +2,7 @@
 #include <chrono>
 
 #include "can.h"
+#include "Cable.h"
 
 #define SEND_ID_CAN 0x55
 #define SEND_MSG_CONNECT_AUTO_STAND				{0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, }

@@ -112,9 +112,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Cable.cpp" />
     <ClCompile Include="can.cpp" />
-    <ClCompile Include="ConfiguratorWindowProc.cpp" />
-    <ClCompile Include="ConfiguratorWindow.cpp" />
     <ClCompile Include="fullTestAutoStand_TestWindow.cpp" />
     <ClCompile Include="fullTestManualStand_TestWindow.cpp" />
     <ClCompile Include="inAutoTestAutoStand_TestWindow.cpp" />
@@ -138,7 +137,6 @@
     <ClCompile Include="twoThread.cpp" />
     <ClCompile Include="WindowFrame.cpp" />
     <QtRcc Include="resources\resources.qrc" />
-    <QtUic Include="ConfiguratorWindow.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
@@ -152,13 +150,13 @@
     <QtMoc Include="qsliderbutton.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Cable.h" />
     <ClInclude Include="can.h" />
     <ClInclude Include="Components.h" />
     <QtMoc Include="MoreWindow.h" />
     <QtMoc Include="ReportWindow.h" />
     <ClInclude Include="resource.h" />
     <QtMoc Include="twoThread.h" />
-    <QtMoc Include="ConfiguratorWindow.h" />
     <QtMoc Include="WindowFrame.h" />
     <QtMoc Include="TestWindow.h" />
   </ItemGroup>

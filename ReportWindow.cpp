@@ -223,26 +223,26 @@ void ReportWindow::initUiSetValueTable()
 			switch (column)
 			{
 			case COLUMN_PAD:
-				model->setData(model->index(row, column), QString((char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[row - ROW_3].connector)));
+				model->setData(model->index(row, column), QString((char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[row - ROW_3].getConnector())));
 				break;
 
 			case COLUMN_PIN:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].pin));
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getPin()));
 				break;
 
 			case COLUMN_NAME:
-				model->setData(model->index(row, column), QString(cables[row - ROW_3].name));
+				model->setData(model->index(row, column), QString(cables[row - ROW_3].getName()));
 				break;
 
 			case COLUMN_COMPONENT:
-				model->setData(model->index(row, column), QString(cables[row - ROW_3].component));
+				model->setData(model->index(row, column), QString(cables[row - ROW_3].getComponent()));
 				break;
 
 			case COLUMN_TYPE:
 				switch (viewWindowState->appLanguage)
 				{
 				case RUSSIAN_LANG:
-					switch (cables[row - ROW_3].type)
+					switch (cables[row - ROW_3].getType())
 					{
 					case TYPE_NOT_SET:
 						model->setData(model->index(row, column), QString("No set"));
@@ -265,7 +265,7 @@ void ReportWindow::initUiSetValueTable()
 					}
 					break;
 				case ENGLISH_LANG:
-					switch (cables[row - ROW_3].type)
+					switch (cables[row - ROW_3].getType())
 					{
 					case TYPE_NOT_SET:
 						model->setData(model->index(row, column), QString::fromLocal8Bit("Не указан"));
@@ -292,19 +292,19 @@ void ReportWindow::initUiSetValueTable()
 				break;
 
 			case COLUMN_TRESHHOLDERS_U_MIN:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].minVoltage));
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMinVoltage()));
 				break;
 
 			case COLUMN_TRESHHOLDERS_U_MAX:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].maxVoltage));
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMaxVoltage()));
 				break;
 
 			case COLUMN_TRESHHOLDERS_I_MIN:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].minCurrent));
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMinCurrent()));
 				break;
 
 			case COLUMN_TRESHHOLDERS_I_MAX:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].maxCurrent));
+				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMaxCurrent()));
 				break;
 			}
 

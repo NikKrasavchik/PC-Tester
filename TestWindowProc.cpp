@@ -12,22 +12,22 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			cableRows[i]->measureds.push_back(tmpMeasured);
 		}
 		// Test
-		cableRows[i]->id = cables[i].id;
-		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].connector);
-		cableRows[i]->connectorInt = cables[i].connector;
-		cableRows[i]->pin = QString::number(cables[i].pin);
-		cableRows[i]->name = cables[i].name;
-		cableRows[i]->component = cables[i].component;
-		cableRows[i]->minCurrent = cables[i].minCurrent;
-		cableRows[i]->maxCurrent = cables[i].maxCurrent;
-		cableRows[i]->minVoltage = cables[i].minVoltage;
-		cableRows[i]->maxVoltage = cables[i].maxVoltage;
+		cableRows[i]->id = cables[i].getId();
+		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].getConnector());
+		cableRows[i]->connectorInt = cables[i].getConnector();
+		cableRows[i]->pin = QString::number(cables[i].getPin());
+		cableRows[i]->name = cables[i].getName();
+		cableRows[i]->component = cables[i].getComponent();
+		cableRows[i]->minCurrent = cables[i].getMinCurrent();
+		cableRows[i]->maxCurrent = cables[i].getMaxCurrent();
+		cableRows[i]->minVoltage = cables[i].getMinVoltage();
+		cableRows[i]->maxVoltage = cables[i].getMaxVoltage();
 		cableRows[i]->stateDigital = BUTTON_NOT_SET;
 		cableRows[i]->statePWM = BUTTON_NOT_SET;
-		cableRows[i]->canId = cables[i].canId;
-		cableRows[i]->bit = cables[i].bit;
+		cableRows[i]->canId = cables[i].getCanId();
+		cableRows[i]->bit = cables[i].getBit();
 
-		switch (cables[i].direction)
+		switch (cables[i].getDirection())
 		{
 		case DIRECTION_OUT:
 			cableRows[i]->direction = "OUT";
@@ -43,7 +43,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			testType == WindowType::IN_TEST_MANUAL_STAND ||
 			testType == WindowType::FULL_TEST_AUTO_STAND ||
 			testType == WindowType::FULL_TEST_MANUAL_STAND)
-			switch (cables[i].type)
+			switch (cables[i].getType())
 			{
 			case TYPE_DIGITAL:
 				cableRows[i]->type = "DIGITAL";
@@ -67,7 +67,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			testType == WindowType::FULL_TEST_AUTO_STAND ||
 			testType == WindowType::FULL_TEST_MANUAL_STAND)
 		{
-			switch (cables[i].type)
+			switch (cables[i].getType())
 			{
 			case TYPE_DIGITAL:
 				if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
@@ -89,7 +89,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		else if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
 			cableRows[i]->direction = "";
 
-		cableRows[i]->generateInteractionButtons(testType, cables[i].type);
+		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
 	}
 }

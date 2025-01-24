@@ -38,9 +38,6 @@
     <QtRcc Include="resources\resources.qrc">
       <Filter>Resource Files</Filter>
     </QtRcc>
-    <QtUic Include="ConfiguratorWindow.ui">
-      <Filter>Form Files</Filter>
-    </QtUic>
     <QtUic Include="MoreWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
@@ -91,12 +88,6 @@
     <ClCompile Include="WindowFrame.cpp">
       <Filter>Source Files\Ui</Filter>
     </ClCompile>
-    <ClCompile Include="ConfiguratorWindowProc.cpp">
-      <Filter>Source Files\Proc</Filter>
-    </ClCompile>
-    <ClCompile Include="ConfiguratorWindow.cpp">
-      <Filter>Source Files\Ui</Filter>
-    </ClCompile>
     <ClCompile Include="MainWindowProc.cpp">
       <Filter>Source Files\Proc</Filter>
     </ClCompile>
@@ -115,15 +106,15 @@
     <ClCompile Include="ReportWindow.cpp">
       <Filter>Source Files\Ui</Filter>
     </ClCompile>
+    <ClCompile Include="Cable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="WindowFrame.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="ConfiguratorWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="TestWindow.h">
@@ -147,6 +138,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Cable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

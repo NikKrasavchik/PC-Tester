@@ -139,10 +139,10 @@ ManualStandTwoThread::ManualStandTwoThread(std::vector<Cable> cables, StandStatu
 	{
 		TestCables* cable = new TestCables;
 
-		cable->pad = (int)cables[i].connector;
-		cable->pin = cables[i].pin;
-		cable->canId = cables[i].canId;
-		cable->byte = cables[i].bit;
+		cable->pad = (int)cables[i].getConnector();
+		cable->pin = cables[i].getPin();
+		cable->canId = cables[i].getCanId();
+		cable->byte = cables[i].getBit();
 
 		cable->oldValue = NOT_SET;
 		this->cables.push_back(cable);

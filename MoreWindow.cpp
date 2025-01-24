@@ -638,7 +638,8 @@ MoreWindowInDig::MoreWindowInDig(TestTableRowProperties* row) : MoreWindowIn(row
 MoreWindowInAnalog::MoreWindowInAnalog(TestTableRowProperties* row) : MoreWindowIn(row, SIZE_MOREWINDOW_IN_ANALOG)
 {
 	coutTrehholders = 5;
-	mainTableWidget->setRowCount(15);
+	mainTableWidget->setColumnCount(11);
+	mainTableWidget->setRowCount(4);
 
 	initUiTableIn(TypeMoreWindow::MoreWindowInAnalog);
 }
@@ -676,34 +677,34 @@ void MoreWindow::on_saveChangesButton_clicked()
 	{
 		Cable cableTmp;
 
-		cableTmp.id = row->id;
-		cableTmp.connector = row->connectorInt;
-		cableTmp.pin = row->pin.toInt();
+		cableTmp.setId(row->id);
+		cableTmp.setConnector(row->connectorInt);
+		cableTmp.setPin(row->pin.toInt());
 
 		if (row->direction == "OUT")
-			cableTmp.direction = DIRECTION_OUT;
+			cableTmp.setDirection(DIRECTION_OUT);
 		else if (row->direction == "IN")
-			cableTmp.direction = DIRECTION_IN;
+			cableTmp.setDirection(DIRECTION_IN);
 		else
-			cableTmp.direction = DIRECTION_NOT_SET;
+			cableTmp.setDirection(DIRECTION_NOT_SET);
 
 		if (row->type == "DIGITAL")
-			cableTmp.type = TYPE_DIGITAL;
+			cableTmp.setType(TYPE_DIGITAL);
 		else if (row->type == "ANALOG")
-			cableTmp.type = TYPE_ANALOG;
+			cableTmp.setType(TYPE_ANALOG);
 		else if (row->type == "HALL")
-			cableTmp.type = TYPE_HALL;
+			cableTmp.setType(TYPE_HALL);
 		else if (row->type == "PWM")
-			cableTmp.type = TYPE_PWM;
+			cableTmp.setType(TYPE_PWM);
 		else if (row->type == "VNH")
-			cableTmp.type = TYPE_VNH;
+			cableTmp.setType(TYPE_VNH);
 		else
-			cableTmp.type = TYPE_NOT_SET;
+			cableTmp.setType(TYPE_NOT_SET);
 
-		cableTmp.canId = row->canId;
-		cableTmp.bit = row->bit;
-		cableTmp.name = row->name;
-		cableTmp.component = row->component;
+		cableTmp.setCanId(row->canId);
+		cableTmp.setBit(row->bit);
+		cableTmp.setName(row->name);
+		cableTmp.setComponent(row->component);
 		//cableTmp.minVoltage = (changedThresholds[0] != NOT_SET ? changedThresholds[0] : row->minVoltage);
 		//cableTmp.maxVoltage = (changedThresholds[1] != NOT_SET ? changedThresholds[1] : row->maxVoltage);
 		//cableTmp.minCurrent = (changedThresholds[2] != NOT_SET ? changedThresholds[2] : row->minCurrent);
