@@ -292,19 +292,19 @@ void ReportWindow::initUiSetValueTable()
 				break;
 
 			case COLUMN_TRESHHOLDERS_U_MIN:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMinVoltage()));
+				//model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMinVoltage()));
 				break;
 
 			case COLUMN_TRESHHOLDERS_U_MAX:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMaxVoltage()));
+				//model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMaxVoltage()));
 				break;
 
 			case COLUMN_TRESHHOLDERS_I_MIN:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMinCurrent()));
+				//model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMinCurrent()));
 				break;
 
 			case COLUMN_TRESHHOLDERS_I_MAX:
-				model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMaxCurrent()));
+				//model->setData(model->index(row, column), QString::number(cables[row - ROW_3].getMaxCurrent()));
 				break;
 			}
 

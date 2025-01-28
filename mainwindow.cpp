@@ -75,13 +75,13 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	ui.setupUi(this);
 
-	this->selectedStand = STAND_MANUAL;
+	this->selectedType = TYPE_MANUAL;
+	this->selectedStand = STAND_NOT_SET;
 
 	initFloatCheck();
 	initCables();
 
 	initUi();
-	switchTypeSlider->repaint();
 }
 
 MainWindow::~MainWindow()
@@ -132,7 +132,7 @@ void MainWindow::initUi()
 	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLUMN_0);
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLUMN_1);
 
-	selectedStand = AUTO_STAND;
+	selectedType = AUTO_STAND;
 	viewWindowState->appTheme = LIGHT_THEME;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
 
@@ -233,8 +233,11 @@ void MainWindow::initUiLeftHLayout()
 	leftVLayout->setObjectName("leftVLayout");
 	leftHLayout->addItem(leftVLayout);
 
+	leftStandSwitchUpSpacer = new QSpacerItem(0, 50, QSizePolicy::Fixed);
+	leftVLayout->addItem(leftStandSwitchUpSpacer);
+
 	initUiSwitchStand();
-	leftVLayout->addLayout(leftSwitchStandHLayout);
+	leftVLayout->addLayout(leftSwitchStandVLayout);
 
 	topSettingsSpacer = new QSpacerItem(0, 100, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	leftVLayout->addItem(topSettingsSpacer);
@@ -258,27 +261,27 @@ void MainWindow::initUiLeftHLayout()
 
 void MainWindow::initUiSwitchStand()
 {
-	leftSwitchStandHLayout = new QHBoxLayout();
-	leftSwitchStandHLayout->setObjectName("leftSwitchStandHLayout");
-
-	switchTypeSlider = new QSliderButton(false, mainLayoutWidget);
-	switchTypeSlider->setObjectName("switchTypeSlider");
-	switchTypeSlider->setFixedSize(MIN_STAND_SWITCH_SLIDER_HEIGHT, MIN_STAND_SWITCH_SLIDER_WIDTH);
-	leftSwitchStandHLayout->addWidget(switchTypeSlider);
-
 	leftSwitchStandVLayout = new QVBoxLayout();
 	leftSwitchStandVLayout->setObjectName("leftSwitchStandVLayout");
-	leftSwitchStandHLayout->addItem(leftSwitchStandVLayout);
 
 	leftStandBCMButton = new QPushButton();
 	leftStandBCMButton->setObjectName("standBCMButton");
 	leftStandBCMButton->setText("BCM");
+	leftStandBCMButton->setStyleSheet(lightStyles.mainButton);
 	leftSwitchStandVLayout->addWidget(leftStandBCMButton);
+
+	connect(leftStandBCMButton, &QPushButton::clicked, this, &MainWindow::on_leftStandBCMButton_clicked);
+
+	leftStandSwitchSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	leftSwitchStandVLayout->addItem(leftStandSwitchSpacer);
 
 	leftStandDMButton = new QPushButton();
 	leftStandDMButton->setObjectName("standDMButton");
 	leftStandDMButton->setText("DM");
+	leftStandDMButton->setStyleSheet(lightStyles.mainButton);
 	leftSwitchStandVLayout->addWidget(leftStandDMButton);
+
+	connect(leftStandDMButton, &QPushButton::clicked, this, &MainWindow::on_leftStandDMButton_clicked);
 }
 
 void MainWindow::initUiAdapter()
@@ -614,8 +617,6 @@ void MainWindow::initStyles()
 	// selectStand
 	manualStandButton->setStyleSheet(lightStyles.standButtons); // manualButton
 	autoStandButton->setStyleSheet(lightStyles.standButtons); // autoButton
-	switchStandSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider); // slider
-	switchTypeSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider);
 
 	// themeLanguage
 	switchThemeButton->setStyleSheet(lightStyles.mainButton);
@@ -808,11 +809,6 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
 	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
 	
-	// type slider slider 
-	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
-	switchTypeSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
-	switchTypeSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
-
 	// Main
 	// out stend manual
 	outTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
@@ -875,7 +871,6 @@ void MainWindow::resetTheme()
 		// Header
 		// selectStand
 		switchStandSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider); // slider
-		switchTypeSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider); // slider
 		if (switchStandSlider->getStatus() == AUTO_STAND) // button
 		{
 			autoStandButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
@@ -922,7 +917,6 @@ void MainWindow::resetTheme()
 		// Header
 		// selectStand
 		switchStandSlider->setStyleSheet(darkStyles.roundSlider, darkStyles.bgSlider); // slider
-		switchTypeSlider->setStyleSheet(darkStyles.roundSlider, darkStyles.bgSlider); // slider
 		if (switchStandSlider->getStatus() == AUTO_STAND) // button
 		{
 			autoStandButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
@@ -968,9 +962,9 @@ void MainWindow::on_sliderSwitchStand_click()
 
 void MainWindow::on_autoStandButton_clicked()
 {
-	if (selectedStand != AUTO_STAND)
+	if (selectedType != AUTO_STAND)
 	{
-		selectedStand = AUTO_STAND;
+		selectedType = AUTO_STAND;
 		switchStandSlider->setStatus(AUTO_STAND);
 		switchStandButtons();
 	}
@@ -978,9 +972,9 @@ void MainWindow::on_autoStandButton_clicked()
 
 void MainWindow::on_manualStandButton_clicked()
 {
-	if (selectedStand != MANUAL_STAND)
+	if (selectedType != MANUAL_STAND)
 	{
-		selectedStand = MANUAL_STAND;
+		selectedType = MANUAL_STAND;
 		switchStandSlider->setStatus(MANUAL_STAND);
 		switchStandButtons();
 	}
@@ -1333,7 +1327,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 
 	if (can->getFrequencySelected() && can->getAdapterSelected())
 	{
-		if (selectedStand != STAND_NOT_SET)
+		if (selectedType != STAND_NOT_SET)
 		{
 			TestWindow* testWindow = new TestWindow(testType, preparedCables, this);
 
@@ -1363,7 +1357,7 @@ void MainWindow::setParentFrame(WindowFrame* parentFrame)
 	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
 
-static Cable fillCable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, double minCurrent, double maxCurrent, double minVoltage, double maxVoltage, QString name, QString component)
+static Cable fillCable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, std::vector<Thresholds> thresholds, QString name, QString component)
 {
 	Cable cable;
 	cable.setId(id);
@@ -1373,10 +1367,7 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 	cable.setType(type);
 	cable.setCanId(canId);
 	cable.setBit(bit);
-	cable.setMinCurrent(minCurrent);
-	cable.setMaxCurrent(maxCurrent);
-	cable.setMinVoltage(minVoltage);
-	cable.setMaxVoltage(maxVoltage);
+	cable.setThresholds(thresholds);
 	cable.setName(name);
 	cable.setComponent(component);
 	return cable;
@@ -1384,13 +1375,53 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 
 void MainWindow::initCables()
 {
-	// ID	PIN		DIRECTION		TYPE	CAN_ID		BIT		MIN_CURRENT		MAX_CURRENT		MIN_VOLTAGE		MAX_VOLTAGE		NAME	COMPONENT
-	cables.push_back(fillCable(0, ConnectorId::A, 6,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, 2, 20, 1, 12, "HSO_XP1_6", "LOUT2"));
-	cables.push_back(fillCable(0, ConnectorId::A, 7,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "DIGN_XP1_7", "Sw24"));
-	cables.push_back(fillCable(0, ConnectorId::A, 8,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "DIGN_XP1_8", "Sw16"));
-	cables.push_back(fillCable(0, ConnectorId::A, 9,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "HI_XP1_9", "IHall3"));
-	cables.push_back(fillCable(0, ConnectorId::A, 10,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "DIGN_XP1_10", "Sw6"));
-	cables.push_back(fillCable(0, ConnectorId::A, 14,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, 2, 20, 1, 12, "HSO_XP1_14", "LOUT1"));
-	cables.push_back(fillCable(0, ConnectorId::A, 15,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, 2, 20, 1, 12, "HSO_XP1_15", "HSD2"));
-	cables.push_back(fillCable(0, ConnectorId::A, 16,	DIRECTION_OUT,	TYPE_DIGITAL,	0x100, 5, 2, 20, 1, 12, "HSO_XP1_16", "LOUT4"));
+	// ID	PIN		DIRECTION		TYPE	CAN_ID		BIT		Thresholds		NAME	COMPONENT
+	cables.push_back(fillCable(0, ConnectorId::A, 6,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_6", "LOUT2"));
+	cables.push_back(fillCable(0, ConnectorId::A, 7,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12), Thresholds(2, 20, 1, 12)}, "DIGN_XP1_7", "Sw24"));
+	cables.push_back(fillCable(0, ConnectorId::A, 8,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12), Thresholds(2, 20, 1, 12), Thresholds(2, 20, 1, 12)}, "DIGN_XP1_8", "Sw16"));
+	cables.push_back(fillCable(0, ConnectorId::A, 9,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HI_XP1_9", "IHall3"));
+	cables.push_back(fillCable(0, ConnectorId::A, 10,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "DIGN_XP1_10", "Sw6"));
+	cables.push_back(fillCable(0, ConnectorId::A, 14,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_14", "LOUT1"));
+	cables.push_back(fillCable(0, ConnectorId::A, 15,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_15", "HSD2"));
+	cables.push_back(fillCable(0, ConnectorId::A, 16,	DIRECTION_OUT,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_16", "LOUT4"));
+}
+
+void MainWindow::on_leftStandBCMButton_clicked()
+{
+	if (selectedStand != STAND_BCM)
+	{
+		selectedStand = STAND_BCM;
+		switch (viewWindowState->appTheme)
+		{
+		case LIGHT_THEME:
+			leftStandBCMButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			leftStandDMButton->setStyleSheet(lightStyles.mainButton);
+			break;
+
+		case DARK_THEME:
+			leftStandBCMButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			leftStandDMButton->setStyleSheet(darkStyles.mainButton);
+			break;
+		}
+	}
+}
+
+void MainWindow::on_leftStandDMButton_clicked()
+{
+	if (selectedStand != STAND_DM)
+	{
+		selectedStand = STAND_DM;
+		switch (viewWindowState->appTheme)
+		{
+		case LIGHT_THEME:
+			leftStandDMButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			leftStandBCMButton->setStyleSheet(lightStyles.mainButton);
+			break;
+
+		case DARK_THEME:
+			leftStandDMButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			leftStandBCMButton->setStyleSheet(darkStyles.mainButton);
+			break;
+		}
+	}
 }

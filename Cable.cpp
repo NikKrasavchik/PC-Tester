@@ -9,10 +9,7 @@ Cable::Cable()
 	this->type = -1;
 	this->canId = -1;
 	this->bit = -1;
-	this->minCurrent = -1;
-	this->maxCurrent = -1;
-	this->minVoltage = -1;
-	this->maxVoltage = -1;
+	this->thresholds.push_back(Thresholds());
 	this->name = "";
 	this->component = "";
 }
@@ -26,10 +23,7 @@ Cable::Cable(ConnectorId connector, int pin)
 	this->type = -1;
 	this->canId = -1;
 	this->bit = -1;
-	this->minCurrent = -1;
-	this->maxCurrent = -1;
-	this->minVoltage = -1;
-	this->maxVoltage = -1;
+	this->thresholds.push_back(Thresholds());
 	this->name = "";
 	this->component = "";
 }
@@ -43,9 +37,15 @@ Cable::Cable(const Cable& cable)
 	this->type = cable.type;
 	this->canId = cable.canId;
 	this->bit = cable.bit;
-	this->minCurrent = cable.minCurrent;
-	this->maxCurrent = cable.maxCurrent;
-	this->minVoltage = cable.maxVoltage;
+	for (int i = 0; i < cable.thresholds.size(); i++)
+		this->thresholds.push_back(Thresholds(cable.thresholds[i].minCurrent, cable.thresholds[i].maxCurrent, cable.thresholds[i].minVoltage, cable.thresholds[i].maxVoltage));
 	this->name = cable.name;
 	this->component = cable.component;
+}
+
+void Cable::setThresholds(std::vector<Thresholds> thresholds)
+{
+	this->thresholds.clear();
+	for (int i = 0; i < thresholds.size(); i++)
+		this->thresholds.push_back(Thresholds(thresholds[i].minCurrent, thresholds[i].maxCurrent, thresholds[i].minVoltage, thresholds[i].maxVoltage));
 }

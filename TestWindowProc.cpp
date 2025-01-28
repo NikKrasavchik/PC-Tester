@@ -18,10 +18,8 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->pin = QString::number(cables[i].getPin());
 		cableRows[i]->name = cables[i].getName();
 		cableRows[i]->component = cables[i].getComponent();
-		cableRows[i]->minCurrent = cables[i].getMinCurrent();
-		cableRows[i]->maxCurrent = cables[i].getMaxCurrent();
-		cableRows[i]->minVoltage = cables[i].getMinVoltage();
-		cableRows[i]->maxVoltage = cables[i].getMaxVoltage();
+		for (int j = 0; j < cables[i].getThresholds().size(); j++)
+			cableRows[i]->thresholds.push_back(cables[i].getThresholds()[j]);
 		cableRows[i]->stateDigital = BUTTON_NOT_SET;
 		cableRows[i]->statePWM = BUTTON_NOT_SET;
 		cableRows[i]->canId = cables[i].getCanId();

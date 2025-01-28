@@ -24,9 +24,13 @@
 
 #include <QDebug>
 
+#define TYPE_NOT_SET	NOT_SET
+#define TYPE_MANUAL		0
+#define TYPE_AUTO		1
+
 #define STAND_NOT_SET	NOT_SET
-#define STAND_MANUAL		0
-#define STAND_AUTO			1
+#define STAND_BCM		0
+#define STAND_DM		1
 
 class MainWindow : public QMainWindow
 {
@@ -84,7 +88,6 @@ private:
 	QLabel* manualTestAutoStandLabel;
 	QLabel* autoTestAutoStandLabel;
 	QSliderButton* switchStandSlider;
-	QSliderButton* switchTypeSlider;
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* checkAdaptersButton;
@@ -152,6 +155,7 @@ private:
 	QSpacerItem* fullTestAutoStandUpSpacer;
 	QSpacerItem* fullTestAutoStandBottomSpacer;
 	QSpacerItem* leftStandSwitchSpacer;
+	QSpacerItem* leftStandSwitchUpSpacer;
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
 	QPixmap* themeLightPixmap;
@@ -165,7 +169,8 @@ private:
 	std::vector<Cable> cables;
 
 	bool isAllInit;
-	bool selectedStand;
+	int selectedStand;
+	int selectedType;
 
 	QString appstylePath;
 	QString darkStylePath;
@@ -233,6 +238,8 @@ private slots:
 	void on_inAutoTestAutoStandButton_clicked();
 	void on_outAutoTestAutoStandButton_clicked();
 	void on_fullTestAutoStandButton_clicked();
+	void on_leftStandBCMButton_clicked();
+	void on_leftStandDMButton_clicked();
 
 signals:
 	void resizeStandSlider(int width, int height);

@@ -595,10 +595,7 @@ void TestWindow::on_reportButton_clicked()
 		currentCable.setComponent(currentTestTableRowProperties->component);
 		currentCable.setDirection(currentTestTableRowProperties->direction.toInt());
 		currentCable.setType(currentTestTableRowProperties->type.toInt());
-		currentCable.setMinCurrent(currentTestTableRowProperties->minCurrent);
-		currentCable.setMaxCurrent(currentTestTableRowProperties->maxCurrent);
-		currentCable.setMinVoltage(currentTestTableRowProperties->minVoltage);
-		currentCable.setMaxVoltage(currentTestTableRowProperties->maxVoltage);
+		currentCable.setThresholds(currentTestTableRowProperties->thresholds);
 		currentCable.setBit(currentTestTableRowProperties->bit);
 		currentCable.setCanId(currentTestTableRowProperties->canId);
 
@@ -1274,8 +1271,8 @@ void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, 
 			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);
 			QAbstractItemModel* model = mainTableWidget->model();
 			model->setData(model->index(currentRowNum, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5), QString(""));
-			if (cableRows[i]->minVoltage <= voltage && voltage <= cableRows[i]->maxVoltage &&
-				cableRows[i]->minCurrent <= current && current <= cableRows[i]->maxCurrent)
+			if (cableRows[i]->thresholds[0].minCurrent <= voltage && voltage <= cableRows[i]->thresholds[0].maxVoltage &&
+				cableRows[i]->thresholds[0].minCurrent <= current && current <= cableRows[i]->thresholds[0].maxCurrent)
 				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::green);
 			else
 				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);

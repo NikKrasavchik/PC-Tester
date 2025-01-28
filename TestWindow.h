@@ -118,10 +118,7 @@ public:
 
 	std::vector<Measured*> measureds;
 	Measured measured; // Удалим
-	double minCurrent; // Удалим
-	double maxCurrent; // Удалим
-	double minVoltage; // Удалим
-	double maxVoltage; // Удалим
+	std::vector<Thresholds> thresholds;
 
 	void* buttons;
 	QPushButton* moreButton;
