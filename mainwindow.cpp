@@ -37,6 +37,15 @@
 #define OVERCROWDED_SEL_FILE_LABEL		20
 #define CFG_EXTENSION_LETTERS_COUNT		4
 
+//#define INDEX_DATA_CONFIG_CONNECTOR		0
+//#define INDEX_DATA_CONFIG_PIN			1
+//#define INDEX_DATA_CONFIG_DIRECTION		2
+//#define INDEX_DATA_CONFIG_TYPE			3
+//#define INDEX_DATA_CONFIG_CAN_ID		4
+//#define INDEX_DATA_CONFIG_BIT			5
+//#define INDEX_DATA_CONFIG_NAME			6
+//#define INDEX_DATA_CONFIG_COMPONENT		7
+
 std::vector<std::vector<FloatCheck*>> floatCheck;
 
 static void checkAddFloatCheck(ConnectorId connectorId, int pin, FloatCheck* currentFloatCheck)
@@ -1373,68 +1382,65 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 	return cable;
 }
 
+//static bool validatingConfigData(int index, QStringList data)
+//{
+//	switch (index)
+//	{
+//	case INDEX_DATA_CONFIG_CONNECTOR:
+//		break;
+//
+//	case INDEX_DATA_CONFIG_BIT:
+//		break;
+//
+//	case INDEX_DATA_CONFIG_BIT:
+//		break;
+//
+//		case INDEX_DATA_CONFIG_
+//	}
+//}
+
 void MainWindow::initCables()
 {
-	// ID	PIN		DIRECTION		TYPE	CAN_ID		BIT		Thresholds		NAME	COMPONENT
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 6,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12), Thresholds(2, 20, 1, 12)}, "HSO_XP1_6", "LOUT2"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 7,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_7", "Sw24"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 8,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 7, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_8", "Sw16"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 9,	DIRECTION_IN,	TYPE_DIGITAL,	0x101, 0, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HI_XP1_9", "IHall3"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 10,	DIRECTION_IN,	TYPE_DIGITAL,	0x101, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_10", "Sw6"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 14,	DIRECTION_OUT,	TYPE_PWM,		0x101, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP1_14", "LOUT1"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 15,	DIRECTION_OUT,	TYPE_PWM,		0x106, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP1_15", "HSD2"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 16,	DIRECTION_OUT,	TYPE_DIGITAL,	0x101, 7, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP1_16", "LOUT4"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 17,	DIRECTION_OUT,	TYPE_PWM,		0x102, 0, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP1_17", "LOUT3"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 19,	DIRECTION_OUT,	TYPE_DIGITAL,	0x102, 2, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP1_19", "HSD1"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 20,	DIRECTION_OUT,	TYPE_DIGITAL,	0x102, 3, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP1_20", "LOUT5"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 27,	DIRECTION_IN,	TYPE_DIGITAL,	0x103, 2, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HI_XP1_27", "IHall4"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 29,	DIRECTION_IN,	TYPE_DIGITAL,	0x103, 4, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HI_XP1_29", "IHall2"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 30,	DIRECTION_IN,	TYPE_DIGITAL,	0x103, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HI_XP1_30", "IHall1"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 31,	DIRECTION_IN,	TYPE_DIGITAL,	0x103, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_31", "Sw8"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 32,	DIRECTION_IN,	TYPE_ANALOG,	0x103, 7, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "ADC_XP1_32", "ARc7"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 34,	DIRECTION_IN,	TYPE_ANALOG,	0x104, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "ADC_XP1_34", "ARc6"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 35,	DIRECTION_IN,	TYPE_DIGITAL,	0x104, 2, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_35", "Sw4"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 36,	DIRECTION_IN,	TYPE_DIGITAL,	0x104, 3, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_36", "Sw23"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 37,	DIRECTION_IN,	TYPE_DIGITAL,	0x104, 4, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_37", "Sw9"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 38,	DIRECTION_IN,	TYPE_DIGITAL,	0x104, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_38", "Sw17"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 39,	DIRECTION_IN,	TYPE_DIGITAL,	0x104, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HI_XP1_39", "IHall5"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::A, 40,	DIRECTION_IN,	TYPE_DIGITAL,	0x104, 7, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DIGN_XP1_40", "Sw1"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 1,	DIRECTION_OUT,	TYPE_VNH,		0x105, 0, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP2_1", "BRN3"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 2,	DIRECTION_OUT,	TYPE_DIGITAL,	0x105, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_2", "HSD13"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 3,	DIRECTION_OUT,	TYPE_DIGITAL,	0x105, 2, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_3", "HSD9"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 4,	DIRECTION_OUT,	TYPE_VNH,		0x105, 3, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP2_4", "BRP3"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 5,	DIRECTION_OUT,	TYPE_DIGITAL,	0x105, 4, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_5", "HSD11"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 6,	DIRECTION_OUT,	TYPE_DIGITAL,	0x105, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_6", "HSD14"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 7,	DIRECTION_OUT,	TYPE_PWM,		0x105, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_7", "HSD6"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 8,	DIRECTION_OUT,	TYPE_DIGITAL,	0x105, 7, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_8", "HSD7"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 9,	DIRECTION_OUT,	TYPE_VNH,		0x106, 0, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP2_9", "Br1"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 10,	DIRECTION_OUT,	TYPE_VNH,		0x106, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP2_10", "Br4"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 11,	DIRECTION_OUT,	TYPE_DIGITAL,	0x106, 2, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_11", "HSD12"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 12,	DIRECTION_OUT,	TYPE_VNH,		0x106, 3, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP2_12", "Br1"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 13,	DIRECTION_OUT,	TYPE_VNH,		0x106, 4, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP2_13", "Br4"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 14,	DIRECTION_OUT,	TYPE_DIGITAL,	0x106, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP2_14", "HSD10"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::B, 15,	DIRECTION_OUT,	TYPE_DIGITAL,	0x106, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP2_15", "HSD8"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 3,	DIRECTION_OUT,	TYPE_DIGITAL,	0x107, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP3_3", "HSD15"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 6,	DIRECTION_OUT,	TYPE_DIGITAL,	0x107, 3, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP3_6", "HSD16"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 7,	DIRECTION_OUT,	TYPE_VNH,		0x107, 4, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP3_7", "BRN2"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 8,	DIRECTION_OUT,	TYPE_DIGITAL,	0x107, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HSO_XP3_8", "HSD17"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 9,	DIRECTION_OUT,	TYPE_DIGITAL,	0x107, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP3_9", "BRP8"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 10,	DIRECTION_OUT,	TYPE_VNH,		0x107, 7, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP3_10", "BRP2"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 11,	DIRECTION_OUT,	TYPE_DIGITAL,	0x108, 0, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP3_11", "BRP7"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::C, 12,	DIRECTION_OUT,	TYPE_DIGITAL,	0x108, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "HBRO_XP3_12", "BRN8 BRN7"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 1,	DIRECTION_OUT,	TYPE_DIGITAL,	0x108, 2, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_1", "HSD18"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 5,	DIRECTION_OUT,	TYPE_DIGITAL,	0x108, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_5", "BRP6"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 6,	DIRECTION_OUT,	TYPE_DIGITAL,	0x108, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_6", "BRP5"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 7,	DIRECTION_OUT,	TYPE_DIGITAL,	0x108, 7, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_7", "BRN5 BRN6 BRN9"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 8,	DIRECTION_OUT,	TYPE_DIGITAL,	0x109, 0, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_8", "BRP9"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 9,	DIRECTION_OUT,	TYPE_DIGITAL,	0x109, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_9", "HSD20"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 10,	DIRECTION_IN,	TYPE_ANALOG,	0x109, 2, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_10", "ARv7"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 11,	DIRECTION_IN,	TYPE_ANALOG,	0x109, 3, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_11", "ARv2"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 13,	DIRECTION_OUT,	TYPE_DIGITAL,	0x109, 4, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_13", "LOUT6"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 15,	DIRECTION_OUT,	TYPE_DIGITAL,	0x109, 5, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_15", "HSD21"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 16,	DIRECTION_OUT,	TYPE_DIGITAL,	0x109, 6, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_16", "HSD22"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 17,	DIRECTION_OUT,	TYPE_DIGITAL,	0x10A, 0, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_17", "HSD23"));
-	cables.push_back(fillCable(cables.size() - 1, ConnectorId::D, 18,	DIRECTION_OUT,	TYPE_DIGITAL,	0x10A, 1, std::vector<Thresholds>{Thresholds(4, 4, 4, 4), Thresholds(4, 4, 4, 4)}, "DM_TEST_XP4_18", "HSD24"));
+	QFile config("cables.cfg");
+	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
+		return;
+	QTextStream cable(&config);
+	while (!cable.atEnd()) {
+		QString line = cable.readLine();
+		
+		QStringList list = line.split(u';');
+
+		ConnectorId connector = (ConnectorId)(list[0].toInt());
+		int pin = list[1].toInt();
+		int direction = list[2].toInt();
+		int type = list[3].toInt();
+		int canId = list[4].toInt();
+		int bit = list[5].toInt();
+		QString name = list[6];
+		QString component = list[7];
+
+		std::vector<Thresholds> thresholds;
+		for (int i = 8; i < list.size(); i += 2)
+			if (!(direction == DIRECTION_IN && type == TYPE_ANALOG))
+			{
+				int minCurrent = list[i].toInt();
+				int maxCurrent = list[i + 1].toInt();
+				int minVoltage = list[i + 2].toInt();
+				int maxVoltage = list[i + 3].toInt();
+
+				thresholds.push_back(Thresholds(minCurrent, maxCurrent, minVoltage, maxVoltage));
+				i += 2;
+			}
+			else
+			{
+				int minValue = list[i].toInt();
+				int maxValue = list[i + 1].toInt();
+
+				thresholds.push_back(Thresholds(minValue, maxValue));
+			}
+
+		cables.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, name, component));
+	}
 }
 
 void MainWindow::on_leftStandBCMButton_clicked()

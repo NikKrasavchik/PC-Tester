@@ -327,6 +327,10 @@
 #define IND_COLUMN_SIGN_MEASURED_CURRENT_HALL
 #define IND_COLUMN_SIGN_MEASURED_VOLTAGE_HALL
 
+#define WINDOW_HEIGHT			300
+#define EMPTY_WINDOW_WIDTH		600
+#define WINDOW_MEASURED_WIDTH	300
+
 class TestTableRowProperties;
 class MoreWindow : public QDialog
 {

@@ -226,11 +226,6 @@ struct Measured
 {
 	double current = NOT_SET;
 	double voltage = NOT_SET;
-
-	double minCurrent = NOT_SET;
-	double maxCurrent = NOT_SET;
-	double minVoltage = NOT_SET;
-	double maxVoltage = NOT_SET;
 };
 
 extern ViewWindowState* viewWindowState;

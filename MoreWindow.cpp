@@ -194,11 +194,9 @@ void MoreWindow::resetBlockLanguage(int measuredNum)
 
 MoreWindowOut::MoreWindowOut(TestTableRowProperties* row) : MoreWindow(row, SIZE_MOREWINDOW_OUT)
 {
-	if (row->type == "TYPE_VNH")
-	{
-		this->resize(SIZE_MOREWINDOW_OUT_VNH);
-		this->setMinimumSize(SIZE_MOREWINDOW_OUT_VNH);
-	}
+	int measuredWidth = (row->thresholds.size() <= 3 ? row->thresholds.size() : 3);
+	this->resize(EMPTY_WINDOW_WIDTH + (measuredWidth * WINDOW_MEASURED_WIDTH), WINDOW_HEIGHT);
+	this->setMinimumSize(EMPTY_WINDOW_WIDTH + (measuredWidth * WINDOW_MEASURED_WIDTH), WINDOW_HEIGHT);
 
 	this->row = row;
 
