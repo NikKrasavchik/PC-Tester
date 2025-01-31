@@ -37,6 +37,15 @@
 #define OVERCROWDED_SEL_FILE_LABEL		20
 #define CFG_EXTENSION_LETTERS_COUNT		4
 
+//#define INDEX_DATA_CONFIG_CONNECTOR		0
+//#define INDEX_DATA_CONFIG_PIN			1
+//#define INDEX_DATA_CONFIG_DIRECTION		2
+//#define INDEX_DATA_CONFIG_TYPE			3
+//#define INDEX_DATA_CONFIG_CAN_ID		4
+//#define INDEX_DATA_CONFIG_BIT			5
+//#define INDEX_DATA_CONFIG_NAME			6
+//#define INDEX_DATA_CONFIG_COMPONENT		7
+
 std::vector<std::vector<FloatCheck*>> floatCheck;
 
 static void checkAddFloatCheck(ConnectorId connectorId, int pin, FloatCheck* currentFloatCheck)
@@ -1380,17 +1389,65 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 	return cable;
 }
 
+//static bool validatingConfigData(int index, QStringList data)
+//{
+//	switch (index)
+//	{
+//	case INDEX_DATA_CONFIG_CONNECTOR:
+//		break;
+//
+//	case INDEX_DATA_CONFIG_BIT:
+//		break;
+//
+//	case INDEX_DATA_CONFIG_BIT:
+//		break;
+//
+//		case INDEX_DATA_CONFIG_
+//	}
+//}
+
 void MainWindow::initCables()
 {
-	// ID	PIN		DIRECTION		TYPE	CAN_ID		BIT		Thresholds		NAME	COMPONENT
-	cables.push_back(fillCable(0, ConnectorId::A, 6,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_6", "LOUT2"));
-	cables.push_back(fillCable(0, ConnectorId::A, 7,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12), Thresholds(2, 20, 1, 12)}, "DIGN_XP1_7", "Sw24"));
-	cables.push_back(fillCable(0, ConnectorId::A, 8,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12), Thresholds(2, 20, 1, 12), Thresholds(2, 20, 1, 12)}, "DIGN_XP1_8", "Sw16"));
-	cables.push_back(fillCable(0, ConnectorId::A, 9,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HI_XP1_9", "IHall3"));
-	cables.push_back(fillCable(0, ConnectorId::A, 10,	DIRECTION_IN,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "DIGN_XP1_10", "Sw6"));
-	cables.push_back(fillCable(0, ConnectorId::A, 14,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_14", "LOUT1"));
-	cables.push_back(fillCable(0, ConnectorId::A, 15,	DIRECTION_OUT,	TYPE_PWM,		0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_15", "HSD2"));
-	cables.push_back(fillCable(0, ConnectorId::A, 16,	DIRECTION_OUT,	TYPE_DIGITAL,	0x100, 5, std::vector<Thresholds>{Thresholds(2, 20, 1, 12)}, "HSO_XP1_16", "LOUT4"));
+	QFile config("cables.cfg");
+	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
+		return;
+	QTextStream cable(&config);
+	while (!cable.atEnd()) {
+		QString line = cable.readLine();
+		
+		QStringList list = line.split(u';');
+
+		ConnectorId connector = (ConnectorId)(list[0].toInt());
+		int pin = list[1].toInt();
+		int direction = list[2].toInt();
+		int type = list[3].toInt();
+		int canId = list[4].toInt();
+		int bit = list[5].toInt();
+		QString name = list[6];
+		QString component = list[7];
+
+		std::vector<Thresholds> thresholds;
+		for (int i = 8; i < list.size(); i += 2)
+			if (!(direction == DIRECTION_IN && type == TYPE_ANALOG))
+			{
+				int minCurrent = list[i].toInt();
+				int maxCurrent = list[i + 1].toInt();
+				int minVoltage = list[i + 2].toInt();
+				int maxVoltage = list[i + 3].toInt();
+
+				thresholds.push_back(Thresholds(minCurrent, maxCurrent, minVoltage, maxVoltage));
+				i += 2;
+			}
+			else
+			{
+				int minValue = list[i].toInt();
+				int maxValue = list[i + 1].toInt();
+
+				thresholds.push_back(Thresholds(minValue, maxValue));
+			}
+
+		cables.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, name, component));
+	}
 }
 
 void MainWindow::on_leftStandBCMButton_clicked()

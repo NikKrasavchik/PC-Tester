@@ -6,7 +6,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 	{
 		cableRows.push_back(new TestTableRowProperties(this));
 		// Test
-		for (int j = 0; j < 3; j++)
+		for (int j = 0; j < cables[i].getThresholds().size(); j++)
 		{
 			Measured* tmpMeasured = new Measured;
 			cableRows[i]->measureds.push_back(tmpMeasured);

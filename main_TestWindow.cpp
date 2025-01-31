@@ -1255,9 +1255,10 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 	//	ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 
 	//}
-
+				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
 	//resetLanguage();
 }
+	}
 
 //void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current)
 //{
@@ -1615,14 +1616,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 {
 	MoreWindow* moreWindow = nullptr;
 	if (this->direction == "OUT")
-		if (this->type == "DIGITAL")
-			moreWindow = new MoreWindowOutDig(this);
-		else if (this->type == "PWM")
-			moreWindow = new MoreWindowOutPwm(this);
-		else if (this->type == "VNH")
-			moreWindow = new MoreWindowOutVnh(this);
-		else
-			QMessageBox::warning(testwindow, "Error","Error");
+		moreWindow = new MoreWindowOut(this);
 	else if(this->direction == "IN")
 		if(this->type == "DIGITAL")
 			moreWindow = new MoreWindowInDig(this);
@@ -1644,4 +1638,3 @@ void TestTableRowProperties::on_checkButton_clicked()
 {
 
 }
- 

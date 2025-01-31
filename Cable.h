@@ -11,12 +11,27 @@ struct Thresholds
 	double minVoltage;
 	double maxVoltage;
 
+	double minValue;
+	double maxValue;
+
 	Thresholds()
 	{
 		minCurrent = -1;
 		maxCurrent = -1;
 		minVoltage = -1;
 		maxVoltage = -1;
+		minValue = -1;
+		maxValue = -1;
+	}
+
+	Thresholds(double minValue, double maxValue)
+	{
+		this->minValue = minValue;
+		this->maxValue = maxValue;
+		this->minCurrent = -1;
+		this->maxCurrent = -1;
+		this->minVoltage = -1;
+		this->maxVoltage = -1;
 	}
 
 	Thresholds(double minCurrent, double maxCurrent, double minVoltage, double maxVoltage)
@@ -25,6 +40,8 @@ struct Thresholds
 		this->maxCurrent = maxCurrent;
 		this->minVoltage = minVoltage;
 		this->maxVoltage = maxVoltage;
+		this->minValue = -1;
+		this->maxValue = -1;
 	}
 
 	Thresholds(const Thresholds& thresholds)
@@ -33,6 +50,8 @@ struct Thresholds
 		this->maxCurrent = thresholds.maxCurrent;
 		this->minVoltage = thresholds.minVoltage;
 		this->maxVoltage = thresholds.maxVoltage;
+		this->minValue = thresholds.minValue;
+		this->maxValue = thresholds.maxValue;
 	}
 };
 

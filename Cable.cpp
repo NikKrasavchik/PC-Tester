@@ -2,13 +2,13 @@
 
 Cable::Cable()
 {
-	this->id = -1;
+	this->id = NOT_SET;
 	this->connector = ConnectorId::EMPTY;
-	this->pin = -1;
-	this->direction = -1;
-	this->type = -1;
-	this->canId = -1;
-	this->bit = -1;
+	this->pin = NOT_SET;
+	this->direction = NOT_SET;
+	this->type = NOT_SET;
+	this->canId = NOT_SET;
+	this->bit = NOT_SET;
 	this->thresholds.push_back(Thresholds());
 	this->name = "";
 	this->component = "";
@@ -16,13 +16,13 @@ Cable::Cable()
 
 Cable::Cable(ConnectorId connector, int pin)
 {
-	this->id = -1;
+	this->id = NOT_SET;
 	this->connector = connector;
 	this->pin = pin;
-	this->direction = -1;
-	this->type = -1;
-	this->canId = -1;
-	this->bit = -1;
+	this->direction = NOT_SET;
+	this->type = NOT_SET;
+	this->canId = NOT_SET;
+	this->bit = NOT_SET;
 	this->thresholds.push_back(Thresholds());
 	this->name = "";
 	this->component = "";
