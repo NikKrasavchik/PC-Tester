@@ -42,8 +42,8 @@ public:
 
 	std::vector<QString> getNameAdapters();
 
-	void sendTestMsg(int pad, int pin);
-	void sendTestMsg(int pad, int pin, int digValue, int pwmValue);
+	static void sendTestMsg(int pad, int pin);
+	static void sendTestMsg(int pad, int pin, int digValue, int pwmValue);
 
 
 private:
@@ -88,17 +88,19 @@ private:
 
 	static canHandle hnd;
 	QTimer* timerReadCan;
+	QTimer* timerSendConnectMsg;
 	QTimer* timerCheckStandConnection;
 
 
 private slots:
-	void Slot_ReadCan();
-	void Slot_CheckStandConnection();
+	void Timer_ReadCan();
+	void Timer_SendConnectMsg();
+	void Timer_CheckStandConnection();
 
 signals:
 	void Signal_ChangedStatusStandConnect(bool statusConnect);
-	void Signal_StandDisonnect();
-	void Signal_TestCompleted();
+	void Signal_AfterTest(int connector, int pin, std::vector<Measured*> measureds, double voltage, double current);
+
 
 };
 

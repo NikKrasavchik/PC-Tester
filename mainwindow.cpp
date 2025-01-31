@@ -1225,7 +1225,7 @@ void MainWindow::on_outManualTestAutoStandButton_clicked()
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
-	selectedFileStandType = CFG_STAND_MANUAL;
+	//selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
 	if (!can->getStatusAdapterSelected())
 	{
@@ -1251,7 +1251,7 @@ void MainWindow::on_inAutoTestAutoStandButton_clicked()
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
-	selectedFileStandType = CFG_STAND_MANUAL;
+	//selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
 	if (!can->getStatusAdapterSelected())
 	{
@@ -1277,7 +1277,7 @@ void MainWindow::on_outAutoTestAutoStandButton_clicked()
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
-	selectedFileStandType = CFG_STAND_MANUAL;
+	//selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
 	if (!can->getStatusAdapterSelected())
 	{
@@ -1303,7 +1303,7 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
-	selectedFileStandType = CFG_STAND_MANUAL;
+	//selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
 	if (!can->getStatusAdapterSelected())
 	{
@@ -1344,6 +1344,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 			TestWindow* testWindow = new TestWindow(testType, preparedCables, this);
 
 			connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
+			connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
 			can->initCan();
 			WindowFrame w(testType, nullptr, testWindow);
 			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));

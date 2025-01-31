@@ -1,0 +1,186 @@
+{
+  "main": {
+    "id": "c26afcc3a07ceb8a",
+    "type": "split",
+    "children": [
+      {
+        "id": "b6311b890b897012",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a5d0e85f6b71eab5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "CAN - матрица AutoStend.md",
+                "mode": "source",
+                "source": false
+              },
+              "icon": "lucide-file",
+              "title": "CAN - матрица AutoStend"
+            }
+          }
+        ]
+      },
+      {
+        "id": "77dea3e5f3ab6168",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "02fd6f23b3376748",
+            "type": "leaf",
+            "state": {
+              "type": "graph",
+              "state": {},
+              "icon": "lucide-git-fork",
+              "title": "Граф"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "1944d1312f5a9b93",
+    "type": "split",
+    "children": [
+      {
+        "id": "6fb3e877fe46dfea",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a8d6b9ca5cd18e48",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Файловый менеджер"
+            }
+          },
+          {
+            "id": "9e72ff7d48ee3e87",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Поиск"
+            }
+          },
+          {
+            "id": "fa803809c160f91f",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Закладки"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "f637d0df69a62fc3",
+    "type": "split",
+    "children": [
+      {
+        "id": "c2f600741bf47909",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "64c150204bccd8a5",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "CAN - матрица AutoStend.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Обратные ссылки для CAN - матрица AutoStend"
+            }
+          },
+          {
+            "id": "c27c12d6df9ce52f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "CAN - матрица AutoStend.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Исходящие ссылки из CAN - матрица AutoStend"
+            }
+          },
+          {
+            "id": "0070b60a7d300410",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Теги"
+            }
+          },
+          {
+            "id": "89e27db1a8838ea3",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "CAN - матрица AutoStend.md"
+              },
+              "icon": "lucide-list",
+              "title": "Структура CAN - матрица AutoStend"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Меню быстрого перехода": false,
+      "graph:Граф": false,
+      "canvas:Создать новый холст": false,
+      "daily-notes:Сегодняшняя заметка": false,
+      "templates:Вставить шаблон": false,
+      "command-palette:Открыть палитру команд": false
+    }
+  },
+  "active": "a5d0e85f6b71eab5",
+  "lastOpenFiles": [
+    "Добро пожаловать.md",
+    "CAN - матрица AutoStend.md"
+  ]
+}

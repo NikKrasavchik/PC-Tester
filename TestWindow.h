@@ -117,7 +117,6 @@ public:
 	QString comment;
 
 	std::vector<Measured*> measureds;
-	Measured measured; // Удалим
 	std::vector<Thresholds> thresholds;
 
 	void* buttons;
@@ -162,7 +161,7 @@ public:
 
 	void setFileName(QString fileName);
 	void setParentFrame(WindowFrame* parentFrame);
-	//void ProcAutoTest(int pad, int pin);
+	void ProcAutoTest(int pad, int pin);
 	QString getFileName() { return fileName; }
 
 	StandStatusFlags* statusFlags;
@@ -351,6 +350,7 @@ public slots:
 	//// autoTwoThread
 	//void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
 	//void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current);
+	void Slot_AfterTest(int connector, int pin, std::vector<Measured*> measureds, double voltage, double current);
 
 private slots:
 	void selectCurrentCell(QString conector, QString pin);

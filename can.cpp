@@ -14,9 +14,11 @@ Can::Can()
 	b_flagIsChangedStandConnection = false;
 
 	timerReadCan = new QTimer();
-	connect(timerReadCan, SIGNAL(timeout()), this, SLOT(Slot_ReadCan()));
+	connect(timerReadCan, SIGNAL(timeout()), this, SLOT(Timer_ReadCan()));
 	timerCheckStandConnection = new QTimer();
-	connect(timerCheckStandConnection, SIGNAL(timeout()), this, SLOT(Slot_CheckStandConnection()));
+	connect(timerCheckStandConnection, SIGNAL(timeout()), this, SLOT(Timer_CheckStandConnection()));
+	timerSendConnectMsg = new QTimer();
+	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
 }
 
 bool Can::initCan()
@@ -46,8 +48,7 @@ bool Can::initCan()
 	}
 
 	timerReadCan->start(10); // И запустим таймер]
-
-
+	timerSendConnectMsg->start(100); // И запустим таймер]
 	timerCheckStandConnection->start(100); // И запустим таймер
 
 	return true;
@@ -56,6 +57,7 @@ bool Can::initCan()
 bool Can::deinitCan()
 {
 	timerReadCan->stop();
+	timerSendConnectMsg->stop();
 	timerCheckStandConnection->stop();
 
 	b_flagStandConnectionCheck = false;
@@ -328,7 +330,7 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 	return resultPair;
 }
 
-void Can::Slot_ReadCan()
+void Can::Timer_ReadCan()
 {
 	int id = -2;
 	int msgReceive[8];
@@ -346,32 +348,45 @@ void Can::Slot_ReadCan()
 		{
 			b_flagStandConnectionCheck = true;
 		}
+		else
+		{
+			std::vector<Measured*> measureds;
+			Measured* tmpMeasured = new Measured();
+			measureds.push_back(tmpMeasured);
+			Signal_AfterTest(msgReceive[0], msgReceive[1], measureds, 10, 10);
+		}
 	}
 
+#ifdef DEBUG
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Send";
-//	delete msgReceive;
+#endif // DEBUG
 }
-void Can::Slot_CheckStandConnection()
+void Can::Timer_SendConnectMsg()
+{
+	int msgSendConnect[8] = { 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0xFF };
+	writeCan(RECEIVE_ID_CAN_AUTO_STAND, msgSendConnect);
+}
+void Can::Timer_CheckStandConnection()
 {
 	if (b_flagIsChangedStandConnection != b_flagStandConnectionCheck)
 	{
 		b_flagIsChangedStandConnection = b_flagStandConnectionCheck;
 		if (b_flagStandConnectionCheck)
-		{
 			Signal_ChangedStatusStandConnect(true);
-		}
 		else
-		{
 			Signal_ChangedStatusStandConnect(false);
-		}
 	}
-
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
 	b_flagStandConnectionCheck = false;
+	
+#ifdef DEBUG
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
+#endif // DEBUG
 }
 
 void Can::sendTestMsg(int pad, int pin)
 {
+	int msgSendConnect[8] = { pad, pin, 0, 0, 0, 0, 0, 0 };
+	writeCan(10, msgSendConnect);
 }
 
 void Can::sendTestMsg(int pad, int pin, int digValue, int pwmValue)
