@@ -51,12 +51,12 @@ private:
 	nowTesting nowTesting;
 	Can* can;
 	StandStatusFlags* statusFlags;
-public slots:
-	void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin);
-
-signals:
-	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
-	void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, double voltage, double current);
+//public slots:
+//	void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin);
+//
+//signals:
+//	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
+//	void msgToTestWindowAfterTest_AutoTwoThread(int pad, int pin, double voltage, double current);
 };
 
 class ManualStandTwoThread : public QThread
@@ -95,10 +95,10 @@ private:
 
 	StandStatusFlags* statusFlags;
 
-public slots:
-	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
-
-signals:
-	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
-	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
+//public slots:
+//	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
+//
+//signals:
+//	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
+//	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 };

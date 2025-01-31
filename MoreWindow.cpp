@@ -798,6 +798,6 @@ void MoreWindow::resaveFile(QString fileName, Cable newCable)
 */
 void MoreWindow::on_startTestButton_clicked()
 {
-	if (!row->testwindow->statusFlags->StatusTest)
-		row->testwindow->ProcAutoTest((int)row->connectorInt, row->pin.toInt());
+	//if (!row->testwindow->statusFlags->StatusTest)
+	//	row->testwindow->ProcAutoTest((int)row->connectorInt, row->pin.toInt());
 }

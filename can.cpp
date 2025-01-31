@@ -10,22 +10,29 @@ Can::Can()
 {
 	b_adapterSelected = false;
 	b_frequencySelected = false;
+	b_flagStandConnectionCheck = false;
+	b_flagIsChangedStandConnection = false;
 
-
+	timerReadCan = new QTimer();
+	connect(timerReadCan, SIGNAL(timeout()), this, SLOT(Slot_ReadCan()));
+	timerCheckStandConnection = new QTimer();
+	connect(timerCheckStandConnection, SIGNAL(timeout()), this, SLOT(Slot_CheckStandConnection()));
 }
 
-void Can::initCan()
+bool Can::initCan()
 {
+	if (!b_adapterSelected)
+		return false;
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
-		
+		// Дописать проверку ошибок kvasera
 		canInitializeLibrary(); // Инициализация api kvaser
 		hnd = canOpenChannel(kvaser->activeAdapter, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
 		canSetBusParams(hnd, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Установка параматров на CAN-шину.
 		canBusOn(hnd); // Запуск CAN-шины
 	}
 	else
-	{
+	{ // Дописать проверку ошибок Marathon
 		auto statusTmp = CiInit();
 		statusTmp = CiOpen( marathon->activeAdapter, CIO_CAN11);
 		statusTmp = CiSetBaud(marathon->activeAdapter, marathon->p_frequency.first, marathon->p_frequency.second);
@@ -37,31 +44,50 @@ void Can::initCan()
 		statusTmp = CiStart(marathon->activeAdapter);
 
 	}
+
+	timerReadCan->start(10); // И запустим таймер]
+
+
+	timerCheckStandConnection->start(100); // И запустим таймер
+
+	return true;
 }
 
-void Can::deinitCan()
+bool Can::deinitCan()
 {
-	if (kvaser->activeAdapter != NOT_SET) // kvaser
+	timerReadCan->stop();
+	timerCheckStandConnection->stop();
+
+	b_flagStandConnectionCheck = false;
+	b_flagIsChangedStandConnection = false;
+	
+	
+	if (!b_adapterSelected)
+		return false;
+	if (kvaser->activeAdapter != NOT_SET) // kvaser 
 	{
-		canBusOff(hnd);
+		canBusOff(hnd);  // Дописать проверку ошибок kvasera
 		canClose(hnd);
 	}
 	else
 	{
-		CiStop(marathon->activeAdapter);
+		CiStop(marathon->activeAdapter);  // Дописать проверку ошибок Marathon
 		CiClose(marathon->activeAdapter);
 	}
+	return true;
 }
 
-void Can::writeCan(int id, int* msg)
+bool Can::writeCan(int id, int* msg)
 {
+	
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned char msgSendKvase[8];
 		for (int i = 0; i < 8; i++)
 			msgSendKvase[i] = msg[i];
 
-		canWrite(hnd, id, msgSendKvase, 8, 0);
+		canWrite(hnd, id, msgSendKvase, 8, 0); // Дописать проверку ошибок kvasera
+		return true;
 	}
 	else
 	{
@@ -71,9 +97,10 @@ void Can::writeCan(int id, int* msg)
 		for (int i = 0; i < 8; i++)
 			msgTransmit.data[i] = msg[i];
 		
-		auto statusTmp = CiTransmit(marathon->activeAdapter, &msgTransmit);
-
+		auto statusTmp = CiTransmit(marathon->activeAdapter, &msgTransmit); // Дописать проверку ошибок Marathon
+		return true;
 	}
+	return false;
 }
 
 
@@ -84,7 +111,7 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 	//Can::coun++;
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
-		unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
+		unsigned int* dlc = new unsigned int(), *flags = new unsigned int();
 		unsigned long* timestamp = new unsigned long();
 		unsigned char msgReceive[8] = { 0, };
 
@@ -94,8 +121,12 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 		{
 			for (int i = 0; i < 8; i++)
 				msg[i] = msgReceive[i];
-			return true;
 		}
+		delete dlc;
+		delete flags;
+		delete timestamp;
+		if (*id != NOT_SET)
+			return true;
 		else
 			return false;
 	}
@@ -116,7 +147,7 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 	}
 }
 
-void Can::setAdapterNeme(QString adapter)
+void Can::setSelectedAdapterNeme(QString adapter)
 {
 	kvaser->activeAdapter = NOT_SET;
 	marathon->activeAdapter = NOT_SET;
@@ -143,16 +174,9 @@ void Can::setAdapterNeme(QString adapter)
 		}
 	b_adapterSelected = false;
 
-	if (kvaser->activeAdapter == NOT_SET || marathon->activeAdapter == NOT_SET)
-	{
-		if (1)
-		{
-			1;
-		}
-	}
 }
 
-void Can::setFrequency(QString frequency)
+void Can::setSelectedFrequency(QString frequency)
 {
 	if (frequency == "...")
 	{
@@ -302,4 +326,54 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 		break;
 	}
 	return resultPair;
+}
+
+void Can::Slot_ReadCan()
+{
+	int id = -2;
+	int msgReceive[8];
+	if (Can::readWaitCan(&id, msgReceive, 10))
+	{
+		if (id == RECEIVE_ID_CAN_AUTO_STAND && // переодическое сообшение о конекте
+			msgReceive[0] == 0x0 &&
+			msgReceive[1] == 0xAA &&
+			msgReceive[2] == 0x0 &&
+			msgReceive[3] == 0xAA &&
+			msgReceive[4] == 0x0 &&
+			msgReceive[5] == 0xAA &&
+			msgReceive[6] == 0x0 &&
+			msgReceive[7] == 0xFF)
+		{
+			b_flagStandConnectionCheck = true;
+		}
+	}
+
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Send";
+//	delete msgReceive;
+}
+void Can::Slot_CheckStandConnection()
+{
+	if (b_flagIsChangedStandConnection != b_flagStandConnectionCheck)
+	{
+		b_flagIsChangedStandConnection = b_flagStandConnectionCheck;
+		if (b_flagStandConnectionCheck)
+		{
+			Signal_ChangedStatusStandConnect(true);
+		}
+		else
+		{
+			Signal_ChangedStatusStandConnect(false);
+		}
+	}
+
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
+	b_flagStandConnectionCheck = false;
+}
+
+void Can::sendTestMsg(int pad, int pin)
+{
+}
+
+void Can::sendTestMsg(int pad, int pin, int digValue, int pwmValue)
+{
 }

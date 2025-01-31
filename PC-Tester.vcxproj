@@ -151,7 +151,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cable.h" />
-    <ClInclude Include="can.h" />
+    <QtMoc Include="can.h" />
     <ClInclude Include="Components.h" />
     <QtMoc Include="MoreWindow.h" />
     <QtMoc Include="ReportWindow.h" />

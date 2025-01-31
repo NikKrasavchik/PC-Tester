@@ -162,7 +162,7 @@ public:
 
 	void setFileName(QString fileName);
 	void setParentFrame(WindowFrame* parentFrame);
-	void ProcAutoTest(int pad, int pin);
+	//void ProcAutoTest(int pad, int pin);
 	QString getFileName() { return fileName; }
 
 	StandStatusFlags* statusFlags;
@@ -226,7 +226,7 @@ private:
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<QCheckBox*> manualChecks;
 	std::vector<Measured*> measuredValues;
-	QThread* th;
+	//QThread* th;
 	Cable *nextCheckCable;
 
 	void initUiMain();
@@ -343,18 +343,19 @@ public slots:
 
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
-	// manualTwoThread
-	void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
-	void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
+	void Slot_ChangedStatusStandConnect(bool statusConnect);
+	//// manualTwoThread
+	//void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
+	//void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
 
-	// autoTwoThread
-	void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
-	void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current);
+	//// autoTwoThread
+	//void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
+	//void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current);
 
 private slots:
 	void selectCurrentCell(QString conector, QString pin);
 
 signals:
-	// autoTwoThread
-	void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin);
+	//// autoTwoThread
+	//void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin);
 };

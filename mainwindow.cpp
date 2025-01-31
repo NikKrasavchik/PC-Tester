@@ -712,7 +712,7 @@ void MainWindow::initConnections()
 
 void MainWindow::switchStyleMainButtons()
 {
-	if (can->getFrequencySelected() && can->getAdapterSelected())
+	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected())
 	{
 		if (viewWindowState->appTheme == LIGHT_THEME)
 		{
@@ -1053,9 +1053,9 @@ void MainWindow::resetLanguage()
 		outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
 		fullTestAutoStandButton->setText(QString::fromLocal8Bit("Полная"));
 
-		if (!can->getAdapterSelected())
+		if (!can->getStatusAdapterSelected())
 			selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
-		if (!can->getFrequencySelected())
+		if (!can->getStatusFrequencySelected())
 			selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
 		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
 		autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
@@ -1073,15 +1073,15 @@ void MainWindow::resetLanguage()
 		outAutoTestAutoStandButton->setText(QString("Out"));
 		fullTestAutoStandButton->setText(QString("Full"));
 
-		if (!can->getAdapterSelected())
+		if (!can->getStatusAdapterSelected())
 			selectAdapterLabel->setText(QString("Select adapter"));
-		if (!can->getFrequencySelected())
+		if (!can->getStatusFrequencySelected())
 			selectFrequencyLabel->setText(QString("Select frequency"));
 		manualTestAutoStandLabel->setText(QString("Manual"));
 		
 		break;
 	}
-	if (can->getFrequencySelected())
+	if (can->getStatusFrequencySelected())
 		on_selectFrequencyComboBox_changed(1);
 }
 
@@ -1090,7 +1090,7 @@ void MainWindow::on_selectFrequencyComboBox_changed(int index)
 	if (!isAllInit)
 		return;
 
-	can->setFrequency(selectFrequencyComboBox->currentText());
+	can->setSelectedFrequency(selectFrequencyComboBox->currentText());
 	switchStyleMainButtons();
 
 	if (index == 0)
@@ -1109,7 +1109,7 @@ void MainWindow::on_selectAdapterComboBox_changed(int index)
 	if (!isAllInit)
 		return;
 
-	can->setAdapterNeme(selectAdapterComboBox->currentText()); // Адаптер не выбранна
+	can->setSelectedAdapterNeme(selectAdapterComboBox->currentText()); // Адаптер не выбранна
 	switchStyleMainButtons();
 
 	if (index == 0)
@@ -1134,12 +1134,12 @@ void MainWindow::on_checkAdaptersButton_clicked()
 
 void MainWindow::on_outTestManualStandButton_clicked()
 {
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1155,12 +1155,12 @@ void MainWindow::on_outTestManualStandButton_clicked()
 
 void MainWindow::on_inTestManualStandButton_clicked()
 {
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1176,12 +1176,12 @@ void MainWindow::on_inTestManualStandButton_clicked()
 
 void MainWindow::on_fullTestManualStandButton_clicked()
 {
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1192,12 +1192,12 @@ void MainWindow::on_fullTestManualStandButton_clicked()
 
 void MainWindow::on_inManualTestAutoStandButton_clicked()
 {
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1218,12 +1218,12 @@ void MainWindow::on_outManualTestAutoStandButton_clicked()
 	selectFrequencyComboBox->setCurrentIndex(6);
 	selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1244,12 +1244,12 @@ void MainWindow::on_inAutoTestAutoStandButton_clicked()
 	selectFrequencyComboBox->setCurrentIndex(6);
 	selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1270,12 +1270,12 @@ void MainWindow::on_outAutoTestAutoStandButton_clicked()
 	selectFrequencyComboBox->setCurrentIndex(6);
 	selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1296,12 +1296,12 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 	selectFrequencyComboBox->setCurrentIndex(6);
 	selectedFileStandType = CFG_STAND_MANUAL;
 #endif // DEBUG
-	if (!can->getAdapterSelected())
+	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
 		return;
 	}
-	if (!can->getFrequencySelected())
+	if (!can->getStatusFrequencySelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
@@ -1312,25 +1312,30 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 
 void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
 {		
+	// Проверка на актуальность выбраного адаптера.
 	std::vector<QString> nameAdapters = can->getNameAdapters();
-	int acceptValue = 0;
+	bool isHaveAdapter = false;
 	for(int j = 0; j < nameAdapters.size(); j++)
 		if (selectAdapterComboBox->currentText() == nameAdapters[j])
-			acceptValue = 1;
-
-	if (!acceptValue)
+		{
+			isHaveAdapter = true;
+			break;
+		}
+	if (!isHaveAdapter)
 	{
 		on_checkAdaptersButton_clicked();
 		return;
 	}
 
 
-	if (can->getFrequencySelected() && can->getAdapterSelected())
+	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected())
 	{
 		if (selectedType != STAND_NOT_SET)
 		{
 			TestWindow* testWindow = new TestWindow(testType, preparedCables, this);
 
+			connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
+			can->initCan();
 			WindowFrame w(testType, nullptr, testWindow);
 			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 			testWindow->setParentFrame(&w);
@@ -1338,7 +1343,9 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 			this->hide();
 			testWindow->exec();
 			resetWindowView();
+			can->deinitCan();
 			this->show();
+
 		}
 	}
 }

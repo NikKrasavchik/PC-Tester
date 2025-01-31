@@ -1,21 +1,62 @@
 #pragma once
 
 #include <vector>
+#include "qobject.h"
+#include "qtimer.h"
+#include "qdebug.h"
+#include "QTime"
 
 #include "qstring.h"
 #include "canlib.h"
 #include "chai.h"
 #include "Components.h"
 
-class Can
+#define RECEIVE_ID_CAN_AUTO_STAND 0x51
+
+class Can : public QObject
 {
+	Q_OBJECT
 public:
 	Can();
 
-	static void initCan();
-	static void deinitCan();
+	// ------------------------------------
+	// Name: initCan
+	// Return: bool
+	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+	//			true  - в случае если can прошёл инициализацию.
+	// ------------------------------------
+	bool initCan();
+	// ------------------------------------
+	// Name: deinitCan
+	// Return: bool
+	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+	//			true  - в случае если can прошёл деинициализацию.
+	// ------------------------------------
+	bool deinitCan();
 
-	static void writeCan(int id, int* msg);
+	void setSelectedAdapterNeme(QString adapter);
+	void setSelectedFrequency(QString frequency);
+
+	bool getStatusAdapterSelected() { return b_adapterSelected; }
+	bool getStatusFrequencySelected() { return b_frequencySelected; }
+
+	std::vector<QString> getNameAdapters();
+
+	void sendTestMsg(int pad, int pin);
+	void sendTestMsg(int pad, int pin, int digValue, int pwmValue);
+
+
+private:
+	// ------------------------------------
+	// Name: writeCan
+	// Varibals:
+	//			int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
+	//			int* msg - указатель на переменную в которая отправиться в can.
+	// Return: bool
+	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+	//			true  - в случае если can-сообщение отправленно.
+	// ------------------------------------
+	static bool writeCan(int id, int* msg);
 	// ------------------------------------
 	// Name: readWaitCan
 	// Varibals:
@@ -28,29 +69,36 @@ public:
 	// ------------------------------------
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
-	void setAdapterNeme(QString adapter);
-	void setFrequency(QString frequency);
+	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
 
-	bool getAdapterSelected() { return b_adapterSelected; }
-	bool getFrequencySelected() { return b_frequencySelected; }
-
-	std::vector<QString> getNameAdapters();
-
-private:
-
+// Varibals:
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;
 		int activeAdapter;
 		std::pair<int, int> p_frequency;
 	};
-	static canHandle hnd;
-
-	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
+	static modelAdapter *kvaser;
+	static modelAdapter *marathon;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;
+	bool b_flagStandConnectionCheck;
+	bool b_flagIsChangedStandConnection;
 
-	static modelAdapter *kvaser;
-	static modelAdapter *marathon;
+	static canHandle hnd;
+	QTimer* timerReadCan;
+	QTimer* timerCheckStandConnection;
+
+
+private slots:
+	void Slot_ReadCan();
+	void Slot_CheckStandConnection();
+
+signals:
+	void Signal_ChangedStatusStandConnect(bool statusConnect);
+	void Signal_StandDisonnect();
+	void Signal_TestCompleted();
+
 };
+

@@ -17,20 +17,20 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* 
 	statusFlags = new StandStatusFlags;
 	statusFlags->StatusConnected = false;
 
-	if (testType == WindowType::IN_TEST_MANUAL_STAND ||
-		testType == WindowType::OUT_TEST_MANUAL_STAND ||
-		testType == WindowType::FULL_TEST_MANUAL_STAND)
-	{
-		th = new ManualStandTwoThread(cables, statusFlags);
-	}
-	else if (testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
-		testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
-		testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
-		testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
-		testType == WindowType::FULL_TEST_AUTO_STAND)
-	{
-		th = new AutoStandTwoThread(statusFlags);
-	}
+	//if (testType == WindowType::IN_TEST_MANUAL_STAND ||
+	//	testType == WindowType::OUT_TEST_MANUAL_STAND ||
+	//	testType == WindowType::FULL_TEST_MANUAL_STAND)
+	//{
+	//	th = new ManualStandTwoThread(cables, statusFlags);
+	//}
+	//else if (testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
+	//	testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
+	//	testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
+	//	testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
+	//	testType == WindowType::FULL_TEST_AUTO_STAND)
+	//{
+	//	th = new AutoStandTwoThread(statusFlags);
+	//}
 	
 	initUiMain();
 	initUiMainHeader();
@@ -88,7 +88,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* 
 	initStyles();
 
 	setStatusTableButtons(false);
-	th->start();
+	//th->start();
 }
 
 TestWindow::~TestWindow()
@@ -104,8 +104,8 @@ TestWindow::~TestWindow()
 	delete backButtonDarkPixmap;
 	for (int i = 0; i < cableRows.size(); i++)
 		delete cableRows[i];
-	th->terminate();
-	delete th;
+	//th->terminate();
+	//delete th;
 }
 
 void TestWindow::initUiMain()
@@ -432,24 +432,25 @@ void TestWindow::initIcons()
 void TestWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
+		//connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
 	switch (testType)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
 	case WindowType::OUT_TEST_MANUAL_STAND:
 	case WindowType::FULL_TEST_MANUAL_STAND:
-		// manualTwoThread
-		connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
-		connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
+		//// manualTwoThread
+		//connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
+		//connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
 		break;
 	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 	case WindowType::IN_AUTO_TEST_AUTO_STAND:
 	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
 	case WindowType::FULL_TEST_AUTO_STAND:
-		// autoTwoThread
-		connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowStatusConnect_AutoTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_AutoTwoThread);
-		connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowAfterTest_AutoTwoThread, this, &TestWindow::msgToTestWindowAfterTest_AutoTwoThread);
-		connect(this, &TestWindow::msgToTwoThreadStartTest_AutoTwoThread, (AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread);
+		//// autoTwoThread
+		//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowStatusConnect_AutoTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_AutoTwoThread);
+		//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowAfterTest_AutoTwoThread, this, &TestWindow::msgToTestWindowAfterTest_AutoTwoThread);
+		//connect(this, &TestWindow::msgToTwoThreadStartTest_AutoTwoThread, (AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread);
 		break;
 	}
 
@@ -1125,195 +1126,197 @@ static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProp
 	return NOT_SET;
 }
 
-void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect)
-{
-	setStatusTableButtons(statusConnect);
-	if (statusConnect)
-	{
-		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_CONNECTED, 0, 0);
-		for (int i = 0; i < cableRows.size(); i++)
-		{
-			if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
-			{
-				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
-				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
-			}
-			else if (cableRows[i]->type == "PWM")
-			{
-				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
-				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
-			}
-			else if (cableRows[i]->type == "VNH")
-			{
-				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
-				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
-				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
-				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
-			}
+//void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect)
+//{
+//	setStatusTableButtons(statusConnect);
+//	if (statusConnect)
+//	{
+//		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_CONNECTED, 0, 0);
+//		for (int i = 0; i < cableRows.size(); i++)
+//		{
+//			if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+//			{
+//				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
+//				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
+//			}
+//			else if (cableRows[i]->type == "PWM")
+//			{
+//				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
+//				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
+//			}
+//			else if (cableRows[i]->type == "VNH")
+//			{
+//				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
+//				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
+//				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
+//				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
+//			}
+//
+//		}
+//	}
+//	else
+//	{
+//		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
+//
+//
+//	}
+//	statusFlags->StatusConnected = statusConnect;
+//	resetLanguage();
+//	resetTheme();
+//
+//}
 
-		}
-	}
-	else
-	{
-		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
 
 
-	}
-	statusFlags->StatusConnected = statusConnect;
-	resetLanguage();
-	resetTheme();
+//void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue)
+//{
+//	int currentColoumnNum = STATUS_NOT_SET;
+//	switch (testType)
+//	{
+//	case WindowType::IN_TEST_MANUAL_STAND:
+//		currentColoumnNum = STATUS_IN_TEST;
+//		break;
+//
+//	case WindowType::FULL_TEST_MANUAL_STAND:
+//		currentColoumnNum = STATUS_FULL_TEST;
+//		break;
+//
+//	default:
+//		// ERROR
+//		break;
+//	}
+//	int currentRowNum = determineCurrentRowNum(pad, pin, cableRows);
+//	QAbstractItemModel* model = mainTableWidget->model();
+//	model->setData(model->index(currentRowNum, currentColoumnNum), QString::number(newValue));
+//}
 
-}
-
-
-
-void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue)
-{
-	int currentColoumnNum = STATUS_NOT_SET;
-	switch (testType)
-	{
-	case WindowType::IN_TEST_MANUAL_STAND:
-		currentColoumnNum = STATUS_IN_TEST;
-		break;
-
-	case WindowType::FULL_TEST_MANUAL_STAND:
-		currentColoumnNum = STATUS_FULL_TEST;
-		break;
-
-	default:
-		// ERROR
-		break;
-	}
-	int currentRowNum = determineCurrentRowNum(pad, pin, cableRows);
-	QAbstractItemModel* model = mainTableWidget->model();
-	model->setData(model->index(currentRowNum, currentColoumnNum), QString::number(newValue));
-}
-
-void TestWindow::ProcAutoTest(int connector, int pin)
-{
-	for (int i = 0; i < cableRows.size(); i++)
-	{
-		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
-		{
-
-		
-
-			msgToTwoThreadStartTest_AutoTwoThread(connector, pin);
-		}
-	}
-}
+//void TestWindow::ProcAutoTest(int connector, int pin)
+//{
+//	for (int i = 0; i < cableRows.size(); i++)
+//	{
+//		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
+//		{
+//
+//		
+//
+//			msgToTwoThreadStartTest_AutoTwoThread(connector, pin);
+//		}
+//	}
+//}
 
 
 void TestWindow::on_AutoStandStartTestButton_clicked()
 {
-	if (isFullTestEnabled)
-	{
+	//if (isFullTestEnabled)
+	//{
 
-		isFullTestEnabled = false;
-		for (int i = 0; i < cableRows.size(); i++)
-			if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
-			{
-				if (i == cableRows.size() - 1)
-				{
-					// Тест закончен
-					nextCheckCable->setConnector(cableRows[0]->connectorInt);
-					nextCheckCable->setPin(cableRows[0]->pin.toInt());
-					QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
-					isFullTestEnabled = false;
-					return;
-				}
-				nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
-				nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
-				break;
-			}
-	}
-	else
-	{
-		if (!statusFlags->StatusConnected) // Если стенд не подключён, ничего не делаем
-		{
-			if (viewWindowState->appLanguage == RUSSIAN_LANG)
-				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Стенд не подключен"));
-			else
-				QMessageBox::warning(this, QString("Warning"), QString("Stand is not connected"));
-			return;
-		}
-		else if (statusFlags->StatusTest) // Если идёт тест, ничего не делаем
-		{
-			if (viewWindowState->appLanguage == RUSSIAN_LANG)
-				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("В данный момент проходит тест"));
-			else
-				QMessageBox::warning(this, QString("Warning"), QString("Currently being tested"));
-			return;
-		}
-	
-		isFullTestEnabled = true;
-		for (int i = 0; i < cableRows.size(); i++)
-			if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
-				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
-				
-		ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
+	//	isFullTestEnabled = false;
+	//	for (int i = 0; i < cableRows.size(); i++)
+	//		if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
+	//		{
+	//			if (i == cableRows.size() - 1)
+	//			{
+	//				// Тест закончен
+	//				nextCheckCable->setConnector(cableRows[0]->connectorInt);
+	//				nextCheckCable->setPin(cableRows[0]->pin.toInt());
+	//				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
+	//				isFullTestEnabled = false;
+	//				return;
+	//			}
+	//			nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
+	//			nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
+	//			break;
+	//		}
+	//}
+	//else
+	//{
+	//	if (!statusFlags->StatusConnected) // Если стенд не подключён, ничего не делаем
+	//	{
+	//		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+	//			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Стенд не подключен"));
+	//		else
+	//			QMessageBox::warning(this, QString("Warning"), QString("Stand is not connected"));
+	//		return;
+	//	}
+	//	else if (statusFlags->StatusTest) // Если идёт тест, ничего не делаем
+	//	{
+	//		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+	//			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("В данный момент проходит тест"));
+	//		else
+	//			QMessageBox::warning(this, QString("Warning"), QString("Currently being tested"));
+	//		return;
+	//	}
+	//
+	//	isFullTestEnabled = true;
+	//	for (int i = 0; i < cableRows.size(); i++)
+	//		if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
+	//			mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
+	//			
+	//	ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 
-	}
+	//}
 
-	resetLanguage();
+	//resetLanguage();
 }
 
-void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current)
+//void TestWindow::msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current)
+//{
+//	// Красим нужную ячейку 
+//	for (int i = 0; i < cableRows.size(); i++)
+//	{
+//		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
+//			pin == cableRows[i]->pin.toInt())
+//		{
+//			cableRows[i]->measured.voltage = voltage;
+//			cableRows[i]->measured.current = current;
+//			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);
+//			QAbstractItemModel* model = mainTableWidget->model();
+//			model->setData(model->index(currentRowNum, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5), QString(""));
+//			if (cableRows[i]->thresholds[0].minCurrent <= voltage && voltage <= cableRows[i]->thresholds[0].maxVoltage &&
+//				cableRows[i]->thresholds[0].minCurrent <= current && current <= cableRows[i]->thresholds[0].maxCurrent)
+//				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::green);
+//			else
+//				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
+//
+//			if (isFullTestEnabled)// запускаем следующий тест
+//			{
+//				for (int i = 0; i < cableRows.size(); i++)
+//					if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
+//					{
+//						if (i == cableRows.size() - 1)
+//						{
+//							// Тест закончен
+//							nextCheckCable->setConnector(cableRows[0]->connectorInt);
+//							nextCheckCable->setPin(cableRows[0]->pin.toInt());
+//							QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
+//							isFullTestEnabled = false;
+//							resetLanguage();
+//							return;
+//						}
+//						nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
+//						nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
+//						break;
+//					}
+//				mainTableWidget->item(i+1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
+//				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
+//			}
+//			return;
+//		}
+//	}
+//
+//
+//
+//
+//	double t = floatCheck[(int)ConnectorId::A][2]->d3; // Пример доступа
+//}
+
+void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 {
-	// Красим нужную ячейку 
-	for (int i = 0; i < cableRows.size(); i++)
-	{
-		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
-			pin == cableRows[i]->pin.toInt())
-		{
-			cableRows[i]->measured.voltage = voltage;
-			cableRows[i]->measured.current = current;
-			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);
-			QAbstractItemModel* model = mainTableWidget->model();
-			model->setData(model->index(currentRowNum, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5), QString(""));
-			if (cableRows[i]->thresholds[0].minCurrent <= voltage && voltage <= cableRows[i]->thresholds[0].maxVoltage &&
-				cableRows[i]->thresholds[0].minCurrent <= current && current <= cableRows[i]->thresholds[0].maxCurrent)
-				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::green);
-			else
-				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
-
-			if (isFullTestEnabled)// запускаем следующий тест
-			{
-				for (int i = 0; i < cableRows.size(); i++)
-					if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
-					{
-						if (i == cableRows.size() - 1)
-						{
-							// Тест закончен
-							nextCheckCable->setConnector(cableRows[0]->connectorInt);
-							nextCheckCable->setPin(cableRows[0]->pin.toInt());
-							QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
-							isFullTestEnabled = false;
-							resetLanguage();
-							return;
-						}
-						nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
-						nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
-						break;
-					}
-				mainTableWidget->item(i+1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
-				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
-			}
-			return;
-		}
-	}
-
-
-
-
-	double t = floatCheck[(int)ConnectorId::A][2]->d3; // Пример доступа
-}
-
-void TestWindow::msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect)
-{
+	statusFlags->StatusConnected = statusConnect;
 	resetLanguage();
 	resetTheme();
 }
+
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)
 {
 	interactionButtonsWidget->setObjectName("interactionButtonsWidget");
@@ -1434,7 +1437,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_VNH_HEIGHT);
 		}
 	}
-	connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
+	//connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
 	connect(cableRows[currentRowNum], &TestTableRowProperties::switchActiveTableButton, this, &TestWindow::switchActiveTableButton);
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
