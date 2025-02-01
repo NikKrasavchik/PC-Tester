@@ -114,6 +114,7 @@ public:
 	QString component;
 	QString direction;
 	QString type;
+	int typeInt;
 	QString comment;
 
 	std::vector<Measured*> measureds;

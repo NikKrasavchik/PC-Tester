@@ -1200,7 +1200,7 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 
 		
 
-			Can::sendTestMsg(connector, pin);
+			Can::sendTestMsg(cableRows[i]->connectorInt, cableRows[i]->pin.toInt(), cableRows[i]->typeInt);
 		}
 	}
 }

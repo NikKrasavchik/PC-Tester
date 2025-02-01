@@ -1,5 +1,7 @@
 #pragma once
 
+//#define DEBUG_CAN
+
 #include <vector>
 #include "qobject.h"
 #include "qtimer.h"
@@ -11,7 +13,7 @@
 #include "chai.h"
 #include "Components.h"
 
-#define RECEIVE_ID_CAN_AUTO_STAND 0x51
+#define ID_CAN_AUTOSTAND 0x51
 
 class Can : public QObject
 {
@@ -42,8 +44,18 @@ public:
 
 	std::vector<QString> getNameAdapters();
 
-	static void sendTestMsg(int pad, int pin);
-	static void sendTestMsg(int pad, int pin, int digValue, int pwmValue);
+	// ------------------------------------
+	// Name: sendTestMsg
+	// Varibals: 
+	//			ConnectorId pad - enum переедающий в себе идентификатор коложки (A - 1; B - 2; C - 3; C - 4; ...).
+	//			int pin - номер пина в колодки.
+	//			int type - bдентификатор показывающий какого типа пин.
+	// Return: bool
+	//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
+	//			true  - в случае если сообщение отправилось.
+	// ------------------------------------
+	static bool sendTestMsg(ConnectorId pad, int pin, int type);
+	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
 
 private:
@@ -80,22 +92,24 @@ private:
 	};
 	static modelAdapter *kvaser;
 	static modelAdapter *marathon;
+	static canHandle hnd;
+
+	uint8_t counterConnectMsg;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;
 	bool b_flagStandConnectionCheck;
-	bool b_flagIsChangedStandConnection;
+	bool b_flagStatusConnection;		// Флаг показывающий присоединён ли Stand
 
-	static canHandle hnd;
-	QTimer* timerReadCan;
-	QTimer* timerSendConnectMsg;
-	QTimer* timerCheckStandConnection;
+	QTimer* timerReadCan;				// Таймер для считывания Can-сообщений.
+	QTimer* timerSendConnectMsg;		// Таймер для отправки сообщений на подключение или проверки подключения.
+	QTimer* timerCheckStandConnection;	// Таймер для проверки времени времени прихода переодического сообщения конекта.
 
 
 private slots:
-	void Timer_ReadCan();
-	void Timer_SendConnectMsg();
-	void Timer_CheckStandConnection();
+	void Timer_ReadCan();				// Слот для считывания Can-сообщений.
+	void Timer_SendConnectMsg();		// Слот для отправки сообщений на подключение или проверки подключения.
+	void Timer_CheckStandConnection();	// Слот для проверки времени времени прихода переодического сообщения конекта.
 
 signals:
 	void Signal_ChangedStatusStandConnect(bool statusConnect);

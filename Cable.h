@@ -55,6 +55,24 @@ struct Thresholds
 	}
 };
 
+struct Measureds
+{
+	double current;
+	double voltage;
+
+	Measureds()
+	{
+		current = NOT_SET;
+		voltage = NOT_SET;
+	}
+
+	Measureds(double voltage, double current)
+	{
+		this->voltage = voltage;
+		this->current = current;
+	}
+};
+
 class Cable
 {
 public:
@@ -70,6 +88,7 @@ public:
 	void setCanId(int canId)					{ this->canId = canId; }
 	void setBit(int bit)						{ this->bit = bit; }
 	void setThresholds(std::vector<Thresholds> thresholds);
+	void setMeasureds(std::vector<Measureds> measureds);
 	void setName(QString name)					{ this->name = name; }
 	void setComponent(QString component)		{ this->component = component; }
 
@@ -81,6 +100,7 @@ public:
 	int getCanId()								{ return this->canId; }
 	int getBit()								{ return this->bit; }
 	std::vector<Thresholds> getThresholds()		{ return this->thresholds; }
+	std::vector<Measureds> getMeasureds()		{ return this->measureds; }
 	QString getName()							{ return this->name; }
 	QString getComponent()						{ return this->component; }
 
@@ -93,6 +113,7 @@ private:
 	int canId;
 	int bit;
 	std::vector<Thresholds> thresholds;
+	std::vector<Measureds> measureds;
 	QString name;
 	QString component;
 };

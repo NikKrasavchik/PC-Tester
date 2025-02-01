@@ -24,6 +24,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->statePWM = BUTTON_NOT_SET;
 		cableRows[i]->canId = cables[i].getCanId();
 		cableRows[i]->bit = cables[i].getBit();
+		cableRows[i]->typeInt = cables[i].getType();
 
 		switch (cables[i].getDirection())
 		{

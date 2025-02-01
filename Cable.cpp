@@ -49,3 +49,10 @@ void Cable::setThresholds(std::vector<Thresholds> thresholds)
 	for (int i = 0; i < thresholds.size(); i++)
 		this->thresholds.push_back(Thresholds(thresholds[i].minCurrent, thresholds[i].maxCurrent, thresholds[i].minVoltage, thresholds[i].maxVoltage));
 }
+
+void Cable::setMeasureds(std::vector<Measureds> measureds)
+{
+	this->measureds.clear();
+	for (int i = 0; i < measureds.size(); i++)
+		this->measureds.push_back(Measureds(measureds[i].voltage, measureds[i].current));
+}

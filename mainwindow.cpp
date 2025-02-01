@@ -1374,7 +1374,7 @@ void MainWindow::setParentFrame(WindowFrame* parentFrame)
 	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
 }
 
-static Cable fillCable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, std::vector<Thresholds> thresholds, QString name, QString component)
+static Cable fillCable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, std::vector<Thresholds> thresholds, std::vector<Measureds> measureds, QString name, QString component)
 {
 	Cable cable;
 	cable.setId(id);
@@ -1385,6 +1385,7 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 	cable.setCanId(canId);
 	cable.setBit(bit);
 	cable.setThresholds(thresholds);
+	cable.setMeasureds(measureds);
 	cable.setName(name);
 	cable.setComponent(component);
 	return cable;
@@ -1428,7 +1429,10 @@ void MainWindow::initCables()
 		QString component = list[7];
 
 		std::vector<Thresholds> thresholds;
+		std::vector<Measureds> measureds;
 		for (int i = 8; i < list.size(); i += 2)
+		{
+
 			if (!(direction == DIRECTION_IN && type == TYPE_ANALOG))
 			{
 				int minCurrent = list[i].toInt();
@@ -1446,8 +1450,9 @@ void MainWindow::initCables()
 
 				thresholds.push_back(Thresholds(minValue, maxValue));
 			}
-
-		cables.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, name, component));
+			measureds.push_back(Measureds());
+		}
+		cables.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 	}
 }
 
