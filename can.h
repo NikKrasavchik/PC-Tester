@@ -1,6 +1,6 @@
 #pragma once
 
-//#define DEBUG_CAN
+#define DEBUG_CAN
 
 #include <vector>
 #include "qobject.h"
@@ -14,6 +14,7 @@
 #include "Components.h"
 
 #define ID_CAN_AUTOSTAND 0x51
+#define ID_CAN_MANUALSTAND 0x100
 
 class Can : public QObject
 {
@@ -23,11 +24,13 @@ public:
 
 	// ------------------------------------
 	// Name: initCan
+	// Varibals: 
+	//			WindowType windowType - enum хранищий в себе идентификатор опрдел€ющий какое окно сейчас открыто
 	// Return: bool
 	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
 	//			true  - в случае если can прошЄл инициализацию.
 	// ------------------------------------
-	bool initCan();
+	bool initCan(WindowType windowType);
 	// ------------------------------------
 	// Name: deinitCan
 	// Return: bool
@@ -57,8 +60,6 @@ public:
 	static bool sendTestMsg(ConnectorId pad, int pin, int type);
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
-
-private:
 	// ------------------------------------
 	// Name: writeCan
 	// Varibals:
@@ -69,6 +70,8 @@ private:
 	//			true  - в случае если can-сообщение отправленно.
 	// ------------------------------------
 	static bool writeCan(int id, int* msg);
+
+private:
 	// ------------------------------------
 	// Name: readWaitCan
 	// Varibals:
@@ -94,6 +97,7 @@ private:
 	static modelAdapter *marathon;
 	static canHandle hnd;
 
+	WindowType windowType;
 	uint8_t counterConnectMsg;
 
 	bool b_adapterSelected;

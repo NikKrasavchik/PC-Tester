@@ -474,9 +474,6 @@ void TestTableRowProperties::on_load100Button_clicked()
 
 void TestTableRowProperties::sendSignal()
 {
-	msgToTwoThreadStartTest_ManualTwoThread(this->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
-void TestTableRowProperties::msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent)
-{
-}

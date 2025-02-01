@@ -143,7 +143,7 @@ public slots:
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
 
-	void msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent);
+	//void msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent);
 
 signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);

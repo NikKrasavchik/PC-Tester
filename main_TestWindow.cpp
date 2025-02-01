@@ -1313,6 +1313,43 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measured*> m
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 {
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+	case WindowType::OUT_TEST_MANUAL_STAND:
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		setStatusTableButtons(statusConnect);
+		if (statusConnect)
+		{
+			resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_CONNECTED, 0, 0);
+			for (int i = 0; i < cableRows.size(); i++)
+			{
+				if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
+				{
+					cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
+					cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
+				}
+				else if (cableRows[i]->type == "PWM")
+				{
+					cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
+					cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
+				}
+				else if (cableRows[i]->type == "VNH")
+				{
+					cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
+					cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
+					cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
+					cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
+				}
+
+			}
+		}
+		else
+		{
+			resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
+
+		}
+	}
 	statusFlags->StatusConnected = statusConnect;
 	resetLanguage();
 	resetTheme();

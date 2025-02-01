@@ -21,10 +21,13 @@ Can::Can()
 	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
 }
 
-bool Can::initCan()
+bool Can::initCan(WindowType windowType)
 {
 	if (!b_adapterSelected)
 		return false;
+	
+	this->windowType = windowType;
+
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		// Дописать проверку ошибок kvasera
@@ -47,9 +50,9 @@ bool Can::initCan()
 
 	}
 
-	timerReadCan->start(10); // И запустим таймер]
-	timerSendConnectMsg->start(100); // И запустим таймер]
-	timerCheckStandConnection->start(100); // И запустим таймер
+	timerReadCan->start(1); // И запустим таймер]
+	//timerSendConnectMsg->start(100); // И запустим таймер]
+	timerCheckStandConnection->start(300); // И запустим таймер
 
 	counterConnectMsg = 0;
 
@@ -334,47 +337,72 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 
 void Can::Timer_ReadCan()
 {
-	int id = -2;
+	int id = NOT_SET;
 	int msgReceive[8];
-	if (Can::readWaitCan(&id, msgReceive, 10))
+	if (Can::readWaitCan(&id, msgReceive, 1))
 	{
-		if (id == ID_CAN_AUTOSTAND && // сообшение о конекте
-			!b_flagStatusConnection &&
-			msgReceive[0] == 0x0 &&
-			msgReceive[1] == 0xAA &&
-			msgReceive[2] == 0x0 &&
-			msgReceive[3] == 0xAA &&
-			msgReceive[4] == 0x0 &&
-			msgReceive[5] == 0xAA &&
-			msgReceive[6] == 0x0 &&
-			msgReceive[7] == 0xFA)
+		switch (windowType)
 		{
-			Signal_ChangedStatusStandConnect(true);
-			b_flagStatusConnection = true;
-			b_flagStandConnectionCheck = true;
-			counterConnectMsg = 0;
+		case WindowType::IN_TEST_MANUAL_STAND:
+		case WindowType::OUT_TEST_MANUAL_STAND:
+		case WindowType::FULL_TEST_MANUAL_STAND:
+			if (id == ID_CAN_MANUALSTAND)// сообшение о конекте
+			{
+				b_flagStandConnectionCheck = true;
+				if (!b_flagStatusConnection)
+				{
+
+					Signal_ChangedStatusStandConnect(true);
+					b_flagStatusConnection = true;
+				}
+			}
+			break;
+		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+		case WindowType::IN_AUTO_TEST_AUTO_STAND:
+		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+		case WindowType::FULL_TEST_AUTO_STAND:
+			if (id == ID_CAN_AUTOSTAND && // сообшение о конекте
+				!b_flagStatusConnection &&
+				msgReceive[0] == 0x0 &&
+				msgReceive[1] == 0xAA &&
+				msgReceive[2] == 0x0 &&
+				msgReceive[3] == 0xAA &&
+				msgReceive[4] == 0x0 &&
+				msgReceive[5] == 0xAA &&
+				msgReceive[6] == 0x0 &&
+				msgReceive[7] == 0xFA)
+			{
+				Signal_ChangedStatusStandConnect(true);
+				b_flagStatusConnection = true;
+				b_flagStandConnectionCheck = true;
+				counterConnectMsg = 0;
+			}
+			else if (id == ID_CAN_AUTOSTAND && // переодическое сообшение о конекте
+				b_flagStatusConnection &&
+				msgReceive[0] == counterConnectMsg &&
+				msgReceive[1] == 0xAA &&
+				msgReceive[2] == 0x0 &&
+				msgReceive[3] == 0xAA &&
+				msgReceive[4] == 0x0 &&
+				msgReceive[5] == 0xAA &&
+				msgReceive[6] == 0x0 &&
+				msgReceive[7] == 0xFA)
+			{
+				b_flagStandConnectionCheck = true;
+				counterConnectMsg++;
+			}
+			else if (id == ID_CAN_AUTOSTAND && b_flagStatusConnection) // Сообщение о результате теста
+			{
+				std::vector<Measured*> measureds;
+				Measured* tmpMeasured = new Measured();
+				measureds.push_back(tmpMeasured);
+				Signal_AfterTest(msgReceive[0], msgReceive[1], measureds, 10, 10);
+			}
+			break;
 		}
-		else if (id == ID_CAN_AUTOSTAND && // переодическое сообшение о конекте
-			b_flagStatusConnection &&
-			msgReceive[0] == counterConnectMsg &&
-			msgReceive[1] == 0xAA &&
-			msgReceive[2] == 0x0 &&
-			msgReceive[3] == 0xAA &&
-			msgReceive[4] == 0x0 &&
-			msgReceive[5] == 0xAA &&
-			msgReceive[6] == 0x0 &&
-			msgReceive[7] == 0xFA)
-		{
-			b_flagStandConnectionCheck = true;
-			counterConnectMsg++;
-		}
-		else if(id == ID_CAN_AUTOSTAND && b_flagStatusConnection) // Сообщение о результате теста
-		{
-			std::vector<Measured*> measureds;
-			Measured* tmpMeasured = new Measured();
-			measureds.push_back(tmpMeasured);
-			Signal_AfterTest(msgReceive[0], msgReceive[1], measureds, 10, 10);
-		}
+
+			
 	}
 
 #ifdef DEBUG_CAN
@@ -427,4 +455,6 @@ bool Can::sendTestMsg(ConnectorId pad, int pin, int type)
 
 void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 {
+	int msgSendConnect[8] = { (int)pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
+	Can::writeCan(0x55, msgSendConnect);
 }

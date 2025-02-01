@@ -1345,7 +1345,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 
 			connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 			connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
-			can->initCan();
+			can->initCan(testType);
 			WindowFrame w(testType, nullptr, testWindow);
 			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 			testWindow->setParentFrame(&w);
