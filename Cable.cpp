@@ -10,6 +10,7 @@ Cable::Cable()
 	this->canId = NOT_SET;
 	this->bit = NOT_SET;
 	this->thresholds.push_back(Thresholds());
+	this->measureds.push_back(Measureds());
 	this->name = "";
 	this->component = "";
 }
@@ -39,6 +40,8 @@ Cable::Cable(const Cable& cable)
 	this->bit = cable.bit;
 	for (int i = 0; i < cable.thresholds.size(); i++)
 		this->thresholds.push_back(Thresholds(cable.thresholds[i].minCurrent, cable.thresholds[i].maxCurrent, cable.thresholds[i].minVoltage, cable.thresholds[i].maxVoltage));
+	for (int i = 0; i < cable.measureds.size(); i++)
+		this->measureds.push_back(Measureds(cable.measureds[i].voltage, cable.measureds[i].current));
 	this->name = cable.name;
 	this->component = cable.component;
 }

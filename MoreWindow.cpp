@@ -844,9 +844,9 @@ void MoreWindowIn::initUiTableIn(TypeMoreWindow typeWindow)
 
 MoreWindowInDig::MoreWindowInDig(TestTableRowProperties* row) : MoreWindowIn(row, SIZE_MOREWINDOW_IN_DIG)
 {
-	//mainTableWidget->setRowCount(2);
-	//mainTableWidget->setColumnCount(7);
-	//initUiTableIn(TypeMoreWindow::MoreWindowInDig);
+	mainTableWidget->setRowCount(2);
+	mainTableWidget->setColumnCount(7);
+	initUiTableIn(TypeMoreWindow::MoreWindowInDig);
 }
 
 MoreWindowInAnalog::MoreWindowInAnalog(TestTableRowProperties* row) : MoreWindowIn(row, SIZE_MOREWINDOW_IN_ANALOG)

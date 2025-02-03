@@ -449,7 +449,7 @@ uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 	uint8_t flags = 0;
 	// Block
 	flags += 1;
-	flags = flags << 1;
+	flags = flags << 3;
 	// Type
 	switch (typeCable)
 	{
@@ -472,7 +472,7 @@ uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 		flags += 5;
 		break;
 	}
-	flags = flags << 3;
+	flags = flags << 4;
 
 
 	return flags;

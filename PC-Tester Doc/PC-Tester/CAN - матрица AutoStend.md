@@ -47,4 +47,17 @@ PC начинает отправлять сообщение ConnectMsgPCPeriodic
 	1. Type pin - DIG_IN = 000 | ANALOG_IN = 001
 	2. Type pin - DIG_OUT = 010 | PWM_OUT = 011 
 	3. Type pin - VNH_OUT = 100 | HALL_OUT = 101
- 
+
+
+
+
+
+# PC <- Stend
+
+
+## Test
+	### TestMsg
+**Time: не периодическое**
+**Id: 0x51**
+**Description:** Сообщение даёт команду Stend-у на начало проверки пина. 
+#### MSG
