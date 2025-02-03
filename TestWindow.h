@@ -128,7 +128,7 @@ public:
 
 	TestWindow* testwindow;
 
-	TestTableRowProperties* getThis() { return this; };
+	TestTableRowProperties* getThis() { return this; }; // ”жасное название. Ќе вникал, но если это родительский какой то, то назови что то по типу getParent
 	void generateInteractionButtons(WindowType testType, int type);
 	void switchButtonState(TestButtons testButton);
 	void sendSignal();

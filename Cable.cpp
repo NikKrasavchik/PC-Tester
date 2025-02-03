@@ -39,9 +39,9 @@ Cable::Cable(const Cable& cable)
 	this->canId = cable.canId;
 	this->bit = cable.bit;
 	for (int i = 0; i < cable.thresholds.size(); i++)
-		this->thresholds.push_back(Thresholds(cable.thresholds[i].minCurrent, cable.thresholds[i].maxCurrent, cable.thresholds[i].minVoltage, cable.thresholds[i].maxVoltage));
+		this->thresholds.push_back(Thresholds(cable.thresholds[i]));
 	for (int i = 0; i < cable.measureds.size(); i++)
-		this->measureds.push_back(Measureds(cable.measureds[i].voltage, cable.measureds[i].current));
+		this->measureds.push_back(Measureds(cable.measureds[i]));
 	this->name = cable.name;
 	this->component = cable.component;
 }
@@ -50,7 +50,7 @@ void Cable::setThresholds(std::vector<Thresholds> thresholds)
 {
 	this->thresholds.clear();
 	for (int i = 0; i < thresholds.size(); i++)
-		this->thresholds.push_back(Thresholds(thresholds[i].minCurrent, thresholds[i].maxCurrent, thresholds[i].minVoltage, thresholds[i].maxVoltage));
+		this->thresholds.push_back(Thresholds(thresholds[i]));
 }
 
 void Cable::setMeasureds(std::vector<Measureds> measureds)

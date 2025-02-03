@@ -468,7 +468,7 @@ uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 	case TypeCable::VNH_OUT:
 		flags += 4;
 		break;
-	case TypeCable::HALL_OUT:
+	case TypeCable::HALL_IN:
 		flags += 5;
 		break;
 	}

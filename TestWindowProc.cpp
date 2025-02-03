@@ -36,7 +36,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			else if (cables[i].getType() == TYPE_VNH)
 				cableRows[i]->typeInt = TypeCable::VNH_OUT;
 			if (cables[i].getType() == TYPE_HALL)
-				cableRows[i]->typeInt = TypeCable::HALL_OUT;
+				cableRows[i]->typeInt = TypeCable::HALL_IN;
 			break;
 
 		case DIRECTION_IN:

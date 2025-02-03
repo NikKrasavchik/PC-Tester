@@ -71,6 +71,13 @@ struct Measureds
 		this->voltage = voltage;
 		this->current = current;
 	}
+
+	Measureds(const Measureds& measureds)
+	{
+		this->current = measureds.current;
+		this->voltage = measureds.voltage;
+	}
+
 };
 
 class Cable

@@ -1433,7 +1433,7 @@ void MainWindow::initCables()
 		for (int i = 8; i < list.size(); i += 2)
 		{
 
-			if (!(direction == DIRECTION_IN && type == TYPE_ANALOG))
+			if (direction != DIRECTION_IN)
 			{
 				int minCurrent = list[i].toInt();
 				int maxCurrent = list[i + 1].toInt();

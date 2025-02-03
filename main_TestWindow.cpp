@@ -1481,8 +1481,6 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_VNH_HEIGHT);
 		}
-
-
 	}
 	//connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
 	connect(cableRows[currentRowNum], &TestTableRowProperties::switchActiveTableButton, this, &TestWindow::switchActiveTableButton);
@@ -1666,15 +1664,18 @@ void TestTableRowProperties::on_moreButton_clicked()
 	case TypeCable::DIG_OUT:
 	case TypeCable::PWM_OUT:
 	case TypeCable::VNH_OUT:
-	case TypeCable::HALL_OUT:
 		moreWindow = new MoreWindowOut(this);
 		break;
+
 	case TypeCable::DIG_IN:
-		moreWindow = new MoreWindowInDig(this);
+	case TypeCable::HALL_IN:
+		moreWindow = new MoreWindowIn(this);
 		break;
+
 	case TypeCable::ANALOG_IN:
 		moreWindow = new MoreWindowInAnalog(this);
 		break;
+
 	default:
 		QMessageBox::warning(testwindow, "Error","Error");
 		break;
