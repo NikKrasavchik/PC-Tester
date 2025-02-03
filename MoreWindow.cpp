@@ -255,7 +255,7 @@ void MoreWindow::setValues()
 	mainTableWidget->item(CELL_VALUE_FILLED_CONNECTOR)->setText(row->connectorStr);
 	mainTableWidget->item(CELL_VALUE_FILLED_PIN)->setText(row->pin);
 	mainTableWidget->item(CELL_VALUE_FILLED_DIRECTION)->setText(row->direction);
-	mainTableWidget->item(CELL_VALUE_FILLED_TYPE)->setText(row->type);
+	mainTableWidget->item(CELL_VALUE_FILLED_TYPE)->setText(row->typeStr);
 	mainTableWidget->item(CELL_VALUE_FILLED_NAME)->setText(row->name);
 
 	for (int i = 0; i < row->thresholds.size(); i++)
@@ -269,7 +269,7 @@ void MoreWindow::setValues()
 	}
 }
 
-void MoreWindowOut::generateThresholds(Measured measured, Thresholds thresholds)
+void MoreWindowOut::generateThresholds(Measureds measured, Thresholds thresholds)
 {
 }
 
@@ -347,7 +347,7 @@ void MoreWindowOut::generateThresholds(Measured measured, Thresholds thresholds)
 //	mainTableWidget->item(OUTALL_CELL_VALUE_DIRECTION_TABLE)->setFlags(Qt::ItemIsSelectable);
 //	mainTableWidget->item(OUTALL_CELL_VALUE_DIRECTION_TABLE)->setFont(*font);
 //	// Type
-//	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_VALUE_TYPE_TABLE), row->type);
+//	mainTableWidget->model()->setData(mainTableWidget->model()->index(OUTALL_CELL_VALUE_TYPE_TABLE), row->typeStr);
 //	mainTableWidget->item(OUTALL_CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
 //	mainTableWidget->item(OUTALL_CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
 //	mainTableWidget->item(OUTALL_CELL_VALUE_TYPE_TABLE)->setFont(*font);
@@ -640,7 +640,7 @@ void MoreWindowIn::initUiTableIn(TypeMoreWindow typeWindow)
 		mainTableWidget->item(INDIG_CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
 		mainTableWidget->item(INDIG_CELL_VALUE_PIN_TABLE)->setFont(*font);
 		// Type
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(INDIG_CELL_VALUE_TYPE_TABLE), row->type);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INDIG_CELL_VALUE_TYPE_TABLE), row->typeStr);
 		mainTableWidget->item(INDIG_CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
 		mainTableWidget->item(INDIG_CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
 		mainTableWidget->item(INDIG_CELL_VALUE_TYPE_TABLE)->setFont(*font);
@@ -736,7 +736,7 @@ void MoreWindowIn::initUiTableIn(TypeMoreWindow typeWindow)
 		mainTableWidget->item(INANALOG_CELL_VALUE_PIN_TABLE)->setFlags(Qt::ItemIsSelectable);
 		mainTableWidget->item(INANALOG_CELL_VALUE_PIN_TABLE)->setFont(*font);
 		// Type
-		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_VALUE_TYPE_TABLE), row->type);
+		mainTableWidget->model()->setData(mainTableWidget->model()->index(INANALOG_CELL_VALUE_TYPE_TABLE), row->typeStr);
 		mainTableWidget->item(INANALOG_CELL_VALUE_TYPE_TABLE)->setTextAlignment(Qt::AlignCenter);
 		mainTableWidget->item(INANALOG_CELL_VALUE_TYPE_TABLE)->setFlags(Qt::ItemIsSelectable);
 		mainTableWidget->item(INANALOG_CELL_VALUE_TYPE_TABLE)->setFont(*font);
@@ -903,15 +903,15 @@ void MoreWindow::on_saveChangesButton_clicked()
 		else
 			cableTmp.setDirection(DIRECTION_NOT_SET);
 
-		if (row->type == "DIGITAL")
+		if (row->typeStr == "DIGITAL")
 			cableTmp.setType(TYPE_DIGITAL);
-		else if (row->type == "ANALOG")
+		else if (row->typeStr == "ANALOG")
 			cableTmp.setType(TYPE_ANALOG);
-		else if (row->type == "HALL")
+		else if (row->typeStr == "HALL")
 			cableTmp.setType(TYPE_HALL);
-		else if (row->type == "PWM")
+		else if (row->typeStr == "PWM")
 			cableTmp.setType(TYPE_PWM);
-		else if (row->type == "VNH")
+		else if (row->typeStr == "VNH")
 			cableTmp.setType(TYPE_VNH);
 		else
 			cableTmp.setType(TYPE_NOT_SET);

@@ -51,7 +51,7 @@ bool Can::initCan(WindowType windowType)
 	}
 
 	timerReadCan->start(1); // И запустим таймер]
-	//timerSendConnectMsg->start(100); // И запустим таймер]
+	timerSendConnectMsg->start(100); // И запустим таймер]
 	timerCheckStandConnection->start(300); // И запустим таймер
 
 	counterConnectMsg = 0;
@@ -392,10 +392,10 @@ void Can::Timer_ReadCan()
 				b_flagStandConnectionCheck = true;
 				counterConnectMsg++;
 			}
-			else if (id == ID_CAN_AUTOSTAND && b_flagStatusConnection) // Сообщение о результате теста
+			else if (id == 2 && b_flagStatusConnection) // Сообщение о результате теста
 			{
-				std::vector<Measured*> measureds;
-				Measured* tmpMeasured = new Measured();
+				std::vector<Measureds*> measureds;
+				Measureds* tmpMeasured = new Measureds();
 				measureds.push_back(tmpMeasured);
 				Signal_AfterTest(msgReceive[0], msgReceive[1], measureds, 10, 10);
 			}
@@ -444,11 +444,48 @@ void Can::Timer_CheckStandConnection()
 #endif // DEBUG_CAN
 }
 
-bool Can::sendTestMsg(ConnectorId pad, int pin, int type)
+uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 {
-	if (type == NOT_SET)
+	uint8_t flags = 0;
+	// Block
+	flags += 1;
+	flags = flags << 1;
+	// Type
+	switch (typeCable)
+	{
+	case TypeCable::DIG_IN:
+		flags += 0;
+		break;
+	case TypeCable::ANALOG_IN:
+		flags += 1;
+		break;
+	case TypeCable::DIG_OUT:
+		flags += 2;
+		break;
+	case TypeCable::PWM_OUT:
+		flags += 3;
+		break;
+	case TypeCable::VNH_OUT:
+		flags += 4;
+		break;
+	case TypeCable::HALL_OUT:
+		flags += 5;
+		break;
+	}
+	flags = flags << 3;
+
+
+	return flags;
+}
+bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, NameTestingBlock nameBlock)
+{
+
+	if ((int)typeCable == NOT_SET)
 		return false;
-	int msgSendConnect[8] = { (int)pad, pin, type, 0, 0, 0, 0, 0 };
+
+	int msgSendConnect[8] = { (int)pad, pin, generateFlags(typeCable, nameBlock), 0, 0, 0, 0, 0 };
+	//generateFlags(typeCable, nameBlock);
+	
 	writeCan(10, msgSendConnect); // Дописать проверку ошибок kvasera
 	return true;
 }

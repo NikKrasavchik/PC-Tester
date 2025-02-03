@@ -133,6 +133,13 @@ enum class WindowType
 	REPORTWINDOW
 };
 
+enum class NameTestingBlock
+{
+	EMPTY = NOT_SET,
+	DM,
+	BCM
+};
+
 enum class ConnectorId
 {
 	EMPTY,
@@ -159,6 +166,17 @@ enum class TypeResetTableButtonsTheme
 #define TYPE_VNH				2
 #define TYPE_ANALOG				3
 #define TYPE_HALL				4
+
+enum class TypeCable
+{
+	EMPTY = NOT_SET,
+	DIG_IN,
+	ANALOG_IN,
+	DIG_OUT,
+	PWM_OUT,
+	VNH_OUT,
+	HALL_OUT
+};
 
 #define DIRECTION_NOT_SET		NOT_SET
 #define DIRECTION_OUT			0
@@ -222,11 +240,6 @@ struct FloatCheck
 
 extern std::vector<std::vector<FloatCheck*>> floatCheck;
 
-struct Measured
-{
-	double current = NOT_SET;
-	double voltage = NOT_SET;
-};
 
 extern ViewWindowState* viewWindowState;
 

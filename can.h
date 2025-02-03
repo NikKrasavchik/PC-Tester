@@ -11,7 +11,8 @@
 #include "qstring.h"
 #include "canlib.h"
 #include "chai.h"
-#include "Components.h"
+//#include "Components.h"
+#include "Cable.h"
 
 #define ID_CAN_AUTOSTAND 0x51
 #define ID_CAN_MANUALSTAND 0x100
@@ -25,7 +26,7 @@ public:
 	// ------------------------------------
 	// Name: initCan
 	// Varibals: 
-	//			WindowType windowType - enum хранищий в себе идентификатор опрдел€ющий какое окно сейчас открыто
+	//			WindowType windowType - enum хранищий в себе идентификатор опрдел€ющий какое окно сейчас открыто.
 	// Return: bool
 	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
 	//			true  - в случае если can прошЄл инициализацию.
@@ -57,9 +58,11 @@ public:
 	//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
 	//			true  - в случае если сообщение отправилось.
 	// ------------------------------------
-	static bool sendTestMsg(ConnectorId pad, int pin, int type);
+	static bool sendTestMsg(ConnectorId pad, int pin, TypeCable type, NameTestingBlock nameBlock);
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
+
+private:
 	// ------------------------------------
 	// Name: writeCan
 	// Varibals:
@@ -70,8 +73,6 @@ public:
 	//			true  - в случае если can-сообщение отправленно.
 	// ------------------------------------
 	static bool writeCan(int id, int* msg);
-
-private:
 	// ------------------------------------
 	// Name: readWaitCan
 	// Varibals:
@@ -85,6 +86,7 @@ private:
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
+	//uint8_t generateFlags(int typeCable, NameTestingBlock nameBlock);
 
 // Varibals:
 	struct modelAdapter
@@ -117,7 +119,7 @@ private slots:
 
 signals:
 	void Signal_ChangedStatusStandConnect(bool statusConnect);
-	void Signal_AfterTest(int connector, int pin, std::vector<Measured*> measureds, double voltage, double current);
+	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds, double voltage, double current);
 
 
 };

@@ -112,28 +112,28 @@ void TestWindow::resetTableTypeLanguageOutManualTestAutoStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			if (cableRows[currentRowNum]->type == "DIGITAL")
+			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Öטפנמגמי"));
-			else if (cableRows[currentRowNum]->type == "PWM")
+			else if (cableRows[currentRowNum]->typeStr == "PWM")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("ØÈÌ"));
-			else if (cableRows[currentRowNum]->type == "VNH")
+			else if (cableRows[currentRowNum]->typeStr == "VNH")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("VNH"));
-			else if (cableRows[currentRowNum]->type == "ANALOG")
+			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Àםאכמדמגûי"));
-			else if (cableRows[currentRowNum]->type == "HALL")
+			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
 			break;
 
 		case ENGLISH_LANG:
-			if (cableRows[currentRowNum]->type == "DIGITAL")
+			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
-			else if (cableRows[currentRowNum]->type == "PWM")
+			else if (cableRows[currentRowNum]->typeStr == "PWM")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
-			else if (cableRows[currentRowNum]->type == "VNH")
+			else if (cableRows[currentRowNum]->typeStr == "VNH")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
-			else if (cableRows[currentRowNum]->type == "ANALOG")
+			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Analog");
-			else if (cableRows[currentRowNum]->type == "HALL")
+			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
 			break;
 		}

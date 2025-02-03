@@ -8,7 +8,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		// Test
 		for (int j = 0; j < cables[i].getThresholds().size(); j++)
 		{
-			Measured* tmpMeasured = new Measured;
+			Measureds* tmpMeasured = new Measureds;
 			cableRows[i]->measureds.push_back(tmpMeasured);
 		}
 		// Test
@@ -24,16 +24,27 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->statePWM = BUTTON_NOT_SET;
 		cableRows[i]->canId = cables[i].getCanId();
 		cableRows[i]->bit = cables[i].getBit();
-		cableRows[i]->typeInt = cables[i].getType();
 
 		switch (cables[i].getDirection())
 		{
 		case DIRECTION_OUT:
 			cableRows[i]->direction = "OUT";
+			if (cables[i].getType() == TYPE_DIGITAL)
+				cableRows[i]->typeInt = TypeCable::DIG_OUT;
+			else if (cables[i].getType() == TYPE_PWM)
+				cableRows[i]->typeInt = TypeCable::PWM_OUT;
+			else if (cables[i].getType() == TYPE_VNH)
+				cableRows[i]->typeInt = TypeCable::VNH_OUT;
+			if (cables[i].getType() == TYPE_HALL)
+				cableRows[i]->typeInt = TypeCable::HALL_OUT;
 			break;
 
 		case DIRECTION_IN:
 			cableRows[i]->direction = "IN";
+			if(cables[i].getType() == TYPE_DIGITAL)
+				cableRows[i]->typeInt = TypeCable::DIG_IN;
+			else if(cables[i].getType() == TYPE_ANALOG)
+				cableRows[i]->typeInt = TypeCable::ANALOG_IN;
 			break;
 		}
 
@@ -45,15 +56,15 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			switch (cables[i].getType())
 			{
 			case TYPE_DIGITAL:
-				cableRows[i]->type = "DIGITAL";
+				cableRows[i]->typeStr = "DIGITAL";
 				break;
 
 			case TYPE_ANALOG:
-				cableRows[i]->type = "ANALOG";
+				cableRows[i]->typeStr = "ANALOG";
 				break;
 
 			case TYPE_HALL:
-				cableRows[i]->type = "HALL";
+				cableRows[i]->typeStr = "HALL";
 				break;
 
 			default:
@@ -70,15 +81,15 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			{
 			case TYPE_DIGITAL:
 				if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
-					cableRows[i]->type = "DIGITAL";
+					cableRows[i]->typeStr = "DIGITAL";
 				break;
 
 			case TYPE_PWM:
-				cableRows[i]->type = "PWM";
+				cableRows[i]->typeStr = "PWM";
 				break;
 
 			case TYPE_VNH:
-				cableRows[i]->type = "VNH";
+				cableRows[i]->typeStr = "VNH";
 				break;
 
 			default:
@@ -93,11 +104,11 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 	}
 }
 
-void TestTableRowProperties::generateInteractionButtons(WindowType testType, int type)
+void TestTableRowProperties::generateInteractionButtons(WindowType testType, int typeStr)
 {
 	if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
 		testType == WindowType::FULL_TEST_MANUAL_STAND)
-		switch (type)
+		switch (typeStr)
 		{
 		case TYPE_DIGITAL:
 			if (direction == "OUT")
@@ -240,7 +251,7 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		break;
 	}
 
-	if (type == "DIGITAL")
+	if (typeStr == "DIGITAL")
 	{
 		((DigitalButtons*)buttons)->onButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((DigitalButtons*)buttons)->offButton->setStyleSheet(currentStyles->inactiveTableButton);
@@ -264,7 +275,7 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 			break;
 		}
 	}
-	else if (type == "PWM")
+	else if (typeStr == "PWM")
 	{
 		((PWMButtons*)buttons)->load0Button->setStyleSheet(currentStyles->inactiveTableButton);
 		((PWMButtons*)buttons)->load25Button->setStyleSheet(currentStyles->inactiveTableButton);
@@ -309,7 +320,7 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 			break;
 		}
 	}
-	else if (type == "VNH")
+	else if (typeStr == "VNH")
 	{
 		switch (testButton)
 		{

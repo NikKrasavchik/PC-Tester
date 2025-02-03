@@ -6,6 +6,7 @@
       {
         "id": "b6311b890b897012",
         "type": "tabs",
+        "dimension": 57.67766497461929,
         "children": [
           {
             "id": "a5d0e85f6b71eab5",
@@ -26,6 +27,7 @@
       {
         "id": "77dea3e5f3ab6168",
         "type": "tabs",
+        "dimension": 42.32233502538071,
         "children": [
           {
             "id": "02fd6f23b3376748",
@@ -179,9 +181,9 @@
       "command-palette:Открыть палитру команд": false
     }
   },
-  "active": "a5d0e85f6b71eab5",
+  "active": "02fd6f23b3376748",
   "lastOpenFiles": [
-    "Добро пожаловать.md",
-    "CAN - матрица AutoStend.md"
+    "CAN - матрица AutoStend.md",
+    "Добро пожаловать.md"
   ]
 }

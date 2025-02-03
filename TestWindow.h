@@ -113,11 +113,11 @@ public:
 	QString name;
 	QString component;
 	QString direction;
-	QString type;
-	int typeInt;
+	QString typeStr;
+	TypeCable typeInt;
 	QString comment;
 
-	std::vector<Measured*> measureds;
+	std::vector<Measureds*> measureds;
 	std::vector<Thresholds> thresholds;
 
 	void* buttons;
@@ -128,6 +128,7 @@ public:
 
 	TestWindow* testwindow;
 
+	TestTableRowProperties* getThis() { return this; };
 	void generateInteractionButtons(WindowType testType, int type);
 	void switchButtonState(TestButtons testButton);
 	void sendSignal();
@@ -225,7 +226,7 @@ private:
 	Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<QCheckBox*> manualChecks;
-	std::vector<Measured*> measuredValues;
+	std::vector<Measureds*> measuredValues;
 	//QThread* th;
 	Cable *nextCheckCable;
 
@@ -351,7 +352,7 @@ public slots:
 	//// autoTwoThread
 	//void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
 	//void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current);
-	void Slot_AfterTest(int connector, int pin, std::vector<Measured*> measureds, double voltage, double current);
+	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds, double voltage, double current);
 
 private slots:
 	void selectCurrentCell(QString conector, QString pin);

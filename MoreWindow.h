@@ -410,7 +410,7 @@ private:
 	TestTableRowProperties* row;
 
 	void generateSigns();
-	void generateThresholds(Measured measured, Thresholds threshold);
+	void generateThresholds(Measureds measured, Thresholds threshold);
 };
 
 class MoreWindowOutDig final : public MoreWindowOut
