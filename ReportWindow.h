@@ -13,137 +13,263 @@
 #include "Components.h"
 #include "TestWindow.h"
 
-#define START_ReportWindow_WIDTH			1000
-#define START_ReportWindow_HEIGHT			250
-#define START_ReportWindow_SIZE			START_ReportWindow_WIDTH, START_ReportWindow_HEIGHT
+#define WINDOW_MIN_SIZE_WIDTH		1000
+#define WINDOW_MIN_SIZE_HEIGHT		250
+#define WINDOW_MIN_SIZE				WINDOW_MIN_SIZE_WIDTH,	WINDOW_MIN_SIZE_HEIGHT
 
-#define BUTTON_WIDTH					100
-#define BUTTON_HEIGHT					40
-#define BUTTON_SIZE						BUTTON_WIDTH, BUTTON_HEIGHT
+#define LEFT_PADDING_MAIN_WIDGET	10
+#define UP_PADDING_MAIN_WIDGET		10
 
-#define LEFT_PADDING_MAIN_WIDGET		10
-#define UP_PADDING_MAIN_WIDGET			10
-#define COLUMN_SETTER_WIDTH				150
+#define BUTTON_WIDTH				100
+#define BUTTON_HEIGHT				40
+#define BUTTON_SIZE					BUTTON_WIDTH, BUTTON_HEIGHT
 
-#define SPAN_COUNT_1	1
-#define SPAN_COUNT_2	2
-#define SPAN_COUNT_3	3
-#define SPAN_COUNT_4	4
+#define MEASUREMENT_OFFSET_DOUBLE		2
+#define MEASUREMENT_OFFSET_QUADRUPLE	4
+#define MEASUREMENT_OFFSET_SEXTUPLE		6
 
-#define ROW_0			0
-#define ROW_1			1
-#define ROW_2			2
-#define ROW_3			3
+#define MEASUREMENT_OFFSET_OUT			MEASUREMENT_OFFSET_SEXTUPLE
+#define MEASUREMENT_OFFSET_IN			MEASUREMENT_OFFSET_DOUBLE
+#define MEASUREMENT_OFFSET_IN_ANALOG	MEASUREMENT_OFFSET_QUADRUPLE
 
-#define COLUMN_PAD					0
-#define COLUMN_PIN					1
-#define COLUMN_TYPE					2
-#define COLUMN_NAME					3
-#define COLUMN_COMPONENT			4
-#define COLUMN_TRESHHOLDERS			5
-#define COLUMN_TRESHHOLDERS_U		5
-#define COLUMN_TRESHHOLDERS_U_MIN	5
-#define COLUMN_TRESHHOLDERS_U_MAX	6
-#define COLUMN_TRESHHOLDERS_I		7
-#define COLUMN_TRESHHOLDERS_I_MIN	7
-#define COLUMN_TRESHHOLDERS_I_MAX	8
+#define ROW_COUNT_BASE_TABLE			1
+#define COLUMN_COUNT_BASE_TABLE			7
 
-#define OUTALL_CELL_PAD_TABLE							ROW_0, COLUMN_PAD
-#define OUTALL_CELL_PIN_TABLE							ROW_0, COLUMN_PIN
-#define OUTALL_CELL_TYPE_TABLE							ROW_0, COLUMN_TYPE
-#define OUTALL_CELL_NAME_TABLE							ROW_0, COLUMN_NAME
-#define CELL_COMPONENT_TABLE					ROW_0, COLUMN_COMPONENT
-#define CELL_TRESHHOLDERS_TABLE					ROW_0, COLUMN_TRESHHOLDERS
-#define CELL_TRESHHOLDERS_U_TABLE				ROW_1, COLUMN_TRESHHOLDERS_U
-#define CELL_TRESHHOLDERS_I_TABLE				ROW_1, COLUMN_TRESHHOLDERS_I
-#define CELL_TRESHHOLDERS_U_MIN_TABLE			ROW_2, COLUMN_TRESHHOLDERS_U_MIN
-#define CELL_TRESHHOLDERS_U_MAX_TABLE			ROW_2, COLUMN_TRESHHOLDERS_U_MAX
-#define CELL_TRESHHOLDERS_I_MIN_TABLE			ROW_2, COLUMN_TRESHHOLDERS_I_MIN
-#define CELL_TRESHHOLDERS_I_MAX_TABLE			ROW_2, COLUMN_TRESHHOLDERS_I_MAX
+#define SPAN_VERTICAL_DOUBLE			2, 1
+#define SPAN_VERTICAL_TRIPPLE			3, 1
+#define SPAN_VERTICAL_QUADRUPLE			4, 1
 
-#define CLEAR_COLUMN_COUNT		9
+#define SPAN_HORIZONTAL_DOUBLE			1, 2
+#define SPAN_HORIZONTAL_TRIPPLE			1, 3
+#define SPAN_HORIZONTAL_QUADRUPLE		1, 4
+#define SPAN_HORIZONTAL_SEXTUPLE		1, 6
 
-#define SET_INVISIBLE			0
-#define SET_VISIBLE				1
+#define SPAN_NONE						1, 1
+#define SPAN_SQUAD_DOUBLE				2, 2
 
-#define MEASURED_COLUMN			0
-#define CHECK_MANUAL_STAND		1
-#define CHECK_PC_AUTO_STAND		2
-#define CHECK_STAND_AUTO_STAND	3
+#define SPAN_TYPE_OUT					4, 6
+#define SPAN_TYPE_IN					1, 6
+#define SPAN_TYPE_IN_ANALOG				3, 6
 
-#define ADDITIONAL_IND_NOT_SET	NOT_SET
+#define SPAN_TYPE_COMMENT_OUT			4, 1
+#define SPAN_TYPE_COMMENT_IN			1, 1
+#define SPAN_TYPE_COMMENT_IN_ANALOG		3, 1
 
-struct ActiveColumn
-{
-	bool measured;
-	bool checkManualStand;
-	bool checkPCAutoStand;
-	bool checkStandAutoStand;
-};
 
+#define MEASUREMENT_COLUMN_POSITION		6
+
+#define ROW_COUNT_SIGN_OUT				4
+#define ROW_COUNT_SIGN_IN_ANALOG		3
+
+#define IND_ROW_BASE_SIGN				0
+
+#define IND_ROW_BASE_SIGN_CONNECTOR			IND_ROW_BASE_SIGN
+#define IND_ROW_BASE_SIGN_PIN				IND_ROW_BASE_SIGN
+#define IND_ROW_BASE_SIGN_DIRECTION			IND_ROW_BASE_SIGN
+#define IND_ROW_BASE_SIGN_TYPE				IND_ROW_BASE_SIGN
+#define IND_ROW_BASE_SIGN_NAME				IND_ROW_BASE_SIGN
+#define IND_ROW_BASE_SIGN_EMPTY				IND_ROW_BASE_SIGN
+#define IND_ROW_BASE_SIGN_COMMENT			IND_ROW_BASE_SIGN
+
+#define IND_COLUMN_BASE_CONNECTOR			0
+#define IND_COLUMN_BASE_PIN					1
+#define IND_COLUMN_BASE_DIRECTION			2
+#define IND_COLUMN_BASE_TYPE				3
+#define IND_COLUMN_BASE_NAME				4
+#define IND_COLUMN_BASE_EMPTY				5
+#define IND_COLUMN_BASE_COMMENT				6
+
+#define CELL_SIGN_BASE_CONNECTOR			IND_ROW_BASE_SIGN_CONNECTOR,	IND_COLUMN_BASE_CONNECTOR
+#define CELL_SIGN_BASE_PIN					IND_ROW_BASE_SIGN_PIN,			IND_COLUMN_BASE_PIN
+#define CELL_SIGN_BASE_DIRECTION			IND_ROW_BASE_SIGN_DIRECTION,	IND_COLUMN_BASE_DIRECTION
+#define CELL_SIGN_BASE_TYPE					IND_ROW_BASE_SIGN_TYPE,			IND_COLUMN_BASE_TYPE
+#define CELL_SIGN_BASE_NAME					IND_ROW_BASE_SIGN_NAME,			IND_COLUMN_BASE_NAME
+#define CELL_SIGN_BASE_EMPTY				IND_ROW_BASE_SIGN_EMPTY,		IND_COLUMN_BASE_EMPTY
+#define CELL_SIGN_BASE_COMMENT				IND_ROW_BASE_SIGN_COMMENT,		IND_COLUMN_BASE_COMMENT
+
+class TestTableRowProperties;
 class ReportWindow : public QDialog
 {
 	Q_OBJECT
 
 public:
-	ReportWindow(std::vector<Cable> cables, std::vector<void*> additionalValues, WindowType testType);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows);
 	~ReportWindow();
 
 private:
+	QWidget* mainWidget;
+	QTableWidget* tableWidget;
+	QPushButton* saveButton;
+	QVBoxLayout* mainVLayout;
+	QHBoxLayout* footerHLayout;
+	QSpacerItem* mainMiddleSpacer;
+	QSpacerItem* footerLeftSpacer;
+
+	std::vector<TestTableRowProperties*> cableRows;
+
 	void initUi();
 	void initUiTable();
-	void initUiGenerateTable();
-	void initUiSetValueTable();
-	void initUiColumnSetters();
 	void initUiFooter();
-	void resetUiAdditionalColumns();
-	void resetUiFillColumns();
-	
-	void fillColumnsSetters();
 
-	WindowType testType;
-	std::vector<void*> additionalValues;
+	void generateTable();
+	void generateTableBaseSign();
+	void generateTableSign(TypeCable type, int maxTypeOffset);	
+
+	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
+	
+	void resetBaseLanguage();
+	//void resetLanguage();
+	void resetTheme();
 
 	void resizeEvent(QResizeEvent* event);
-
-	QWidget* mainWidget;
-	QWidget* columnSetterWidget;
-	QWidget* footerWidget;
-	QVBoxLayout* mainVLayout;
-	QVBoxLayout* columnSetterVLayout;
-	QHBoxLayout* bodyHLayout;
-	QHBoxLayout* bottomHLayout;
-	QHBoxLayout* measuredHLayout;
-	QHBoxLayout* checkManualStandHLayout;
-	QHBoxLayout* checkPCAutoStandHLayout;
-	QHBoxLayout* checkStandAutoStandHLayout;
-	QTableWidget* mainTableWidget;
-	QCheckBox* measuredCheckBox;
-	QCheckBox* checkManualStandCheckBox;
-	QCheckBox* checkPCAutoStandCheckBox;
-	QCheckBox* checkStandAutoStandCheckBox;
-	QSpacerItem* bottomRightSpacer;
-	QSpacerItem* bottomLeftSpacer;
-	QLabel* measuredLabel;
-	QLabel* checkManualStandLabel;
-	QLabel* checkPCAutoStandLabel;
-	QLabel* checkStandAutoStandLabel;
-	QPushButton* saveButton;
-	QLineEdit* testerNameLineEdit;
-	QLineEdit* testerJobLineEdit;
-	
-	std::vector<Cable> cables;
-
-	float changedThresholds[4];
-
-	ActiveColumn activeColumn;
-
-public slots:
-	void on_saveButton_clicked();
-
-	void on_measuredCheckBox_stateChanged(int state);
-	void on_checkManualStandCheckBox_stateChanged(int state);
-	void on_checkPCAutoStandCheckBox_stateChanged(int state);
-	void on_checkStandAutoStandCheckBox_stateChanged(int state);
 };
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//#define START_ReportWindow_WIDTH		1000
+//#define START_ReportWindow_HEIGHT		250
+//#define START_ReportWindow_SIZE			START_ReportWindow_WIDTH, START_ReportWindow_HEIGHT
+//
+//#define BUTTON_WIDTH					100
+//#define BUTTON_HEIGHT					40
+//#define BUTTON_SIZE						BUTTON_WIDTH, BUTTON_HEIGHT
+//
+//#define LEFT_PADDING_MAIN_WIDGET		10
+//#define UP_PADDING_MAIN_WIDGET		10
+//#define COLUMN_SETTER_WIDTH				150
+//
+//#define SPAN_COUNT_1					1
+//#define SPAN_COUNT_2					2
+//#define SPAN_COUNT_3					3
+//#define SPAN_COUNT_4					4
+//
+//#define ROW_0							0
+//#define ROW_1							1
+//#define ROW_2							2
+//#define ROW_3							3
+//
+//#define COLUMN_PAD						0
+//#define COLUMN_PIN						1
+//#define COLUMN_TYPE						2
+//#define COLUMN_NAME						3
+//#define COLUMN_COMPONENT				4
+//#define COLUMN_TRESHHOLDERS				5
+//#define COLUMN_TRESHHOLDERS_U			5
+//#define COLUMN_TRESHHOLDERS_U_MIN		5
+//#define COLUMN_TRESHHOLDERS_U_MAX		6
+//#define COLUMN_TRESHHOLDERS_I			7
+//#define COLUMN_TRESHHOLDERS_I_MIN		7
+//#define COLUMN_TRESHHOLDERS_I_MAX		8
+//
+//#define OUTALL_CELL_PAD_TABLE			ROW_0,	COLUMN_PAD
+//#define OUTALL_CELL_PIN_TABLE			ROW_0,	COLUMN_PIN
+//#define OUTALL_CELL_TYPE_TABLE			ROW_0,	COLUMN_TYPE
+//#define OUTALL_CELL_NAME_TABLE			ROW_0,	COLUMN_NAME
+//#define CELL_COMPONENT_TABLE			ROW_0,	COLUMN_COMPONENT
+//#define CELL_TRESHHOLDERS_TABLE			ROW_0,	COLUMN_TRESHHOLDERS
+//#define CELL_TRESHHOLDERS_U_TABLE		ROW_1,	COLUMN_TRESHHOLDERS_U
+//#define CELL_TRESHHOLDERS_I_TABLE		ROW_1,	COLUMN_TRESHHOLDERS_I
+//#define CELL_TRESHHOLDERS_U_MIN_TABLE	ROW_2,	COLUMN_TRESHHOLDERS_U_MIN
+//#define CELL_TRESHHOLDERS_U_MAX_TABLE	ROW_2,	COLUMN_TRESHHOLDERS_U_MAX
+//#define CELL_TRESHHOLDERS_I_MIN_TABLE	ROW_2,	COLUMN_TRESHHOLDERS_I_MIN
+//#define CELL_TRESHHOLDERS_I_MAX_TABLE	ROW_2,	COLUMN_TRESHHOLDERS_I_MAX
+//
+//#define CLEAR_COLUMN_COUNT				9
+//
+//#define SET_INVISIBLE					0
+//#define SET_VISIBLE						1
+//
+//#define MEASURED_COLUMN					0
+//#define CHECK_MANUAL_STAND				1
+//#define CHECK_PC_AUTO_STAND				2
+//#define CHECK_STAND_AUTO_STAND			3
+//
+//#define ADDITIONAL_IND_NOT_SET			NOT_SET
+//
+//struct ActiveColumn
+//{
+//	bool measured;
+//	bool checkManualStand;
+//	bool checkPCAutoStand;
+//	bool checkStandAutoStand;
+//};
+//
+//class ReportWindow : public QDialog
+//{
+//	Q_OBJECT
+//
+//public:
+//	ReportWindow(std::vector<Cable> cables, std::vector<void*> additionalValues, WindowType testType);
+//	~ReportWindow();
+//
+//private:
+//	void initUi();
+//	void initUiTable();
+//	void initUiGenerateTable();
+//	void initUiSetValueTable();
+//	void initUiColumnSetters();
+//	void initUiFooter();
+//	void resetUiAdditionalColumns();
+//	void resetUiFillColumns();
+//	
+//	void fillColumnsSetters();
+//
+//	WindowType testType;
+//	std::vector<void*> additionalValues;
+//
+//	void resizeEvent(QResizeEvent* event);
+//
+//	QWidget* mainWidget;
+//	QWidget* columnSetterWidget;
+//	QWidget* footerWidget;
+//	QVBoxLayout* mainVLayout;
+//	QVBoxLayout* columnSetterVLayout;
+//	QHBoxLayout* bodyHLayout;
+//	QHBoxLayout* bottomHLayout;
+//	QHBoxLayout* measuredHLayout;
+//	QHBoxLayout* checkManualStandHLayout;
+//	QHBoxLayout* checkPCAutoStandHLayout;
+//	QHBoxLayout* checkStandAutoStandHLayout;
+//	QTableWidget* mainTableWidget;
+//	QCheckBox* measuredCheckBox;
+//	QCheckBox* checkManualStandCheckBox;
+//	QCheckBox* checkPCAutoStandCheckBox;
+//	QCheckBox* checkStandAutoStandCheckBox;
+//	QSpacerItem* bottomRightSpacer;
+//	QSpacerItem* bottomLeftSpacer;
+//	QLabel* measuredLabel;
+//	QLabel* checkManualStandLabel;
+//	QLabel* checkPCAutoStandLabel;
+//	QLabel* checkStandAutoStandLabel;
+//	QPushButton* saveButton;
+//	QLineEdit* testerNameLineEdit;
+//	QLineEdit* testerJobLineEdit;
+//	
+//	std::vector<Cable> cables;
+//
+//	float changedThresholds[4];
+//
+//	ActiveColumn activeColumn;
+//
+//public slots:
+//	void on_saveButton_clicked();
+//
+//	//void on_measuredCheckBox_stateChanged(int state);
+//	//void on_checkManualStandCheckBox_stateChanged(int state);
+//	//void on_checkPCAutoStandCheckBox_stateChanged(int state);
+//	//void on_checkStandAutoStandCheckBox_stateChanged(int state);
+//};
+//

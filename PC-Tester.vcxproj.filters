@@ -126,10 +126,10 @@
     <QtMoc Include="MoreWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="ReportWindow.h">
+    <QtMoc Include="can.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <QtMoc Include="can.h">
+    <QtMoc Include="ReportWindow.h">
       <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>

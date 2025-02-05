@@ -160,6 +160,8 @@ enum class TypeResetTableButtonsTheme
 
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
+#define TYPE_COUNT				6
+
 #define TYPE_NOT_SET			NOT_SET
 #define TYPE_DIGITAL			0
 #define TYPE_PWM				1
@@ -170,11 +172,11 @@ enum class TypeResetTableButtonsTheme
 enum class TypeCable
 {
 	EMPTY = NOT_SET,
-	DIG_IN,
-	ANALOG_IN,
 	DIG_OUT,
 	PWM_OUT,
 	VNH_OUT,
+	DIG_IN,
+	ANALOG_IN,
 	HALL_IN
 };
 
