@@ -11,8 +11,8 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* 
 	this->testType = testType;
 	this->can = can;
 	isFullTestEnabled = false;
-
-	nextCheckCable = new Cable(cables[0].getConnector(), cables[0].getPin());
+	if(cables.size() != 0)
+		nextCheckCable = new Cable(cables[0].getConnector(), cables[0].getPin());
 	statusFlags = new StandStatusFlags;
 	statusFlags->StatusConnected = false;
 	statusFlags->StatusTest = false;
