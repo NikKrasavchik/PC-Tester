@@ -263,10 +263,10 @@ void MoreWindowOut::setValues()
 	{
 		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->measureds[i]->current != -1 ? QString::number(row->measureds[i]->voltage) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->measureds[i]->voltage != -1 ? QString::number(row->measureds[i]->current) : "-");
-		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-");
-		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxCurrent != -1 ? QString::number(row->thresholds[i].maxCurrent) : "-");
-		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minVoltage != -1 ? QString::number(row->thresholds[i].minVoltage) : "-");
-		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxVoltage != -1 ? QString::number(row->thresholds[i].maxVoltage) : "-");
+		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minVoltage != -1 ? QString::number(row->thresholds[i].minVoltage) : "-");
+		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxVoltage != -1 ? QString::number(row->thresholds[i].maxVoltage) : "-");
+		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-"); // CELL_OUT_VALUES_MIN_VOLTAGE Должнго быть CELL_OUT_VALUES_MIN_CURRENT и наоборот и так везде !!!! 
+		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxCurrent != -1 ? QString::number(row->thresholds[i].maxCurrent) : "-");
 	}
 }
 
@@ -552,6 +552,5 @@ void MoreWindow::resaveFile(QString fileName, Cable newCable)
 
 void MoreWindow::on_startTestButton_clicked()
 {
-	//if (!row->testwindow->statusFlags->StatusTest)
-	//	row->testwindow->ProcAutoTest((int)row->connectorInt, row->pin.toInt());
+	Can::sendTestMsg(row->connectorInt, row->pin.toInt(), row->typeInt, NameTestingBlock::BCM);
 }

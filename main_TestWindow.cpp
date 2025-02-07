@@ -1267,11 +1267,48 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 }
 	
 
-void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds, double voltage, double current)
+void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds)
 {
 	// Красим нужную ячейку 
 	for (int i = 0; i < cableRows.size(); i++)
 	{
+		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
+		{
+			cableRows[i]->measureds = measureds;
+
+			QAbstractItemModel* model = mainTableWidget->model();
+			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);
+			model->setData(model->index(currentRowNum, 6), QString(""));
+			for (int j = 0; j < cableRows[i]->thresholds.size(); j++)
+				if( cableRows[i]->thresholds[j].minVoltage > measureds[j]->voltage || cableRows[i]->thresholds[j].maxVoltage < measureds[j]->voltage || 
+					cableRows[i]->thresholds[j].minCurrent > measureds[j]->current || cableRows[i]->thresholds[j].maxCurrent < measureds[j]->current)
+					mainTableWidget->item(i, 6)->setBackgroundColor(Qt::red);
+			if (mainTableWidget->item(i, 6)->backgroundColor() != Qt::red)
+					mainTableWidget->item(i, 6)->setBackgroundColor(Qt::green);
+			if (isFullTestEnabled)// запускаем следующий тест
+			{
+				for (int i = 0; i < cableRows.size(); i++)
+					if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
+					{
+						if (i == cableRows.size() - 1)
+						{
+							// Тест закончен
+							nextCheckCable->setConnector(cableRows[0]->connectorInt);
+							nextCheckCable->setPin(cableRows[0]->pin.toInt());
+							QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
+							isFullTestEnabled = false;
+							resetLanguage();
+							return;
+						}
+						nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
+						nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
+						break;
+					}
+				mainTableWidget->item(i + 1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
+				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
+			}
+		}
+		/*
 		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
 			pin == cableRows[i]->pin.toInt())
 		{
@@ -1309,6 +1346,7 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 			}
 			return;
 		}
+		*/
 	}
 
 

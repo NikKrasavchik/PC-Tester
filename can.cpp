@@ -434,8 +434,7 @@ void Can::Timer_ReadCan()
 				measureds.push_back(getMeasureds(msgReceive));
 				if (msgReceive[2] & 0x01 == 1) // Конец теста
 				{
-
-					Signal_AfterTest(msgReceive[0], msgReceive[1], measureds, 10, 10);
+					Signal_AfterTest(msgReceive[0], msgReceive[1], measureds);
 					measureds.clear();
 				}
 

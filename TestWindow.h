@@ -352,7 +352,7 @@ public slots:
 	//// autoTwoThread
 	//void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
 	//void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current);
-	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds, double voltage, double current);
+	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 
 private slots:
 	void selectCurrentCell(QString conector, QString pin);

@@ -120,7 +120,7 @@ private slots:
 
 signals:
 	void Signal_ChangedStatusStandConnect(bool statusConnect);
-	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds, double voltage, double current);
+	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 
 
 };
