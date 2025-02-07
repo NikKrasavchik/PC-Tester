@@ -96,8 +96,8 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 				break;
 			}
 		}
-		else if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
-			cableRows[i]->direction = "";
+		//else if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
+		//	cableRows[i]->direction = "";
 
 		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);

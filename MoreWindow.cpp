@@ -305,8 +305,19 @@ void MoreWindowIn::generateSigns()
 
 void MoreWindowIn::setValues()
 {
-	mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setText(QString::number(row->measureds[0]->current) != "-1" ? QString::number(row->measureds[0]->current) : "-");
-	mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setText(QString::number(row->measureds[0]->voltage) != "-1" ? QString::number(row->measureds[0]->voltage) : "-");
+	if (row->measureds[0]->current == 1)
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor("#7CC770"));
+	else if (row->measureds[0]->current == 0)
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor("#FF8686"));
+	else
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setText("-");
+
+	if (row->measureds[0]->voltage == 1)
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor("#7CC770"));
+	else if (row->measureds[0]->voltage == 0)
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor("#FF8686"));
+	else
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setText("-");
 }
 
 void MoreWindowIn::resetBlockLanguage(int measuredNum)
