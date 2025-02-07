@@ -261,8 +261,8 @@ void MoreWindowOut::setValues()
 {
 	for (int i = 0; i < row->thresholds.size(); i++)
 	{
-		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->measureds[i]->current != -1 ? QString::number(row->measureds[i]->current) : "-");
-		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->measureds[i]->voltage != -1 ? QString::number(row->measureds[i]->voltage) : "-");
+		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->measureds[i]->current != -1 ? QString::number(row->measureds[i]->voltage) : "-");
+		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->measureds[i]->voltage != -1 ? QString::number(row->measureds[i]->current) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxCurrent != -1 ? QString::number(row->thresholds[i].maxCurrent) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minVoltage != -1 ? QString::number(row->thresholds[i].minVoltage) : "-");
@@ -400,9 +400,10 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 
 void MoreWindowInAnalog::setValues()
 {
+	mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (0 * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[0]->voltage) != "-1" ? QString::number(row->measureds[0]->voltage) : "-");
+	mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (1 * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[0]->current) != "-1" ? QString::number(row->measureds[0]->current) : "-");
 	for (int i = 0; i < row->thresholds.size(); i++)
 	{ 
-		mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[i]->current) != "-1" ? QString::number(row->measureds[i]->current) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
 	}

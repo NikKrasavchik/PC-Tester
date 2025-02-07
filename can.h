@@ -100,6 +100,7 @@ private:
 	static canHandle hnd;
 
 	WindowType windowType;
+	std::vector<Measureds*> measureds;
 	uint8_t counterConnectMsg;
 
 	bool b_adapterSelected;

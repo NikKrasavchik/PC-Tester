@@ -57,8 +57,8 @@ struct Thresholds
 
 struct Measureds
 {
-	double current;
 	double voltage;
+	double current;
 
 	Measureds()
 	{

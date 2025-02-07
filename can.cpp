@@ -56,6 +56,8 @@ bool Can::initCan(WindowType windowType)
 
 	counterConnectMsg = 0;
 
+	measureds.clear();
+
 	return true;
 }
 
@@ -67,7 +69,8 @@ bool Can::deinitCan()
 
 	b_flagStandConnectionCheck = false;
 	b_flagStatusConnection = false;
-	
+
+	measureds.clear();
 	
 	if (!b_adapterSelected)
 		return false;
@@ -335,6 +338,39 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 	return resultPair;
 }
 
+Measureds* getMeasureds(int* msg)
+{
+	Measureds* measured = nullptr;
+	int tmp = msg[2] >> 5;
+	TypeCable type = (TypeCable)(msg[2] >> 5);
+	double voltage;
+	double current;
+
+	switch (type)
+	{
+	case TypeCable::DIG_IN:
+	case TypeCable::ANALOG_IN:
+		measured = new Measureds(msg[6], msg[7]);
+		break;
+	case TypeCable::HALL_IN:
+		//flags += 5;
+		break;
+	case TypeCable::DIG_OUT:
+	case TypeCable::PWM_OUT:
+		voltage = ((msg[4] << 8) + msg[5]) / 1000.0;
+		current = ((msg[6] << 8) + msg[7]) / 1000.0;
+		measured = new Measureds(voltage, current);
+		break;
+	case TypeCable::VNH_OUT:
+		voltage = ((msg[4] << 8) + msg[5]) / 1000.0;
+		current = ((msg[6] << 8) + msg[7]) / 1000.0;
+		measured = new Measureds(voltage, current);
+		break;
+	}
+
+	return measured;
+}
+
 void Can::Timer_ReadCan()
 {
 	int id = NOT_SET;
@@ -392,12 +428,17 @@ void Can::Timer_ReadCan()
 				b_flagStandConnectionCheck = true;
 				counterConnectMsg++;
 			}
-			else if (id == 2 && b_flagStatusConnection) // Сообщение о результате теста
+			else if (id == 2 ) // Сообщение о результате теста
 			{
-				std::vector<Measureds*> measureds;
-				Measureds* tmpMeasured = new Measureds();
-				measureds.push_back(tmpMeasured);
-				Signal_AfterTest(msgReceive[0], msgReceive[1], measureds, 10, 10);
+				
+				measureds.push_back(getMeasureds(msgReceive));
+				if (msgReceive[2] & 0x01 == 1) // Конец теста
+				{
+
+					Signal_AfterTest(msgReceive[0], msgReceive[1], measureds, 10, 10);
+					measureds.clear();
+				}
+
 			}
 			break;
 		}

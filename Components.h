@@ -1,6 +1,6 @@
 #pragma once
 
-//#define DEBUG
+#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -172,12 +172,12 @@ enum class TypeResetTableButtonsTheme
 enum class TypeCable
 {
 	EMPTY = NOT_SET,
-	DIG_OUT,
-	PWM_OUT,
-	VNH_OUT,
 	DIG_IN,
 	ANALOG_IN,
-	HALL_IN
+	HALL_IN,
+	DIG_OUT,
+	PWM_OUT,
+	VNH_OUT
 };
 
 #define DIRECTION_NOT_SET		NOT_SET

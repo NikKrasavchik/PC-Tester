@@ -1690,4 +1690,5 @@ void TestTableRowProperties::on_moreButton_clicked()
 void TestTableRowProperties::on_checkButton_clicked()
 {
 
+	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, NameTestingBlock::BCM);
 }
