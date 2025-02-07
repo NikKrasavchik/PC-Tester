@@ -588,41 +588,7 @@ void TestWindow::on_switchLanguageButton_clicked()
 
 void TestWindow::on_reportButton_clicked()
 {
-	//std::vector<Cable> cables;
-	//for (int currentCableInd = 0; currentCableInd < this->cableRows.size(); currentCableInd++)
-	//{
-	//	TestTableRowProperties* currentTestTableRowProperties = this->cableRows[currentCableInd];
-	//	
-	//	Cable currentCable;
-	//	currentCable.setId(currentTestTableRowProperties->id);
-	//	currentCable.setConnector((ConnectorId)(currentTestTableRowProperties->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL));
-	//	currentCable.setPin(currentTestTableRowProperties->pin.toInt());
-	//	currentCable.setName(currentTestTableRowProperties->name);
-	//	currentCable.setComponent(currentTestTableRowProperties->component);
-	//	currentCable.setDirection(currentTestTableRowProperties->direction.toInt());
-	//	currentCable.setType(currentTestTableRowProperties->typeStr.toInt());
-	//	currentCable.setThresholds(currentTestTableRowProperties->thresholds);
-	//	currentCable.setBit(currentTestTableRowProperties->bit);
-	//	currentCable.setCanId(currentTestTableRowProperties->canId);
-
-	//	cables.push_back(currentCable);
-	//}
-
-	//std::vector<void*> additionalValues;
-	//if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
-	//	testType == WindowType::IN_TEST_MANUAL_STAND ||
-	//	testType == WindowType::FULL_TEST_MANUAL_STAND)
-	//	for (int i = 0; i < manualChecks.size(); i++)
-	//		additionalValues.push_back((void*)manualChecks[i]);
-	//if (testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
-	//	testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
-	//	testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
-	//	testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
-	//	testType == WindowType::FULL_TEST_AUTO_STAND)
-	//	for (int i = 0; i < measuredValues.size(); i++)
-	//		additionalValues.push_back((void*)measuredValues[i]);
-
-	ReportWindow* reportWindow = new ReportWindow(cableRows/*, additionalValues, testType*/);
+	ReportWindow* reportWindow = new ReportWindow(cableRows);
 
 	WindowFrame w(WindowType::REPORTWINDOW, nullptr, reportWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
