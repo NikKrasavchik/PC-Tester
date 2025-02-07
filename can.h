@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG_CAN
+//#define DEBUG_CAN
 
 #include <vector>
 #include "qobject.h"
@@ -36,7 +36,7 @@ public:
 	// Name: deinitCan
 	// Return: bool
 	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-	//			true  - в случае если can прошёл деинициализацию.
+	//			true  - в слу	чае если can прошёл деинициализацию.
 	// ------------------------------------
 	bool deinitCan();
 

@@ -38,6 +38,7 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 	initDarkStyleSheets();
 	resetTheme();
 
+	//ui->title->setText("PC-Tester");
 	setTitle(windowType);
 
 	setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
@@ -49,7 +50,6 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 		resize(child->size());
 	}
 	mIsCollapse = false;
-	ui->title->setText("");
 }
 
 /// @brief Destructor for the WindowFrame class.
@@ -421,6 +421,12 @@ void WindowFrame::setTitle(WindowType windowType) {
 		case WindowType::FULL_TEST_AUTO_STAND:
 			ui->title->setText(QString::fromLocal8Bit("Полная автоматическая проверка | Автоматический стенд"));
 			break;
+		case WindowType::MOREWINDOW:
+			ui->title->setText(QString::fromLocal8Bit("Подробнее..."));
+			break;
+		case WindowType::REPORTWINDOW:
+			ui->title->setText(QString::fromLocal8Bit("Отчёт"));
+			break;
 		}
 		break;
 	case ENGLISH_LANG:
@@ -464,6 +470,12 @@ void WindowFrame::setTitle(WindowType windowType) {
 
 		case WindowType::FULL_TEST_AUTO_STAND:
 			ui->title->setText(QString("Full auto test | Auto stend"));
+			break;
+		case WindowType::MOREWINDOW:
+			ui->title->setText(QString("More..."));
+			break;
+		case WindowType::REPORTWINDOW:
+			ui->title->setText(QString("Report"));
 			break;
 		}
 	}

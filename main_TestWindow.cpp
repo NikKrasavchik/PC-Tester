@@ -8,7 +8,6 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* 
 	: QDialog(parent)
 {
 	ui.setupUi(this);
-
 	this->testType = testType;
 	this->can = can;
 	isFullTestEnabled = false;

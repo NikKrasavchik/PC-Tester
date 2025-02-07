@@ -291,7 +291,7 @@ void MoreWindowIn::generateSigns()
 		for (int j = 0; j < MEASURED_OFFSET_DOUBLE; j++)
 		{
 			mainTableWidget->insertColumn(MEASUREMENT_COLUMN_POSITION);
-			mainTableWidget->setColumnWidth(MEASUREMENT_COLUMN_POSITION, 75);
+			mainTableWidget->setColumnWidth(MEASUREMENT_COLUMN_POSITION, 90);
 		}
 
 		prepareItem(CELL_IN_SIGN_MEASURED_1, SPAN_NONE);
