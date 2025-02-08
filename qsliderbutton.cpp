@@ -1,3 +1,4 @@
+
 #include "qsliderbutton.h"
 #include <QPainter>
 #include <QMouseEvent>

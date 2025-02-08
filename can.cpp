@@ -437,7 +437,7 @@ void Can::Timer_ReadCan()
 					if ((TypeCable)(msgReceive[2] >> 5) == TypeCable::ANALOG_IN) // Костыль
 					{
 						measureds.push_back(new Measureds(measureds[0]->current,-1));
-						measureds[0]->voltage = NOT_SET;
+						measureds[0]->current = NOT_SET;
 					}
 					Signal_AfterTest(msgReceive[0], msgReceive[1], measureds);
 					measureds.clear();

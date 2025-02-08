@@ -150,7 +150,7 @@ signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
-	void selectCurrentCell(QString connector, QString pin);
+	//void selectCurrentCell(QString connector, QString pin);
 };
 
 class TestWindow : public QDialog
@@ -344,20 +344,13 @@ public slots:
 
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
+
+
+public slots:
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
-	//// manualTwoThread
-	//void msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect);
-	//void msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue);
-
-	//// autoTwoThread
-	//void msgToTestWindowStatusConnect_AutoTwoThread(bool statusConnect);
-	//void msgToTestWindowAfterTest_AutoTwoThread(int connector, int pin, double voltage, double current);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
-
-private slots:
-	void selectCurrentCell(QString conector, QString pin);
+	//void selectCurrentCell(QString conector, QString pin);
 
 signals:
-	//// autoTwoThread
-	//void msgToTwoThreadStartTest_AutoTwoThread(int pad, int pin);
+
 };

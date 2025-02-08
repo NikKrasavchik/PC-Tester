@@ -483,22 +483,7 @@ void MoreWindow::on_saveChangesButton_clicked()
 		cableTmp.setBit(row->bit);
 		cableTmp.setName(row->name);
 		cableTmp.setComponent(row->component);
-		//cableTmp.minVoltage = (changedThresholds[0] != NOT_SET ? changedThresholds[0] : row->minVoltage);
-		//cableTmp.maxVoltage = (changedThresholds[1] != NOT_SET ? changedThresholds[1] : row->maxVoltage);
-		//cableTmp.minCurrent = (changedThresholds[2] != NOT_SET ? changedThresholds[2] : row->minCurrent);
-		//cableTmp.maxCurrent = (changedThresholds[3] != NOT_SET ? changedThresholds[3] : row->maxCurrent);
 
-		//row->minVoltage = (changedThresholds[0] != NOT_SET ? changedThresholds[0] : row->minVoltage);
-		//row->maxVoltage = (changedThresholds[1] != NOT_SET ? changedThresholds[1] : row->maxVoltage);
-		//row->minCurrent = (changedThresholds[2] != NOT_SET ? changedThresholds[2] : row->minCurrent);
-		//row->maxCurrent = (changedThresholds[3] != NOT_SET ? changedThresholds[3] : row->maxCurrent);
-
-		//changedThresholds[0] = NOT_SET;
-		//changedThresholds[1] = NOT_SET;
-		//changedThresholds[2] = NOT_SET;
-		//changedThresholds[3] = NOT_SET;
-
-		//resaveFile(row->testwindow->getFileName(), cableTmp);
 
 		saveChangesButton->hide();
 	}
