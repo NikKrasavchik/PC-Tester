@@ -1,6 +1,6 @@
 #pragma once
 
-#define DEBUG
+//#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -282,7 +282,8 @@ namespace Warnings
 		TEST_ACCESS_FILE_SEL,
 		TEST_ACCESS_FREQUENCY_SEL,
 		TEST_ACCESS_ADAPTER_SEL,
-		ADAPTERS_CHANGED
+		ADAPTERS_CHANGED,
+		SIZE_CABLE_NUL
 	};
 }
 

@@ -11,26 +11,11 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* 
 	this->testType = testType;
 	this->can = can;
 	isFullTestEnabled = false;
-
-	nextCheckCable = new Cable(cables[0].getConnector(), cables[0].getPin());
+	if(cables.size() != 0)
+		nextCheckCable = new Cable(cables[0].getConnector(), cables[0].getPin());
 	statusFlags = new StandStatusFlags;
 	statusFlags->StatusConnected = false;
 	statusFlags->StatusTest = false;
-
-	//if (testType == WindowType::IN_TEST_MANUAL_STAND ||
-	//	testType == WindowType::OUT_TEST_MANUAL_STAND ||
-	//	testType == WindowType::FULL_TEST_MANUAL_STAND)
-	//{
-	//	th = new ManualStandTwoThread(cables, statusFlags);
-	//}
-	//else if (testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
-	//	testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
-	//	testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
-	//	testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
-	//	testType == WindowType::FULL_TEST_AUTO_STAND)
-	//{
-	//	th = new AutoStandTwoThread(statusFlags);
-	//}
 	
 	initUiMain();
 	initUiMainHeader();
@@ -432,27 +417,6 @@ void TestWindow::initIcons()
 void TestWindow::initConnections()
 {
 	QMetaObject::connectSlotsByName(this);
-		//connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
-	switch (testType)
-	{
-	case WindowType::IN_TEST_MANUAL_STAND:
-	case WindowType::OUT_TEST_MANUAL_STAND:
-	case WindowType::FULL_TEST_MANUAL_STAND:
-		//// manualTwoThread
-		//connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowStatusConnect_ManualTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_ManualTwoThread);
-		//connect((ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTestWindowChangeValue_ManualTwoThread, this, &TestWindow::msgToTestWindowChangeValue_ManualTwoThread);
-		break;
-	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-	case WindowType::IN_AUTO_TEST_AUTO_STAND:
-	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-	case WindowType::FULL_TEST_AUTO_STAND:
-		//// autoTwoThread
-		//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowStatusConnect_AutoTwoThread, this, &TestWindow::msgToTestWindowStatusConnect_AutoTwoThread);
-		//connect((AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTestWindowAfterTest_AutoTwoThread, this, &TestWindow::msgToTestWindowAfterTest_AutoTwoThread);
-		//connect(this, &TestWindow::msgToTwoThreadStartTest_AutoTwoThread, (AutoStandTwoThread*)th, &AutoStandTwoThread::msgToTwoThreadStartTest_AutoTwoThread);
-		break;
-	}
 
 }
 
@@ -1097,70 +1061,6 @@ static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProp
 			return currentRowNum;
 	return NOT_SET;
 }
-
-//void TestWindow::msgToTestWindowStatusConnect_ManualTwoThread(bool statusConnect)
-//{
-//	setStatusTableButtons(statusConnect);
-//	if (statusConnect)
-//	{
-//		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_CONNECTED, 0, 0);
-//		for (int i = 0; i < cableRows.size(); i++)
-//		{
-//			if (cableRows[i]->type == "DIGITAL" && cableRows[i]->direction == "OUT")
-//			{
-//				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
-//				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
-//			}
-//			else if (cableRows[i]->type == "PWM")
-//			{
-//				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
-//				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
-//			}
-//			else if (cableRows[i]->type == "VNH")
-//			{
-//				cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
-//				cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
-//				cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
-//				cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
-//			}
-//
-//		}
-//	}
-//	else
-//	{
-//		resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
-//
-//
-//	}
-//	statusFlags->StatusConnected = statusConnect;
-//	resetLanguage();
-//	resetTheme();
-//
-//}
-
-
-
-//void TestWindow::msgToTestWindowChangeValue_ManualTwoThread(int pad, int pin, int newValue)
-//{
-//	int currentColoumnNum = STATUS_NOT_SET;
-//	switch (testType)
-//	{
-//	case WindowType::IN_TEST_MANUAL_STAND:
-//		currentColoumnNum = STATUS_IN_TEST;
-//		break;
-//
-//	case WindowType::FULL_TEST_MANUAL_STAND:
-//		currentColoumnNum = STATUS_FULL_TEST;
-//		break;
-//
-//	default:
-//		// ERROR
-//		break;
-//	}
-//	int currentRowNum = determineCurrentRowNum(pad, pin, cableRows);
-//	QAbstractItemModel* model = mainTableWidget->model();
-//	model->setData(model->index(currentRowNum, currentColoumnNum), QString::number(newValue));
-//}
 
 void TestWindow::ProcAutoTest(int connector, int pin)
 {

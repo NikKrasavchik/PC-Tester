@@ -107,6 +107,9 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 		case Warnings::MainWindow::ADAPTERS_CHANGED:
 			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Изменился список активных адаптеров"));
 			break;
+		case Warnings::MainWindow::SIZE_CABLE_NUL:
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Кол-во тестируемых проводов равно нулю"));
+			break;
 
 		default:
 			break;
@@ -130,6 +133,10 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 
 		case Warnings::MainWindow::ADAPTERS_CHANGED:
 			QMessageBox::warning(this, QString("Warning"), QString("The list of active adapter adapters has changed"));
+			break;
+
+		case Warnings::MainWindow::SIZE_CABLE_NUL:
+			QMessageBox::warning(this, QString("Warning"), QString("The number of wires tested is zero"));
 			break;
 
 		default:

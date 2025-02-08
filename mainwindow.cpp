@@ -1335,7 +1335,12 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		on_checkAdaptersButton_clicked();
 		return;
 	}
-
+	
+	if (preparedCables.size() == 0)
+	{
+		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
+		return;
+	}
 
 	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected())
 	{
