@@ -18,7 +18,7 @@ MoreWindow::MoreWindow(TestTableRowProperties* row)
 	initBaseUi();
 	fillBaseTable();
 
-	QMetaObject::connectSlotsByName(this);
+	//QMetaObject::connectSlotsByName(this);
 }
 
 MoreWindow::~MoreWindow() {}
@@ -39,7 +39,6 @@ void MoreWindow::initBaseUi()
 	mainTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
 	mainTableWidget->horizontalHeader()->hide();
 	mainTableWidget->verticalHeader()->hide();
-	connect(mainTableWidget, &QTableWidget::cellChanged, this, &MoreWindow::on_mainTableWidget_cellChanged);
 	mainVLayout->addWidget(mainTableWidget);
 
 	// BottomLayout
@@ -175,6 +174,8 @@ MoreWindowOut::MoreWindowOut(TestTableRowProperties* row) : MoreWindow(row)
 	MoreWindow::setValues();
 	generateSigns();
 	setValues();
+
+	connect(mainTableWidget, &QTableWidget::cellChanged, this, &MoreWindow::on_mainTableWidget_cellChanged);
 }
 
 void MoreWindowOut::generateSigns()
@@ -190,6 +191,7 @@ void MoreWindowOut::generateSigns()
 	prepareItem(CELL_SIGN_BASE_TYPE, SPAN_VERTICAL_QUADRUPLE);
 	prepareItem(CELL_SIGN_BASE_NAME, SPAN_VERTICAL_QUADRUPLE);
 	prepareItem(CELL_SIGN_BASE_COMMENT, SPAN_VERTICAL_QUADRUPLE);
+	//mainTableWidget->item(CELL_SIGN_BASE_COMMENT)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable)
 
 	resetLanguage(OFFSET_NULL);
 	
@@ -267,6 +269,13 @@ void MoreWindowOut::setValues()
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxVoltage != -1 ? QString::number(row->thresholds[i].maxVoltage) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-"); // CELL_OUT_VALUES_MIN_VOLTAGE Должнго быть CELL_OUT_VALUES_MIN_CURRENT и наоборот и так везде !!!! 
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxCurrent != -1 ? QString::number(row->thresholds[i].maxCurrent) : "-");
+
+		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 	}
 }
 
@@ -280,6 +289,8 @@ MoreWindowIn::MoreWindowIn(TestTableRowProperties* row) : MoreWindow(row)
 	MoreWindow::setValues();
 	generateSigns();
 	setValues();
+
+	connect(mainTableWidget, &QTableWidget::cellChanged, this, &MoreWindow::on_mainTableWidget_cellChanged);
 }
 
 void MoreWindowIn::generateSigns()
@@ -347,6 +358,8 @@ MoreWindowInAnalog::MoreWindowInAnalog(TestTableRowProperties* row) : MoreWindow
 	MoreWindow::setValues();
 	generateSigns();
 	setValues();
+
+	connect(mainTableWidget, &QTableWidget::cellChanged, this, &MoreWindow::on_mainTableWidget_cellChanged);
 }
 
 void MoreWindowInAnalog::generateSigns()
@@ -411,10 +424,9 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 
 void MoreWindowInAnalog::setValues()
 {
-	mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (0 * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[0]->voltage) != "-1" ? QString::number(row->measureds[0]->voltage) : "-");
-	mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (1 * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[0]->current) != "-1" ? QString::number(row->measureds[0]->current) : "-");
 	for (int i = 0; i < row->thresholds.size(); i++)
 	{ 
+		mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[i]->voltage) != "-1" ? QString::number(row->measureds[i]->voltage) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
 	}
@@ -423,10 +435,83 @@ void MoreWindowInAnalog::setValues()
 
 void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 {
-	if (row == 4 && isAllInit)
+	int value = column - MEASUREMENT_COLUMN_POSITION;
+	int currentOffset;
+	if (this->row->direction == "OUT")
+		currentOffset = MEASURED_OFFSET_SEXTUPLE;
+	else if (this->row->typeInt == TypeCable::ANALOG_IN)
+		currentOffset = MEASURED_OFFSET_TRIPPLE;
+	else
+		currentOffset = MEASURED_OFFSET_DOUBLE;
+
+	int index = 0;
+	while (value - currentOffset >= 0)
 	{
-		saveChangesButton->show();
+		value -= currentOffset;
+		index++;
 	}
+	
+	QString text = mainTableWidget->item(row, column)->text();
+	if (this->row->direction == "OUT")
+	{
+		switch (value)
+		{
+		case 0:
+			this->row->measureds[index]->current = text.toFloat();
+			break;
+
+		case 1:
+			this->row->measureds[index]->voltage = text.toFloat();
+			break;
+
+		case 2:
+			this->row->thresholds[index].minCurrent = text.toFloat();
+			break;
+
+		case 3:
+			this->row->thresholds[index].maxCurrent = text.toFloat();
+			break;
+
+		case 4:
+			this->row->thresholds[index].minVoltage= text.toFloat();
+			break;
+
+		case 5:
+			this->row->thresholds[index].maxVoltage = text.toFloat();
+			break;
+		}
+	}
+	else if (this->row->typeInt == TypeCable::ANALOG_IN)
+	{
+		switch (value)
+		{
+		case 0:
+			this->row->measureds[0]->current = text.toFloat();
+			break;
+
+		case 1:
+			this->row->measureds[0]->voltage = text.toFloat();
+			break;
+		}
+	}
+	else
+	{
+		switch (value)
+		{
+		case 0:
+			this->row->measureds[index]->voltage = text.toFloat();
+			break;
+
+		case 1:
+			this->row->thresholds[index].minValue = text.toFloat();
+			break;
+
+		case 2:
+			this->row->thresholds[index].maxValue = text.toFloat();
+			break;
+		}
+	}
+	resaveFile();
 }
 
 void MoreWindow::on_commentTextEdit_textChanged()
@@ -504,10 +589,10 @@ void MoreWindow::on_saveChangesButton_clicked()
 	}
 }
 
-/*
-void MoreWindow::resaveFile(QString fileName, Cable newCable)
+
+void MoreWindow::resaveFile()
 {
-	QFile file(fileName);
+	QFile file("cables.cfg");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		//generateError(EMPTY_FILLING, Errors::Configurator::FILE_OPEN);
@@ -521,32 +606,6 @@ void MoreWindow::resaveFile(QString fileName, Cable newCable)
 		dataLine.remove("\n");
 		QStringList dataList = dataLine.split(";");
 
-		for (int i = CELL_MIN_CURRENT; i < dataList.size(); i++)
-			if (dataList[0].toInt() == (int)newCable.connector && dataList[1].toInt() == newCable.pin)
-			{
-				switch (i)
-				{
-				case CELL_MIN_CURRENT:
-					if (dataList[i].toInt() != newCable.minCurrent)
-						dataList[i] = QString::number(newCable.minCurrent);
-					break;
-
-				case CELL_MAX_CURRENT:
-					if (dataList[i].toInt() != newCable.maxCurrent)
-						dataList[i] = QString::number(newCable.maxCurrent);
-					break;
-
-				case CELL_MIN_VOLTAGE:
-					if (dataList[i].toInt() != newCable.minVoltage)
-						dataList[i] = QString::number(newCable.minVoltage);
-					break;
-
-				case CELL_MAX_VOLTAGE:
-					if (dataList[i].toInt() != newCable.maxVoltage)
-						dataList[i] = QString::number(newCable.maxVoltage);
-					break;
-				}
-			}
 
 		QString outputLine = "";
 		for (int i = 0; i < dataList.size(); i++)
@@ -555,11 +614,10 @@ void MoreWindow::resaveFile(QString fileName, Cable newCable)
 	}
 
 	std::ofstream fout;
-	fout.open(fileName.toStdString());
+	fout.open("cables.cfg");
 	fout << outputString.toStdString();
 	fout.close();
 }
-*/
 
 void MoreWindow::on_startTestButton_clicked()
 {

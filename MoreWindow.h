@@ -296,7 +296,7 @@ private:
 
 	void resizeEvent(QResizeEvent* event) { mainWidget->resize(geometry().width() - (PADDING_MAINWIDGET * 2), geometry().height() - PADDING_MAINWIDGET); };
 
-	//void resaveFile(QString fileName, Cable newCable);
+	void resaveFile();
 
 	QWidget* mainWidget;
 	QVBoxLayout* mainVLayout;
