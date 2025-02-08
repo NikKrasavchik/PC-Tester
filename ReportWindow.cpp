@@ -158,6 +158,19 @@ static int getMaxTypeOffset(std::vector<TestTableRowProperties*> cableRows)
 	return maxTypeOffset;
 }
 
+static void prepareItem(QTableWidget* tableWidget, int row, int column, int rowSpan, int columnSpan)
+{
+	QFont font;
+	font.setBold(true);
+	font.setPointSizeF(10);
+
+	tableWidget->setSpan(row, column, rowSpan, columnSpan);
+	tableWidget->model()->setData(tableWidget->model()->index(row, column), "");
+	tableWidget->item(row, column)->setTextAlignment(Qt::AlignCenter);
+	tableWidget->item(row, column)->setFlags(Qt::ItemIsSelectable);
+	tableWidget->item(row, column)->setFont(font);
+}
+
 void ReportWindow::generateTable()
 {
 	generateTableBaseSign();
@@ -176,23 +189,34 @@ void ReportWindow::generateTable()
 
 	for (int type = 0; type < TYPE_COUNT; type++)
 	{
+		if (!typedCableRows[type].size())
+			continue;
+
+		int previousRowCount = tableWidget->rowCount();
 		int maxTypeOffset = getMaxTypeOffset(typedCableRows[type]);
 		generateTableSign((TypeCable)type, maxTypeOffset);
 		fillTable((TypeCable)type, typedCableRows[type]);
+		int emptySpanRow = tableWidget->rowCount() - previousRowCount;
+		int emptySpanColumn = COLUMN_COUNT_BASE_TABLE - 1;
+		switch ((TypeCable)type)
+		{
+		case TypeCable::DIG_IN:
+		case TypeCable::HALL_IN:
+			emptySpanColumn += MEASUREMENT_OFFSET_IN * MEASUREMENT_OFFSET_DOUBLE;
+			break;
+
+		case TypeCable::ANALOG_IN:
+			emptySpanColumn += MEASUREMENT_OFFSET_IN_ANALOG * maxTypeOffset;
+			break;
+
+		case TypeCable::DIG_OUT:
+		case TypeCable::PWM_OUT:
+		case TypeCable::VNH_OUT:
+			emptySpanColumn += MEASUREMENT_OFFSET_OUT * maxTypeOffset;
+			break;
+		}
+		prepareItem(tableWidget, previousRowCount, emptySpanColumn, emptySpanRow, tableWidget->columnCount() - emptySpanColumn - 1);
 	}
-}
-
-static void prepareItem(QTableWidget* tableWidget, int row, int column, int rowSpan, int columnSpan)
-{
-	QFont font;
-	font.setBold(true);
-	font.setPointSizeF(10);
-
-	tableWidget->setSpan(row, column, rowSpan, columnSpan);
-	tableWidget->model()->setData(tableWidget->model()->index(row, column), "");
-	tableWidget->item(row, column)->setTextAlignment(Qt::AlignCenter);
-	tableWidget->item(row, column)->setFlags(Qt::ItemIsSelectable);
-	tableWidget->item(row, column)->setFont(font);
 }
 
 void ReportWindow::generateTableBaseSign()
@@ -280,7 +304,7 @@ static void generateTableSignOut(QTableWidget* tableWidget, int maxTypeOffset)
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString(QString::fromLocal8Bit("Измерение ") + QString::number(i)));
+			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString(QString::fromLocal8Bit("Измерение ") + QString::number(i + 1)));
 			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString(QString::fromLocal8Bit("Измеренное значение")));
 			tableWidget->item(indRowMeasuredVoltage, indColumnMeasuredValuesVoltage)->setText(QString(QString::fromLocal8Bit("U, В")));
 			tableWidget->item(indRowMeasuredCurrent, indColumnMeasuredValuesCurrent)->setText(QString(QString::fromLocal8Bit("I, А")));
@@ -294,7 +318,7 @@ static void generateTableSignOut(QTableWidget* tableWidget, int maxTypeOffset)
 			break;
 
 		case ENGLISH_LANG:
-			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Measured ") + QString::number(i));
+			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Measured ") + QString::number(i + 1));
 			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString("Measured values"));
 			tableWidget->item(indRowMeasuredVoltage, indColumnMeasuredValuesVoltage)->setText(QString("U, V"));
 			tableWidget->item(indRowMeasuredCurrent, indColumnMeasuredValuesCurrent)->setText(QString("I, А"));
@@ -327,15 +351,15 @@ static void generateTableSignIn(QTableWidget* tableWidget)
 	int indRowMeasured = tableWidget->rowCount();
 
 	int indColumnMeasured1 = MEASUREMENT_COLUMN_POSITION;
-	int indColumnMeasured2 = MEASUREMENT_COLUMN_POSITION + 1;
+	int indColumnMeasured2 = MEASUREMENT_COLUMN_POSITION + 2;
 
 	tableWidget->insertRow(tableWidget->rowCount());
 
 	tableWidget->setSpan(indRowMeasured, 0, SPAN_TYPE_IN);
 	tableWidget->setSpan(indRowMeasured, tableWidget->columnCount() - 1, SPAN_TYPE_COMMENT_IN);
 
-	prepareItem(tableWidget, indRowMeasured, indColumnMeasured1, SPAN_NONE);
-	prepareItem(tableWidget, indRowMeasured, indColumnMeasured2, SPAN_NONE);
+	prepareItem(tableWidget, indRowMeasured, indColumnMeasured1, SPAN_HORIZONTAL_DOUBLE);
+	prepareItem(tableWidget, indRowMeasured, indColumnMeasured2, SPAN_HORIZONTAL_DOUBLE);
 
 	switch (viewWindowState->appLanguage)
 	{
@@ -382,7 +406,7 @@ static void generateTableSignInAnalog(QTableWidget* tableWidget, int maxTypeOffs
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString(QString::fromLocal8Bit("Измерение ") + QString::number(i)));
+			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString(QString::fromLocal8Bit("Измерение ") + QString::number(i + 1)));
 			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString(QString::fromLocal8Bit("Измеренное значение")));
 			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString(QString::fromLocal8Bit("Пороги")));
 			tableWidget->item(indRowThresholdsMin, indColumnThresholdsMin)->setText(QString(QString::fromLocal8Bit("Мин")));
@@ -390,7 +414,7 @@ static void generateTableSignInAnalog(QTableWidget* tableWidget, int maxTypeOffs
 			break;
 
 		case ENGLISH_LANG:
-			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Measured ") + QString::number(i));
+			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Measured ") + QString::number(i + 1));
 			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString("Measured values"));
 			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString("Thresholds"));
 			tableWidget->item(indRowThresholdsMin, indColumnThresholdsMin)->setText(QString("Min"));
@@ -500,10 +524,10 @@ static void fillTableIn(QTableWidget* tableWidget, std::vector<TestTableRowPrope
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
 
 		int indColumnMeasuredValue1 = MEASUREMENT_COLUMN_POSITION;
-		int indColumnMeasuredValue2 = MEASUREMENT_COLUMN_POSITION + 1;
+		int indColumnMeasuredValue2 = MEASUREMENT_COLUMN_POSITION + 2;
 
-		prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValue1, SPAN_NONE);
-		prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValue2, SPAN_NONE);
+		prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValue1, SPAN_HORIZONTAL_DOUBLE);
+		prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValue2, SPAN_HORIZONTAL_DOUBLE);
 
 		tableWidget->item(indCurrentRow, indColumnMeasuredValue1)->setText(QString::number(cableRows[i]->measureds[0]->current) != "-1" ? QString::number(cableRows[i]->measureds[0]->current) : "-");
 		tableWidget->item(indCurrentRow, indColumnMeasuredValue2)->setText(QString::number(cableRows[i]->measureds[0]->voltage) != "-1" ? QString::number(cableRows[i]->measureds[0]->voltage) : "-");
@@ -540,7 +564,7 @@ static void fillTableInAnalog(QTableWidget* tableWidget, std::vector<TestTableRo
 			prepareItem(tableWidget, indCurrentRow, indColumnThresholdsMin, SPAN_NONE);
 			prepareItem(tableWidget, indCurrentRow, indColumnThresholdsMax, SPAN_NONE);
 
-			tableWidget->item(indCurrentRow, indColumnMeasuredValues)->setText(cableRows[i]->measureds[j]->current != -1 ? QString::number(cableRows[i]->measureds[j]->current) : "-");
+			tableWidget->item(indCurrentRow, indColumnMeasuredValues)->setText(cableRows[i]->measureds[j]->voltage != -1 ? QString::number(cableRows[i]->measureds[j]->voltage) : "-");
 			tableWidget->item(indCurrentRow, indColumnThresholdsMin)->setText(cableRows[i]->thresholds[j].minValue != -1 ? QString::number(cableRows[i]->thresholds[j].minValue) : "-");
 			tableWidget->item(indCurrentRow, indColumnThresholdsMax)->setText(cableRows[i]->thresholds[j].maxValue != -1 ? QString::number(cableRows[i]->thresholds[j].maxValue) : "-");
 
