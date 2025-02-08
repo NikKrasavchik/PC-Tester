@@ -109,9 +109,6 @@
     <ClCompile Include="Cable.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="twoThread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Xlsx\xlsxabstractooxmlfile.cpp">
       <Filter>Xlsx</Filter>
     </ClCompile>
@@ -223,9 +220,6 @@
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="can.h">
-      <Filter>Header Files</Filter>
-    </QtMoc>
-    <QtMoc Include="twoThread.h">
       <Filter>Header Files</Filter>
     </QtMoc>
     <QtMoc Include="Xlsx\xlsxdocument.h">

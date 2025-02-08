@@ -1,4 +1,5 @@
 #pragma once
+#include "ui_ReportWindow.h"
 
 #include <QDialog>
 #include <QFormLayout>
@@ -9,7 +10,6 @@
 #include <QString>
 #include <QCheckBox>
 
-#include "ui_ReportWindow.h"
 #include "Components.h"
 #include "TestWindow.h"
 
@@ -88,6 +88,7 @@
 #define CELL_SIGN_BASE_COMMENT				IND_ROW_BASE_SIGN_COMMENT,		IND_COLUMN_BASE_COMMENT
 
 class TestTableRowProperties;
+class TestWindow;
 class ReportWindow : public QDialog
 {
 	Q_OBJECT
@@ -122,6 +123,9 @@ private:
 	void resetTheme();
 
 	void resizeEvent(QResizeEvent* event);
+
+public slots:
+	void on_saveButton_clicked();
 };
 
 

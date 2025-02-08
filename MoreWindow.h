@@ -1,4 +1,5 @@
 #pragma once
+#include "ui_MoreWindow.h"
 
 #include <QDialog>
 #include <QFormLayout>
@@ -11,8 +12,6 @@
 #include <QFileDialog>
 #include <fstream>
 
-#include "ui_MoreWindow.h"
-#include "Components.h"
 #include "TestWindow.h"
 
 #define START_MOREWINDOW_WIDTH			900
@@ -255,6 +254,7 @@
 #define WINDOW_MEASURED_WIDTH	300
 
 class TestTableRowProperties;
+class TestWindow;
 
 class MoreWindow : public QDialog
 {

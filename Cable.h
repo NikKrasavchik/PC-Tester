@@ -4,6 +4,7 @@
 
 #include "Components.h"
 
+
 struct Thresholds
 {
 	double minCurrent;

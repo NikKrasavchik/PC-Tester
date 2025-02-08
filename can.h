@@ -11,7 +11,6 @@
 #include "qstring.h"
 #include "canlib.h"
 #include "chai.h"
-//#include "Components.h"
 #include "Cable.h"
 
 #define ID_CAN_AUTOSTAND 0x51
