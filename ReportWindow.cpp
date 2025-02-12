@@ -694,6 +694,11 @@ void genereateHeaderTable(Document& xlsx, int maxOffset)
 	xlsx.mergeCells(range);
 
 }
+
+void ReportWindow::on_commentTextEdit_textChanged()
+{
+
+}
 void ReportWindow::on_saveButton_clicked()
 {
 	int maxOffset = getMaxColumnOffset(cableRows);
