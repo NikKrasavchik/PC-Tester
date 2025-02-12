@@ -102,7 +102,7 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
-	TestTableRowProperties(TestWindow* testwindow) { this->testwindow = testwindow; };
+	TestTableRowProperties(TestWindow* testwindow) {  };
 
 	int id;
 	int canId;
@@ -126,7 +126,7 @@ public:
 	int stateDigital;
 	int statePWM;
 
-	TestWindow* testwindow;
+	//TestWindow* testwindow;
 
 	TestTableRowProperties* getThis() { return this; }; // ”жасное название. Ќе вникал, но если это родительский какой то, то назови что то по типу getParent
 	void generateInteractionButtons(WindowType testType, int type);

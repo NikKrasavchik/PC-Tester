@@ -63,8 +63,8 @@ struct Measureds
 
 	Measureds()
 	{
-		current = NOT_SET;
 		voltage = NOT_SET;
+		current = NOT_SET;
 	}
 
 	Measureds(double voltage, double current)
@@ -75,8 +75,8 @@ struct Measureds
 
 	Measureds(const Measureds& measureds)
 	{
-		this->current = measureds.current;
 		this->voltage = measureds.voltage;
+		this->current = measureds.current;
 	}
 
 };

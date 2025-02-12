@@ -1,5 +1,4 @@
 #pragma once
-
 #define DEBUG
 
 #define MIN_SCREEN_WIDTH    800

@@ -1,6 +1,5 @@
 #pragma once
 #include "ui_ReportWindow.h"
-
 #include <QDialog>
 #include <QFormLayout>
 #include <qtablewidget.h>
@@ -8,10 +7,12 @@
 #include <QHeaderView>
 #include <qmessagebox.h>
 #include <QString>
+#include <QDateTime>
 #include <QCheckBox>
 
 #include "Components.h"
 #include "TestWindow.h"
+#include "Xlsx/xlsxdocument.h"
 
 #define WINDOW_MIN_SIZE_WIDTH		1000
 #define WINDOW_MIN_SIZE_HEIGHT		250
@@ -87,6 +88,10 @@
 #define CELL_SIGN_BASE_EMPTY				IND_ROW_BASE_SIGN_EMPTY,		IND_COLUMN_BASE_EMPTY
 #define CELL_SIGN_BASE_COMMENT				IND_ROW_BASE_SIGN_COMMENT,		IND_COLUMN_BASE_COMMENT
 
+// Save File
+#define HEIGHT_HEADERFILE 7
+#define START_ROW_TABLE 9
+
 class TestTableRowProperties;
 class TestWindow;
 class ReportWindow : public QDialog
@@ -94,7 +99,7 @@ class ReportWindow : public QDialog
 	Q_OBJECT
 
 public:
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName);
 	~ReportWindow();
 
 private:
@@ -107,6 +112,8 @@ private:
 	QSpacerItem* footerLeftSpacer;
 
 	std::vector<TestTableRowProperties*> cableRows;
+	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
+	QString testerName;
 
 	void initUi();
 	void initUiTable();
@@ -122,6 +129,8 @@ private:
 	void resetTheme();
 
 	void resizeEvent(QResizeEvent* event);
+
+	// save file
 
 public slots:
 	void on_saveButton_clicked();

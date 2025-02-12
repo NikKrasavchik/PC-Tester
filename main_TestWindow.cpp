@@ -551,7 +551,7 @@ void TestWindow::on_switchLanguageButton_clicked()
 
 void TestWindow::on_reportButton_clicked()
 {
-	ReportWindow* reportWindow = new ReportWindow(cableRows);
+	ReportWindow* reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text());
 
 	WindowFrame w(WindowType::REPORTWINDOW, nullptr, reportWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
@@ -1580,7 +1580,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 		break;
 
 	default:
-		QMessageBox::warning(testwindow, "Error","Error");
+		//QMessageBox::warning(testwindow, "Error","Error");
 		break;
 	}
 		

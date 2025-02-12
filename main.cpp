@@ -4,14 +4,11 @@
 #include <QProxyStyle>
 #include <QStyleFactory>
 #include <QFile>
-#include "Xlsx/xlsxdocument.h"
 ViewWindowState* viewWindowState;
+
 
 int main(int argc, char* argv[])
 {
-
-	QXlsx::Document xlsx;
-	xlsx.write("A1", "123 Qt!");
 
 	viewWindowState = new ViewWindowState;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
