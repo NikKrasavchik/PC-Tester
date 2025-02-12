@@ -95,6 +95,18 @@ void MoreWindow::fillBaseTable()
 	prepareItem(CELL_VALUE_BASE_NAME,		SPAN_NONE);
 	prepareItem(CELL_VALUE_BASE_COMMENT,	SPAN_NONE);
 
+	commentTextEdit = new QTextEdit(mainTableWidget);
+	commentTextEdit->setText(row->comment);
+	connect(commentTextEdit, &QTextEdit::textChanged, this, &MoreWindow::on_commentTextEdit_textChanged);
+
+	QWidget* commentWidget = new QWidget();
+	QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
+	commentHLayout->addWidget(commentTextEdit);
+	commentHLayout->setAlignment(Qt::AlignCenter);
+	commentHLayout->setContentsMargins(0, 0, 0, 0);
+	commentWidget->setLayout(commentHLayout);
+	mainTableWidget->setCellWidget(CELL_VALUE_BASE_COMMENT, commentWidget);
+
 	resetLanguage(OFFSET_NULL);
 
 	mainTableWidget->setColumnWidth(IND_COLUMN_BASE_CONNECTOR, 65);
@@ -123,7 +135,8 @@ void MoreWindow::prepareItem(int row, int column, int rowSpan, int columnSpan)
 	font.setBold(true);
 	font.setPointSizeF(10);
 
-	mainTableWidget->setSpan(row, column, rowSpan, columnSpan);
+	if (!(rowSpan == 1 && columnSpan == 1))
+		mainTableWidget->setSpan(row, column, rowSpan, columnSpan);
 	mainTableWidget->model()->setData(mainTableWidget->model()->index(row, column), "");
 	mainTableWidget->item(row, column)->setTextAlignment(Qt::AlignCenter);
 	mainTableWidget->item(row, column)->setFlags(Qt::ItemIsSelectable);
