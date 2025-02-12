@@ -176,6 +176,7 @@ MoreWindowOut::MoreWindowOut(TestTableRowProperties* row) : MoreWindow(row)
 	setValues();
 
 	connect(mainTableWidget, &QTableWidget::cellChanged, this, &MoreWindow::on_mainTableWidget_cellChanged);
+	isAllInit = true;
 }
 
 void MoreWindowOut::generateSigns()
@@ -288,6 +289,7 @@ MoreWindowIn::MoreWindowIn(TestTableRowProperties* row) : MoreWindow(row)
 	setValues();
 
 	connect(mainTableWidget, &QTableWidget::cellChanged, this, &MoreWindow::on_mainTableWidget_cellChanged);
+	isAllInit = true;
 }
 
 void MoreWindowIn::generateSigns()
@@ -357,6 +359,7 @@ MoreWindowInAnalog::MoreWindowInAnalog(TestTableRowProperties* row) : MoreWindow
 	setValues();
 
 	connect(mainTableWidget, &QTableWidget::cellChanged, this, &MoreWindow::on_mainTableWidget_cellChanged);
+	isAllInit = true;
 }
 
 void MoreWindowInAnalog::generateSigns()
@@ -435,58 +438,61 @@ void MoreWindowInAnalog::setValues()
 
 void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 {
-	int value = column - MEASUREMENT_COLUMN_POSITION;
-	int currentOffset;
-	if (this->row->direction == "OUT")
-		currentOffset = MEASURED_OFFSET_SEXTUPLE;
-	else if (this->row->typeInt == TypeCable::ANALOG_IN)
-		currentOffset = MEASURED_OFFSET_TRIPPLE;
-	else
-		currentOffset = MEASURED_OFFSET_DOUBLE;
+	if (isAllInit)
+	{
+		int value = column - MEASUREMENT_COLUMN_POSITION;
+		int currentOffset;
+		if (this->row->direction == "OUT")
+			currentOffset = MEASURED_OFFSET_SEXTUPLE;
+		else if (this->row->typeInt == TypeCable::ANALOG_IN)
+			currentOffset = MEASURED_OFFSET_TRIPPLE;
+		else
+			currentOffset = MEASURED_OFFSET_DOUBLE;
 
-	int index = 0;
-	while (value - currentOffset >= 0)
-	{
-		value -= currentOffset;
-		index++;
-	}
-	
-	QString text = mainTableWidget->item(row, column)->text();
-	if (this->row->direction == "OUT")
-	{
-		switch (value)
+		int index = 0;
+		while (value - currentOffset >= 0)
 		{
-		case 2:
-			this->row->thresholds[index].minVoltage = text.toFloat();
-			break;
-
-		case 3:
-			this->row->thresholds[index].maxVoltage = text.toFloat();
-			break;
-
-		case 4:
-			this->row->thresholds[index].minCurrent = text.toFloat();
-			break;
-
-		case 5:
-			this->row->thresholds[index].maxCurrent = text.toFloat();
-			break;
+			value -= currentOffset;
+			index++;
 		}
-	}
-	else if (this->row->typeInt == TypeCable::ANALOG_IN)
-	{
-		switch (value)
+
+		QString text = mainTableWidget->item(row, column)->text();
+		if (this->row->direction == "OUT")
 		{
-		case 1:
-			this->row->thresholds[index].minValue = text.toFloat();
-			break;
+			switch (value)
+			{
+			case 2:
+				this->row->thresholds[index].minVoltage = text.toFloat();
+				break;
 
-		case 2:
-			this->row->thresholds[index].maxValue = text.toFloat();
-			break;
+			case 3:
+				this->row->thresholds[index].maxVoltage = text.toFloat();
+				break;
+
+			case 4:
+				this->row->thresholds[index].minCurrent = text.toFloat();
+				break;
+
+			case 5:
+				this->row->thresholds[index].maxCurrent = text.toFloat();
+				break;
+			}
 		}
+		else if (this->row->typeInt == TypeCable::ANALOG_IN)
+		{
+			switch (value)
+			{
+			case 1:
+				this->row->thresholds[index].minValue = text.toFloat();
+				break;
+
+			case 2:
+				this->row->thresholds[index].maxValue = text.toFloat();
+				break;
+			}
+		}
+		resaveFile();
 	}
-	resaveFile();
 }
 
 void MoreWindow::on_commentTextEdit_textChanged()
