@@ -601,7 +601,7 @@ void MoreWindow::resaveFile()
 
 		for (int i = 0; i < dataList.size(); i++)
 			outputString += dataList[i] + ";";
-		outputString += '\n';
+		outputString[outputString.size() - 1] = '\n';
 	}
 	outputString.remove(outputString.size() - 1, 1);
 	fin.close();

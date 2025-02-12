@@ -1,4 +1,5 @@
 #pragma once
+#include "ui_TestWindow.h"
 
 #include <QDialog>
 #include <QFormLayout>
@@ -11,11 +12,8 @@
 #include <QHeaderView>
 #include <qmessagebox.h>
 
-#include "ui_TestWindow.h"
 #include "WindowFrame.h"
-#include "Components.h"
 #include "can.h"
-#include "twoThread.h"
 #include "MoreWindow.h"
 #include "ReportWindow.h"
 
@@ -97,6 +95,8 @@ struct CheckButton
 	QPushButton* checkButton;
 };
 
+class MoreWindow;
+class ReportWindow;
 class TestTableRowProperties : public QObject
 {
 	Q_OBJECT

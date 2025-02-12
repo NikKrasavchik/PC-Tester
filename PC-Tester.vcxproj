@@ -134,7 +134,6 @@
     </ClCompile>
     <ClCompile Include="StyleSheets.cpp" />
     <ClCompile Include="TestWindowProc.cpp" />
-    <ClCompile Include="twoThread.cpp" />
     <ClCompile Include="WindowFrame.cpp" />
     <ClCompile Include="Xlsx\xlsxabstractooxmlfile.cpp" />
     <ClCompile Include="Xlsx\xlsxabstractsheet.cpp" />
@@ -227,7 +226,6 @@
     <ClInclude Include="Xlsx\xlsxzipreader_p.h" />
     <ClInclude Include="Xlsx\xlsxzipwriter_p.h" />
     <QtMoc Include="Xlsx\xlsxdocument.h" />
-    <QtMoc Include="twoThread.h" />
     <QtMoc Include="can.h" />
     <ClInclude Include="Components.h" />
     <QtMoc Include="MoreWindow.h" />

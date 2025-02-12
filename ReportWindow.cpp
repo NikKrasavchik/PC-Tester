@@ -597,7 +597,10 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 }
 
 
+void ReportWindow::on_saveButton_clicked()
+{
 
+}
 
 
 
