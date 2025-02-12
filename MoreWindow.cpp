@@ -270,8 +270,8 @@ void MoreWindowOut::setValues()
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-"); // CELL_OUT_VALUES_MIN_VOLTAGE Должнго быть CELL_OUT_VALUES_MIN_CURRENT и наоборот и так везде !!!! 
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxCurrent != -1 ? QString::number(row->thresholds[i].maxCurrent) : "-");
 
-		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
-		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		//mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		//mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
@@ -310,6 +310,9 @@ void MoreWindowIn::generateSigns()
 		prepareItem(CELL_IN_VALUE_MEASURED_1, SPAN_NONE);
 		prepareItem(CELL_IN_VALUE_MEASURED_2, SPAN_NONE);
 
+		//mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		//mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		
 		resetBlockLanguage(row->thresholds.size() - i);
 	}
 }
@@ -429,6 +432,10 @@ void MoreWindowInAnalog::setValues()
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[i]->voltage) != "-1" ? QString::number(row->measureds[i]->voltage) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
+
+		//mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 	}
 }
 
@@ -456,28 +463,20 @@ void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 	{
 		switch (value)
 		{
-		case 0:
-			this->row->measureds[index]->current = text.toFloat();
-			break;
-
-		case 1:
-			this->row->measureds[index]->voltage = text.toFloat();
-			break;
-
 		case 2:
-			this->row->thresholds[index].minCurrent = text.toFloat();
+			this->row->thresholds[index].minVoltage = text.toFloat();
 			break;
 
 		case 3:
-			this->row->thresholds[index].maxCurrent = text.toFloat();
+			this->row->thresholds[index].maxVoltage = text.toFloat();
 			break;
 
 		case 4:
-			this->row->thresholds[index].minVoltage= text.toFloat();
+			this->row->thresholds[index].minCurrent = text.toFloat();
 			break;
 
 		case 5:
-			this->row->thresholds[index].maxVoltage = text.toFloat();
+			this->row->thresholds[index].maxCurrent = text.toFloat();
 			break;
 		}
 	}
@@ -485,23 +484,6 @@ void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 	{
 		switch (value)
 		{
-		case 0:
-			this->row->measureds[0]->current = text.toFloat();
-			break;
-
-		case 1:
-			this->row->measureds[0]->voltage = text.toFloat();
-			break;
-		}
-	}
-	else
-	{
-		switch (value)
-		{
-		case 0:
-			this->row->measureds[index]->voltage = text.toFloat();
-			break;
-
 		case 1:
 			this->row->thresholds[index].minValue = text.toFloat();
 			break;
@@ -577,26 +559,52 @@ void MoreWindow::on_saveChangesButton_clicked()
 
 void MoreWindow::resaveFile()
 {
-	QFile file("cables.cfg");
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	QFile fin("cables.cfg");
+	if (!fin.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
 		//generateError(EMPTY_FILLING, Errors::Configurator::FILE_OPEN);
 		return;
 	}
 
 	QString outputString = "";
-	while (!file.atEnd())
+	while (!fin.atEnd())
 	{
-		QString dataLine = file.readLine();
+		QString dataLine = fin.readLine();
 		dataLine.remove("\n");
 		QStringList dataList = dataLine.split(";");
 
+		if (dataList[0].toInt() == (int)row->connectorInt && dataList[1] == row->pin)
+		{
+			switch (row->typeInt)
+			{
+			case TypeCable::DIG_OUT:
+			case TypeCable::PWM_OUT:
+			case TypeCable::VNH_OUT:
+				for (int i = 0; i < row->thresholds.size(); i++)
+				{
+					dataList[FILE_MEASUREMENT_OFFSET + i * 4] = QString::number(row->thresholds[i].minVoltage);
+					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 1] = QString::number(row->thresholds[i].maxVoltage);
+					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 2] = QString::number(row->thresholds[i].minCurrent);
+					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 3] = QString::number(row->thresholds[i].maxCurrent);
+				}
+				break;
 
-		QString outputLine = "";
+			case TypeCable::ANALOG_IN:
+				for (int i = 0; i < row->thresholds.size(); i++)
+				{
+					dataList[FILE_MEASUREMENT_OFFSET + i * 2] = QString::number(row->thresholds[i].minValue);
+					dataList[FILE_MEASUREMENT_OFFSET + i * 2 + 1] = QString::number(row->thresholds[i].maxValue);
+				}
+				break;
+			}
+		}
+
 		for (int i = 0; i < dataList.size(); i++)
-			outputLine += dataList[i] + ";";
-		outputString += outputLine.left(outputLine.lastIndexOf(";")) + "\n";
+			outputString += dataList[i] + ";";
+		outputString += '\n';
 	}
+	outputString.remove(outputString.size() - 1, 1);
+	fin.close();
 
 	std::ofstream fout;
 	fout.open("cables.cfg");
