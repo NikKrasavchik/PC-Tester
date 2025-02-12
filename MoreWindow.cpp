@@ -18,7 +18,7 @@ MoreWindow::MoreWindow(TestTableRowProperties* row)
 	initBaseUi();
 	fillBaseTable();
 
-	//QMetaObject::connectSlotsByName(this);
+	QMetaObject::connectSlotsByName(this);
 }
 
 MoreWindow::~MoreWindow() {}
@@ -191,7 +191,6 @@ void MoreWindowOut::generateSigns()
 	prepareItem(CELL_SIGN_BASE_TYPE, SPAN_VERTICAL_QUADRUPLE);
 	prepareItem(CELL_SIGN_BASE_NAME, SPAN_VERTICAL_QUADRUPLE);
 	prepareItem(CELL_SIGN_BASE_COMMENT, SPAN_VERTICAL_QUADRUPLE);
-	//mainTableWidget->item(CELL_SIGN_BASE_COMMENT)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable)
 
 	resetLanguage(OFFSET_NULL);
 	
@@ -270,8 +269,6 @@ void MoreWindowOut::setValues()
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-"); // CELL_OUT_VALUES_MIN_VOLTAGE Должнго быть CELL_OUT_VALUES_MIN_CURRENT и наоборот и так везде !!!! 
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxCurrent != -1 ? QString::number(row->thresholds[i].maxCurrent) : "-");
 
-		//mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
-		//mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
@@ -309,9 +306,6 @@ void MoreWindowIn::generateSigns()
 		prepareItem(CELL_IN_SIGN_MEASURED_2, SPAN_NONE);
 		prepareItem(CELL_IN_VALUE_MEASURED_1, SPAN_NONE);
 		prepareItem(CELL_IN_VALUE_MEASURED_2, SPAN_NONE);
-
-		//mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
-		//mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		
 		resetBlockLanguage(row->thresholds.size() - i);
 	}
@@ -433,7 +427,6 @@ void MoreWindowInAnalog::setValues()
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
 
-		//mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 	}
@@ -500,62 +493,6 @@ void MoreWindow::on_commentTextEdit_textChanged()
 {
 	row->comment = commentTextEdit->toPlainText();
 }
-
-void MoreWindow::on_saveChangesButton_clicked()
-{
-	QMessageBox msgBox;
-	msgBox.setStandardButtons(QMessageBox::Save | QMessageBox::Cancel);
-	msgBox.setDefaultButton(QMessageBox::Save);
-	msgBox.setIcon(QMessageBox::Question);
-	msgBox.setMinimumSize(200, 100);
-	switch (viewWindowState->appLanguage)
-	{
-	case RUSSIAN_LANG:
-		msgBox.setText(QString::fromLocal8Bit("Сохранить изменения?"));
-		msgBox.setInformativeText(QString::fromLocal8Bit("Изменения будут внесены в конфигурационный файл."));
-		break;
-	case ENGLISH_LANG:
-
-		break;
-	}
-	if (msgBox.exec() == QMessageBox::Save)
-	{
-		Cable cableTmp;
-
-		cableTmp.setId(row->id);
-		cableTmp.setConnector(row->connectorInt);
-		cableTmp.setPin(row->pin.toInt());
-
-		if (row->direction == "OUT")
-			cableTmp.setDirection(DIRECTION_OUT);
-		else if (row->direction == "IN")
-			cableTmp.setDirection(DIRECTION_IN);
-		else
-			cableTmp.setDirection(DIRECTION_NOT_SET);
-
-		if (row->typeStr == "DIGITAL")
-			cableTmp.setType(TYPE_DIGITAL);
-		else if (row->typeStr == "ANALOG")
-			cableTmp.setType(TYPE_ANALOG);
-		else if (row->typeStr == "HALL")
-			cableTmp.setType(TYPE_HALL);
-		else if (row->typeStr == "PWM")
-			cableTmp.setType(TYPE_PWM);
-		else if (row->typeStr == "VNH")
-			cableTmp.setType(TYPE_VNH);
-		else
-			cableTmp.setType(TYPE_NOT_SET);
-
-		cableTmp.setCanId(row->canId);
-		cableTmp.setBit(row->bit);
-		cableTmp.setName(row->name);
-		cableTmp.setComponent(row->component);
-
-
-		saveChangesButton->hide();
-	}
-}
-
 
 void MoreWindow::resaveFile()
 {

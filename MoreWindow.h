@@ -305,11 +305,11 @@ private:
 	QHBoxLayout* bottomHLayout;
 	QSpacerItem* bottomSpacer;
 	QPushButton* startTestButton;
+	QPushButton* saveButton;
 
 public slots:
 	void on_mainTableWidget_cellChanged(int row, int column);
 	void on_commentTextEdit_textChanged();
-	void on_saveChangesButton_clicked();
 	void on_startTestButton_clicked();
 };
 

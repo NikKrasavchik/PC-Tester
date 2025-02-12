@@ -12,7 +12,6 @@ int main(int argc, char* argv[])
 
 	QXlsx::Document xlsx;
 	xlsx.write("A1", "123 Qt!");
-	xlsx.saveAs("123.xlsx");
 
 	viewWindowState = new ViewWindowState;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
