@@ -23,6 +23,8 @@
 **
 ****************************************************************************/
 
+// https://github.com/dbzhang800/QtXlsxWriter
+
 #ifndef QXLSX_XLSXDOCUMENT_H
 #define QXLSX_XLSXDOCUMENT_H
 
