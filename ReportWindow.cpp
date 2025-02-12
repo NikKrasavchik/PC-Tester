@@ -160,8 +160,9 @@ static void prepareItem(QTableWidget* tableWidget, int row, int column, int rowS
 	QFont font;
 	font.setBold(true);
 	font.setPointSizeF(10);
-
-	tableWidget->setSpan(row, column, rowSpan, columnSpan);
+	
+	if (!(rowSpan == 1 && columnSpan == 1))
+		tableWidget->setSpan(row, column, rowSpan, columnSpan);
 	tableWidget->model()->setData(tableWidget->model()->index(row, column), "");
 	tableWidget->item(row, column)->setTextAlignment(Qt::AlignCenter);
 	tableWidget->item(row, column)->setFlags(Qt::ItemIsSelectable);
@@ -180,7 +181,7 @@ void ReportWindow::generateTable()
 	}
 	tableWidget->setSpan(IND_ROW_BASE_SIGN, MEASUREMENT_COLUMN_POSITION, 1, maxColumnOffset);
 
-	std::vector<std::vector<TestTableRowProperties*>> typedCableRows(TYPE_COUNT);
+	typedCableRows.resize(TYPE_COUNT);
 	for (int i = 0; i < cableRows.size(); i++)
 		typedCableRows[(int)cableRows[i]->typeInt].push_back(cableRows[i]);
 
@@ -191,10 +192,13 @@ void ReportWindow::generateTable()
 
 		int previousRowCount = tableWidget->rowCount();
 		int maxTypeOffset = getMaxTypeOffset(typedCableRows[type]);
+
 		generateTableSign((TypeCable)type, maxTypeOffset);
 		fillTable((TypeCable)type, typedCableRows[type]);
+
 		int emptySpanRow = tableWidget->rowCount() - previousRowCount;
 		int emptySpanColumn = COLUMN_COUNT_BASE_TABLE - 1;
+
 		switch ((TypeCable)type)
 		{
 		case TypeCable::DIG_IN:
@@ -212,6 +216,7 @@ void ReportWindow::generateTable()
 			emptySpanColumn += MEASUREMENT_OFFSET_OUT * maxTypeOffset;
 			break;
 		}
+
 		prepareItem(tableWidget, previousRowCount, emptySpanColumn, emptySpanRow, tableWidget->columnCount() - emptySpanColumn - 1);
 	}
 }
@@ -448,7 +453,7 @@ void ReportWindow::generateTableSign(TypeCable type, int maxTypeOffset)
 	}
 }
 
-static void fillTableOut(QTableWidget* tableWidget, std::vector<TestTableRowProperties*> cableRows)
+void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -474,7 +479,6 @@ static void fillTableOut(QTableWidget* tableWidget, std::vector<TestTableRowProp
 		int indColumnThresholdsCurrentMin = MEASUREMENT_COLUMN_POSITION + 4;
 		int indColumnThresholdsCurrentMax = MEASUREMENT_COLUMN_POSITION + 5;
 
-
 		for (int j = 0; j < cableRows[i]->thresholds.size(); j++)
 		{
 			prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValuesVoltage, SPAN_NONE);
@@ -498,10 +502,25 @@ static void fillTableOut(QTableWidget* tableWidget, std::vector<TestTableRowProp
 			indColumnThresholdsCurrentMin += MEASUREMENT_OFFSET_OUT;
 			indColumnThresholdsCurrentMax += MEASUREMENT_OFFSET_OUT;
 		}
+
+		commentsTextEdits.push_back(new QTextEdit());
+		connect(commentsTextEdits[commentsTextEdits.size() - 1], &QTextEdit::textChanged, this, &ReportWindow::on_commentTextEdit_textChanged);
+		QWidget* commentWidget = new QWidget();
+		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
+		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
+		commentHLayout->setAlignment(Qt::AlignCenter);
+		commentHLayout->setContentsMargins(0, 0, 0, 0);
+		commentWidget->setLayout(commentHLayout);
+		tableWidget->setCellWidget(indCurrentRow, tableWidget->columnCount() - 1, commentWidget);
+		if (cableRows[i]->comment.size() != 0)
+		{
+			prepareItem(tableWidget, indCurrentRow, tableWidget->columnCount() - 1, SPAN_NONE);
+			commentsTextEdits[commentsTextEdits.size() - 1]->setText(cableRows[i]->comment);
+		}
 	}
 }
 
-static void fillTableIn(QTableWidget* tableWidget, std::vector<TestTableRowProperties*> cableRows)
+void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -528,10 +547,25 @@ static void fillTableIn(QTableWidget* tableWidget, std::vector<TestTableRowPrope
 
 		tableWidget->item(indCurrentRow, indColumnMeasuredValue1)->setText(QString::number(cableRows[i]->measureds[0]->current) != "-1" ? QString::number(cableRows[i]->measureds[0]->current) : "-");
 		tableWidget->item(indCurrentRow, indColumnMeasuredValue2)->setText(QString::number(cableRows[i]->measureds[0]->voltage) != "-1" ? QString::number(cableRows[i]->measureds[0]->voltage) : "-");
+
+		commentsTextEdits.push_back(new QTextEdit());
+		connect(commentsTextEdits[commentsTextEdits.size() - 1], &QTextEdit::textChanged, this, &ReportWindow::on_commentTextEdit_textChanged);
+		QWidget* commentWidget = new QWidget();
+		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
+		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
+		commentHLayout->setAlignment(Qt::AlignCenter);
+		commentHLayout->setContentsMargins(0, 0, 0, 0);
+		commentWidget->setLayout(commentHLayout);
+		tableWidget->setCellWidget(indCurrentRow, tableWidget->columnCount() - 1, commentWidget);
+		if (cableRows[i]->comment.size() != 0)
+		{
+			prepareItem(tableWidget, indCurrentRow, tableWidget->columnCount() - 1, SPAN_NONE);
+			commentsTextEdits[commentsTextEdits.size() - 1]->setText(cableRows[i]->comment);
+		}
 	}
 }
 
-static void fillTableInAnalog(QTableWidget* tableWidget, std::vector<TestTableRowProperties*> cableRows)
+void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -549,7 +583,7 @@ static void fillTableInAnalog(QTableWidget* tableWidget, std::vector<TestTableRo
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(cableRows[i]->direction);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
-
+		
 		int indColumnMeasuredValues = MEASUREMENT_COLUMN_POSITION;
 		int indColumnThresholdsMin = MEASUREMENT_COLUMN_POSITION + 2;
 		int indColumnThresholdsMax = MEASUREMENT_COLUMN_POSITION + 3;
@@ -569,6 +603,21 @@ static void fillTableInAnalog(QTableWidget* tableWidget, std::vector<TestTableRo
 			indColumnThresholdsMin += MEASUREMENT_OFFSET_IN_ANALOG;
 			indColumnThresholdsMax += MEASUREMENT_OFFSET_IN_ANALOG;
 		}
+
+		commentsTextEdits.push_back(new QTextEdit());
+		connect(commentsTextEdits[commentsTextEdits.size() - 1], &QTextEdit::textChanged, this, &ReportWindow::on_commentTextEdit_textChanged);
+		QWidget* commentWidget = new QWidget();
+		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
+		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
+		commentHLayout->setAlignment(Qt::AlignCenter);
+		commentHLayout->setContentsMargins(0, 0, 0, 0);
+		commentWidget->setLayout(commentHLayout);
+		tableWidget->setCellWidget(indCurrentRow, tableWidget->columnCount() - 1, commentWidget);
+		if (cableRows[i]->comment.size() != 0)
+		{
+			prepareItem(tableWidget, indCurrentRow, tableWidget->columnCount() - 1, SPAN_NONE);
+			commentsTextEdits[commentsTextEdits.size() - 1]->setText(cableRows[i]->comment);
+		}
 	}
 }
 
@@ -579,16 +628,16 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 	case TypeCable::DIG_OUT:
 	case TypeCable::PWM_OUT:
 	case TypeCable::VNH_OUT:
-		fillTableOut(tableWidget, cableRows);
+		fillTableOut(cableRows);
 		break;
 
 	case TypeCable::DIG_IN:
 	case TypeCable::HALL_IN:
-		fillTableIn(tableWidget, cableRows);
+		fillTableIn(cableRows);
 		break;
 
 	case TypeCable::ANALOG_IN:
-		fillTableInAnalog(tableWidget, cableRows);
+		fillTableInAnalog(cableRows);
 		break;
 	}
 }
@@ -596,4 +645,9 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 void ReportWindow::on_saveButton_clicked()
 {
 
+}
+
+void ReportWindow::on_commentTextEdit_textChanged()
+{
+	
 }

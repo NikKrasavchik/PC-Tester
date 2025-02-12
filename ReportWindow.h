@@ -107,6 +107,8 @@ private:
 	QSpacerItem* footerLeftSpacer;
 
 	std::vector<TestTableRowProperties*> cableRows;
+	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
+	std::vector<QTextEdit*> commentsTextEdits;
 
 	void initUi();
 	void initUiTable();
@@ -117,6 +119,9 @@ private:
 	void generateTableSign(TypeCable type, int maxTypeOffset);	
 
 	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
+	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
+	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
+	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
 	
 	void resetBaseLanguage();
 	void resetTheme();
@@ -125,4 +130,5 @@ private:
 
 public slots:
 	void on_saveButton_clicked();
+	void on_commentTextEdit_textChanged();
 };

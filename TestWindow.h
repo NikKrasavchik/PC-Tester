@@ -102,7 +102,7 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
-	TestTableRowProperties(TestWindow* testwindow) { this->testwindow = testwindow; };
+	TestTableRowProperties(TestWindow* testwindow) { this->testwindow = testwindow; this->comment = ""; };
 
 	int id;
 	int canId;
