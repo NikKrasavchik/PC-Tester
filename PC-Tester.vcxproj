@@ -67,6 +67,7 @@
     <ClCompile>
       <DisableSpecificWarnings>4828;26451</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
@@ -77,6 +78,7 @@
     <ClCompile>
       <DisableSpecificWarnings>4828;26451</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
