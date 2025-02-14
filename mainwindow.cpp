@@ -84,8 +84,8 @@ MainWindow::MainWindow(QWidget* parent)
 {
 	ui.setupUi(this);
 
-	this->selectedType = TYPE_MANUAL;
-	this->selectedStand = STAND_NOT_SET;
+	this->selectedTypeStand = TypeStand::EMPTY;
+	this->selectedBlock = NameTestingBlock::EMPTY;
 
 	initFloatCheck();
 	initCables();
@@ -141,7 +141,7 @@ void MainWindow::initUi()
 	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLUMN_0);
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLUMN_1);
 
-	selectedType = AUTO_STAND;
+	selectedTypeStand = TypeStand::AUTO;
 	viewWindowState->appTheme = LIGHT_THEME;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
 
@@ -246,7 +246,7 @@ void MainWindow::initUiLeftHLayout()
 	leftVLayout->addItem(leftStandSwitchUpSpacer);
 
 	initUiSwitchStand();
-	leftVLayout->addLayout(leftSwitchStandVLayout);
+	leftVLayout->addLayout(leftSwitchBlockVLayout);
 
 	topSettingsSpacer = new QSpacerItem(0, 100, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	leftVLayout->addItem(topSettingsSpacer);
@@ -270,27 +270,27 @@ void MainWindow::initUiLeftHLayout()
 
 void MainWindow::initUiSwitchStand()
 {
-	leftSwitchStandVLayout = new QVBoxLayout();
-	leftSwitchStandVLayout->setObjectName("leftSwitchStandVLayout");
+	leftSwitchBlockVLayout = new QVBoxLayout();
+	leftSwitchBlockVLayout->setObjectName("leftSwitchBlockVLayout");
 
-	leftStandBCMButton = new QPushButton();
-	leftStandBCMButton->setObjectName("standBCMButton");
-	leftStandBCMButton->setText("BCM");
-	leftStandBCMButton->setStyleSheet(lightStyles.mainButton);
-	leftSwitchStandVLayout->addWidget(leftStandBCMButton);
+	leftBlockBCMButton = new QPushButton();
+	leftBlockBCMButton->setObjectName("blockBCMButton");
+	leftBlockBCMButton->setText("BCM");
+	leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
+	leftSwitchBlockVLayout->addWidget(leftBlockBCMButton);
 
-	connect(leftStandBCMButton, &QPushButton::clicked, this, &MainWindow::on_leftStandBCMButton_clicked);
+	connect(leftBlockBCMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockBCMButton_clicked);
 
 	leftStandSwitchSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
-	leftSwitchStandVLayout->addItem(leftStandSwitchSpacer);
+	leftSwitchBlockVLayout->addItem(leftStandSwitchSpacer);
 
-	leftStandDMButton = new QPushButton();
-	leftStandDMButton->setObjectName("standDMButton");
-	leftStandDMButton->setText("DM");
-	leftStandDMButton->setStyleSheet(lightStyles.mainButton);
-	leftSwitchStandVLayout->addWidget(leftStandDMButton);
+	leftBlockDMButton = new QPushButton();
+	leftBlockDMButton->setObjectName("blockDMButton");
+	leftBlockDMButton->setText("DM");
+	leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
+	leftSwitchBlockVLayout->addWidget(leftBlockDMButton);
 
-	connect(leftStandDMButton, &QPushButton::clicked, this, &MainWindow::on_leftStandDMButton_clicked);
+	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockDMButton_clicked);
 }
 
 void MainWindow::initUiAdapter()
@@ -880,7 +880,7 @@ void MainWindow::resetTheme()
 		// Header
 		// selectStand
 		switchStandSlider->setStyleSheet(lightStyles.roundSlider, lightStyles.bgSlider); // slider
-		if (switchStandSlider->getStatus() == AUTO_STAND) // button
+		if (switchStandSlider->getStatus() == TypeStand::AUTO) // button
 		{
 			autoStandButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
 			manualStandButton->setStyleSheet(lightStyles.standButtons);
@@ -926,7 +926,7 @@ void MainWindow::resetTheme()
 		// Header
 		// selectStand
 		switchStandSlider->setStyleSheet(darkStyles.roundSlider, darkStyles.bgSlider); // slider
-		if (switchStandSlider->getStatus() == AUTO_STAND) // button
+		if (switchStandSlider->getStatus() == TypeStand::AUTO) // button
 		{
 			autoStandButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
 			manualStandButton->setStyleSheet(darkStyles.standButtons);
@@ -971,20 +971,20 @@ void MainWindow::on_sliderSwitchStand_click()
 
 void MainWindow::on_autoStandButton_clicked()
 {
-	if (selectedType != AUTO_STAND)
+	if (selectedTypeStand != TypeStand::AUTO)
 	{
-		selectedType = AUTO_STAND;
-		switchStandSlider->setStatus(AUTO_STAND);
+		selectedTypeStand = TypeStand::AUTO;
+		switchStandSlider->setStatus(TypeStand::AUTO);
 		switchStandButtons();
 	}
 }
 
 void MainWindow::on_manualStandButton_clicked()
 {
-	if (selectedType != MANUAL_STAND)
+	if (selectedTypeStand != TypeStand::MANUAL)
 	{
-		selectedType = MANUAL_STAND;
-		switchStandSlider->setStatus(MANUAL_STAND);
+		selectedTypeStand = TypeStand::MANUAL;
+		switchStandSlider->setStatus(TypeStand::MANUAL);
 		switchStandButtons();
 	}
 }
@@ -993,7 +993,7 @@ void MainWindow::switchStandButtons()
 {
 	switch (switchStandSlider->getStatus())
 	{
-	case AUTO_STAND:
+	case TypeStand::AUTO:
 		manualStandWidget->hide();
 		autoStandWidget->show();
 
@@ -1011,7 +1011,7 @@ void MainWindow::switchStandButtons()
 		}
 		break;
 
-	case MANUAL_STAND:
+	case TypeStand::MANUAL:
 		autoStandWidget->hide();
 		manualStandWidget->show();
 
@@ -1143,16 +1143,12 @@ void MainWindow::on_checkAdaptersButton_clicked()
 
 void MainWindow::on_outTestManualStandButton_clicked()
 {
-	if (!can->getStatusAdapterSelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
-		return;
-	}
-	if (!can->getStatusFrequencySelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
+#endif // DEBUG
 
 	std::vector<Cable> preparedCables = {};
 	for (int i = 0; i < cables.size(); i++)
@@ -1164,16 +1160,12 @@ void MainWindow::on_outTestManualStandButton_clicked()
 
 void MainWindow::on_inTestManualStandButton_clicked()
 {
-	if (!can->getStatusAdapterSelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
-		return;
-	}
-	if (!can->getStatusFrequencySelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
+#endif // DEBUG
 
 	std::vector<Cable> preparedCables = {};
 	for (int i = 0; i < cables.size(); i++)
@@ -1185,32 +1177,24 @@ void MainWindow::on_inTestManualStandButton_clicked()
 
 void MainWindow::on_fullTestManualStandButton_clicked()
 {
-	if (!can->getStatusAdapterSelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
-		return;
-	}
-	if (!can->getStatusFrequencySelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
+#endif // DEBUG
 
 	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND, cables);
 }
 
 void MainWindow::on_inManualTestAutoStandButton_clicked()
 {
-	if (!can->getStatusAdapterSelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
-		return;
-	}
-	if (!can->getStatusFrequencySelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
+#ifdef DEBUG
+	selectAdapterComboBox->setCurrentIndex(1);
+	selectFrequencyComboBox->setCurrentIndex(6);
+	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
+#endif // DEBUG
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
@@ -1226,17 +1210,8 @@ void MainWindow::on_outManualTestAutoStandButton_clicked()
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
 	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
 #endif // DEBUG
-	if (!can->getStatusAdapterSelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
-		return;
-	}
-	if (!can->getStatusFrequencySelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
@@ -1252,17 +1227,8 @@ void MainWindow::on_inAutoTestAutoStandButton_clicked()
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
 	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
 #endif // DEBUG
-	if (!can->getStatusAdapterSelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
-		return;
-	}
-	if (!can->getStatusFrequencySelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
@@ -1278,17 +1244,8 @@ void MainWindow::on_outAutoTestAutoStandButton_clicked()
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
 	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
 #endif // DEBUG
-	if (!can->getStatusAdapterSelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
-		return;
-	}
-	if (!can->getStatusFrequencySelected())
-	{
-		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
-		return;
-	}
 
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
@@ -1304,7 +1261,19 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 	selectAdapterComboBox->setCurrentIndex(1);
 	selectFrequencyComboBox->setCurrentIndex(6);
 	//selectedFileStandType = CFG_STAND_MANUAL;
+	leftBlockDMButton->click();
 #endif // DEBUG
+
+	createTestWindow(WindowType::FULL_TEST_AUTO_STAND, cables);
+}
+
+void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
+{
+	if (preparedCables.size() == 0)
+	{
+		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
+		return;
+	}
 	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
@@ -1315,16 +1284,16 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
+	if (selectedBlock == NameTestingBlock::EMPTY)
+	{
+		generateWarning(Warnings::MainWindow::NOT_SELECTED_BLOCK);
+		return;
+	}
 
-	createTestWindow(WindowType::FULL_TEST_AUTO_STAND, cables);
-}
-
-void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
-{		
 	// Проверка на актуальность выбраного адаптера.
 	std::vector<QString> nameAdapters = can->getNameAdapters();
 	bool isHaveAdapter = false;
-	for(int j = 0; j < nameAdapters.size(); j++)
+	for (int j = 0; j < nameAdapters.size(); j++)
 		if (selectAdapterComboBox->currentText() == nameAdapters[j])
 		{
 			isHaveAdapter = true;
@@ -1335,34 +1304,24 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		on_checkAdaptersButton_clicked();
 		return;
 	}
-	
-	if (preparedCables.size() == 0)
-	{
-		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
-		return;
-	}
 
-	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected())
-	{
-		if (selectedType != STAND_NOT_SET)
-		{
-			TestWindow* testWindow = new TestWindow(testType, preparedCables, this);
 
-			connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
-			connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
-			can->initCan(testType);
-			WindowFrame w(testType, nullptr, testWindow);
-			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
-			testWindow->setParentFrame(&w);
-			w.show();
-			this->hide();
-			testWindow->exec();
-			resetWindowView();
-			can->deinitCan();
-			this->show();
+	TestWindow* testWindow = new TestWindow(testType, preparedCables, selectedBlock, this);
 
-		}
-	}
+	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
+	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
+	can->initCan(testType);
+	WindowFrame w(testType, nullptr, testWindow);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+	testWindow->setParentFrame(&w);
+	w.show();
+	this->hide();
+	testWindow->exec();
+	resetWindowView();
+	can->deinitCan();
+	this->show();
+
+
 }
 
 void MainWindow::resetWindowView()
@@ -1396,31 +1355,25 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 	return cable;
 }
 
-//static bool validatingConfigData(int index, QStringList data)
-//{
-//	switch (index)
-//	{
-//	case INDEX_DATA_CONFIG_CONNECTOR:
-//		break;
-//
-//	case INDEX_DATA_CONFIG_BIT:
-//		break;
-//
-//	case INDEX_DATA_CONFIG_BIT:
-//		break;
-//
-//		case INDEX_DATA_CONFIG_
-//	}
-//}
-
 void MainWindow::initCables()
 {
 	QFile config("cables.cfg");
 	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
 	QTextStream cable(&config);
+	NameTestingBlock block = NameTestingBlock::EMPTY;
 	while (!cable.atEnd()) {
 		QString line = cable.readLine();
+		if (line == "DM")
+		{
+			block = NameTestingBlock::DM;
+			continue;
+		}
+		else if (line == "BCM")
+		{
+			block = NameTestingBlock::BCM;
+			continue;
+		}
 		
 		QStringList list = line.split(u';');
 
@@ -1457,46 +1410,53 @@ void MainWindow::initCables()
 			}
 			measureds.push_back(Measureds());
 		}
-		cables.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+		if(block == NameTestingBlock::DM)
+			cablesDMStorag.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+		else if(block == NameTestingBlock::BCM)
+			cablesBCMStorag.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 	}
 }
 
-void MainWindow::on_leftStandBCMButton_clicked()
+void MainWindow::on_leftBlockBCMButton_clicked()
 {
-	if (selectedStand != STAND_BCM)
+	if (selectedBlock != NameTestingBlock::BCM)
 	{
-		selectedStand = STAND_BCM;
+		selectedBlock = NameTestingBlock::BCM;
 		switch (viewWindowState->appTheme)
 		{
 		case LIGHT_THEME:
-			leftStandBCMButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			leftStandDMButton->setStyleSheet(lightStyles.mainButton);
+			leftBlockBCMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
+			leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
 			break;
 
 		case DARK_THEME:
-			leftStandBCMButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			leftStandDMButton->setStyleSheet(darkStyles.mainButton);
+			leftBlockBCMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
+			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
 			break;
 		}
+		cables.clear();
+		cables = cablesBCMStorag;
 	}
 }
 
-void MainWindow::on_leftStandDMButton_clicked()
+void MainWindow::on_leftBlockDMButton_clicked()
 {
-	if (selectedStand != STAND_DM)
+	if (selectedBlock != NameTestingBlock::DM)
 	{
-		selectedStand = STAND_DM;
+		selectedBlock = NameTestingBlock::DM;
 		switch (viewWindowState->appTheme)
 		{
 		case LIGHT_THEME:
-			leftStandDMButton->setStyleSheet(lightStyles.mainButtonNoActive);
-			leftStandBCMButton->setStyleSheet(lightStyles.mainButton);
+			leftBlockDMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
+			leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
 			break;
 
 		case DARK_THEME:
-			leftStandDMButton->setStyleSheet(darkStyles.mainButtonNoActive);
-			leftStandBCMButton->setStyleSheet(darkStyles.mainButton);
+			leftBlockDMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
+			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
 			break;
 		}
+		cables.clear();
+		cables = cablesDMStorag;
 	}
 }

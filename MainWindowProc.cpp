@@ -110,6 +110,9 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 		case Warnings::MainWindow::SIZE_CABLE_NUL:
 			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Кол-во тестируемых проводов равно нулю"));
 			break;
+		case Warnings::MainWindow::NOT_SELECTED_BLOCK:
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите блок для тестирования"));
+			break;
 
 		default:
 			break;
@@ -137,6 +140,9 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 
 		case Warnings::MainWindow::SIZE_CABLE_NUL:
 			QMessageBox::warning(this, QString("Warning"), QString("The number of wires tested is zero"));
+			break;
+		case Warnings::MainWindow::NOT_SELECTED_BLOCK:
+			QMessageBox::warning(this, QString("Warning"), QString("Select a block to test"));
 			break;
 
 		default:

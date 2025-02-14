@@ -1,5 +1,5 @@
 #pragma once
-#define DEBUG
+//#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -18,9 +18,6 @@
 
 #define MANUAL_STAND	0
 #define AUTO_STAND		1
-
-#define DM_STAND		0
-#define BCM_STAND		0
 
 #define NOT_SET			-1
 
@@ -86,6 +83,7 @@ struct Styles
 	QString testwindowTestTimeComboBox;
 	QString testwindowTableWidget;
 	QString testwindowNameLineEdit;
+	QString testwindowLableBlock;
 
 	// TABLEBUTTON
 	//
@@ -130,6 +128,13 @@ enum class WindowType
 	FULL_TEST_AUTO_STAND,
 	MOREWINDOW,
 	REPORTWINDOW
+};
+
+enum class TypeStand
+{
+	EMPTY = NOT_SET,
+	MANUAL,
+	AUTO
 };
 
 enum class NameTestingBlock
@@ -282,7 +287,8 @@ namespace Warnings
 		TEST_ACCESS_FREQUENCY_SEL,
 		TEST_ACCESS_ADAPTER_SEL,
 		ADAPTERS_CHANGED,
-		SIZE_CABLE_NUL
+		SIZE_CABLE_NUL,
+		NOT_SELECTED_BLOCK
 	};
 }
 

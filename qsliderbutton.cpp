@@ -6,9 +6,7 @@
 QSliderButton::QSliderButton(bool isHorizontal, QWidget* parent)
 {
 	this->setParent(parent);
-	status = AUTO_STAND;
-	type = DM_STAND;
-	type = BCM_STAND;
+	status = TypeStand::AUTO;
 
 	this->isHorizontal = isHorizontal;
 }
@@ -29,7 +27,7 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 		painter.drawRoundedRect(0, 0, sizeHeight, sizeWidth, sizeHeight / 2, sizeHeight / 2);
 
 	//Рисуем шарик
-	if (this->status == MANUAL_STAND)
+	if (this->status == TypeStand::MANUAL)
 	{
 		painter.setBrush(roundColor);
 
@@ -49,24 +47,24 @@ void QSliderButton::mousePressEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton)
 	{
-		if (this->status)
-			this->status = MANUAL_STAND;
+		if (this->status == TypeStand::AUTO)
+			this->status = TypeStand::MANUAL;
 		else
-			this->status = AUTO_STAND;
+			this->status = TypeStand::AUTO;
 
 		on_sliderSwitchStand_click();
 
 		repaint();
 	}
 }
-int QSliderButton::getStatus()
+TypeStand QSliderButton::getStatus()
 {
 	return status;
 }
 
-void QSliderButton::setStatus(int newValue)
+void QSliderButton::setStatus(TypeStand newValue)
 {
-	if (newValue == MANUAL_STAND || newValue == AUTO_STAND)
+	if (newValue == TypeStand::MANUAL || newValue == TypeStand::AUTO)
 		status = newValue;
 	repaint();
 }

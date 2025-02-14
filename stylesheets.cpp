@@ -133,7 +133,7 @@ void MainWindow::initLightStyleSheets()
 	lightStyles.standButtons =
 		R"(
 		.QPushButton {
-			border-radius: 25px;
+			border-radius: 10px;
 			background-color: #B0B0B0;
 
 			color: black;
@@ -152,7 +152,7 @@ void MainWindow::initLightStyleSheets()
 	lightStyles.alwaysActiveStandButton =
 		R"(
 		.QPushButton {
-			border-radius: 25px;
+			border-radius: 10px;
 			background-color: #767676;
 
 			color: black;
@@ -274,7 +274,7 @@ void MainWindow::initDarkStyleSheets()
 	darkStyles.standButtons =
 		R"(
 		.QPushButton {
-			border-radius: 25px;
+			border-radius: 10px;
 			background-color: #535353;
 
 			color: white;
@@ -293,7 +293,7 @@ void MainWindow::initDarkStyleSheets()
 	darkStyles.alwaysActiveStandButton =
 		R"(
 		.QPushButton {
-			border-radius: 25px;
+			border-radius: 10px;
 			background-color: #858383;
 
 			color: white;
@@ -567,6 +567,16 @@ void TestWindow::initLightStyleSheets()
 			font-weight: 600;
 
 	)";
+	lightStyles.testwindowLableBlock =
+		R"(
+			color: black;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 30px;
+			font-weight: 800;
+
+	)";
 
 	lightStyles.activeTableButton =
 		R"(
@@ -757,6 +767,16 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+
+	)";
+	darkStyles.testwindowLableBlock =
+		R"(
+			color: white;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 30px;
+			font-weight: 800;
 
 	)";
 

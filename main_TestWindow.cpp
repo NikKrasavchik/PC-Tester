@@ -4,12 +4,13 @@
 #define STATUS_IN_TEST		5
 #define STATUS_FULL_TEST	7
 
-TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* parent)
+TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, NameTestingBlock testingBlock, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
 	this->testType = testType;
 	this->can = can;
+	this->testingBlock = testingBlock;
 	isFullTestEnabled = false;
 	if(cables.size() != 0)
 		nextCheckCable = new Cable(cables[0].getConnector(), cables[0].getPin());
@@ -180,6 +181,7 @@ void TestWindow::initUiTable()
 	mainTableWidget->setObjectName("mainTableWidget");
 	mainTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	mainTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+	mainTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 	mainTableHeaderLabels = new QStringList();
 	mainVLayout->addWidget(mainTableWidget);
 }
@@ -200,6 +202,10 @@ void TestWindow::initUiMainFooter()
 
 	fileNameLabel = new QLabel(footerLayoutWidget);
 	fileNameLabel->setObjectName("fileNameLabel");
+	if(testingBlock == NameTestingBlock::DM)
+		fileNameLabel->setText("DM");
+	else
+		fileNameLabel->setText("BCM");
 	fileNameLabel->setFixedSize(FIXED_FILE_NAME_WIDTH, FIXED_FILE_NAME_HEIGHT);
 	footerMainHLayout->addWidget(fileNameLabel);
 
@@ -249,8 +255,6 @@ void TestWindow::initRecources()
 
 void TestWindow::initTexts()
 {
-	fileNameLabel->setText(fileName);
-
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
@@ -508,12 +512,6 @@ void TestWindow::switchActiveTableButton(void* activeButton, void* inactiveButto
 	//(DigitalButtons*)(activeButton)->onButton;
 }
 
-void TestWindow::setFileName(QString fileName)
-{
-	this->fileName = fileName;
-	fileNameLabel->setText(this->fileName);
-}
-
 void TestWindow::on_backButton_clicked()
 {
 	this->close();
@@ -577,7 +575,7 @@ void TestWindow::resetTheme()
 		reportButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 		testerNameLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
-		fileNameLabel->setStyleSheet(lightStyles.testwindowNameLineEdit);
+		fileNameLabel->setStyleSheet(lightStyles.testwindowLableBlock);
 		resetIconMoreButton(LIGHT_THEME);
 
 		switch (testType)
@@ -664,7 +662,7 @@ void TestWindow::resetTheme()
 		reportButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 		testerNameLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
-		fileNameLabel->setStyleSheet(darkStyles.testwindowNameLineEdit);
+		fileNameLabel->setStyleSheet(darkStyles.testwindowLableBlock);
 		resetIconMoreButton(DARK_THEME);
 
 		switch (testType)

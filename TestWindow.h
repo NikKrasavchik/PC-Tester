@@ -158,7 +158,7 @@ class TestWindow : public QDialog
 	Q_OBJECT
 
 public:
-	TestWindow(WindowType testType, std::vector<Cable> cables, QWidget* parent = nullptr);
+	TestWindow(WindowType testType, std::vector<Cable> cables, NameTestingBlock testingBlock, QWidget* parent = nullptr);
 	~TestWindow();
 
 	void setFileName(QString fileName);
@@ -223,6 +223,7 @@ private:
 
 	QString fileName;
 	WindowType testType;
+	NameTestingBlock testingBlock;
 	Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<QCheckBox*> manualChecks;

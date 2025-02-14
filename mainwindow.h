@@ -28,9 +28,6 @@
 #define TYPE_MANUAL		0
 #define TYPE_AUTO		1
 
-#define STAND_NOT_SET	NOT_SET
-#define STAND_BCM		0
-#define STAND_DM		1
 
 class MainWindow : public QMainWindow
 {
@@ -78,7 +75,7 @@ private:
 	QVBoxLayout* mainVLayout;
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* manualStandMainVLayout;
-	QVBoxLayout* leftSwitchStandVLayout;
+	QVBoxLayout* leftSwitchBlockVLayout;
 	QVBoxLayout* leftSwitchStandButtonsVLayout;
 	QHBoxLayout* leftSwitchStandHLayout;
 	QLabel* logoLabel;
@@ -101,8 +98,8 @@ private:
 	QPushButton* outAutoTestAutoStandButton;
 	QPushButton* inAutoTestAutoStandButton;
 	QPushButton* fullTestAutoStandButton;
-	QPushButton* leftStandBCMButton;
-	QPushButton* leftStandDMButton;
+	QPushButton* leftBlockBCMButton;
+	QPushButton* leftBlockDMButton;
 	QComboBox* selectAdapterComboBox;
 	QComboBox* selectFrequencyComboBox;
 	QSpacerItem* rightAutoStandSpacer;
@@ -167,10 +164,12 @@ private:
 
 	Can* can;
 	std::vector<Cable> cables;
+	std::vector<Cable> cablesDMStorag;
+	std::vector<Cable> cablesBCMStorag;
 
 	bool isAllInit;
-	int selectedStand;
-	int selectedType;
+	NameTestingBlock selectedBlock;
+	TypeStand selectedTypeStand;
 
 	QString appstylePath;
 	QString darkStylePath;
@@ -238,8 +237,8 @@ private slots:
 	void on_inAutoTestAutoStandButton_clicked();
 	void on_outAutoTestAutoStandButton_clicked();
 	void on_fullTestAutoStandButton_clicked();
-	void on_leftStandBCMButton_clicked();
-	void on_leftStandDMButton_clicked();
+	void on_leftBlockBCMButton_clicked();
+	void on_leftBlockDMButton_clicked();
 
 signals:
 	void resizeStandSlider(int width, int height);

@@ -13,16 +13,15 @@ class QSliderButton : public QWidget
 public:
 	explicit QSliderButton(bool isHorizontal, QWidget* parent);
 
-	int getStatus();
-	void setStatus(int newValue);
+	TypeStand getStatus();
+	void setStatus(TypeStand newValue);
 	void setStyleSheet(QString roundColor, QString bgColor);
 
 private:
 	virtual void paintEvent(QPaintEvent* event);
 	virtual void mousePressEvent(QMouseEvent* event);
 
-	int status; // Положение слайдера. 0 - кружок слева (manual) / 1 - кружок справа (auto)
-	int type; // Положение слайдера. 0 - кружок сверху (BCM) / 1 - кружок снизу (auto)
+	TypeStand status; // Положение слайдера. 0 - кружок слева (manual) / 1 - кружок справа (auto)
 
 	int sizeWidth;
 	int sizeHeight;
