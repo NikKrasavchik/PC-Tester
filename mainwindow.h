@@ -198,7 +198,7 @@ private:
 	void initUiAutoStand();
 	void initUiManualStand();
 	void initUiAutoStandManualTest();
-	void initUiAutoStandAutoTest();
+	void initUiAutoStandAutoTest();	
 	void initUiAutoStandFullTest();
 
 	void fillComboBoxes();

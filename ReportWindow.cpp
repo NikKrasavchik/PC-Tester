@@ -914,7 +914,11 @@ void ReportWindow::on_saveButton_clicked()
 				for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 				{
 					if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
+					{
 						writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), "-", Format::AlignHCenter, tmpRowFormat);
+						xlsx.write(numRow, 8 + (4 * j), "-", tmpRowFormat); // red
+						xlsx.write(numRow, 9 + (4 * j), "-", tmpRowFormat);
+					}
 					else
 					{
 						Format tmpRedFormat(format);
