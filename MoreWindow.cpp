@@ -1,5 +1,11 @@
 #include "MoreWindow.h"
 
+#define BUTTON_SIZE						100, 40
+
+#define MEASUREMENT_COLUMN_POSITION	5
+
+#define IND_COLUMN_BASE_COMMENT				5
+
 #define CELL_MIN_CURRENT	6
 #define CELL_MAX_CURRENT	7
 #define CELL_MIN_VOLTAGE	8
@@ -178,7 +184,7 @@ void MoreWindow::resetLanguage(int offset)
 
 MoreWindowOut::MoreWindowOut(TestTableRowProperties* row) : MoreWindow(row)
 {
-	int measuredWidth = (row->thresholds.size() <= 3 ? row->thresholds.size() : 3);
+	int measuredWidth = ((int)row->thresholds.size() <= 3 ? (int)row->thresholds.size() : 3);
 	this->resize(EMPTY_WINDOW_WIDTH + (measuredWidth * WINDOW_MEASURED_WIDTH), WINDOW_OUT_HEIGHT);
 	this->setMinimumSize(EMPTY_WINDOW_WIDTH + (measuredWidth * WINDOW_MEASURED_WIDTH), WINDOW_OUT_HEIGHT);
 
@@ -234,7 +240,7 @@ void MoreWindowOut::generateSigns()
 		prepareItem(CELL_OUT_VALUES_MIN_VOLTAGE, SPAN_NONE);
 		prepareItem(CELL_OUT_VALUES_MAX_VOLTAGE, SPAN_NONE);
 
-		resetBlockLanguage(row->thresholds.size() - i);
+		resetBlockLanguage((int)row->thresholds.size() - i);
 	}
 }
 
@@ -322,7 +328,7 @@ void MoreWindowIn::generateSigns()
 		prepareItem(CELL_IN_VALUE_MEASURED_1, SPAN_NONE);
 		prepareItem(CELL_IN_VALUE_MEASURED_2, SPAN_NONE);
 		
-		resetBlockLanguage(row->thresholds.size() - i);
+		resetBlockLanguage((int)row->thresholds.size() - i);
 	}
 }
 
@@ -361,7 +367,7 @@ void MoreWindowIn::resetBlockLanguage(int measuredNum)
 
 MoreWindowInAnalog::MoreWindowInAnalog(TestTableRowProperties* row) : MoreWindow(row)
 {
-	int measuredWidth = (row->thresholds.size() <= 3 ? row->thresholds.size() : 3);
+	int measuredWidth = ((int)row->thresholds.size() <= 3 ? (int)row->thresholds.size() : 3);
 	this->resize(EMPTY_WINDOW_WIDTH + (measuredWidth * WINDOW_MEASURED_WIDTH), WINDOW_OUT_HEIGHT);
 	this->setMinimumSize(EMPTY_WINDOW_WIDTH + (measuredWidth * WINDOW_MEASURED_WIDTH), WINDOW_OUT_HEIGHT);
 
@@ -409,7 +415,7 @@ void MoreWindowInAnalog::generateSigns()
 		prepareItem(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN, SPAN_NONE);
 		prepareItem(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX, SPAN_NONE);
 
-		resetBlockLanguage(row->thresholds.size() - i);
+		resetBlockLanguage((int)row->thresholds.size() - i);
 	}
 }
 

@@ -25,7 +25,7 @@ void TestWindow::initUiTableOutTestManualStand()
 
 void TestWindow::initUiTableHeaderOutTestManualStand()
 {
-	mainTableWidget->setRowCount(cableRows.size());
+	mainTableWidget->setRowCount((int)cableRows.size());
 	mainTableWidget->setColumnCount(COLUMN_COUNT);
 
 	resetTableHeaderLanguageOutTestManualStand();

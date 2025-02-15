@@ -1411,9 +1411,9 @@ void MainWindow::initCables()
 			measureds.push_back(Measureds());
 		}
 		if(block == NameTestingBlock::DM)
-			cablesDMStorag.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+			cablesDMStorag.push_back(fillCable((int)cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 		else if(block == NameTestingBlock::BCM)
-			cablesBCMStorag.push_back(fillCable(cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+			cablesBCMStorag.push_back(fillCable((int)cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 	}
 }
 

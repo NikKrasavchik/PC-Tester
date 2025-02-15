@@ -32,7 +32,7 @@ void TestWindow::initUiTableOutManualTestAutoStand()
 
 void TestWindow::initUiTableHeaderOutManualTestAutoStand()
 {
-	mainTableWidget->setRowCount(cableRows.size());
+	mainTableWidget->setRowCount((int)cableRows.size());
 	mainTableWidget->setColumnCount(COLUMN_COUNT);
 
 	resetTableHeaderLanguageOutManualTestAutoStand();

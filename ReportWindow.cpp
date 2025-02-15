@@ -1,5 +1,15 @@
 #include "ReportWindow.h"
 
+#define BUTTON_WIDTH				100
+#define BUTTON_HEIGHT				40
+#define BUTTON_SIZE					BUTTON_WIDTH, BUTTON_HEIGHT
+
+#define MEASUREMENT_COLUMN_POSITION		6
+
+#define IND_COLUMN_BASE_COMMENT				6
+
+using namespace QXlsx;
+
 ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName)
 {
 	this->cableRows = cableRows;
@@ -128,8 +138,8 @@ static int getMaxColumnOffset(std::vector<TestTableRowProperties*> cableRows)
 		case TypeCable::DIG_OUT:
 		case TypeCable::PWM_OUT:
 		case TypeCable::VNH_OUT:
-			if (cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT > maxColumnOffset)
-				maxColumnOffset = cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT;
+			if ((int)cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT > maxColumnOffset)
+				maxColumnOffset = (int)cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT;
 			break;
 
 		case TypeCable::DIG_IN:
@@ -139,8 +149,8 @@ static int getMaxColumnOffset(std::vector<TestTableRowProperties*> cableRows)
 			break;
 
 		case TypeCable::ANALOG_IN:
-			if (cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_IN_ANALOG > maxColumnOffset)
-				maxColumnOffset = cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT;
+			if ((int)cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_IN_ANALOG > maxColumnOffset)
+				maxColumnOffset = (int)cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT;
 			break;
 		}
 
@@ -151,8 +161,8 @@ static int getMaxTypeOffset(std::vector<TestTableRowProperties*> cableRows)
 {
 	int maxTypeOffset = 0;
 	for (int i = 0; i < cableRows.size(); i++)
-		if (maxTypeOffset < cableRows[i]->thresholds.size())
-			maxTypeOffset = cableRows[i]->thresholds.size();
+		if (maxTypeOffset < (int)cableRows[i]->thresholds.size())
+			maxTypeOffset = (int)cableRows[i]->thresholds.size();
 	return maxTypeOffset;
 }
 
@@ -643,8 +653,6 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 	}
 }
 
-using namespace QXlsx;
-
 void writeHorizontalAlignCell(Document& xlsx, int row, int columnStart, int columnEnd, const QVariant& text, QXlsx::Format::HorizontalAlignment align, Format formatText = Format(), const QColor& color = nullptr)
 {
 	CellRange r(row, columnStart, row, columnEnd);
@@ -719,8 +727,6 @@ QString getStrDirection(QString direction)
 		else if (direction == "IN")
 			str = "In";
 		break;
-	default:
-		break;
 	}
 	return str;
 }
@@ -785,8 +791,6 @@ QString getStrType(TypeCable type)
 		default:
 			break;
 		}
-	default:
-		break;
 	}
 	return str;
 }
@@ -849,7 +853,7 @@ void ReportWindow::on_saveButton_clicked()
 				{
 					writeHorizontalAlignCell(xlsx, numRow, 6, 7, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 1") : QString("Value 1"), Format::AlignHCenter, tmpHeaderFormat);
 					writeHorizontalAlignCell(xlsx, numRow, 8, 9, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 2") : QString("Value 2"), Format::AlignHCenter, tmpHeaderFormat);
-					CellRange* range = new CellRange(numRow, 10, numRow + typedCableRows[type].size(), 9 + maxOffset - 4);
+					CellRange* range = new CellRange(numRow, 10, numRow + (int)typedCableRows[type].size(), 9 + maxOffset - 4);
 					xlsx.mergeCells(*range, format);
 					delete range;
 					range = new CellRange(numRow, 1, numRow, 5);
@@ -894,7 +898,7 @@ void ReportWindow::on_saveButton_clicked()
 						xlsx.write(numRow + 2, 8 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
 						xlsx.write(numRow + 2, 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
 					}	
-					CellRange* range = new CellRange(numRow, 6 + (typedCableRows[type][i]->thresholds.size() * 4), numRow + typedCableRows[type].size() + 2, 9 + maxOffset - 4);
+					CellRange* range = new CellRange(numRow, 6 + ((int)typedCableRows[type][i]->thresholds.size() * 4), numRow + (int)typedCableRows[type].size() + 2, 9 + maxOffset - 4);
 					if (typedCableRows[type][i]->thresholds.size() * 6 != maxOffset)
 						xlsx.mergeCells(*range, format);
 					delete range;
@@ -979,7 +983,7 @@ void ReportWindow::on_saveButton_clicked()
 
 
 					}
-					CellRange* range = new CellRange(numRow, 6 + (typedCableRows[type][i]->thresholds.size() * 6), numRow + typedCableRows[type].size() + 3, 9 + maxOffset - 4);
+					CellRange* range = new CellRange(numRow, 6 + ((int)typedCableRows[type][i]->thresholds.size() * 6), numRow + (int)typedCableRows[type].size() + 3, 9 + maxOffset - 4);
 					if (typedCableRows[type][i]->thresholds.size() * 6 != maxOffset)
 						xlsx.mergeCells(*range, format);
 					delete range;

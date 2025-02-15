@@ -86,8 +86,8 @@ private:
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
 	//uint8_t generateFlags(int typeCable, NameTestingBlock nameBlock);
-
-// Varibals:
+	
+// Variables:
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;

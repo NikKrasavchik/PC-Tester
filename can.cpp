@@ -13,6 +13,9 @@ Can::Can()
 	b_flagStandConnectionCheck = false;
 	b_flagStatusConnection = false;
 
+	counterConnectMsg = 0;
+	windowType = WindowType();
+
 	timerReadCan = new QTimer();
 	connect(timerReadCan, SIGNAL(timeout()), this, SLOT(Timer_ReadCan()));
 	timerCheckStandConnection = new QTimer();
@@ -432,7 +435,7 @@ void Can::Timer_ReadCan()
 			{
 				
 				measureds.push_back(getMeasureds(msgReceive));
-				if (msgReceive[2] & 0x01 == 1) // Конец теста
+				if ((msgReceive[2] & 0x01) == 1) // Конец теста
 				{
 					if ((TypeCable)(msgReceive[2] >> 5) == TypeCable::ANALOG_IN) // Костыль
 					{
