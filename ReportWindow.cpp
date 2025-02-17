@@ -138,6 +138,7 @@ static int getMaxColumnOffset(std::vector<TestTableRowProperties*> cableRows)
 		case TypeCable::DIG_OUT:
 		case TypeCable::PWM_OUT:
 		case TypeCable::VNH_OUT:
+		case TypeCable::HLD_OUT:
 			if ((int)cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT > maxColumnOffset)
 				maxColumnOffset = (int)cableRows[i]->thresholds.size() * MEASUREMENT_OFFSET_OUT;
 			break;
@@ -224,6 +225,7 @@ void ReportWindow::generateTable()
 		case TypeCable::DIG_OUT:
 		case TypeCable::PWM_OUT:
 		case TypeCable::VNH_OUT:
+		case TypeCable::HLD_OUT:
 			emptySpanColumn += MEASUREMENT_OFFSET_OUT * maxTypeOffset;
 			break;
 		}
@@ -450,6 +452,7 @@ void ReportWindow::generateTableSign(TypeCable type, int maxTypeOffset)
 	case TypeCable::DIG_OUT:
 	case TypeCable::PWM_OUT:
 	case TypeCable::VNH_OUT:
+	case TypeCable::HLD_OUT:
 		generateTableSignOut(tableWidget, maxTypeOffset);
 		break;
 
@@ -639,6 +642,7 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 	case TypeCable::DIG_OUT:
 	case TypeCable::PWM_OUT:
 	case TypeCable::VNH_OUT:
+	case TypeCable::HLD_OUT:
 		fillTableOut(cableRows);
 		break;
 
@@ -742,24 +746,35 @@ QString getStrType(TypeCable type)
 		case TypeCable::EMPTY:
 			str = "Error";
 			break;
+
 		case TypeCable::DIG_IN:
 			str = QString::fromLocal8Bit("Öטפנמגמי");
 			break;
+
 		case TypeCable::ANALOG_IN:
 			str = QString::fromLocal8Bit("Àםאכמדמגûי");
 			break;
+
 		case TypeCable::HALL_IN:
 			str = "HAll";
 			break;
+
 		case TypeCable::DIG_OUT:
 			str = QString::fromLocal8Bit("Öטפנמגמי");
 			break;
+
 		case TypeCable::PWM_OUT:
 			str = "PWM";
 			break;
+
 		case TypeCable::VNH_OUT:
 			str = "VNH";
 			break;
+
+		case TypeCable::HLD_OUT:
+			str = "HLD";
+			break;
+
 		default:
 			break;
 		}
@@ -770,24 +785,34 @@ QString getStrType(TypeCable type)
 		case TypeCable::EMPTY:
 			str = "Error";
 			break;
+
 		case TypeCable::DIG_IN:
 			str = "Digital";
 			break;
+
 		case TypeCable::ANALOG_IN:
 			str = "Analog";
 			break;
+
 		case TypeCable::HALL_IN:
 			str = "HAll";
 			break;
+
 		case TypeCable::DIG_OUT:
 			str = "Digital";
 			break;
+
 		case TypeCable::PWM_OUT:
 			str = "PWM";
 			break;
+
 		case TypeCable::VNH_OUT:
 			str = "VNH";
 			break;
+
+		case TypeCable::HLD_OUT:
+			str = "HLD";
+
 		default:
 			break;
 		}
@@ -872,7 +897,6 @@ void ReportWindow::on_saveButton_clicked()
 				{
 					writeHorizontalAlignCell(xlsx, numRow, 6, 7, "-", Format::AlignHCenter, tmpRowFormat);
 					writeHorizontalAlignCell(xlsx, numRow, 8, 9, "-", Format::AlignHCenter, tmpRowFormat);
-
 				}
 				else
 				{
@@ -957,7 +981,7 @@ void ReportWindow::on_saveButton_clicked()
 			case TypeCable::DIG_OUT:
 			case TypeCable::PWM_OUT:
 			case TypeCable::VNH_OUT:
-
+			case TypeCable::HLD_OUT:
 				if (i == 0) // header type
 				{
 					for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)

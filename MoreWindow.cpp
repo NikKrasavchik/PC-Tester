@@ -542,6 +542,7 @@ void MoreWindow::resaveFile()
 			case TypeCable::DIG_OUT:
 			case TypeCable::PWM_OUT:
 			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
 				for (int i = 0; i < row->thresholds.size(); i++)
 				{
 					dataList[FILE_MEASUREMENT_OFFSET + i * 4] = QString::number(row->thresholds[i].minVoltage);

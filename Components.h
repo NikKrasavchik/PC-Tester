@@ -152,7 +152,12 @@ enum class ConnectorId
 	C,
 	D,
 	E,
-	F
+	F,
+	G,
+	H,
+	I,
+	J,
+	K
 };
 
 enum class TypeResetTableButtonsTheme
@@ -164,7 +169,7 @@ enum class TypeResetTableButtonsTheme
 
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
-#define TYPE_COUNT				6
+#define TYPE_COUNT				7
 
 #define TYPE_NOT_SET			NOT_SET
 #define TYPE_DIGITAL			0
@@ -182,7 +187,8 @@ enum class TypeCable
 	HALL_IN,
 	DIG_OUT,
 	PWM_OUT,
-	VNH_OUT
+	VNH_OUT,
+	HLD_OUT
 };
 
 #define DIRECTION_NOT_SET		NOT_SET

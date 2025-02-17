@@ -115,6 +115,8 @@ void TestWindow::resetTableTypeLanguageOutAutoTestAutoStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Аналоговый"));
 			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
+			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
 			break;
 
 		case ENGLISH_LANG:
@@ -128,6 +130,8 @@ void TestWindow::resetTableTypeLanguageOutAutoTestAutoStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Analog");
 			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
+			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HLD");
 			break;
 		}
 	}

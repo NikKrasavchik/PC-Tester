@@ -26,6 +26,7 @@
 #define COLUMN_DIGITAL_HEIGHT		50
 #define COLUMN_PWM_HEIGHT			128
 #define COLUMN_VNH_HEIGHT			169
+#define COLUMN_HLD_HEIGHT			128
 
 #define COLUMN_CONNECTOR_WIDTH		70
 #define COLUMN_PIN_WIDTH			40
@@ -48,6 +49,9 @@
 #define LOAD50_BUTTON_PRESSED	128
 #define LOAD75_BUTTON_PRESSED	192
 #define LOAD100_BUTTON_PRESSED	255
+#define FIRST_BUTTON_PRESSED	0
+#define SECOND_BUTTON_PRESSED	1
+#define ZERO_BUTTON_PRESSED		2
 
 #define SORT_TYPE_INDEX			0
 #define SORT_TYPE_DIRECTION_OUT	1
@@ -61,7 +65,10 @@ enum class TestButtons
 	BUTTON_LOAD_25,
 	BUTTON_LOAD_50,
 	BUTTON_LOAD_75,
-	BUTTON_LOAD_100
+	BUTTON_LOAD_100,
+	BUTTON_FIRST,
+	BUTTON_SECOND,
+	BUTTON_ZERO
 };
 
 struct DigitalButtons
@@ -88,6 +95,13 @@ struct VNHButtons
 	QPushButton* load50Button;
 	QPushButton* load75Button;
 	QPushButton* load100Button;
+};
+
+struct HLDButtons
+{
+	QPushButton* firstButton;
+	QPushButton* secondButton;
+	QPushButton* zeroButton;
 };
 
 struct CheckButton
@@ -125,6 +139,7 @@ public:
 
 	int stateDigital;
 	int statePWM;
+	int stateHLD;
 
 	//TestWindow* testwindow;
 
@@ -141,6 +156,9 @@ public slots:
 	void on_load50Button_clicked();
 	void on_load75Button_clicked();
 	void on_load100Button_clicked();
+	void on_first_clicked();
+	void on_second_clicked();
+	void on_zero_clicked();
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
 
@@ -150,7 +168,7 @@ signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
-	//void selectCurrentCell(QString connector, QString pin);
+	void selectCurrentCell(QString connector, QString pin);
 };
 
 class TestWindow : public QDialog
@@ -350,7 +368,7 @@ public slots:
 public slots:
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
-	//void selectCurrentCell(QString conector, QString pin);
+	void selectCurrentCell(QString conector, QString pin);
 
 signals:
 

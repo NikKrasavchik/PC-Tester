@@ -1,10 +1,8 @@
 #include "can.h"
 
-
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
-
 
 Can::Can()
 {
@@ -55,7 +53,7 @@ bool Can::initCan(WindowType windowType)
 
 	timerReadCan->start(1); // И запустим таймер]
 	timerSendConnectMsg->start(100); // И запустим таймер]
-	timerCheckStandConnection->start(300); // И запустим таймер
+	timerCheckStandConnection->start(500); // И запустим таймер
 
 	counterConnectMsg = 0;
 
@@ -355,19 +353,25 @@ Measureds* getMeasureds(int* msg)
 	case TypeCable::ANALOG_IN:
 		measured = new Measureds(msg[6], msg[7]);
 		break;
+
 	case TypeCable::HALL_IN:
 		//flags += 5;
 		break;
+
 	case TypeCable::DIG_OUT:
 	case TypeCable::PWM_OUT:
 		voltage = ((msg[4] << 8) + msg[5]) / 1000.0;
 		current = ((msg[6] << 8) + msg[7]) / 1000.0;
 		measured = new Measureds(voltage, current);
 		break;
+
 	case TypeCable::VNH_OUT:
 		voltage = ((msg[4] << 8) + msg[5]) / 1000.0;
 		current = ((msg[6] << 8) + msg[7]) / 1000.0;
 		measured = new Measureds(voltage, current);
+		break;
+
+	case TypeCable::HLD_OUT:
 		break;
 	}
 
@@ -504,20 +508,29 @@ uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 	case TypeCable::DIG_IN:
 		flags += 0;
 		break;
+
 	case TypeCable::ANALOG_IN:
 		flags += 1;
 		break;
+
 	case TypeCable::DIG_OUT:
 		flags += 2;
 		break;
+
 	case TypeCable::PWM_OUT:
 		flags += 3;
 		break;
+
 	case TypeCable::VNH_OUT:
 		flags += 4;
 		break;
+
 	case TypeCable::HALL_IN:
 		flags += 5;
+		break;
+
+	case TypeCable::HLD_OUT:
+		flags += 6;
 		break;
 	}
 	flags = flags << 4;

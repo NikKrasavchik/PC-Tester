@@ -36,17 +36,17 @@ void TestWindow::initUiTableHeaderInAutoTestAutoStand()
 	resetTableHeaderLanguageInAutoTestAutoStand();
 
 	mainTableWidget->setColumnWidth(COLUMN_CONNECTOR,	COLUMN_CONNECTOR_WIDTH);
-	mainTableWidget->setColumnWidth(COLUMN_PIN,		COLUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_PIN,			COLUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_TYPE,		COLUMN_TYPE_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_STAND,		COLUMN_STAND_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_PC,			COLUMN_PC_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_MORE,		COLUMN_MORE_WIDTH);
 
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CONNECTOR,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CONNECTOR,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PIN,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME,			QHeaderView::Stretch);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_STAND,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_STAND,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PC,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_MORE,			QHeaderView::Fixed);
 
@@ -115,6 +115,8 @@ void TestWindow::resetTableTypeLanguageInAutoTestAutoStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Аналоговый"));
 			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
+			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
 			break;
 
 		case ENGLISH_LANG:
@@ -128,6 +130,8 @@ void TestWindow::resetTableTypeLanguageInAutoTestAutoStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Analog");
 			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
+			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HLD");
 			break;
 		}
 	}

@@ -1305,7 +1305,6 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		return;
 	}
 
-
 	TestWindow* testWindow = new TestWindow(testType, preparedCables, selectedBlock, this);
 
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
@@ -1320,8 +1319,6 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	resetWindowView();
 	can->deinitCan();
 	this->show();
-
-
 }
 
 void MainWindow::resetWindowView()

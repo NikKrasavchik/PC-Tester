@@ -447,6 +447,7 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((DigitalButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((DigitalButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
+
 				case TypeCable::PWM_OUT:
 					((PWMButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.inactiveTableButton);
 					((PWMButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
@@ -454,6 +455,7 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((PWMButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
 					((PWMButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
+
 				case TypeCable::VNH_OUT:
 					((VNHButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((VNHButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.inactiveTableButton);
@@ -463,6 +465,13 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((VNHButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
 					((VNHButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
+
+				case TypeCable::HLD_OUT:
+					((HLDButtons*)(cableRows[i]->buttons))->firstButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->secondButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setStyleSheet(lightStyles.inactiveTableButton);
+					break;
+
 				default:
 					break;
 				}
@@ -482,6 +491,7 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((DigitalButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((DigitalButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.activeTableButton);
 					break;
+
 				case TypeCable::PWM_OUT:
 					((PWMButtons*)(cableRows[i]->buttons))->load0Button->setStyleSheet(lightStyles.activeTableButton);
 					((PWMButtons*)(cableRows[i]->buttons))->load25Button->setStyleSheet(lightStyles.inactiveTableButton);
@@ -489,6 +499,7 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((PWMButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
 					((PWMButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
+
 				case TypeCable::VNH_OUT:
 					((VNHButtons*)(cableRows[i]->buttons))->onButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((VNHButtons*)(cableRows[i]->buttons))->offButton->setStyleSheet(lightStyles.activeTableButton);
@@ -498,6 +509,13 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((VNHButtons*)(cableRows[i]->buttons))->load75Button->setStyleSheet(lightStyles.inactiveTableButton);
 					((VNHButtons*)(cableRows[i]->buttons))->load100Button->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
+
+				case TypeCable::HLD_OUT:
+					((HLDButtons*)(cableRows[i]->buttons))->firstButton->setStyleSheet(lightStyles.activeTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->secondButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setStyleSheet(lightStyles.inactiveTableButton);
+					break;
+
 				default:
 					break;
 				}
@@ -1045,6 +1063,13 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 				((VNHButtons*)(cableRows[i]->buttons))->load75Button->setDisabled(statusButton);
 				((VNHButtons*)(cableRows[i]->buttons))->load100Button->setDisabled(statusButton);
 				break;
+
+			case TypeCable::HLD_OUT:
+				((HLDButtons*)(cableRows[i]->buttons))->firstButton->setDisabled(statusButton);
+				((HLDButtons*)(cableRows[i]->buttons))->secondButton->setDisabled(statusButton);
+				((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setDisabled(statusButton);
+				break;
+
 			default:
 				break;
 			}
@@ -1066,9 +1091,7 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 	{
 		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
 		{
-
 			//TestTableRowProperties pop = *cableRows[i];
-
 			Can::sendTestMsg(cableRows[i]->connectorInt, cableRows[i]->pin.toInt(), cableRows[i]->typeInt, NameTestingBlock::BCM);
 		}
 	}
@@ -1079,7 +1102,6 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 {
 	if (isFullTestEnabled)
 	{
-
 		isFullTestEnabled = false;
 		for (int i = 0; i < cableRows.size(); i++)
 			if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
@@ -1123,9 +1145,8 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
 				
 		ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
-
 	}
-				//mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
+	//mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
 	resetLanguage();
 }
 	
@@ -1237,16 +1258,24 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 					cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
 					cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
 					break;
+
 				case TypeCable::PWM_OUT:
 					cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
 					cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
 					break;
+
 				case TypeCable::VNH_OUT:
 					cableRows[i]->switchButtonState(TestButtons::BUTTON_OFF);
 					cableRows[i]->switchButtonState(TestButtons::BUTTON_LOAD_0);
 					cableRows[i]->stateDigital = OFF_BUTTON_PRESSED;
 					cableRows[i]->statePWM = LOAD0_BUTTON_PRESSED;
 					break;
+
+				case TypeCable::HLD_OUT:
+					cableRows[i]->switchButtonState(TestButtons::BUTTON_FIRST);
+					cableRows[i]->stateHLD = ZERO_BUTTON_PRESSED;
+					break;
+
 				default:
 					break;
 				}
@@ -1255,7 +1284,6 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 		else
 		{
 			resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
-
 		}
 	}
 	statusFlags->StatusConnected = statusConnect;
@@ -1381,6 +1409,40 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_VNH_HEIGHT);
+		}
+		else if (cableRows[currentRowNum]->typeStr == "HLD")
+		{
+			QHBoxLayout* interactionButtonsActiveHLayout = new QHBoxLayout(interactionButtonsWidget);
+			interactionButtonsActiveHLayout->setObjectName("interactionButtonsActiveHLayout");
+			interactionButtonsCellVLayout->addLayout(interactionButtonsActiveHLayout);
+			QVBoxLayout* interactionButtonsActiveVLayout = new QVBoxLayout(interactionButtonsWidget);
+			interactionButtonsActiveVLayout->setObjectName("interactionButtonsActiveVLayout");
+
+			QSpacerItem* leftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+			QSpacerItem* rightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+
+			interactionButtonsActiveHLayout->addItem(leftSpacer);
+			interactionButtonsActiveHLayout->addLayout(interactionButtonsActiveVLayout);
+			interactionButtonsActiveHLayout->addItem(rightSpacer);
+
+			QSpacerItem* upSpacer = new QSpacerItem(0, 10, QSizePolicy::Expanding);
+			QSpacerItem* middleUpSpacer = new QSpacerItem(0, 10, QSizePolicy::Expanding);
+			QSpacerItem* middleDownSpacer = new QSpacerItem(0, 10, QSizePolicy::Expanding);
+			QSpacerItem* downSpacer = new QSpacerItem(0, 10, QSizePolicy::Expanding);
+
+			interactionButtonsActiveVLayout->addItem(upSpacer);
+			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->firstButton);
+			interactionButtonsActiveVLayout->addItem(middleUpSpacer);
+			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->secondButton);
+			interactionButtonsActiveVLayout->addItem(middleDownSpacer);
+			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->zeroButton);
+			interactionButtonsActiveVLayout->addItem(downSpacer);
+
+			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->firstButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_first_clicked);
+			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->secondButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_second_clicked);
+			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->zeroButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_zero_clicked);
+
+			mainTableWidget->setRowHeight(currentRowNum, COLUMN_HLD_HEIGHT);
 		}
 	}
 	//connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
@@ -1565,6 +1627,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 	case TypeCable::DIG_OUT:
 	case TypeCable::PWM_OUT:
 	case TypeCable::VNH_OUT:
+	case TypeCable::HLD_OUT:
 		moreWindow = new MoreWindowOut(this);
 		break;
 
