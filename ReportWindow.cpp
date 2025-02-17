@@ -1068,11 +1068,8 @@ void ReportWindow::on_saveButton_clicked()
 	}
 	
 
-	//std::filesystem::path path = L"./Новая папка";
-	//l(fs::is_directory(path));
-	
-	//auto result = std::filesystem::create_directory("test");
-
+	QDir dir;
+	dir.mkdir("Reports");
 	xlsx.saveAs("Reports/Report.xlsx");
 
 

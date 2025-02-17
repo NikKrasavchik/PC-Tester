@@ -182,7 +182,8 @@ enum class TypeCable
 	HALL_IN,
 	DIG_OUT,
 	PWM_OUT,
-	VNH_OUT
+	VNH_OUT,
+	HLD_OUT
 };
 
 #define DIRECTION_NOT_SET		NOT_SET
