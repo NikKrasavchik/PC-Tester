@@ -46,7 +46,7 @@ PC начинает отправлять сообщение ConnectMsgPCPeriodic
 	0. DM/BCM - DM = 0 / BCM = 1
 	1. Type pin - DIG_IN = 000 | ANALOG_IN = 001
 	2. Type pin - HALL_IN = 010 | DIG_OUT = 011 
-	3. Type pin - PWM_OUT = 100 | VNH_OUT = 101
+	3. Type pin - PWM_OUT = 100 | VNH_OUT = 101 | HLD_OUT = 110
 
 
 

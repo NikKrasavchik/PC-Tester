@@ -51,9 +51,9 @@ bool Can::initCan(WindowType windowType)
 
 	}
 
-	timerReadCan->start(1); // И запустим таймер]
+	timerReadCan->start(5); // И запустим таймер]
 	timerSendConnectMsg->start(100); // И запустим таймер]
-	timerCheckStandConnection->start(500); // И запустим таймер
+	timerCheckStandConnection->start(TIME_CHECKCONNECTION); // И запустим таймер
 
 	counterConnectMsg = 0;
 
@@ -418,8 +418,10 @@ void Can::Timer_ReadCan()
 			{
 				Signal_ChangedStatusStandConnect(true);
 				b_flagStatusConnection = true;
-				b_flagStandConnectionCheck = true;
+				timerCheckStandConnection->start(TIME_CHECKCONNECTION);
 				counterConnectMsg = 0;
+
+
 			}
 			else if (id == ID_CAN_AUTOSTAND && // переодическое сообшение о конекте
 				b_flagStatusConnection &&
@@ -432,6 +434,8 @@ void Can::Timer_ReadCan()
 				msgReceive[6] == 0x0 &&
 				msgReceive[7] == 0xFA)
 			{
+				qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "I received a message about a periodic connection";
+				timerCheckStandConnection->start(TIME_CHECKCONNECTION);
 				b_flagStandConnectionCheck = true;
 				counterConnectMsg++;
 			}
@@ -479,17 +483,22 @@ void Can::Timer_SendConnectMsg()
 
 void Can::Timer_CheckStandConnection()
 {
-	if (b_flagStatusConnection)
-	{
-		if(b_flagStandConnectionCheck)
-			b_flagStandConnectionCheck = false;
-		else
-		{
-			b_flagStandConnectionCheck = false;
-			b_flagStatusConnection = false;
-			Signal_ChangedStatusStandConnect(false);
-		}
-	}
+
+	timerCheckStandConnection->stop();
+	Signal_ChangedStatusStandConnect(false);
+	b_flagStatusConnection = false;
+
+	//if (b_flagStatusConnection)
+	//{
+	//	if(b_flagStandConnectionCheck)
+	//		b_flagStandConnectionCheck = false;
+	//	else
+	//	{
+	//		b_flagStandConnectionCheck = false;
+	//		b_flagStatusConnection = false;
+	//		Signal_ChangedStatusStandConnect(false);
+	//	}
+	//}
 	
 #ifdef DEBUG_CAN
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
