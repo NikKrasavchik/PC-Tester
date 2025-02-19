@@ -16,6 +16,8 @@
 #define ID_CAN_AUTOSTAND 0x51
 #define ID_CAN_MANUALSTAND 0x100
 
+#define TIME_CHECKCONNECTION 200
+
 class Can : public QObject
 {
 	Q_OBJECT
