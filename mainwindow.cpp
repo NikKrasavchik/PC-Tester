@@ -205,8 +205,8 @@ void MainWindow::initUiSwitchType()
 	rightSwitchStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Preferred);
 	switchTypeHLayout->addItem(rightSwitchStandSpacer);
 
-	// Auto
 	autoStandButton = new QPushButton(mainLayoutWidget);
+	// Auto
 	autoStandButton->setObjectName("autoStandButton");
 	autoStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
 	switchTypeHLayout->addWidget(autoStandButton);
@@ -1304,7 +1304,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		on_checkAdaptersButton_clicked();
 		return;
 	}
-
+	
 	TestWindow* testWindow = new TestWindow(testType, preparedCables, selectedBlock, this);
 
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);

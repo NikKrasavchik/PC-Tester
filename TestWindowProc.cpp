@@ -219,21 +219,21 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 		case TYPE_HLD:
 			buttons = new HLDButtons();
 
-			((HLDButtons*)buttons)->firstButton = new QPushButton();
-			((HLDButtons*)buttons)->firstButton->setObjectName("firstButton");
-			((HLDButtons*)buttons)->firstButton->setText("first");
-			((HLDButtons*)buttons)->firstButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
-			((HLDButtons*)buttons)->firstButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+			((HLDButtons*)buttons)->highButton = new QPushButton();
+			((HLDButtons*)buttons)->highButton->setObjectName("highButton");
+			((HLDButtons*)buttons)->highButton->setText("High");
+			((HLDButtons*)buttons)->highButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+			((HLDButtons*)buttons)->highButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
-			((HLDButtons*)buttons)->secondButton = new QPushButton();
-			((HLDButtons*)buttons)->secondButton->setObjectName("secondButton");
-			((HLDButtons*)buttons)->secondButton->setText("second");
-			((HLDButtons*)buttons)->secondButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
-			((HLDButtons*)buttons)->secondButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+			((HLDButtons*)buttons)->lowButton = new QPushButton();
+			((HLDButtons*)buttons)->lowButton->setObjectName("lowButton");
+			((HLDButtons*)buttons)->lowButton->setText("Low");
+			((HLDButtons*)buttons)->lowButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+			((HLDButtons*)buttons)->lowButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 			
 			((HLDButtons*)buttons)->zeroButton = new QPushButton();
 			((HLDButtons*)buttons)->zeroButton->setObjectName("zeroButton");
-			((HLDButtons*)buttons)->zeroButton->setText("zero");
+			((HLDButtons*)buttons)->zeroButton->setText("Zero");
 			((HLDButtons*)buttons)->zeroButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((HLDButtons*)buttons)->zeroButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 			break;
@@ -421,24 +421,24 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 	}
 	else if (typeStr == "HLD")
 	{
-		((HLDButtons*)buttons)->firstButton->setStyleSheet(currentStyles->inactiveTableButton);
-		((HLDButtons*)buttons)->secondButton->setStyleSheet(currentStyles->inactiveTableButton);
+		((HLDButtons*)buttons)->highButton->setStyleSheet(currentStyles->inactiveTableButton);
+		((HLDButtons*)buttons)->lowButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((HLDButtons*)buttons)->zeroButton->setStyleSheet(currentStyles->inactiveTableButton);
 
-		((HLDButtons*)buttons)->firstButton->setDisabled(false);
-		((HLDButtons*)buttons)->secondButton->setDisabled(false);
+		((HLDButtons*)buttons)->highButton->setDisabled(false);
+		((HLDButtons*)buttons)->lowButton->setDisabled(false);
 		((HLDButtons*)buttons)->zeroButton->setDisabled(false);
 
 		switch (testButton)
 		{
-		case TestButtons::BUTTON_FIRST:
-			((HLDButtons*)buttons)->firstButton->setStyleSheet(currentStyles->activeTableButton);
-			((HLDButtons*)buttons)->firstButton->setDisabled(true);
+		case TestButtons::BUTTON_HIGH:
+			((HLDButtons*)buttons)->highButton->setStyleSheet(currentStyles->activeTableButton);
+			((HLDButtons*)buttons)->highButton->setDisabled(true);
 			break;
 
-		case TestButtons::BUTTON_SECOND:
-			((HLDButtons*)buttons)->secondButton->setStyleSheet(currentStyles->activeTableButton);
-			((HLDButtons*)buttons)->secondButton->setDisabled(true);
+		case TestButtons::BUTTON_LOW:
+			((HLDButtons*)buttons)->lowButton->setStyleSheet(currentStyles->activeTableButton);
+			((HLDButtons*)buttons)->lowButton->setDisabled(true);
 			break;
 
 		case TestButtons::BUTTON_ZERO:
@@ -517,30 +517,31 @@ void TestTableRowProperties::on_load50Button_clicked()
 	sendSignal();
 }
 
-void TestTableRowProperties::on_first_clicked()
+void TestTableRowProperties::on_high_clicked()
 {
-	if (stateHLD == FIRST_BUTTON_PRESSED)
+	if (stateHLD == HIGH_BUTTON_PRESSED)
 		return;
 
 	selectCurrentCell(connectorStr, pin);
 
-	switchButtonState(TestButtons::BUTTON_FIRST);
-	stateHLD = FIRST_BUTTON_PRESSED;
+	switchButtonState(TestButtons::BUTTON_HIGH);
+	stateHLD = HIGH_BUTTON_PRESSED;
 
-	sendSignal();
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 1, 0);
+
 }
 
-void TestTableRowProperties::on_second_clicked()
+void TestTableRowProperties::on_low_clicked()
 {
-	if (stateHLD == SECOND_BUTTON_PRESSED)
+	if (stateHLD == LOW_BUTTON_PRESSED)
 		return;
 
 	selectCurrentCell(connectorStr, pin);
 
-	switchButtonState(TestButtons::BUTTON_SECOND);
-	stateHLD = SECOND_BUTTON_PRESSED;
+	switchButtonState(TestButtons::BUTTON_LOW);
+	stateHLD = LOW_BUTTON_PRESSED;
 
-	sendSignal();
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 2, 0);
 }
 
 void TestTableRowProperties::on_zero_clicked()
@@ -553,7 +554,8 @@ void TestTableRowProperties::on_zero_clicked()
 	switchButtonState(TestButtons::BUTTON_ZERO);
 	stateHLD = ZERO_BUTTON_PRESSED;
 
-	sendSignal();
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, 0);
+
 }
 
 void TestTableRowProperties::on_load75Button_clicked()

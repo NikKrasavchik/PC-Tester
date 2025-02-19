@@ -467,8 +467,8 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					break;
 
 				case TypeCable::HLD_OUT:
-					((HLDButtons*)(cableRows[i]->buttons))->firstButton->setStyleSheet(lightStyles.inactiveTableButton);
-					((HLDButtons*)(cableRows[i]->buttons))->secondButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->highButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->lowButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
 
@@ -511,8 +511,8 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					break;
 
 				case TypeCable::HLD_OUT:
-					((HLDButtons*)(cableRows[i]->buttons))->firstButton->setStyleSheet(lightStyles.activeTableButton);
-					((HLDButtons*)(cableRows[i]->buttons))->secondButton->setStyleSheet(lightStyles.inactiveTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->highButton->setStyleSheet(lightStyles.activeTableButton);
+					((HLDButtons*)(cableRows[i]->buttons))->lowButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
 
@@ -1065,8 +1065,8 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 				break;
 
 			case TypeCable::HLD_OUT:
-				((HLDButtons*)(cableRows[i]->buttons))->firstButton->setDisabled(statusButton);
-				((HLDButtons*)(cableRows[i]->buttons))->secondButton->setDisabled(statusButton);
+				((HLDButtons*)(cableRows[i]->buttons))->highButton->setDisabled(statusButton);
+				((HLDButtons*)(cableRows[i]->buttons))->lowButton->setDisabled(statusButton);
 				((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setDisabled(statusButton);
 				break;
 
@@ -1272,7 +1272,7 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 					break;
 
 				case TypeCable::HLD_OUT:
-					cableRows[i]->switchButtonState(TestButtons::BUTTON_FIRST);
+					cableRows[i]->switchButtonState(TestButtons::BUTTON_ZERO);
 					cableRows[i]->stateHLD = ZERO_BUTTON_PRESSED;
 					break;
 
@@ -1431,15 +1431,15 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			QSpacerItem* downSpacer = new QSpacerItem(0, 10, QSizePolicy::Expanding);
 
 			interactionButtonsActiveVLayout->addItem(upSpacer);
-			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->firstButton);
+			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->highButton);
 			interactionButtonsActiveVLayout->addItem(middleUpSpacer);
-			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->secondButton);
+			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->lowButton);
 			interactionButtonsActiveVLayout->addItem(middleDownSpacer);
 			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->zeroButton);
 			interactionButtonsActiveVLayout->addItem(downSpacer);
 
-			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->firstButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_first_clicked);
-			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->secondButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_second_clicked);
+			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->highButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_high_clicked);
+			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->lowButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_low_clicked);
 			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->zeroButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_zero_clicked);
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_HLD_HEIGHT);
