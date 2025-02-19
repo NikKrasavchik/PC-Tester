@@ -195,46 +195,6 @@ enum class TypeCable
 #define DIRECTION_OUT			0
 #define DIRECTION_IN			1
 
-//class Cable
-//{
-//	int id;
-//	ConnectorId connector;
-//	int pin;
-//	int direction;
-//	int type;
-//	int canId;
-//	int bit;
-//	double minCurrent;
-//	double maxCurrent;
-//	double minVoltage;
-//	double maxVoltage;
-//	QString name;
-//	QString component;
-//
-//	Cable() {};
-//	Cable(ConnectorId connector, int pin)
-//	{
-//		this->connector = connector;
-//		this->pin = pin;
-//	}
-//	Cable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, double minCurrent, double maxCurrent, double minVoltage, double maxVoltage, QString name, QString component)
-//	{
-//		this->id = id;
-//		this->connector = connector;
-//		this->pin = pin;
-//		this->direction = direction;
-//		this->type = type;
-//		this->canId = canId;
-//		this->bit = bit;
-//		this->minCurrent = minCurrent;
-//		this->maxCurrent = maxCurrent;
-//		this->minVoltage = minVoltage;
-//		this->maxVoltage = maxVoltage;
-//		this->name = name;
-//		this->component = component;
-//	}
-//};
-
 struct FloatCheck
 {
 	double d1;
@@ -252,7 +212,6 @@ struct FloatCheck
 };
 
 extern std::vector<std::vector<FloatCheck*>> floatCheck;
-
 
 extern ViewWindowState* viewWindowState;
 
@@ -302,3 +261,6 @@ namespace Warnings
 const QString style = "Fusion";
 const QString appstylePath = ":/recources/style/appstyles.qss";
 const QString appLogoPath = ":/Dark/icons/App_Logo_White.png";
+
+#define RED_COLOR		"#FF8686"
+#define GREEN_COLOR		"#7CC770"

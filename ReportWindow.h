@@ -126,6 +126,7 @@ private:
 	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
+	//void fillTableColor(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
 	
 	void resetBaseLanguage();
 	void resetTheme();

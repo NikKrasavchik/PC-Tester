@@ -467,6 +467,90 @@ void ReportWindow::generateTableSign(TypeCable type, int maxTypeOffset)
 	}
 }
 
+void static fillTableColorOut(TestTableRowProperties* cableRow, int measuredIndex, QTableWidgetItem** tableItems)
+{
+	bool disparity = false;
+
+	if (cableRow->measureds[measuredIndex]->voltage < cableRow->thresholds[measuredIndex].minVoltage)
+	{
+		tableItems[0]->setBackgroundColor(RED_COLOR);
+		tableItems[2]->setBackgroundColor(RED_COLOR);
+		disparity = true;
+	}
+	if (cableRow->measureds[measuredIndex]->voltage > cableRow->thresholds[measuredIndex].maxVoltage)
+	{
+		tableItems[0]->setBackgroundColor(RED_COLOR);
+		tableItems[3]->setBackgroundColor(RED_COLOR);
+		disparity = true;
+	}
+	if (!disparity)
+		tableItems[0]->setBackgroundColor(GREEN_COLOR);
+	
+	disparity = false;
+	if (cableRow->measureds[measuredIndex]->current < cableRow->thresholds[measuredIndex].minCurrent)
+	{
+		tableItems[1]->setBackgroundColor(RED_COLOR);
+		tableItems[4]->setBackgroundColor(RED_COLOR);
+		disparity = true;
+	}
+	if (cableRow->measureds[measuredIndex]->current > cableRow->thresholds[measuredIndex].maxCurrent)
+	{
+		tableItems[1]->setBackgroundColor(RED_COLOR);
+		tableItems[5]->setBackgroundColor(RED_COLOR);
+		disparity = true;
+	}
+	if (!disparity)
+		tableItems[1]->setBackgroundColor(GREEN_COLOR);
+}
+
+void static fillTableColorIn(TestTableRowProperties* cableRow, QTableWidgetItem** tableItems)
+{
+	tableItems[0]->setBackgroundColor(cableRow->measureds[0]->voltage ? GREEN_COLOR : RED_COLOR);
+	tableItems[1]->setBackgroundColor(cableRow->measureds[1]->current ? GREEN_COLOR : RED_COLOR);
+}
+
+void static fillTableColorInAnalog(TestTableRowProperties* cableRow, int measuredIndex, QTableWidgetItem** tableItems)
+{
+	bool disparity = false;
+
+	if (cableRow->measureds[measuredIndex]->voltage < cableRow->thresholds[measuredIndex].minValue)
+	{
+		tableItems[0]->setBackgroundColor(RED_COLOR);
+		tableItems[2]->setBackgroundColor(RED_COLOR);
+		disparity = true;
+	}
+	if (cableRow->measureds[measuredIndex]->voltage > cableRow->thresholds[measuredIndex].maxValue)
+	{
+		tableItems[0]->setBackgroundColor(RED_COLOR);
+		tableItems[3]->setBackgroundColor(RED_COLOR);
+		disparity = true;
+	}
+	if (!disparity)
+		tableItems[0]->setBackgroundColor(GREEN_COLOR);
+}
+
+void static fillTableColor(TestTableRowProperties* cableRow, int measuredIndex, QTableWidgetItem** tableItems)
+{
+	switch (cableRow->typeInt)
+	{
+	case TypeCable::DIG_OUT:
+	case TypeCable::PWM_OUT:
+	case TypeCable::VNH_OUT:
+	case TypeCable::HLD_OUT:
+		fillTableColorOut(cableRow, measuredIndex, tableItems);
+		break;
+		
+	case TypeCable::DIG_IN:
+	case TypeCable::HALL_IN:
+		fillTableColorIn(cableRow, tableItems);
+		break;
+
+	case TypeCable::ANALOG_IN:
+		fillTableColorInAnalog(cableRow, measuredIndex, tableItems);
+		break;
+	}
+}
+
 void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int i = 0; i < cableRows.size(); i++)
@@ -502,12 +586,23 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 			prepareItem(tableWidget, indCurrentRow, indColumnThresholdsCurrentMin, SPAN_NONE);
 			prepareItem(tableWidget, indCurrentRow, indColumnThresholdsCurrentMax, SPAN_NONE);
 
-			tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage)->setText(cableRows[i]->measureds[j]->voltage != -1 ? QString::number(cableRows[i]->measureds[j]->current) : "-");
-			tableWidget->item(indCurrentRow, indColumnMeasuredValuesCurrent)->setText(cableRows[i]->measureds[j]->current != -1 ? QString::number(cableRows[i]->measureds[j]->voltage) : "-");
-			tableWidget->item(indCurrentRow, indColumnThresholdsVoltageMin)->setText(cableRows[i]->thresholds[j].minVoltage != -1 ? QString::number(cableRows[i]->thresholds[j].minVoltage) : "-");
-			tableWidget->item(indCurrentRow, indColumnThresholdsVoltageMax)->setText(cableRows[i]->thresholds[j].maxVoltage != -1 ? QString::number(cableRows[i]->thresholds[j].maxVoltage) : "-");
-			tableWidget->item(indCurrentRow, indColumnThresholdsCurrentMin)->setText(cableRows[i]->thresholds[j].minCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].minCurrent) : "-");
-			tableWidget->item(indCurrentRow, indColumnThresholdsCurrentMax)->setText(cableRows[i]->thresholds[j].maxCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].maxCurrent) : "-");
+			QTableWidgetItem* tableItems[6];
+
+			tableItems[0] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
+			tableItems[1] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
+			tableItems[2] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
+			tableItems[3] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
+			tableItems[4] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
+			tableItems[5] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
+
+			tableItems[0]->setText(cableRows[i]->measureds[j]->voltage != -1 ? QString::number(cableRows[i]->measureds[j]->current) : "-");
+			tableItems[1]->setText(cableRows[i]->measureds[j]->current != -1 ? QString::number(cableRows[i]->measureds[j]->voltage) : "-");
+			tableItems[2]->setText(cableRows[i]->thresholds[j].minVoltage != -1 ? QString::number(cableRows[i]->thresholds[j].minVoltage) : "-");
+			tableItems[3]->setText(cableRows[i]->thresholds[j].maxVoltage != -1 ? QString::number(cableRows[i]->thresholds[j].maxVoltage) : "-");
+			tableItems[4]->setText(cableRows[i]->thresholds[j].minCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].minCurrent) : "-");
+			tableItems[5]->setText(cableRows[i]->thresholds[j].maxCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].maxCurrent) : "-");
+
+			fillTableColor(cableRows[i], j, tableItems);
 
 			indColumnMeasuredValuesVoltage += MEASUREMENT_OFFSET_OUT;
 			indColumnMeasuredValuesCurrent += MEASUREMENT_OFFSET_OUT;
@@ -657,6 +752,11 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 	}
 }
 
+void ReportWindow::on_commentTextEdit_textChanged()
+{
+
+}
+
 void writeHorizontalAlignCell(Document& xlsx, int row, int columnStart, int columnEnd, const QVariant& text, QXlsx::Format::HorizontalAlignment align, Format formatText = Format(), const QColor& color = nullptr)
 {
 	CellRange r(row, columnStart, row, columnEnd);
@@ -677,9 +777,6 @@ void genereateHeaderFile(Document& xlsx, QString testerName)
 	timeFormat.setBorderStyle(Format::BorderThin);
 	Format format;
 	format.setBorderStyle(Format::BorderThin);
-
-
-
 
 	writeHorizontalAlignCell(xlsx, 1, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Дата проверки") : QString("Date of inspection"), Format::AlignLeft, format);
 	writeHorizontalAlignCell(xlsx, 2, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Время проверки") : QString("Time of inspection"), Format::AlignLeft, format);
@@ -820,28 +917,17 @@ QString getStrType(TypeCable type)
 	return str;
 }
 
-void ReportWindow::on_commentTextEdit_textChanged()
-{
-
-}
-
-
 void ReportWindow::on_saveButton_clicked()
 {
 	int maxOffset = getMaxColumnOffset(cableRows);
-
 
 	Document xlsx;
 	xlsx.addSheet(viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Отчёт") : QString("Report"));
 	xlsx.currentWorksheet()->setGridLinesVisible(false);
 	xlsx.setColumnWidth(1,	5, 13);
 
-
 	genereateHeaderFile(xlsx, testerName);
 	genereateHeaderTable(xlsx, maxOffset);
-
-
-
 
 	Format format;
 	format.setHorizontalAlignment(Format::AlignHCenter);
@@ -938,7 +1024,6 @@ void ReportWindow::on_saveButton_clicked()
 				xlsx.write(numRow, 5, typedCableRows[type][i]->name, tmpRowFormat);
 				xlsx.write(numRow, 6 + maxOffset, typedCableRows[type][i]->comment, tmpRowCommentFormat);
 
-
 				for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 				{
 					if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
@@ -1003,9 +1088,6 @@ void ReportWindow::on_saveButton_clicked()
 						xlsx.write(numRow + 3, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
 						xlsx.write(numRow + 3, 10 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
 						xlsx.write(numRow + 3, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
-
-
-
 					}
 					CellRange* range = new CellRange(numRow, 6 + ((int)typedCableRows[type][i]->thresholds.size() * 6), numRow + (int)typedCableRows[type].size() + 3, 9 + maxOffset - 4);
 					if (typedCableRows[type][i]->thresholds.size() * 6 != maxOffset)
@@ -1025,8 +1107,6 @@ void ReportWindow::on_saveButton_clicked()
 
 				for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 				{
-
-
 					if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
 					{
 						xlsx.write(numRow, 6 + (6 * j), QString("-"), tmpRowFormat);
@@ -1035,14 +1115,13 @@ void ReportWindow::on_saveButton_clicked()
 						xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRowFormat);
 						xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRowFormat);
 						xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRowFormat);
-
 					}
 					else
 					{
 						Format tmpRedFormat(format);
-						tmpRedFormat.setPatternBackgroundColor("#FF8686");
+						tmpRedFormat.setPatternBackgroundColor(RED_COLOR);
 						Format tmpGreenFormat(format);
-						tmpGreenFormat.setPatternBackgroundColor("#7CC770");
+						tmpGreenFormat.setPatternBackgroundColor(GREEN_COLOR);
 						if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minVoltage && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxVoltage)
 						{
 							xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpGreenFormat);
@@ -1057,7 +1136,6 @@ void ReportWindow::on_saveButton_clicked()
 						}
 						else if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].maxVoltage)
 						{
-
 							xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpRedFormat);
 							xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRowFormat);
 							xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRedFormat); // red
@@ -1077,13 +1155,11 @@ void ReportWindow::on_saveButton_clicked()
 						}
 						else if (typedCableRows[type][i]->measureds[j]->current > typedCableRows[type][i]->thresholds[j].maxCurrent)
 						{
-
 							xlsx.write(numRow, 7 + (6 * j), typedCableRows[type][i]->measureds[j]->current, tmpRedFormat);
 							xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRowFormat);
 							xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRedFormat); // red
 						}
 					}
-
 				}
 				numRow++;
 				break;
@@ -1091,12 +1167,9 @@ void ReportWindow::on_saveButton_clicked()
 		}
 	}
 	
-
 	QDir dir;
 	dir.mkdir("Reports");
 	xlsx.saveAs("Reports/Report.xlsx");
-
-
 }
 
 
