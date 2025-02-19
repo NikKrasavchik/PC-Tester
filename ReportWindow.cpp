@@ -469,6 +469,9 @@ void ReportWindow::generateTableSign(TypeCable type, int maxTypeOffset)
 
 void static fillTableColorOut(TestTableRowProperties* cableRow, int measuredIndex, QTableWidgetItem** tableItems)
 {
+	if (cableRow->measureds[measuredIndex]->voltage == -1 && cableRow->measureds[measuredIndex]->current == -1)
+		return;
+
 	bool disparity = false;
 
 	if (cableRow->measureds[measuredIndex]->voltage < cableRow->thresholds[measuredIndex].minVoltage)
@@ -505,24 +508,30 @@ void static fillTableColorOut(TestTableRowProperties* cableRow, int measuredInde
 
 void static fillTableColorIn(TestTableRowProperties* cableRow, QTableWidgetItem** tableItems)
 {
+	if (cableRow->measureds[0]->voltage == -1 && cableRow->measureds[0]->current == -1)
+		return;
+
 	tableItems[0]->setBackgroundColor(cableRow->measureds[0]->voltage ? GREEN_COLOR : RED_COLOR);
-	tableItems[1]->setBackgroundColor(cableRow->measureds[1]->current ? GREEN_COLOR : RED_COLOR);
+	tableItems[1]->setBackgroundColor(cableRow->measureds[0]->current ? GREEN_COLOR : RED_COLOR);
 }
 
 void static fillTableColorInAnalog(TestTableRowProperties* cableRow, int measuredIndex, QTableWidgetItem** tableItems)
 {
+	if (cableRow->measureds[measuredIndex]->voltage == -1)
+		return;
+
 	bool disparity = false;
 
 	if (cableRow->measureds[measuredIndex]->voltage < cableRow->thresholds[measuredIndex].minValue)
 	{
 		tableItems[0]->setBackgroundColor(RED_COLOR);
-		tableItems[2]->setBackgroundColor(RED_COLOR);
+		tableItems[1]->setBackgroundColor(RED_COLOR);
 		disparity = true;
 	}
 	if (cableRow->measureds[measuredIndex]->voltage > cableRow->thresholds[measuredIndex].maxValue)
 	{
 		tableItems[0]->setBackgroundColor(RED_COLOR);
-		tableItems[3]->setBackgroundColor(RED_COLOR);
+		tableItems[2]->setBackgroundColor(RED_COLOR);
 		disparity = true;
 	}
 	if (!disparity)
@@ -587,13 +596,12 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 			prepareItem(tableWidget, indCurrentRow, indColumnThresholdsCurrentMax, SPAN_NONE);
 
 			QTableWidgetItem* tableItems[6];
-
 			tableItems[0] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
-			tableItems[1] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
-			tableItems[2] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
-			tableItems[3] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
-			tableItems[4] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
-			tableItems[5] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesVoltage);
+			tableItems[1] = tableWidget->item(indCurrentRow, indColumnMeasuredValuesCurrent);
+			tableItems[2] = tableWidget->item(indCurrentRow, indColumnThresholdsVoltageMin);
+			tableItems[3] = tableWidget->item(indCurrentRow, indColumnThresholdsVoltageMax);
+			tableItems[4] = tableWidget->item(indCurrentRow, indColumnThresholdsCurrentMin);
+			tableItems[5] = tableWidget->item(indCurrentRow, indColumnThresholdsCurrentMax);
 
 			tableItems[0]->setText(cableRows[i]->measureds[j]->voltage != -1 ? QString::number(cableRows[i]->measureds[j]->current) : "-");
 			tableItems[1]->setText(cableRows[i]->measureds[j]->current != -1 ? QString::number(cableRows[i]->measureds[j]->voltage) : "-");
@@ -654,8 +662,11 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 		prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValue1, SPAN_HORIZONTAL_DOUBLE);
 		prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValue2, SPAN_HORIZONTAL_DOUBLE);
 
-		tableWidget->item(indCurrentRow, indColumnMeasuredValue1)->setText(QString::number(cableRows[i]->measureds[0]->voltage) != "-1" ? QString::number(cableRows[i]->measureds[0]->voltage) : "-");
-		tableWidget->item(indCurrentRow, indColumnMeasuredValue2)->setText(QString::number(cableRows[i]->measureds[0]->current) != "-1" ? QString::number(cableRows[i]->measureds[0]->current) : "-");
+		QTableWidgetItem* tableItems[2];
+		tableItems[0] = tableWidget->item(indCurrentRow, indColumnMeasuredValue1);
+		tableItems[1] = tableWidget->item(indCurrentRow, indColumnMeasuredValue2);
+
+		fillTableColor(cableRows[i], 0, tableItems);
 
 		commentsTextEdits.push_back(new QTextEdit());
 		connect(commentsTextEdits[commentsTextEdits.size() - 1], &QTextEdit::textChanged, this, &ReportWindow::on_commentTextEdit_textChanged);
@@ -704,9 +715,16 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 			prepareItem(tableWidget, indCurrentRow, indColumnThresholdsMin, SPAN_NONE);
 			prepareItem(tableWidget, indCurrentRow, indColumnThresholdsMax, SPAN_NONE);
 
-			tableWidget->item(indCurrentRow, indColumnMeasuredValues)->setText(cableRows[i]->measureds[j]->voltage != -1 ? QString::number(cableRows[i]->measureds[j]->voltage) : "-");
-			tableWidget->item(indCurrentRow, indColumnThresholdsMin)->setText(cableRows[i]->thresholds[j].minValue != -1 ? QString::number(cableRows[i]->thresholds[j].minValue) : "-");
-			tableWidget->item(indCurrentRow, indColumnThresholdsMax)->setText(cableRows[i]->thresholds[j].maxValue != -1 ? QString::number(cableRows[i]->thresholds[j].maxValue) : "-");
+			QTableWidgetItem* tableItems[3];
+			tableItems[0] = tableWidget->item(indCurrentRow, indColumnMeasuredValues);
+			tableItems[1] = tableWidget->item(indCurrentRow, indColumnThresholdsMin);
+			tableItems[2] = tableWidget->item(indCurrentRow, indColumnThresholdsMax);
+
+			tableItems[0]->setText(cableRows[i]->measureds[j]->voltage != -1 ? QString::number(cableRows[i]->measureds[j]->voltage) : "-");
+			tableItems[1]->setText(cableRows[i]->thresholds[j].minValue != -1 ? QString::number(cableRows[i]->thresholds[j].minValue) : "-");
+			tableItems[2]->setText(cableRows[i]->thresholds[j].maxValue != -1 ? QString::number(cableRows[i]->thresholds[j].maxValue) : "-");
+
+			fillTableColor(cableRows[i], j, tableItems);
 
 			indColumnMeasuredValues += MEASUREMENT_OFFSET_IN_ANALOG;
 			indColumnThresholdsMin += MEASUREMENT_OFFSET_IN_ANALOG;
@@ -1461,3 +1479,4 @@ void writeCustomNumFormatsCell(Document& xlsx, int row, double value, const QStr
 	Document xlsx2("Book1.xlsx");
 	xlsx2.saveAs("Book2.xlsx");
 */
+
