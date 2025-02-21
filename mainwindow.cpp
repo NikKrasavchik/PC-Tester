@@ -1383,7 +1383,7 @@ void MainWindow::initCables()
 		int pin = list[1].toInt();
 		int direction = list[2].toInt();
 		int type = list[3].toInt();
-		int canId = list[4].toInt();
+		int canId = list[4].toInt(nullptr, 16);
 		int bit = list[5].toInt();
 		QString name = list[6];
 		QString component = list[7];

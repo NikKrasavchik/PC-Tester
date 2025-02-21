@@ -575,10 +575,41 @@ void MoreWindow::resaveFile()
 	while (!fin.atEnd())
 	{
 		QString dataLine = fin.readLine();
+		if (dataLine == "DM\n" || dataLine == "BCM\n")
+		{
+			outputString += dataLine;
+			continue;
+		}
+
 		dataLine.remove("\n");
 		QStringList dataList = dataLine.split(";");
 
-		if (dataList[0].toInt() == (int)row->connectorInt && dataList[1] == row->pin)
+		bool typeCheck;
+		if (row->direction == "OUT")
+			if (row->typeStr == "DIGITAL")
+				typeCheck = (dataList[3].toInt() == TYPE_DIGITAL);
+			else if (row->typeStr == "PWM")
+				typeCheck = (dataList[3].toInt() == TYPE_PWM);
+			else if (row->typeStr == "VNH")
+				typeCheck = (dataList[3].toInt() == TYPE_VNH);
+			else if (row->typeStr == "HLD")
+				typeCheck = (dataList[3].toInt() == TYPE_HLD);
+		else
+			if (row->typeStr == "DIGITAL")
+				typeCheck = (dataList[3].toInt() == TYPE_DIGITAL);
+			else if (row->typeStr == "ANALOG")
+				typeCheck = (dataList[3].toInt() == TYPE_ANALOG);
+			else if (row->typeStr == "HALL")
+				typeCheck = (dataList[3].toInt() == TYPE_HALL);
+
+		if ((dataList[0].toInt() == (int)row->connectorInt) &&
+			(dataList[1] == row->pin) &&
+			((dataList[2].toInt() ? "IN" : "OUT") == row->direction) &&
+			typeCheck &&
+			(dataList[4].toInt(nullptr, 16) == row->canId) &&
+			(dataList[5].toInt() == row->bit) &&
+			(dataList[6] == row->name) &&
+			(dataList[7] == row->component))
 		{
 			switch (row->typeInt)
 			{
