@@ -434,10 +434,12 @@ void Can::Timer_ReadCan()
 				msgReceive[6] == 0x0 &&
 				msgReceive[7] == 0xFA)
 			{
-				qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "I received a message about a periodic connection";
 				timerCheckStandConnection->start(TIME_CHECKCONNECTION);
 				b_flagStandConnectionCheck = true;
 				counterConnectMsg++;
+#ifdef DEBUG_CAN
+				qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "I received a message about a periodic connection";
+#endif // DEBUG_CAN
 			}
 			else if (id == 2 ) // Сообщение о результате теста
 			{

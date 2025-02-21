@@ -49,8 +49,8 @@
 #define LOAD50_BUTTON_PRESSED	128
 #define LOAD75_BUTTON_PRESSED	192
 #define LOAD100_BUTTON_PRESSED	255
-#define FIRST_BUTTON_PRESSED	0
-#define SECOND_BUTTON_PRESSED	1
+#define HIGH_BUTTON_PRESSED		0
+#define LOW_BUTTON_PRESSED	1
 #define ZERO_BUTTON_PRESSED		2
 
 #define SORT_TYPE_INDEX			0
@@ -66,8 +66,8 @@ enum class TestButtons
 	BUTTON_LOAD_50,
 	BUTTON_LOAD_75,
 	BUTTON_LOAD_100,
-	BUTTON_FIRST,
-	BUTTON_SECOND,
+	BUTTON_HIGH,
+	BUTTON_LOW,
 	BUTTON_ZERO
 };
 
@@ -99,8 +99,8 @@ struct VNHButtons
 
 struct HLDButtons
 {
-	QPushButton* firstButton;
-	QPushButton* secondButton;
+	QPushButton* highButton;
+	QPushButton* lowButton;
 	QPushButton* zeroButton;
 };
 
@@ -156,8 +156,8 @@ public slots:
 	void on_load50Button_clicked();
 	void on_load75Button_clicked();
 	void on_load100Button_clicked();
-	void on_first_clicked();
-	void on_second_clicked();
+	void on_high_clicked();
+	void on_low_clicked();
 	void on_zero_clicked();
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
