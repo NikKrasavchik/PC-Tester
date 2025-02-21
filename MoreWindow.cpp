@@ -286,13 +286,41 @@ void MoreWindowOut::setValues()
 		mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->measureds[i]->voltage != -1 ? QString::number(row->measureds[i]->current) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minVoltage != -1 ? QString::number(row->thresholds[i].minVoltage) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxVoltage != -1 ? QString::number(row->thresholds[i].maxVoltage) : "-");
-		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-"); // CELL_OUT_VALUES_MIN_VOLTAGE Должнго быть CELL_OUT_VALUES_MIN_CURRENT и наоборот и так везде !!!! 
+		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].minCurrent != -1 ? QString::number(row->thresholds[i].minCurrent) : "-");
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setText(row->thresholds[i].maxCurrent != -1 ? QString::number(row->thresholds[i].maxCurrent) : "-");
 
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 		mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
+		
+		if (row->measureds[i]->current != -1)
+			if (row->measureds[i]->current < row->thresholds[i].minCurrent)
+			{
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+			}
+			else if (row->measureds[i]->current > row->thresholds[i].maxCurrent)
+			{
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+			}
+			else
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(GREEN_COLOR);
+
+		if (row->measureds[i]->voltage != -1)
+			if (row->measureds[i]->voltage < row->thresholds[i].minVoltage)
+			{
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+			}
+			else if (row->measureds[i]->voltage > row->thresholds[i].maxVoltage)
+			{
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+			}
+			else
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(GREEN_COLOR);
 	}
 }
 
@@ -335,16 +363,16 @@ void MoreWindowIn::generateSigns()
 void MoreWindowIn::setValues()
 {
 	if (row->measureds[0]->voltage == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor("#7CC770"));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(GREEN_COLOR));
 	else if (row->measureds[0]->voltage == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor("#FF8686"));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(RED_COLOR));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setText("-");
 
 	if (row->measureds[0]->current == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor("#7CC770"));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(GREEN_COLOR));
 	else if (row->measureds[0]->current == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor("#FF8686"));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(RED_COLOR));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setText("-");
 }
@@ -446,6 +474,22 @@ void MoreWindowInAnalog::setValues()
 	for (int i = 0; i < row->thresholds.size(); i++)
 	{ 
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->measureds[i]->voltage) != "-1" ? QString::number(row->measureds[i]->voltage) : "-");
+		if (row->measureds[i]->voltage == -1)
+			mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setText("-");
+		else
+			if (row->measureds[i]->voltage < row->thresholds[i].minValue)
+			{
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+			}
+			else if (row->measureds[i]->voltage > row->thresholds[i].maxValue)
+			{
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+			}
+			else
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(GREEN_COLOR);
+
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
 
@@ -453,7 +497,6 @@ void MoreWindowInAnalog::setValues()
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setFlags(Qt::ItemIsEnabled | Qt::ItemIsEditable);
 	}
 }
-
 
 void MoreWindow::on_mainTableWidget_cellChanged(int row, int column)
 {

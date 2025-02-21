@@ -56,8 +56,6 @@
 #define SPAN_TYPE_COMMENT_IN			1, 1
 #define SPAN_TYPE_COMMENT_IN_ANALOG		3, 1
 
-
-
 #define ROW_COUNT_SIGN_OUT				4
 #define ROW_COUNT_SIGN_IN_ANALOG		3
 
