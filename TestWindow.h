@@ -324,12 +324,12 @@ private:
 
 	void initUiFullTestAutoStand();
 	void initUiTableFullTestAutoStand();
-	void initUiTableHeaderFullTestAutoStand();
+	void resetTableHeaderFullTestAutoStand();
 	void resetLanguageFullTestAutoStand();
 	void resetTableHeaderLanguageFullTestAutoStand();
 	void resetTableTypeLanguageFullTestAutoStand();
 	void resetTableDirectionLanguageFullTestAutoStand();
-	void initUiTableRowsFullTestAutoStand();
+	void resetTableRowsFullTestAutoStand();
 
 	void resetTheme();
 	void resetLanguage();
@@ -362,8 +362,6 @@ public slots:
 	void on_fullTestSortButton_clicked();
 
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
-
-
 
 public slots:
 	void Slot_ChangedStatusStandConnect(bool statusConnect);

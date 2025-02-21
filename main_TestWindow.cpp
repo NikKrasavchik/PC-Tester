@@ -1615,8 +1615,17 @@ void TestWindow::on_fullTestSortButton_clicked()
 	rewriteCableRows(&cableRows, fullTestSortType);
 
 	mainTableWidget->clear();
-	resetTableHeaderFullTestManualStand();
-	resetTableRowsFullTestManualStand();
+
+	if (testType == WindowType::FULL_TEST_MANUAL_STAND)
+	{
+		resetTableHeaderFullTestManualStand();
+		resetTableRowsFullTestManualStand();
+	}
+	else if (testType == WindowType::FULL_TEST_AUTO_STAND)
+	{
+		resetTableHeaderFullTestAutoStand();
+		resetTableRowsFullTestAutoStand();
+	}
 }
 
 void TestTableRowProperties::on_moreButton_clicked()

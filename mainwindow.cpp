@@ -1359,21 +1359,26 @@ void MainWindow::initCables()
 		return;
 	QTextStream cable(&config);
 	NameTestingBlock block = NameTestingBlock::EMPTY;
+	int id;
 	while (!cable.atEnd()) {
 		QString line = cable.readLine();
 		if (line == "DM")
 		{
 			block = NameTestingBlock::DM;
+			id = 0;
 			continue;
 		}
 		else if (line == "BCM")
 		{
 			block = NameTestingBlock::BCM;
+			id = 0;
 			continue;
 		}
+		else
+			id++;
 		
 		QStringList list = line.split(u';');
-
+		
 		ConnectorId connector = (ConnectorId)(list[0].toInt());
 		int pin = list[1].toInt();
 		int direction = list[2].toInt();
@@ -1408,9 +1413,9 @@ void MainWindow::initCables()
 			measureds.push_back(Measureds());
 		}
 		if(block == NameTestingBlock::DM)
-			cablesDMStorag.push_back(fillCable((int)cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+			cablesDMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 		else if(block == NameTestingBlock::BCM)
-			cablesBCMStorag.push_back(fillCable((int)cables.size(), connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+			cablesBCMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 	}
 }
 

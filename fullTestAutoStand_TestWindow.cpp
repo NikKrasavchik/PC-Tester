@@ -31,11 +31,11 @@ void TestWindow::initUiFullTestAutoStand()
 
 void TestWindow::initUiTableFullTestAutoStand()
 {
-	initUiTableHeaderFullTestAutoStand();
-	initUiTableRowsFullTestAutoStand();
+	resetTableHeaderFullTestAutoStand();
+	resetTableRowsFullTestAutoStand();
 }
 
-void TestWindow::initUiTableHeaderFullTestAutoStand()
+void TestWindow::resetTableHeaderFullTestAutoStand()
 {
 	mainTableWidget->setRowCount((int)cableRows.size());
 	mainTableWidget->setColumnCount(COLUMN_COUNT);
@@ -175,7 +175,7 @@ void TestWindow::resetTableTypeLanguageFullTestAutoStand()
 	}
 }
 
-void TestWindow::initUiTableRowsFullTestAutoStand()
+void TestWindow::resetTableRowsFullTestAutoStand()
 {
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
