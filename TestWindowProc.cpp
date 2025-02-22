@@ -83,7 +83,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			switch (cables[i].getType())
 			{
 			case TYPE_DIGITAL:
-				if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
+				if (testType != WindowType::FULL_TEST_AUTO_STAND && testType != WindowType::FULL_TEST_MANUAL_STAND)
 					cableRows[i]->typeStr = "DIGITAL";
 				break;
 
@@ -109,6 +109,22 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
 	}
+}
+
+TestTableRowProperties::TestTableRowProperties(TestWindow* testwindow)
+{
+	id = -1;
+	canId = -1;
+	bit = -1;
+	connectorStr = "";
+	connectorInt = ConnectorId::EMPTY;
+	pin = "";
+	name = "";
+	component = "";
+	direction = "";
+	typeStr = "";
+	typeInt = TypeCable::EMPTY;
+	comment = "";
 }
 
 void TestTableRowProperties::generateInteractionButtons(WindowType testType, int typeStr)

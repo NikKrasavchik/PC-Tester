@@ -116,7 +116,7 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
-	TestTableRowProperties(TestWindow* testwindow) {  };
+	TestTableRowProperties(TestWindow* testwindow);
 
 	int id;
 	int canId;

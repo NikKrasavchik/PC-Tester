@@ -65,7 +65,7 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <DisableSpecificWarnings>4828;26451</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
@@ -76,7 +76,7 @@
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <DisableSpecificWarnings>4828;26451</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495</DisableSpecificWarnings>
       <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>

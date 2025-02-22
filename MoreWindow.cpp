@@ -584,7 +584,7 @@ void MoreWindow::resaveFile()
 		dataLine.remove("\n");
 		QStringList dataList = dataLine.split(";");
 
-		bool typeCheck;
+		bool typeCheck = false;
 		if (row->direction == "OUT")
 			if (row->typeStr == "DIGITAL")
 				typeCheck = (dataList[3].toInt() == TYPE_DIGITAL);
