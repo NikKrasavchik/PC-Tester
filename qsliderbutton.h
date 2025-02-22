@@ -11,22 +11,25 @@ class QSliderButton : public QWidget
 {
 	Q_OBJECT
 public:
-	explicit QSliderButton(QWidget* parent);
+	explicit QSliderButton(bool isHorizontal, QWidget* parent);
 
-	int getStatus();
-	void setStatus(int newValue);
+	TypeStand getStatus();
+	void setStatus(TypeStand newValue);
 	void setStyleSheet(QString roundColor, QString bgColor);
 
 private:
 	virtual void paintEvent(QPaintEvent* event);
 	virtual void mousePressEvent(QMouseEvent* event);
 
-	int status; // Положение слайдера. 0 - кружок слевва (manual) / 1 - кружок справа (auto)
+	TypeStand status; // Положение слайдера. 0 - кружок слева (manual) / 1 - кружок справа (auto)
+
 	int sizeWidth;
 	int sizeHeight;
 
 	QColor roundColor;
 	QColor bgColor;
+
+	bool isHorizontal;
 
 public slots:
 	void resizeSlider(int newWidth, int newHeight);
