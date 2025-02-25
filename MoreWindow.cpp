@@ -567,11 +567,12 @@ void MoreWindow::resaveFile()
 	QFile fin("cables.cfg");
 	if (!fin.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		//generateError(EMPTY_FILLING, Errors::Configurator::FILE_OPEN);
+		MoreWindow::generateWarning(Warnings::MoreWindow::OPEN_FILE_ERROR);
 		return;
 	}
 
 	QString outputString = "";
+	bool isFound = false;
 	while (!fin.atEnd())
 	{
 		QString dataLine = fin.readLine();
@@ -611,6 +612,7 @@ void MoreWindow::resaveFile()
 			(dataList[6] == row->name) &&
 			(dataList[7] == row->component))
 		{
+			isFound = true;
 			switch (row->typeInt)
 			{
 			case TypeCable::DIG_OUT:
@@ -643,6 +645,12 @@ void MoreWindow::resaveFile()
 	outputString.remove(outputString.size() - 1, 1);
 	fin.close();
 
+	if (!isFound)
+	{
+		generateWarning(Warnings::MoreWindow::FILE_NOT_FOUND);
+		return;
+	}
+
 	std::ofstream fout;
 	fout.open("cables.cfg");
 	fout << outputString.toStdString();
@@ -652,4 +660,32 @@ void MoreWindow::resaveFile()
 void MoreWindow::on_startTestButton_clicked()
 {
 	Can::sendTestMsg(row->connectorInt, row->pin.toInt(), row->typeInt, TestBlockName::BCM);
+}
+
+void MoreWindow::generateWarning(Warnings::MoreWindow warning)
+{
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		switch (warning)
+		{
+		case Warnings::MoreWindow::OPEN_FILE_ERROR:
+			break;
+
+		case Warnings::MoreWindow::FILE_NOT_FOUND:
+			break;
+		}
+		break;
+
+	case ENGLISH_LANG:
+		switch (warning)
+		{
+		case Warnings::MoreWindow::OPEN_FILE_ERROR:
+			break;
+
+		case Warnings::MoreWindow::FILE_NOT_FOUND:
+			break;
+		}
+		break;
+	}
 }

@@ -1338,11 +1338,16 @@ void MainWindow::initCables()
 {
 	QFile config("cables.cfg");
 	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
 		return;
+	}
+
 	QTextStream cable(&config);
 	TestBlockName block = TestBlockName::EMPTY;
 	int id = 0;
-	while (!cable.atEnd()) {
+	while (!cable.atEnd()) 
+	{
 		QString line = cable.readLine();
 		if (line == "DM")
 		{
@@ -1393,9 +1398,9 @@ void MainWindow::initCables()
 			}
 			measureds.push_back(Measureds());
 		}
-		if(block == TestBlockName::DM)
+		if (block == TestBlockName::DM)
 			cablesDMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
-		else if(block == TestBlockName::BCM)
+		else if (block == TestBlockName::BCM)
 			cablesBCMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 	}
 }

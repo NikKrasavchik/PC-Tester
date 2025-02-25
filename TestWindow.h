@@ -156,6 +156,7 @@ public:
 	void generateInteractionButtons(WindowType testType, int type);
 	void switchButtonState(TestButtons testButton);
 	void sendSignal();
+	void generateWarning(Warnings::TestWindow warning);
 
 public slots:
 	void on_onButton_clicked();
@@ -173,7 +174,6 @@ public slots:
 
 signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
-	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
 	void selectCurrentCell(QString connector, QString pin);
 };
@@ -359,8 +359,6 @@ public slots:
 	void on_autoStandStartTestButton_clicked();
 
 	void on_fullTestSortButton_clicked();
-
-	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);

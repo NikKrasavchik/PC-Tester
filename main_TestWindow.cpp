@@ -528,10 +528,6 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 	}
 }
 
-void TestWindow::switchActiveTableButton(void* activeButton, void* inactiveButton)
-{
-}
-
 void TestWindow::on_backButton_clicked()
 {
 	this->close();
@@ -1402,7 +1398,6 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_HLD_HEIGHT);
 		}
 	}
-	connect(cableRows[currentRowNum], &TestTableRowProperties::switchActiveTableButton, this, &TestWindow::switchActiveTableButton);
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
 	interactionButtonsWidget->setLayout(interactionButtonsCellVLayout);
@@ -1603,7 +1598,7 @@ void TestTableRowProperties::on_moreButton_clicked()
 		break;
 
 	default:
-		//QMessageBox::warning(testwindow, "Error","Error");
+		generateWarning(Warnings::TestWindow::OPEN_MORE_WINDOW);
 		break;
 	}
 		
