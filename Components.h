@@ -1,4 +1,5 @@
 #pragma once
+
 //#define DEBUG
 
 #define MIN_SCREEN_WIDTH    800
@@ -15,6 +16,13 @@
 
 #define KVASER			0
 #define MARATHON		1
+
+#define FREQUENCY_50K	50000
+#define FREQUENCY_100K	100000
+#define FREQUENCY_125K	125000
+#define FREQUENCY_250K	250000
+#define FREQUENCY_500K	500000
+#define FREQUENCY_1000K	1000000
 
 #define MANUAL_STAND	0
 #define AUTO_STAND		1
@@ -211,8 +219,6 @@ struct FloatCheck
 	}
 };
 
-extern std::vector<std::vector<FloatCheck*>> floatCheck;
-
 extern ViewWindowState* viewWindowState;
 
 #define FIXED_HEADER_HEIGHT			80
@@ -264,20 +270,3 @@ const QString appLogoPath = ":/Dark/icons/App_Logo_White.png";
 
 #define RED_COLOR		"#FF8686"
 #define GREEN_COLOR		"#7CC770"
-
-//static Cable fillCable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, std::vector<Thresholds> thresholds, std::vector<Measureds> measureds, QString name, QString component)
-//{
-//	Cable cable;
-//	cable.setId(id);
-//	cable.setConnector(connector);
-//	cable.setPin(pin);
-//	cable.setDirection(direction);
-//	cable.setType(type);
-//	cable.setCanId(canId);
-//	cable.setBit(bit);
-//	cable.setThresholds(thresholds);
-//	cable.setMeasureds(measureds);
-//	cable.setName(name);
-//	cable.setComponent(component);
-//	return cable;
-//}

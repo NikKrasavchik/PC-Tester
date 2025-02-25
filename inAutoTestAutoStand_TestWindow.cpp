@@ -2,10 +2,10 @@
 
 #define COLUMN_COUNT	7
 
-#define COLUMN_TYPE	3
+#define COLUMN_TYPE		3
 #define COLUMN_STAND	4
 #define COLUMN_PC		5
-#define COLUMN_MORE	6
+#define COLUMN_MORE		6
 
 void TestWindow::initUiInAutoTestAutoStand()
 {

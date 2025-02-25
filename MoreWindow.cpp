@@ -2,14 +2,14 @@
 
 #define BUTTON_SIZE						100, 40
 
-#define MEASUREMENT_COLUMN_POSITION	5
+#define MEASUREMENT_COLUMN_POSITION		5
 
-#define IND_COLUMN_BASE_COMMENT				5
+#define IND_COLUMN_BASE_COMMENT			5
 
-#define CELL_MIN_CURRENT	6
-#define CELL_MAX_CURRENT	7
-#define CELL_MIN_VOLTAGE	8
-#define CELL_MAX_VOLTAGE	9
+#define CELL_MIN_CURRENT				6
+#define CELL_MAX_CURRENT				7
+#define CELL_MIN_VOLTAGE				8
+#define CELL_MAX_VOLTAGE				9
 
 MoreWindow::MoreWindow(TestTableRowProperties* row)
 {

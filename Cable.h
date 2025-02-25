@@ -4,7 +4,6 @@
 
 #include "Components.h"
 
-
 struct Thresholds
 {
 	double minCurrent;
@@ -78,7 +77,6 @@ struct Measureds
 		this->voltage = measureds.voltage;
 		this->current = measureds.current;
 	}
-
 };
 
 class Cable

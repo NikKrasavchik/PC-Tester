@@ -1,4 +1,3 @@
-
 #include "qsliderbutton.h"
 #include <QPainter>
 #include <QMouseEvent>
@@ -57,6 +56,7 @@ void QSliderButton::mousePressEvent(QMouseEvent* event)
 		repaint();
 	}
 }
+
 TypeStand QSliderButton::getStatus()
 {
 	return status;

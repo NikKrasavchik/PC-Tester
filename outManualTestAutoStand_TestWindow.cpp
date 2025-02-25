@@ -2,11 +2,11 @@
 
 #define COLUMN_COUNT		8
 
-#define COLUMN_TYPE		3
+#define COLUMN_TYPE			3
 #define COLUMN_CHECK		4
 #define COLUMN_STAND		5
 #define COLUMN_PC			6
-#define COLUMN_MORE		7
+#define COLUMN_MORE			7
 
 void TestWindow::initUiOutManualTestAutoStand()
 {

@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ui_MoreWindow.h"
 
 #include <QDialog>
@@ -17,7 +18,6 @@
 #define START_MOREWINDOW_WIDTH			900
 #define START_MOREWINDOW_HEIGHT			250
 #define START_MOREWINDOW_SIZE			START_MOREWINDOW_WIDTH,START_MOREWINDOW_HEIGHT
-
 
 #define PADDING_MAINWIDGET				10
 

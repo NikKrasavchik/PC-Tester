@@ -28,7 +28,6 @@
 #define TYPE_MANUAL		0
 #define TYPE_AUTO		1
 
-
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
