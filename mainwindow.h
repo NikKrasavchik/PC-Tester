@@ -153,7 +153,7 @@ private:
 
 	Can* can;
 	std::vector<Cable> cables;
-	std::vector<Cable> cablesDMStorag; /////////////////////////////////////////////////////////////////////////////////////////////////////
+	std::vector<Cable> cablesDMStorag;
 	std::vector<Cable> cablesBCMStorag;
 
 	bool isAllInit;

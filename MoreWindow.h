@@ -216,6 +216,7 @@ private:
 	void resizeEvent(QResizeEvent* event) { mainWidget->resize(geometry().width() - (PADDING_MAINWIDGET * 2), geometry().height() - PADDING_MAINWIDGET); };
 
 	void resaveFile();
+	void generateWarning(Warnings::MoreWindow warning);
 
 	QWidget* mainWidget;
 	QVBoxLayout* mainVLayout;

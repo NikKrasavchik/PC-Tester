@@ -602,3 +602,24 @@ void TestTableRowProperties::sendSignal()
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
+void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
+{
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		switch (warning)
+		{
+		case Warnings::TestWindow::OPEN_MORE_WINDOW:
+			break;
+		}
+		break;
+
+	case ENGLISH_LANG:
+		switch (warning)
+		{
+		case Warnings::TestWindow::OPEN_MORE_WINDOW:
+			break;
+		}
+		break;
+	}
+}

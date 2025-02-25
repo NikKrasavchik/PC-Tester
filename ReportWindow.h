@@ -115,7 +115,8 @@ private:
 
 	void generateTable();
 	void generateTableBaseSign();
-	void generateTableSign(TypeCable type, int maxTypeOffset);	
+	void generateTableSign(TypeCable type, int maxTypeOffset);
+	void generateWarning(Warnings::ReportWindow warning);
 
 	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
 	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
@@ -124,6 +125,7 @@ private:
 	
 	void resetBaseLanguage();
 	void resetTheme();
+	QString getStrType(TypeCable type);
 
 	void resizeEvent(QResizeEvent* event);
 

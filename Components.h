@@ -202,7 +202,26 @@ namespace Warnings
 		TEST_ACCESS_ADAPTER_SEL,
 		ADAPTERS_CHANGED,
 		SIZE_CABLE_NUL,
-		NOT_SELECTED_BLOCK
+		NOT_SELECTED_BLOCK,
+		FILE_NOT_FOUND
+	};
+
+	enum class ReportWindow
+	{
+		XLSX_SAVE_SUCCESS,
+		XLSX_SAVE_ERROR,
+		TYPE_CHANGE_ERROR
+	};
+
+	enum class MoreWindow
+	{
+		OPEN_FILE_ERROR,
+		FILE_NOT_FOUND
+	};
+
+	enum class TestWindow
+	{
+		OPEN_MORE_WINDOW
 	};
 }
 
