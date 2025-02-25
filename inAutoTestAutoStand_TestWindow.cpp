@@ -17,6 +17,7 @@ void TestWindow::initUiInAutoTestAutoStand()
 	autoStandStartTestButton = new QPushButton(usefulSpaceWidget);
 	autoStandStartTestButton->setObjectName("AutoStandStartTestButton");
 	autoStandStartTestButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	connect(autoStandStartTestButton, &QPushButton::clicked, this, &TestWindow::on_autoStandStartTestButton_clicked);
 	usefulSpaceHLayout->addWidget(autoStandStartTestButton);
 
 	initUiTableInAutoTestAutoStand();

@@ -233,27 +233,6 @@ void MainWindow::initLightStyleSheets()
 			font-weight: 800;
 	)";
 
-	lightStyles.settingButton =
-		R"(
-		.QPushButton {
-			border-radius: 25px;
-			background-color: #B0B0B0;
-
-			color: black;
-			font-family: Kartika;
-			font-size: 20px;
-			font-weight: 600;
-		}
-
-		.QPushButton:hover {
-			background-color: #9D9D9D;
-		}
-
-		.QPushButton:hover:pressed {
-			background-color: #767676;
-		}
-	)";
-
 	lightStyles.settingComboBox =
 		R"(
 		background-color: #B0B0B0;
@@ -380,27 +359,6 @@ void MainWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 20px;
 			font-weight: 800;
-	)";
-
-	darkStyles.settingButton =
-		R"(
-		.QPushButton {
-			border-radius: 25px;
-			background-color: #535353;
-
-			color: white;
-			font-family: Kartika;
-			font-size: 20px;
-			font-weight: 600;
-		}
-
-		.QPushButton:hover {
-			background-color: #6E6E6E;
-		}
-
-		.QPushButton:hover:pressed {
-			background-color: #858383;
-		}
 	)";
 
 	darkStyles.settingComboBox =

@@ -42,21 +42,32 @@
 #define COLUMN_MORE_WIDTH			25
 #define COLUMN_MANUAL_CHECK_WIDTH	100
 
-#define BUTTON_NOT_SET			NOT_SET
-#define OFF_BUTTON_PRESSED		0
-#define ON_BUTTON_PRESSED		1
-#define LOAD0_BUTTON_PRESSED	0
-#define LOAD25_BUTTON_PRESSED	64
-#define LOAD50_BUTTON_PRESSED	128
-#define LOAD75_BUTTON_PRESSED	192
-#define LOAD100_BUTTON_PRESSED	255
-#define HIGH_BUTTON_PRESSED		0
-#define LOW_BUTTON_PRESSED	1
-#define ZERO_BUTTON_PRESSED		2
+#define BUTTON_NOT_SET				NOT_SET
+#define OFF_BUTTON_PRESSED			0
+#define ON_BUTTON_PRESSED			1
+#define LOAD0_BUTTON_PRESSED		0
+#define LOAD25_BUTTON_PRESSED		64
+#define LOAD50_BUTTON_PRESSED		128
+#define LOAD75_BUTTON_PRESSED		192
+#define LOAD100_BUTTON_PRESSED		255
+#define HIGH_BUTTON_PRESSED			0
+#define LOW_BUTTON_PRESSED			1
+#define ZERO_BUTTON_PRESSED			2
 
-#define SORT_TYPE_INDEX			0
-#define SORT_TYPE_DIRECTION_OUT	1
-#define SORT_TYPE_DIRECTION_IN	2
+#define SORT_TYPE_INDEX				0
+#define SORT_TYPE_DIRECTION_OUT		1
+#define SORT_TYPE_DIRECTION_IN		2
+
+#define FIXED_HEADER_BUTTON_WIDTH	120
+#define FIXED_HEADER_BUTTON_HEIGHT	50
+#define FIXED_HEADER_COMBO_WIDTH	200
+#define FIXED_HEADER_COMBO_HEIGHT	40
+#define FIXED_MORE_BUTTON_SIZE		25
+#define FIXED_ACHECK_BUTTON_WIDTH	60
+#define FIXED_ACHECK_BUTTON_HEIGHT	25
+#define FIXED_CHECK_BUTTON_WIDTH	65
+#define FIXED_CHECK_WBUTTON_WIDTH	148
+#define	FIXED_CHECK_BUTTON_HEIGHT	30
 
 enum class TestButtons
 {
@@ -142,7 +153,6 @@ public:
 	int statePWM;
 	int stateHLD;
 
-	TestTableRowProperties* getThis() { return this; }; // ”жасное название. Ќе вникал, но если это родительский какой то, то назови что то по типу getParent
 	void generateInteractionButtons(WindowType testType, int type);
 	void switchButtonState(TestButtons testButton);
 	void sendSignal();
@@ -173,13 +183,11 @@ class TestWindow : public QDialog
 	Q_OBJECT
 
 public:
-	TestWindow(WindowType testType, std::vector<Cable> cables, NameTestingBlock testingBlock, QWidget* parent = nullptr);
+	TestWindow(WindowType testType, std::vector<Cable> cables, TestBlockName testingBlock, QWidget* parent = nullptr);
 	~TestWindow();
-
-	void setFileName(QString fileName);
+	
 	void setParentFrame(WindowFrame* parentFrame);
 	void ProcAutoTest(int pad, int pin);
-	QString getFileName() { return fileName; }
 
 	StandStatusFlags* statusFlags;
 private:
@@ -203,7 +211,6 @@ private:
 	QPushButton* backButton;
 	QPushButton* reportButton;
 	QPushButton* fullTestSortButton;
-	QPushButton* fullTestAutoStandSortButton;
 	QPushButton* inTestManualStandConnectButton;
 	QPushButton* outTestManualStandConnectButton;
 	QPushButton* fullTestManualStandConnectButton;
@@ -238,11 +245,10 @@ private:
 
 	QString fileName;
 	WindowType testType;
-	NameTestingBlock testingBlock;
+	TestBlockName testingBlock;
 	Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<QCheckBox*> manualChecks;
-	std::vector<Measureds*> measuredValues;
 	Cable *nextCheckCable;
 
 	void initUiMain();
@@ -330,10 +336,7 @@ private:
 	void resetTheme();
 	void resetLanguage();
 	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
-	void resetLanguageRowsTable();
 	void resetIconMoreButton(bool theme);
-	void sortRows();
-	void fillTestTimeComboBoxes();
 
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget);
@@ -350,16 +353,15 @@ public slots:
 	void on_switchLanguageButton_clicked();
 	void on_reportButton_clicked();
 
-	void on_AutoStandConnectButton_clicked();
+	void on_autoStandConnectButton_clicked();
 	void on_inManualTestAutoStandTestTimeComboBox_changed(int ind);
 	void on_outManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void on_AutoStandStartTestButton_clicked();
+	void on_autoStandStartTestButton_clicked();
 
 	void on_fullTestSortButton_clicked();
 
 	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
-public slots:
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 	void selectCurrentCell(QString conector, QString pin);

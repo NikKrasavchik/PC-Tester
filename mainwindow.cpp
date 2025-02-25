@@ -43,7 +43,7 @@ MainWindow::MainWindow(QWidget* parent)
 	ui.setupUi(this);
 
 	this->selectedTypeStand = TypeStand::EMPTY;
-	this->selectedBlock = NameTestingBlock::EMPTY;
+	this->selectedBlock = TestBlockName::EMPTY;
 
 	initCables();
 
@@ -660,9 +660,6 @@ void MainWindow::initRecources()
 	checkAdapterDarkPixmap = new QPixmap(":/Dark/icons/Update_White.png");
 	languageLightPixmap = new QPixmap(":/Light/icons/Language_Black.png");
 	languageDarkPixmap = new QPixmap(":/Dark/icons/Language_White.png");
-	appstylePath = ":/recources/style/appstyles.qss";
-	lightStylePath = ":/styles/style/lightTheme.qss";
-	darkStylePath = ":/styles/style/darkTheme.qss";
 }
 
 void MainWindow::initConnections()
@@ -1240,7 +1237,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (selectedBlock == NameTestingBlock::EMPTY)
+	if (selectedBlock == TestBlockName::EMPTY)
 	{
 		generateWarning(Warnings::MainWindow::NOT_SELECTED_BLOCK);
 		return;
@@ -1314,19 +1311,19 @@ void MainWindow::initCables()
 	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
 		return;
 	QTextStream cable(&config);
-	NameTestingBlock block = NameTestingBlock::EMPTY;
+	TestBlockName block = TestBlockName::EMPTY;
 	int id = 0;
 	while (!cable.atEnd()) {
 		QString line = cable.readLine();
 		if (line == "DM")
 		{
-			block = NameTestingBlock::DM;
+			block = TestBlockName::DM;
 			id = 0;
 			continue;
 		}
 		else if (line == "BCM")
 		{
-			block = NameTestingBlock::BCM;
+			block = TestBlockName::BCM;
 			id = 0;
 			continue;
 		}
@@ -1367,18 +1364,18 @@ void MainWindow::initCables()
 			}
 			measureds.push_back(Measureds());
 		}
-		if(block == NameTestingBlock::DM)
+		if(block == TestBlockName::DM)
 			cablesDMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
-		else if(block == NameTestingBlock::BCM)
+		else if(block == TestBlockName::BCM)
 			cablesBCMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
 	}
 }
 
 void MainWindow::on_leftBlockBCMButton_clicked()
 {
-	if (selectedBlock != NameTestingBlock::BCM)
+	if (selectedBlock != TestBlockName::BCM)
 	{
-		selectedBlock = NameTestingBlock::BCM;
+		selectedBlock = TestBlockName::BCM;
 		switch (viewWindowState->appTheme)
 		{
 		case LIGHT_THEME:
@@ -1398,9 +1395,9 @@ void MainWindow::on_leftBlockBCMButton_clicked()
 
 void MainWindow::on_leftBlockDMButton_clicked()
 {
-	if (selectedBlock != NameTestingBlock::DM)
+	if (selectedBlock != TestBlockName::DM)
 	{
-		selectedBlock = NameTestingBlock::DM;
+		selectedBlock = TestBlockName::DM;
 		switch (viewWindowState->appTheme)
 		{
 		case LIGHT_THEME:

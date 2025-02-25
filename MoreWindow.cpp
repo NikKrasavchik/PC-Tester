@@ -297,30 +297,30 @@ void MoreWindowOut::setValues()
 		if (row->measureds[i]->current != -1)
 			if (row->measureds[i]->current < row->thresholds[i].minCurrent)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else if (row->measureds[i]->current > row->thresholds[i].maxCurrent)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(GREEN_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_GREEN);
 
 		if (row->measureds[i]->voltage != -1)
 			if (row->measureds[i]->voltage < row->thresholds[i].minVoltage)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else if (row->measureds[i]->voltage > row->thresholds[i].maxVoltage)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(GREEN_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_GREEN);
 	}
 }
 
@@ -363,16 +363,16 @@ void MoreWindowIn::generateSigns()
 void MoreWindowIn::setValues()
 {
 	if (row->measureds[0]->voltage == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(GREEN_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(COLOR_GREEN));
 	else if (row->measureds[0]->voltage == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(RED_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(COLOR_RED));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setText("-");
 
 	if (row->measureds[0]->current == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(GREEN_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(COLOR_GREEN));
 	else if (row->measureds[0]->current == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(RED_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(COLOR_RED));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setText("-");
 }
@@ -479,16 +479,16 @@ void MoreWindowInAnalog::setValues()
 		else
 			if (row->measureds[i]->voltage < row->thresholds[i].minValue)
 			{
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else if (row->measureds[i]->voltage > row->thresholds[i].maxValue)
 			{
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(GREEN_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_GREEN);
 
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
@@ -651,5 +651,5 @@ void MoreWindow::resaveFile()
 
 void MoreWindow::on_startTestButton_clicked()
 {
-	Can::sendTestMsg(row->connectorInt, row->pin.toInt(), row->typeInt, NameTestingBlock::BCM);
+	Can::sendTestMsg(row->connectorInt, row->pin.toInt(), row->typeInt, TestBlockName::BCM);
 }

@@ -4,12 +4,10 @@
 #include <QWidget>
 #include "Components.h"
 
-#define ROUND_COLOR "#979797"
-#define BG_COLOR    "#E8E8E8"
-
 class QSliderButton : public QWidget
 {
 	Q_OBJECT
+
 public:
 	explicit QSliderButton(bool isHorizontal, QWidget* parent);
 

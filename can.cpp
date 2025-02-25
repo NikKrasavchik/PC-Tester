@@ -495,7 +495,7 @@ void Can::Timer_CheckStandConnection()
 #endif // DEBUG_CAN
 }
 
-uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
+uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 {
 	uint8_t flags = 0;
 	// Block
@@ -537,7 +537,7 @@ uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 	return flags;
 }
 
-bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, NameTestingBlock nameBlock)
+bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, TestBlockName nameBlock)
 {
 	if ((int)typeCable == NOT_SET)
 		return false;

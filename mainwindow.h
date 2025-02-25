@@ -24,10 +24,6 @@
 
 #include <QDebug>
 
-#define TYPE_NOT_SET	NOT_SET
-#define TYPE_MANUAL		0
-#define TYPE_AUTO		1
-
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -75,8 +71,6 @@ private:
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* manualStandMainVLayout;
 	QVBoxLayout* leftSwitchBlockVLayout;
-	QVBoxLayout* leftSwitchStandButtonsVLayout;
-	QHBoxLayout* leftSwitchStandHLayout;
 	QLabel* logoLabel;
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
@@ -105,7 +99,6 @@ private:
 	QSpacerItem* leftManualStandSpacer;
 	QSpacerItem* leftSwitchStandSpacer;
 	QSpacerItem* rightSwitchStandSpacer;
-	QSpacerItem* topSwitchStandSpacer;
 	QSpacerItem* topFrequencySpacer;
 	QSpacerItem* topSettingsSpacer;
 	QSpacerItem* botSettingsSpacer;
@@ -122,9 +115,6 @@ private:
 	QSpacerItem* manualTestAutoStandLeftSpacer;
 	QSpacerItem* manualTestAutoStandRightSpacer;
 	QSpacerItem* frequencyMiddleSpacer;
-	QSpacerItem* selectFileMiddleSpacer;
-	QSpacerItem* selectFileLeftSpacer;
-	QSpacerItem* selectFileRightSpacer;
 	QSpacerItem* testManualStandMiddleUpSpacer;
 	QSpacerItem* testManualStandMiddleBottomSpacer;
 	QSpacerItem* testManualStandMiddleFooterSpacer;
@@ -163,16 +153,12 @@ private:
 
 	Can* can;
 	std::vector<Cable> cables;
-	std::vector<Cable> cablesDMStorag;
+	std::vector<Cable> cablesDMStorag; /////////////////////////////////////////////////////////////////////////////////////////////////////
 	std::vector<Cable> cablesBCMStorag;
 
 	bool isAllInit;
-	NameTestingBlock selectedBlock;
+	TestBlockName selectedBlock;
 	TypeStand selectedTypeStand;
-
-	QString appstylePath;
-	QString darkStylePath;
-	QString lightStylePath;
 
 	void initRecources();
 	void initStyles();
@@ -209,7 +195,6 @@ private:
 
 	void resizeEvent(QResizeEvent* event);
 
-	std::vector<Cable> prepareArguments(WindowType testType);
 	void createTestWindow(WindowType testType, std::vector<Cable> preparedCables);
 
 	void generateWarning(Warnings::MainWindow warning);
