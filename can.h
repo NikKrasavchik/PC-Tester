@@ -103,7 +103,6 @@ private:
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
-	//uint8_t generateFlags(int typeCable, NameTestingBlock nameBlock);
 	
 // Variables:
 	struct modelAdapter
@@ -128,7 +127,6 @@ private:
 	QTimer* timerReadCan;				// Таймер для считывания Can-сообщений.
 	QTimer* timerSendConnectMsg;		// Таймер для отправки сообщений на подключение или проверки подключения.
 	QTimer* timerCheckStandConnection;	// Таймер для проверки времени времени прихода переодического сообщения конекта.
-
 
 private slots:
 	void Timer_ReadCan();				// Слот для считывания Can-сообщений.

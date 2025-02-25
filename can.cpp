@@ -48,7 +48,6 @@ bool Can::initCan(WindowType windowType)
 		statusTmp = CiTrQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
 		statusTmp = CiRcQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
 		statusTmp = CiStart(marathon->activeAdapter);
-
 	}
 
 	timerReadCan->start(5); // И запустим таймер]
@@ -90,7 +89,6 @@ bool Can::deinitCan()
 
 bool Can::writeCan(int id, int* msg)
 {
-	
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned char msgSendKvase[8];
@@ -114,9 +112,7 @@ bool Can::writeCan(int id, int* msg)
 	return false;
 }
 
-
-
-		canmsg_t msgReceive;
+canmsg_t msgReceive;
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
 	//Can::coun++;
@@ -133,9 +129,11 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 			for (int i = 0; i < 8; i++)
 				msg[i] = msgReceive[i];
 		}
+
 		delete dlc;
 		delete flags;
 		delete timestamp;
+
 		if (*id != NOT_SET)
 			return true;
 		else
@@ -154,7 +152,6 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 		}
 		else
 			return false;
-
 	}
 }
 
@@ -176,6 +173,7 @@ void Can::setSelectedAdapterNeme(QString adapter)
 			b_adapterSelected = true;
 			return;
 		}
+
 	for (int i = 0; i < marathon->nameAdapters.size(); i++) // Проходим по marathon
 		if (marathon->nameAdapters[i] == adapter)
 		{
@@ -183,8 +181,8 @@ void Can::setSelectedAdapterNeme(QString adapter)
 			b_adapterSelected = true;
 			return;
 		}
-	b_adapterSelected = false;
 
+	b_adapterSelected = false;
 }
 
 void Can::setSelectedFrequency(QString frequency)
@@ -279,7 +277,7 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 
 	switch (frequency)
 	{
-	case 50000:
+	case FREQUENCY_50K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_50K;
 		else
@@ -288,7 +286,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_50K_bt1;
 		}
 		break;
-	case 100000:
+
+	case FREQUENCY_100K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_100K;
 		else
@@ -297,7 +296,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_100K_bt1;
 		}
 		break;
-	case 125000:
+
+	case FREQUENCY_125K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_125K;
 		else
@@ -306,7 +306,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_125K_bt1;
 		}
 		break;
-	case 250000:
+
+	case FREQUENCY_250K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_250K;
 		else
@@ -315,7 +316,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_250K_bt1;
 		}
 		break;
-	case 500000:
+
+	case FREQUENCY_500K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_500K;
 		else
@@ -324,7 +326,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_500K_bt1;
 		}
 		break;
-	case 1000000:
+
+	case FREQUENCY_1000K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_1M;
 		else
@@ -333,6 +336,7 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_1M_bt1;
 		}
 		break;
+
 	default:
 		break;
 	}
@@ -400,6 +404,7 @@ void Can::Timer_ReadCan()
 				}
 			}
 			break;
+
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -443,7 +448,6 @@ void Can::Timer_ReadCan()
 			}
 			else if (id == 2 ) // Сообщение о результате теста
 			{
-				
 				measureds.push_back(getMeasureds(msgReceive));
 				if ((msgReceive[2] & 0x01) == 1) // Конец теста
 				{
@@ -455,12 +459,9 @@ void Can::Timer_ReadCan()
 					Signal_AfterTest(msgReceive[0], msgReceive[1], measureds);
 					measureds.clear();
 				}
-
 			}
 			break;
 		}
-
-			
 	}
 
 #ifdef DEBUG_CAN
@@ -485,22 +486,9 @@ void Can::Timer_SendConnectMsg()
 
 void Can::Timer_CheckStandConnection()
 {
-
 	timerCheckStandConnection->stop();
 	Signal_ChangedStatusStandConnect(false);
 	b_flagStatusConnection = false;
-
-	//if (b_flagStatusConnection)
-	//{
-	//	if(b_flagStandConnectionCheck)
-	//		b_flagStandConnectionCheck = false;
-	//	else
-	//	{
-	//		b_flagStandConnectionCheck = false;
-	//		b_flagStatusConnection = false;
-	//		Signal_ChangedStatusStandConnect(false);
-	//	}
-	//}
 	
 #ifdef DEBUG_CAN
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
@@ -546,17 +534,15 @@ uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 	}
 	flags = flags << 4;
 
-
 	return flags;
 }
+
 bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, NameTestingBlock nameBlock)
 {
-
 	if ((int)typeCable == NOT_SET)
 		return false;
 
 	int msgSendConnect[8] = { (int)pad, pin, generateFlags(typeCable, nameBlock), 0, 0, 0, 0, 0 };
-	//generateFlags(typeCable, nameBlock);
 	
 	writeCan(10, msgSendConnect); // Дописать проверку ошибок kvasera
 	return true;

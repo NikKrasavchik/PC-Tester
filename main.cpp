@@ -21,12 +21,11 @@
 #include <QProxyStyle>
 #include <QStyleFactory>
 #include <QFile>
-ViewWindowState* viewWindowState;
 
+ViewWindowState* viewWindowState;
 
 int main(int argc, char* argv[])
 {
-
 	viewWindowState = new ViewWindowState;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
 	viewWindowState->appTheme = LIGHT_THEME;

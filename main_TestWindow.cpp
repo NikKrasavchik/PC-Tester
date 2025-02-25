@@ -74,7 +74,6 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, NameTesti
 	initStyles();
 
 	setStatusTableButtons(false);
-	//th->start();
 }
 
 TestWindow::~TestWindow()
@@ -90,8 +89,6 @@ TestWindow::~TestWindow()
 	delete backButtonDarkPixmap;
 	for (int i = 0; i < cableRows.size(); i++)
 		delete cableRows[i];
-	//th->terminate();
-	//delete th;
 }
 
 void TestWindow::initUiMain()
@@ -436,11 +433,9 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 	{
 	case TypeResetTableButtonsTheme::STAND_DISCONNECTED:
 		for (int i = 0; i < cableRows.size(); i++)
-		{
 			if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
 				testType == WindowType::IN_TEST_MANUAL_STAND ||
 				testType == WindowType::FULL_TEST_MANUAL_STAND)
-			{
 				switch (cableRows[i]->typeInt)
 				{
 				case TypeCable::DIG_OUT:
@@ -475,16 +470,13 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 				default:
 					break;
 				}
-			}
-		}
 		break;
+
 	case TypeResetTableButtonsTheme::STAND_CONNECTED:
 		for (int i = 0; i < cableRows.size(); i++)
-		{
 			if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
 				testType == WindowType::IN_TEST_MANUAL_STAND ||
 				testType == WindowType::FULL_TEST_MANUAL_STAND)
-			{
 				switch (cableRows[i]->typeInt)
 				{
 				case TypeCable::DIG_OUT:
@@ -519,15 +511,12 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 				default:
 					break;
 				}
-			}
-		}
 		break;
 	}
 }
 
 void TestWindow::switchActiveTableButton(void* activeButton, void* inactiveButton)
 {
-	//(DigitalButtons*)(activeButton)->onButton;
 }
 
 void TestWindow::on_backButton_clicked()
@@ -580,7 +569,6 @@ void TestWindow::resetTheme()
 	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
-
 		logoLabel->setPixmap(*logoLightPixmap);
 		switchThemeButton->setIcon(QIcon(*themeLightPixmap));
 		switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
@@ -837,6 +825,7 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			resetLanguageOutAutoTestAutoStand();
 			break;
+
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
 				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
@@ -849,6 +838,7 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
 			resetLanguageInAutoTestAutoStand();
 			break;
+
 		case WindowType::FULL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
 				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
@@ -864,9 +854,11 @@ void TestWindow::resetLanguage()
 			case SORT_TYPE_INDEX:
 				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо нумерации"));
 				break;
+
 			case SORT_TYPE_DIRECTION_OUT:
 				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо выходам"));
 				break;
+
 			case SORT_TYPE_DIRECTION_IN:
 				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо входам"));
 				break;
@@ -895,9 +887,11 @@ void TestWindow::resetLanguage()
 			case SORT_TYPE_INDEX:
 				fullTestSortButton->setText(QString("Sort:\nnum"));
 				break;
+
 			case SORT_TYPE_DIRECTION_OUT:
 				fullTestSortButton->setText(QString("Sort:\nout first"));
 				break;
+
 			case SORT_TYPE_DIRECTION_IN:
 				fullTestSortButton->setText(QString("Sort:\nin first"));
 				break;
@@ -956,6 +950,7 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString("Start"));
 			resetLanguageOutAutoTestAutoStand();
 			break;
+
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
 				autoStandConnectButton->setText(QString("Stand\nconnected"));
@@ -968,6 +963,7 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString("Start"));
 			resetLanguageInAutoTestAutoStand();
 			break;
+
 		case WindowType::FULL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
 				autoStandConnectButton->setText(QString("Stand\nconnected"));
@@ -983,9 +979,11 @@ void TestWindow::resetLanguage()
 			case SORT_TYPE_INDEX:
 				fullTestSortButton->setText(QString("Sort:\nnum"));
 				break;
+
 			case SORT_TYPE_DIRECTION_OUT:
 				fullTestSortButton->setText(QString("Sort:\nout first"));
 				break;
+
 			case SORT_TYPE_DIRECTION_IN:
 				fullTestSortButton->setText(QString("Sort:\nin first"));
 				break;
@@ -1088,13 +1086,8 @@ static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProp
 void TestWindow::ProcAutoTest(int connector, int pin)
 {
 	for (int i = 0; i < cableRows.size(); i++)
-	{
 		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
-		{
-			//TestTableRowProperties pop = *cableRows[i];
 			Can::sendTestMsg(cableRows[i]->connectorInt, cableRows[i]->pin.toInt(), cableRows[i]->typeInt, NameTestingBlock::BCM);
-		}
-	}
 }
 
 
@@ -1146,7 +1139,6 @@ void TestWindow::on_AutoStandStartTestButton_clicked()
 				
 		ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 	}
-	//mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
 	resetLanguage();
 }
 	
@@ -1155,7 +1147,6 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 {
 	// Красим нужную ячейку 
 	for (int i = 0; i < cableRows.size(); i++)
-	{
 		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
 		{
 			cableRows[i]->measureds = measureds;
@@ -1164,11 +1155,11 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);
 			model->setData(model->index(currentRowNum, 6), QString(""));
 			for (int j = 0; j < cableRows[i]->thresholds.size(); j++)
-				if( cableRows[i]->thresholds[j].minVoltage > measureds[j]->voltage || cableRows[i]->thresholds[j].maxVoltage < measureds[j]->voltage || 
+				if (cableRows[i]->thresholds[j].minVoltage > measureds[j]->voltage || cableRows[i]->thresholds[j].maxVoltage < measureds[j]->voltage ||
 					cableRows[i]->thresholds[j].minCurrent > measureds[j]->current || cableRows[i]->thresholds[j].maxCurrent < measureds[j]->current)
 					mainTableWidget->item(i, 6)->setBackgroundColor(Qt::red);
 			if (mainTableWidget->item(i, 6)->backgroundColor() != Qt::red)
-					mainTableWidget->item(i, 6)->setBackgroundColor(Qt::green);
+				mainTableWidget->item(i, 6)->setBackgroundColor(Qt::green);
 			if (isFullTestEnabled)// запускаем следующий тест
 			{
 				for (int i = 0; i < cableRows.size(); i++)
@@ -1192,12 +1183,6 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 			}
 		}
-	}
-
-
-
-
-	double t = floatCheck[(int)ConnectorId::A][2]->d3; // Пример доступа
 }
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
@@ -1243,9 +1228,7 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 			}
 		}
 		else
-		{
 			resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
-		}
 	}
 	statusFlags->StatusConnected = statusConnect;
 	resetLanguage();
@@ -1406,7 +1389,6 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_HLD_HEIGHT);
 		}
 	}
-	//connect(cableRows[currentRowNum], &TestTableRowProperties::msgToTwoThreadStartTest_ManualTwoThread, (ManualStandTwoThread*)th, &ManualStandTwoThread::msgToTwoThreadStartTest_ManualTwoThread);
 	connect(cableRows[currentRowNum], &TestTableRowProperties::switchActiveTableButton, this, &TestWindow::switchActiveTableButton);
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
@@ -1457,12 +1439,10 @@ void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
 void TestWindow::resetIconMoreButton(bool theme)
 {
 	for (int row = 0; row < cableRows.size(); row++)
-	{
 		if (theme)
 			cableRows[row]->moreButton->setIcon(QIcon(*moreButtonDarkPixmap));
 		else
 			cableRows[row]->moreButton->setIcon(QIcon(*moreButtonLightPixmap));
-	}
 }
 
 void TestWindow::rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType)
@@ -1475,15 +1455,14 @@ void TestWindow::rewriteCableRows(std::vector<TestTableRowProperties*>* cableRow
 		for (int i = 0; i < cableRows->size(); i++)
 		{
 			bool flag = true;
-			for (int j = 0; j < cableRows->size() - (i + 1); j++) {
-				if ((*cableRows)[j]->id > (*cableRows)[j + 1]->id) {
+			for (int j = 0; j < cableRows->size() - (i + 1); j++)
+				if ((*cableRows)[j]->id > (*cableRows)[j + 1]->id) 
+				{
 					flag = false;
 					std::swap((*cableRows)[j], (*cableRows)[j + 1]);
 				}
-			}
-			if (flag) {
+			if (flag) 
 				break;
-			}
 		}
 		break;
 
@@ -1492,14 +1471,14 @@ void TestWindow::rewriteCableRows(std::vector<TestTableRowProperties*>* cableRow
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "OUT")
 			{
-				auto p = new TestTableRowProperties(this);
+				auto p = new TestTableRowProperties();
 				cableRows->push_back(p);
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "IN")
 			{
-				cableRows->push_back(new TestTableRowProperties(this));
+				cableRows->push_back(new TestTableRowProperties());
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		break;
@@ -1509,13 +1488,13 @@ void TestWindow::rewriteCableRows(std::vector<TestTableRowProperties*>* cableRow
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "IN")
 			{
-				cableRows->push_back(new TestTableRowProperties(this));
+				cableRows->push_back(new TestTableRowProperties());
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		for (int i = 0; i < tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "OUT")
 			{
-				cableRows->push_back(new TestTableRowProperties(this));
+				cableRows->push_back(new TestTableRowProperties());
 				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
 			}
 		break;
@@ -1623,6 +1602,5 @@ void TestTableRowProperties::on_moreButton_clicked()
 
 void TestTableRowProperties::on_checkButton_clicked()
 {
-
 	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, NameTestingBlock::BCM);
 }

@@ -1,13 +1,13 @@
 #include "TestWindow.h"
 
-#define COLUMN_COUNT		9
+#define COLUMN_COUNT			9
 
-#define COLUMN_COMPONENT	3
-#define COLUMN_DIRECTION	4
-#define COLUMN_TYPE			5
-#define COLUMN_CHECK		6
-#define COLUMN_STATUS		7
-#define COLUMN_MANUAL_CHECK	8
+#define COLUMN_COMPONENT		3
+#define COLUMN_DIRECTION		4
+#define COLUMN_TYPE				5
+#define COLUMN_CHECK			6
+#define COLUMN_STATUS			7
+#define COLUMN_MANUAL_CHECK		8
 
 void TestWindow::initUiFullTestManualStand()
 {

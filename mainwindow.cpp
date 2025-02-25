@@ -1,7 +1,7 @@
 #include "MainWindow.h"
 
-#define GRID_COLUMN_0  0
-#define GRID_COLUMN_1  1
+#define GRID_COLUMN_0	0
+#define GRID_COLUMN_1	1
 #define GRID_ROW_0      0
 #define GRID_ROW_1      1
 
@@ -37,48 +37,6 @@
 #define OVERCROWDED_SEL_FILE_LABEL		20
 #define CFG_EXTENSION_LETTERS_COUNT		4
 
-//#define INDEX_DATA_CONFIG_CONNECTOR		0
-//#define INDEX_DATA_CONFIG_PIN			1
-//#define INDEX_DATA_CONFIG_DIRECTION		2
-//#define INDEX_DATA_CONFIG_TYPE			3
-//#define INDEX_DATA_CONFIG_CAN_ID		4
-//#define INDEX_DATA_CONFIG_BIT			5
-//#define INDEX_DATA_CONFIG_NAME			6
-//#define INDEX_DATA_CONFIG_COMPONENT		7
-
-std::vector<std::vector<FloatCheck*>> floatCheck;
-
-static void checkAddFloatCheck(ConnectorId connectorId, int pin, FloatCheck* currentFloatCheck)
-{
-	while (floatCheck.size() - 1 != (int)connectorId)
-	{
-		std::vector<FloatCheck*> tmpFloatCheck;
-		tmpFloatCheck.push_back(new FloatCheck());
-		floatCheck.push_back(tmpFloatCheck);
-	}
-
-	if (floatCheck[(int)connectorId].size() - 1 < pin)
-	{
-		while (floatCheck[(int)connectorId].size() != pin)
-			floatCheck[(int)connectorId].push_back(new FloatCheck());
-		floatCheck[(int)connectorId].push_back(currentFloatCheck);
-	}
-	else
-		floatCheck[(int)connectorId][pin] = currentFloatCheck;
-}
-
-static void initFloatCheck()
-{
-	checkAddFloatCheck(ConnectorId::A, 10, new FloatCheck(4.4, 3.3, 2.2, 1.1));
-	checkAddFloatCheck(ConnectorId::A, 2, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::B, 6, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::C, 4, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::D, 3, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::E, 7, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::F, 15, new FloatCheck(4, 3, 2, 1));
-	checkAddFloatCheck(ConnectorId::F, 10, new FloatCheck(4, 3, 2, 1));
-}
-
 MainWindow::MainWindow(QWidget* parent)
 	: QMainWindow(parent)
 {
@@ -87,7 +45,6 @@ MainWindow::MainWindow(QWidget* parent)
 	this->selectedTypeStand = TypeStand::EMPTY;
 	this->selectedBlock = NameTestingBlock::EMPTY;
 
-	initFloatCheck();
 	initCables();
 
 	initUi();
@@ -581,7 +538,7 @@ void MainWindow::initUiManualStand()
 	testManualStandMiddleUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
 	testManualStandVLayout->addItem(testManualStandMiddleUpSpacer);
 
-	//// out test manual stand
+	// out test manual stand
 	outTestManualStandButton = new QPushButton(backgroundManualStandWidget);
 	outTestManualStandButton->setObjectName("outTestManualStandButton");
 	outTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
@@ -590,7 +547,7 @@ void MainWindow::initUiManualStand()
 	testManualStandMiddleBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
 	testManualStandVLayout->addItem(testManualStandMiddleBottomSpacer);
 
-	//// in test manual stand
+	// in test manual stand
 	inTestManualStandButton = new QPushButton(backgroundManualStandWidget);
 	inTestManualStandButton->setObjectName("inTestManualStandButton");
 	inTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
@@ -599,7 +556,7 @@ void MainWindow::initUiManualStand()
 	testManualStandMiddleFooterSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
 	testManualStandVLayout->addItem(testManualStandMiddleFooterSpacer);
 
-	//// full test manual stand
+	// full test manual stand
 	fullTestManualStandButton = new QPushButton(backgroundManualStandWidget);
 	fullTestManualStandButton->setObjectName("fullTestManualStandButton");
 	fullTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
@@ -646,8 +603,7 @@ void MainWindow::initStyles()
 	manualTestAutoStandWidget->setStyleSheet(lightStyles.mainSubstrateButtons);
 	fullTestAutoStandWidget->setStyleSheet(lightStyles.mainSubstrateButtons);
 
-	//Setting
-	//
+	// Setting
 	checkAdaptersButton->setStyleSheet(lightStyles.mainButton);
 }
 
@@ -1388,7 +1344,7 @@ void MainWindow::initCables()
 		return;
 	QTextStream cable(&config);
 	NameTestingBlock block = NameTestingBlock::EMPTY;
-	int id;
+	int id = 0;
 	while (!cable.atEnd()) {
 		QString line = cable.readLine();
 		if (line == "DM")
@@ -1421,7 +1377,6 @@ void MainWindow::initCables()
 		std::vector<Measureds> measureds;
 		for (int i = 8; i < list.size(); i += 2)
 		{
-
 			if (direction != DIRECTION_IN)
 			{
 				int minCurrent = list[i].toInt();

@@ -4,7 +4,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 {
 	for (int i = 0; i < cables.size(); i++)
 	{
-		cableRows.push_back(new TestTableRowProperties(this));
+		cableRows.push_back(new TestTableRowProperties());
 		// Test
 		for (int j = 0; j < cables[i].getThresholds().size(); j++)
 		{
@@ -103,15 +103,13 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 				break;
 			}
 		}
-		//else if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
-		//	cableRows[i]->direction = "";
 
 		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
 	}
 }
 
-TestTableRowProperties::TestTableRowProperties(TestWindow* testwindow)
+TestTableRowProperties::TestTableRowProperties()
 {
 	id = -1;
 	canId = -1;
@@ -571,7 +569,6 @@ void TestTableRowProperties::on_zero_clicked()
 	stateHLD = ZERO_BUTTON_PRESSED;
 
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, 0);
-
 }
 
 void TestTableRowProperties::on_load75Button_clicked()

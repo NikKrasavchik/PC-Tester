@@ -37,4 +37,5 @@ public slots:
 signals:
 	void on_sliderSwitchStand_click();
 };
+
 #endif QSLIDERBUTTON_H

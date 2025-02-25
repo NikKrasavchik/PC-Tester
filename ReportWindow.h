@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ui_ReportWindow.h"
 #include <QDialog>
 #include <QFormLayout>
@@ -13,9 +14,6 @@
 #include "Components.h"
 #include "TestWindow.h"
 #include "Xlsx/xlsxdocument.h"
-//#include <iostream>
-//#include <filesystem>
-//#include <experimental/filesystem>
 
 #define WINDOW_MIN_SIZE_WIDTH		1000
 #define WINDOW_MIN_SIZE_HEIGHT		250
@@ -23,7 +21,6 @@
 
 #define LEFT_PADDING_MAIN_WIDGET	10
 #define UP_PADDING_MAIN_WIDGET		10
-
 
 #define MEASUREMENT_OFFSET_DOUBLE		2
 #define MEASUREMENT_OFFSET_QUADRUPLE	4
@@ -124,14 +121,11 @@ private:
 	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
-	//void fillTableColor(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
 	
 	void resetBaseLanguage();
 	void resetTheme();
 
 	void resizeEvent(QResizeEvent* event);
-
-	// save file
 
 public slots:
 	void on_saveButton_clicked();

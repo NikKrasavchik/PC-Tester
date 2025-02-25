@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ui_TestWindow.h"
 
 #include <QDialog>
@@ -116,7 +117,7 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
-	TestTableRowProperties(TestWindow* testwindow);
+	TestTableRowProperties();
 
 	int id;
 	int canId;
@@ -141,8 +142,6 @@ public:
 	int statePWM;
 	int stateHLD;
 
-	//TestWindow* testwindow;
-
 	TestTableRowProperties* getThis() { return this; }; // Ужасное название. Не вникал, но если это родительский какой то, то назови что то по типу getParent
 	void generateInteractionButtons(WindowType testType, int type);
 	void switchButtonState(TestButtons testButton);
@@ -161,8 +160,6 @@ public slots:
 	void on_zero_clicked();
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
-
-	//void msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent);
 
 signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
@@ -235,7 +232,7 @@ private:
 	QPixmap* moreButtonLightPixmap;
 	QPixmap* moreButtonDarkPixmap;
 
-	int fullTestSortType; // false - сортировка по нумерации / true - сортировка по типу
+	int fullTestSortType;
 	
 	bool isFullTestEnabled; 
 
@@ -246,7 +243,6 @@ private:
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<QCheckBox*> manualChecks;
 	std::vector<Measureds*> measuredValues;
-	//QThread* th;
 	Cable *nextCheckCable;
 
 	void initUiMain();
@@ -334,7 +330,7 @@ private:
 	void resetTheme();
 	void resetLanguage();
 	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
-	void resetLanguageRowsTable(); // Надо как то менять язык в таблице
+	void resetLanguageRowsTable();
 	void resetIconMoreButton(bool theme);
 	void sortRows();
 	void fillTestTimeComboBoxes();
@@ -367,7 +363,4 @@ public slots:
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 	void selectCurrentCell(QString conector, QString pin);
-
-signals:
-
 };
