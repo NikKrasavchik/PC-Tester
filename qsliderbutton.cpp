@@ -16,7 +16,7 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 
 	painter.setPen(QPen(Qt::black, 3));
 	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.setPen(QPen(QColor("#fff"), 0.1));
+	painter.setPen(QPen(QColor(COLOR_WHITE), 0.1));
 
 	// Рисуем фон
 	painter.setBrush(bgColor);

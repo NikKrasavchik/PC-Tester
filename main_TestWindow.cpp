@@ -4,7 +4,20 @@
 #define STATUS_IN_TEST		5
 #define STATUS_FULL_TEST	7
 
-TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, NameTestingBlock testingBlock, QWidget* parent)
+#define FIXED_HEADER_HEIGHT			80
+#define FIXED_FOOTER_HEIGHT			80
+#define FIXED_LOGO_WIDTH			220
+#define FIXED_LOGO_HEIGHT			55
+#define THEME_LANG_BUTTON_SIZE		30
+#define BACK_BUTTON_SIZE			50
+#define FIXED_FILE_NAME_WIDTH		150
+#define FIXED_FILE_NAME_HEIGHT		50
+#define FIXED_TESTER_NAME_WIDTH		300
+#define FIXED_TESTER_NAME_HEIGHT	50
+#define FIXED_REPORT_BUTTON_WIDTH	100
+#define FIXED_REPORT_BUTTON_HEIGHT	50
+
+TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlockName testingBlock, QWidget* parent)
 	: QDialog(parent)
 {
 	ui.setupUi(this);
@@ -199,7 +212,7 @@ void TestWindow::initUiMainFooter()
 
 	fileNameLabel = new QLabel(footerLayoutWidget);
 	fileNameLabel->setObjectName("fileNameLabel");
-	if(testingBlock == NameTestingBlock::DM)
+	if(testingBlock == TestBlockName::DM)
 		fileNameLabel->setText("DM");
 	else
 		fileNameLabel->setText("BCM");
@@ -1087,11 +1100,11 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
-			Can::sendTestMsg(cableRows[i]->connectorInt, cableRows[i]->pin.toInt(), cableRows[i]->typeInt, NameTestingBlock::BCM);
+			Can::sendTestMsg(cableRows[i]->connectorInt, cableRows[i]->pin.toInt(), cableRows[i]->typeInt, TestBlockName::BCM);
 }
 
 
-void TestWindow::on_AutoStandStartTestButton_clicked()
+void TestWindow::on_autoStandStartTestButton_clicked()
 {
 	if (isFullTestEnabled)
 	{
@@ -1602,5 +1615,5 @@ void TestTableRowProperties::on_moreButton_clicked()
 
 void TestTableRowProperties::on_checkButton_clicked()
 {
-	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, NameTestingBlock::BCM);
+	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, TestBlockName::BCM);
 }

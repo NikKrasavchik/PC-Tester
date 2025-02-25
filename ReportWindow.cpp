@@ -475,34 +475,34 @@ void static fillTableColorOut(TestTableRowProperties* cableRow, int measuredInde
 
 	if (cableRow->measureds[measuredIndex]->voltage < cableRow->thresholds[measuredIndex].minVoltage)
 	{
-		tableItems[0]->setBackgroundColor(RED_COLOR);
-		tableItems[2]->setBackgroundColor(RED_COLOR);
+		tableItems[0]->setBackgroundColor(COLOR_RED);
+		tableItems[2]->setBackgroundColor(COLOR_RED);
 		disparity = true;
 	}
 	if (cableRow->measureds[measuredIndex]->voltage > cableRow->thresholds[measuredIndex].maxVoltage)
 	{
-		tableItems[0]->setBackgroundColor(RED_COLOR);
-		tableItems[3]->setBackgroundColor(RED_COLOR);
+		tableItems[0]->setBackgroundColor(COLOR_RED);
+		tableItems[3]->setBackgroundColor(COLOR_RED);
 		disparity = true;
 	}
 	if (!disparity)
-		tableItems[0]->setBackgroundColor(GREEN_COLOR);
+		tableItems[0]->setBackgroundColor(COLOR_GREEN);
 	
 	disparity = false;
 	if (cableRow->measureds[measuredIndex]->current < cableRow->thresholds[measuredIndex].minCurrent)
 	{
-		tableItems[1]->setBackgroundColor(RED_COLOR);
-		tableItems[4]->setBackgroundColor(RED_COLOR);
+		tableItems[1]->setBackgroundColor(COLOR_RED);
+		tableItems[4]->setBackgroundColor(COLOR_RED);
 		disparity = true;
 	}
 	if (cableRow->measureds[measuredIndex]->current > cableRow->thresholds[measuredIndex].maxCurrent)
 	{
-		tableItems[1]->setBackgroundColor(RED_COLOR);
-		tableItems[5]->setBackgroundColor(RED_COLOR);
+		tableItems[1]->setBackgroundColor(COLOR_RED);
+		tableItems[5]->setBackgroundColor(COLOR_RED);
 		disparity = true;
 	}
 	if (!disparity)
-		tableItems[1]->setBackgroundColor(GREEN_COLOR);
+		tableItems[1]->setBackgroundColor(COLOR_GREEN);
 }
 
 void static fillTableColorIn(TestTableRowProperties* cableRow, QTableWidgetItem** tableItems)
@@ -510,8 +510,8 @@ void static fillTableColorIn(TestTableRowProperties* cableRow, QTableWidgetItem*
 	if (cableRow->measureds[0]->voltage == -1 && cableRow->measureds[0]->current == -1)
 		return;
 
-	tableItems[0]->setBackgroundColor(cableRow->measureds[0]->voltage ? GREEN_COLOR : RED_COLOR);
-	tableItems[1]->setBackgroundColor(cableRow->measureds[0]->current ? GREEN_COLOR : RED_COLOR);
+	tableItems[0]->setBackgroundColor(cableRow->measureds[0]->voltage ? COLOR_GREEN : COLOR_RED);
+	tableItems[1]->setBackgroundColor(cableRow->measureds[0]->current ? COLOR_GREEN : COLOR_RED);
 }
 
 void static fillTableColorInAnalog(TestTableRowProperties* cableRow, int measuredIndex, QTableWidgetItem** tableItems)
@@ -523,18 +523,18 @@ void static fillTableColorInAnalog(TestTableRowProperties* cableRow, int measure
 
 	if (cableRow->measureds[measuredIndex]->voltage < cableRow->thresholds[measuredIndex].minValue)
 	{
-		tableItems[0]->setBackgroundColor(RED_COLOR);
-		tableItems[1]->setBackgroundColor(RED_COLOR);
+		tableItems[0]->setBackgroundColor(COLOR_RED);
+		tableItems[1]->setBackgroundColor(COLOR_RED);
 		disparity = true;
 	}
 	if (cableRow->measureds[measuredIndex]->voltage > cableRow->thresholds[measuredIndex].maxValue)
 	{
-		tableItems[0]->setBackgroundColor(RED_COLOR);
-		tableItems[2]->setBackgroundColor(RED_COLOR);
+		tableItems[0]->setBackgroundColor(COLOR_RED);
+		tableItems[2]->setBackgroundColor(COLOR_RED);
 		disparity = true;
 	}
 	if (!disparity)
-		tableItems[0]->setBackgroundColor(GREEN_COLOR);
+		tableItems[0]->setBackgroundColor(COLOR_GREEN);
 }
 
 void static fillTableColor(TestTableRowProperties* cableRow, int measuredIndex, QTableWidgetItem** tableItems)
@@ -620,7 +620,6 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 		}
 
 		commentsTextEdits.push_back(new QTextEdit());
-		connect(commentsTextEdits[commentsTextEdits.size() - 1], &QTextEdit::textChanged, this, &ReportWindow::on_commentTextEdit_textChanged);
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
@@ -668,7 +667,6 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 		fillTableColor(cableRows[i], 0, tableItems);
 
 		commentsTextEdits.push_back(new QTextEdit());
-		connect(commentsTextEdits[commentsTextEdits.size() - 1], &QTextEdit::textChanged, this, &ReportWindow::on_commentTextEdit_textChanged);
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
@@ -730,7 +728,6 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 		}
 
 		commentsTextEdits.push_back(new QTextEdit());
-		connect(commentsTextEdits[commentsTextEdits.size() - 1], &QTextEdit::textChanged, this, &ReportWindow::on_commentTextEdit_textChanged);
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
@@ -766,10 +763,6 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 		fillTableInAnalog(cableRows);
 		break;
 	}
-}
-
-void ReportWindow::on_commentTextEdit_textChanged()
-{
 }
 
 void writeHorizontalAlignCell(Document& xlsx, int row, int columnStart, int columnEnd, const QVariant& text, QXlsx::Format::HorizontalAlignment align, Format formatText = Format(), const QColor& color = nullptr)
@@ -956,16 +949,16 @@ void ReportWindow::on_saveButton_clicked()
 		for (int i = 0; i < typedCableRows[type].size(); i++)
 		{
 			Format tmpHeaderFormat(format);
-			tmpHeaderFormat.setPatternBackgroundColor(QColor("#8db4e2"));
+			tmpHeaderFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_BLUE));
 			Format tmpRowFormat(format);
 			if (color)
 			{
-				tmpRowFormat.setPatternBackgroundColor(QColor("#95b3d7"));
+				tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_LIGHT_GREY));
 				color = false;
 			}
 			else
 			{
-				tmpRowFormat.setPatternBackgroundColor(QColor("#dce6f1"));
+				tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_WHITE));
 				color = true;
 			}
 			Format tmpRowCommentFormat(tmpRowFormat);
@@ -1001,8 +994,8 @@ void ReportWindow::on_saveButton_clicked()
 				}
 				else
 				{
-					writeHorizontalAlignCell(xlsx, numRow, 6, 7, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->voltage == 0 ? QColor("#FF8686") : QColor("#7CC770")));
-					writeHorizontalAlignCell(xlsx, numRow, 8, 9, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->current == 0 ? QColor("#FF8686") : QColor("#7CC770")));
+					writeHorizontalAlignCell(xlsx, numRow, 6, 7, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->voltage == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
+					writeHorizontalAlignCell(xlsx, numRow, 8, 9, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->current == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
 				}
 				numRow++;
 				break;
@@ -1052,9 +1045,9 @@ void ReportWindow::on_saveButton_clicked()
 					else
 					{
 						Format tmpRedFormat(format);
-						tmpRedFormat.setPatternBackgroundColor("#FF8686");
+						tmpRedFormat.setPatternBackgroundColor(COLOR_LIGHT_RED);
 						Format tmpGreenFormat(format);
-						tmpGreenFormat.setPatternBackgroundColor("#7CC770");
+						tmpGreenFormat.setPatternBackgroundColor(COLOR_LIGHT_GREEN);
 
 						if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minValue && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxValue)
 						{
@@ -1139,9 +1132,9 @@ void ReportWindow::on_saveButton_clicked()
 					else
 					{
 						Format tmpRedFormat(format);
-						tmpRedFormat.setPatternBackgroundColor(RED_COLOR);
+						tmpRedFormat.setPatternBackgroundColor(COLOR_RED);
 						Format tmpGreenFormat(format);
-						tmpGreenFormat.setPatternBackgroundColor(GREEN_COLOR);
+						tmpGreenFormat.setPatternBackgroundColor(COLOR_GREEN);
 						if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minVoltage && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxVoltage)
 						{
 							xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpGreenFormat);

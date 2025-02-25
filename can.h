@@ -13,10 +13,10 @@
 #include "chai.h"
 #include "Cable.h"
 
-#define ID_CAN_AUTOSTAND 0x51
-#define ID_CAN_MANUALSTAND 0x100
+#define ID_CAN_AUTOSTAND		0x51
+#define ID_CAN_MANUALSTAND		0x100
 
-#define TIME_CHECKCONNECTION 200
+#define TIME_CHECKCONNECTION	200
 
 class Can : public QObject
 {
@@ -75,7 +75,7 @@ public:
 	//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
 	//			true  - в случае если сообщение отправилось.
 	// ------------------------------------
-	static bool sendTestMsg(ConnectorId pad, int pin, TypeCable type, NameTestingBlock nameBlock);
+	static bool sendTestMsg(ConnectorId pad, int pin, TypeCable type, TestBlockName nameBlock);
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
 
