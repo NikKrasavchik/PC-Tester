@@ -1,11 +1,14 @@
+
 #include "qsliderbutton.h"
 #include <QPainter>
 #include <QMouseEvent>
 
-QSliderButton::QSliderButton(QWidget* parent)
+QSliderButton::QSliderButton(bool isHorizontal, QWidget* parent)
 {
 	this->setParent(parent);
-	status = AUTO_STAND;
+	status = TypeStand::AUTO;
+
+	this->isHorizontal = isHorizontal;
 }
 
 void QSliderButton::paintEvent(QPaintEvent* event)
@@ -18,10 +21,13 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 
 	// Рисуем фон
 	painter.setBrush(bgColor);
-	painter.drawRoundedRect(0, 0, sizeWidth, sizeHeight, sizeHeight / 2, sizeHeight / 2);
+	if (isHorizontal)
+		painter.drawRoundedRect(0, 0, sizeWidth, sizeHeight, sizeHeight / 2, sizeHeight / 2);
+	else
+		painter.drawRoundedRect(0, 0, sizeHeight, sizeWidth, sizeHeight / 2, sizeHeight / 2);
 
 	//Рисуем шарик
-	if (this->status == MANUAL_STAND)
+	if (this->status == TypeStand::MANUAL)
 	{
 		painter.setBrush(roundColor);
 
@@ -30,7 +36,10 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 	else
 	{
 		painter.setBrush(roundColor);
-		painter.drawEllipse(sizeWidth - sizeHeight, 0, sizeHeight, sizeHeight);
+		if (isHorizontal)
+			painter.drawEllipse(sizeWidth - sizeHeight, 0, sizeHeight, sizeHeight);
+		else
+			painter.drawEllipse(0, sizeWidth - sizeHeight, sizeHeight, sizeHeight);
 	}
 }
 
@@ -38,24 +47,24 @@ void QSliderButton::mousePressEvent(QMouseEvent* event)
 {
 	if (event->button() == Qt::LeftButton)
 	{
-		if (this->status)
-			this->status = MANUAL_STAND;
+		if (this->status == TypeStand::AUTO)
+			this->status = TypeStand::MANUAL;
 		else
-			this->status = AUTO_STAND;
+			this->status = TypeStand::AUTO;
 
 		on_sliderSwitchStand_click();
 
 		repaint();
 	}
 }
-int QSliderButton::getStatus()
+TypeStand QSliderButton::getStatus()
 {
 	return status;
 }
 
-void QSliderButton::setStatus(int newValue)
+void QSliderButton::setStatus(TypeStand newValue)
 {
-	if (newValue == MANUAL_STAND || newValue == AUTO_STAND)
+	if (newValue == TypeStand::MANUAL || newValue == TypeStand::AUTO)
 		status = newValue;
 	repaint();
 }

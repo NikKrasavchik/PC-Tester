@@ -6,63 +6,28 @@
 #include <QPushButton>
 #include <QComboBox>
 #include <QFileDialog>
+#include <QApplication>
+#include <QProxyStyle>
+#include <QStyleFactory>
+#include <QFile>
+#include <qmessagebox.h>
+#include <utility>
 
 #include "ui_mainwindow.h"
 #include "TestWindow.h"
 #include "qsliderbutton.h"
-#include "StyleSheets.h"
 #include "can.h"
+#include "WindowFrame.h"
+#include "Components.h"
+#include "mainwindow.h"
+#include "Cable.h"
 
 #include <QDebug>
 
-#define MIN_SCREEN_WIDTH    800
-#define MIN_SCREEN_HEIGHT   600
+#define TYPE_NOT_SET	NOT_SET
+#define TYPE_MANUAL		0
+#define TYPE_AUTO		1
 
-#define BORDER_INDENT   25
-#define TOOLBAR_SIZE    20
-
-#define GRID_COLOUMN_0  0
-#define GRID_COLOUMN_1  1
-#define GRID_ROW_0      0
-#define GRID_ROW_1      1
-
-#define MIN_STAND_BUTTON_WIDTH			144
-#define MIN_STAND_BUTTON_HEIGHT			62
-#define MIN_STAND_SWITCH_SLIDER_WIDTH	88
-#define MIN_STAND_SWITCH_SLIDER_HEIGHT	46
-#define MIN_THEME_LANG_BUTTON			30
-#define MIN_ADAPTER_COMBO_HEIGHT		35
-#define MIN_ADAPTER_BUTTON_SIZE			35
-#define MIN_FREQUENCY_COMBO_HEIGHT		35
-#define MIN_CONFIGURATOR_BUTTON_WIDTH	160
-#define MIN_CONFIGURATOR_BUTTON_HEIGHT	66
-#define MIN_FILE_SEL_BUTTON_WIDTH		166
-#define MIN_FILE_SEL_BUTTON_HEIGHT		66
-#define MIN_MAIN_IN_OUT_BUTTON_WIDTH	145
-#define MIN_MAIN_IN_OUT_BUTTON_HEIGHT	46
-#define MIN_MAIN_FUL_BUTTON_WIDTH		200
-#define MIN_MAIN_FUL_BUTTON_HEIGHT		60
-
-#define MAX_ADAPTER_COMBO_WIDTH			263
-#define MAX_FREQUENCY_COMBO_WIDTH		300
-
-#define COEF_STAND_BUTTON				0.1
-#define COEF_STAND_SLIDER				0.06
-#define COEF_THEME_LANG_BUTTON			0.03
-#define COEF_ADAPTER_GROUP				0.05
-#define COEF_FREQUENC_COMBO				0.05
-#define COEF_CONFIGURATOR_BUTTON		0.05
-#define COEF_FILE_SEL_BUTTON			0.05
-#define COEF_MAIN_BUTTON				0.05
-
-#define LIGHT_THEME		0
-#define DARK_THEME		1
-
-#define RUSSIAN_LANG	0
-#define ENGLISH_LANG	1
-
-#define OVERCROWDED_SEL_FILE_LABEL		26
-#define CFG_EXTENSION_LETTERS_COUNT		4
 
 class MainWindow : public QMainWindow
 {
@@ -72,8 +37,11 @@ public:
 	MainWindow(QWidget* parent = nullptr);
 	~MainWindow();
 
+	void setParentFrame(WindowFrame* parentFrame);
+
 private:
 	Ui::MainWindowClass ui;
+	WindowFrame* parentFrame;
 
 	QWidget* mainLayoutWidget;
 	QWidget* manualStandWidget;
@@ -83,14 +51,12 @@ private:
 	QWidget* autoTestAutoStandWidget;
 	QWidget* backgroundManualStandWidget;
 	QGridLayout* mainGridLayout;
+	QHBoxLayout* switchTypeHLayout;
 	QHBoxLayout* topHLayout;
-	QHBoxLayout* switchStandHLayout;
 	QHBoxLayout* findAdapterHLayout;
-	QHBoxLayout* configuratorHLayout;
 	QHBoxLayout* partitionTestAutoStandHLayout;
 	QHBoxLayout* manualStandMainHLayout;
 	QHBoxLayout* leftHLayout;
-	QHBoxLayout* selectFileHLayout;
 	QHBoxLayout* backgroundManualStandHLayout;
 	QHBoxLayout* autoStandMainHLayout;
 	QHBoxLayout* manualTestAutoStandHLayout;
@@ -106,14 +72,15 @@ private:
 	QVBoxLayout* leftSettingsVLayout;
 	QVBoxLayout* selectAdapterVLayout;
 	QVBoxLayout* selectFrequencyVLayout;
-	QVBoxLayout* selectFileVLayout;
 	QVBoxLayout* mainVLayout;
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* manualStandMainVLayout;
+	QVBoxLayout* leftSwitchBlockVLayout;
+	QVBoxLayout* leftSwitchStandButtonsVLayout;
+	QHBoxLayout* leftSwitchStandHLayout;
 	QLabel* logoLabel;
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
-	QLabel* selectFileLabel;
 	QLabel* manualStandLabel;
 	QLabel* manualTestAutoStandLabel;
 	QLabel* autoTestAutoStandLabel;
@@ -121,8 +88,6 @@ private:
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* checkAdaptersButton;
-	QPushButton* configuratorButton;
-	QPushButton* selectFileButton;
 	QPushButton* manualStandButton;
 	QPushButton* autoStandButton;
 	QPushButton* outTestManualStandButton;
@@ -133,20 +98,20 @@ private:
 	QPushButton* outAutoTestAutoStandButton;
 	QPushButton* inAutoTestAutoStandButton;
 	QPushButton* fullTestAutoStandButton;
+	QPushButton* leftBlockBCMButton;
+	QPushButton* leftBlockDMButton;
 	QComboBox* selectAdapterComboBox;
 	QComboBox* selectFrequencyComboBox;
 	QSpacerItem* rightAutoStandSpacer;
 	QSpacerItem* leftManualStandSpacer;
 	QSpacerItem* leftSwitchStandSpacer;
 	QSpacerItem* rightSwitchStandSpacer;
+	QSpacerItem* topSwitchStandSpacer;
 	QSpacerItem* topFrequencySpacer;
 	QSpacerItem* topSettingsSpacer;
 	QSpacerItem* botSettingsSpacer;
-	QSpacerItem* topSelectFileSpacer;
-	QSpacerItem* topConfiguratorSpacer;
 	QSpacerItem* findAdapterCenterSpacer;
 	QSpacerItem* selectAdapterMiddleSpacer;
-	QSpacerItem* configuratorLeftSpacer;
 	QSpacerItem* manualStandMainLeftSpacer;
 	QSpacerItem* manualStandMainRightSpacer;
 	QSpacerItem* manualStandMainUpSpacer;
@@ -186,7 +151,8 @@ private:
 	QSpacerItem* fullTestAutoStandRightSpacer;
 	QSpacerItem* fullTestAutoStandUpSpacer;
 	QSpacerItem* fullTestAutoStandBottomSpacer;
-	QFrame* selectFileLine;
+	QSpacerItem* leftStandSwitchSpacer;
+	QSpacerItem* leftStandSwitchUpSpacer;
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
 	QPixmap* themeLightPixmap;
@@ -197,21 +163,26 @@ private:
 	QPixmap* languageDarkPixmap;
 
 	Can* can;
+	std::vector<Cable> cables;
+	std::vector<Cable> cablesDMStorag;
+	std::vector<Cable> cablesBCMStorag;
 
-	bool appTheme;
-	bool appLanguage;
-	bool fileSelected;
-	bool isAllInit = false;
-	bool selectedStand;
+	bool isAllInit;
+	NameTestingBlock selectedBlock;
+	TypeStand selectedTypeStand;
 
-	QString selectedFullFileName;
+	QString appstylePath;
+	QString darkStylePath;
+	QString lightStylePath;
 
-	void initStyleSheets();
 	void initRecources();
 	void initStyles();
+	void initLightStyleSheets();
+	void initDarkStyleSheets();
 	void initTexts();
 	void initIcons();
 	void initConnections();
+	void initCables();
 
 	void initUi();
 	void initUiLogo();
@@ -219,35 +190,38 @@ private:
 	void initUiLeftHLayout();
 	void initUiMainVLayout();
 
-	void initUiSwitchStand();
+	void initUiSwitchType();
 	void initUiSwitchThemeLang();
+	void initUiSwitchStand();
 	void initUiAdapter();
 	void initUiFrequency();
-	void initUiSelectFile();
-	void initUiConfigurator();
 	void initUiAutoStand();
 	void initUiManualStand();
 	void initUiAutoStandManualTest();
-	void initUiAutoStandAutoTest();
+	void initUiAutoStandAutoTest();	
 	void initUiAutoStandFullTest();
 
 	void fillComboBoxes();
 
 	void switchStandButtons();
-	void switchTheme();
-	void switchLanguage();
+	void resetTheme();
+	void resetLanguage();
 	void switchStyleMainButtons();
 
 	void resizeEvent(QResizeEvent* event);
 
-	void createTestWindow(TestWindowType testType);
+	std::vector<Cable> prepareArguments(WindowType testType);
+	void createTestWindow(WindowType testType, std::vector<Cable> preparedCables);
+
+	void generateWarning(Warnings::MainWindow warning);
+
+	void resetWindowView();
 
 private slots:
 	// Button
 	void on_sliderSwitchStand_click();
 	void on_manualStandButton_clicked();
 	void on_autoStandButton_clicked();
-	void on_selectFileButton_clicked();
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
 	void on_checkAdaptersButton_clicked();
@@ -263,6 +237,8 @@ private slots:
 	void on_inAutoTestAutoStandButton_clicked();
 	void on_outAutoTestAutoStandButton_clicked();
 	void on_fullTestAutoStandButton_clicked();
+	void on_leftBlockBCMButton_clicked();
+	void on_leftBlockDMButton_clicked();
 
 signals:
 	void resizeStandSlider(int width, int height);
