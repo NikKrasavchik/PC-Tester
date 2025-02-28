@@ -57,11 +57,27 @@ void QSliderButton::mousePressEvent(QMouseEvent* event)
 	}
 }
 
+// ------------------------------------
+// Name: getStatus
+//		Возврат текущего статуса
+// Return: 
+//			TypeStand: Переменная, хранящая в себе информацию о выбранном стенде. Возвращаемые данные:
+//						MANUAL
+//						AUTO
+// ------------------------------------
 TypeStand QSliderButton::getStatus()
 {
 	return status;
 }
 
+// ------------------------------------
+// Name: setStatus
+//		Установка текущего статуса
+// Varibals: 
+//			TypeStand newValue: Переменная, хранящая в себе информация о выбранном стенде. Обрабатываемые аргументы:
+//								MANUAL
+//								AUTO
+// ------------------------------------
 void QSliderButton::setStatus(TypeStand newValue)
 {
 	if (newValue == TypeStand::MANUAL || newValue == TypeStand::AUTO)
@@ -75,6 +91,13 @@ void QSliderButton::resizeSlider(int newWidth, int newHeight)
 	sizeHeight = newHeight;
 }
 
+// ------------------------------------
+// Name: setStyleSheet
+//		Установка стиля
+// Varibals: 
+//			QString roundColor: Переменная, хранящая в себе информацию о стиле грани
+//			QString bgColor: Переменная, хранящая в себе информацию о стиле заднего фона
+// ------------------------------------
 void QSliderButton::setStyleSheet(QString roundColor, QString bgColor)
 {
 	this->roundColor = roundColor;

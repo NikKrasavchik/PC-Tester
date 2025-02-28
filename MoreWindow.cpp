@@ -135,6 +135,15 @@ void MoreWindow::fillBaseTable()
 	mainTableWidget->verticalHeader()->setSectionResizeMode(IND_ROW_BASE_VALUE, QHeaderView::Stretch);
 }
 
+// ------------------------------------
+// Name: prepareItem
+//		Подготовка ячейки для записи в него данных
+// Varibals: 
+//			int row: индекс строчки ячейки
+//			int column: индекс столбца ячйки
+//			int rowSpan: количество ячейек для горизонтального соединения
+//			int columnSpan: количество ячейук для вертикального соединения
+// ------------------------------------
 void MoreWindow::prepareItem(int row, int column, int rowSpan, int columnSpan)
 {
 	QFont font;
@@ -149,6 +158,10 @@ void MoreWindow::prepareItem(int row, int column, int rowSpan, int columnSpan)
 	mainTableWidget->item(row, column)->setFont(font);
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindow::setValues()
 {
 	mainTableWidget->item(CELL_VALUE_BASE_CONNECTOR)->setText(row->connectorStr);
@@ -158,6 +171,12 @@ void MoreWindow::setValues()
 	mainTableWidget->item(CELL_VALUE_BASE_NAME)->setText(row->name);
 }
 
+// ------------------------------------
+// Name: resetLanguage
+//		Обновление данных в ячейках под актуальный язык
+// Varibals: 
+//			int offset: Значение смещения. По умолчанию OFFSET_NULL
+// ------------------------------------
 void MoreWindow::resetLanguage(int offset)
 {
 	switch (viewWindowState->appLanguage)
@@ -278,6 +297,10 @@ void MoreWindowOut::resetBlockLanguage(int measuredNum)
 	}
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindowOut::setValues()
 {
 	for (int i = 0; i < row->thresholds.size(); i++)
@@ -360,6 +383,10 @@ void MoreWindowIn::generateSigns()
 	}
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindowIn::setValues()
 {
 	if (row->measureds[0]->voltage == 1)
@@ -469,6 +496,10 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 	}
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindowInAnalog::setValues()
 {
 	for (int i = 0; i < row->thresholds.size(); i++)

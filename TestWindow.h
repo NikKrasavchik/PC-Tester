@@ -153,9 +153,55 @@ public:
 	int statePWM;
 	int stateHLD;
 
+	// ------------------------------------
+	// Name: generateInteractionButtons
+	//			Производится генерация кнопок в соответствии с типом кабеля
+	// Varibals:
+	//			WindowType testType: Содержит тип теста. Обрабатываемые аргументы:
+	//								OUT_TEST_MANUAL_STAND		
+	//								FULL_TEST_MANUAL_STAND
+	//								OUT_MANUAL_TEST_AUTO_STAND
+	//								IN_MANUAL_TEST_AUTO_STAND
+	//								OUT_AUTO_TEST_AUTO_STAND
+	//			int type: Содержит тип кабеля. Обрабатываемые аргументы:
+	//						TYPE_DIGITAL
+	//						TYPE_PWM
+	//						TYPE_VNH
+	//						TYPE_HLD
+	// ------------------------------------
 	void generateInteractionButtons(WindowType testType, int type);
+
+	// ------------------------------------
+	// Name: switchButtonState
+	//			Производится переулючение стиля кнопок в соответствии с нажатием кнопок
+	// Varibals: 
+	//			TestButtons testButton: содержит тип кнопки. Обрабатываемые аргументы:
+	//				BUTTON_ON
+	//				BUTTON_OFF
+	//				BUTTON_LOAD_0
+	//				BUTTON_LOAD_25
+	//				BUTTON_LOAD_50
+	//				BUTTON_LOAD_75
+	//				BUTTON_LOAD_100
+	//				BUTTON_HIGH
+	//				BUTTON_LOW
+	//				BUTTON_ZERO
+	// ------------------------------------
 	void switchButtonState(TestButtons testButton);
+
+	// ------------------------------------
+	// Name: sendSignal
+	//			Отправляется сигнал на can
+	// ------------------------------------
 	void sendSignal();
+
+	// ------------------------------------
+	// Name: generateWarning
+	//			Вызывается окно сообщения при неожиданных исходах
+	// Varibals: 
+	//			Warnings::TestWindow warning: Идентификатор вызываемой ошибки
+	//											OPEN_MORE_WINDOW
+	// ------------------------------------
 	void generateWarning(Warnings::TestWindow warning);
 
 public slots:
@@ -185,8 +231,19 @@ class TestWindow : public QDialog
 public:
 	TestWindow(WindowType testType, std::vector<Cable> cables, TestBlockName testingBlock, QWidget* parent = nullptr);
 	~TestWindow();
-	
+
+	// ------------------------------------
+	// Name: 
+	// Varibals: 
+	// Return: 
+	// ------------------------------------
 	void setParentFrame(WindowFrame* parentFrame);
+
+	// ------------------------------------
+	// Name: 
+	// Varibals: 
+	// Return: 
+	// ------------------------------------
 	void ProcAutoTest(int pad, int pin);
 
 	StandStatusFlags* statusFlags;

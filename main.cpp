@@ -1,4 +1,3 @@
-
 //    ДЛЯ СБОРКИ УБЕДИТСЯ:
 //    1. Настроен ли Qt в вашей VS
 //    2. Правильный ди путь до SDK
@@ -26,12 +25,14 @@ ViewWindowState* viewWindowState;
 
 int main(int argc, char* argv[])
 {
+	// Создание глобальной переменной, в которой хранится информация о размере экрана, языке и теме
 	viewWindowState = new ViewWindowState;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
 	viewWindowState->appTheme = LIGHT_THEME;
 	viewWindowState->appSize.width = MIN_SCREEN_WIDTH;
 	viewWindowState->appSize.height = MIN_SCREEN_HEIGHT;
 
+	// Запуск приложения
 	QApplication a(argc, argv);
 	a.setStyle(new QProxyStyle(QStyleFactory::create(style)));
 

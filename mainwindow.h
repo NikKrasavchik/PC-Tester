@@ -32,6 +32,12 @@ public:
 	MainWindow(QWidget* parent = nullptr);
 	~MainWindow();
 
+	// ------------------------------------
+	// Name: setParentFrame
+	//		Сохранение родительского элемента
+	// Varibals: 
+	//			WindowFrame* parentFrame: родительских элемент
+	// ------------------------------------
 	void setParentFrame(WindowFrame* parentFrame);
 
 private:
@@ -202,17 +208,19 @@ private:
 	void resetWindowView();
 
 private slots:
-	// Button
+	// Buttons
 	void on_sliderSwitchStand_click();
 	void on_manualStandButton_clicked();
 	void on_autoStandButton_clicked();
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
 	void on_checkAdaptersButton_clicked();
-	// ComboBox
+
+	// ComboBoxes
 	void on_selectFrequencyComboBox_changed(int index);
 	void on_selectAdapterComboBox_changed(int index);
-	// main
+
+	// Test buttons
 	void on_outTestManualStandButton_clicked();
 	void on_inTestManualStandButton_clicked();
 	void on_fullTestManualStandButton_clicked();

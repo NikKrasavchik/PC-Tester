@@ -194,6 +194,10 @@ public:
 	MoreWindow(TestTableRowProperties* row);
 	~MoreWindow();
 
+	// ------------------------------------
+	// Name: setValues
+	//		«апись значений кабел€ в таблицу
+	// ------------------------------------
 	virtual void setValues();
 
 protected:
@@ -206,7 +210,23 @@ protected:
 	int coutThresholds;
 	bool isAllInit;
 
+	// ------------------------------------
+	// Name: prepareItem
+	//		ѕодготовка €чейки дл€ записи в него данных
+	// Varibals: 
+	//			int row: индекс строчки €чейки
+	//			int column: индекс столбца €чйки
+	//			int rowSpan: количество €чейек дл€ горизонтального соединени€
+	//			int columnSpan: количество €чейук дл€ вертикального соединени€
+	// ------------------------------------
 	void prepareItem(int row, int column, int rowSpan, int columnSpan);
+
+	// ------------------------------------
+	// Name: resetLanguage
+	//		ќбновление данных в €чейках под актуальный €зык
+	// Varibals: 
+	//			int offset: «начение смещени€. ѕо умолчанию OFFSET_NULL
+	// ------------------------------------
 	void resetLanguage(int offset);
 
 private:
