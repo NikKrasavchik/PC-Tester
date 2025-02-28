@@ -191,7 +191,7 @@ void TestWindow::initUiMainFooter()
 	footerLine = new QFrame(mainLayoutWidget);
 	footerLine->setObjectName("footerLine");
 	footerLine->setFrameShape(QFrame::HLine);
-	mainVLayout->addWidget(footerLine);
+ 	mainVLayout->addWidget(footerLine);
 
 	footerLayoutWidget = new QWidget(mainLayoutWidget);
 	footerLayoutWidget->setObjectName("footerLayoutWidget");
@@ -1192,45 +1192,6 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 			}
 		}
-		/*
-		if (connector == cableRows[i]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL &&
-			pin == cableRows[i]->pin.toInt())
-		{
-			cableRows[i]->measureds = measureds;
-			int currentRowNum = determineCurrentRowNum(connector, pin, cableRows);
-			QAbstractItemModel* model = mainTableWidget->model();
-			model->setData(model->index(currentRowNum, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5), QString(""));
-			if (cableRows[i]->thresholds[0].minCurrent <= voltage && voltage <= cableRows[i]->thresholds[0].maxVoltage &&
-				cableRows[i]->thresholds[0].minCurrent <= current && current <= cableRows[i]->thresholds[0].maxCurrent)
-				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::green);
-			else
-				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::red);
-
-			if (isFullTestEnabled)// запускаем следующий тест
-			{
-				for (int i = 0; i < cableRows.size(); i++)
-					if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
-					{
-						if (i == cableRows.size() - 1)
-						{
-							// Тест закончен
-							nextCheckCable->setConnector(cableRows[0]->connectorInt);
-							nextCheckCable->setPin(cableRows[0]->pin.toInt());
-							QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
-							isFullTestEnabled = false;
-							resetLanguage();
-							return;
-						}
-						nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
-						nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
-						break;
-					}
-				mainTableWidget->item(i+1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
-				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
-			}
-			return;
-		}
-		*/
 	}
 
 

@@ -210,13 +210,13 @@ std::vector<QString> Can::getNameAdapters()
 {
 	// Чистим массив с названияями адаптеров, для того что бы актуализировать подключенные адаптеры
 	kvaser->nameAdapters.clear();
-	marathon->nameAdapters.clear();
+	marathon->nameAdapters.clear();	
 
 	std::vector<QString> resultVector;
 
 	// kvaser
-	int chanCount;             // Кол-во адаптеров kvaser
-	char charNameAdapter[255];     // Название адаптера
+	int chanCount;					// Кол-во адаптеров kvaser
+	char charNameAdapter[255];		// Название адаптера
 
 	canInitializeLibrary();
 	canGetNumberOfChannels(&chanCount);

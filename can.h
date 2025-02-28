@@ -7,8 +7,8 @@
 #include "qtimer.h"
 #include "qdebug.h"
 #include "QTime"
-
 #include "qstring.h"
+
 #include "canlib.h"
 #include "chai.h"
 #include "Cable.h"
@@ -33,6 +33,7 @@ public:
 	//			true  - в случае если can прошёл инициализацию.
 	// ------------------------------------
 	bool initCan(WindowType windowType);
+
 	// ------------------------------------
 	// Name: deinitCan
 	// Return: bool
@@ -41,12 +42,27 @@ public:
 	// ------------------------------------
 	bool deinitCan();
 
+	// ------------------------------------
+	// Name: setSelectedAdapterNeme
+	// Varibals: 
+	//			QString adapter - имя адаптера который будет выбран в качестве рабочего.
+	//			Значения обезательно должно соответсвовать какому либо элементу полученному из метода getNameAdapters().
+	// ------------------------------------
 	void setSelectedAdapterNeme(QString adapter);
+
 	void setSelectedFrequency(QString frequency);
 
 	bool getStatusAdapterSelected() { return b_adapterSelected; }
 	bool getStatusFrequencySelected() { return b_frequencySelected; }
 
+	// ------------------------------------
+	// Name: getNameAdapters
+	// Return: std::vector<QString>
+	//			Массив названий Can-адаптеров которые подключены к ПК и мы можем с ними работат.
+	//			Примечание:
+	//				У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
+	//				Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
+	// ------------------------------------
 	std::vector<QString> getNameAdapters();
 
 	// ------------------------------------

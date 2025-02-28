@@ -230,7 +230,7 @@ void MainWindow::initUiSwitchThemeLang()
 	switchLanguageButton = new QPushButton(mainLayoutWidget);
 	switchLanguageButton->setObjectName("switchLanguageButton");
 	switchLanguageButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
-	switchThemeLanguageVLayout->addWidget(switchLanguageButton);
+	switchThemeLanguageVLayout->addWidget(switchLanguageButton);	
 }
 
 void MainWindow::initUiLeftHLayout()
@@ -276,7 +276,6 @@ void MainWindow::initUiSwitchStand()
 	leftBlockBCMButton = new QPushButton();
 	leftBlockBCMButton->setObjectName("blockBCMButton");
 	leftBlockBCMButton->setText("BCM");
-	leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
 	leftSwitchBlockVLayout->addWidget(leftBlockBCMButton);
 
 	connect(leftBlockBCMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockBCMButton_clicked);
@@ -287,7 +286,6 @@ void MainWindow::initUiSwitchStand()
 	leftBlockDMButton = new QPushButton();
 	leftBlockDMButton->setObjectName("blockDMButton");
 	leftBlockDMButton->setText("DM");
-	leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
 	leftSwitchBlockVLayout->addWidget(leftBlockDMButton);
 
 	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockDMButton_clicked);
@@ -913,6 +911,21 @@ void MainWindow::resetTheme()
 		autoTestAutoStandLabel->setStyleSheet(lightStyles.mainText);
 		manualTestAutoStandLabel->setStyleSheet(lightStyles.mainText);
 		manualStandLabel->setStyleSheet(lightStyles.mainText);
+		if (selectedBlock == NameTestingBlock::BCM) // button
+		{
+			leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
+			leftBlockBCMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
+		}
+		else if(selectedBlock == NameTestingBlock::DM)
+		{
+			leftBlockDMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
+			leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
+		}
+		else
+		{
+			leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
+			leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
+		}
 
 		break;
 
@@ -959,6 +972,22 @@ void MainWindow::resetTheme()
 		autoTestAutoStandLabel->setStyleSheet(darkStyles.mainText);
 		manualTestAutoStandLabel->setStyleSheet(darkStyles.mainText);
 		manualStandLabel->setStyleSheet(darkStyles.mainText);
+		if (selectedBlock == NameTestingBlock::BCM) // button
+		{
+			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
+			leftBlockBCMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
+		}
+		else if(selectedBlock == NameTestingBlock::DM)
+		{
+			leftBlockDMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
+			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
+		}
+		else
+		{
+			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
+			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
+		}
+
 
 		break;
 	}
@@ -1424,18 +1453,7 @@ void MainWindow::on_leftBlockBCMButton_clicked()
 	if (selectedBlock != NameTestingBlock::BCM)
 	{
 		selectedBlock = NameTestingBlock::BCM;
-		switch (viewWindowState->appTheme)
-		{
-		case LIGHT_THEME:
-			leftBlockBCMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
-			leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
-			break;
-
-		case DARK_THEME:
-			leftBlockBCMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
-			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
-			break;
-		}
+		resetTheme();
 		cables.clear();
 		cables = cablesBCMStorag;
 	}
@@ -1446,18 +1464,7 @@ void MainWindow::on_leftBlockDMButton_clicked()
 	if (selectedBlock != NameTestingBlock::DM)
 	{
 		selectedBlock = NameTestingBlock::DM;
-		switch (viewWindowState->appTheme)
-		{
-		case LIGHT_THEME:
-			leftBlockDMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
-			leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
-			break;
-
-		case DARK_THEME:
-			leftBlockDMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
-			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
-			break;
-		}
+		resetTheme();
 		cables.clear();
 		cables = cablesDMStorag;
 	}
