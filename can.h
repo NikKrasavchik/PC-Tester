@@ -79,6 +79,9 @@ public:
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
 
+
+	void setCable(std::vector<Cable> cable);
+	static void clearOldValue();
 private:
 	// ------------------------------------
 	// Name: writeCan
@@ -103,6 +106,7 @@ private:
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
+
 	
 // Variables:
 	struct modelAdapter
@@ -118,11 +122,12 @@ private:
 	WindowType windowType;
 	std::vector<Measureds*> measureds;
 	uint8_t counterConnectMsg;
+	static std::vector<std::pair<Cable, int>> Cables;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;
 	bool b_flagStandConnectionCheck;
-	bool b_flagStatusConnection;		// Флаг показывающий присоединён ли Stand
+	static bool b_flagStatusConnection;		// Флаг показывающий присоединён ли Stand
 
 	QTimer* timerReadCan;				// Таймер для считывания Can-сообщений.
 	QTimer* timerSendConnectMsg;		// Таймер для отправки сообщений на подключение или проверки подключения.
@@ -134,7 +139,8 @@ private slots:
 	void Timer_CheckStandConnection();	// Слот для проверки времени времени прихода переодического сообщения конекта.
 
 signals:
-	void Signal_ChangedStatusStandConnect(bool statusConnect);
-	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
+	void Signal_ChangedStatusStandConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён 
+	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // Сигнал означающий завершение теста у автостенда
+	void Signal_ChangedByte(ConnectorId pad, int pin, int newValue);
 };
 

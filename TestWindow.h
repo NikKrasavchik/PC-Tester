@@ -362,5 +362,6 @@ public slots:
 
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
+	void Slot_ChangedByte(ConnectorId pad, int pin, int newValue);
 	void selectCurrentCell(QString conector, QString pin);
 };

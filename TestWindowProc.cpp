@@ -11,7 +11,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			Measureds* tmpMeasured = new Measureds;
 			cableRows[i]->measureds.push_back(tmpMeasured);
 		}
-		cableRows[i]->comment = QString::fromLocal8Bit("Привет, у этого кабеля всё плохо. Он сломан Сломанно A6 и вообще Vnh Как быв не понятно ткак сейчас тработает а это текст для теста");
+		//cableRows[i]->comment = QString::fromLocal8Bit("Привет, у этого кабеля всё плохо. Он сломан Сломанно A6 и вообще Vnh Как быв не понятно ткак сейчас тработает а это текст для теста");
 		// Test
 		cableRows[i]->id = cables[i].getId();
 		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].getConnector());

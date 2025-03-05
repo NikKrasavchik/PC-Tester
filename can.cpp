@@ -1,14 +1,16 @@
 #include "can.h"
+#include "Cable.h"
 
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
+std::vector<std::pair<Cable, int>> Can::Cables;
+bool Can::b_flagStatusConnection;
 
 Can::Can()
 {
 	b_adapterSelected = false;
 	b_frequencySelected = false;
-	b_flagStandConnectionCheck = false;
 	b_flagStatusConnection = false;
 
 	counterConnectMsg = 0;
@@ -50,9 +52,30 @@ bool Can::initCan(WindowType windowType)
 		statusTmp = CiStart(marathon->activeAdapter);
 	}
 
-	timerReadCan->start(5); // И запустим таймер]
-	timerSendConnectMsg->start(100); // И запустим таймер]
-	timerCheckStandConnection->start(TIME_CHECKCONNECTION); // И запустим таймер
+	timerReadCan->start(2); // И запустим таймер]
+	switch (windowType)
+	{
+	case WindowType::MAINWINDOW:
+	case WindowType::CONFIGURATOR:
+	case WindowType::IN_TEST_MANUAL_STAND:
+	case WindowType::OUT_TEST_MANUAL_STAND:
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100); // И запустим таймер
+		break;
+
+	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+	case WindowType::IN_AUTO_TEST_AUTO_STAND:
+	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+	case WindowType::FULL_TEST_AUTO_STAND:
+		timerSendConnectMsg->start(100); // И запустим таймер]
+		timerCheckStandConnection->start(TIME_CHECKCONNECTION); // И запустим таймер
+		break;
+
+	default:
+		break;
+	}
+
 
 	counterConnectMsg = 0;
 
@@ -67,7 +90,6 @@ bool Can::deinitCan()
 	timerSendConnectMsg->stop();
 	timerCheckStandConnection->stop();
 
-	b_flagStandConnectionCheck = false;
 	b_flagStatusConnection = false;
 
 	measureds.clear();
@@ -395,12 +417,20 @@ void Can::Timer_ReadCan()
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			if (id == ID_CAN_MANUALSTAND)// сообшение о конекте
 			{
-				b_flagStandConnectionCheck = true;
+				if(b_flagStatusConnection)
+					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
 				if (!b_flagStatusConnection)
 				{
-
 					Signal_ChangedStatusStandConnect(true);
 					b_flagStatusConnection = true;
+				}
+			}
+			for (int i = 0; i < Cables.size(); i++)
+			{
+				if (id == Cables[i].first.getCanId() && msgReceive[Cables[i].first.getBit()] != Cables[i].second)
+				{
+					Cables[i].second = msgReceive[Cables[i].first.getBit()];
+					Signal_ChangedByte(Cables[i].first.getConnector(), Cables[i].first.getPin(), Cables[i].second);
 				}
 			}
 			break;
@@ -440,7 +470,6 @@ void Can::Timer_ReadCan()
 				msgReceive[7] == 0xFA)
 			{
 				timerCheckStandConnection->start(TIME_CHECKCONNECTION);
-				b_flagStandConnectionCheck = true;
 				counterConnectMsg++;
 #ifdef DEBUG_CAN
 				qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "I received a message about a periodic connection";
@@ -494,7 +523,6 @@ void Can::Timer_CheckStandConnection()
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
 #endif // DEBUG_CAN
 }
-
 uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 {
 	uint8_t flags = 0;
@@ -552,4 +580,24 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 {
 	int msgSendConnect[8] = { (int)pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
 	Can::writeCan(0x55, msgSendConnect);
+}
+
+
+void Can::setCable(std::vector<Cable> cable)
+{
+	Cables.clear();
+	for (int i = 0; i < cable.size(); i++)
+	{
+		std::pair<Cable, int> pairTmp;
+		pairTmp.first = cable[i];
+		pairTmp.second = NOT_SET;
+		Cables.push_back(pairTmp);
+	}
+}
+
+void Can::clearOldValue()
+{
+	for (int i = 0; i < Cables.size(); i++)
+		Cables[i].second = NOT_SET;
+	b_flagStatusConnection = false;
 }

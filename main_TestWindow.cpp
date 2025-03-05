@@ -87,6 +87,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlock
 	initStyles();
 
 	setStatusTableButtons(false);
+	Can::clearOldValue();
 }
 
 TestWindow::~TestWindow()
@@ -615,7 +616,6 @@ void TestWindow::resetTheme()
 				inTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleConnect);
 			else
 				inTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
-			inTestManualStandConnectButton->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
@@ -1194,6 +1194,30 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 		}
 }
 
+void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
+{
+	QAbstractItemModel* model = mainTableWidget->model();
+	for (int row = 0; row < cableRows.size(); row++)
+		if (cableRows[row]->connectorInt == pad && cableRows[row]->pin.toInt() == pin)
+		{
+			switch (testType)
+			{
+
+			case WindowType::IN_TEST_MANUAL_STAND:
+				model->setData(model->index(row, 5), QString::number(newValue));
+				break;
+			case WindowType::OUT_TEST_MANUAL_STAND:
+				break;
+			case WindowType::FULL_TEST_MANUAL_STAND:
+				model->setData(model->index(row, 7), QString::number(newValue));
+				break;
+
+			default:
+				break;
+			}
+		}
+}
+
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 {
 	switch (testType)
@@ -1574,6 +1598,7 @@ void TestWindow::on_fullTestSortButton_clicked()
 		resetTableHeaderFullTestAutoStand();
 		resetTableRowsFullTestAutoStand();
 	}
+	Can::clearOldValue();
 }
 
 void TestTableRowProperties::on_moreButton_clicked()
@@ -1612,3 +1637,6 @@ void TestTableRowProperties::on_checkButton_clicked()
 {
 	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, TestBlockName::BCM);
 }
+
+
+
