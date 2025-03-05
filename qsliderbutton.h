@@ -11,8 +11,33 @@ class QSliderButton : public QWidget
 public:
 	explicit QSliderButton(bool isHorizontal, QWidget* parent);
 
+	// ------------------------------------
+	// Name: getStatus
+	//		Возврат текущего статуса
+	// Return: 
+	//			TypeStand: Переменная, хранящая в себе информацию о выбранном стенде. Возвращаемые данные:
+	//						MANUAL
+	//						AUTO
+	// ------------------------------------
 	TypeStand getStatus();
+
+	// ------------------------------------
+	// Name: setStatus
+	//		Установка текущего статуса
+	// Varibals: 
+	//			TypeStand newValue: Переменная, хранящая в себе информация о выбранном стенде. Обрабатываемые аргументы:
+	//								MANUAL
+	//								AUTO
+	// ------------------------------------
 	void setStatus(TypeStand newValue);
+
+	// ------------------------------------
+	// Name: setStyleSheet
+	//		Установка стиля
+	// Varibals: 
+	//			QString roundColor: Переменная, хранящая в себе информацию о стиле грани
+	//			QString bgColor: Переменная, хранящая в себе информацию о стиле заднего фона
+	// ------------------------------------
 	void setStyleSheet(QString roundColor, QString bgColor);
 
 private:

@@ -50,9 +50,30 @@ public:
 	// ------------------------------------
 	void setSelectedAdapterNeme(QString adapter);
 
+	// ------------------------------------
+	// Name: setSelectedFrequency
+	//		Установка выбранной частоты для работы can
+	// Varibals: 
+	//			Qstring frequency: Выбираемая частота.
+	// ------------------------------------
 	void setSelectedFrequency(QString frequency);
 
+	// ------------------------------------
+	// Name: getStatusAdapterSelected
+	//		Возвращение статуса выбора адаптера.
+	// Return: bool
+	//			true: Адаптер выбран.
+	//			false: Адаптер не выбран.
+	// ------------------------------------
 	bool getStatusAdapterSelected() { return b_adapterSelected; }
+
+	// ------------------------------------
+	// Name: getStatusFrequencySelected
+	//		Возврвщения статуса выбора статуса.
+	// Return: bool
+	//			true: Частота выбрана
+	//			false: Частота не выбрана.
+	// ------------------------------------
 	bool getStatusFrequencySelected() { return b_frequencySelected; }
 
 	// ------------------------------------
@@ -76,6 +97,16 @@ public:
 	//			true  - в случае если сообщение отправилось.
 	// ------------------------------------
 	static bool sendTestMsg(ConnectorId pad, int pin, TypeCable type, TestBlockName nameBlock);
+
+	// ------------------------------------
+	// Name: sendTestMsg
+	//		Отправка сообщения на can
+	// Varibals: 
+	//			ConnectorId pad: Коннектор отправляемого кабеля
+	//			int pin: Пин отправляемого кабеля
+	//			int digValue: Цифровое значение отправляемого кабеля
+	//			int pwmValue: ШИМ значение отправляемого кабеля
+	// ------------------------------------
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
 
@@ -93,6 +124,7 @@ private:
 	//			true  - в случае если can-сообщение отправленно.
 	// ------------------------------------
 	static bool writeCan(int id, int* msg);
+
 	// ------------------------------------
 	// Name: readWaitCan
 	// Varibals:

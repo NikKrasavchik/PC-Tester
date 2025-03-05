@@ -1312,6 +1312,12 @@ void MainWindow::resetWindowView()
 	parentFrame->resetTheme();
 }
 
+// ------------------------------------
+// Name: setParentFrame
+//		Сохранение родительского элемента
+// Varibals: 
+//			WindowFrame* parentFrame: родительских элемент
+// ------------------------------------
 void MainWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;

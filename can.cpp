@@ -24,6 +24,14 @@ Can::Can()
 	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
 }
 
+// ------------------------------------
+// Name: initCan
+// Varibals: 
+//			WindowType windowType - enum хранищий в себе идентификатор опрделяющий какое окно сейчас открыто.
+// Return: bool
+//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+//			true  - в случае если can прошёл инициализацию.
+// ------------------------------------
 bool Can::initCan(WindowType windowType)
 {
 	if (!b_adapterSelected)
@@ -84,6 +92,12 @@ bool Can::initCan(WindowType windowType)
 	return true;
 }
 
+// ------------------------------------
+// Name: deinitCan
+// Return: bool
+//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+//			true  - в слу	чае если can прошёл деинициализацию.
+// ------------------------------------
 bool Can::deinitCan()
 {
 	timerReadCan->stop();
@@ -109,6 +123,15 @@ bool Can::deinitCan()
 	return true;
 }
 
+// ------------------------------------
+// Name: writeCan
+// Varibals:
+//			int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
+//			int* msg - указатель на переменную в которая отправиться в can.
+// Return: bool
+//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+//			true  - в случае если can-сообщение отправленно.
+// ------------------------------------
 bool Can::writeCan(int id, int* msg)
 {
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
@@ -134,6 +157,16 @@ bool Can::writeCan(int id, int* msg)
 	return false;
 }
 
+// ------------------------------------
+// Name: readWaitCan
+// Varibals:
+//			int* id - указатель на переменную в которую запишеться id пришедшего can-сообщения.
+//			int* msg - указатель на переменную в которую запишеться сообщение пришедшее из can.
+//			int  timeout - время в миллисикундах сколько мы будем ждать сообщение из can-шыны.
+// Return: bool
+//			false - в случае если за время timeout не пришло сообщение на can-шину.
+//			true  - в случае если за время timeout пришло сообшение на can-шину.
+// ------------------------------------
 canmsg_t msgReceive;
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
@@ -177,6 +210,12 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 	}
 }
 
+// ------------------------------------
+// Name: setSelectedAdapterNeme
+// Varibals: 
+//			QString adapter - имя адаптера который будет выбран в качестве рабочего.
+//			Значения обезательно должно соответсвовать какому либо элементу полученному из метода getNameAdapters().
+// ------------------------------------
 void Can::setSelectedAdapterNeme(QString adapter)
 {
 	kvaser->activeAdapter = NOT_SET;
@@ -207,6 +246,12 @@ void Can::setSelectedAdapterNeme(QString adapter)
 	b_adapterSelected = false;
 }
 
+// ------------------------------------
+// Name: setSelectedFrequency
+//		Установка выбранной частоты для работы can
+// Varibals: 
+//			Qstring frequency: Выбираемая частота.
+// ------------------------------------
 void Can::setSelectedFrequency(QString frequency)
 {
 	if (frequency == "...")
@@ -226,6 +271,14 @@ void Can::setSelectedFrequency(QString frequency)
 	}
 }
 
+// ------------------------------------
+// Name: getNameAdapters
+// Return: std::vector<QString>
+//			Массив названий Can-адаптеров которые подключены к ПК и мы можем с ними работат.
+//			Примечание:
+//				У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
+//				Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
+// ------------------------------------
 std::vector<QString> Can::getNameAdapters()
 {
 	// Чистим массив с названияями адаптеров, для того что бы актуализировать подключенные адаптеры
@@ -565,6 +618,16 @@ uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 	return flags;
 }
 
+// ------------------------------------
+// Name: sendTestMsg
+// Varibals: 
+//			ConnectorId pad - enum переедающий в себе идентификатор коложки (A - 1; B - 2; C - 3; C - 4; ...).
+//			int pin - номер пина в колодки.
+//			int type - bдентификатор показывающий какого типа пин.
+// Return: bool
+//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
+//			true  - в случае если сообщение отправилось.
+// ------------------------------------
 bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, TestBlockName nameBlock)
 {
 	if ((int)typeCable == NOT_SET)
@@ -576,6 +639,15 @@ bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, TestBlockNa
 	return true;
 }
 
+// ------------------------------------
+// Name: sendTestMsg
+//		Отправка сообщения на can
+// Varibals: 
+//			ConnectorId pad: Коннектор отправляемого кабеля
+//			int pin: Пин отправляемого кабеля
+//			int digValue: Цифровое значение отправляемого кабеля
+//			int pwmValue: ШИМ значение отправляемого кабеля
+// ------------------------------------
 void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 {
 	int msgSendConnect[8] = { (int)pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
