@@ -73,7 +73,7 @@ TypeStand QSliderButton::getStatus()
 // ------------------------------------
 // Name: setStatus
 //		Установка текущего статуса
-// Varibals: 
+// Variables: 
 //			TypeStand newValue: Переменная, хранящая в себе информация о выбранном стенде. Обрабатываемые аргументы:
 //								MANUAL
 //								AUTO
@@ -94,7 +94,7 @@ void QSliderButton::resizeSlider(int newWidth, int newHeight)
 // ------------------------------------
 // Name: setStyleSheet
 //		Установка стиля
-// Varibals: 
+// Variables: 
 //			QString roundColor: Переменная, хранящая в себе информацию о стиле грани
 //			QString bgColor: Переменная, хранящая в себе информацию о стиле заднего фона
 // ------------------------------------

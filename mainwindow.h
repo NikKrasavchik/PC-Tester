@@ -35,7 +35,7 @@ public:
 	// ------------------------------------
 	// Name: setParentFrame
 	//		Сохранение родительского элемента
-	// Varibals: 
+	// Variables: 
 	//			WindowFrame* parentFrame: родительских элемент
 	// ------------------------------------
 	void setParentFrame(WindowFrame* parentFrame);

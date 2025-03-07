@@ -565,7 +565,30 @@ void TestWindow::on_switchLanguageButton_clicked()
 
 void TestWindow::on_reportButton_clicked()
 {
-	ReportWindow* reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text());
+	ReportWindow* reportWindow;
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+	case WindowType::OUT_TEST_MANUAL_STAND:
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		reportWindow = new ReportWindow(cableRows, manualChecks, testerNameLineEdit->text());
+		break;
+
+	case WindowType::IN_AUTO_TEST_AUTO_STAND:
+	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+	case WindowType::FULL_TEST_AUTO_STAND:
+		reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text());
+		break;
+
+	default:
+		// Error
+		return;
+		break;
+	}
+	reportWindow->setTestingBlock(testingBlock);
+	reportWindow->setTestingType(testType);
 
 	WindowFrame w(WindowType::REPORTWINDOW, nullptr, reportWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
@@ -1007,8 +1030,12 @@ void TestWindow::resetLanguage()
 	}
 }
 
-
-
+// ------------------------------------
+// Name: setParentFrame
+//		Сохранение родительского элемента
+// Variables: 
+//			WindowFrame* parentFrame: Родительский элемент
+// ------------------------------------
 void TestWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;
@@ -1092,6 +1119,13 @@ static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProp
 	return NOT_SET;
 }
 
+// ------------------------------------
+// Name: ProcAutoTest
+//		Отправка сообщения на can
+// Variables: 
+//			int pad: Коннектор кабеля для отправки
+//			int pin: Пин кабеля для отправки
+// ------------------------------------
 void TestWindow::ProcAutoTest(int connector, int pin)
 {
 	for (int i = 0; i < cableRows.size(); i++)

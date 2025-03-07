@@ -864,12 +864,12 @@ void MainWindow::resetTheme()
 		autoTestAutoStandLabel->setStyleSheet(lightStyles.mainText);
 		manualTestAutoStandLabel->setStyleSheet(lightStyles.mainText);
 		manualStandLabel->setStyleSheet(lightStyles.mainText);
-		if (selectedBlock == NameTestingBlock::BCM) // button
+		if (selectedBlock == TestBlockName::BCM) // button
 		{
 			leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
 			leftBlockBCMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
 		}
-		else if(selectedBlock == NameTestingBlock::DM)
+		else if(selectedBlock == TestBlockName::DM)
 		{
 			leftBlockDMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
 			leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
@@ -925,12 +925,12 @@ void MainWindow::resetTheme()
 		autoTestAutoStandLabel->setStyleSheet(darkStyles.mainText);
 		manualTestAutoStandLabel->setStyleSheet(darkStyles.mainText);
 		manualStandLabel->setStyleSheet(darkStyles.mainText);
-		if (selectedBlock == NameTestingBlock::BCM) // button
+		if (selectedBlock == TestBlockName::BCM) // button
 		{
 			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
 			leftBlockBCMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
 		}
-		else if(selectedBlock == NameTestingBlock::DM)
+		else if(selectedBlock == TestBlockName::DM)
 		{
 			leftBlockDMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
 			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
@@ -1313,7 +1313,7 @@ void MainWindow::resetWindowView()
 // ------------------------------------
 // Name: setParentFrame
 //		Сохранение родительского элемента
-// Varibals: 
+// Variables: 
 //			WindowFrame* parentFrame: родительских элемент
 // ------------------------------------
 void MainWindow::setParentFrame(WindowFrame* parentFrame)
@@ -1415,7 +1415,7 @@ void MainWindow::on_leftBlockBCMButton_clicked()
 {
 	if (selectedBlock != TestBlockName::BCM)
 	{
-		selectedBlock = NameTestingBlock::BCM;
+		selectedBlock = TestBlockName::BCM;
 		resetTheme();
 		cables.clear();
 		cables = cablesBCMStorag;
@@ -1426,7 +1426,7 @@ void MainWindow::on_leftBlockDMButton_clicked()
 {
 	if (selectedBlock != TestBlockName::DM)
 	{
-		selectedBlock = NameTestingBlock::DM;
+		selectedBlock = TestBlockName::DM;
 		resetTheme();
 		cables.clear();
 		cables = cablesDMStorag;

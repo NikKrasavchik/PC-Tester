@@ -22,9 +22,24 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QStri
 	QMetaObject::connectSlotsByName(this);
 }
 
+ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName)
+{
+	for (int i = 0; i < checkedState.size(); i++)
+		this->checkedState.push_back(checkedState[i]->isChecked());
+	this->cableRows = cableRows;
+	this->testerName = testerName;
+	int t = 2;
+	setMinimumSize(WINDOW_MIN_SIZE);
+	resize(WINDOW_MIN_SIZE);
+
+	initUi();
+	QMetaObject::connectSlotsByName(this);
+}
+
 ReportWindow::~ReportWindow()
 {
 }
+
 
 void ReportWindow::initUi()
 {
@@ -193,8 +208,12 @@ void ReportWindow::generateTable()
 	tableWidget->setSpan(IND_ROW_BASE_SIGN, MEASUREMENT_COLUMN_POSITION, 1, maxColumnOffset);
 
 	typedCableRows.resize(TYPE_COUNT);
+	typedCheckedState.resize(TYPE_COUNT);
 	for (int i = 0; i < cableRows.size(); i++)
+	{
 		typedCableRows[(int)cableRows[i]->typeInt].push_back(cableRows[i]);
+		typedCheckedState[(int)cableRows[i]->typeInt].push_back(checkedState[i]);
+	}
 
 	for (int type = 0; type < TYPE_COUNT; type++)
 	{
@@ -205,7 +224,7 @@ void ReportWindow::generateTable()
 		int maxTypeOffset = getMaxTypeOffset(typedCableRows[type]);
 
 		generateTableSign((TypeCable)type, maxTypeOffset);
-		fillTable((TypeCable)type, typedCableRows[type]);
+		fillTable((TypeCable)type, typedCableRows[type], typedCheckedState[type]);
 
 		int emptySpanRow = tableWidget->rowCount() - previousRowCount;
 		int emptySpanColumn = COLUMN_COUNT_BASE_TABLE - 1;
@@ -559,7 +578,16 @@ void static fillTableColor(TestTableRowProperties* cableRow, int measuredIndex, 
 	}
 }
 
-void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
+void static fillManualTable(QTableWidgetItem** tableItems, bool checkedState)
+{
+	tableItems[0]->setText("");
+	tableItems[1]->setText("");
+
+	tableItems[0]->setBackgroundColor(checkedState ? COLOR_GREEN : COLOR_RED);
+	tableItems[1]->setBackgroundColor(checkedState ? COLOR_GREEN : COLOR_RED);
+}
+
+void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -609,7 +637,26 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 			tableItems[4]->setText(cableRows[i]->thresholds[j].minCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].minCurrent) : "-");
 			tableItems[5]->setText(cableRows[i]->thresholds[j].maxCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].maxCurrent) : "-");
 
-			fillTableColor(cableRows[i], j, tableItems);
+			switch (testType)
+			{
+			case WindowType::IN_TEST_MANUAL_STAND:
+			case WindowType::OUT_TEST_MANUAL_STAND:
+			case WindowType::FULL_TEST_MANUAL_STAND:
+				fillManualTable(tableItems, checkedState[i]);
+				break;
+
+			case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+			case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			case WindowType::IN_AUTO_TEST_AUTO_STAND:
+			case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+			case WindowType::FULL_TEST_AUTO_STAND:
+				fillTableColor(cableRows[i], j, tableItems);
+				break;
+
+			default:
+				generateWarning(Warnings::ReportWindow::INCORRECT_TEST_TYPE);
+				break;
+			}
 
 			indColumnMeasuredValuesVoltage += MEASUREMENT_OFFSET_OUT;
 			indColumnMeasuredValuesCurrent += MEASUREMENT_OFFSET_OUT;
@@ -635,7 +682,7 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 	}
 }
 
-void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
+void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -664,7 +711,26 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 		tableItems[0] = tableWidget->item(indCurrentRow, indColumnMeasuredValue1);
 		tableItems[1] = tableWidget->item(indCurrentRow, indColumnMeasuredValue2);
 
-		fillTableColor(cableRows[i], 0, tableItems);
+		switch (testType)
+		{
+		case WindowType::IN_TEST_MANUAL_STAND:
+		case WindowType::OUT_TEST_MANUAL_STAND:
+		case WindowType::FULL_TEST_MANUAL_STAND:
+			fillManualTable(tableItems, checkedState[i]);
+			break;
+
+		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+		case WindowType::IN_AUTO_TEST_AUTO_STAND:
+		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+		case WindowType::FULL_TEST_AUTO_STAND:
+			fillTableColor(cableRows[i], 0, tableItems);
+			break;
+
+		default:
+			generateWarning(Warnings::ReportWindow::INCORRECT_TEST_TYPE);
+			break;
+		}
 
 		commentsTextEdits.push_back(new QTextEdit());
 		QWidget* commentWidget = new QWidget();
@@ -682,7 +748,7 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 	}
 }
 
-void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows)
+void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -720,7 +786,26 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 			tableItems[1]->setText(cableRows[i]->thresholds[j].minValue != -1 ? QString::number(cableRows[i]->thresholds[j].minValue) : "-");
 			tableItems[2]->setText(cableRows[i]->thresholds[j].maxValue != -1 ? QString::number(cableRows[i]->thresholds[j].maxValue) : "-");
 
-			fillTableColor(cableRows[i], j, tableItems);
+			switch (testType)
+			{
+			case WindowType::IN_TEST_MANUAL_STAND:
+			case WindowType::OUT_TEST_MANUAL_STAND:
+			case WindowType::FULL_TEST_MANUAL_STAND:
+				fillManualTable(tableItems, checkedState[i]);
+				break;
+
+			case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+			case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+			case WindowType::IN_AUTO_TEST_AUTO_STAND:
+			case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+			case WindowType::FULL_TEST_AUTO_STAND:
+				fillTableColor(cableRows[i], j, tableItems);
+				break;
+
+			default:
+				generateWarning(Warnings::ReportWindow::INCORRECT_TEST_TYPE);
+				break;
+			}
 
 			indColumnMeasuredValues += MEASUREMENT_OFFSET_IN_ANALOG;
 			indColumnThresholdsMin += MEASUREMENT_OFFSET_IN_ANALOG;
@@ -743,7 +828,7 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 	}
 }
 
-void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows)
+void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
 {
 	switch (type)
 	{
@@ -751,16 +836,16 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 	case TypeCable::PWM_OUT:
 	case TypeCable::VNH_OUT:
 	case TypeCable::HLD_OUT:
-		fillTableOut(cableRows);
+		fillTableOut(cableRows, checkedState);
 		break;
 
 	case TypeCable::DIG_IN:
 	case TypeCable::HALL_IN:
-		fillTableIn(cableRows);
+		fillTableIn(cableRows, checkedState);
 		break;
 
 	case TypeCable::ANALOG_IN:
-		fillTableInAnalog(cableRows);
+		fillTableInAnalog(cableRows, checkedState);
 		break;
 	}
 }

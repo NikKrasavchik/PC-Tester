@@ -24,7 +24,7 @@ Can::Can()
 
 // ------------------------------------
 // Name: initCan
-// Varibals: 
+// Variables: 
 //			WindowType windowType - enum хранищий в себе идентификатор опрделяющий какое окно сейчас открыто.
 // Return: bool
 //			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
@@ -103,7 +103,7 @@ bool Can::deinitCan()
 
 // ------------------------------------
 // Name: writeCan
-// Varibals:
+// Variables:
 //			int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
 //			int* msg - указатель на переменную в которая отправиться в can.
 // Return: bool
@@ -137,7 +137,7 @@ bool Can::writeCan(int id, int* msg)
 
 // ------------------------------------
 // Name: readWaitCan
-// Varibals:
+// Variables:
 //			int* id - указатель на переменную в которую запишеться id пришедшего can-сообщения.
 //			int* msg - указатель на переменную в которую запишеться сообщение пришедшее из can.
 //			int  timeout - время в миллисикундах сколько мы будем ждать сообщение из can-шыны.
@@ -190,7 +190,7 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 
 // ------------------------------------
 // Name: setSelectedAdapterNeme
-// Varibals: 
+// Variables: 
 //			QString adapter - имя адаптера который будет выбран в качестве рабочего.
 //			Значения обезательно должно соответсвовать какому либо элементу полученному из метода getNameAdapters().
 // ------------------------------------
@@ -227,7 +227,7 @@ void Can::setSelectedAdapterNeme(QString adapter)
 // ------------------------------------
 // Name: setSelectedFrequency
 //		Установка выбранной частоты для работы can
-// Varibals: 
+// Variables: 
 //			Qstring frequency: Выбираемая частота.
 // ------------------------------------
 void Can::setSelectedFrequency(QString frequency)
@@ -592,7 +592,7 @@ uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 
 // ------------------------------------
 // Name: sendTestMsg
-// Varibals: 
+// Variables: 
 //			ConnectorId pad - enum переедающий в себе идентификатор коложки (A - 1; B - 2; C - 3; C - 4; ...).
 //			int pin - номер пина в колодки.
 //			int type - bдентификатор показывающий какого типа пин.
@@ -614,7 +614,7 @@ bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, TestBlockNa
 // ------------------------------------
 // Name: sendTestMsg
 //		Отправка сообщения на can
-// Varibals: 
+// Variables: 
 //			ConnectorId pad: Коннектор отправляемого кабеля
 //			int pin: Пин отправляемого кабеля
 //			int digValue: Цифровое значение отправляемого кабеля
