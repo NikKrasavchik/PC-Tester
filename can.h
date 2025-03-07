@@ -27,10 +27,10 @@ public:
 	// ------------------------------------
 	// Name: initCan
 	// Varibals: 
-	//			WindowType windowType - enum хранищий в себе идентификатор опрдел€ющий какое окно сейчас открыто.
+	//	WindowType windowType - enum хранищий в себе идентификатор опрдел€ющий какое окно сейчас открыто.
 	// Return: bool
-	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-	//			true  - в случае если can прошЄл инициализацию.
+	//	false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+	//	true  - в случае если can прошЄл инициализацию.
 	// ------------------------------------
 	bool initCan(WindowType windowType);
 
@@ -171,6 +171,7 @@ private slots:
 	void Timer_CheckStandConnection();	// —лот дл€ проверки времени времени прихода переодического сообщени€ конекта.
 
 signals:
+
 	void Signal_ChangedStatusStandConnect(bool statusConnect); // —игнал который говорит что статус присоеденени€ к стенду изменЄн 
 	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // —игнал означающий завершение теста у автостенда
 	void Signal_ChangedByte(ConnectorId pad, int pin, int newValue);
