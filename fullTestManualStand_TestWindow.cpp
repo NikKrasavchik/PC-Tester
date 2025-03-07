@@ -34,7 +34,6 @@ void TestWindow::initUiTableFullTestManualStand()
 
 void TestWindow::resetTableHeaderFullTestManualStand()
 {
-
 	mainTableWidget->setRowCount((int)cableRows.size());
 	mainTableWidget->setColumnCount(COLUMN_COUNT);
 	

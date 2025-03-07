@@ -1315,7 +1315,7 @@ void MainWindow::resetWindowView()
 // ------------------------------------
 // Name: setParentFrame
 //		Сохранение родительского элемента
-// Varibals: 
+// Variables: 
 //			WindowFrame* parentFrame: родительских элемент
 // ------------------------------------
 void MainWindow::setParentFrame(WindowFrame* parentFrame)

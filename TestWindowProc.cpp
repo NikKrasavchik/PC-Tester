@@ -128,7 +128,7 @@ TestTableRowProperties::TestTableRowProperties()
 // ------------------------------------
 // Name: generateInteractionButtons
 //			Производится генерация кнопок в соответствии с типом кабеля
-// Varibals:
+// Variables:
 //			WindowType testType: Содержит тип теста. Обрабатываемые аргументы:
 //								OUT_TEST_MANUAL_STAND		
 //								FULL_TEST_MANUAL_STAND
@@ -299,7 +299,7 @@ void TestWindow::selectCurrentCell(QString connector, QString pin)
 // ------------------------------------
 // Name: switchButtonState
 //			Производится переулючение стиля кнопок в соответствии с нажатием кнопок
-// Varibals: 
+// Variables: 
 //			TestButtons testButton: содержит тип кнопки. Обрабатываемые аргументы:
 //				BUTTON_ON
 //				BUTTON_OFF
@@ -641,7 +641,7 @@ void TestTableRowProperties::sendSignal()
 // ------------------------------------
 // Name: generateWarning
 //			Вызывается окно сообщения при неожиданных исходах
-// Varibals: 
+// Variables: 
 //			Warnings::TestWindow warning: Идентификатор вызываемой ошибки
 //											OPEN_MORE_WINDOW
 // ------------------------------------

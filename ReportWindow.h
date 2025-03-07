@@ -92,8 +92,12 @@ class ReportWindow : public QDialog
 	Q_OBJECT
 
 public:
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName, TestBlockName testingBlock);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName);
 	~ReportWindow();
+
+	void setTestingBlock(TestBlockName testingBlock) { this->testingBlock = testingBlock; }
+	void setTestingType(WindowType testType) { this->testType = testType; }
 
 private:
 	QWidget* mainWidget;
@@ -104,12 +108,16 @@ private:
 	QSpacerItem* mainMiddleSpacer;
 	QSpacerItem* footerLeftSpacer;
 
-	std::vector<TestTableRowProperties*> cableRows;
-	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
-	std::vector<QTextEdit*> commentsTextEdits;
-	QString testerName;
 	TestBlockName testingBlock;
 	QString serialNumberBlock;
+	WindowType testType;
+
+	std::vector<TestTableRowProperties*> cableRows;
+	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
+	std::vector<bool> checkedState;
+	std::vector<std::vector<bool>> typedCheckedState;
+	std::vector<QTextEdit*> commentsTextEdits;
+	QString testerName;
 
 	void initUi();
 	void initUiTable();
@@ -120,10 +128,10 @@ private:
 	void generateTableSign(TypeCable type, int maxTypeOffset);
 	void generateWarning(Warnings::ReportWindow warning);
 
-	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
-	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
-	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
-	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
+	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
+	void fillTableOut(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
+	void fillTableIn(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
+	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
 	
 	void resetBaseLanguage();
 	void resetTheme();

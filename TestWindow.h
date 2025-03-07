@@ -156,7 +156,7 @@ public:
 	// ------------------------------------
 	// Name: generateInteractionButtons
 	//			Производится генерация кнопок в соответствии с типом кабеля
-	// Varibals:
+	// Variables:
 	//			WindowType testType: Содержит тип теста. Обрабатываемые аргументы:
 	//								OUT_TEST_MANUAL_STAND		
 	//								FULL_TEST_MANUAL_STAND
@@ -174,7 +174,7 @@ public:
 	// ------------------------------------
 	// Name: switchButtonState
 	//			Производится переулючение стиля кнопок в соответствии с нажатием кнопок
-	// Varibals: 
+	// Variables: 
 	//			TestButtons testButton: содержит тип кнопки. Обрабатываемые аргументы:
 	//				BUTTON_ON
 	//				BUTTON_OFF
@@ -198,7 +198,7 @@ public:
 	// ------------------------------------
 	// Name: generateWarning
 	//			Вызывается окно сообщения при неожиданных исходах
-	// Varibals: 
+	// Variables: 
 	//			Warnings::TestWindow warning: Идентификатор вызываемой ошибки
 	//											OPEN_MORE_WINDOW
 	// ------------------------------------
@@ -233,16 +233,19 @@ public:
 	~TestWindow();
 
 	// ------------------------------------
-	// Name: 
-	// Varibals: 
-	// Return: 
+	// Name: setParentFrame
+	//		Сохранение родительского элемента
+	// Variables: 
+	//			WindowFrame* parentFrame: Родительский элемент
 	// ------------------------------------
 	void setParentFrame(WindowFrame* parentFrame);
 
 	// ------------------------------------
-	// Name: 
-	// Varibals: 
-	// Return: 
+	// Name: ProcAutoTest
+	//		Отправка сообщения на can
+	// Variables: 
+	//			int pad: Коннектор кабеля для отправки
+	//			int pin: Пин кабеля для отправки
 	// ------------------------------------
 	void ProcAutoTest(int pad, int pin);
 
@@ -298,7 +301,7 @@ private:
 
 	int fullTestSortType;
 	
-	bool isFullTestEnabled; 
+	bool isFullTestEnabled;
 
 	QString fileName;
 	WindowType testType;

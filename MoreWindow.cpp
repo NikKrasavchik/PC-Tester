@@ -138,7 +138,7 @@ void MoreWindow::fillBaseTable()
 // ------------------------------------
 // Name: prepareItem
 //		ѕодготовка €чейки дл€ записи в него данных
-// Varibals: 
+// Variables: 
 //			int row: индекс строчки €чейки
 //			int column: индекс столбца €чйки
 //			int rowSpan: количество €чейек дл€ горизонтального соединени€
@@ -174,7 +174,7 @@ void MoreWindow::setValues()
 // ------------------------------------
 // Name: resetLanguage
 //		ќбновление данных в €чейках под актуальный €зык
-// Varibals: 
+// Variables: 
 //			int offset: «начение смещени€. ѕо умолчанию OFFSET_NULL
 // ------------------------------------
 void MoreWindow::resetLanguage(int offset)

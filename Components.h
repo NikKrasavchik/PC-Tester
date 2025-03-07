@@ -212,7 +212,8 @@ namespace Warnings
 	{
 		XLSX_SAVE_SUCCESS,
 		XLSX_SAVE_ERROR,
-		TYPE_CHANGE_ERROR
+		TYPE_CHANGE_ERROR,
+		INCORRECT_TEST_TYPE
 	};
 
 	enum class MoreWindow
@@ -223,7 +224,8 @@ namespace Warnings
 
 	enum class TestWindow
 	{
-		OPEN_MORE_WINDOW
+		OPEN_MORE_WINDOW,
+		INCORRECT_TEST_TYPE
 	};
 }
 
