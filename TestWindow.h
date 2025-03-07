@@ -285,7 +285,6 @@ private:
 	QLabel* fileNameLabel;
 	QFrame* headerLine;
 	QFrame* footerLine;
-	QLineEdit* testerNameLineEdit;
 	QTableWidget* mainTableWidget;
 	QStringList* mainTableHeaderLabels;
 	QPixmap* logoLightPixmap;
