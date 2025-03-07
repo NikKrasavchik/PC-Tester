@@ -109,6 +109,7 @@ private:
 	QSpacerItem* footerLeftSpacer;
 
 	TestBlockName testingBlock;
+	QString serialNumberBlock;
 	WindowType testType;
 
 	std::vector<TestTableRowProperties*> cableRows;

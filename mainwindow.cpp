@@ -242,7 +242,7 @@ void MainWindow::initUiSwitchStand()
 
 	leftBlockDMButton = new QPushButton();
 	leftBlockDMButton->setObjectName("blockDMButton");
-	leftBlockDMButton->setText("DM");
+	leftBlockDMButton->setText("DTM");
 	leftSwitchBlockVLayout->addWidget(leftBlockDMButton);
 
 	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockDMButton_clicked);
@@ -1291,6 +1291,8 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
+	connect(can, &Can::Signal_ChangedByte, testWindow, &TestWindow::Slot_ChangedByte);
+	can->setCable(preparedCables);
 	can->initCan(testType);
 	WindowFrame w(testType, nullptr, testWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));

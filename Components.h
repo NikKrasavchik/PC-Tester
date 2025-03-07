@@ -1,6 +1,8 @@
 #pragma once
 
 //#define DEBUG
+//#define FOR_DEVELOPER
+
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
