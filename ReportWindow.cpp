@@ -10,11 +10,13 @@
 
 using namespace QXlsx;
 
-ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName)
+ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName, TestBlockName testingBlock)
 {
 	this->cableRows = cableRows;
 	this->testerName = testerName;
+	this->testingBlock = testingBlock;
 	int t = 2;
+	serialNumberBlock = "1234";
 	setMinimumSize(WINDOW_MIN_SIZE);
 	resize(WINDOW_MIN_SIZE);
 
@@ -1184,8 +1186,26 @@ void ReportWindow::on_saveButton_clicked()
 		}
 
 		QDir dir;
+		QDateTime time = QDateTime::currentDateTime();
+
 		dir.mkdir("Reports");
-		xlsx.saveAs("Reports/Report.xlsx");
+		QString nameFile = "Reports/";
+		if (testingBlock == TestBlockName::DM)
+			nameFile += "DTM_";
+		else
+			nameFile += "BCM_";
+		nameFile += serialNumberBlock + "_";
+		nameFile += time.date().toString("dd.MM.yy").remove(".");
+		for (int i = 1; i < 1000000; i++)
+		{
+			QString tmpNameFile = nameFile + "_test" + QString::number(i) + ".xlsx";
+			if (!QFile::exists(tmpNameFile))
+			{
+				nameFile = tmpNameFile;
+				break;
+			}
+		}
+		xlsx.saveAs(nameFile);
 
 		generateWarning(Warnings::ReportWindow::XLSX_SAVE_SUCCESS);
 	}

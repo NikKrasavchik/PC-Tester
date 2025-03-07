@@ -242,7 +242,7 @@ void MainWindow::initUiSwitchStand()
 
 	leftBlockDMButton = new QPushButton();
 	leftBlockDMButton->setObjectName("blockDMButton");
-	leftBlockDMButton->setText("DM");
+	leftBlockDMButton->setText("DTM");
 	leftSwitchBlockVLayout->addWidget(leftBlockDMButton);
 
 	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockDMButton_clicked);

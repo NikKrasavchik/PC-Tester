@@ -92,7 +92,7 @@ class ReportWindow : public QDialog
 	Q_OBJECT
 
 public:
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName, TestBlockName testingBlock);
 	~ReportWindow();
 
 private:
@@ -108,6 +108,8 @@ private:
 	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
 	std::vector<QTextEdit*> commentsTextEdits;
 	QString testerName;
+	TestBlockName testingBlock;
+	QString serialNumberBlock;
 
 	void initUi();
 	void initUiTable();

@@ -566,7 +566,7 @@ void TestWindow::on_switchLanguageButton_clicked()
 
 void TestWindow::on_reportButton_clicked()
 {
-	ReportWindow* reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text());
+	ReportWindow* reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text(), testingBlock);
 
 	WindowFrame w(WindowType::REPORTWINDOW, nullptr, reportWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
