@@ -377,57 +377,70 @@ void WindowFrame::setIcon(const QString& iconPath) {
 /// @brief set title for the window
 /// @param title
 void WindowFrame::setTitle(WindowType windowType) {
+	QString tmpStr = "";
+#ifdef FOR_DEVELOPER
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		tmpStr = QString::fromLocal8Bit(" | Для разработчика");
+		break;
+	case ENGLISH_LANG:
+		tmpStr = " | For developer";
+		break;
+	}
+#endif // !FOR_DEVELOPER
+
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester");
+			ui->title->setText("PC-Tester" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
-			ui->title->setText(QString::fromLocal8Bit("Конфигуратор"));
+			ui->title->setText(QString::fromLocal8Bit("Конфигуратор") + tmpStr);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Входы | Ручной стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Входы | Ручной стенд") + tmpStr);
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Выходы | Ручной стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Выходы | Ручной стенд") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Полная проверка | Ручной стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Полная проверка | Ручной стенд") + tmpStr);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Входы ручная проверка | Автоматический стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Входы ручная проверка | Автоматический стенд") + tmpStr);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Выходы ручная проверка | Автоматический стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Выходы ручная проверка | Автоматический стенд") + tmpStr);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Входы автоматическая проверка | Автоматический стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Входы автоматическая проверка | Автоматический стенд") + tmpStr);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Выходы автоматическаяя проверка | Автоматический стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Выходы автоматическаяя проверка | Автоматический стенд") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Полная автоматическая проверка | Автоматический стенд"));
+			ui->title->setText(QString::fromLocal8Bit("Полная автоматическая проверка | Автоматический стенд") + tmpStr);
 			break;
 
 		case WindowType::MOREWINDOW:
-			ui->title->setText(QString::fromLocal8Bit("Подробнее..."));
+			ui->title->setText(QString::fromLocal8Bit("Подробнее...") + tmpStr);
 			break;
 
 		case WindowType::REPORTWINDOW:
-			ui->title->setText(QString::fromLocal8Bit("Отчёт"));
+			ui->title->setText(QString::fromLocal8Bit("Отчёт") + tmpStr);
 			break;
 		}
 		break;
@@ -436,51 +449,51 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester");
+			ui->title->setText("PC-Tester" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
-			ui->title->setText(QString("Configurator"));
+			ui->title->setText(QString("Configurator") + tmpStr);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
-			ui->title->setText(QString("In test | Manual stend"));
+			ui->title->setText(QString("In test | Manual stend") + tmpStr);
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
-			ui->title->setText(QString("Out test | Manual stend"));
+			ui->title->setText(QString("Out test | Manual stend") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_MANUAL_STAND:
-			ui->title->setText(QString("Full test | Manual stend"));
+			ui->title->setText(QString("Full test | Manual stend") + tmpStr);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString("In manual test | Auto stend"));
+			ui->title->setText(QString("In manual test | Auto stend") + tmpStr);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString("Out manual test | Auto stend"));
+			ui->title->setText(QString("Out manual test | Auto stend") + tmpStr);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString("In auto test | Auto stend"));
+			ui->title->setText(QString("In auto test | Auto stend") + tmpStr);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString("Out auto test | Auto stend"));
+			ui->title->setText(QString("Out auto test | Auto stend") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
-			ui->title->setText(QString("Full auto test | Auto stend"));
+			ui->title->setText(QString("Full auto test | Auto stend") + tmpStr);
 			break;
 
 		case WindowType::MOREWINDOW:
-			ui->title->setText(QString("More..."));
+			ui->title->setText(QString("More...") + tmpStr);
 			break;
 
 		case WindowType::REPORTWINDOW:
-			ui->title->setText(QString("Report"));
+			ui->title->setText(QString("Report") + tmpStr);
 			break;
 		}
 	}

@@ -572,7 +572,7 @@ void TestWindow::on_reportButton_clicked()
 	case WindowType::IN_TEST_MANUAL_STAND:
 	case WindowType::OUT_TEST_MANUAL_STAND:
 	case WindowType::FULL_TEST_MANUAL_STAND:
-		reportWindow = new ReportWindow(cableRows, manualChecks, testerNameLineEdit->text());
+		reportWindow = new ReportWindow(cableRows, manualChecks, testerNameLineEdit->text(), testingBlock);
 		break;
 
 	case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -580,7 +580,7 @@ void TestWindow::on_reportButton_clicked()
 	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 	case WindowType::FULL_TEST_AUTO_STAND:
-		reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text());
+		reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text(), testingBlock);
 		break;
 
 	default:

@@ -15,7 +15,6 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QStri
 	this->cableRows = cableRows;
 	this->testerName = testerName;
 	this->testingBlock = testingBlock;
-	int t = 2;
 	serialNumberBlock = "1234";
 	setMinimumSize(WINDOW_MIN_SIZE);
 	resize(WINDOW_MIN_SIZE);
@@ -24,13 +23,13 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QStri
 	QMetaObject::connectSlotsByName(this);
 }
 
-ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName)
+ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName, TestBlockName testingBlock)
 {
 	for (int i = 0; i < checkedState.size(); i++)
 		this->checkedState.push_back(checkedState[i]->isChecked());
 	this->cableRows = cableRows;
 	this->testerName = testerName;
-	int t = 2;
+	this->testingBlock = testingBlock;
 	setMinimumSize(WINDOW_MIN_SIZE);
 	resize(WINDOW_MIN_SIZE);
 
@@ -40,6 +39,7 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::
 
 ReportWindow::~ReportWindow()
 {
+
 }
 
 

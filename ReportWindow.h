@@ -92,8 +92,8 @@ class ReportWindow : public QDialog
 	Q_OBJECT
 
 public:
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName);
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName, TestBlockName testingBlock);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName, TestBlockName testingBlock);
 	~ReportWindow();
 
 	void setTestingBlock(TestBlockName testingBlock) { this->testingBlock = testingBlock; }

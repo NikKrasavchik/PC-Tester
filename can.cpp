@@ -659,7 +659,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 6;
 		}
-		else if (digValue == 1) // hight
+		else if (digValue == 1) // high
 		{
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 6;
@@ -681,7 +681,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 7;
 		}
-		else if (digValue == 1) // hight
+		else if (digValue == 1) // high
 		{
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 7;
@@ -703,7 +703,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 7;
 		}
-		else if (digValue == 1) // hight
+		else if (digValue == 1) // high
 		{
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 7;
@@ -725,7 +725,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 12;
 		}
-		else if (digValue == 1) // hight
+		else if (digValue == 1) // high
 		{
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 12;
@@ -747,7 +747,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 11;
 		}
-		else if (digValue == 1) // hight
+		else if (digValue == 1) // high
 		{
 			Can::writeCan(0x55, msgSendConnect);
 			msgSendConnect[1] = 11;
@@ -769,7 +769,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 		Can::writeCan(0x55, msgSendConnect);
 		msgSendConnect[1] = 7;
 	}
-	else if (digValue == 1) // hight
+	else if (digValue == 1) // high
 	{
 		Can::writeCan(0x55, msgSendConnect);
 		msgSendConnect[1] = 7;
