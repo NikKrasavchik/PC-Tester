@@ -31,7 +31,8 @@
 #define MEASUREMENT_OFFSET_IN_ANALOG	MEASUREMENT_OFFSET_QUADRUPLE
 
 #define ROW_COUNT_BASE_TABLE			1
-#define COLUMN_COUNT_BASE_TABLE			7
+#define COLUMN_COUNT_BASE_TABLE			6
+#define COLUMN_COUNT_MANUAL				7
 
 #define SPAN_VERTICAL_DOUBLE			2, 1
 #define SPAN_VERTICAL_TRIPPLE			3, 1
@@ -45,9 +46,9 @@
 #define SPAN_NONE						1, 1
 #define SPAN_SQUAD_DOUBLE				2, 2
 
-#define SPAN_TYPE_OUT					4, 6
-#define SPAN_TYPE_IN					1, 6
-#define SPAN_TYPE_IN_ANALOG				3, 6
+#define SPAN_TYPE_OUT					4, 5
+#define SPAN_TYPE_IN					1, 5
+#define SPAN_TYPE_IN_ANALOG				3, 5
 
 #define SPAN_TYPE_COMMENT_OUT			4, 1
 #define SPAN_TYPE_COMMENT_IN			1, 1
@@ -71,15 +72,17 @@
 #define IND_COLUMN_BASE_DIRECTION		2
 #define IND_COLUMN_BASE_TYPE			3
 #define IND_COLUMN_BASE_NAME			4
-#define IND_COLUMN_BASE_EMPTY			5
 
 #define CELL_SIGN_BASE_CONNECTOR		IND_ROW_BASE_SIGN_CONNECTOR,	IND_COLUMN_BASE_CONNECTOR
 #define CELL_SIGN_BASE_PIN				IND_ROW_BASE_SIGN_PIN,			IND_COLUMN_BASE_PIN
 #define CELL_SIGN_BASE_DIRECTION		IND_ROW_BASE_SIGN_DIRECTION,	IND_COLUMN_BASE_DIRECTION
 #define CELL_SIGN_BASE_TYPE				IND_ROW_BASE_SIGN_TYPE,			IND_COLUMN_BASE_TYPE
 #define CELL_SIGN_BASE_NAME				IND_ROW_BASE_SIGN_NAME,			IND_COLUMN_BASE_NAME
-#define CELL_SIGN_BASE_EMPTY			IND_ROW_BASE_SIGN_EMPTY,		IND_COLUMN_BASE_EMPTY
 #define CELL_SIGN_BASE_COMMENT			IND_ROW_BASE_SIGN_COMMENT,		IND_COLUMN_BASE_COMMENT
+
+#define CELL_SIGN_CORRECT				IND_ROW_BASE_SIGN,				IND_COLUMN_BASE_COMMENT
+
+#define IND_COLUMN_MANUAL_VALUE			5
 
 // Save File
 #define HEIGHT_HEADERFILE				7	
@@ -132,16 +135,17 @@ private:
 	void initUiTable();
 	void initUiFooter();
 
-	void generateTable();
 	void generateTableBaseSign();
+	void generateTableAuto();
+	void generateTableManual();
 	void generateTableSign(TypeCable type, int maxTypeOffset);
 	void generateXlsx();
 	void generateWarning(Warnings::ReportWindow warning);
 
-	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
-	void fillTableOut(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
-	void fillTableIn(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
-	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);
+	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
+	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
+	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
+	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
 	
 	void resetBaseLanguage();
 	void resetTheme();
