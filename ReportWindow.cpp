@@ -1165,6 +1165,7 @@ QString ReportWindow::getStrType(TypeCable type)
 			break;
 
 		case TypeCable::DIG_IN:
+		case TypeCable::DIG_OUT:
 			str = QString::fromLocal8Bit("Цифровой");
 			break;
 
@@ -1174,10 +1175,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HALL_IN:
 			str = "HAll";
-			break;
-
-		case TypeCable::DIG_OUT:
-			str = QString::fromLocal8Bit("Цифровой");
 			break;
 
 		case TypeCable::PWM_OUT:
@@ -1190,9 +1187,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HLD_OUT:
 			str = "HLD";
-			break;
-
-		default:
 			break;
 		}
 		break;
@@ -1205,6 +1199,7 @@ QString ReportWindow::getStrType(TypeCable type)
 			break;
 
 		case TypeCable::DIG_IN:
+		case TypeCable::DIG_OUT:
 			str = "Digital";
 			break;
 
@@ -1214,10 +1209,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HALL_IN:
 			str = "HAll";
-			break;
-
-		case TypeCable::DIG_OUT:
-			str = "Digital";
 			break;
 
 		case TypeCable::PWM_OUT:
@@ -1230,9 +1221,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HLD_OUT:
 			str = "HLD";
-
-		default:
-			break;
 		}
 	}
 	return str;
@@ -1240,8 +1228,21 @@ QString ReportWindow::getStrType(TypeCable type)
 
 void ReportWindow::on_saveButton_clicked()
 {
-	testerName = testerNameLineEdit->text();
-	serialNumber = serialNumberLineEdit->text();
+	if (testerNameLineEdit->text() != "")
+		testerName = testerNameLineEdit->text();
+	else
+	{
+		generateWarning(Warnings::ReportWindow::EMPTY_INITIALS);
+		return;
+	}
+
+	if (serialNumberLineEdit->text() != "")
+		serialNumber = serialNumberLineEdit->text();
+	else
+	{
+		generateWarning(Warnings::ReportWindow::EMPTY_SERIAL);
+		return;
+	}
 
 	generateXlsx();
 }
@@ -1512,11 +1513,11 @@ void ReportWindow::generateXlsx()
 			nameFile += "DTM_";
 		else
 			nameFile += "BCM_";
-		nameFile += serialNumberBlock + "_";
-		nameFile += time.date().toString("dd.MM.yy").remove(".");
+		nameFile += serialNumber + "-";
+		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
 		for (int i = 1;; i++)
 		{
-			QString tmpNameFile = nameFile + "_test" + QString::number(i) + ".xlsx";
+			QString tmpNameFile = nameFile + "-test" + QString::number(i) + ".xlsx";
 			if (!QFile::exists(tmpNameFile))
 			{
 				nameFile = tmpNameFile;
@@ -1525,7 +1526,7 @@ void ReportWindow::generateXlsx()
 		}
 		xlsx.saveAs(nameFile);
 
-		generateWarning(Warnings::ReportWindow::XLSX_SAVE_SUCCESS);
+		QMessageBox::warning(this, QString::fromLocal8Bit("Сохранено"), QString::fromLocal8Bit("Отчёт \"" + nameFile.toLocal8Bit() + "\" сохранён в папку Reports"));
 	}
 	catch (...)
 	{
@@ -1542,9 +1543,6 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 		{
 		case Warnings::ReportWindow::XLSX_SAVE_ERROR:
 			break;
-
-		case Warnings::ReportWindow::XLSX_SAVE_SUCCESS:
-			break;
 		}
 		break;
 
@@ -1552,9 +1550,6 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 		switch (warning)
 		{
 		case Warnings::ReportWindow::XLSX_SAVE_ERROR:
-			break;
-
-		case Warnings::ReportWindow::XLSX_SAVE_SUCCESS:
 			break;
 		}
 		break;
