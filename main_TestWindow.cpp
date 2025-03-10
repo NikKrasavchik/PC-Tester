@@ -227,12 +227,6 @@ void TestWindow::initUiMainFooter()
 	reportHLayout->setObjectName("reportHLayout");
 	footerMainHLayout->addItem(reportHLayout);
 
-	testerNameLineEdit = new QLineEdit(footerLayoutWidget);
-	testerNameLineEdit->setObjectName("testerNameLineEdit");
-	testerNameLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
-	testerNameLineEdit->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_TESTER_NAME_HEIGHT);
-	reportHLayout->addWidget(testerNameLineEdit);
-
 	reportSpacer = new QSpacerItem(50, 0, QSizePolicy::Fixed);
 	reportHLayout->addItem(reportSpacer);
 
@@ -270,7 +264,6 @@ void TestWindow::initTexts()
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
-		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
 
 		switch (testType)
 		{
@@ -339,7 +332,6 @@ void TestWindow::initTexts()
 
 	case ENGLISH_LANG:
 		reportButton->setText(QString("Report"));
-		testerNameLineEdit->setText(QString("Ivanov Ivan Ivanovich"));
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
@@ -572,7 +564,7 @@ void TestWindow::on_reportButton_clicked()
 	case WindowType::IN_TEST_MANUAL_STAND:
 	case WindowType::OUT_TEST_MANUAL_STAND:
 	case WindowType::FULL_TEST_MANUAL_STAND:
-		reportWindow = new ReportWindow(cableRows, manualChecks, testerNameLineEdit->text(), testingBlock);
+		reportWindow = new ReportWindow(cableRows, manualChecks, testingBlock);
 		break;
 
 	case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -580,7 +572,7 @@ void TestWindow::on_reportButton_clicked()
 	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 	case WindowType::FULL_TEST_AUTO_STAND:
-		reportWindow = new ReportWindow(cableRows, testerNameLineEdit->text(), testingBlock);
+		reportWindow = new ReportWindow(cableRows, testingBlock);
 		break;
 
 	default:
@@ -613,7 +605,6 @@ void TestWindow::resetTheme()
 		backButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		reportButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
-		testerNameLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
 		fileNameLabel->setStyleSheet(lightStyles.testwindowLableBlock);
 		resetIconMoreButton(LIGHT_THEME);
 
@@ -699,7 +690,6 @@ void TestWindow::resetTheme()
 		backButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		reportButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
-		testerNameLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
 		fileNameLabel->setStyleSheet(darkStyles.testwindowLableBlock);
 		resetIconMoreButton(DARK_THEME);
 
@@ -782,7 +772,6 @@ void TestWindow::resetLanguage()
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
-		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
 
 		switch (testType)
 		{
@@ -905,7 +894,6 @@ void TestWindow::resetLanguage()
 
 	case ENGLISH_LANG:
 		reportButton->setText(QString("Report"));
-		testerNameLineEdit->setText(QString("Ivanov Ivan Ivanovich"));
 
 		switch (testType)
 		{

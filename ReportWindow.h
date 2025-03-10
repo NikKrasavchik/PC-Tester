@@ -92,8 +92,8 @@ class ReportWindow : public QDialog
 	Q_OBJECT
 
 public:
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName, TestBlockName testingBlock);
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName, TestBlockName testingBlock);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, TestBlockName testingBlock);
+	ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, TestBlockName testingBlock);
 	~ReportWindow();
 
 	void setTestingBlock(TestBlockName testingBlock) { this->testingBlock = testingBlock; }
@@ -101,12 +101,20 @@ public:
 
 private:
 	QWidget* mainWidget;
+	QWidget* footerWidget;
+	QWidget* reportDataWidget;
 	QTableWidget* tableWidget;
 	QPushButton* saveButton;
 	QVBoxLayout* mainVLayout;
+	QHBoxLayout* reportDataHLayout;
 	QHBoxLayout* footerHLayout;
+	QSpacerItem* reportDataSpacer;
 	QSpacerItem* mainMiddleSpacer;
-	QSpacerItem* footerLeftSpacer;
+	QSpacerItem* footerSpacer;
+	QLineEdit* testerNameLineEdit;
+	QLineEdit* serialNumberLineEdit;
+	QLabel* testerNameLabel;
+	QLabel* serialNumberLabel;
 
 	TestBlockName testingBlock;
 	QString serialNumberBlock;
@@ -118,6 +126,7 @@ private:
 	std::vector<std::vector<bool>> typedCheckedState;
 	std::vector<QTextEdit*> commentsTextEdits;
 	QString testerName;
+	QString serialNumber;
 
 	void initUi();
 	void initUiTable();
@@ -126,6 +135,7 @@ private:
 	void generateTable();
 	void generateTableBaseSign();
 	void generateTableSign(TypeCable type, int maxTypeOffset);
+	void generateXlsx();
 	void generateWarning(Warnings::ReportWindow warning);
 
 	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState);

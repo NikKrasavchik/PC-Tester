@@ -3,6 +3,10 @@
 #define BUTTON_WIDTH					100
 #define BUTTON_HEIGHT					40
 #define BUTTON_SIZE						BUTTON_WIDTH, BUTTON_HEIGHT
+#define FIXED_NAME_LABEL_WIDTH			75
+#define FIXED_SERIAL_LABEL_WIDTH		125
+#define FIXED_DATA_LINE_EDIT_WIDTH		300
+#define FIXED_DATA_LINE_EDIT_HEIGHT		50
 
 #define MEASUREMENT_COLUMN_POSITION		6
 
@@ -10,10 +14,9 @@
 
 using namespace QXlsx;
 
-ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QString testerName, TestBlockName testingBlock)
+ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, TestBlockName testingBlock)
 {
 	this->cableRows = cableRows;
-	this->testerName = testerName;
 	this->testingBlock = testingBlock;
 	serialNumberBlock = "1234";
 	setMinimumSize(WINDOW_MIN_SIZE);
@@ -23,13 +26,11 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, QStri
 	QMetaObject::connectSlotsByName(this);
 }
 
-ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, QString testerName, TestBlockName testingBlock)
+ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, TestBlockName testingBlock)
 {
 	for (int i = 0; i < checkedState.size(); i++)
 		this->checkedState.push_back(checkedState[i]->isChecked());
 	this->cableRows = cableRows;
-	this->testerName = testerName;
-	this->testingBlock = testingBlock;
 	setMinimumSize(WINDOW_MIN_SIZE);
 	resize(WINDOW_MIN_SIZE);
 
@@ -73,28 +74,60 @@ void ReportWindow::initUiTable()
 
 void ReportWindow::initUiFooter()
 {
-	footerHLayout = new QHBoxLayout(mainWidget);
+	footerWidget = new QWidget(mainWidget);
+	footerWidget->setObjectName("footerWidget");
+	mainVLayout->addWidget(footerWidget);
+
+	footerHLayout = new QHBoxLayout(footerWidget);
 	footerHLayout->setObjectName("footerHLayout");
-	mainVLayout->addLayout(footerHLayout);
 
-	footerLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
-	footerHLayout->addItem(footerLeftSpacer);
+	reportDataWidget = new QWidget(footerWidget);
+	reportDataWidget->setObjectName("serialNumberWidget");
+	footerHLayout->addWidget(reportDataWidget);
 
-	saveButton = new QPushButton(mainWidget);
+	reportDataHLayout = new QHBoxLayout(reportDataWidget);
+	reportDataHLayout->setObjectName("serialNumbreVLayout");
+	
+	QFont font;
+	font.setBold(true);
+	font.setPointSizeF(10);
+
+	testerNameLabel = new QLabel(reportDataWidget);
+	testerNameLabel->setObjectName("testerNameLabel");
+	testerNameLabel->setFixedWidth(FIXED_NAME_LABEL_WIDTH);
+	testerNameLabel->setFont(font);
+	testerNameLabel->setAlignment(Qt::AlignmentFlag::AlignVCenter | Qt::AlignRight);
+	reportDataHLayout->addWidget(testerNameLabel);
+
+	testerNameLineEdit = new QLineEdit(reportDataWidget);
+	testerNameLineEdit->setObjectName("testerNameLineEdit");
+	testerNameLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	testerNameLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
+	reportDataHLayout->addWidget(testerNameLineEdit);
+
+	reportDataSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
+	reportDataHLayout->addItem(reportDataSpacer);
+
+	serialNumberLabel = new QLabel(reportDataWidget);
+	serialNumberLabel->setObjectName("serialNumberLabel");
+	serialNumberLabel->setFixedWidth(FIXED_SERIAL_LABEL_WIDTH);
+	serialNumberLabel->setFont(font);
+	serialNumberLabel->setAlignment(Qt::AlignmentFlag::AlignVCenter | Qt::AlignRight);
+	reportDataHLayout->addWidget(serialNumberLabel);
+
+	serialNumberLineEdit = new QLineEdit(reportDataWidget);
+	serialNumberLineEdit->setObjectName("serialNumberLineEdit");
+	serialNumberLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	serialNumberLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
+	reportDataHLayout->addWidget(serialNumberLineEdit);
+
+	footerSpacer = new QSpacerItem(10000, 0, QSizePolicy::Expanding);
+	footerHLayout->addItem(footerSpacer);
+
+	saveButton = new QPushButton(footerWidget);
 	saveButton->setObjectName("saveButton");
 	saveButton->setFixedSize(BUTTON_SIZE);
 	footerHLayout->addWidget(saveButton);
-
-	switch (viewWindowState->appLanguage)
-	{
-	case RUSSIAN_LANG:
-		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
-		break;
-
-	case ENGLISH_LANG:
-		saveButton->setText(QString("Save"));
-		break;
-	}
 }
 
 void ReportWindow::resetBaseLanguage()
@@ -109,6 +142,11 @@ void ReportWindow::resetBaseLanguage()
 		tableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString::fromLocal8Bit("Название"));
 		tableWidget->item(CELL_SIGN_BASE_EMPTY)->setText(QString::fromLocal8Bit(""));
 		tableWidget->item(CELL_SIGN_BASE_COMMENT)->setText(QString::fromLocal8Bit("Комментарий"));
+		
+		testerNameLabel->setText(QString::fromLocal8Bit("ФИО: "));
+		serialNumberLabel->setText(QString::fromLocal8Bit("Серийный номер: "));
+
+		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
 		break;
 
 	case ENGLISH_LANG:
@@ -119,6 +157,11 @@ void ReportWindow::resetBaseLanguage()
 		tableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString("Name"));
 		tableWidget->item(CELL_SIGN_BASE_EMPTY)->setText(QString(""));
 		tableWidget->item(CELL_SIGN_BASE_COMMENT)->setText(QString("Comment"));
+
+		testerNameLabel->setText(QString("Initial: "));
+		serialNumberLabel->setText(QString("Serial number: "));
+		
+		saveButton->setText(QString("Save"));
 		break;
 	}
 }
@@ -214,7 +257,8 @@ void ReportWindow::generateTable()
 	for (int i = 0; i < cableRows.size(); i++)
 	{
 		typedCableRows[(int)cableRows[i]->typeInt].push_back(cableRows[i]);
-		typedCheckedState[(int)cableRows[i]->typeInt].push_back(checkedState[i]);
+		if (checkedState.size())
+			typedCheckedState[(int)cableRows[i]->typeInt].push_back(checkedState[i]);
 	}
 
 	for (int type = 0; type < TYPE_COUNT; type++)
@@ -1015,6 +1059,14 @@ QString ReportWindow::getStrType(TypeCable type)
 
 void ReportWindow::on_saveButton_clicked()
 {
+	testerName = testerNameLineEdit->text();
+	serialNumber = serialNumberLineEdit->text();
+
+	generateXlsx();
+}
+
+void ReportWindow::generateXlsx()
+{
 	try
 	{
 		int maxOffset = getMaxColumnOffset(cableRows);
@@ -1281,7 +1333,7 @@ void ReportWindow::on_saveButton_clicked()
 			nameFile += "BCM_";
 		nameFile += serialNumberBlock + "_";
 		nameFile += time.date().toString("dd.MM.yy").remove(".");
-		for (int i = 1; i < 1000000; i++)
+		for (int i = 1;; i++)
 		{
 			QString tmpNameFile = nameFile + "_test" + QString::number(i) + ".xlsx";
 			if (!QFile::exists(tmpNameFile))
