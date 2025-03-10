@@ -672,7 +672,7 @@ void MainWindow::initConnections()
 
 void MainWindow::switchStyleMainButtons()
 {
-	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected())
+	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected() && selectedBlock != TestBlockName::EMPTY)
 	{
 		if (viewWindowState->appTheme == LIGHT_THEME)
 		{
@@ -1421,6 +1421,7 @@ void MainWindow::on_leftBlockBCMButton_clicked()
 		resetTheme();
 		cables.clear();
 		cables = cablesBCMStorag;
+		switchStyleMainButtons();
 	}
 }
 
@@ -1432,5 +1433,6 @@ void MainWindow::on_leftBlockDMButton_clicked()
 		resetTheme();
 		cables.clear();
 		cables = cablesDMStorag;
+		switchStyleMainButtons();
 	}
 }

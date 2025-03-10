@@ -36,6 +36,7 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::
 
 ReportWindow::~ReportWindow()
 {
+
 }
 
 
