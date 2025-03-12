@@ -1018,12 +1018,6 @@ void TestWindow::resetLanguage()
 	}
 }
 
-// ------------------------------------
-// Name: setParentFrame
-//		Сохранение родительского элемента
-// Variables: 
-//			WindowFrame* parentFrame: Родительский элемент
-// ------------------------------------
 void TestWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;
@@ -1107,13 +1101,6 @@ static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProp
 	return NOT_SET;
 }
 
-// ------------------------------------
-// Name: ProcAutoTest
-//		Отправка сообщения на can
-// Variables: 
-//			int pad: Коннектор кабеля для отправки
-//			int pin: Пин кабеля для отправки
-// ------------------------------------
 void TestWindow::ProcAutoTest(int connector, int pin)
 {
 	for (int i = 0; i < cableRows.size(); i++)
@@ -1675,6 +1662,3 @@ void TestTableRowProperties::on_checkButton_clicked()
 {
 	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, TestBlockName::BCM);
 }
-
-
-

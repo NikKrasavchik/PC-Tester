@@ -8,9 +8,9 @@
 #define FIXED_DATA_LINE_EDIT_WIDTH		300
 #define FIXED_DATA_LINE_EDIT_HEIGHT		50
 
-#define MEASUREMENT_COLUMN_POSITION		6
+#define MEASUREMENT_COLUMN_POSITION		5
 
-#define IND_COLUMN_BASE_COMMENT			6
+#define IND_COLUMN_BASE_COMMENT			5
 
 using namespace QXlsx;
 
@@ -18,9 +18,6 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, TestB
 {
 	this->cableRows = cableRows;
 	this->testingBlock = testingBlock;
-	serialNumberBlock = "1234";
-	setMinimumSize(WINDOW_MIN_SIZE);
-	resize(WINDOW_MIN_SIZE);
 
 	initUi();
 	QMetaObject::connectSlotsByName(this);
@@ -31,8 +28,7 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::
 	for (int i = 0; i < checkedState.size(); i++)
 		this->checkedState.push_back(checkedState[i]->isChecked());
 	this->cableRows = cableRows;
-	setMinimumSize(WINDOW_MIN_SIZE);
-	resize(WINDOW_MIN_SIZE);
+	this->testingBlock = testingBlock;
 
 	initUi();
 	QMetaObject::connectSlotsByName(this);
@@ -46,6 +42,8 @@ ReportWindow::~ReportWindow()
 
 void ReportWindow::initUi()
 {
+	setMinimumSize(WINDOW_MIN_SIZE);
+	resize(WINDOW_MIN_SIZE);
 	mainWidget = new QWidget(this);
 	mainWidget->setObjectName("mainWidget");
 	mainWidget->setGeometry(LEFT_PADDING_MAIN_WIDGET, UP_PADDING_MAIN_WIDGET, WINDOW_MIN_SIZE_WIDTH - (LEFT_PADDING_MAIN_WIDGET * 2), WINDOW_MIN_SIZE_HEIGHT - (UP_PADDING_MAIN_WIDGET * 2));
@@ -60,7 +58,11 @@ void ReportWindow::initUi()
 
 	initUiFooter();
 	resetTheme();
-	generateTable();
+	generateTableBaseSign();
+	if (checkedState.size())
+		generateTableManual();
+	else
+		generateTableAuto();
 }
 
 void ReportWindow::initUiTable()
@@ -140,9 +142,8 @@ void ReportWindow::resetBaseLanguage()
 		tableWidget->item(CELL_SIGN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Направление"));
 		tableWidget->item(CELL_SIGN_BASE_TYPE)->setText(QString::fromLocal8Bit("Тип"));
 		tableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString::fromLocal8Bit("Название"));
-		tableWidget->item(CELL_SIGN_BASE_EMPTY)->setText(QString::fromLocal8Bit(""));
 		tableWidget->item(CELL_SIGN_BASE_COMMENT)->setText(QString::fromLocal8Bit("Комментарий"));
-		
+
 		testerNameLabel->setText(QString::fromLocal8Bit("ФИО: "));
 		serialNumberLabel->setText(QString::fromLocal8Bit("Серийный номер: "));
 
@@ -155,12 +156,11 @@ void ReportWindow::resetBaseLanguage()
 		tableWidget->item(CELL_SIGN_BASE_DIRECTION)->setText(QString("Direction"));
 		tableWidget->item(CELL_SIGN_BASE_TYPE)->setText(QString("Type"));
 		tableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString("Name"));
-		tableWidget->item(CELL_SIGN_BASE_EMPTY)->setText(QString(""));
 		tableWidget->item(CELL_SIGN_BASE_COMMENT)->setText(QString("Comment"));
 
 		testerNameLabel->setText(QString("Initial: "));
 		serialNumberLabel->setText(QString("Serial number: "));
-		
+
 		saveButton->setText(QString("Save"));
 		break;
 	}
@@ -240,10 +240,87 @@ static void prepareItem(QTableWidget* tableWidget, int row, int column, int rowS
 	tableWidget->item(row, column)->setFont(font);
 }
 
-void ReportWindow::generateTable()
+void ReportWindow::generateTableManual()
 {
-	generateTableBaseSign();
+	tableWidget->insertColumn(MEASUREMENT_COLUMN_POSITION);
+	tableWidget->setColumnWidth(MEASUREMENT_COLUMN_POSITION, 50);
+	prepareItem(tableWidget, CELL_SIGN_CORRECT, SPAN_NONE);
 
+	for (int i = 0; i < cableRows.size(); i++)
+	{
+		int row = tableWidget->rowCount();
+		tableWidget->insertRow(tableWidget->rowCount());
+		for (int column = 0; column < COLUMN_COUNT_MANUAL; column++)
+			prepareItem(tableWidget, row, column, SPAN_NONE);
+
+		tableWidget->item(row, IND_COLUMN_BASE_CONNECTOR)->setText(cableRows[i]->connectorStr);
+		tableWidget->item(row, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
+		tableWidget->item(row, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
+		tableWidget->item(row, IND_COLUMN_MANUAL_VALUE)->setBackgroundColor(checkedState[i] ? QColor(COLOR_GREEN) : QColor(COLOR_RED));
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(row, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Вход"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(row, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Выход"));
+			
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Цифровой"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Аналоговый"));
+				break;
+
+			case TypeCable::PWM_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("ШИМ"));
+				break;
+
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(row, IND_COLUMN_BASE_DIRECTION)->setText(QString("In"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(row, IND_COLUMN_BASE_DIRECTION)->setText(QString("Out"));
+
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("Digital"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("Analog"));
+				break;
+
+			case TypeCable::PWM_OUT:
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+		}
+	}
+
+}
+
+void ReportWindow::generateTableAuto()
+{
 	int maxColumnOffset = getMaxColumnOffset(cableRows);
 	for (int i = 0; i < maxColumnOffset; i++)
 	{
@@ -253,13 +330,8 @@ void ReportWindow::generateTable()
 	tableWidget->setSpan(IND_ROW_BASE_SIGN, MEASUREMENT_COLUMN_POSITION, 1, maxColumnOffset);
 
 	typedCableRows.resize(TYPE_COUNT);
-	typedCheckedState.resize(TYPE_COUNT);
 	for (int i = 0; i < cableRows.size(); i++)
-	{
 		typedCableRows[(int)cableRows[i]->typeInt].push_back(cableRows[i]);
-		if (checkedState.size())
-			typedCheckedState[(int)cableRows[i]->typeInt].push_back(checkedState[i]);
-	}
 
 	for (int type = 0; type < TYPE_COUNT; type++)
 	{
@@ -270,7 +342,7 @@ void ReportWindow::generateTable()
 		int maxTypeOffset = getMaxTypeOffset(typedCableRows[type]);
 
 		generateTableSign((TypeCable)type, maxTypeOffset);
-		fillTable((TypeCable)type, typedCableRows[type], typedCheckedState[type]);
+		fillTable((TypeCable)type, typedCableRows[type]);
 
 		int emptySpanRow = tableWidget->rowCount() - previousRowCount;
 		int emptySpanColumn = COLUMN_COUNT_BASE_TABLE - 1;
@@ -308,14 +380,12 @@ void ReportWindow::generateTableBaseSign()
 	prepareItem(tableWidget, CELL_SIGN_BASE_DIRECTION, SPAN_NONE);
 	prepareItem(tableWidget, CELL_SIGN_BASE_TYPE, SPAN_NONE);
 	prepareItem(tableWidget, CELL_SIGN_BASE_NAME, SPAN_NONE);
-	prepareItem(tableWidget, CELL_SIGN_BASE_EMPTY, SPAN_NONE);
 	prepareItem(tableWidget, CELL_SIGN_BASE_COMMENT, SPAN_NONE);
 
-	tableWidget->setColumnWidth(IND_COLUMN_BASE_CONNECTOR, 65);
+	tableWidget->setColumnWidth(IND_COLUMN_BASE_CONNECTOR, 75);
 	tableWidget->setColumnWidth(IND_COLUMN_BASE_PIN, 65);
 	tableWidget->setColumnWidth(IND_COLUMN_BASE_DIRECTION, 120);
-	tableWidget->setColumnWidth(IND_COLUMN_BASE_TYPE, 75);
-	tableWidget->setColumnWidth(IND_COLUMN_BASE_EMPTY, 65);
+	tableWidget->setColumnWidth(IND_COLUMN_BASE_TYPE, 90);
 	tableWidget->setColumnWidth(IND_COLUMN_BASE_COMMENT, 150);
 
 	tableWidget->setRowHeight(IND_ROW_BASE_SIGN, 40);
@@ -326,7 +396,6 @@ void ReportWindow::generateTableBaseSign()
 	tableWidget->horizontalHeader()->setSectionResizeMode(IND_COLUMN_BASE_DIRECTION, QHeaderView::Fixed);
 	tableWidget->horizontalHeader()->setSectionResizeMode(IND_COLUMN_BASE_TYPE, QHeaderView::Fixed);
 	tableWidget->horizontalHeader()->setSectionResizeMode(IND_COLUMN_BASE_NAME, QHeaderView::Stretch);
-	tableWidget->horizontalHeader()->setSectionResizeMode(IND_COLUMN_BASE_EMPTY, QHeaderView::Fixed);
 	tableWidget->horizontalHeader()->setSectionResizeMode(IND_COLUMN_BASE_COMMENT, QHeaderView::Fixed);
 
 	tableWidget->verticalHeader()->setSectionResizeMode(IND_ROW_BASE_SIGN, QHeaderView::Fixed);
@@ -633,7 +702,7 @@ void static fillManualTable(QTableWidgetItem** tableItems, bool checkedState)
 	tableItems[1]->setBackgroundColor(checkedState ? COLOR_GREEN : COLOR_RED);
 }
 
-void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
+void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -648,9 +717,66 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows, 
 
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_CONNECTOR)->setText(cableRows[i]->connectorStr);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
-		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(cableRows[i]->direction);
-		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
+
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Вход"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Выход"));
+
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Цифровой"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Аналоговый"));
+				break;
+
+			case TypeCable::PWM_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("ШИМ"));
+				break;
+
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("In"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("Out"));
+
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("Digital"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("Analog"));
+				break;
+
+			case TypeCable::PWM_OUT:
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+		}
 
 		int indColumnMeasuredValuesVoltage = MEASUREMENT_COLUMN_POSITION;
 		int indColumnMeasuredValuesCurrent = MEASUREMENT_COLUMN_POSITION + 1;
@@ -683,26 +809,7 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows, 
 			tableItems[4]->setText(cableRows[i]->thresholds[j].minCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].minCurrent) : "-");
 			tableItems[5]->setText(cableRows[i]->thresholds[j].maxCurrent != -1 ? QString::number(cableRows[i]->thresholds[j].maxCurrent) : "-");
 
-			switch (testType)
-			{
-			case WindowType::IN_TEST_MANUAL_STAND:
-			case WindowType::OUT_TEST_MANUAL_STAND:
-			case WindowType::FULL_TEST_MANUAL_STAND:
-				fillManualTable(tableItems, checkedState[i]);
-				break;
-
-			case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			case WindowType::FULL_TEST_AUTO_STAND:
-				fillTableColor(cableRows[i], j, tableItems);
-				break;
-
-			default:
-				generateWarning(Warnings::ReportWindow::INCORRECT_TEST_TYPE);
-				break;
-			}
+			fillTableColor(cableRows[i], j, tableItems);
 
 			indColumnMeasuredValuesVoltage += MEASUREMENT_OFFSET_OUT;
 			indColumnMeasuredValuesCurrent += MEASUREMENT_OFFSET_OUT;
@@ -728,7 +835,7 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows, 
 	}
 }
 
-void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
+void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -743,9 +850,65 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows, s
 
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_CONNECTOR)->setText(cableRows[i]->connectorStr);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
-		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(cableRows[i]->direction);
-		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Вход"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Выход"));
+
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Цифровой"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Аналоговый"));
+				break;
+
+			case TypeCable::PWM_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("ШИМ"));
+				break;
+
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("In"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("Out"));
+
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("Digital"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("Analog"));
+				break;
+
+			case TypeCable::PWM_OUT:
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+		}
 
 		int indColumnMeasuredValue1 = MEASUREMENT_COLUMN_POSITION;
 		int indColumnMeasuredValue2 = MEASUREMENT_COLUMN_POSITION + 2;
@@ -757,26 +920,7 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows, s
 		tableItems[0] = tableWidget->item(indCurrentRow, indColumnMeasuredValue1);
 		tableItems[1] = tableWidget->item(indCurrentRow, indColumnMeasuredValue2);
 
-		switch (testType)
-		{
-		case WindowType::IN_TEST_MANUAL_STAND:
-		case WindowType::OUT_TEST_MANUAL_STAND:
-		case WindowType::FULL_TEST_MANUAL_STAND:
-			fillManualTable(tableItems, checkedState[i]);
-			break;
-
-		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-		case WindowType::IN_AUTO_TEST_AUTO_STAND:
-		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-		case WindowType::FULL_TEST_AUTO_STAND:
-			fillTableColor(cableRows[i], 0, tableItems);
-			break;
-
-		default:
-			generateWarning(Warnings::ReportWindow::INCORRECT_TEST_TYPE);
-			break;
-		}
+		fillTableColor(cableRows[i], 0, tableItems);
 
 		commentsTextEdits.push_back(new QTextEdit());
 		QWidget* commentWidget = new QWidget();
@@ -794,7 +938,7 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows, s
 	}
 }
 
-void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
+void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows)
 {
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -809,9 +953,65 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_CONNECTOR)->setText(cableRows[i]->connectorStr);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
-		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(cableRows[i]->direction);
-		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
 		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Вход"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Выход"));
+
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Цифровой"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("Аналоговый"));
+				break;
+
+			case TypeCable::PWM_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString::fromLocal8Bit("ШИМ"));
+				break;
+
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("In"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("Out"));
+
+			switch (cableRows[i]->typeInt)
+			{
+			case TypeCable::DIG_IN:
+			case TypeCable::DIG_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("Digital"));
+				break;
+
+			case TypeCable::ANALOG_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("Analog"));
+				break;
+
+			case TypeCable::PWM_OUT:
+			case TypeCable::HALL_IN:
+			case TypeCable::VNH_OUT:
+			case TypeCable::HLD_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			}
+			break;
+		}
 		
 		int indColumnMeasuredValues = MEASUREMENT_COLUMN_POSITION;
 		int indColumnThresholdsMin = MEASUREMENT_COLUMN_POSITION + 2;
@@ -832,26 +1032,7 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 			tableItems[1]->setText(cableRows[i]->thresholds[j].minValue != -1 ? QString::number(cableRows[i]->thresholds[j].minValue) : "-");
 			tableItems[2]->setText(cableRows[i]->thresholds[j].maxValue != -1 ? QString::number(cableRows[i]->thresholds[j].maxValue) : "-");
 
-			switch (testType)
-			{
-			case WindowType::IN_TEST_MANUAL_STAND:
-			case WindowType::OUT_TEST_MANUAL_STAND:
-			case WindowType::FULL_TEST_MANUAL_STAND:
-				fillManualTable(tableItems, checkedState[i]);
-				break;
-
-			case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			case WindowType::FULL_TEST_AUTO_STAND:
-				fillTableColor(cableRows[i], j, tableItems);
-				break;
-
-			default:
-				generateWarning(Warnings::ReportWindow::INCORRECT_TEST_TYPE);
-				break;
-			}
+			fillTableColor(cableRows[i], j, tableItems);
 
 			indColumnMeasuredValues += MEASUREMENT_OFFSET_IN_ANALOG;
 			indColumnThresholdsMin += MEASUREMENT_OFFSET_IN_ANALOG;
@@ -874,7 +1055,7 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 	}
 }
 
-void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows, std::vector<bool> checkedState)
+void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows)
 {
 	switch (type)
 	{
@@ -882,16 +1063,16 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 	case TypeCable::PWM_OUT:
 	case TypeCable::VNH_OUT:
 	case TypeCable::HLD_OUT:
-		fillTableOut(cableRows, checkedState);
+		fillTableOut(cableRows);
 		break;
 
 	case TypeCable::DIG_IN:
 	case TypeCable::HALL_IN:
-		fillTableIn(cableRows, checkedState);
+		fillTableIn(cableRows);
 		break;
 
 	case TypeCable::ANALOG_IN:
-		fillTableInAnalog(cableRows, checkedState);
+		fillTableInAnalog(cableRows);
 		break;
 	}
 }
@@ -984,6 +1165,7 @@ QString ReportWindow::getStrType(TypeCable type)
 			break;
 
 		case TypeCable::DIG_IN:
+		case TypeCable::DIG_OUT:
 			str = QString::fromLocal8Bit("Цифровой");
 			break;
 
@@ -993,10 +1175,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HALL_IN:
 			str = "HAll";
-			break;
-
-		case TypeCable::DIG_OUT:
-			str = QString::fromLocal8Bit("Цифровой");
 			break;
 
 		case TypeCable::PWM_OUT:
@@ -1009,9 +1187,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HLD_OUT:
 			str = "HLD";
-			break;
-
-		default:
 			break;
 		}
 		break;
@@ -1024,6 +1199,7 @@ QString ReportWindow::getStrType(TypeCable type)
 			break;
 
 		case TypeCable::DIG_IN:
+		case TypeCable::DIG_OUT:
 			str = "Digital";
 			break;
 
@@ -1033,10 +1209,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HALL_IN:
 			str = "HAll";
-			break;
-
-		case TypeCable::DIG_OUT:
-			str = "Digital";
 			break;
 
 		case TypeCable::PWM_OUT:
@@ -1049,9 +1221,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HLD_OUT:
 			str = "HLD";
-
-		default:
-			break;
 		}
 	}
 	return str;
@@ -1059,8 +1228,21 @@ QString ReportWindow::getStrType(TypeCable type)
 
 void ReportWindow::on_saveButton_clicked()
 {
-	testerName = testerNameLineEdit->text();
-	serialNumber = serialNumberLineEdit->text();
+	if (testerNameLineEdit->text() != "")
+		testerName = testerNameLineEdit->text();
+	else
+	{
+		generateWarning(Warnings::ReportWindow::EMPTY_INITIALS);
+		return;
+	}
+
+	if (serialNumberLineEdit->text() != "")
+		serialNumber = serialNumberLineEdit->text();
+	else
+	{
+		generateWarning(Warnings::ReportWindow::EMPTY_SERIAL);
+		return;
+	}
 
 	generateXlsx();
 }
@@ -1331,11 +1513,11 @@ void ReportWindow::generateXlsx()
 			nameFile += "DTM_";
 		else
 			nameFile += "BCM_";
-		nameFile += serialNumberBlock + "_";
-		nameFile += time.date().toString("dd.MM.yy").remove(".");
+		nameFile += serialNumber + "-";
+		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
 		for (int i = 1;; i++)
 		{
-			QString tmpNameFile = nameFile + "_test" + QString::number(i) + ".xlsx";
+			QString tmpNameFile = nameFile + "-test" + QString::number(i) + ".xlsx";
 			if (!QFile::exists(tmpNameFile))
 			{
 				nameFile = tmpNameFile;
@@ -1344,7 +1526,7 @@ void ReportWindow::generateXlsx()
 		}
 		xlsx.saveAs(nameFile);
 
-		generateWarning(Warnings::ReportWindow::XLSX_SAVE_SUCCESS);
+		QMessageBox::warning(this, QString::fromLocal8Bit("Сохранено"), QString::fromLocal8Bit("Отчёт \"" + nameFile.toLocal8Bit() + "\" сохранён в папку Reports"));
 	}
 	catch (...)
 	{
@@ -1361,9 +1543,6 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 		{
 		case Warnings::ReportWindow::XLSX_SAVE_ERROR:
 			break;
-
-		case Warnings::ReportWindow::XLSX_SAVE_SUCCESS:
-			break;
 		}
 		break;
 
@@ -1371,9 +1550,6 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 		switch (warning)
 		{
 		case Warnings::ReportWindow::XLSX_SAVE_ERROR:
-			break;
-
-		case Warnings::ReportWindow::XLSX_SAVE_SUCCESS:
 			break;
 		}
 		break;

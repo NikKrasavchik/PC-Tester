@@ -210,10 +210,11 @@ namespace Warnings
 
 	enum class ReportWindow
 	{
-		XLSX_SAVE_SUCCESS,
 		XLSX_SAVE_ERROR,
 		TYPE_CHANGE_ERROR,
-		INCORRECT_TEST_TYPE
+		INCORRECT_TEST_TYPE,
+		EMPTY_INITIALS,
+		EMPTY_SERIAL
 	};
 
 	enum class MoreWindow
