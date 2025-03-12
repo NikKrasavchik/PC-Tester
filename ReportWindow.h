@@ -126,7 +126,6 @@ private:
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
 	std::vector<bool> checkedState;
-	std::vector<std::vector<bool>> typedCheckedState;
 	std::vector<QTextEdit*> commentsTextEdits;
 	QString testerName;
 	QString serialNumber;

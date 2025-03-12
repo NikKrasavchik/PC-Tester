@@ -1294,6 +1294,11 @@ void ReportWindow::on_saveButton_clicked()
 
 void ReportWindow::generateXlsx()
 {
+
+	typedCableRows.clear();
+		typedCableRows.resize(TYPE_COUNT);
+	for (int i = 0; i < cableRows.size(); i++)
+		typedCableRows[(int)cableRows[i]->typeInt].push_back(cableRows[i]);
 	try
 	{
 		int maxOffset = getMaxColumnOffset(cableRows);
@@ -1310,7 +1315,16 @@ void ReportWindow::generateXlsx()
 		format.setHorizontalAlignment(Format::AlignHCenter);
 		format.setFontBold(true);
 		format.setBorderStyle(Format::BorderThin);
+		for (int i = 0; i < cableRows.size(); i++)
+		{
+			xlsx.write(i + 5, 20, cableRows[i]->connectorStr, format);
+			xlsx.write(i + 5, 21, cableRows[i]->pin, format);
+			if(checkedState[i])
+				xlsx.write(i + 5, 21, "Work", format);
+			else
+				xlsx.write(i + 5, 21, "No", format);
 
+		}
 		int numRow = START_ROW_TABLE;
 		bool color = false;
 		for (int type = 0; type < typedCableRows.size(); type++)
@@ -1332,7 +1346,6 @@ void ReportWindow::generateXlsx()
 				}
 				Format tmpRowCommentFormat(tmpRowFormat);
 				tmpRowCommentFormat.setHorizontalAlignment(Format::AlignLeft);
-
 				switch ((TypeCable)type)
 				{
 				case TypeCable::DIG_IN:
