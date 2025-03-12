@@ -297,6 +297,10 @@ private:
 	QPixmap* backButtonDarkPixmap;
 	QPixmap* moreButtonLightPixmap;
 	QPixmap* moreButtonDarkPixmap;
+	QPixmap* clockwiseLightPixmap;
+	QPixmap* clockwiseDarkPixmap;
+	QPixmap* counterclockwiseLightPixmap;
+	QPixmap* counterclockwiseDarkPixmap;
 
 	int fullTestSortType;
 	

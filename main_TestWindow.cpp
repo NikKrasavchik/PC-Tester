@@ -18,6 +18,8 @@
 #define FIXED_TESTER_NAME_HEIGHT	50
 #define FIXED_REPORT_BUTTON_WIDTH	100
 #define FIXED_REPORT_BUTTON_HEIGHT	50
+#define FIXED_WISE_PIXMAP_WIDTH		30
+#define FIXED_WISE_PIXMAP_HEIGHT	30
 
 TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlockName testingBlock, QWidget* parent)
 	: QDialog(parent)
@@ -258,6 +260,10 @@ void TestWindow::initRecources()
 	backButtonDarkPixmap = new QPixmap(":/Dark/icons/Back_White.png");
 	moreButtonLightPixmap = new QPixmap(":/Light/icons/More_Black.svg");
 	moreButtonDarkPixmap = new QPixmap(":/Dark/icons/More_White.svg");
+	clockwiseLightPixmap = new QPixmap(":/Light/icons/Clockwise_Black.png");
+	clockwiseDarkPixmap = new QPixmap(":/Dark/icons/Clockwise_White.png");
+	counterclockwiseLightPixmap = new QPixmap(":/Light/icons/Counterclockwise_Black.png");
+	counterclockwiseDarkPixmap = new QPixmap(":/Dark/icons/Counterclockwise_White.png");
 }
 
 void TestWindow::initTexts()
@@ -766,6 +772,7 @@ void TestWindow::resetTheme()
 		}
 		break;
 	}
+	can->clearOldValue();
 }
 
 void TestWindow::resetLanguage()
@@ -1217,10 +1224,60 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 			case WindowType::IN_TEST_MANUAL_STAND:
 				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
 				{
-					//if(newValue == 1)
-					//	// Картинка по часовой в столбец 5
-					//else if(newValue == 2)
-					//	// Картинка по противчасовой в столбец 5
+					if (newValue == 1)
+					{
+						QWidget* wiseWidget = new QWidget(mainTableWidget);
+						QLabel* counterclockwiseLabel = new QLabel(wiseWidget);
+						counterclockwiseLabel->setObjectName("counterclockwiseLabel");
+						counterclockwiseLabel->setText("");
+						counterclockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							counterclockwiseLabel->setPixmap(*counterclockwiseDarkPixmap);
+							break;
+
+						case LIGHT_THEME:
+							counterclockwiseLabel->setPixmap(*counterclockwiseLightPixmap);
+							break;
+						}
+						QHBoxLayout* counterclockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+						counterclockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
+						QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+						counterclockwiseCellHLayout->addItem(leftWiseSpacer);
+						counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
+						counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+						wiseWidget->setLayout(counterclockwiseCellHLayout);
+						if (mainTableWidget->cellWidget(row, 5) != nullptr)
+							mainTableWidget->removeCellWidget(row, 5);
+						mainTableWidget->setCellWidget(row, 5, wiseWidget);
+					}
+					else if (newValue == 2)
+					{
+						QWidget* wiseWidget = new QWidget(mainTableWidget);
+						QLabel* clockwiseLabel = new QLabel(wiseWidget);
+						clockwiseLabel->setObjectName("clockwiseLabel");
+						clockwiseLabel->setText("");
+						clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							clockwiseLabel->setPixmap(*clockwiseDarkPixmap);
+							break;
+
+						case LIGHT_THEME:
+							clockwiseLabel->setPixmap(*clockwiseLightPixmap);
+							break;
+						}
+						QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+						clockwiseCellHLayout->setObjectName("moreCellHLayout");
+						QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+						clockwiseCellHLayout->addItem(leftWiseSpacer);
+						clockwiseCellHLayout->addWidget(clockwiseLabel);
+						clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+						wiseWidget->setLayout(clockwiseCellHLayout);
+						mainTableWidget->setCellWidget(row, 5, wiseWidget);
+					}
 				}
 				else
 					model->setData(model->index(row, 5), QString::number(newValue));
@@ -1230,10 +1287,58 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 			case WindowType::FULL_TEST_MANUAL_STAND:
 				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
 				{
-					//if(newValue == 1)
-					//	// Картинка по часовой в столбец 7
-					//else if(newValue == 2)
-					//	// Картинка по противчасовой в столбец 7
+					if (newValue == 1)
+					{
+						QWidget* wiseWidget = new QWidget(mainTableWidget);
+						QLabel* counterclockwiseLabel = new QLabel(wiseWidget);
+						counterclockwiseLabel->setObjectName("counterclockwiseLabel");
+						counterclockwiseLabel->setText("");
+						counterclockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							counterclockwiseLabel->setPixmap(*counterclockwiseDarkPixmap);
+							break;
+
+						case LIGHT_THEME:
+							counterclockwiseLabel->setPixmap(*counterclockwiseLightPixmap);
+							break;
+						}
+						QHBoxLayout* counterclockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+						counterclockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
+						QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+						counterclockwiseCellHLayout->addItem(leftWiseSpacer);
+						counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
+						counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+						wiseWidget->setLayout(counterclockwiseCellHLayout);
+						mainTableWidget->setCellWidget(row, 7, wiseWidget);
+					}
+					else if (newValue == 2)
+					{
+						QWidget* wiseWidget = new QWidget(mainTableWidget);
+						QLabel* clockwiseLabel = new QLabel(wiseWidget);
+						clockwiseLabel->setObjectName("clockwiseLabel");
+						clockwiseLabel->setText("");
+						clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							clockwiseLabel->setPixmap(*clockwiseDarkPixmap);
+							break;
+
+						case LIGHT_THEME:
+							clockwiseLabel->setPixmap(*clockwiseLightPixmap);
+							break;
+						}
+						QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+						clockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
+						QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+						clockwiseCellHLayout->addItem(leftWiseSpacer);
+						clockwiseCellHLayout->addWidget(clockwiseLabel);
+						clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+						wiseWidget->setLayout(clockwiseCellHLayout);
+						mainTableWidget->setCellWidget(row, 7, wiseWidget);
+					}
 				}
 				else
 					model->setData(model->index(row, 7), QString::number(newValue));
@@ -1244,6 +1349,88 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 			}
 		}
 }
+
+			//case WindowType::IN_TEST_MANUAL_STAND:
+			//	if (cableRows[row]->typeInt == TypeCable::HALL_IN)
+			//	{
+			//		if (newValue == 1)
+			//		{
+			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
+			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 0));
+			//			QLabel* counterclockwiseLabel = wises[wises.size() - 1].first;
+			//			counterclockwiseLabel->setObjectName("counterclockwiseLabel");
+			//			counterclockwiseLabel->setText("");
+			//			counterclockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+			//			QHBoxLayout* counterclockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+			//			counterclockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
+			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+			//			counterclockwiseCellHLayout->addItem(leftWiseSpacer);
+			//			counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
+			//			counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+			//			wiseWidget->setLayout(counterclockwiseCellHLayout);
+			//			mainTableWidget->setCellWidget(row, 5, wiseWidget);
+			//		}
+			//		else if (newValue == 2)
+			//		{
+			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
+			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 1));
+			//			QLabel* clockwiseLabel = wises[wises.size() - 1].first;
+			//			clockwiseLabel->setObjectName("clockwiseLabel");
+			//			clockwiseLabel->setText("");
+			//			clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+			//			QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+			//			clockwiseCellHLayout->setObjectName("moreCellHLayout");
+			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+			//			clockwiseCellHLayout->addItem(leftWiseSpacer);
+			//			clockwiseCellHLayout->addWidget(clockwiseLabel);
+			//			clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+			//			wiseWidget->setLayout(clockwiseCellHLayout);
+			//			mainTableWidget->setCellWidget(row, 5, wiseWidget);
+			//		}
+			//	}
+			//	else
+			//		model->setData(model->index(row, 5), QString::number(newValue));
+			//	break;
+			//case WindowType::OUT_TEST_MANUAL_STAND:
+			//	break;
+			//case WindowType::FULL_TEST_MANUAL_STAND:
+			//	if (cableRows[row]->typeInt == TypeCable::HALL_IN)
+			//	{
+			//		if (newValue == 1)
+			//		{
+			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
+			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 0));
+			//			QLabel* counterclockwiseLabel = wises[wises.size() - 1].first;
+			//			counterclockwiseLabel->setObjectName("counterclockwiseLabel");
+			//			counterclockwiseLabel->setText("");
+			//			counterclockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+			//			QHBoxLayout* counterclockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+			//			counterclockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
+			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+			//			counterclockwiseCellHLayout->addItem(leftWiseSpacer);
+			//			counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
+			//			counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+			//			wiseWidget->setLayout(counterclockwiseCellHLayout);
+			//			mainTableWidget->setCellWidget(row, 7, wiseWidget);
+			//		}
+			//		else if (newValue == 2)
+			//		{
+			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
+			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 1));
+			//			QLabel* clockwiseLabel = wises[wises.size() - 1].first;
+			//			clockwiseLabel->setObjectName("clockwiseLabel");
+			//			clockwiseLabel->setText("");
+			//			clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+			//			QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+			//			clockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
+			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+			//			clockwiseCellHLayout->addItem(leftWiseSpacer);
+			//			clockwiseCellHLayout->addWidget(clockwiseLabel);
+			//			clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+			//			wiseWidget->setLayout(clockwiseCellHLayout);
+			//			mainTableWidget->setCellWidget(row, 7, wiseWidget);
+			//		}
+			//	}
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 {
