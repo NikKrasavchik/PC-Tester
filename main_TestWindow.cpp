@@ -1,5 +1,7 @@
 #include "TestWindow.h"
 
+#define MIN_SCREEN_WIDTH	900
+
 #define STATUS_NOT_SET		NOT_SET
 #define STATUS_IN_TEST		5
 #define STATUS_FULL_TEST	7

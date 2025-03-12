@@ -36,9 +36,8 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::
 
 ReportWindow::~ReportWindow()
 {
-
+	resaveComments();
 }
-
 
 void ReportWindow::initUi()
 {
@@ -242,9 +241,21 @@ static void prepareItem(QTableWidget* tableWidget, int row, int column, int rowS
 
 void ReportWindow::generateTableManual()
 {
+	tableWidget->setColumnWidth(IND_COLUMN_BASE_COMMENT, 250);
 	tableWidget->insertColumn(MEASUREMENT_COLUMN_POSITION);
-	tableWidget->setColumnWidth(MEASUREMENT_COLUMN_POSITION, 50);
+	tableWidget->setColumnWidth(MEASUREMENT_COLUMN_POSITION, 80);
 	prepareItem(tableWidget, CELL_SIGN_CORRECT, SPAN_NONE);
+	
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		tableWidget->item(CELL_SIGN_CORRECT)->setText(QString::fromLocal8Bit("Статус\nпроверки"));
+		break;
+
+	case ENGLISH_LANG:
+		tableWidget->item(CELL_SIGN_CORRECT)->setText("Check\nstatus");
+		break;
+	}
 
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -257,6 +268,21 @@ void ReportWindow::generateTableManual()
 		tableWidget->item(row, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
 		tableWidget->item(row, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
 		tableWidget->item(row, IND_COLUMN_MANUAL_VALUE)->setBackgroundColor(checkedState[i] ? QColor(COLOR_GREEN) : QColor(COLOR_RED));
+
+
+		commentsTextEdits.push_back(new QTextEdit());
+		QWidget* commentWidget = new QWidget();
+		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
+		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
+		commentHLayout->setAlignment(Qt::AlignCenter);
+		commentHLayout->setContentsMargins(0, 0, 0, 0);
+		commentWidget->setLayout(commentHLayout);
+		tableWidget->setCellWidget(row, tableWidget->columnCount() - 1, commentWidget);
+		if (cableRows[i]->comment.size() != 0)
+		{
+			prepareItem(tableWidget, row, tableWidget->columnCount() - 1, SPAN_NONE);
+			commentsTextEdits[commentsTextEdits.size() - 1]->setText(cableRows[i]->comment);
+		}
 
 		switch (viewWindowState->appLanguage)
 		{
@@ -1077,6 +1103,23 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 	}
 }
 
+void ReportWindow::resaveComments()
+{
+	if (checkedState.size())
+		for (int i = 0; i < cableRows.size(); i++)
+			cableRows[i]->comment = commentsTextEdits[i]->toPlainText();
+	else
+	{
+		int counter = 0;
+		for (int i = 0; i < typedCableRows.size(); i++)
+			for (int j = 0; j < typedCableRows[i].size(); j++)
+			{
+				typedCableRows[i][j]->comment = commentsTextEdits[counter]->toPlainText();
+				counter++;
+			}
+	}
+}
+
 void writeHorizontalAlignCell(Document& xlsx, int row, int columnStart, int columnEnd, const QVariant& text, QXlsx::Format::HorizontalAlignment align, Format formatText = Format(), const QColor& color = nullptr)
 {
 	CellRange r(row, columnStart, row, columnEnd);
@@ -1243,6 +1286,8 @@ void ReportWindow::on_saveButton_clicked()
 		generateWarning(Warnings::ReportWindow::EMPTY_SERIAL);
 		return;
 	}
+
+	resaveComments();
 
 	generateXlsx();
 }

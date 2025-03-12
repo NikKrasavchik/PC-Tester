@@ -147,6 +147,8 @@ private:
 	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
 	
+	void resaveComments();
+
 	void resetBaseLanguage();
 	void resetTheme();
 	QString getStrType(TypeCable type);
