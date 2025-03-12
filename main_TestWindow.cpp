@@ -1226,12 +1226,28 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 			{
 
 			case WindowType::IN_TEST_MANUAL_STAND:
-				model->setData(model->index(row, 5), QString::number(newValue));
+				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
+				{
+					//if(newValue == 1)
+					//	// Картинка по часовой в столбец 5
+					//else if(newValue == 2)
+					//	// Картинка по противчасовой в столбец 5
+				}
+				else
+					model->setData(model->index(row, 5), QString::number(newValue));
 				break;
 			case WindowType::OUT_TEST_MANUAL_STAND:
 				break;
 			case WindowType::FULL_TEST_MANUAL_STAND:
-				model->setData(model->index(row, 7), QString::number(newValue));
+				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
+				{
+					//if(newValue == 1)
+					//	// Картинка по часовой в столбец 7
+					//else if(newValue == 2)
+					//	// Картинка по противчасовой в столбец 7
+				}
+				else
+					model->setData(model->index(row, 7), QString::number(newValue));
 				break;
 
 			default:
