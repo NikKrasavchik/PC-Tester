@@ -594,6 +594,24 @@ void TestWindow::initLightStyleSheets()
 			background-color: #767676;
 		}
 	)";
+
+	lightStyles.testwindowManualCheckBox =
+		R"(
+		.QCheckBox{ 
+			font:18px;
+		}
+		.QCheckBox::indicator {
+			border: 3px solid rgb(252, 85, 85);
+			width: 20px;
+			height: 20px;
+			border-radius: 12px;
+			background-color: rgb(135, 135, 135);
+		}
+		.QCheckBox::indicator:checked {
+			border: 3px solid rgb(135, 135, 135);
+			background-color: rgb(124, 199, 112);
+		}
+	)";
 }
 
 void TestWindow::initDarkStyleSheets()

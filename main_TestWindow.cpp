@@ -1647,15 +1647,20 @@ void TestWindow::initTableAdditionalManualChecks(int currentRowNum, QWidget* man
 
 	QHBoxLayout* manualChecksHLayout = new QHBoxLayout(manualChecksWidget);
 	manualChecksHLayout->setObjectName("manualChecksHLayout");
+	manualChecksHLayout->setContentsMargins(0, 0, 0, 0);
 
 	QSpacerItem* leftSpacer = new QSpacerItem(10, 1, QSizePolicy::Expanding);
 	manualChecksHLayout->addItem(leftSpacer);
 	
-	manualChecks.push_back(new QCheckBox(manualChecksWidget));
+	QCheckBox* checkBox = new QCheckBox(manualChecksWidget);
+	checkBox->setStyleSheet(lightStyles.testwindowManualCheckBox);
+	manualChecks.push_back(checkBox);
 	manualChecksHLayout->addWidget(manualChecks[manualChecks.size() - 1]);
 
 	QSpacerItem* rightSpacer = new QSpacerItem(10, 1, QSizePolicy::Expanding);
 	manualChecksHLayout->addItem(rightSpacer);
+
+	manualChecksWidget->setLayout(manualChecksHLayout);
 }
 
 void TestWindow::initAutoCheckButton(int currentRowNum, QWidget* autoCheckCellWidget)

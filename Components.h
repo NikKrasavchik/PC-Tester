@@ -84,6 +84,7 @@ struct Styles
 	QString testwindowTableWidget;
 	QString testwindowNameLineEdit;
 	QString testwindowLableBlock;
+	QString testwindowManualCheckBox;
 
 	// TABLEBUTTON
 	//
