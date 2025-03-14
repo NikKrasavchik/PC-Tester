@@ -424,6 +424,8 @@ public slots:
 
 	void on_fullTestSortButton_clicked();
 
+	void on_mainTableWidget_cellClicked(int row, int column);
+
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 	void Slot_ChangedByte(ConnectorId pad, int pin, int newValue);

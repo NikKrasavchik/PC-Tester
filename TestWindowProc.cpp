@@ -667,3 +667,9 @@ void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
 		break;
 	}
 }
+
+void TestWindow::on_mainTableWidget_cellClicked(int row, int column)
+{
+	if (column == mainTableWidget->columnCount() - 1)
+		manualChecks[row]->setChecked(!manualChecks[row]->isChecked());
+}

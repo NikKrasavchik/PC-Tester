@@ -1220,7 +1220,6 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 		{
 			switch (testType)
 			{
-
 			case WindowType::IN_TEST_MANUAL_STAND:
 				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
 				{
@@ -1248,9 +1247,9 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 						counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
 						counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
 						wiseWidget->setLayout(counterclockwiseCellHLayout);
-						if (mainTableWidget->cellWidget(row, 5) != nullptr)
-							mainTableWidget->removeCellWidget(row, 5);
-						mainTableWidget->setCellWidget(row, 5, wiseWidget);
+						if (mainTableWidget->cellWidget(row, STATUS_IN_TEST) != nullptr)
+							mainTableWidget->removeCellWidget(row, STATUS_IN_TEST);
+						mainTableWidget->setCellWidget(row, STATUS_IN_TEST, wiseWidget);
 					}
 					else if (newValue == 2)
 					{
@@ -1276,7 +1275,7 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 						clockwiseCellHLayout->addWidget(clockwiseLabel);
 						clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
 						wiseWidget->setLayout(clockwiseCellHLayout);
-						mainTableWidget->setCellWidget(row, 5, wiseWidget);
+						mainTableWidget->setCellWidget(row, STATUS_IN_TEST, wiseWidget);
 					}
 				}
 				else
@@ -1311,7 +1310,7 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 						counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
 						counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
 						wiseWidget->setLayout(counterclockwiseCellHLayout);
-						mainTableWidget->setCellWidget(row, 7, wiseWidget);
+						mainTableWidget->setCellWidget(row, STATUS_FULL_TEST, wiseWidget);
 					}
 					else if (newValue == 2)
 					{
@@ -1337,11 +1336,11 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 						clockwiseCellHLayout->addWidget(clockwiseLabel);
 						clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
 						wiseWidget->setLayout(clockwiseCellHLayout);
-						mainTableWidget->setCellWidget(row, 7, wiseWidget);
+						mainTableWidget->setCellWidget(row, STATUS_FULL_TEST, wiseWidget);
 					}
 				}
 				else
-					model->setData(model->index(row, 7), QString::number(newValue));
+					model->setData(model->index(row, STATUS_FULL_TEST), QString::number(newValue));
 				break;
 
 			default:
@@ -1349,88 +1348,6 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 			}
 		}
 }
-
-			//case WindowType::IN_TEST_MANUAL_STAND:
-			//	if (cableRows[row]->typeInt == TypeCable::HALL_IN)
-			//	{
-			//		if (newValue == 1)
-			//		{
-			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
-			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 0));
-			//			QLabel* counterclockwiseLabel = wises[wises.size() - 1].first;
-			//			counterclockwiseLabel->setObjectName("counterclockwiseLabel");
-			//			counterclockwiseLabel->setText("");
-			//			counterclockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
-			//			QHBoxLayout* counterclockwiseCellHLayout = new QHBoxLayout(wiseWidget);
-			//			counterclockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
-			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
-			//			counterclockwiseCellHLayout->addItem(leftWiseSpacer);
-			//			counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
-			//			counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
-			//			wiseWidget->setLayout(counterclockwiseCellHLayout);
-			//			mainTableWidget->setCellWidget(row, 5, wiseWidget);
-			//		}
-			//		else if (newValue == 2)
-			//		{
-			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
-			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 1));
-			//			QLabel* clockwiseLabel = wises[wises.size() - 1].first;
-			//			clockwiseLabel->setObjectName("clockwiseLabel");
-			//			clockwiseLabel->setText("");
-			//			clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
-			//			QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
-			//			clockwiseCellHLayout->setObjectName("moreCellHLayout");
-			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
-			//			clockwiseCellHLayout->addItem(leftWiseSpacer);
-			//			clockwiseCellHLayout->addWidget(clockwiseLabel);
-			//			clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
-			//			wiseWidget->setLayout(clockwiseCellHLayout);
-			//			mainTableWidget->setCellWidget(row, 5, wiseWidget);
-			//		}
-			//	}
-			//	else
-			//		model->setData(model->index(row, 5), QString::number(newValue));
-			//	break;
-			//case WindowType::OUT_TEST_MANUAL_STAND:
-			//	break;
-			//case WindowType::FULL_TEST_MANUAL_STAND:
-			//	if (cableRows[row]->typeInt == TypeCable::HALL_IN)
-			//	{
-			//		if (newValue == 1)
-			//		{
-			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
-			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 0));
-			//			QLabel* counterclockwiseLabel = wises[wises.size() - 1].first;
-			//			counterclockwiseLabel->setObjectName("counterclockwiseLabel");
-			//			counterclockwiseLabel->setText("");
-			//			counterclockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
-			//			QHBoxLayout* counterclockwiseCellHLayout = new QHBoxLayout(wiseWidget);
-			//			counterclockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
-			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
-			//			counterclockwiseCellHLayout->addItem(leftWiseSpacer);
-			//			counterclockwiseCellHLayout->addWidget(counterclockwiseLabel);
-			//			counterclockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
-			//			wiseWidget->setLayout(counterclockwiseCellHLayout);
-			//			mainTableWidget->setCellWidget(row, 7, wiseWidget);
-			//		}
-			//		else if (newValue == 2)
-			//		{
-			//			QWidget* wiseWidget = new QWidget(mainTableWidget);
-			//			wises.push_back(std::pair<QLabel*, bool>(new QLabel(wiseWidget), 1));
-			//			QLabel* clockwiseLabel = wises[wises.size() - 1].first;
-			//			clockwiseLabel->setObjectName("clockwiseLabel");
-			//			clockwiseLabel->setText("");
-			//			clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
-			//			QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
-			//			clockwiseCellHLayout->setObjectName("clockwiseCellHLayout");
-			//			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
-			//			clockwiseCellHLayout->addItem(leftWiseSpacer);
-			//			clockwiseCellHLayout->addWidget(clockwiseLabel);
-			//			clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
-			//			wiseWidget->setLayout(clockwiseCellHLayout);
-			//			mainTableWidget->setCellWidget(row, 7, wiseWidget);
-			//		}
-			//	}
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 {
