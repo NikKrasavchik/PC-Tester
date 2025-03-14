@@ -147,6 +147,8 @@ void ReportWindow::resetBaseLanguage()
 		serialNumberLabel->setText(QString::fromLocal8Bit("Серийный номер: "));
 
 		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
+		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
+		serialNumberLineEdit->setText(QString("123"));
 		break;
 
 	case ENGLISH_LANG:
@@ -161,6 +163,8 @@ void ReportWindow::resetBaseLanguage()
 		serialNumberLabel->setText(QString("Serial number: "));
 
 		saveButton->setText(QString("Save"));
+		testerNameLineEdit->setText(QString("Ivanov Ivan Ivanovich"));
+		serialNumberLineEdit->setText(QString("123"));
 		break;
 	}
 }
@@ -1155,7 +1159,7 @@ void genereateHeaderFile(Document& xlsx, QString testerName)
 	writeHorizontalAlignCell(xlsx, 3, 3, 6, testerName, Format::AlignLeft, format);
 }
 
-void genereateHeaderTable(Document& xlsx, int maxOffset)
+void genereateHeaderTable(Document& xlsx, int maxOffset, bool isAutoStand)
 {
 	Format format;
 	format.setHorizontalAlignment(Format::AlignHCenter);
@@ -1167,10 +1171,20 @@ void genereateHeaderTable(Document& xlsx, int maxOffset)
 	xlsx.write(HEIGHT_HEADERFILE + 1, 3, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Направление") : QString("Direction"), format);
 	xlsx.write(HEIGHT_HEADERFILE + 1, 4, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Тип") : QString("Type"), format);
 	xlsx.write(HEIGHT_HEADERFILE + 1, 5, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название") : QString("Name"), format);
-	xlsx.write(HEIGHT_HEADERFILE + 1, 6 + maxOffset, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), format);
+	if (isAutoStand)
+	{
+		xlsx.write(HEIGHT_HEADERFILE + 1, 6 + maxOffset, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), format);
 
-	CellRange range(HEIGHT_HEADERFILE + 1, 6, HEIGHT_HEADERFILE + 1, 5 + maxOffset);
-	xlsx.mergeCells(range, format);
+		CellRange range(HEIGHT_HEADERFILE + 1, 6, HEIGHT_HEADERFILE + 1, 5 + maxOffset);
+		xlsx.mergeCells(range, format);
+	}
+	else
+	{
+		xlsx.write(HEIGHT_HEADERFILE + 1, 8, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), format);
+
+		CellRange range(HEIGHT_HEADERFILE + 1, 6, HEIGHT_HEADERFILE + 1, 7);
+		xlsx.mergeCells(range, format);
+	}
 }
 
 QString getStrDirection(QString direction)
@@ -1308,260 +1322,288 @@ void ReportWindow::generateXlsx()
 		xlsx.currentWorksheet()->setGridLinesVisible(false);
 		xlsx.setColumnWidth(1, 5, 13);
 
-		genereateHeaderFile(xlsx, testerName);
-		genereateHeaderTable(xlsx, maxOffset);
+
 
 		Format format;
 		format.setHorizontalAlignment(Format::AlignHCenter);
 		format.setFontBold(true);
 		format.setBorderStyle(Format::BorderThin);
-		for (int i = 0; i < cableRows.size(); i++)
-		{
-			xlsx.write(i + 5, 20, cableRows[i]->connectorStr, format);
-			xlsx.write(i + 5, 21, cableRows[i]->pin, format);
-			if(checkedState[i])
-				xlsx.write(i + 5, 21, "Work", format);
-			else
-				xlsx.write(i + 5, 21, "No", format);
+		//for (int i = 0; i < cableRows.size(); i++)
+		//{
+		//	xlsx.write(i + 5, 30, cableRows[i]->connectorStr, format);
+		//	xlsx.write(i + 5, 31, cableRows[i]->pin, format);
+		//	if(checkedState[i])
+		//		xlsx.write(i + 5, 32, "Work", format);
+		//	else
+		//		xlsx.write(i + 5, 32, "No", format);
 
-		}
+		//}
 		int numRow = START_ROW_TABLE;
 		bool color = false;
-		for (int type = 0; type < typedCableRows.size(); type++)
-		{
-			for (int i = 0; i < typedCableRows[type].size(); i++)
-			{
-				Format tmpHeaderFormat(format);
-				tmpHeaderFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_BLUE));
-				Format tmpRowFormat(format);
-				if (color)
-				{
-					tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_LIGHT_GREY));
-					color = false;
-				}
-				else
-				{
-					tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_WHITE));
-					color = true;
-				}
-				Format tmpRowCommentFormat(tmpRowFormat);
-				tmpRowCommentFormat.setHorizontalAlignment(Format::AlignLeft);
-				switch ((TypeCable)type)
-				{
-				case TypeCable::DIG_IN:
-				case TypeCable::HALL_IN:
-					if (i == 0) // header type
-					{
-						writeHorizontalAlignCell(xlsx, numRow, 6, 7, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 1") : QString("Value 1"), Format::AlignHCenter, tmpHeaderFormat);
-						writeHorizontalAlignCell(xlsx, numRow, 8, 9, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 2") : QString("Value 2"), Format::AlignHCenter, tmpHeaderFormat);
-						CellRange* range = new CellRange(numRow, 10, numRow + (int)typedCableRows[type].size(), 9 + maxOffset - 4);
-						xlsx.mergeCells(*range, format);
-						delete range;
-						range = new CellRange(numRow, 1, numRow, 5);
-						xlsx.mergeCells(*range);
-						delete range;
-						numRow++;
-					}
-					xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
-					xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
-					xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
-					xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
-					xlsx.write(numRow, 5, typedCableRows[type][i]->name, tmpRowFormat);
-					xlsx.write(numRow, 6 + maxOffset, typedCableRows[type][i]->comment, tmpRowCommentFormat);
 
-					if (typedCableRows[type][i]->measureds[0]->voltage == NOT_SET)
+		genereateHeaderFile(xlsx, testerName);
+		if (checkedState.size())
+		{
+			genereateHeaderTable(xlsx, maxOffset, false);
+			for (int i = 0; i < cableRows.size(); i++)
+			{
+				xlsx.write(numRow, 1, cableRows[i]->connectorStr, format);
+				xlsx.write(numRow, 2, cableRows[i]->pin, format);
+				xlsx.write(numRow, 3, getStrDirection(cableRows[i]->direction), format);
+				xlsx.write(numRow, 4, getStrType(cableRows[i]->typeInt), format);
+				xlsx.write(numRow, 5, cableRows[i]->name, format);
+				xlsx.write(numRow, 8, cableRows[i]->comment, format);
+
+				Format tmpManualStandFormat(format);
+				if (checkedState[i])
+					tmpManualStandFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_GREEN));
+				else
+					tmpManualStandFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_RED));
+
+				CellRange range(numRow, 6, numRow, 7);
+				xlsx.mergeCells(range, tmpManualStandFormat);
+				numRow++;
+			}
+		}
+		else
+		{
+			genereateHeaderTable(xlsx, maxOffset, true);
+
+			for (int type = 0; type < typedCableRows.size(); type++)
+			{
+				for (int i = 0; i < typedCableRows[type].size(); i++)
+				{
+					Format tmpHeaderFormat(format);
+					tmpHeaderFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_BLUE));
+					Format tmpRowFormat(format);
+					if (color)
 					{
-						writeHorizontalAlignCell(xlsx, numRow, 6, 7, "-", Format::AlignHCenter, tmpRowFormat);
-						writeHorizontalAlignCell(xlsx, numRow, 8, 9, "-", Format::AlignHCenter, tmpRowFormat);
+						tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_LIGHT_GREY));
+						color = false;
 					}
 					else
 					{
-						writeHorizontalAlignCell(xlsx, numRow, 6, 7, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->voltage == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
-						writeHorizontalAlignCell(xlsx, numRow, 8, 9, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->current == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
+						tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_WHITE));
+						color = true;
 					}
-					numRow++;
-					break;
-
-				case TypeCable::ANALOG_IN:
-					if (i == 0) // header type
+					Format tmpRowCommentFormat(tmpRowFormat);
+					tmpRowCommentFormat.setHorizontalAlignment(Format::AlignLeft);
+					switch ((TypeCable)type)
 					{
-						for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
+					case TypeCable::DIG_IN:
+					case TypeCable::HALL_IN:
+						if (i == 0) // header type
 						{
-							writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), Format::AlignHCenter, tmpHeaderFormat);
-
-							CellRange r(numRow + 1, 6 + (4 * j), numRow + 2, 7 + (4 * j));
-							xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измеренное значение") : QString("Measured values"), tmpHeaderFormat);
-							tmpHeaderFormat.setTextWarp(true);
-							xlsx.mergeCells(r, tmpHeaderFormat);
-							tmpHeaderFormat.setTextWarp(false);
-
-							writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (4 * j), 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), Format::AlignHCenter, tmpHeaderFormat);
-							xlsx.write(numRow + 2, 8 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
-							xlsx.write(numRow + 2, 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
-						}
-						CellRange* range = new CellRange(numRow, 6 + ((int)typedCableRows[type][i]->thresholds.size() * 4), numRow + (int)typedCableRows[type].size() + 2, 9 + maxOffset - 4);
-						if (typedCableRows[type][i]->thresholds.size() * 6 != maxOffset)
+							writeHorizontalAlignCell(xlsx, numRow, 6, 7, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 1") : QString("Value 1"), Format::AlignHCenter, tmpHeaderFormat);
+							writeHorizontalAlignCell(xlsx, numRow, 8, 9, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 2") : QString("Value 2"), Format::AlignHCenter, tmpHeaderFormat);
+							CellRange* range = new CellRange(numRow, 10, numRow + (int)typedCableRows[type].size(), 9 + maxOffset - 4);
 							xlsx.mergeCells(*range, format);
-						delete range;
-						range = new CellRange(numRow, 1, numRow + 2, 5);
-						xlsx.mergeCells(*range);
-						delete range;
-						numRow += 3;
-					}
+							delete range;
+							range = new CellRange(numRow, 1, numRow, 5);
+							xlsx.mergeCells(*range);
+							delete range;
+							numRow++;
+						}
+						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
+						xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
+						xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
+						xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
+						xlsx.write(numRow, 5, typedCableRows[type][i]->name, tmpRowFormat);
+						xlsx.write(numRow, 6 + maxOffset, typedCableRows[type][i]->comment, tmpRowCommentFormat);
 
-					xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
-					xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
-					xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
-					xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
-					xlsx.write(numRow, 5, typedCableRows[type][i]->name, tmpRowFormat);
-					xlsx.write(numRow, 6 + maxOffset, typedCableRows[type][i]->comment, tmpRowCommentFormat);
-
-					for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
-					{
-						if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
+						if (typedCableRows[type][i]->measureds[0]->voltage == NOT_SET)
 						{
-							writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), "-", Format::AlignHCenter, tmpRowFormat);
-							xlsx.write(numRow, 8 + (4 * j), "-", tmpRowFormat); // red
-							xlsx.write(numRow, 9 + (4 * j), "-", tmpRowFormat);
+							writeHorizontalAlignCell(xlsx, numRow, 6, 7, "-", Format::AlignHCenter, tmpRowFormat);
+							writeHorizontalAlignCell(xlsx, numRow, 8, 9, "-", Format::AlignHCenter, tmpRowFormat);
 						}
 						else
 						{
-							Format tmpRedFormat(format);
-							tmpRedFormat.setPatternBackgroundColor(COLOR_LIGHT_RED);
-							Format tmpGreenFormat(format);
-							tmpGreenFormat.setPatternBackgroundColor(COLOR_LIGHT_GREEN);
-
-							if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minValue && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxValue)
-							{
-								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpGreenFormat);
-								xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRowFormat);
-								xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRowFormat);
-							}
-							else if (typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].minValue)
-							{
-								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpRedFormat);
-								xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRedFormat); // red
-								xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRowFormat);
-							}
-							else if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].maxValue)
-							{
-								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpRedFormat);
-								xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRowFormat);
-								xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRedFormat); // red
-							}
-
+							writeHorizontalAlignCell(xlsx, numRow, 6, 7, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->voltage == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
+							writeHorizontalAlignCell(xlsx, numRow, 8, 9, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->current == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
 						}
-					}
+						numRow++;
+						break;
 
-					numRow++;
-					break;
+					case TypeCable::ANALOG_IN:
+						if (i == 0) // header type
+						{
+							for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
+							{
+								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), Format::AlignHCenter, tmpHeaderFormat);
 
-				case TypeCable::DIG_OUT:
-				case TypeCable::PWM_OUT:
-				case TypeCable::VNH_OUT:
-				case TypeCable::HLD_OUT:
-					if (i == 0) // header type
-					{
+								CellRange r(numRow + 1, 6 + (4 * j), numRow + 2, 7 + (4 * j));
+								xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измеренное значение") : QString("Measured values"), tmpHeaderFormat);
+								tmpHeaderFormat.setTextWarp(true);
+								xlsx.mergeCells(r, tmpHeaderFormat);
+								tmpHeaderFormat.setTextWarp(false);
+
+								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (4 * j), 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), Format::AlignHCenter, tmpHeaderFormat);
+								xlsx.write(numRow + 2, 8 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
+								xlsx.write(numRow + 2, 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
+							}
+							CellRange* range = new CellRange(numRow, 6 + ((int)typedCableRows[type][i]->thresholds.size() * 4), numRow + (int)typedCableRows[type].size() + 2, 9 + maxOffset - 4);
+							if (typedCableRows[type][i]->thresholds.size() * 6 != maxOffset)
+								xlsx.mergeCells(*range, format);
+							delete range;
+							range = new CellRange(numRow, 1, numRow + 2, 5);
+							xlsx.mergeCells(*range);
+							delete range;
+							numRow += 3;
+						}
+
+						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
+						xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
+						xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
+						xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
+						xlsx.write(numRow, 5, typedCableRows[type][i]->name, tmpRowFormat);
+						xlsx.write(numRow, 6 + maxOffset, typedCableRows[type][i]->comment, tmpRowCommentFormat);
+
 						for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 						{
-							writeHorizontalAlignCell(xlsx, numRow, 6 + (6 * j), 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), Format::AlignHCenter, tmpHeaderFormat);
+							if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
+							{
+								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), "-", Format::AlignHCenter, tmpRowFormat);
+								xlsx.write(numRow, 8 + (4 * j), "-", tmpRowFormat); // red
+								xlsx.write(numRow, 9 + (4 * j), "-", tmpRowFormat);
+							}
+							else
+							{
+								Format tmpRedFormat(format);
+								tmpRedFormat.setPatternBackgroundColor(COLOR_LIGHT_RED);
+								Format tmpGreenFormat(format);
+								tmpGreenFormat.setPatternBackgroundColor(COLOR_LIGHT_GREEN);
 
-							CellRange r(numRow + 1, 6 + (6 * j), numRow + 2, 7 + (6 * j));
-							xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измеренное значение") : QString("Measured values"), tmpHeaderFormat);
-							tmpHeaderFormat.setTextWarp(true);
-							xlsx.mergeCells(r, tmpHeaderFormat);
-							tmpHeaderFormat.setTextWarp(false);
+								if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minValue && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxValue)
+								{
+									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpGreenFormat);
+									xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRowFormat);
+									xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRowFormat);
+								}
+								else if (typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].minValue)
+								{
+									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpRedFormat);
+									xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRedFormat); // red
+									xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRowFormat);
+								}
+								else if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].maxValue)
+								{
+									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpRedFormat);
+									xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRowFormat);
+									xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRedFormat); // red
+								}
 
-							writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (6 * j), 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), Format::AlignHCenter, tmpHeaderFormat);
-							writeHorizontalAlignCell(xlsx, numRow + 2, 8 + (6 * j), 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("U, В") : QString("U, V"), Format::AlignHCenter, tmpHeaderFormat);
-							writeHorizontalAlignCell(xlsx, numRow + 2, 10 + (6 * j), 11 + (6 * j), QString("I, A"), Format::AlignHCenter, tmpHeaderFormat);
-							xlsx.write(numRow + 3, 6 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("U, В") : QString("U, V"), tmpHeaderFormat);
-							xlsx.write(numRow + 3, 7 + (6 * j), QString("I, A"), tmpHeaderFormat);
-							xlsx.write(numRow + 3, 8 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
-							xlsx.write(numRow + 3, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
-							xlsx.write(numRow + 3, 10 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
-							xlsx.write(numRow + 3, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
+							}
 						}
 
-						CellRange* range = new CellRange(numRow, 6 + ((int)typedCableRows[type][i]->thresholds.size() * 6), numRow + (int)typedCableRows[type].size() + 3, 9 + maxOffset - 4);
-						if (typedCableRows[type][i]->thresholds.size() * 6 != maxOffset)
-							xlsx.mergeCells(*range, format);
-						delete range;
-						range = new CellRange(numRow, 1, numRow + 3, 5);
-						xlsx.mergeCells(*range);
-						delete range;
-						numRow += 4;
-					}
+						numRow++;
+						break;
 
-					xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
-					xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
-					xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
-					xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
-					xlsx.write(numRow, 5, typedCableRows[type][i]->name, tmpRowFormat);
-					xlsx.write(numRow, 6 + maxOffset, typedCableRows[type][i]->comment, tmpRowCommentFormat);
-
-					for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
-					{
-						if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
+					case TypeCable::DIG_OUT:
+					case TypeCable::PWM_OUT:
+					case TypeCable::VNH_OUT:
+					case TypeCable::HLD_OUT:
+						if (i == 0) // header type
 						{
-							xlsx.write(numRow, 6 + (6 * j), QString("-"), tmpRowFormat);
-							xlsx.write(numRow, 7 + (6 * j), QString("-"), tmpRowFormat);
-							xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRowFormat);
-							xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRowFormat);
-							xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRowFormat);
-							xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRowFormat);
+							for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
+							{
+								writeHorizontalAlignCell(xlsx, numRow, 6 + (6 * j), 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), Format::AlignHCenter, tmpHeaderFormat);
+
+								CellRange r(numRow + 1, 6 + (6 * j), numRow + 2, 7 + (6 * j));
+								xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измеренное значение") : QString("Measured values"), tmpHeaderFormat);
+								tmpHeaderFormat.setTextWarp(true);
+								xlsx.mergeCells(r, tmpHeaderFormat);
+								tmpHeaderFormat.setTextWarp(false);
+
+								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (6 * j), 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), Format::AlignHCenter, tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow + 2, 8 + (6 * j), 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("U, В") : QString("U, V"), Format::AlignHCenter, tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow + 2, 10 + (6 * j), 11 + (6 * j), QString("I, A"), Format::AlignHCenter, tmpHeaderFormat);
+								xlsx.write(numRow + 3, 6 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("U, В") : QString("U, V"), tmpHeaderFormat);
+								xlsx.write(numRow + 3, 7 + (6 * j), QString("I, A"), tmpHeaderFormat);
+								xlsx.write(numRow + 3, 8 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
+								xlsx.write(numRow + 3, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
+								xlsx.write(numRow + 3, 10 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
+								xlsx.write(numRow + 3, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
+							}
+
+							CellRange* range = new CellRange(numRow, 6 + ((int)typedCableRows[type][i]->thresholds.size() * 6), numRow + (int)typedCableRows[type].size() + 3, 9 + maxOffset - 4);
+							if (typedCableRows[type][i]->thresholds.size() * 6 != maxOffset)
+								xlsx.mergeCells(*range, format);
+							delete range;
+							range = new CellRange(numRow, 1, numRow + 3, 5);
+							xlsx.mergeCells(*range);
+							delete range;
+							numRow += 4;
 						}
-						else
-						{
-							Format tmpRedFormat(format);
-							tmpRedFormat.setPatternBackgroundColor(COLOR_RED);
-							Format tmpGreenFormat(format);
-							tmpGreenFormat.setPatternBackgroundColor(COLOR_GREEN);
-							if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minVoltage && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxVoltage)
-							{
-								xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpGreenFormat);
-								xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRowFormat);
-								xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRowFormat);
-							}
-							else if (typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].minVoltage)
-							{
-								xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpRedFormat);
-								xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRedFormat); // red
-								xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRowFormat);
-							}
-							else if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].maxVoltage)
-							{
-								xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpRedFormat);
-								xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRowFormat);
-								xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRedFormat); // red
-							}
 
-							if (typedCableRows[type][i]->measureds[j]->current > typedCableRows[type][i]->thresholds[j].minCurrent && typedCableRows[type][i]->measureds[j]->current < typedCableRows[type][i]->thresholds[j].maxCurrent)
+						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
+						xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
+						xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
+						xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
+						xlsx.write(numRow, 5, typedCableRows[type][i]->name, tmpRowFormat);
+						xlsx.write(numRow, 6 + maxOffset, typedCableRows[type][i]->comment, tmpRowCommentFormat);
+
+						for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
+						{
+							if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
 							{
-								xlsx.write(numRow, 7 + (6 * j), typedCableRows[type][i]->measureds[j]->current, tmpGreenFormat);
+								xlsx.write(numRow, 6 + (6 * j), QString("-"), tmpRowFormat);
+								xlsx.write(numRow, 7 + (6 * j), QString("-"), tmpRowFormat);
+								xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRowFormat);
+								xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRowFormat);
 								xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRowFormat);
 								xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRowFormat);
 							}
-							else if (typedCableRows[type][i]->measureds[j]->current < typedCableRows[type][i]->thresholds[j].minCurrent)
+							else
 							{
-								xlsx.write(numRow, 7 + (6 * j), typedCableRows[type][i]->measureds[j]->current, tmpRedFormat);
-								xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRedFormat); // red
-								xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRowFormat);
-							}
-							else if (typedCableRows[type][i]->measureds[j]->current > typedCableRows[type][i]->thresholds[j].maxCurrent)
-							{
-								xlsx.write(numRow, 7 + (6 * j), typedCableRows[type][i]->measureds[j]->current, tmpRedFormat);
-								xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRowFormat);
-								xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRedFormat); // red
+								Format tmpRedFormat(format);
+								tmpRedFormat.setPatternBackgroundColor(COLOR_RED);
+								Format tmpGreenFormat(format);
+								tmpGreenFormat.setPatternBackgroundColor(COLOR_GREEN);
+								if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minVoltage && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxVoltage)
+								{
+									xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpGreenFormat);
+									xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRowFormat);
+									xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRowFormat);
+								}
+								else if (typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].minVoltage)
+								{
+									xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpRedFormat);
+									xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRedFormat); // red
+									xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRowFormat);
+								}
+								else if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].maxVoltage)
+								{
+									xlsx.write(numRow, 6 + (6 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpRedFormat);
+									xlsx.write(numRow, 8 + (6 * j), typedCableRows[type][i]->thresholds[j].minVoltage, tmpRowFormat);
+									xlsx.write(numRow, 9 + (6 * j), typedCableRows[type][i]->thresholds[j].maxVoltage, tmpRedFormat); // red
+								}
+
+								if (typedCableRows[type][i]->measureds[j]->current > typedCableRows[type][i]->thresholds[j].minCurrent && typedCableRows[type][i]->measureds[j]->current < typedCableRows[type][i]->thresholds[j].maxCurrent)
+								{
+									xlsx.write(numRow, 7 + (6 * j), typedCableRows[type][i]->measureds[j]->current, tmpGreenFormat);
+									xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRowFormat);
+									xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRowFormat);
+								}
+								else if (typedCableRows[type][i]->measureds[j]->current < typedCableRows[type][i]->thresholds[j].minCurrent)
+								{
+									xlsx.write(numRow, 7 + (6 * j), typedCableRows[type][i]->measureds[j]->current, tmpRedFormat);
+									xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRedFormat); // red
+									xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRowFormat);
+								}
+								else if (typedCableRows[type][i]->measureds[j]->current > typedCableRows[type][i]->thresholds[j].maxCurrent)
+								{
+									xlsx.write(numRow, 7 + (6 * j), typedCableRows[type][i]->measureds[j]->current, tmpRedFormat);
+									xlsx.write(numRow, 10 + (6 * j), typedCableRows[type][i]->thresholds[j].minCurrent, tmpRowFormat);
+									xlsx.write(numRow, 11 + (6 * j), typedCableRows[type][i]->thresholds[j].maxCurrent, tmpRedFormat); // red
+								}
 							}
 						}
+						numRow++;
+						break;
 					}
-					numRow++;
-					break;
 				}
 			}
 		}
-
 		QDir dir;
 		QDateTime time = QDateTime::currentDateTime();
 
