@@ -142,6 +142,7 @@ public:
 	QString typeStr;
 	TypeCable typeInt;
 	QString comment;
+	bool manualChecked;
 
 	std::vector<Measureds*> measureds;
 	std::vector<Thresholds> thresholds;

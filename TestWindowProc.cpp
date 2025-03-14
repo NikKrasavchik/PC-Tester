@@ -123,6 +123,7 @@ TestTableRowProperties::TestTableRowProperties()
 	typeStr = "";
 	typeInt = TypeCable::EMPTY;
 	comment = "";
+	manualChecked = false;
 }
 
 // ------------------------------------

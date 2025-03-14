@@ -1745,7 +1745,6 @@ void TestWindow::rewriteCableRows(std::vector<TestTableRowProperties*>* cableRow
 			}
 		break;
 	}
-
 }
 
 void TestWindow::on_fullTestSortButton_clicked()
@@ -1798,6 +1797,13 @@ void TestWindow::on_fullTestSortButton_clicked()
 		break;
 	}
 
+	if (testType == WindowType::FULL_TEST_MANUAL_STAND)
+	{
+		for (int i = 0; i < cableRows.size(); i++)
+			cableRows[i]->manualChecked = manualChecks[i]->isChecked();
+		manualChecks.clear();
+	}
+
 	rewriteCableRows(&cableRows, fullTestSortType);
 
 	mainTableWidget->clear();
@@ -1806,12 +1812,16 @@ void TestWindow::on_fullTestSortButton_clicked()
 	{
 		resetTableHeaderFullTestManualStand();
 		resetTableRowsFullTestManualStand();
+
+		for (int i = 0; i < manualChecks.size(); i++)
+			manualChecks[i]->setChecked(cableRows[i]->manualChecked);
 	}
 	else if (testType == WindowType::FULL_TEST_AUTO_STAND)
 	{
 		resetTableHeaderFullTestAutoStand();
 		resetTableRowsFullTestAutoStand();
 	}
+
 	Can::clearOldValue();
 }
 
