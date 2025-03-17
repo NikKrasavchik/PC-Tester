@@ -24,6 +24,7 @@
 
 #define MAX_ADAPTER_COMBO_WIDTH			263
 #define MAX_FREQUENCY_COMBO_WIDTH		300
+#define BLOCK_VERSION_COMBO_WIDTH		100
 
 #define COEF_STAND_BUTTON				0.1
 #define COEF_STAND_SLIDER				0.06
@@ -43,9 +44,9 @@ MainWindow::MainWindow(QWidget* parent)
 	ui.setupUi(this);
 
 	this->selectedTypeStand = TypeStand::EMPTY;
-	this->selectedBlock = TestBlockName::EMPTY;
+	viewWindowState->selectedBlock = TestBlockName::EMPTY;
 
-	initCables();
+	initBlockVersions();
 
 	initUi();
 }
@@ -246,6 +247,33 @@ void MainWindow::initUiSwitchStand()
 	leftSwitchBlockVLayout->addWidget(leftBlockDMButton);
 
 	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockDMButton_clicked);
+
+	selectBlockVersionVLayout = new QVBoxLayout();
+	selectBlockVersionVLayout->setObjectName("selectBlockVersionVLayout");
+	leftSwitchBlockVLayout->addLayout(selectBlockVersionVLayout);
+
+	selectBlockVersionUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	selectBlockVersionVLayout->addItem(selectBlockVersionUpSpacer);
+
+	selectBlockVersionLabel = new QLabel();
+	selectBlockVersionLabel->setObjectName("selectBlockVersionLabel");
+	selectBlockVersionLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	selectBlockVersionVLayout->addWidget(selectBlockVersionLabel);
+
+	selectBlockVersionHLayout = new QHBoxLayout();
+	selectBlockVersionHLayout->setObjectName("selectBlockVersionHLayout");
+	selectBlockVersionVLayout->addLayout(selectBlockVersionHLayout);
+
+	selectBlockVersionLeftSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
+	selectBlockVersionHLayout->addItem(selectBlockVersionLeftSpacer);
+
+	selectBlockVersionComboBox = new QComboBox();
+	selectBlockVersionComboBox->setObjectName("selectBlockVersionComboBox");
+	selectBlockVersionComboBox->setFixedWidth(BLOCK_VERSION_COMBO_WIDTH);
+	selectBlockVersionHLayout->addWidget(selectBlockVersionComboBox);
+
+	selectBlockVersionRightSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
+	selectBlockVersionHLayout->addItem(selectBlockVersionRightSpacer);
 }
 
 void MainWindow::initUiAdapter()
@@ -293,7 +321,7 @@ void MainWindow::initUiFrequency()
 	selectFrequencyComboBox->setFixedHeight(MIN_FREQUENCY_COMBO_HEIGHT);
 	selectFrequencyComboBox->setMaximumWidth(MAX_FREQUENCY_COMBO_WIDTH);
 	selectFrequencyVLayout->addWidget(selectFrequencyComboBox);
-	//iehejifejfje
+	
 	frequencyMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
 	selectFrequencyVLayout->addItem(frequencyMiddleSpacer);
 
@@ -624,6 +652,7 @@ void MainWindow::initTexts()
 	selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
 	selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
 	manualStandLabel->setText(QString::fromLocal8Bit("Ручная"));
+	selectBlockVersionLabel->setText(QString::fromLocal8Bit("Версия блока"));
 }
 
 void MainWindow::fillComboBoxes()
@@ -666,13 +695,14 @@ void MainWindow::initConnections()
 	connect(switchStandSlider, &QSliderButton::on_sliderSwitchStand_click, this, &MainWindow::on_sliderSwitchStand_click);
 	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
 	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
+	connect(selectBlockVersionComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectBlockVersionComboBox_changed(int)));
 
 	QMetaObject::connectSlotsByName(this);
 }
 
 void MainWindow::switchStyleMainButtons()
 {
-	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected() && selectedBlock != TestBlockName::EMPTY)
+	if (can->getStatusFrequencySelected() && can->getStatusAdapterSelected() && viewWindowState->selectedBlock != TestBlockName::EMPTY)
 	{
 		if (viewWindowState->appTheme == LIGHT_THEME)
 		{
@@ -851,6 +881,8 @@ void MainWindow::resetTheme()
 		checkAdaptersButton->setStyleSheet(lightStyles.themeLangButton); // button обновления
 		selectAdapterComboBox->setStyleSheet(lightStyles.settingComboBox); // settingComboBox
 		selectAdapterLabel->setStyleSheet(lightStyles.settingSelectText); // lable адаптера
+		selectBlockVersionComboBox->setStyleSheet(lightStyles.settingComboBox);
+		selectBlockVersionLabel->setStyleSheet(lightStyles.settingSelectText);
 
 		// частота
 		selectFrequencyComboBox->setStyleSheet(lightStyles.settingComboBox); // settingComboBox
@@ -864,12 +896,12 @@ void MainWindow::resetTheme()
 		autoTestAutoStandLabel->setStyleSheet(lightStyles.mainText);
 		manualTestAutoStandLabel->setStyleSheet(lightStyles.mainText);
 		manualStandLabel->setStyleSheet(lightStyles.mainText);
-		if (selectedBlock == TestBlockName::BCM) // button
+		if (viewWindowState->selectedBlock == TestBlockName::BCM) // button
 		{
 			leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
 			leftBlockBCMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
 		}
-		else if(selectedBlock == TestBlockName::DM)
+		else if(viewWindowState->selectedBlock == TestBlockName::DTM)
 		{
 			leftBlockDMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
 			leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
@@ -912,6 +944,8 @@ void MainWindow::resetTheme()
 		checkAdaptersButton->setStyleSheet(darkStyles.themeLangButton); // button обновления
 		selectAdapterComboBox->setStyleSheet(darkStyles.settingComboBox); // settingComboBox
 		selectAdapterLabel->setStyleSheet(darkStyles.settingSelectText); // lable адаптера
+		selectBlockVersionComboBox->setStyleSheet(darkStyles.settingComboBox);
+		selectBlockVersionLabel->setStyleSheet(darkStyles.settingSelectText);
 
 		// частота
 		selectFrequencyComboBox->setStyleSheet(darkStyles.settingComboBox); // settingComboBox
@@ -925,12 +959,12 @@ void MainWindow::resetTheme()
 		autoTestAutoStandLabel->setStyleSheet(darkStyles.mainText);
 		manualTestAutoStandLabel->setStyleSheet(darkStyles.mainText);
 		manualStandLabel->setStyleSheet(darkStyles.mainText);
-		if (selectedBlock == TestBlockName::BCM) // button
+		if (viewWindowState->selectedBlock == TestBlockName::BCM) // button
 		{
 			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
 			leftBlockBCMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
 		}
-		else if(selectedBlock == TestBlockName::DM)
+		else if(viewWindowState->selectedBlock == TestBlockName::DTM)
 		{
 			leftBlockDMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
 			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
@@ -1043,7 +1077,7 @@ void MainWindow::resetLanguage()
 		inAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
 		outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
 		fullTestAutoStandButton->setText(QString::fromLocal8Bit("Полная"));
-
+		selectBlockVersionLabel->setText(QString::fromLocal8Bit("Версия блока"));
 		if (!can->getStatusAdapterSelected())
 			selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
 		if (!can->getStatusFrequencySelected())
@@ -1063,7 +1097,7 @@ void MainWindow::resetLanguage()
 		inAutoTestAutoStandButton->setText(QString("In"));
 		outAutoTestAutoStandButton->setText(QString("Out"));
 		fullTestAutoStandButton->setText(QString("Full"));
-
+		selectBlockVersionLabel->setText(QString("BlockVersion"));
 		if (!can->getStatusAdapterSelected())
 			selectAdapterLabel->setText(QString("Select adapter"));
 		if (!can->getStatusFrequencySelected())
@@ -1266,7 +1300,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
 		return;
 	}
-	if (selectedBlock == TestBlockName::EMPTY)
+	if (viewWindowState->selectedBlock == TestBlockName::EMPTY)
 	{
 		generateWarning(Warnings::MainWindow::NOT_SELECTED_BLOCK);
 		return;
@@ -1287,7 +1321,7 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		return;
 	}
 	
-	TestWindow* testWindow = new TestWindow(testType, preparedCables, selectedBlock, this);
+	TestWindow* testWindow = new TestWindow(testType, preparedCables, viewWindowState->selectedBlock, this);
 
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
@@ -1342,7 +1376,7 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 	return cable;
 }
 
-void MainWindow::initCables()
+void MainWindow::initBlockVersions()
 {
 	QFile config("cables.cfg");
 	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
@@ -1353,86 +1387,178 @@ void MainWindow::initCables()
 
 	QTextStream cable(&config);
 	TestBlockName block = TestBlockName::EMPTY;
-	int id = 0;
-	while (!cable.atEnd()) 
+	while (!cable.atEnd())
 	{
 		QString line = cable.readLine();
 		if (line == "DM")
 		{
-			block = TestBlockName::DM;
-			id = 0;
+			block = TestBlockName::DTM;
 			continue;
 		}
-		else if (line == "BCM")
+
+		if (line == "BCM")
 		{
 			block = TestBlockName::BCM;
-			id = 0;
 			continue;
 		}
-		else
-			id++;
-		
-		QStringList list = line.split(u';');
-		
-		ConnectorId connector = (ConnectorId)(list[0].toInt());
-		int pin = list[1].toInt();
-		int direction = list[2].toInt();
-		int type = list[3].toInt();
-		int canId = list[4].toInt(nullptr, 16);
-		int bit = list[5].toInt();
-		QString name = list[6];
-		QString component = list[7];
 
-		std::vector<Thresholds> thresholds;
-		std::vector<Measureds> measureds;
-		for (int i = 8; i < list.size(); i += 2)
+		if (line[0] == ":")
 		{
-			if (direction != DIRECTION_IN)
+			line.remove(":");
+			switch (block)
 			{
-				int minCurrent = list[i].toInt();
-				int maxCurrent = list[i + 1].toInt();
-				int minVoltage = list[i + 2].toInt();
-				int maxVoltage = list[i + 3].toInt();
+			case TestBlockName::DTM:
+				blockVersionsDTM.push_back(line);
+				break;
 
-				thresholds.push_back(Thresholds(minCurrent, maxCurrent, minVoltage, maxVoltage));
-				i += 2;
+			case TestBlockName::BCM:
+				blockVersionsBCM.push_back(line);
+				break;
+
+			case TestBlockName::EMPTY:
+				// ERROR
+				break;
+			}
+		}
+	}
+}
+
+void MainWindow::loadCables(TestBlockName block, QString version)
+{
+	if (block == TestBlockName::EMPTY)
+		return;
+
+	viewWindowState->actualVersion = version;
+
+	QFile config("cables.cfg");
+	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
+		return;
+	}
+
+	QTextStream cable(&config);
+	bool admissionBlock = false;
+	bool admissionVersion = false;
+	int id = 0;
+	while (!cable.atEnd())
+	{
+		QString line = cable.readLine();
+
+		if (line == "DM")
+			if (block == TestBlockName::DTM)
+			{
+				admissionBlock = true;
+				continue;
 			}
 			else
 			{
-				int minValue = list[i].toInt();
-				int maxValue = list[i + 1].toInt();
-
-				thresholds.push_back(Thresholds(minValue, maxValue));
+				admissionBlock = false;
+				continue;
 			}
-			measureds.push_back(Measureds());
+		if (line == "BCM")
+			if (block == TestBlockName::BCM)
+			{
+				admissionBlock = true;
+				continue;
+			}
+			else
+			{
+				admissionBlock = false;
+				continue;
+			}
+
+		QString oldLine = line;
+		if (line[0] == ":")
+			line.remove(":");
+		if (admissionBlock && line == version)
+		{
+			admissionVersion = true;
+			continue;
 		}
-		if (block == TestBlockName::DM)
-			cablesDMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
-		else if (block == TestBlockName::BCM)
-			cablesBCMStorag.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+
+		if (admissionVersion && oldLine[0] == ":")
+		{
+			admissionBlock = false;
+			admissionVersion = false;
+		}
+
+		if (admissionVersion)
+		{
+			QStringList list = line.split(u';');
+
+			ConnectorId connector = (ConnectorId)(list[0].toInt());
+			int pin = list[1].toInt();
+			int direction = list[2].toInt();
+			int type = list[3].toInt();
+			int canId = list[4].toInt(nullptr, 16);
+			int bit = list[5].toInt();
+			QString name = list[6];
+			QString component = list[7];
+
+			std::vector<Thresholds> thresholds;
+			std::vector<Measureds> measureds;
+			for (int i = 8; i < list.size(); i += 2)
+			{
+				if (direction != DIRECTION_IN)
+				{
+					int minCurrent = list[i].toInt();
+					int maxCurrent = list[i + 1].toInt();
+					int minVoltage = list[i + 2].toInt();
+					int maxVoltage = list[i + 3].toInt();
+
+					thresholds.push_back(Thresholds(minCurrent, maxCurrent, minVoltage, maxVoltage));
+					i += 2;
+				}
+				else
+				{
+					int minValue = list[i].toInt();
+					int maxValue = list[i + 1].toInt();
+
+					thresholds.push_back(Thresholds(minValue, maxValue));
+				}
+				measureds.push_back(Measureds());
+			}
+			cables.push_back(fillCable(id, connector, pin, direction, type, canId, bit, thresholds, measureds, name, component));
+		}
 	}
 }
 
 void MainWindow::on_leftBlockBCMButton_clicked()
 {
-	if (selectedBlock != TestBlockName::BCM)
+	if (viewWindowState->selectedBlock != TestBlockName::BCM)
 	{
-		selectedBlock = TestBlockName::BCM;
+		viewWindowState->selectedBlock = TestBlockName::BCM;
 		resetTheme();
 		cables.clear();
-		cables = cablesBCMStorag;
+		selectBlockVersionComboBox->clear();
+		for (int i = 0; i < blockVersionsBCM.size(); i++)
+			selectBlockVersionComboBox->addItem(blockVersionsBCM[i]);
+		selectBlockVersionComboBox->setCurrentIndex(blockVersionsBCM.size() - 1);
 		switchStyleMainButtons();
 	}
 }
 
 void MainWindow::on_leftBlockDMButton_clicked()
 {
-	if (selectedBlock != TestBlockName::DM)
+	if (viewWindowState->selectedBlock != TestBlockName::DTM)
 	{
-		selectedBlock = TestBlockName::DM;
+		viewWindowState->selectedBlock = TestBlockName::DTM;
 		resetTheme();
 		cables.clear();
-		cables = cablesDMStorag;
+		selectBlockVersionComboBox->clear();
+		for (int i = 0; i < blockVersionsDTM.size(); i++)
+			selectBlockVersionComboBox->addItem(blockVersionsDTM[i]);
+		selectBlockVersionComboBox->setCurrentIndex(blockVersionsDTM.size() - 1);
 		switchStyleMainButtons();
+	}
+}
+
+void MainWindow::on_selectBlockVersionComboBox_changed(int index)
+{
+	if (isAllInit)
+	{
+		cables.clear();
+		loadCables(viewWindowState->selectedBlock, selectBlockVersionComboBox->itemText(index));
 	}
 }

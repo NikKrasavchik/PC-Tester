@@ -64,6 +64,7 @@ private:
 	QHBoxLayout* autoTestAutoStandHLayout;
 	QHBoxLayout* fullTestAutoStandHLayout;
 	QHBoxLayout* fullTestAutoStandMiddleHLayout;
+	QHBoxLayout* selectBlockVersionHLayout;
 	QVBoxLayout* fullTestAutoStandVLayout;
 	QVBoxLayout* autoTestAutoStandVLayout;
 	QVBoxLayout* manualTestAutoStandVLayout;
@@ -77,7 +78,9 @@ private:
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* manualStandMainVLayout;
 	QVBoxLayout* leftSwitchBlockVLayout;
+	QVBoxLayout* selectBlockVersionVLayout;
 	QLabel* logoLabel;
+	QLabel* selectBlockVersionLabel;
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
 	QLabel* manualStandLabel;
@@ -99,6 +102,7 @@ private:
 	QPushButton* fullTestAutoStandButton;
 	QPushButton* leftBlockBCMButton;
 	QPushButton* leftBlockDMButton;
+	QComboBox* selectBlockVersionComboBox;
 	QComboBox* selectAdapterComboBox;
 	QComboBox* selectFrequencyComboBox;
 	QSpacerItem* rightAutoStandSpacer;
@@ -148,6 +152,9 @@ private:
 	QSpacerItem* fullTestAutoStandBottomSpacer;
 	QSpacerItem* leftStandSwitchSpacer;
 	QSpacerItem* leftStandSwitchUpSpacer;
+	QSpacerItem* selectBlockVersionUpSpacer;
+	QSpacerItem* selectBlockVersionLeftSpacer;
+	QSpacerItem* selectBlockVersionRightSpacer;
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
 	QPixmap* themeLightPixmap;
@@ -159,11 +166,10 @@ private:
 
 	Can* can;
 	std::vector<Cable> cables;
-	std::vector<Cable> cablesDMStorag;
-	std::vector<Cable> cablesBCMStorag;
+	std::vector<QString> blockVersionsDTM;
+	std::vector<QString> blockVersionsBCM;
 
 	bool isAllInit;
-	TestBlockName selectedBlock;
 	TypeStand selectedTypeStand;
 
 	void initRecources();
@@ -173,7 +179,8 @@ private:
 	void initTexts();
 	void initIcons();
 	void initConnections();
-	void initCables();
+	void initBlockVersions();
+	void loadCables(TestBlockName block, QString version);
 
 	void initUi();
 	void initUiLogo();
@@ -217,6 +224,7 @@ private slots:
 	void on_checkAdaptersButton_clicked();
 
 	// ComboBoxes
+	void on_selectBlockVersionComboBox_changed(int index);
 	void on_selectFrequencyComboBox_changed(int index);
 	void on_selectAdapterComboBox_changed(int index);
 

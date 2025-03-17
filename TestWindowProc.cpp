@@ -11,7 +11,6 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			Measureds* tmpMeasured = new Measureds;
 			cableRows[i]->measureds.push_back(tmpMeasured);
 		}
-		//cableRows[i]->comment = QString::fromLocal8Bit("Привет, у этого кабеля всё плохо. Он сломан Сломанно A6 и вообще Vnh Как быв не понятно ткак сейчас тработает а это текст для теста");
 		// Test
 		cableRows[i]->id = cables[i].getId();
 		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].getConnector());
@@ -126,22 +125,6 @@ TestTableRowProperties::TestTableRowProperties()
 	manualChecked = false;
 }
 
-// ------------------------------------
-// Name: generateInteractionButtons
-//			Производится генерация кнопок в соответствии с типом кабеля
-// Variables:
-//			WindowType testType: Содержит тип теста. Обрабатываемые аргументы:
-//								OUT_TEST_MANUAL_STAND		
-//								FULL_TEST_MANUAL_STAND
-//								OUT_MANUAL_TEST_AUTO_STAND
-//								IN_MANUAL_TEST_AUTO_STAND
-//								OUT_AUTO_TEST_AUTO_STAND
-//			int type: Содержит тип кабеля. Обрабатываемые аргументы:
-//						TYPE_DIGITAL
-//						TYPE_PWM
-//						TYPE_VNH
-//						TYPE_HLD
-// ------------------------------------
 void TestTableRowProperties::generateInteractionButtons(WindowType testType, int type)
 {
 	if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
@@ -207,6 +190,7 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((VNHButtons*)buttons)->load0Button = new QPushButton();
 			((VNHButtons*)buttons)->load0Button->setObjectName("load0Button");
 			((VNHButtons*)buttons)->load0Button->setText("0%");
+
 			((VNHButtons*)buttons)->load0Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((VNHButtons*)buttons)->load0Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
@@ -297,22 +281,6 @@ void TestWindow::selectCurrentCell(QString connector, QString pin)
 			mainTableWidget->setCurrentCell(i, 0);
 }
 
-// ------------------------------------
-// Name: switchButtonState
-//			Производится переулючение стиля кнопок в соответствии с нажатием кнопок
-// Variables: 
-//			TestButtons testButton: содержит тип кнопки. Обрабатываемые аргументы:
-//				BUTTON_ON
-//				BUTTON_OFF
-//				BUTTON_LOAD_0
-//				BUTTON_LOAD_25
-//				BUTTON_LOAD_50
-//				BUTTON_LOAD_75
-//				BUTTON_LOAD_100
-//				BUTTON_HIGH
-//				BUTTON_LOW
-//				BUTTON_ZERO
-// ------------------------------------
 void TestTableRowProperties::switchButtonState(TestButtons testButton)
 {
 	Styles* currentStyles = nullptr;
@@ -630,22 +598,11 @@ void TestTableRowProperties::on_load100Button_clicked()
 	sendSignal();
 }
 
-// ------------------------------------
-// Name: sendSignal
-//			Отправляется сигнал на can
-// ------------------------------------
 void TestTableRowProperties::sendSignal()
 {
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
-// ------------------------------------
-// Name: generateWarning
-//			Вызывается окно сообщения при неожиданных исходах
-// Variables: 
-//			Warnings::TestWindow warning: Идентификатор вызываемой ошибки
-//											OPEN_MORE_WINDOW
-// ------------------------------------
 void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
 {
 	switch (viewWindowState->appLanguage)

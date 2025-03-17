@@ -604,10 +604,40 @@ void MoreWindow::resaveFile()
 
 	QString outputString = "";
 	bool isFound = false;
+	bool admissionBlock = false;
+	bool admissionVersion = false;
 	while (!fin.atEnd())
 	{
 		QString dataLine = fin.readLine();
+		
+		if (dataLine == "DM\n" && viewWindowState->selectedBlock == TestBlockName::DTM)
+			if (viewWindowState->selectedBlock == TestBlockName::DTM)
+				admissionBlock = true;
+			else
+				admissionBlock = false;
+
+		if (dataLine == "BCM\n")
+			if (viewWindowState->selectedBlock == TestBlockName::BCM)
+				admissionBlock = true;
+			else
+				admissionBlock = false;
+
+		QString proccessedDataLine = dataLine;
+		proccessedDataLine.remove(":");
+		proccessedDataLine.remove("\n");
+
+		if (dataLine[0] == ":")
+			if (proccessedDataLine == viewWindowState->actualVersion)
+				admissionVersion = true;
+			else
+				admissionVersion = false;
+
 		if (dataLine == "DM\n" || dataLine == "BCM\n")
+		{
+			outputString += dataLine;
+			continue;
+		}
+		if (dataLine[0] == ":")
 		{
 			outputString += dataLine;
 			continue;
@@ -634,40 +664,41 @@ void MoreWindow::resaveFile()
 			else if (row->typeStr == "HALL")
 				typeCheck = (dataList[3].toInt() == TYPE_HALL);
 
-		if ((dataList[0].toInt() == (int)row->connectorInt) &&
-			(dataList[1] == row->pin) &&
-			((dataList[2].toInt() ? "IN" : "OUT") == row->direction) &&
-			typeCheck &&
-			(dataList[4].toInt(nullptr, 16) == row->canId) &&
-			(dataList[5].toInt() == row->bit) &&
-			(dataList[6] == row->name) &&
-			(dataList[7] == row->component))
-		{
-			isFound = true;
-			switch (row->typeInt)
+		if (admissionBlock && admissionVersion)
+			if ((dataList[0].toInt() == (int)row->connectorInt) &&
+				(dataList[1] == row->pin) &&
+				((dataList[2].toInt() ? "IN" : "OUT") == row->direction) &&
+				typeCheck &&
+				(dataList[4].toInt(nullptr, 16) == row->canId) &&
+				(dataList[5].toInt() == row->bit) &&
+				(dataList[6] == row->name) &&
+				(dataList[7] == row->component))
 			{
-			case TypeCable::DIG_OUT:
-			case TypeCable::PWM_OUT:
-			case TypeCable::VNH_OUT:
-			case TypeCable::HLD_OUT:
-				for (int i = 0; i < row->thresholds.size(); i++)
+				isFound = true;
+				switch (row->typeInt)
 				{
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4] = QString::number(row->thresholds[i].minVoltage);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 1] = QString::number(row->thresholds[i].maxVoltage);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 2] = QString::number(row->thresholds[i].minCurrent);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 3] = QString::number(row->thresholds[i].maxCurrent);
-				}
-				break;
+				case TypeCable::DIG_OUT:
+				case TypeCable::PWM_OUT:
+				case TypeCable::VNH_OUT:
+				case TypeCable::HLD_OUT:
+					for (int i = 0; i < row->thresholds.size(); i++)
+					{
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4] = QString::number(row->thresholds[i].minVoltage);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 1] = QString::number(row->thresholds[i].maxVoltage);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 2] = QString::number(row->thresholds[i].minCurrent);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 3] = QString::number(row->thresholds[i].maxCurrent);
+					}
+					break;
 
-			case TypeCable::ANALOG_IN:
-				for (int i = 0; i < row->thresholds.size(); i++)
-				{
-					dataList[FILE_MEASUREMENT_OFFSET + i * 2] = QString::number(row->thresholds[i].minValue);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 2 + 1] = QString::number(row->thresholds[i].maxValue);
+				case TypeCable::ANALOG_IN:
+					for (int i = 0; i < row->thresholds.size(); i++)
+					{
+						dataList[FILE_MEASUREMENT_OFFSET + i * 2] = QString::number(row->thresholds[i].minValue);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 2 + 1] = QString::number(row->thresholds[i].maxValue);
+					}
+					break;
 				}
-				break;
 			}
-		}
 
 		for (int i = 0; i < dataList.size(); i++)
 			outputString += dataList[i] + ";";

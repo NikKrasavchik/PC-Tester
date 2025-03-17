@@ -102,11 +102,20 @@ struct Size
 	int height;
 };
 
+enum class TestBlockName
+{
+	EMPTY = NOT_SET,
+	DTM,
+	BCM
+};
+
 struct ViewWindowState
 {
 	bool appTheme;
 	bool appLanguage;
 	Size appSize;
+	QString actualVersion;
+	TestBlockName selectedBlock;
 };
 
 struct StandStatusFlags
@@ -136,13 +145,6 @@ enum class TypeStand
 	EMPTY = NOT_SET,
 	MANUAL,
 	AUTO
-};
-
-enum class TestBlockName
-{
-	EMPTY = NOT_SET,
-	DM,
-	BCM
 };
 
 enum class ConnectorId
