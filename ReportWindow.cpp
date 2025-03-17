@@ -1609,7 +1609,7 @@ void ReportWindow::generateXlsx()
 
 		dir.mkdir("Reports");
 		QString nameFile = "Reports/";
-		if (testingBlock == TestBlockName::DM)
+		if (testingBlock == TestBlockName::DTM)
 			nameFile += "DTM_";
 		else
 			nameFile += "BCM_";

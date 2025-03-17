@@ -217,7 +217,7 @@ void TestWindow::initUiMainFooter()
 
 	fileNameLabel = new QLabel(footerLayoutWidget);
 	fileNameLabel->setObjectName("fileNameLabel");
-	if(testingBlock == TestBlockName::DM)
+	if(testingBlock == TestBlockName::DTM)
 		fileNameLabel->setText("DM");
 	else
 		fileNameLabel->setText("BCM");

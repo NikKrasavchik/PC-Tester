@@ -31,6 +31,8 @@ int main(int argc, char* argv[])
 	viewWindowState->appTheme = LIGHT_THEME;
 	viewWindowState->appSize.width = MIN_SCREEN_WIDTH;
 	viewWindowState->appSize.height = MIN_SCREEN_HEIGHT;
+	viewWindowState->actualVersion = "";
+	viewWindowState->selectedBlock = TestBlockName::EMPTY;
 
 	// Запуск приложения
 	QApplication a(argc, argv);
