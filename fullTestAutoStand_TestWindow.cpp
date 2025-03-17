@@ -43,6 +43,7 @@ void TestWindow::resetTableHeaderFullTestAutoStand()
 
 	resetTableHeaderLanguageFullTestAutoStand();
 
+
 	mainTableWidget->setColumnWidth(COLUMN_CONNECTOR,	COLUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_PIN,		COLUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_DIRECTION,	COLUMN_DIRECTION_WIDTH);
@@ -181,6 +182,7 @@ void TestWindow::resetTableRowsFullTestAutoStand()
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
+		mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
 		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
