@@ -1,10 +1,10 @@
 #include "TestWindow.h"
 
-#define MIN_SCREEN_WIDTH	900
+#define MIN_TEST_SCREEN_WIDTH	900
 
-#define STATUS_NOT_SET		NOT_SET
-#define STATUS_IN_TEST		5
-#define STATUS_FULL_TEST	7
+#define STATUS_NOT_SET			NOT_SET
+#define STATUS_IN_TEST			5
+#define STATUS_FULL_TEST		7
 
 #define FIXED_HEADER_HEIGHT			80
 #define FIXED_FOOTER_HEIGHT			80
@@ -109,11 +109,11 @@ TestWindow::~TestWindow()
 
 void TestWindow::initUiMain()
 {
-	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
+	setMinimumSize(QSize(MIN_TEST_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
 
 	mainLayoutWidget = new QWidget(this);
 	mainLayoutWidget->setObjectName("mainLayoutWidget");
-	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
+	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_TEST_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
 
 	mainVLayout = new QVBoxLayout(mainLayoutWidget);
 	mainVLayout->setObjectName("mainVLayout");
