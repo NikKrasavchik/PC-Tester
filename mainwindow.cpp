@@ -25,6 +25,7 @@
 #define MAX_ADAPTER_COMBO_WIDTH			263
 #define MAX_FREQUENCY_COMBO_WIDTH		300
 #define BLOCK_VERSION_COMBO_WIDTH		100
+#define BLOCK_VERSION_COMBO_HEIGHT		20
 
 #define COEF_STAND_BUTTON				0.1
 #define COEF_STAND_SLIDER				0.06
@@ -76,7 +77,7 @@ void MainWindow::initUi()
 	viewWindowState->appSize.height = MIN_SCREEN_HEIGHT;
 
 	mainLayoutWidget = new QWidget(this);
-	mainLayoutWidget->setObjectName("MainFormLayoutWidget");
+	mainLayoutWidget->setObjectName("MainLayoutWidget");
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, MIN_SCREEN_WIDTH - (BORDER_INDENT * 2), MIN_SCREEN_HEIGHT - (BORDER_INDENT * 2));
 
 	initLightStyleSheets();
@@ -94,9 +95,9 @@ void MainWindow::initUi()
 	mainGridLayout->setSpacing(0);
 	mainGridLayout->setVerticalSpacing(0);
 
-	mainGridLayout->addWidget(logoLabel, GRID_ROW_0, GRID_COLUMN_0, Qt::AlignHCenter);
-	mainGridLayout->addLayout(topHLayout, GRID_ROW_0, GRID_COLUMN_1);
-	mainGridLayout->addLayout(leftVLayout, GRID_ROW_1, GRID_COLUMN_0);
+	mainGridLayout->addWidget(logoWidget, GRID_ROW_0, GRID_COLUMN_0, Qt::AlignHCenter);
+	mainGridLayout->addWidget(topWidget, GRID_ROW_0, GRID_COLUMN_1);
+	mainGridLayout->addWidget(leftHWidget, GRID_ROW_1, GRID_COLUMN_0);
 	mainGridLayout->addLayout(mainVLayout, GRID_ROW_1, GRID_COLUMN_1);
 
 	selectedTypeStand = TypeStand::AUTO;
@@ -119,34 +120,52 @@ void MainWindow::initUi()
 
 void MainWindow::initUiLogo()
 {
-	logoLabel = new QLabel(this);
+	logoWidget = new QWidget(mainLayoutWidget);
+	logoWidget->setObjectName("logoWidget");
+
+	logoHLayout = new QHBoxLayout(logoWidget);
+	logoHLayout->setObjectName("logoHLayout");
+
+	logoPixmapWidget = new QWidget(logoWidget);
+	logoPixmapWidget->setObjectName("logoWidget");
+	logoPixmapWidget->setFixedSize(FIXED_LOGO_WIDTH, FIXED_LOGO_HEIGHT);
+	logoHLayout->addWidget(logoPixmapWidget);
+
+	logoLabel = new QLabel(logoPixmapWidget);
 	logoLabel->setObjectName("LogoLabel");
 	logoLabel->setText("");
 	logoLabel->setEnabled(true);
+	logoLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
 }
 
 void MainWindow::initUiTopHLayout()
 {
-	topHLayout = new QHBoxLayout();
+	topWidget = new QWidget(mainLayoutWidget);
+	topWidget->setObjectName("topWidget");
+
+	topHLayout = new QHBoxLayout(topWidget);
 	topHLayout->setObjectName("topHLayout");
 
 	initUiSwitchType();
-	topHLayout->addItem(switchTypeHLayout);
+	topHLayout->addWidget(switchTypeWidget);
 
 	initUiSwitchThemeLang();
-	topHLayout->addItem(switchThemeLanguageVLayout);
+	topHLayout->addWidget(switchThemeLanguageWidget);
 }
 
 void MainWindow::initUiSwitchType()
 {
-	switchTypeHLayout = new QHBoxLayout();
+	switchTypeWidget = new QWidget(topWidget);
+	switchTypeWidget->setObjectName("switchTypeWidget");
+
+	switchTypeHLayout = new QHBoxLayout(switchTypeWidget);
 	switchTypeHLayout->setObjectName("switchStandHLayout");
 
 	leftManualStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
 	switchTypeHLayout->addItem(leftManualStandSpacer);
 
 	// Manual
-	manualStandButton = new QPushButton(mainLayoutWidget);
+	manualStandButton = new QPushButton(switchTypeWidget);
 	manualStandButton->setObjectName("manualStandButton");
 	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
 	switchTypeHLayout->addWidget(manualStandButton);
@@ -155,7 +174,7 @@ void MainWindow::initUiSwitchType()
 	switchTypeHLayout->addItem(leftSwitchStandSpacer);
 
 	// Switch stand
-	switchStandSlider = new QSliderButton(true, mainLayoutWidget);
+	switchStandSlider = new QSliderButton(true, switchTypeWidget);
 	switchStandSlider->setObjectName("switchStandButton");
 	switchStandSlider->setFixedSize(MIN_STAND_SWITCH_SLIDER_WIDTH, MIN_STAND_SWITCH_SLIDER_HEIGHT);
 	switchTypeHLayout->addWidget(switchStandSlider);
@@ -163,8 +182,8 @@ void MainWindow::initUiSwitchType()
 	rightSwitchStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Preferred);
 	switchTypeHLayout->addItem(rightSwitchStandSpacer);
 
-	autoStandButton = new QPushButton(mainLayoutWidget);
 	// Auto
+	autoStandButton = new QPushButton(switchTypeWidget);
 	autoStandButton->setObjectName("autoStandButton");
 	autoStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
 	switchTypeHLayout->addWidget(autoStandButton);
@@ -175,17 +194,20 @@ void MainWindow::initUiSwitchType()
 
 void MainWindow::initUiSwitchThemeLang()
 {
-	switchThemeLanguageVLayout = new QVBoxLayout();
+	switchThemeLanguageWidget = new QWidget(topWidget);
+	switchThemeLanguageWidget->setObjectName("switchThemeLanguageWidget");
+
+	switchThemeLanguageVLayout = new QVBoxLayout(switchThemeLanguageWidget);
 	switchThemeLanguageVLayout->setObjectName("switchThemeLanguageVLayout");
 
 	// Theme
-	switchThemeButton = new QPushButton(mainLayoutWidget);
+	switchThemeButton = new QPushButton(switchThemeLanguageWidget);
 	switchThemeButton->setObjectName("switchThemeButton");
 	switchThemeButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
 	switchThemeLanguageVLayout->addWidget(switchThemeButton);
 
 	// Language
-	switchLanguageButton = new QPushButton(mainLayoutWidget);
+	switchLanguageButton = new QPushButton(switchThemeLanguageWidget);
 	switchLanguageButton->setObjectName("switchLanguageButton");
 	switchLanguageButton->setFixedSize(MIN_THEME_LANG_BUTTON, MIN_THEME_LANG_BUTTON);
 	switchThemeLanguageVLayout->addWidget(switchLanguageButton);	
@@ -193,45 +215,61 @@ void MainWindow::initUiSwitchThemeLang()
 
 void MainWindow::initUiLeftHLayout()
 {
-	leftHLayout = new QHBoxLayout();
+	leftHWidget = new QWidget(mainLayoutWidget);
+	leftHWidget->setObjectName("leftWidget");
+	leftHWidget->setFixedWidth(FIXED_LOGO_WIDTH);
+
+	leftHLayout = new QHBoxLayout(leftHWidget);
 	leftHLayout->setObjectName("leftHLayout");
 
-	leftVLayout = new QVBoxLayout();
-	leftVLayout->setObjectName("leftVLayout");
-	leftHLayout->addItem(leftVLayout);
+	leftHLayoutLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+	leftHLayout->addItem(leftHLayoutLeftSpacer);
 
-	leftStandSwitchUpSpacer = new QSpacerItem(0, 50, QSizePolicy::Fixed);
-	leftVLayout->addItem(leftStandSwitchUpSpacer);
+	leftVWidget = new QWidget(leftHWidget);
+	leftVWidget->setObjectName("leftVWidget");
+	leftHLayout->addWidget(leftVWidget);
+
+	leftVLayout = new QVBoxLayout(leftVWidget);
+	leftVLayout->setObjectName("leftVLayout");
 
 	initUiSwitchStand();
-	leftVLayout->addLayout(leftSwitchBlockVLayout);
+	leftVLayout->addWidget(leftSwitchBlockWidget);
 
-	topSettingsSpacer = new QSpacerItem(0, 100, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	topSettingsSpacer = new QSpacerItem(0, 15, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	leftVLayout->addItem(topSettingsSpacer);
 
-	leftSettingsVLayout = new QVBoxLayout();
+	leftSettingsWidget = new QWidget(leftVWidget);
+	leftSettingsWidget->setObjectName("leftSettingsWidget");
+	leftVLayout->addWidget(leftSettingsWidget);
+
+	leftSettingsVLayout = new QVBoxLayout(leftSettingsWidget);
 	leftSettingsVLayout->setObjectName("leftSettingsVLayout");
-	leftVLayout->addItem(leftSettingsVLayout);
 
 	initUiAdapter();
-	leftSettingsVLayout->addItem(selectAdapterVLayout);
+	leftSettingsVLayout->addWidget(selectAdapterWidget);
 
-	topFrequencySpacer = new QSpacerItem(0, 40, QSizePolicy::Minimum, QSizePolicy::Expanding);
+	topFrequencySpacer = new QSpacerItem(0, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	leftSettingsVLayout->addItem(topFrequencySpacer);
 
 	initUiFrequency();
-	leftSettingsVLayout->addItem(selectFrequencyVLayout);
+	leftSettingsVLayout->addWidget(selectFrequencyWidget);
 
-	botSettingsSpacer = new QSpacerItem(0, 20, QSizePolicy::Minimum, QSizePolicy::Preferred);
+	botSettingsSpacer = new QSpacerItem(0, 10, QSizePolicy::Minimum, QSizePolicy::Expanding);
 	leftVLayout->addItem(botSettingsSpacer);
+
+	leftHLayoutRightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+	leftHLayout->addItem(leftHLayoutRightSpacer);
 }
 
 void MainWindow::initUiSwitchStand()
 {
-	leftSwitchBlockVLayout = new QVBoxLayout();
+	leftSwitchBlockWidget = new QWidget(leftVWidget);
+	leftSwitchBlockWidget->setObjectName("leftSwitchBlockWidget");
+
+	leftSwitchBlockVLayout = new QVBoxLayout(leftSwitchBlockWidget);
 	leftSwitchBlockVLayout->setObjectName("leftSwitchBlockVLayout");
 
-	leftBlockBCMButton = new QPushButton();
+	leftBlockBCMButton = new QPushButton(leftSwitchBlockWidget);
 	leftBlockBCMButton->setObjectName("blockBCMButton");
 	leftBlockBCMButton->setText("BCM");
 	leftSwitchBlockVLayout->addWidget(leftBlockBCMButton);
@@ -241,35 +279,48 @@ void MainWindow::initUiSwitchStand()
 	leftStandSwitchSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
 	leftSwitchBlockVLayout->addItem(leftStandSwitchSpacer);
 
-	leftBlockDMButton = new QPushButton();
+	leftBlockDMButton = new QPushButton(leftSwitchBlockWidget);
 	leftBlockDMButton->setObjectName("blockDMButton");
 	leftBlockDMButton->setText("DTM");
 	leftSwitchBlockVLayout->addWidget(leftBlockDMButton);
 
 	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockDMButton_clicked);
 
-	selectBlockVersionVLayout = new QVBoxLayout();
+	selectBlockVersionVWidget = new QWidget(leftSwitchBlockWidget);
+	selectBlockVersionVWidget->setObjectName("selectBlockVersionVWidget");
+	leftSwitchBlockVLayout->addWidget(selectBlockVersionVWidget);
+
+	selectBlockVersionVLayout = new QVBoxLayout(selectBlockVersionVWidget);
 	selectBlockVersionVLayout->setObjectName("selectBlockVersionVLayout");
+	selectBlockVersionVLayout->setContentsMargins(0, 0, 0, 0);
 	leftSwitchBlockVLayout->addLayout(selectBlockVersionVLayout);
 
-	selectBlockVersionUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	selectBlockVersionUpSpacer = new QSpacerItem(0, 10, QSizePolicy::Fixed);
 	selectBlockVersionVLayout->addItem(selectBlockVersionUpSpacer);
 
-	selectBlockVersionLabel = new QLabel();
+	selectBlockVersionLabel = new QLabel(selectBlockVersionVWidget);
 	selectBlockVersionLabel->setObjectName("selectBlockVersionLabel");
 	selectBlockVersionLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	selectBlockVersionLabel->setStyleSheet("color: white;");
+	selectBlockVersionLabel->setText("asdf");
 	selectBlockVersionVLayout->addWidget(selectBlockVersionLabel);
 
-	selectBlockVersionHLayout = new QHBoxLayout();
+	selectBlockVersionHWidget = new QWidget(selectBlockVersionVWidget);
+	selectBlockVersionHWidget->setObjectName("selectBlockVersionHWidget");
+	selectBlockVersionVLayout->addWidget(selectBlockVersionHWidget);
+
+	selectBlockVersionHLayout = new QHBoxLayout(selectBlockVersionHWidget);
 	selectBlockVersionHLayout->setObjectName("selectBlockVersionHLayout");
+	selectBlockVersionHLayout->setContentsMargins(0, 0, 0, 0);
 	selectBlockVersionVLayout->addLayout(selectBlockVersionHLayout);
 
 	selectBlockVersionLeftSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
 	selectBlockVersionHLayout->addItem(selectBlockVersionLeftSpacer);
 
-	selectBlockVersionComboBox = new QComboBox();
+	selectBlockVersionComboBox = new QComboBox(selectBlockVersionHWidget);
 	selectBlockVersionComboBox->setObjectName("selectBlockVersionComboBox");
 	selectBlockVersionComboBox->setFixedWidth(BLOCK_VERSION_COMBO_WIDTH);
+	selectBlockVersionComboBox->setFixedHeight(BLOCK_VERSION_COMBO_HEIGHT);
 	selectBlockVersionHLayout->addWidget(selectBlockVersionComboBox);
 
 	selectBlockVersionRightSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
@@ -278,15 +329,23 @@ void MainWindow::initUiSwitchStand()
 
 void MainWindow::initUiAdapter()
 {
-	selectAdapterVLayout = new QVBoxLayout();
+	selectAdapterWidget = new QWidget(leftSettingsWidget);
+	selectAdapterWidget->setObjectName("selectAdapterWidget");
+
+	selectAdapterVLayout = new QVBoxLayout(selectAdapterWidget);
+	selectAdapterVLayout->setContentsMargins(0, 0, 0, 0);
 	selectAdapterVLayout->setObjectName("selectAdapterVLayout");
 
-	findAdapterHLayout = new QHBoxLayout();
+	findAdapterWidget = new QWidget(selectAdapterWidget);
+	findAdapterWidget->setObjectName("findAdapterWidget");
+	selectAdapterVLayout->addWidget(findAdapterWidget);
+
+	findAdapterHLayout = new QHBoxLayout(findAdapterWidget);
 	findAdapterHLayout->setObjectName("findAdapterHLayout");
-	selectAdapterVLayout->addItem(findAdapterHLayout);
+	findAdapterHLayout->setContentsMargins(0, 0, 0, 0);
 
 	// Adapter button
-	checkAdaptersButton = new QPushButton(mainLayoutWidget);
+	checkAdaptersButton = new QPushButton(findAdapterWidget);
 	checkAdaptersButton->setObjectName("checkAdaptersButton");
 	checkAdaptersButton->setFixedSize(MIN_ADAPTER_BUTTON_SIZE, MIN_ADAPTER_BUTTON_SIZE);
 	findAdapterHLayout->addWidget(checkAdaptersButton);
@@ -295,7 +354,7 @@ void MainWindow::initUiAdapter()
 	findAdapterHLayout->addItem(findAdapterCenterSpacer);
 
 	// Adapter combo box
-	selectAdapterComboBox = new QComboBox(mainLayoutWidget);
+	selectAdapterComboBox = new QComboBox(findAdapterWidget);
 	selectAdapterComboBox->setObjectName("selectAdapterComboBox");
 	selectAdapterComboBox->setFixedHeight(MIN_ADAPTER_COMBO_HEIGHT);
 	selectAdapterComboBox->setMaximumWidth(MAX_ADAPTER_COMBO_WIDTH);
@@ -305,7 +364,7 @@ void MainWindow::initUiAdapter()
 	selectAdapterVLayout->addItem(selectAdapterMiddleSpacer);
 
 	// Adapter label
-	selectAdapterLabel = new QLabel(mainLayoutWidget);
+	selectAdapterLabel = new QLabel(findAdapterWidget);
 	selectAdapterLabel->setObjectName("selectAdapterLabel");
 	selectAdapterLabel->setMaximumWidth(MAX_ADAPTER_COMBO_WIDTH);
 	selectAdapterVLayout->addWidget(selectAdapterLabel);
@@ -313,10 +372,13 @@ void MainWindow::initUiAdapter()
 
 void MainWindow::initUiFrequency()
 {
-	selectFrequencyVLayout = new QVBoxLayout();
+	selectFrequencyWidget = new QWidget(leftSettingsWidget);
+	selectFrequencyWidget->setObjectName("selectFrequencyWidget");
+
+	selectFrequencyVLayout = new QVBoxLayout(selectFrequencyWidget);
 	selectFrequencyVLayout->setObjectName("selectFrequencyVLayout");
 
-	selectFrequencyComboBox = new QComboBox(mainLayoutWidget);
+	selectFrequencyComboBox = new QComboBox(selectFrequencyWidget);
 	selectFrequencyComboBox->setObjectName("selectAdapterComboBox");
 	selectFrequencyComboBox->setFixedHeight(MIN_FREQUENCY_COMBO_HEIGHT);
 	selectFrequencyComboBox->setMaximumWidth(MAX_FREQUENCY_COMBO_WIDTH);
@@ -325,7 +387,7 @@ void MainWindow::initUiFrequency()
 	frequencyMiddleSpacer = new QSpacerItem(0, 2, QSizePolicy::Fixed);
 	selectFrequencyVLayout->addItem(frequencyMiddleSpacer);
 
-	selectFrequencyLabel = new QLabel(mainLayoutWidget);
+	selectFrequencyLabel = new QLabel(selectFrequencyWidget);
 	selectFrequencyLabel->setObjectName("selectFrequencyLabel");
 	selectFrequencyVLayout->addWidget(selectFrequencyLabel);
 }
@@ -359,7 +421,7 @@ void MainWindow::initUiAutoStand()
 	autoStandMainVLayout->setObjectName("autoStandMainVLayout");
 	autoStandMainHLayout->addItem(autoStandMainVLayout);
 
-	autoStandMainUpSpacer = new QSpacerItem(0, 50, QSizePolicy::Expanding);
+	autoStandMainUpSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding);
 	autoStandMainVLayout->addItem(autoStandMainUpSpacer);
 
 	partitionTestAutoStandHLayout = new QHBoxLayout();
@@ -391,7 +453,7 @@ void MainWindow::initUiAutoStand()
 	fullTestAutoStandOuterRightSpacer = new QSpacerItem(30, 0, QSizePolicy::Expanding);
 	fullTestAutoStandMiddleHLayout->addItem(fullTestAutoStandOuterRightSpacer);
 
-	autoStandMainBottomSpacer = new QSpacerItem(0, 50, QSizePolicy::Expanding);
+	autoStandMainBottomSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding);
 	autoStandMainVLayout->addItem(autoStandMainBottomSpacer);
 
 	autoStandMainRightSpacer = new QSpacerItem(50, 0, QSizePolicy::Expanding);
@@ -784,6 +846,11 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	viewWindowState->appSize.height = geometry().height();
 
 	mainLayoutWidget->setGeometry(BORDER_INDENT, BORDER_INDENT, viewWindowState->appSize.width - (BORDER_INDENT * 2), viewWindowState->appSize.height - (BORDER_INDENT * 2));
+
+	logoWidget->setFixedWidth(FIXED_LOGO_WIDTH + (viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON);
+	logoWidget->setFixedHeight(FIXED_LOGO_HEIGHT + (viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON);
+
+	leftHWidget->setFixedWidth(FIXED_LOGO_WIDTH + (viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON);
 
 	// Выбор стенда
 	// manual
