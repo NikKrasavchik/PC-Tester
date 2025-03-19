@@ -222,6 +222,8 @@ private slots:
 	void on_switchThemeButton_clicked();
 	void on_switchLanguageButton_clicked();
 	void on_checkAdaptersButton_clicked();
+	void on_leftBlockBCMButton_clicked();
+	void on_leftBlockDMButton_clicked();
 
 	// ComboBoxes
 	void on_selectBlockVersionComboBox_changed(int index);
@@ -237,8 +239,7 @@ private slots:
 	void on_inAutoTestAutoStandButton_clicked();
 	void on_outAutoTestAutoStandButton_clicked();
 	void on_fullTestAutoStandButton_clicked();
-	void on_leftBlockBCMButton_clicked();
-	void on_leftBlockDMButton_clicked();
+
 
 signals:
 	void resizeStandSlider(int width, int height);

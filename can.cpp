@@ -652,137 +652,140 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 {
 	int msgSendConnect[8] = { (int)pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
 #ifndef FOR_DEVELOPER
-	if (pad == ConnectorId::D && pin == 7) // D7
+	if (viewWindowState->selectedBlock == TestBlockName::DTM)
 	{
-		if (digValue == 0) // zero
+		if (pad == ConnectorId::D && pin == 7) // D7
 		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 6;
-		}
-		else if (digValue == 1) // high
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 6;
-			msgSendConnect[2] = 2;
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 6;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 6;
+				msgSendConnect[2] = 2;
 
-		}
-		else if (digValue == 2) // low
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 6;
-			msgSendConnect[2] = 1;
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 6;
+				msgSendConnect[2] = 1;
 
+			}
 		}
-	}
-	else if (pad == ConnectorId::D && pin == 6) // D6
-	{
-		if (digValue == 0) // zero
+		else if (pad == ConnectorId::D && pin == 6) // D6
 		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 7;
-		}
-		else if (digValue == 1) // high
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 7;
-			msgSendConnect[2] = 2;
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 2;
 
-		}
-		else if (digValue == 2) // low
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 7;
-			msgSendConnect[2] = 1;
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 1;
 
+			}
 		}
-	}
-	else if (pad == ConnectorId::D && pin == 5) // D5
-	{
-		if (digValue == 0) // zero
+		else if (pad == ConnectorId::D && pin == 5) // D5
 		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 7;
-		}
-		else if (digValue == 1) // high
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 7;
-			msgSendConnect[2] = 2;
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 2;
 
-		}
-		else if (digValue == 2) // low
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 7;
-			msgSendConnect[2] = 1;
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 1;
 
+			}
 		}
-	}
-	else if (pad == ConnectorId::C && pin == 11) // Ñ11
-	{
-		if (digValue == 0) // zero
+		else if (pad == ConnectorId::C && pin == 11) // Ñ11
 		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 12;
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 12;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 12;
+				msgSendConnect[2] = 2;
+
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 12;
+				msgSendConnect[2] = 1;
+
+			}
 		}
-		else if (digValue == 1) // high
+		else if (pad == ConnectorId::C && pin == 12) // Ñ12
 		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 12;
-			msgSendConnect[2] = 2;
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 11;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 11;
+				msgSendConnect[2] = 2;
 
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 11;
+				msgSendConnect[2] = 1;
+
+			}
 		}
-		else if (digValue == 2) // low
+		else if (pad == ConnectorId::D && pin == 8) // D8
 		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 12;
-			msgSendConnect[2] = 1;
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 2;
 
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 1;
+
+			}
 		}
-	}
-	else if (pad == ConnectorId::C && pin == 12) // Ñ12
-	{
-		if (digValue == 0) // zero
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 11;
-		}
-		else if (digValue == 1) // high
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 11;
-			msgSendConnect[2] = 2;
-
-		}
-		else if (digValue == 2) // low
-		{
-			Can::writeCan(0x55, msgSendConnect);
-			msgSendConnect[1] = 11;
-			msgSendConnect[2] = 1;
-
-		}
-	}
-	else if (pad == ConnectorId::D && pin == 8) // D8
-	{
-	if (digValue == 0) // zero
-	{
-		Can::writeCan(0x55, msgSendConnect);
-		msgSendConnect[1] = 7;
-	}
-	else if (digValue == 1) // high
-	{
-		Can::writeCan(0x55, msgSendConnect);
-		msgSendConnect[1] = 7;
-		msgSendConnect[2] = 2;
-
-	}
-	else if (digValue == 2) // low
-	{
-		Can::writeCan(0x55, msgSendConnect);
-		msgSendConnect[1] = 7;
-		msgSendConnect[2] = 1;
-
-	}
 	}
 #endif // !FOR_DEVELOPER
 	Can::writeCan(0x55, msgSendConnect);

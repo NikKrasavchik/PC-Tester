@@ -1534,7 +1534,7 @@ void MainWindow::on_leftBlockBCMButton_clicked()
 		selectBlockVersionComboBox->clear();
 		for (int i = 0; i < blockVersionsBCM.size(); i++)
 			selectBlockVersionComboBox->addItem(blockVersionsBCM[i]);
-		selectBlockVersionComboBox->setCurrentIndex(blockVersionsBCM.size() - 1);
+		selectBlockVersionComboBox->setCurrentIndex((int)blockVersionsBCM.size() - 1);
 		switchStyleMainButtons();
 	}
 }
@@ -1549,7 +1549,7 @@ void MainWindow::on_leftBlockDMButton_clicked()
 		selectBlockVersionComboBox->clear();
 		for (int i = 0; i < blockVersionsDTM.size(); i++)
 			selectBlockVersionComboBox->addItem(blockVersionsDTM[i]);
-		selectBlockVersionComboBox->setCurrentIndex(blockVersionsDTM.size() - 1);
+		selectBlockVersionComboBox->setCurrentIndex((int)blockVersionsBCM.size() - 1);
 		switchStyleMainButtons();
 	}
 }

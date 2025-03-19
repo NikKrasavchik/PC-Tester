@@ -1347,7 +1347,7 @@ void ReportWindow::generateXlsx()
 			genereateHeaderTable(xlsx, maxOffset, false);
 			for (int i = 0; i < cableRows.size(); i++)
 			{
-				xlsx.write(numRow, 1, cableRows[i]->connectorStr, format);
+				xlsx.write(numRow, 1, cableRows[i]->connectorStr + "  (XP" + QString::number((int)cableRows[i]->connectorInt) + ")", format);
 				xlsx.write(numRow, 2, cableRows[i]->pin, format);
 				xlsx.write(numRow, 3, getStrDirection(cableRows[i]->direction), format);
 				xlsx.write(numRow, 4, getStrType(cableRows[i]->typeInt), format);
@@ -1404,7 +1404,7 @@ void ReportWindow::generateXlsx()
 							delete range;
 							numRow++;
 						}
-						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
+						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr + " XP" + QString::number((int)typedCableRows[type][i]->connectorInt), tmpRowFormat);
 						xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
 						xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
 						xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
@@ -1451,7 +1451,7 @@ void ReportWindow::generateXlsx()
 							numRow += 3;
 						}
 
-						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
+						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr + " XP" + QString::number((int)typedCableRows[type][i]->connectorInt), tmpRowFormat);
 						xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
 						xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
 						xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
@@ -1535,7 +1535,7 @@ void ReportWindow::generateXlsx()
 							numRow += 4;
 						}
 
-						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr, tmpRowFormat);
+						xlsx.write(numRow, 1, typedCableRows[type][i]->connectorStr + " XP" + QString::number((int)typedCableRows[type][i]->connectorInt), tmpRowFormat);
 						xlsx.write(numRow, 2, typedCableRows[type][i]->pin, tmpRowFormat);
 						xlsx.write(numRow, 3, getStrDirection(typedCableRows[type][i]->direction), tmpRowFormat);
 						xlsx.write(numRow, 4, getStrType(typedCableRows[type][i]->typeInt), tmpRowFormat);
