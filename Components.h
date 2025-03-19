@@ -3,9 +3,11 @@
 //#define DEBUG
 //#define FOR_DEVELOPER
 
-
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
+
+#define FIXED_LOGO_WIDTH	220
+#define FIXED_LOGO_HEIGHT	55
 
 #define BORDER_INDENT		25
 #define TOOLBAR_SIZE		20
