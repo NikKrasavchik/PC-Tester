@@ -24,7 +24,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlock
 {
 	ui.setupUi(this);
 	this->testType = testType;
-	this->can = can;
+	//this->can = can;
 	this->testingBlock = testingBlock;
 	isFullTestEnabled = false;
 	if(cables.size() != 0)
@@ -778,7 +778,7 @@ void TestWindow::resetTheme()
 		}
 		break;
 	}
-	can->clearOldValue();
+	Can::clearOldValue();
 }
 
 void TestWindow::resetLanguage()
@@ -1237,6 +1237,10 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 {
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int row = 0; row < cableRows.size(); row++)
+	{
+		if (newValue != 1)
+			if (mainTableWidget->cellWidget(row, STATUS_IN_TEST) != nullptr)
+				mainTableWidget->removeCellWidget(row, STATUS_IN_TEST);
 		if (cableRows[row]->connectorInt == pad && cableRows[row]->pin.toInt() == pin)
 		{
 			switch (testType)
@@ -1258,6 +1262,32 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 							hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
 							break;
 						}
+					}
+					else if (newValue == 1)
+					{
+						QWidget* wiseWidget = new QWidget(mainTableWidget);
+						QLabel* clockwiseLabel = new QLabel(wiseWidget);
+						clockwiseLabel->setObjectName("clockwiseLabel");
+						clockwiseLabel->setText("");
+						clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							clockwiseLabel->setPixmap(*clockwiseDarkPixmap);
+							break;
+
+						case LIGHT_THEME:
+							clockwiseLabel->setPixmap(*clockwiseLightPixmap);
+							break;
+						}
+						QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+						clockwiseCellHLayout->setObjectName("moreCellHLayout");
+						QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+						clockwiseCellHLayout->addItem(leftWiseSpacer);
+						clockwiseCellHLayout->addWidget(clockwiseLabel);
+						clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+						wiseWidget->setLayout(clockwiseCellHLayout);
+						mainTableWidget->setCellWidget(row, STATUS_IN_TEST, wiseWidget);
 					}
 				}
 				else
@@ -1290,6 +1320,7 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 				break;
 			}
 		}
+	}
 }
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)

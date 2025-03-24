@@ -481,7 +481,7 @@ void Can::Timer_ReadCan()
 			for (int i = 0; i < Cables.size(); i++)
 			{
 				if (id == Cables[i].first.getCanId() && msgReceive[Cables[i].first.getBit()] != Cables[i].second)
-				{
+				{	
 					Cables[i].second = msgReceive[Cables[i].first.getBit()];
 					Signal_ChangedByte(Cables[i].first.getConnector(), Cables[i].first.getPin(), Cables[i].second);
 				}
