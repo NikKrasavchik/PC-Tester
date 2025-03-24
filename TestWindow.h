@@ -312,7 +312,7 @@ private:
 	QString fileName;
 	WindowType testType;
 	TestBlockName testingBlock;
-	Can* can;
+	//Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<QCheckBox*> manualChecks;
 	Cable *nextCheckCable;

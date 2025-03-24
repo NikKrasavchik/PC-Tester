@@ -24,7 +24,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlock
 {
 	ui.setupUi(this);
 	this->testType = testType;
-	this->can = can;
+	//this->can = can;
 	this->testingBlock = testingBlock;
 	isFullTestEnabled = false;
 	if(cables.size() != 0)
@@ -770,7 +770,7 @@ void TestWindow::resetTheme()
 		}
 		break;
 	}
-	can->clearOldValue();
+	Can::clearOldValue();
 }
 
 void TestWindow::resetLanguage()
@@ -1214,6 +1214,10 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 {
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int row = 0; row < cableRows.size(); row++)
+	{
+		if (newValue != 1)
+			if (mainTableWidget->cellWidget(row, STATUS_IN_TEST) != nullptr)
+				mainTableWidget->removeCellWidget(row, STATUS_IN_TEST);
 		if (cableRows[row]->connectorInt == pad && cableRows[row]->pin.toInt() == pin)
 		{
 			switch (testType)
@@ -1221,7 +1225,7 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 			case WindowType::IN_TEST_MANUAL_STAND:
 				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
 				{
-					if (newValue == 1)
+					if (newValue == 0)
 					{
 						QWidget* wiseWidget = new QWidget(mainTableWidget);
 						QLabel* counterclockwiseLabel = new QLabel(wiseWidget);
@@ -1249,7 +1253,7 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 							mainTableWidget->removeCellWidget(row, STATUS_IN_TEST);
 						mainTableWidget->setCellWidget(row, STATUS_IN_TEST, wiseWidget);
 					}
-					else if (newValue == 2)
+					else if (newValue == 1)
 					{
 						QWidget* wiseWidget = new QWidget(mainTableWidget);
 						QLabel* clockwiseLabel = new QLabel(wiseWidget);
@@ -1345,6 +1349,7 @@ void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 				break;
 			}
 		}
+	}
 }
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
