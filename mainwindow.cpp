@@ -114,7 +114,7 @@ void MainWindow::initUi()
 
 	isAllInit = true;
 
-	on_checkAdaptersButton_clicked();
+	checkAdaptersButton->click();
 	resetTheme();
 }
 

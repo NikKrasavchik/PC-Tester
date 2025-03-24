@@ -19,6 +19,7 @@
         <file>icons/More_White.svg</file>
         <file>icons/Clockwise_White.png</file>
         <file>icons/Counterclockwise_White.png</file>
+        <file>icons/NoClockwise_White.png</file>
     </qresource>
     <qresource prefix="/Light">
         <file>icons/Close_Black.png</file>
@@ -36,6 +37,7 @@
         <file>icons/More_Black.svg</file>
         <file>icons/Clockwise_Black.png</file>
         <file>icons/Counterclockwise_Black.png</file>
+        <file>icons/NoClockwise_Black.png</file>
     </qresource>
     <qresource prefix="/styles">
         <file>style/darkTheme.qss</file>
