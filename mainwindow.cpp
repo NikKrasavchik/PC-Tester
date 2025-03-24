@@ -842,6 +842,7 @@ void MainWindow::switchStyleMainButtons()
 
 void MainWindow::resizeEvent(QResizeEvent* event)
 {
+
 	viewWindowState->appSize.width = geometry().width();
 	viewWindowState->appSize.height = geometry().height();
 
@@ -865,39 +866,41 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	resizeStandSlider(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER), MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
 	switchStandSlider->setFixedWidth(MIN_STAND_SWITCH_SLIDER_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_SLIDER));
 	switchStandSlider->setFixedHeight(MIN_STAND_SWITCH_SLIDER_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_SLIDER));
-	
+
 	// Main
+	int normalizedManualTestButtonWidth = geometry().height() * 1.33;
 	// out stend manual
-	outTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in stend manual
-	inTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// full stend manual
-	fullTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	fullTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
+	int normalizedAutoTestButtonWidth = geometry().height() * 1.645;
 	// out manual stend auto
-	outManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in manual stend auto
-	inManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inManualTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inManualTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in auto stend suto
-	outAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	outAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	outAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// in auto stend auto
-	inAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	inAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inAutoTestAutoStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	inAutoTestAutoStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	// full stend auto
-	fullTestAutoStandButton->setFixedWidth(MIN_MAIN_FUL_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
-	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestAutoStandButton->setFixedWidth(MIN_MAIN_FUL_BUTTON_WIDTH + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 }
 
 void MainWindow::on_switchThemeButton_clicked()
