@@ -67,6 +67,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 
 			case TYPE_HALL:
 				cableRows[i]->typeStr = "HALL";
+				hallLabels.push_back(std::pair<int, QLabel*> {-1, new QLabel()});
 				break;
 
 			default:
@@ -629,4 +630,39 @@ void TestWindow::on_mainTableWidget_cellClicked(int row, int column)
 {
 	if (column == mainTableWidget->columnCount() - 1)
 		manualChecks[row]->setChecked(!manualChecks[row]->isChecked());
+}
+
+void TestWindow::on_rotateTimer_timeout()
+{
+
+	for (int i = 0; i < hallLabels.size(); i++)
+	{
+		if (hallLabels[i].first == -1)
+			continue;
+
+		hallLabels[i].second->setText("");
+		hallLabels[i].first++;
+		
+		if (hallLabels[i].second->pixmap() != nullptr)
+		{
+			QPixmap pixmap = *hallLabels[i].second->pixmap();
+			pixmap.transformed(QTransform().rotate(1));
+			hallLabels[i].second->setPixmap(pixmap);
+		}
+		
+		if (hallLabels[i].first == 360)
+		{
+			hallLabels[i].first = -1;
+			switch (viewWindowState->appTheme)
+			{
+			case DARK_THEME:
+				hallLabels[i].second->setPixmap(QPixmap(*noClockwiseDarkPixmap));
+				break;
+
+			case LIGHT_THEME:
+				hallLabels[i].second->setPixmap(QPixmap(*noClockwiseLightPixmap));
+				break;
+			}
+		}	
+	}
 }

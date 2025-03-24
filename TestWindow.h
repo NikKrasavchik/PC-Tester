@@ -304,6 +304,8 @@ private:
 	QPixmap* clockwiseDarkPixmap;
 	QPixmap* counterclockwiseLightPixmap;
 	QPixmap* counterclockwiseDarkPixmap;
+	QPixmap* noClockwiseLightPixmap;
+	QPixmap* noClockwiseDarkPixmap;
 
 	int fullTestSortType;
 	
@@ -316,6 +318,9 @@ private:
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<QCheckBox*> manualChecks;
 	Cable *nextCheckCable;
+	QTimer* rotateTimer;
+	int timerCounter;
+	std::vector<std::pair<int, QLabel*>> hallLabels;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -432,4 +437,6 @@ public slots:
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 	void Slot_ChangedByte(ConnectorId pad, int pin, int newValue);
 	void selectCurrentCell(QString conector, QString pin);
+
+	void on_rotateTimer_timeout();
 };
