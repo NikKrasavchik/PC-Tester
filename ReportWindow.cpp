@@ -1134,7 +1134,7 @@ void writeHorizontalAlignCell(Document& xlsx, int row, int columnStart, int colu
 	xlsx.mergeCells(r, formatText);
 }
 
-void genereateHeaderFile(Document& xlsx, QString testerName)
+void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testingBlock, QString actualVersion, QString serialNumber)
 {
 	Format dateFormat;
 	dateFormat.setNumberFormatIndex(14);
@@ -1157,6 +1157,8 @@ void genereateHeaderFile(Document& xlsx, QString testerName)
 	writeHorizontalAlignCell(xlsx, 1, 3, 6, time.date(), Format::AlignLeft, dateFormat);
 	writeHorizontalAlignCell(xlsx, 2, 3, 6, time.time(), Format::AlignLeft, timeFormat);
 	writeHorizontalAlignCell(xlsx, 3, 3, 6, testerName, Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 4, 3, 6, testingBlock == TestBlockName::DTM ? QString("DTM ") + actualVersion : QString("BCM ") + actualVersion, Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 5, 3, 6, serialNumber, Format::AlignLeft, format);
 }
 
 void genereateHeaderTable(Document& xlsx, int maxOffset, bool isAutoStand)
@@ -1165,22 +1167,31 @@ void genereateHeaderTable(Document& xlsx, int maxOffset, bool isAutoStand)
 	format.setHorizontalAlignment(Format::AlignHCenter);
 	format.setFontBold(true);
 	format.setBorderStyle(Format::BorderThin);
+	format.setPatternBackgroundColor(QColor(COLOR_LIGHT_BLUE));
 
 	xlsx.write(HEIGHT_HEADERFILE + 1, 1, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Колодка") : QString("Pad"), format);
 	xlsx.write(HEIGHT_HEADERFILE + 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пин") : QString("Pin"), format);
 	xlsx.write(HEIGHT_HEADERFILE + 1, 3, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Направление") : QString("Direction"), format);
 	xlsx.write(HEIGHT_HEADERFILE + 1, 4, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Тип") : QString("Type"), format);
 	xlsx.write(HEIGHT_HEADERFILE + 1, 5, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название") : QString("Name"), format);
+
+	xlsx.setColumnWidth(5, 25);
+
+	Format formatLeftAlg(format);
+	formatLeftAlg.setHorizontalAlignment(Format::AlignLeft);
 	if (isAutoStand)
 	{
-		xlsx.write(HEIGHT_HEADERFILE + 1, 6 + maxOffset, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), format);
+		xlsx.write(HEIGHT_HEADERFILE + 1, 6 + maxOffset, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), formatLeftAlg);
+		xlsx.setColumnWidth(6 + maxOffset, 50);
+
 
 		CellRange range(HEIGHT_HEADERFILE + 1, 6, HEIGHT_HEADERFILE + 1, 5 + maxOffset);
 		xlsx.mergeCells(range, format);
 	}
 	else
 	{
-		xlsx.write(HEIGHT_HEADERFILE + 1, 8, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), format);
+		xlsx.write(HEIGHT_HEADERFILE + 1, 8, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), formatLeftAlg);
+		xlsx.setColumnWidth(8, 50);
 
 		CellRange range(HEIGHT_HEADERFILE + 1, 6, HEIGHT_HEADERFILE + 1, 7);
 		xlsx.mergeCells(range, format);
@@ -1328,6 +1339,7 @@ void ReportWindow::generateXlsx()
 		format.setHorizontalAlignment(Format::AlignHCenter);
 		format.setFontBold(true);
 		format.setBorderStyle(Format::BorderThin);
+
 		//for (int i = 0; i < cableRows.size(); i++)
 		//{
 		//	xlsx.write(i + 5, 30, cableRows[i]->connectorStr, format);
@@ -1341,18 +1353,25 @@ void ReportWindow::generateXlsx()
 		int numRow = START_ROW_TABLE;
 		bool color = false;
 
-		genereateHeaderFile(xlsx, testerName);
+		genereateHeaderFile(xlsx, testerName, testingBlock, viewWindowState->actualVersion, serialNumber);
 		if (checkedState.size())
 		{
 			genereateHeaderTable(xlsx, maxOffset, false);
 			for (int i = 0; i < cableRows.size(); i++)
 			{
-				xlsx.write(numRow, 1, cableRows[i]->connectorStr + "  (XP" + QString::number((int)cableRows[i]->connectorInt) + ")", format);
-				xlsx.write(numRow, 2, cableRows[i]->pin, format);
-				xlsx.write(numRow, 3, getStrDirection(cableRows[i]->direction), format);
-				xlsx.write(numRow, 4, getStrType(cableRows[i]->typeInt), format);
-				xlsx.write(numRow, 5, cableRows[i]->name, format);
-				xlsx.write(numRow, 8, cableRows[i]->comment, format);
+				Format tmpRowFormat(format);
+				if (i % 2)
+					tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_LIGHT_GREY));
+				else
+					tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_WHITE));
+				Format formatLeftAlg(tmpRowFormat);
+				formatLeftAlg.setHorizontalAlignment(Format::AlignLeft);
+				xlsx.write(numRow, 1, cableRows[i]->connectorStr + "  (XP" + QString::number((int)cableRows[i]->connectorInt) + ")", tmpRowFormat);
+				xlsx.write(numRow, 2, cableRows[i]->pin, tmpRowFormat);
+				xlsx.write(numRow, 3, getStrDirection(cableRows[i]->direction), tmpRowFormat);
+				xlsx.write(numRow, 4, getStrType(cableRows[i]->typeInt), tmpRowFormat);
+				xlsx.write(numRow, 5, cableRows[i]->name, tmpRowFormat);
+				xlsx.write(numRow, 8, cableRows[i]->comment, formatLeftAlg);
 
 				Format tmpManualStandFormat(format);
 				if (checkedState[i])
@@ -1374,7 +1393,7 @@ void ReportWindow::generateXlsx()
 				for (int i = 0; i < typedCableRows[type].size(); i++)
 				{
 					Format tmpHeaderFormat(format);
-					tmpHeaderFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_BLUE));
+					tmpHeaderFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_BLUE)); 
 					Format tmpRowFormat(format);
 					if (color)
 					{
