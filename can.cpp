@@ -5,6 +5,7 @@ Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
 std::vector<std::pair<Cable, int>> Can::Cables;
+QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
 bool Can::b_flagStatusConnection;
 
 Can::Can()
@@ -483,15 +484,13 @@ void Can::Timer_ReadCan()
 
 				}
 			}
-
-			for (int i = 0; i < Cables.size(); i++)
-			{
-				if (id == Cables[i].first.getCanId() && msgReceive[Cables[i].first.getBit()] != Cables[i].second)
+			for (int i = 0; i < mapCable[id].size(); i++)
+				if (mapCable[id][i].second != msgReceive[mapCable[id][i].first.getBit()])
 				{
-					Cables[i].second = msgReceive[Cables[i].first.getBit()];
-					Signal_ChangedByte(i, Cables[i].second);
+					mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
+					Signal_ChangedByte(mapCable[id][i].first.getId(), mapCable[id][i].second);
 				}
-			}
+
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -801,21 +800,23 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 
 void Can::setCable(std::vector<Cable> cable)
 {
-	std::vector<Cable> lol;
-	lol = mapCable[100];
-	Cables.clear();
 	for (int i = 0; i < cable.size(); i++)
 	{
-		std::pair<Cable, int> pairTmp;
-		pairTmp.first = cable[i];
-		pairTmp.second = NOT_SET;
-		Cables.push_back(pairTmp);
+		std::vector<std::pair<Cable, int>> tmpVector(mapCable[cable[i].getCanId()]);
+		std::pair< Cable, int> tmpPair;
+
+		tmpPair.first = cable[i];
+		tmpPair.second = NOT_SET;
+
+		tmpVector.push_back(tmpPair);
+		mapCable[cable[i].getCanId()] = tmpVector;
 	}
 }
-
 void Can::clearOldValue()
 {
-	for (int i = 0; i < Cables.size(); i++)
-		Cables[i].second = NOT_SET;
+
+	for (int j = 256; j < 266; j++)
+		for (int i = 0; i < mapCable[j].size(); i++)
+			mapCable[j][i].second = NOT_SET;
 	b_flagStatusConnection = false;
 }

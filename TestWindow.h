@@ -316,6 +316,7 @@ private:
 	TestBlockName testingBlock;
 	//Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
+	QMap <int, int> m;
 	std::vector<QCheckBox*> manualChecks;
 	Cable *nextCheckCable;
 	QTimer* rotateTimer;
@@ -435,7 +436,7 @@ public slots:
 
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
-	void Slot_ChangedByte(ConnectorId pad, int pin, int newValue);
+	void Slot_ChangedByte(int idCable, int newValue);
 	void selectCurrentCell(QString conector, QString pin);
 
 	void on_rotateTimer_timeout();

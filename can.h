@@ -157,7 +157,7 @@ private:
 	uint8_t counterConnectMsg;
 
 	static std::vector<std::pair<Cable, int>> Cables;
-	QMap<int, std::vector<Cable>> mapCable;
+	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;
@@ -177,6 +177,6 @@ signals:
 
 	void Signal_ChangedStatusStandConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён 
 	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // Сигнал означающий завершение теста у автостенда
-	void Signal_ChangedByte(int idArr, int newValue);
+	void Signal_ChangedByte(int idCable, int newValue);
 };
 

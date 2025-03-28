@@ -106,6 +106,8 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 
 		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
+
+		m[cableRows[i]->id] = i;
 	}
 }
 
