@@ -181,6 +181,8 @@ private:
 	QPixmap* languageLightPixmap;
 	QPixmap* languageDarkPixmap;
 
+	QTimer* timerCheckAdapter;
+
 	Can* can;
 	std::vector<Cable> cables;
 	std::vector<QString> blockVersionsDTM;
@@ -256,6 +258,9 @@ private slots:
 	void on_inAutoTestAutoStandButton_clicked();
 	void on_outAutoTestAutoStandButton_clicked();
 	void on_fullTestAutoStandButton_clicked();
+
+	// Timer
+	void Timer_CheckAdapter();
 
 
 signals:

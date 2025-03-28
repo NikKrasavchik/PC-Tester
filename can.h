@@ -174,6 +174,6 @@ signals:
 
 	void Signal_ChangedStatusStandConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён 
 	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // Сигнал означающий завершение теста у автостенда
-	void Signal_ChangedByte(ConnectorId pad, int pin, int newValue);
+	void Signal_ChangedByte(int idArr, int newValue);
 };
 

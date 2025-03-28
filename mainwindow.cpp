@@ -46,6 +46,8 @@ MainWindow::MainWindow(QWidget* parent)
 
 	this->selectedTypeStand = TypeStand::EMPTY;
 	viewWindowState->selectedBlock = TestBlockName::EMPTY;
+	timerCheckAdapter = new QTimer();
+
 
 	initBlockVersions();
 
@@ -758,6 +760,8 @@ void MainWindow::initConnections()
 	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
 	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
 	connect(selectBlockVersionComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectBlockVersionComboBox_changed(int)));
+	connect(timerCheckAdapter, SIGNAL(timeout()), this, SLOT(Timer_CheckAdapter()));
+
 
 	QMetaObject::connectSlotsByName(this);
 }
@@ -1167,7 +1171,7 @@ void MainWindow::resetLanguage()
 		inAutoTestAutoStandButton->setText(QString("In"));
 		outAutoTestAutoStandButton->setText(QString("Out"));
 		fullTestAutoStandButton->setText(QString("Full"));
-		selectBlockVersionLabel->setText(QString("BlockVersion"));
+		selectBlockVersionLabel->setText(QString("Block version"));
 		if (!can->getStatusAdapterSelected())
 			selectAdapterLabel->setText(QString("Select adapter"));
 		if (!can->getStatusFrequencySelected())
@@ -1204,13 +1208,16 @@ void MainWindow::on_selectAdapterComboBox_changed(int index)
 	if (!isAllInit)
 		return;
 
-	can->setSelectedAdapterNeme(selectAdapterComboBox->currentText()); // Адаптер не выбранна
+	can->setSelectedAdapterNeme(selectAdapterComboBox->currentText());
 	switchStyleMainButtons();
 
 	if (index == 0)
 		resetLanguage(); // Ставим предупреждающий lable согласно языку
 	else if (index > 0)
+	{
 		selectAdapterLabel->setText("");
+		timerCheckAdapter->start(1000);
+	}
 }
 
 void MainWindow::on_checkAdaptersButton_clicked()
@@ -1269,7 +1276,7 @@ void MainWindow::on_fullTestManualStandButton_clicked()
 	//selectedFileStandType = CFG_STAND_MANUAL;
 	leftBlockDMButton->click();
 #endif // DEBUG
-
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Press button";
 	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND, cables);
 }
 
@@ -1355,11 +1362,6 @@ void MainWindow::on_fullTestAutoStandButton_clicked()
 
 void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> preparedCables)
 {
-	if (preparedCables.size() == 0)
-	{
-		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
-		return;
-	}
 	if (!can->getStatusAdapterSelected())
 	{
 		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
@@ -1375,37 +1377,30 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		generateWarning(Warnings::MainWindow::NOT_SELECTED_BLOCK);
 		return;
 	}
-
-	// Проверка на актуальность выбраного адаптера.
-	std::vector<QString> nameAdapters = can->getNameAdapters();
-	bool isHaveAdapter = false;
-	for (int j = 0; j < nameAdapters.size(); j++)
-		if (selectAdapterComboBox->currentText() == nameAdapters[j])
-		{
-			isHaveAdapter = true;
-			break;
-		}
-	if (!isHaveAdapter)
+	if (preparedCables.size() == 0)
 	{
-		on_checkAdaptersButton_clicked();
+		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
 		return;
 	}
-	
 	TestWindow* testWindow = new TestWindow(testType, preparedCables, viewWindowState->selectedBlock, this);
 
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
 	connect(can, &Can::Signal_ChangedByte, testWindow, &TestWindow::Slot_ChangedByte);
+	timerCheckAdapter->stop();
 	can->setCable(preparedCables);
 	can->initCan(testType);
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "1401";
 	WindowFrame w(testType, nullptr, testWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	testWindow->setParentFrame(&w);
 	w.show();
 	this->hide();
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "1407";
 	testWindow->exec();
 	resetWindowView();
 	can->deinitCan();
+	timerCheckAdapter->start();
 	this->show();
 }
 
@@ -1630,5 +1625,23 @@ void MainWindow::on_selectBlockVersionComboBox_changed(int index)
 	{
 		cables.clear();
 		loadCables(viewWindowState->selectedBlock, selectBlockVersionComboBox->itemText(index));
+	}
+}
+
+void MainWindow::Timer_CheckAdapter()
+{
+
+	std::vector<QString> nameAdapters = can->getNameAdapters();
+	bool isHaveAdapter = false;
+	for (int j = 0; j < nameAdapters.size(); j++)
+		if (selectAdapterComboBox->currentText() == nameAdapters[j])
+		{
+			isHaveAdapter = true;
+			break;
+		}
+	if (!isHaveAdapter)
+	{
+		on_checkAdaptersButton_clicked();
+		return;
 	}
 }
