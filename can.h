@@ -2,6 +2,7 @@
 
 //#define DEBUG_CAN
 
+# include <QMap>
 #include <vector>
 #include "qobject.h"
 #include "qtimer.h"
@@ -154,7 +155,9 @@ private:
 	WindowType windowType;
 	std::vector<Measureds*> measureds;
 	uint8_t counterConnectMsg;
+
 	static std::vector<std::pair<Cable, int>> Cables;
+	QMap<int, std::vector<Cable>> mapCable;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;

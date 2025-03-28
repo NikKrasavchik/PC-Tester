@@ -459,8 +459,11 @@ Measureds* getMeasureds(int* msg)
 
 void Can::Timer_ReadCan()
 {
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Start";
+
 	int id = NOT_SET;
 	int msgReceive[8];
+	bool isValueChange = false;
 	if (Can::readWaitCan(&id, msgReceive, 1))
 	{
 		switch (windowType)
@@ -472,16 +475,19 @@ void Can::Timer_ReadCan()
 			{
 				if(b_flagStatusConnection)
 					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
-				if (!b_flagStatusConnection)
+				else
 				{
 					Signal_ChangedStatusStandConnect(true);
 					b_flagStatusConnection = true;
+					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
+
 				}
 			}
+
 			for (int i = 0; i < Cables.size(); i++)
 			{
 				if (id == Cables[i].first.getCanId() && msgReceive[Cables[i].first.getBit()] != Cables[i].second)
-				{	
+				{
 					Cables[i].second = msgReceive[Cables[i].first.getBit()];
 					Signal_ChangedByte(i, Cables[i].second);
 				}
@@ -549,6 +555,7 @@ void Can::Timer_ReadCan()
 #ifdef DEBUG_CAN
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Send";
 #endif // DEBUG_CAN
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "end";
 }
 
 void Can::Timer_SendConnectMsg()
@@ -794,6 +801,8 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 
 void Can::setCable(std::vector<Cable> cable)
 {
+	std::vector<Cable> lol;
+	lol = mapCable[100];
 	Cables.clear();
 	for (int i = 0; i < cable.size(); i++)
 	{

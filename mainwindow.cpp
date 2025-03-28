@@ -1382,7 +1382,10 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
 		return;
 	}
+
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Start constructor TestWindow";
 	TestWindow* testWindow = new TestWindow(testType, preparedCables, viewWindowState->selectedBlock, this);
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "End constructor TestWindow";
 
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
@@ -1390,13 +1393,12 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	timerCheckAdapter->stop();
 	can->setCable(preparedCables);
 	can->initCan(testType);
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "1401";
 	WindowFrame w(testType, nullptr, testWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	testWindow->setParentFrame(&w);
 	w.show();
 	this->hide();
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "1407";
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Exec window";
 	testWindow->exec();
 	resetWindowView();
 	can->deinitCan();
@@ -1551,7 +1553,7 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 		if (admissionVersion)
 		{
 			QStringList list = line.split(u';');
-
+			id += 1;
 			ConnectorId connector = (ConnectorId)(list[0].toInt());
 			int pin = list[1].toInt();
 			int direction = list[2].toInt();
@@ -1621,11 +1623,12 @@ void MainWindow::on_leftBlockDMButton_clicked()
 
 void MainWindow::on_selectBlockVersionComboBox_changed(int index)
 {
-	if (isAllInit)
-	{
+	if (!isAllInit)
+		return;
+
 		cables.clear();
 		loadCables(viewWindowState->selectedBlock, selectBlockVersionComboBox->itemText(index));
-	}
+
 }
 
 void MainWindow::Timer_CheckAdapter()

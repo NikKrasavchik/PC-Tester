@@ -1233,89 +1233,90 @@ static int detectProccessedHall(ConnectorId pad, int pin, std::vector<TestTableR
 	return counter;
 }
 
-void TestWindow::Slot_ChangedByte(int idArr, int newValue)
+void TestWindow::Slot_ChangedByte(ConnectorId pad, int pin, int newValue)
 {
 	QAbstractItemModel* model = mainTableWidget->model();
-
-	if (newValue != 1)
-		if (mainTableWidget->cellWidget(idArr, STATUS_IN_TEST) != nullptr)
-			mainTableWidget->removeCellWidget(idArr, STATUS_IN_TEST);
-
-	switch (testType)
+	for (int row = 0; row < cableRows.size(); row++)
 	{
-	case WindowType::IN_TEST_MANUAL_STAND:
-		if (cableRows[idArr]->typeInt == TypeCable::HALL_IN)
+		if (cableRows[row]->connectorInt == pad && cableRows[row]->pin.toInt() == pin)
 		{
-			if (newValue == 0)
+			switch (testType)
 			{
-				int hallId = detectProccessedHall(cableRows[idArr]->connectorInt, cableRows[idArr]->pin.toInt(), cableRows);
-				hallLabels[hallId].first = 0;
-				switch (viewWindowState->appTheme)
+			case WindowType::IN_TEST_MANUAL_STAND:
+				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
 				{
-				case DARK_THEME:
-					hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
-					break;
+					if (newValue == 0)
+					{
+						int hallId = detectProccessedHall(pad, pin, cableRows);
+						hallLabels[hallId].first = 0;
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
+							break;
 
-				case LIGHT_THEME:
-					hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
-					break;
+						case LIGHT_THEME:
+							hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
+							break;
+						}
+					}
+					else if (newValue == 1)
+					{
+						QWidget* wiseWidget = new QWidget(mainTableWidget);
+						QLabel* clockwiseLabel = new QLabel(wiseWidget);
+						clockwiseLabel->setObjectName("clockwiseLabel");
+						clockwiseLabel->setText("");
+						clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							clockwiseLabel->setPixmap(*clockwiseDarkPixmap);
+							break;
+
+						case LIGHT_THEME:
+							clockwiseLabel->setPixmap(*clockwiseLightPixmap);
+							break;
+						}
+						QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
+						clockwiseCellHLayout->setObjectName("moreCellHLayout");
+						QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+						clockwiseCellHLayout->addItem(leftWiseSpacer);
+						clockwiseCellHLayout->addWidget(clockwiseLabel);
+						clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+						wiseWidget->setLayout(clockwiseCellHLayout);
+						mainTableWidget->setCellWidget(row, STATUS_IN_TEST, wiseWidget);
+					}
 				}
-			}
-			else if (newValue == 1)
-			{
-				QWidget* wiseWidget = new QWidget(mainTableWidget);
-				QLabel* clockwiseLabel = new QLabel(wiseWidget);
-				clockwiseLabel->setObjectName("clockwiseLabel");
-				clockwiseLabel->setText("");
-				clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
-				switch (viewWindowState->appTheme)
+				else
+					model->setData(model->index(row, 5), QString::number(newValue));
+				break;
+			case WindowType::FULL_TEST_MANUAL_STAND:
+				if (cableRows[row]->typeInt == TypeCable::HALL_IN)
 				{
-				case DARK_THEME:
-					clockwiseLabel->setPixmap(*clockwiseDarkPixmap);
-					break;
+					if (newValue == 0)
+					{
+						int hallId = detectProccessedHall(pad, pin, cableRows);
+						hallLabels[hallId].first = 0;
+						switch (viewWindowState->appTheme)
+						{
+						case DARK_THEME:
+							hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
+							break;
 
-				case LIGHT_THEME:
-					clockwiseLabel->setPixmap(*clockwiseLightPixmap);
-					break;
+						case LIGHT_THEME:
+							hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
+							break;
+						}
+					}
 				}
-				QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
-				clockwiseCellHLayout->setObjectName("moreCellHLayout");
-				QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
-				clockwiseCellHLayout->addItem(leftWiseSpacer);
-				clockwiseCellHLayout->addWidget(clockwiseLabel);
-				clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
-				wiseWidget->setLayout(clockwiseCellHLayout);
-				mainTableWidget->setCellWidget(idArr, STATUS_IN_TEST, wiseWidget);
+				else
+					model->setData(model->index(row, 7), QString::number(newValue));
+				break;
+
+			default:
+				break;
 			}
 		}
-		else
-			model->setData(model->index(idArr, 5), QString::number(newValue));
-		break;
-	case WindowType::FULL_TEST_MANUAL_STAND:
-		if (cableRows[idArr]->typeInt == TypeCable::HALL_IN)
-		{
-			if (newValue == 0)
-			{
-				int hallId = detectProccessedHall(cableRows[idArr]->connectorInt, cableRows[idArr]->pin.toInt(), cableRows);
-				hallLabels[hallId].first = 0;
-				switch (viewWindowState->appTheme)
-				{
-				case DARK_THEME:
-					hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
-					break;
-
-				case LIGHT_THEME:
-					hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
-					break;
-				}
-			}
-		}
-		else
-			model->setData(model->index(idArr, 7), QString::number(newValue));
-		break;
-
-	default:
-		break;
 	}
 }
 
