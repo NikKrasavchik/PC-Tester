@@ -64,7 +64,50 @@ void ReportWindow::initUiFooter()
 	footerLeftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
 	footerHLayout->addItem(footerLeftSpacer);
 
-	saveButton = new QPushButton(mainWidget);
+	reportDataHLayout = new QHBoxLayout(reportDataWidget);
+	reportDataHLayout->setObjectName("serialNumbreVLayout");
+	
+	QFont font;
+	font.setBold(true);
+	font.setPointSizeF(10);
+
+	testerNameLabel = new QLabel(reportDataWidget);
+	testerNameLabel->setObjectName("testerNameLabel");
+	testerNameLabel->setFixedWidth(FIXED_NAME_LABEL_WIDTH);
+	testerNameLabel->setFont(font);
+	testerNameLabel->setAlignment(Qt::AlignmentFlag::AlignVCenter | Qt::AlignRight);
+	reportDataHLayout->addWidget(testerNameLabel);
+
+	testerNameLineEdit = new QLineEdit(reportDataWidget);
+	testerNameLineEdit->setObjectName("testerNameLineEdit");
+	testerNameLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	testerNameLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
+	reportDataHLayout->addWidget(testerNameLineEdit);
+
+	reportDataSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
+	reportDataHLayout->addItem(reportDataSpacer);
+
+	serialNumberLabel = new QLabel(reportDataWidget);
+	serialNumberLabel->setObjectName("serialNumberLabel");
+	serialNumberLabel->setFixedWidth(FIXED_SERIAL_LABEL_WIDTH);
+	serialNumberLabel->setFont(font);
+	serialNumberLabel->setAlignment(Qt::AlignmentFlag::AlignVCenter | Qt::AlignRight);
+	reportDataHLayout->addWidget(serialNumberLabel);
+
+	serialNumberLineEdit = new QLineEdit(reportDataWidget);
+	serialNumberLineEdit->setObjectName("serialNumberLineEdit");
+	serialNumberLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
+	serialNumberLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
+#ifndef FOR_DEVELOPER
+	serialNumberLineEdit->setReadOnly(true);
+#endif // FOR_DEVELOPER
+	serialNumberLineEdit->setText(Can::getSerialNumber());
+	reportDataHLayout->addWidget(serialNumberLineEdit);
+
+	footerSpacer = new QSpacerItem(10000, 0, QSizePolicy::Expanding);
+	footerHLayout->addItem(footerSpacer);
+
+	saveButton = new QPushButton(footerWidget);
 	saveButton->setObjectName("saveButton");
 	saveButton->setFixedSize(BUTTON_SIZE);
 	footerHLayout->addWidget(saveButton);
@@ -93,6 +136,12 @@ void ReportWindow::resetBaseLanguage()
 		tableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString::fromLocal8Bit("Название"));
 		tableWidget->item(CELL_SIGN_BASE_EMPTY)->setText(QString::fromLocal8Bit(""));
 		tableWidget->item(CELL_SIGN_BASE_COMMENT)->setText(QString::fromLocal8Bit("Комментарий"));
+
+		testerNameLabel->setText(QString::fromLocal8Bit("ФИО: "));
+		serialNumberLabel->setText(QString::fromLocal8Bit("Серийный номер: "));
+
+		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
+		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
 		break;
 
 	case ENGLISH_LANG:
@@ -103,6 +152,12 @@ void ReportWindow::resetBaseLanguage()
 		tableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString("Name"));
 		tableWidget->item(CELL_SIGN_BASE_EMPTY)->setText(QString(""));
 		tableWidget->item(CELL_SIGN_BASE_COMMENT)->setText(QString("Comment"));
+
+		testerNameLabel->setText(QString("Initial: "));
+		serialNumberLabel->setText(QString("Serial number: "));
+
+		saveButton->setText(QString("Save"));
+		testerNameLineEdit->setText(QString("Ivanov Ivan Ivanovich"));
 		break;
 	}
 }

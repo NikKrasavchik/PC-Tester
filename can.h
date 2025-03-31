@@ -2,6 +2,7 @@
 
 //#define DEBUG_CAN
 
+#include "qmap.h"
 #include <vector>
 #include "qobject.h"
 #include "qtimer.h"
@@ -79,6 +80,11 @@ public:
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
 
+	static QString getSerialNumber();
+
+
+	void setCable(std::vector<Cable> cable);
+	static void clearOldValue();
 private:
 	// ------------------------------------
 	// Name: writeCan
@@ -119,6 +125,8 @@ private:
 	WindowType windowType;
 	std::vector<Measureds*> measureds;
 	uint8_t counterConnectMsg;
+
+	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;

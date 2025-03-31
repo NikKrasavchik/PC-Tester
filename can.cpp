@@ -1,8 +1,12 @@
 #include "can.h"
+#include "Cable.h"
+#include "qmap.h"
 
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
+QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
+bool Can::b_flagStatusConnection;
 
 Can::Can()
 {
@@ -87,7 +91,7 @@ bool Can::deinitCan()
 	}
 	return true;
 }
-
+  
 bool Can::writeCan(int id, int* msg)
 {
 	
@@ -566,4 +570,32 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 {
 	int msgSendConnect[8] = { (int)pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
 	Can::writeCan(0x55, msgSendConnect);
+} 
+
+
+void Can::setCable(std::vector<Cable> cable)
+{
+	for (int i = 0; i < cable.size(); i++)
+	{
+		std::vector<std::pair<Cable, int>> tmpVector(mapCable[cable[i].getCanId()]);
+		std::pair< Cable, int> tmpPair;
+
+		tmpPair.first = cable[i];
+		tmpPair.second = NOT_SET;
+
+		tmpVector.push_back(tmpPair);
+		mapCable[cable[i].getCanId()] = tmpVector;
+	}
+}
+void Can::clearOldValue()
+{
+	for (int j = 256; j < 266; j++)
+		for (int i = 0; i < mapCable[j].size(); i++)
+			mapCable[j][i].second = NOT_SET;
+	b_flagStatusConnection = false;
+}
+
+QString Can::getSerialNumber()
+{
+	return QString("123");
 }
