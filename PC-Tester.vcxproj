@@ -242,6 +242,12 @@
   <ItemGroup>
     <ResourceCompile Include="PC-Tester.rc" />
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\icons\App_Logo_Black.ico" />
+    <Image Include="resources\icons\App_Logo_White.ico" />
+    <Image Include="resources\icons\App_Logo_White.png" />
+    <Image Include="resources\icons\icon_result.ico" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />

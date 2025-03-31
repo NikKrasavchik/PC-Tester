@@ -75,7 +75,7 @@ void WindowFrame::initRecources()
 	defaultDarkSizeIcon = QIcon(defaultSizeDarkIconPath);
 }
 
-void WindowFrame::on_switchThemeButton_clicked()
+void WindowFrame::slot_switchThemeButton_clicked()
 {
 	resetTheme();
 }

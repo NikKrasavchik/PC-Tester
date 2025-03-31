@@ -385,4 +385,18 @@
       <Filter>Resource Files</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\icons\icon_result.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\App_Logo_White.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\App_Logo_White.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\icons\App_Logo_Black.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

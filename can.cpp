@@ -4,8 +4,7 @@
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
-std::vector<std::pair<Cable, int>> Can::Cables;
-QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
+//QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
 bool Can::b_flagStatusConnection;
 
 Can::Can()
@@ -25,14 +24,6 @@ Can::Can()
 	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
 }
 
-// ------------------------------------
-// Name: initCan
-// Variables: 
-//			WindowType windowType - enum хранищий в себе идентификатор опрдел€ющий какое окно сейчас открыто.
-// Return: bool
-//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-//			true  - в случае если can прошЄл инициализацию.
-// ------------------------------------
 bool Can::initCan(WindowType windowType)
 {
 	if (!b_adapterSelected)
@@ -85,7 +76,6 @@ bool Can::initCan(WindowType windowType)
 		break;
 	}
 
-
 	counterConnectMsg = 0;
 
 	measureds.clear();
@@ -124,15 +114,6 @@ bool Can::deinitCan()
 	return true;
 }
 
-// ------------------------------------
-// Name: writeCan
-// Variables:
-//			int* id - указатель на переменную в которой хранитьс€ id по которому отправитьс€ can-сообщени€.
-//			int* msg - указатель на переменную в котора€ отправитьс€ в can.
-// Return: bool
-//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-//			true  - в случае если can-сообщение отправленно.
-// ------------------------------------
 bool Can::writeCan(int id, int* msg)
 {
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
@@ -460,7 +441,9 @@ Measureds* getMeasureds(int* msg)
 
 void Can::Timer_ReadCan()
 {
+#ifdef DEBUG_OUTPUT
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Start";
+#endif
 
 	int id = NOT_SET;
 	int msgReceive[8];
@@ -554,7 +537,9 @@ void Can::Timer_ReadCan()
 #ifdef DEBUG_CAN
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Send";
 #endif // DEBUG_CAN
+#ifdef DEBUG_OUTPUT
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "end";
+#endif
 }
 
 void Can::Timer_SendConnectMsg()
@@ -570,8 +555,8 @@ void Can::Timer_SendConnectMsg()
 		int msgSendConnect[8] = { 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0xAF };
 		writeCan(ID_CAN_AUTOSTAND, msgSendConnect);
 	}
-}
 
+}
 void Can::Timer_CheckStandConnection()
 {
 	timerCheckStandConnection->stop();
@@ -815,8 +800,8 @@ void Can::setCable(std::vector<Cable> cable)
 void Can::clearOldValue()
 {
 
-	for (int j = 256; j < 266; j++)
-		for (int i = 0; i < mapCable[j].size(); i++)
-			mapCable[j][i].second = NOT_SET;
-	b_flagStatusConnection = false;
+	//for (int j = 256; j < 266; j++)
+	//	for (int i = 0; i < mapCable[j].size(); i++)
+	//		mapCable[j][i].second = NOT_SET;
+	//b_flagStatusConnection = false;
 }

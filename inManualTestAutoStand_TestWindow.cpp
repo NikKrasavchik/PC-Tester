@@ -168,6 +168,6 @@ void TestWindow::initUiTableRowsInManualTestAutoStand()
 }
 
 
-void TestWindow::on_inManualTestAutoStandTestTimeComboBox_changed(int ind)
+void TestWindow::slot_inManualTestAutoStandTestTimeComboBox_changed(int ind)
 {
 }

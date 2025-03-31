@@ -436,8 +436,15 @@ void TestWindow::initIcons()
 
 void TestWindow::initConnections()
 {
-	QMetaObject::connectSlotsByName(this);
-
+	connect(backButton, &QPushButton::clicked, this, &TestWindow::slot_backButton_clicked);
+	connect(switchThemeButton, &QPushButton::clicked, this, &TestWindow::slot_switchThemeButton_clicked);
+	connect(switchLanguageButton, &QPushButton::clicked, this, &TestWindow::slot_switchLanguageButton_clicked);
+	connect(reportButton, &QPushButton::clicked, this, &TestWindow::slot_reportButton_clicked);
+	connect(autoStandConnectButton, &QPushButton::clicked, this, &TestWindow::slot_autoStandConnectButton_clicked);
+	connect(inManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_inManualTestAutoStandTestTimeComboBox_changed(int)));
+	connect(outManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_outManualTestAutoStandTestTimeComboBox_changed(int)));
+	connect(autoStandStartTestButton, &QPushButton::clicked, this, &TestWindow::slot_autoStandStartTestButton_clicked);
+	connect(fullTestSortButton, &QPushButton::clicked, this, &TestWindow::slot_fullTestSortButton_clicked);
 }
 
 void TestWindow::initStyles()
@@ -534,12 +541,12 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 	}
 }
 
-void TestWindow::on_backButton_clicked()
+void TestWindow::slot_backButton_clicked()
 {
 	this->close();
 }
 
-void TestWindow::on_switchThemeButton_clicked()
+void TestWindow::slot_switchThemeButton_clicked()
 {
 	switch (viewWindowState->appTheme)
 	{
@@ -554,7 +561,7 @@ void TestWindow::on_switchThemeButton_clicked()
 	resetTheme();
 }
 
-void TestWindow::on_switchLanguageButton_clicked()
+void TestWindow::slot_switchLanguageButton_clicked()
 {
 	//hallLabels[0].first = 0;
 	switch (viewWindowState->appLanguage)
@@ -570,7 +577,7 @@ void TestWindow::on_switchLanguageButton_clicked()
 	resetLanguage();
 }
 
-void TestWindow::on_reportButton_clicked()
+void TestWindow::slot_reportButton_clicked()
 {
 	ReportWindow* reportWindow;
 	switch (testType)
@@ -1037,7 +1044,7 @@ void TestWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;
 
-	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
+	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::slot_switchThemeButton_clicked);
 }
 
 void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox)
@@ -1124,7 +1131,7 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 }
 
 
-void TestWindow::on_autoStandStartTestButton_clicked()
+void TestWindow::slot_autoStandStartTestButton_clicked()
 {
 	if (isFullTestEnabled)
 	{
@@ -1256,32 +1263,6 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 					hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
 					break;
 				}
-			}
-			else if (newValue == 1)
-			{
-				QWidget* wiseWidget = new QWidget(mainTableWidget);
-				QLabel* clockwiseLabel = new QLabel(wiseWidget);
-				clockwiseLabel->setObjectName("clockwiseLabel");
-				clockwiseLabel->setText("");
-				clockwiseLabel->setFixedSize(FIXED_TESTER_NAME_WIDTH, FIXED_WISE_PIXMAP_HEIGHT);
-				switch (viewWindowState->appTheme)
-				{
-				case DARK_THEME:
-					clockwiseLabel->setPixmap(*clockwiseDarkPixmap);
-					break;
-
-				case LIGHT_THEME:
-					clockwiseLabel->setPixmap(*clockwiseLightPixmap);
-					break;
-				}
-				QHBoxLayout* clockwiseCellHLayout = new QHBoxLayout(wiseWidget);
-				clockwiseCellHLayout->setObjectName("moreCellHLayout");
-				QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
-				clockwiseCellHLayout->addItem(leftWiseSpacer);
-				clockwiseCellHLayout->addWidget(clockwiseLabel);
-				clockwiseCellHLayout->setContentsMargins(0, 0, 0, 0);
-				wiseWidget->setLayout(clockwiseCellHLayout);
-				mainTableWidget->setCellWidget(m[idCable], STATUS_IN_TEST, wiseWidget);
 			}
 		}
 		else
@@ -1603,46 +1584,45 @@ void TestWindow::rewriteCableRows(std::vector<TestTableRowProperties*>* cableRow
 
 	case SORT_TYPE_DIRECTION_OUT:
 		cableRows->clear();
-		for (int i = 0; i < tmpCableRows.size(); i++)
+		for (int i = 0; i < (int)tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "OUT")
 			{
-				auto p = new TestTableRowProperties();
-				cableRows->push_back(p);
-				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[cableRows->size() - 1]->id] = cableRows->size()-1;
+				cableRows->push_back(new TestTableRowProperties());
+				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
+				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
 			}
-		for (int i = 0; i < tmpCableRows.size(); i++)
+		for (int i = 0; i < (int)tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "IN")
 			{
 				cableRows->push_back(new TestTableRowProperties());
-				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[cableRows->size() - 1]->id] = cableRows->size() - 1;
+				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
+				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
 			}
 		break;
 
 	case SORT_TYPE_DIRECTION_IN:
 		cableRows->clear();
-		for (int i = 0; i < tmpCableRows.size(); i++)
+		for (int i = 0; i < (int)tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "IN")
 			{
 				cableRows->push_back(new TestTableRowProperties());
-				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[cableRows->size() - 1]->id] = cableRows->size() - 1;
+				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
+				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
 
 			}
-		for (int i = 0; i < tmpCableRows.size(); i++)
+		for (int i = 0; i < (int)tmpCableRows.size(); i++)
 			if (tmpCableRows[i]->direction == "OUT")
 			{
 				cableRows->push_back(new TestTableRowProperties());
-				(*cableRows)[cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[cableRows->size() - 1]->id] = cableRows->size() - 1;
+				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
+				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
 			}
 		break;
 	}
 
 }
 
-void TestWindow::on_fullTestSortButton_clicked()
+void TestWindow::slot_fullTestSortButton_clicked()
 {
 	switch (fullTestSortType)
 	{

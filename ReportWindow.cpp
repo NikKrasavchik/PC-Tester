@@ -20,7 +20,7 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, TestB
 	this->testingBlock = testingBlock;
 
 	initUi();
-	QMetaObject::connectSlotsByName(this);
+	initConnections();
 }
 
 ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, TestBlockName testingBlock)
@@ -31,12 +31,17 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::
 	this->testingBlock = testingBlock;
 
 	initUi();
-	QMetaObject::connectSlotsByName(this);
+	initConnections();
 }
 
 ReportWindow::~ReportWindow()
 {
 	resaveComments();
+}
+
+void ReportWindow::initConnections()
+{
+	connect(saveButton, &QPushButton::clicked, this, &ReportWindow::on_saveButton_clicked);
 }
 
 void ReportWindow::initUi()

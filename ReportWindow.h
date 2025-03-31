@@ -132,6 +132,7 @@ private:
 	void initUi();
 	void initUiTable();
 	void initUiFooter();
+	void initConnections();
 
 	void generateTableBaseSign();
 	void generateTableAuto();

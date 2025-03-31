@@ -420,19 +420,19 @@ private:
 	void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType);
 
 public slots:
-	void on_backButton_clicked();
-	void on_switchThemeButton_clicked();
-	void on_switchLanguageButton_clicked();
-	void on_reportButton_clicked();
+	void slot_backButton_clicked();
+	void slot_switchThemeButton_clicked();
+	void slot_switchLanguageButton_clicked();
+	void slot_reportButton_clicked();
 
-	void on_autoStandConnectButton_clicked();
-	void on_inManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void on_outManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void on_autoStandStartTestButton_clicked();
+	void slot_autoStandConnectButton_clicked();
+	void slot_inManualTestAutoStandTestTimeComboBox_changed(int ind);
+	void slot_outManualTestAutoStandTestTimeComboBox_changed(int ind);
+	void slot_autoStandStartTestButton_clicked();
 
-	void on_fullTestSortButton_clicked();
+	void slot_fullTestSortButton_clicked();
 
-	void on_mainTableWidget_cellClicked(int row, int column);
+	void slot_mainTableWidget_cellClicked(int row, int column);
 
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);

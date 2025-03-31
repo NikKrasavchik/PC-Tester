@@ -101,7 +101,7 @@ public:
 
 	// ------------------------------------
 	// Name: sendTestMsg
-	//		Отправка сообщения на can
+	//			Отправка сообщения на can
 	// Variables: 
 	//			ConnectorId pad: Коннектор отправляемого кабеля
 	//			int pin: Пин отправляемого кабеля
@@ -115,15 +115,13 @@ public:
 	void setCable(std::vector<Cable> cable);
 	static void clearOldValue();
 private:
-	// ------------------------------------
-	// Name: writeCan
-	// Variables:
-	//			int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
-	//			int* msg - указатель на переменную в которая отправиться в can.
-	// Return: bool
-	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-	//			true  - в случае если can-сообщение отправленно.
-	// ------------------------------------
+	// Отправляет сообщение в CAN.
+	// @name writeCan
+	// 
+	// @param int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
+	// @param int* msg - указатель на переменную которая отправиться в can.
+	// 
+	// @return bool - В случае удачой отправки возращает true.
 	static bool writeCan(int id, int* msg);
 
 	// ------------------------------------
@@ -139,9 +137,9 @@ private:
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
-
-	
-// Variables:
+//
+// Varibals
+//
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;
@@ -152,12 +150,13 @@ private:
 	static modelAdapter *marathon;
 	static canHandle hnd;
 
-	WindowType windowType;
+	
+	WindowType windowType; // Переменная хранящая идентификатор окна которое сейчас открыто
 	std::vector<Measureds*> measureds;
 	uint8_t counterConnectMsg;
 
 	static std::vector<std::pair<Cable, int>> Cables;
-	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
+	QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;
@@ -170,7 +169,7 @@ private:
 
 private slots:
 	void Timer_ReadCan();				// Слот для считывания Can-сообщений.
-	void Timer_SendConnectMsg();		// Слот для отправки сообщений на подключение или проверки подключения.
+	void Timer_SendConnectMsg();		// @doc Слот для отправки сообщений на подключение или подтверждения подключения.
 	void Timer_CheckStandConnection();	// Слот для проверки времени времени прихода переодического сообщения конекта.
 
 signals:

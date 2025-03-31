@@ -276,7 +276,7 @@ void MainWindow::initUiSwitchStand()
 	leftBlockBCMButton->setText("BCM");
 	leftSwitchBlockVLayout->addWidget(leftBlockBCMButton);
 
-	connect(leftBlockBCMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockBCMButton_clicked);
+	connect(leftBlockBCMButton, &QPushButton::clicked, this, &MainWindow::slot_leftBlockBCMButton_clicked);
 
 	leftStandSwitchSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
 	leftSwitchBlockVLayout->addItem(leftStandSwitchSpacer);
@@ -286,7 +286,7 @@ void MainWindow::initUiSwitchStand()
 	leftBlockDMButton->setText("DTM");
 	leftSwitchBlockVLayout->addWidget(leftBlockDMButton);
 
-	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::on_leftBlockDMButton_clicked);
+	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::slot_leftBlockDMButton_clicked);
 
 	selectBlockVersionVWidget = new QWidget(leftSwitchBlockWidget);
 	selectBlockVersionVWidget->setObjectName("selectBlockVersionVWidget");
@@ -756,14 +756,26 @@ void MainWindow::initRecources()
 void MainWindow::initConnections()
 {
 	connect(this, &MainWindow::resizeStandSlider, switchStandSlider, &QSliderButton::resizeSlider);
-	connect(switchStandSlider, &QSliderButton::on_sliderSwitchStand_click, this, &MainWindow::on_sliderSwitchStand_click);
-	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectAdapterComboBox_changed(int)));
-	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectFrequencyComboBox_changed(int)));
-	connect(selectBlockVersionComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(on_selectBlockVersionComboBox_changed(int)));
+	connect(switchStandSlider, &QSliderButton::on_sliderSwitchStand_click, this, &MainWindow::slot_sliderSwitchStand_clicked);
+	connect(selectAdapterComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_selectAdapterComboBox_changed(int)));
+	connect(selectFrequencyComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_selectFrequencyComboBox_changed(int)));
+	connect(selectBlockVersionComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_selectBlockVersionComboBox_changed(int)));
 	connect(timerCheckAdapter, SIGNAL(timeout()), this, SLOT(Timer_CheckAdapter()));
-
-
-	QMetaObject::connectSlotsByName(this);
+	connect(manualStandButton, &QPushButton::clicked, this, &MainWindow::slot_manualStandButton_clicked);
+	connect(autoStandButton, &QPushButton::clicked, this, &MainWindow::slot_autoStandButton_clicked);
+	connect(switchThemeButton, &QPushButton::clicked, this, &MainWindow::slot_switchThemeButton_clicked);
+	connect(switchLanguageButton, &QPushButton::clicked, this, &MainWindow::slot_switchLanguageButton_clicked);
+	connect(checkAdaptersButton, &QPushButton::clicked, this, &MainWindow::slot_checkAdaptersButton_clicked);
+	connect(leftBlockBCMButton, &QPushButton::clicked, this, &MainWindow::slot_leftBlockBCMButton_clicked);
+	connect(leftBlockDMButton, &QPushButton::clicked, this, &MainWindow::slot_leftBlockDMButton_clicked);
+	connect(outTestManualStandButton, &QPushButton::clicked, this, &MainWindow::slot_outTestManualStandButton_clicked);
+	connect(inTestManualStandButton, &QPushButton::clicked, this, &MainWindow::slot_inTestManualStandButton_clicked);
+	connect(fullTestManualStandButton, &QPushButton::clicked, this, &MainWindow::slot_fullTestManualStandButton_clicked);
+	connect(inManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_inManualTestAutoStandButton_clicked);
+	connect(outManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_outManualTestAutoStandButton_clicked);
+	connect(inAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_inAutoTestAutoStandButton_clicked);
+	connect(outAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_outAutoTestAutoStandButton_clicked);
+	connect(fullTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_fullTestAutoStandButton_clicked);
 }
 
 void MainWindow::switchStyleMainButtons()
@@ -907,7 +919,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	fullTestAutoStandButton->setFixedHeight(MIN_MAIN_FUL_BUTTON_HEIGHT + ((normalizedAutoTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 }
 
-void MainWindow::on_switchThemeButton_clicked()
+void MainWindow::slot_switchThemeButton_clicked()
 {
 	switch (viewWindowState->appTheme)
 	{
@@ -1054,12 +1066,12 @@ void MainWindow::resetTheme()
 	}
 }
 
-void MainWindow::on_sliderSwitchStand_click()
+void MainWindow::slot_sliderSwitchStand_clicked()
 {
 	switchStandButtons();
 }
 
-void MainWindow::on_autoStandButton_clicked()
+void MainWindow::slot_autoStandButton_clicked()
 {
 	if (selectedTypeStand != TypeStand::AUTO)
 	{
@@ -1069,7 +1081,7 @@ void MainWindow::on_autoStandButton_clicked()
 	}
 }
 
-void MainWindow::on_manualStandButton_clicked()
+void MainWindow::slot_manualStandButton_clicked()
 {
 	if (selectedTypeStand != TypeStand::MANUAL)
 	{
@@ -1121,7 +1133,7 @@ void MainWindow::switchStandButtons()
 	}
 }
 
-void MainWindow::on_switchLanguageButton_clicked()
+void MainWindow::slot_switchLanguageButton_clicked()
 {
 	switch (viewWindowState->appLanguage)
 	{
@@ -1177,14 +1189,15 @@ void MainWindow::resetLanguage()
 		if (!can->getStatusFrequencySelected())
 			selectFrequencyLabel->setText(QString("Select frequency"));
 		manualTestAutoStandLabel->setText(QString("Manual"));
+		autoTestAutoStandLabel->setText(QString("Auto"));
 		
 		break;
 	}
 	if (can->getStatusFrequencySelected())
-		on_selectFrequencyComboBox_changed(1);
+		slot_selectFrequencyComboBox_changed(1);
 }
 
-void MainWindow::on_selectFrequencyComboBox_changed(int index)
+void MainWindow::slot_selectFrequencyComboBox_changed(int index)
 {
 	if (!isAllInit)
 		return;
@@ -1203,7 +1216,7 @@ void MainWindow::on_selectFrequencyComboBox_changed(int index)
 	}
 }
 
-void MainWindow::on_selectAdapterComboBox_changed(int index)
+void MainWindow::slot_selectAdapterComboBox_changed(int index)
 {
 	if (!isAllInit)
 		return;
@@ -1220,7 +1233,7 @@ void MainWindow::on_selectAdapterComboBox_changed(int index)
 	}
 }
 
-void MainWindow::on_checkAdaptersButton_clicked()
+void MainWindow::slot_checkAdaptersButton_clicked()
 {
 	if (!isAllInit)
 		return;
@@ -1234,7 +1247,7 @@ void MainWindow::on_checkAdaptersButton_clicked()
 		selectAdapterComboBox->addItem(nameAdapters[i]);
 }
 
-void MainWindow::on_outTestManualStandButton_clicked()
+void MainWindow::slot_outTestManualStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1251,7 +1264,7 @@ void MainWindow::on_outTestManualStandButton_clicked()
 	createTestWindow(WindowType::OUT_TEST_MANUAL_STAND, preparedCables);
 }
 
-void MainWindow::on_inTestManualStandButton_clicked()
+void MainWindow::slot_inTestManualStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1268,7 +1281,7 @@ void MainWindow::on_inTestManualStandButton_clicked()
 	createTestWindow(WindowType::IN_TEST_MANUAL_STAND, preparedCables);
 }
 
-void MainWindow::on_fullTestManualStandButton_clicked()
+void MainWindow::slot_fullTestManualStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1276,11 +1289,13 @@ void MainWindow::on_fullTestManualStandButton_clicked()
 	//selectedFileStandType = CFG_STAND_MANUAL;
 	leftBlockDMButton->click();
 #endif // DEBUG
+#ifdef DEBUG_OUTPUT
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Press button";
+#endif
 	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND, cables);
 }
 
-void MainWindow::on_inManualTestAutoStandButton_clicked()
+void MainWindow::slot_inManualTestAutoStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1297,7 +1312,7 @@ void MainWindow::on_inManualTestAutoStandButton_clicked()
 	createTestWindow(WindowType::IN_MANUAL_TEST_AUTO_STAND, preparedCables);
 }
 
-void MainWindow::on_outManualTestAutoStandButton_clicked()
+void MainWindow::slot_outManualTestAutoStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1314,7 +1329,7 @@ void MainWindow::on_outManualTestAutoStandButton_clicked()
 	createTestWindow(WindowType::OUT_MANUAL_TEST_AUTO_STAND, preparedCables);
 }
 
-void MainWindow::on_inAutoTestAutoStandButton_clicked()
+void MainWindow::slot_inAutoTestAutoStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1331,7 +1346,7 @@ void MainWindow::on_inAutoTestAutoStandButton_clicked()
 	createTestWindow(WindowType::IN_AUTO_TEST_AUTO_STAND, preparedCables);
 }
 
-void MainWindow::on_outAutoTestAutoStandButton_clicked()
+void MainWindow::slot_outAutoTestAutoStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1348,7 +1363,7 @@ void MainWindow::on_outAutoTestAutoStandButton_clicked()
 	createTestWindow(WindowType::OUT_AUTO_TEST_AUTO_STAND, preparedCables);
 }
 
-void MainWindow::on_fullTestAutoStandButton_clicked()
+void MainWindow::slot_fullTestAutoStandButton_clicked()
 {
 #ifdef DEBUG
 	selectAdapterComboBox->setCurrentIndex(1);
@@ -1382,10 +1397,13 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
 		return;
 	}
-
+#ifdef DEBUG_OUTPUT
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Start constructor TestWindow";
+#endif
 	TestWindow* testWindow = new TestWindow(testType, preparedCables, viewWindowState->selectedBlock, this);
+#ifdef DEBUG_OUTPUT
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "End constructor TestWindow";
+#endif
 
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
@@ -1398,7 +1416,9 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	testWindow->setParentFrame(&w);
 	w.show();
 	this->hide();
+#ifdef DEBUG_OUTPUT
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Exec window";
+#endif
 	testWindow->exec();
 	resetWindowView();
 	can->deinitCan();
@@ -1423,7 +1443,7 @@ void MainWindow::setParentFrame(WindowFrame* parentFrame)
 {
 	this->parentFrame = parentFrame;
 
-	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::on_switchThemeButton_clicked);
+	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::slot_switchThemeButton_clicked);
 }
 
 static Cable fillCable(int id, ConnectorId connector, int pin, int direction, int type, int canId, int bit, std::vector<Thresholds> thresholds, std::vector<Measureds> measureds, QString name, QString component)
@@ -1591,7 +1611,7 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 	}
 }
 
-void MainWindow::on_leftBlockBCMButton_clicked()
+void MainWindow::slot_leftBlockBCMButton_clicked()
 {
 	if (viewWindowState->selectedBlock != TestBlockName::BCM)
 	{
@@ -1606,7 +1626,7 @@ void MainWindow::on_leftBlockBCMButton_clicked()
 	}
 }
 
-void MainWindow::on_leftBlockDMButton_clicked()
+void MainWindow::slot_leftBlockDMButton_clicked()
 {
 	if (viewWindowState->selectedBlock != TestBlockName::DTM)
 	{
@@ -1621,7 +1641,7 @@ void MainWindow::on_leftBlockDMButton_clicked()
 	}
 }
 
-void MainWindow::on_selectBlockVersionComboBox_changed(int index)
+void MainWindow::slot_selectBlockVersionComboBox_changed(int index)
 {
 	if (!isAllInit)
 		return;
@@ -1644,7 +1664,7 @@ void MainWindow::Timer_CheckAdapter()
 		}
 	if (!isHaveAdapter)
 	{
-		on_checkAdaptersButton_clicked();
+		slot_checkAdaptersButton_clicked();
 		return;
 	}
 }

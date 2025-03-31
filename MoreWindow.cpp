@@ -23,8 +23,6 @@ MoreWindow::MoreWindow(TestTableRowProperties* row)
 
 	initBaseUi();
 	fillBaseTable();
-
-	QMetaObject::connectSlotsByName(this);
 }
 
 MoreWindow::~MoreWindow() {}
@@ -80,6 +78,11 @@ void MoreWindow::initBaseUi()
 	}
 
 	mainVLayout->addLayout(bottomHLayout);
+}
+
+void MoreWindow::initConnections()
+{
+	connect(startTestButton, &QPushButton::clicked, this, &MoreWindow::on_startTestButton_clicked);
 }
 
 void MoreWindow::fillBaseTable()

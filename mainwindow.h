@@ -235,29 +235,29 @@ private:
 
 private slots:
 	// Buttons
-	void on_sliderSwitchStand_click();
-	void on_manualStandButton_clicked();
-	void on_autoStandButton_clicked();
-	void on_switchThemeButton_clicked();
-	void on_switchLanguageButton_clicked();
-	void on_checkAdaptersButton_clicked();
-	void on_leftBlockBCMButton_clicked();
-	void on_leftBlockDMButton_clicked();
+	void slot_sliderSwitchStand_clicked();
+	void slot_manualStandButton_clicked();
+	void slot_autoStandButton_clicked();
+	void slot_switchThemeButton_clicked();
+	void slot_switchLanguageButton_clicked();
+	void slot_checkAdaptersButton_clicked();
+	void slot_leftBlockBCMButton_clicked();
+	void slot_leftBlockDMButton_clicked();
 
 	// ComboBoxes
-	void on_selectBlockVersionComboBox_changed(int index);
-	void on_selectFrequencyComboBox_changed(int index);
-	void on_selectAdapterComboBox_changed(int index);
+	void slot_selectBlockVersionComboBox_changed(int index);
+	void slot_selectFrequencyComboBox_changed(int index);
+	void slot_selectAdapterComboBox_changed(int index);
 
 	// Test buttons
-	void on_outTestManualStandButton_clicked();
-	void on_inTestManualStandButton_clicked();
-	void on_fullTestManualStandButton_clicked();
-	void on_inManualTestAutoStandButton_clicked();
-	void on_outManualTestAutoStandButton_clicked();
-	void on_inAutoTestAutoStandButton_clicked();
-	void on_outAutoTestAutoStandButton_clicked();
-	void on_fullTestAutoStandButton_clicked();
+	void slot_outTestManualStandButton_clicked();
+	void slot_inTestManualStandButton_clicked();
+	void slot_fullTestManualStandButton_clicked();
+	void slot_inManualTestAutoStandButton_clicked();
+	void slot_outManualTestAutoStandButton_clicked();
+	void slot_inAutoTestAutoStandButton_clicked();
+	void slot_outAutoTestAutoStandButton_clicked();
+	void slot_fullTestAutoStandButton_clicked();
 
 	// Timer
 	void Timer_CheckAdapter();
