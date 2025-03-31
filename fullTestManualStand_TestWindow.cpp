@@ -1,13 +1,13 @@
 #include "TestWindow.h"
 
-#define COLUMN_COUNT		9
+#define COLUMN_COUNT			9
 
-#define COLUMN_COMPONENT	3
-#define COLUMN_DIRECTION	4
-#define COLUMN_TYPE			5
-#define COLUMN_CHECK		6
-#define COLUMN_STATUS		7
-#define COLUMN_MANUAL_CHECK	8
+#define COLUMN_COMPONENT		3
+#define COLUMN_DIRECTION		4
+#define COLUMN_TYPE				5
+#define COLUMN_CHECK			6
+#define COLUMN_STATUS			7
+#define COLUMN_MANUAL_CHECK		8
 
 void TestWindow::initUiFullTestManualStand()
 {
@@ -34,7 +34,6 @@ void TestWindow::initUiTableFullTestManualStand()
 
 void TestWindow::resetTableHeaderFullTestManualStand()
 {
-
 	mainTableWidget->setRowCount((int)cableRows.size());
 	mainTableWidget->setColumnCount(COLUMN_COUNT);
 	
@@ -196,10 +195,13 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 
 void TestWindow::resetTableRowsFullTestManualStand()
 {
+	int hallId = -1;
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr);
+		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
+			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
+		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLUMN_COMPONENT), cableRows[currentRowNum]->component);
@@ -212,6 +214,28 @@ void TestWindow::resetTableRowsFullTestManualStand()
 
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MANUAL_CHECK, manualChecksWidget);
+
+		if (cableRows[currentRowNum]->typeInt == TypeCable::HALL_IN)
+		{
+			hallId++;
+
+			QWidget* wiseWidget = new QWidget(mainTableWidget);
+			QLabel* wiseLabel = hallLabels[hallId].second;
+			hallLabels[hallId].first = 0;
+			wiseLabel->setObjectName("wiseLabel");
+			wiseLabel->setText("");
+
+			QHBoxLayout* wiseCellHLayout = new QHBoxLayout(wiseWidget);
+			wiseCellHLayout->setObjectName("wiseCellHLayout");
+			QSpacerItem* leftWiseSpacer = new QSpacerItem(18, 0, QSizePolicy::Fixed);
+			wiseCellHLayout->addItem(leftWiseSpacer);
+			wiseCellHLayout->addWidget(wiseLabel);
+			wiseCellHLayout->setContentsMargins(0, 0, 0, 0);
+			wiseWidget->setLayout(wiseCellHLayout);
+			if (mainTableWidget->cellWidget(currentRowNum, COLUMN_STATUS) != nullptr)
+				mainTableWidget->removeCellWidget(currentRowNum, COLUMN_STATUS);
+			mainTableWidget->setCellWidget(currentRowNum, COLUMN_STATUS, wiseWidget);
+		}
 	}
 
 	resetTableDirectionLanguageFullTestManualStand();

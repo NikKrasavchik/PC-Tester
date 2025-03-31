@@ -152,7 +152,9 @@ void TestWindow::initUiTableRowsOutTestManualStand()
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR),		cableRows[currentRowNum]->connectorStr);
+		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
+			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
+		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN),				cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME),			cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLUMN_COMPONENT),		cableRows[currentRowNum]->component);

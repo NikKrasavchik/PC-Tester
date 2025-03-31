@@ -2,11 +2,11 @@
 
 #define COLUMN_COUNT	8
 
-#define COLUMN_TYPE	3
+#define COLUMN_TYPE		3
 #define COLUMN_CHECK	4
 #define COLUMN_STAND	5
 #define COLUMN_PC		6
-#define COLUMN_MORE	7
+#define COLUMN_MORE		7
 
 void TestWindow::initUiInManualTestAutoStand()
 {
@@ -38,19 +38,19 @@ void TestWindow::initUiTableHeaderInManualTestAutoStand()
 	resetTableHeaderLanguageInManualTestAutoStand();
 
 	mainTableWidget->setColumnWidth(COLUMN_CONNECTOR,	COLUMN_CONNECTOR_WIDTH);
-	mainTableWidget->setColumnWidth(COLUMN_PIN,		COLUMN_PIN_WIDTH);
+	mainTableWidget->setColumnWidth(COLUMN_PIN,			COLUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_TYPE,		COLUMN_TYPE_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_CHECK,		COLUMN_AUTOCHECK_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_STAND,		COLUMN_STAND_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_PC,			COLUMN_PC_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_MORE,		COLUMN_MORE_WIDTH);
 
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CONNECTOR,	QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CONNECTOR,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PIN,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME,			QHeaderView::Stretch);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CHECK,		QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_STAND,		QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CHECK,			QHeaderView::Fixed);
+	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_STAND,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_PC,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_MORE,			QHeaderView::Fixed);
 
@@ -149,7 +149,9 @@ void TestWindow::initUiTableRowsInManualTestAutoStand()
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr);
+		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
+			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
+		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
 
@@ -166,6 +168,6 @@ void TestWindow::initUiTableRowsInManualTestAutoStand()
 }
 
 
-void TestWindow::on_inManualTestAutoStandTestTimeComboBox_changed(int ind)
+void TestWindow::slot_inManualTestAutoStandTestTimeComboBox_changed(int ind)
 {
 }

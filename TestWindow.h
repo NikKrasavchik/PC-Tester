@@ -1,4 +1,5 @@
 #pragma once
+
 #include "ui_TestWindow.h"
 
 #include <QDialog>
@@ -39,23 +40,36 @@
 #define COLUMN_STAND_WIDTH			60
 #define COLUMN_PC_WIDTH				60
 #define COLUMN_MORE_WIDTH			25
-#define COLUMN_MANUAL_CHECK_WIDTH	100
+#define COLUMN_MANUAL_CHECK_WIDTH	75
 
-#define BUTTON_NOT_SET			NOT_SET
-#define OFF_BUTTON_PRESSED		0
-#define ON_BUTTON_PRESSED		1
-#define LOAD0_BUTTON_PRESSED	0
-#define LOAD25_BUTTON_PRESSED	64
-#define LOAD50_BUTTON_PRESSED	128
-#define LOAD75_BUTTON_PRESSED	192
-#define LOAD100_BUTTON_PRESSED	255
-#define HIGH_BUTTON_PRESSED		0
-#define LOW_BUTTON_PRESSED	1
-#define ZERO_BUTTON_PRESSED		2
+#define MIN_ROW_HEIGHT				40
 
-#define SORT_TYPE_INDEX			0
-#define SORT_TYPE_DIRECTION_OUT	1
-#define SORT_TYPE_DIRECTION_IN	2
+#define BUTTON_NOT_SET				NOT_SET
+#define OFF_BUTTON_PRESSED			0
+#define ON_BUTTON_PRESSED			1
+#define LOAD0_BUTTON_PRESSED		0
+#define LOAD25_BUTTON_PRESSED		64
+#define LOAD50_BUTTON_PRESSED		128
+#define LOAD75_BUTTON_PRESSED		192
+#define LOAD100_BUTTON_PRESSED		255
+#define HIGH_BUTTON_PRESSED			0
+#define LOW_BUTTON_PRESSED			1
+#define ZERO_BUTTON_PRESSED			2
+
+#define SORT_TYPE_INDEX				0
+#define SORT_TYPE_DIRECTION_OUT		1
+#define SORT_TYPE_DIRECTION_IN		2
+
+#define FIXED_HEADER_BUTTON_WIDTH	120
+#define FIXED_HEADER_BUTTON_HEIGHT	50
+#define FIXED_HEADER_COMBO_WIDTH	200
+#define FIXED_HEADER_COMBO_HEIGHT	40
+#define FIXED_MORE_BUTTON_SIZE		25
+#define FIXED_ACHECK_BUTTON_WIDTH	60
+#define FIXED_ACHECK_BUTTON_HEIGHT	25
+#define FIXED_CHECK_BUTTON_WIDTH	65
+#define FIXED_CHECK_WBUTTON_WIDTH	148
+#define	FIXED_CHECK_BUTTON_HEIGHT	30
 
 enum class TestButtons
 {
@@ -116,7 +130,7 @@ class TestTableRowProperties : public QObject
 	Q_OBJECT
 
 public:
-	TestTableRowProperties(TestWindow* testwindow);
+	TestTableRowProperties();
 
 	int id;
 	int canId;
@@ -130,6 +144,7 @@ public:
 	QString typeStr;
 	TypeCable typeInt;
 	QString comment;
+	bool manualChecked;
 
 	std::vector<Measureds*> measureds;
 	std::vector<Thresholds> thresholds;
@@ -141,12 +156,56 @@ public:
 	int statePWM;
 	int stateHLD;
 
-	//TestWindow* testwindow;
-
-	TestTableRowProperties* getThis() { return this; }; // Ужасное название. Не вникал, но если это родительский какой то, то назови что то по типу getParent
+	// ------------------------------------
+	// Name: generateInteractionButtons
+	//			Производится генерация кнопок в соответствии с типом кабеля
+	// Variables:
+	//			WindowType testType: Содержит тип теста. Обрабатываемые аргументы:
+	//								OUT_TEST_MANUAL_STAND		
+	//								FULL_TEST_MANUAL_STAND
+	//								OUT_MANUAL_TEST_AUTO_STAND
+	//								IN_MANUAL_TEST_AUTO_STAND
+	//								OUT_AUTO_TEST_AUTO_STAND
+	//			int type: Содержит тип кабеля. Обрабатываемые аргументы:
+	//						TYPE_DIGITAL
+	//						TYPE_PWM
+	//						TYPE_VNH
+	//						TYPE_HLD
+	// ------------------------------------
 	void generateInteractionButtons(WindowType testType, int type);
+
+	// ------------------------------------
+	// Name: switchButtonState
+	//			Производится переулючение стиля кнопок в соответствии с нажатием кнопок
+	// Variables: 
+	//			TestButtons testButton: содержит тип кнопки. Обрабатываемые аргументы:
+	//				BUTTON_ON
+	//				BUTTON_OFF
+	//				BUTTON_LOAD_0
+	//				BUTTON_LOAD_25
+	//				BUTTON_LOAD_50
+	//				BUTTON_LOAD_75
+	//				BUTTON_LOAD_100
+	//				BUTTON_HIGH
+	//				BUTTON_LOW
+	//				BUTTON_ZERO
+	// ------------------------------------
 	void switchButtonState(TestButtons testButton);
+
+	// ------------------------------------
+	// Name: sendSignal
+	//			Отправляется сигнал на can
+	// ------------------------------------
 	void sendSignal();
+
+	// ------------------------------------
+	// Name: generateWarning
+	//			Вызывается окно сообщения при неожиданных исходах
+	// Variables: 
+	//			Warnings::TestWindow warning: Идентификатор вызываемой ошибки
+	//											OPEN_MORE_WINDOW
+	// ------------------------------------
+	void generateWarning(Warnings::TestWindow warning);
 
 public slots:
 	void on_onButton_clicked();
@@ -162,11 +221,8 @@ public slots:
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
 
-	//void msgFromTwoThreadAfterTest_AutoTwothread(int pad, int pin, float voltage, float curent);
-
 signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
-	void switchActiveTableButton(void* activeButton, void* inactiveButton);
 
 	void selectCurrentCell(QString connector, QString pin);
 };
@@ -176,13 +232,25 @@ class TestWindow : public QDialog
 	Q_OBJECT
 
 public:
-	TestWindow(WindowType testType, std::vector<Cable> cables, NameTestingBlock testingBlock, QWidget* parent = nullptr);
+	TestWindow(WindowType testType, std::vector<Cable> cables, TestBlockName testingBlock, QWidget* parent = nullptr);
 	~TestWindow();
 
-	void setFileName(QString fileName);
+	// ------------------------------------
+	// Name: setParentFrame
+	//		Сохранение родительского элемента
+	// Variables: 
+	//			WindowFrame* parentFrame: Родительский элемент
+	// ------------------------------------
 	void setParentFrame(WindowFrame* parentFrame);
+
+	// ------------------------------------
+	// Name: ProcAutoTest
+	//		Отправка сообщения на can
+	// Variables: 
+	//			int pad: Коннектор кабеля для отправки
+	//			int pin: Пин кабеля для отправки
+	// ------------------------------------
 	void ProcAutoTest(int pad, int pin);
-	QString getFileName() { return fileName; }
 
 	StandStatusFlags* statusFlags;
 private:
@@ -204,9 +272,9 @@ private:
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* backButton;
+	QPushButton* sleepButton;
 	QPushButton* reportButton;
 	QPushButton* fullTestSortButton;
-	QPushButton* fullTestAutoStandSortButton;
 	QPushButton* inTestManualStandConnectButton;
 	QPushButton* outTestManualStandConnectButton;
 	QPushButton* fullTestManualStandConnectButton;
@@ -216,12 +284,12 @@ private:
 	QComboBox* outManualTestAutoStandTestTimeComboBox;
 	QSpacerItem* tripleButtonsSpacer;
 	QSpacerItem* reportSpacer;
+	QSpacerItem* reportSpacerTwo;
 	QSpacerItem* footerSpacer;
 	QLabel* logoLabel;
 	QLabel* fileNameLabel;
 	QFrame* headerLine;
 	QFrame* footerLine;
-	QLineEdit* testerNameLineEdit;
 	QTableWidget* mainTableWidget;
 	QStringList* mainTableHeaderLabels;
 	QPixmap* logoLightPixmap;
@@ -234,20 +302,28 @@ private:
 	QPixmap* backButtonDarkPixmap;
 	QPixmap* moreButtonLightPixmap;
 	QPixmap* moreButtonDarkPixmap;
+	QPixmap* clockwiseLightPixmap;
+	QPixmap* clockwiseDarkPixmap;
+	QPixmap* counterclockwiseLightPixmap;
+	QPixmap* counterclockwiseDarkPixmap;
+	QPixmap* noClockwiseLightPixmap;
+	QPixmap* noClockwiseDarkPixmap;
 
-	int fullTestSortType; // false - сортировка по нумерации / true - сортировка по типу
+	int fullTestSortType;
 	
-	bool isFullTestEnabled; 
+	bool isFullTestEnabled;
 
 	QString fileName;
 	WindowType testType;
-	NameTestingBlock testingBlock;
-	Can* can;
+	TestBlockName testingBlock;
+	//Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
+	QMap <int, int> m;
 	std::vector<QCheckBox*> manualChecks;
-	std::vector<Measureds*> measuredValues;
-	//QThread* th;
 	Cable *nextCheckCable;
+	QTimer* rotateTimer;
+	int timerCounter;
+	std::vector<std::pair<int, QLabel*>> hallLabels;
 
 	void initUiMain();
 	void initUiMainHeader();
@@ -334,10 +410,7 @@ private:
 	void resetTheme();
 	void resetLanguage();
 	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
-	void resetLanguageRowsTable(); // Надо как то менять язык в таблице
 	void resetIconMoreButton(bool theme);
-	void sortRows();
-	void fillTestTimeComboBoxes();
 
 	void generateCableRows(WindowType testType, std::vector<Cable> cables);
 	void initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget);
@@ -349,25 +422,25 @@ private:
 	void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType);
 
 public slots:
-	void on_backButton_clicked();
-	void on_switchThemeButton_clicked();
-	void on_switchLanguageButton_clicked();
-	void on_reportButton_clicked();
+	void slot_backButton_clicked();
+	void slot_switchThemeButton_clicked();
+	void slot_switchLanguageButton_clicked();
+	void slot_reportButton_clicked();
+	void slot_sleepButton_clicked();
 
-	void on_AutoStandConnectButton_clicked();
-	void on_inManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void on_outManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void on_AutoStandStartTestButton_clicked();
+	void slot_autoStandConnectButton_clicked();
+	void slot_inManualTestAutoStandTestTimeComboBox_changed(int ind);
+	void slot_outManualTestAutoStandTestTimeComboBox_changed(int ind);
+	void slot_autoStandStartTestButton_clicked();
 
-	void on_fullTestSortButton_clicked();
+	void slot_fullTestSortButton_clicked();
 
-	void switchActiveTableButton(void* activeButton, void* inactiveButton);
+	void slot_mainTableWidget_cellClicked(int row, int column);
 
-public slots:
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
+	void Slot_ChangedByte(int idCable, int newValue);
 	void selectCurrentCell(QString conector, QString pin);
 
-signals:
-
+	void on_rotateTimer_timeout();
 };

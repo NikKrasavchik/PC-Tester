@@ -3,10 +3,10 @@
 #define COLUMN_COUNT		8
 
 #define COLUMN_DIRECTION	3
-#define COLUMN_TYPE		4
+#define COLUMN_TYPE			4
 #define COLUMN_CHECK		5
 #define COLUMN_STATUS		6
-#define COLUMN_MORE		7
+#define COLUMN_MORE			7
 
 void TestWindow::initUiFullTestAutoStand()
 {
@@ -18,6 +18,7 @@ void TestWindow::initUiFullTestAutoStand()
 	autoStandStartTestButton = new QPushButton(usefulSpaceWidget);
 	autoStandStartTestButton->setObjectName("AutoStandStartTestButton");
 	autoStandStartTestButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
+	connect(autoStandStartTestButton, &QPushButton::clicked, this, &TestWindow::slot_autoStandStartTestButton_clicked);
 	usefulSpaceHLayout->addWidget(autoStandStartTestButton);
 
 	fullTestSortButton = new QPushButton(usefulSpaceWidget);
@@ -41,6 +42,7 @@ void TestWindow::resetTableHeaderFullTestAutoStand()
 	mainTableWidget->setColumnCount(COLUMN_COUNT);
 
 	resetTableHeaderLanguageFullTestAutoStand();
+
 
 	mainTableWidget->setColumnWidth(COLUMN_CONNECTOR,	COLUMN_CONNECTOR_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_PIN,		COLUMN_PIN_WIDTH);
@@ -180,9 +182,9 @@ void TestWindow::resetTableRowsFullTestAutoStand()
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		qDebug() << cableRows[currentRowNum]->connectorStr << cableRows[currentRowNum]->pin << cableRows[currentRowNum]->name << cableRows[currentRowNum]->direction << cableRows[currentRowNum]->typeStr;
-
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr);
+		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
+			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
+		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
 
@@ -198,6 +200,6 @@ void TestWindow::resetTableRowsFullTestAutoStand()
 	resetTableTypeLanguageFullTestAutoStand();
 }
 
-void TestWindow::on_AutoStandConnectButton_clicked()
+void TestWindow::slot_autoStandConnectButton_clicked()
 {
 }

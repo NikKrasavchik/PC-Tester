@@ -24,11 +24,6 @@
 
 #include <QDebug>
 
-#define TYPE_NOT_SET	NOT_SET
-#define TYPE_MANUAL		0
-#define TYPE_AUTO		1
-
-
 class MainWindow : public QMainWindow
 {
 	Q_OBJECT
@@ -37,6 +32,12 @@ public:
 	MainWindow(QWidget* parent = nullptr);
 	~MainWindow();
 
+	// ------------------------------------
+	// Name: setParentFrame
+	//		Сохранение родительского элемента
+	// Variables: 
+	//			WindowFrame* parentFrame: родительских элемент
+	// ------------------------------------
 	void setParentFrame(WindowFrame* parentFrame);
 
 private:
@@ -50,7 +51,22 @@ private:
 	QWidget* manualTestAutoStandWidget;
 	QWidget* autoTestAutoStandWidget;
 	QWidget* backgroundManualStandWidget;
+	QWidget* topWidget;
+	QWidget* switchTypeWidget;
+	QWidget* switchThemeLanguageWidget;
+	QWidget* leftHWidget;
+	QWidget* leftVWidget;
+	QWidget* leftSwitchBlockWidget;
+	QWidget* selectBlockVersionVWidget;
+	QWidget* selectBlockVersionHWidget;
+	QWidget* leftSettingsWidget;
+	QWidget* selectAdapterWidget;
+	QWidget* findAdapterWidget;
+	QWidget* selectFrequencyWidget;
+	QWidget* logoPixmapWidget;
+	QWidget* logoWidget;
 	QGridLayout* mainGridLayout;
+	QHBoxLayout* logoHLayout;
 	QHBoxLayout* switchTypeHLayout;
 	QHBoxLayout* topHLayout;
 	QHBoxLayout* findAdapterHLayout;
@@ -63,6 +79,7 @@ private:
 	QHBoxLayout* autoTestAutoStandHLayout;
 	QHBoxLayout* fullTestAutoStandHLayout;
 	QHBoxLayout* fullTestAutoStandMiddleHLayout;
+	QHBoxLayout* selectBlockVersionHLayout;
 	QVBoxLayout* fullTestAutoStandVLayout;
 	QVBoxLayout* autoTestAutoStandVLayout;
 	QVBoxLayout* manualTestAutoStandVLayout;
@@ -76,9 +93,9 @@ private:
 	QVBoxLayout* switchThemeLanguageVLayout;
 	QVBoxLayout* manualStandMainVLayout;
 	QVBoxLayout* leftSwitchBlockVLayout;
-	QVBoxLayout* leftSwitchStandButtonsVLayout;
-	QHBoxLayout* leftSwitchStandHLayout;
+	QVBoxLayout* selectBlockVersionVLayout;
 	QLabel* logoLabel;
+	QLabel* selectBlockVersionLabel;
 	QLabel* selectAdapterLabel;
 	QLabel* selectFrequencyLabel;
 	QLabel* manualStandLabel;
@@ -100,13 +117,13 @@ private:
 	QPushButton* fullTestAutoStandButton;
 	QPushButton* leftBlockBCMButton;
 	QPushButton* leftBlockDMButton;
+	QComboBox* selectBlockVersionComboBox;
 	QComboBox* selectAdapterComboBox;
 	QComboBox* selectFrequencyComboBox;
 	QSpacerItem* rightAutoStandSpacer;
 	QSpacerItem* leftManualStandSpacer;
 	QSpacerItem* leftSwitchStandSpacer;
 	QSpacerItem* rightSwitchStandSpacer;
-	QSpacerItem* topSwitchStandSpacer;
 	QSpacerItem* topFrequencySpacer;
 	QSpacerItem* topSettingsSpacer;
 	QSpacerItem* botSettingsSpacer;
@@ -123,9 +140,6 @@ private:
 	QSpacerItem* manualTestAutoStandLeftSpacer;
 	QSpacerItem* manualTestAutoStandRightSpacer;
 	QSpacerItem* frequencyMiddleSpacer;
-	QSpacerItem* selectFileMiddleSpacer;
-	QSpacerItem* selectFileLeftSpacer;
-	QSpacerItem* selectFileRightSpacer;
 	QSpacerItem* testManualStandMiddleUpSpacer;
 	QSpacerItem* testManualStandMiddleBottomSpacer;
 	QSpacerItem* testManualStandMiddleFooterSpacer;
@@ -153,6 +167,11 @@ private:
 	QSpacerItem* fullTestAutoStandBottomSpacer;
 	QSpacerItem* leftStandSwitchSpacer;
 	QSpacerItem* leftStandSwitchUpSpacer;
+	QSpacerItem* selectBlockVersionUpSpacer;
+	QSpacerItem* selectBlockVersionLeftSpacer;
+	QSpacerItem* selectBlockVersionRightSpacer;
+	QSpacerItem* leftHLayoutLeftSpacer;
+	QSpacerItem* leftHLayoutRightSpacer;
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
 	QPixmap* themeLightPixmap;
@@ -162,18 +181,15 @@ private:
 	QPixmap* languageLightPixmap;
 	QPixmap* languageDarkPixmap;
 
+	QTimer* timerCheckAdapter;
+
 	Can* can;
 	std::vector<Cable> cables;
-	std::vector<Cable> cablesDMStorag;
-	std::vector<Cable> cablesBCMStorag;
+	std::vector<QString> blockVersionsDTM;
+	std::vector<QString> blockVersionsBCM;
 
 	bool isAllInit;
-	NameTestingBlock selectedBlock;
 	TypeStand selectedTypeStand;
-
-	QString appstylePath;
-	QString darkStylePath;
-	QString lightStylePath;
 
 	void initRecources();
 	void initStyles();
@@ -182,7 +198,8 @@ private:
 	void initTexts();
 	void initIcons();
 	void initConnections();
-	void initCables();
+	void initBlockVersions();
+	void loadCables(TestBlockName block, QString version);
 
 	void initUi();
 	void initUiLogo();
@@ -210,7 +227,6 @@ private:
 
 	void resizeEvent(QResizeEvent* event);
 
-	std::vector<Cable> prepareArguments(WindowType testType);
 	void createTestWindow(WindowType testType, std::vector<Cable> preparedCables);
 
 	void generateWarning(Warnings::MainWindow warning);
@@ -218,27 +234,34 @@ private:
 	void resetWindowView();
 
 private slots:
-	// Button
-	void on_sliderSwitchStand_click();
-	void on_manualStandButton_clicked();
-	void on_autoStandButton_clicked();
-	void on_switchThemeButton_clicked();
-	void on_switchLanguageButton_clicked();
-	void on_checkAdaptersButton_clicked();
-	// ComboBox
-	void on_selectFrequencyComboBox_changed(int index);
-	void on_selectAdapterComboBox_changed(int index);
-	// main
-	void on_outTestManualStandButton_clicked();
-	void on_inTestManualStandButton_clicked();
-	void on_fullTestManualStandButton_clicked();
-	void on_inManualTestAutoStandButton_clicked();
-	void on_outManualTestAutoStandButton_clicked();
-	void on_inAutoTestAutoStandButton_clicked();
-	void on_outAutoTestAutoStandButton_clicked();
-	void on_fullTestAutoStandButton_clicked();
-	void on_leftBlockBCMButton_clicked();
-	void on_leftBlockDMButton_clicked();
+	// Buttons
+	void slot_sliderSwitchStand_clicked();
+	void slot_manualStandButton_clicked();
+	void slot_autoStandButton_clicked();
+	void slot_switchThemeButton_clicked();
+	void slot_switchLanguageButton_clicked();
+	void slot_checkAdaptersButton_clicked();
+	void slot_leftBlockBCMButton_clicked();
+	void slot_leftBlockDMButton_clicked();
+
+	// ComboBoxes
+	void slot_selectBlockVersionComboBox_changed(int index);
+	void slot_selectFrequencyComboBox_changed(int index);
+	void slot_selectAdapterComboBox_changed(int index);
+
+	// Test buttons
+	void slot_outTestManualStandButton_clicked();
+	void slot_inTestManualStandButton_clicked();
+	void slot_fullTestManualStandButton_clicked();
+	void slot_inManualTestAutoStandButton_clicked();
+	void slot_outManualTestAutoStandButton_clicked();
+	void slot_inAutoTestAutoStandButton_clicked();
+	void slot_outAutoTestAutoStandButton_clicked();
+	void slot_fullTestAutoStandButton_clicked();
+
+	// Timer
+	void Timer_CheckAdapter();
+
 
 signals:
 	void resizeStandSlider(int width, int height);

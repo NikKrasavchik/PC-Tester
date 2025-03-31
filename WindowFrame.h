@@ -47,7 +47,7 @@ protected:
 	bool eventFilter(QObject* obj, QEvent* event) override;
 
 public slots:
-	void on_switchThemeButton_clicked();
+	void slot_switchThemeButton_clicked();
 
 private slots:
 	/// Handler for the "Close" button click signal.

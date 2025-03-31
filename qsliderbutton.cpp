@@ -1,4 +1,3 @@
-
 #include "qsliderbutton.h"
 #include <QPainter>
 #include <QMouseEvent>
@@ -17,7 +16,7 @@ void QSliderButton::paintEvent(QPaintEvent* event)
 
 	painter.setPen(QPen(Qt::black, 3));
 	painter.setRenderHint(QPainter::Antialiasing, true);
-	painter.setPen(QPen(QColor("#fff"), 0.1));
+	painter.setPen(QPen(QColor(COLOR_WHITE), 0.1));
 
 	// Рисуем фон
 	painter.setBrush(bgColor);
@@ -57,11 +56,28 @@ void QSliderButton::mousePressEvent(QMouseEvent* event)
 		repaint();
 	}
 }
+
+// ------------------------------------
+// Name: getStatus
+//		Возврат текущего статуса
+// Return: 
+//			TypeStand: Переменная, хранящая в себе информацию о выбранном стенде. Возвращаемые данные:
+//						MANUAL
+//						AUTO
+// ------------------------------------
 TypeStand QSliderButton::getStatus()
 {
 	return status;
 }
 
+// ------------------------------------
+// Name: setStatus
+//		Установка текущего статуса
+// Variables: 
+//			TypeStand newValue: Переменная, хранящая в себе информация о выбранном стенде. Обрабатываемые аргументы:
+//								MANUAL
+//								AUTO
+// ------------------------------------
 void QSliderButton::setStatus(TypeStand newValue)
 {
 	if (newValue == TypeStand::MANUAL || newValue == TypeStand::AUTO)
@@ -75,6 +91,13 @@ void QSliderButton::resizeSlider(int newWidth, int newHeight)
 	sizeHeight = newHeight;
 }
 
+// ------------------------------------
+// Name: setStyleSheet
+//		Установка стиля
+// Variables: 
+//			QString roundColor: Переменная, хранящая в себе информацию о стиле грани
+//			QString bgColor: Переменная, хранящая в себе информацию о стиле заднего фона
+// ------------------------------------
 void QSliderButton::setStyleSheet(QString roundColor, QString bgColor)
 {
 	this->roundColor = roundColor;

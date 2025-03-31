@@ -12,7 +12,6 @@ Can::Can()
 {
 	b_adapterSelected = false;
 	b_frequencySelected = false;
-	b_flagStandConnectionCheck = false;
 	b_flagStatusConnection = false;
 
 	counterConnectMsg = 0;
@@ -52,12 +51,31 @@ bool Can::initCan(WindowType windowType)
 		statusTmp = CiTrQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
 		statusTmp = CiRcQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
 		statusTmp = CiStart(marathon->activeAdapter);
-
 	}
 
-	timerReadCan->start(5); // И запустим таймер]
-	timerSendConnectMsg->start(100); // И запустим таймер]
-	timerCheckStandConnection->start(TIME_CHECKCONNECTION); // И запустим таймер
+	timerReadCan->start(2); // И запустим таймер]
+	switch (windowType)
+	{
+	case WindowType::MAINWINDOW:
+	case WindowType::CONFIGURATOR:
+	case WindowType::IN_TEST_MANUAL_STAND:
+	case WindowType::OUT_TEST_MANUAL_STAND:
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100); // И запустим таймер
+		break;
+
+	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
+	case WindowType::IN_AUTO_TEST_AUTO_STAND:
+	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+	case WindowType::FULL_TEST_AUTO_STAND:
+		timerSendConnectMsg->start(100); // И запустим таймер]
+		timerCheckStandConnection->start(TIME_CHECKCONNECTION); // И запустим таймер
+		break;
+
+	default:
+		break;
+	}
 
 	counterConnectMsg = 0;
 
@@ -66,13 +84,18 @@ bool Can::initCan(WindowType windowType)
 	return true;
 }
 
+// ------------------------------------
+// Name: deinitCan
+// Return: bool
+//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+//			true  - в слу	чае если can прошёл деинициализацию.
+// ------------------------------------
 bool Can::deinitCan()
 {
 	timerReadCan->stop();
 	timerSendConnectMsg->stop();
 	timerCheckStandConnection->stop();
 
-	b_flagStandConnectionCheck = false;
 	b_flagStatusConnection = false;
 
 	measureds.clear();
@@ -94,7 +117,6 @@ bool Can::deinitCan()
   
 bool Can::writeCan(int id, int* msg)
 {
-	
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned char msgSendKvase[8];
@@ -118,9 +140,17 @@ bool Can::writeCan(int id, int* msg)
 	return false;
 }
 
-
-
-		canmsg_t msgReceive;
+// ------------------------------------
+// Name: readWaitCan
+// Variables:
+//			int* id - указатель на переменную в которую запишеться id пришедшего can-сообщения.
+//			int* msg - указатель на переменную в которую запишеться сообщение пришедшее из can.
+//			int  timeout - время в миллисикундах сколько мы будем ждать сообщение из can-шыны.
+// Return: bool
+//			false - в случае если за время timeout не пришло сообщение на can-шину.
+//			true  - в случае если за время timeout пришло сообшение на can-шину.
+// ------------------------------------
+canmsg_t msgReceive;
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
 	//Can::coun++;
@@ -137,9 +167,11 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 			for (int i = 0; i < 8; i++)
 				msg[i] = msgReceive[i];
 		}
+
 		delete dlc;
 		delete flags;
 		delete timestamp;
+
 		if (*id != NOT_SET)
 			return true;
 		else
@@ -158,10 +190,15 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 		}
 		else
 			return false;
-
 	}
 }
 
+// ------------------------------------
+// Name: setSelectedAdapterNeme
+// Variables: 
+//			QString adapter - имя адаптера который будет выбран в качестве рабочего.
+//			Значения обезательно должно соответсвовать какому либо элементу полученному из метода getNameAdapters().
+// ------------------------------------
 void Can::setSelectedAdapterNeme(QString adapter)
 {
 	kvaser->activeAdapter = NOT_SET;
@@ -180,6 +217,7 @@ void Can::setSelectedAdapterNeme(QString adapter)
 			b_adapterSelected = true;
 			return;
 		}
+
 	for (int i = 0; i < marathon->nameAdapters.size(); i++) // Проходим по marathon
 		if (marathon->nameAdapters[i] == adapter)
 		{
@@ -187,10 +225,16 @@ void Can::setSelectedAdapterNeme(QString adapter)
 			b_adapterSelected = true;
 			return;
 		}
-	b_adapterSelected = false;
 
+	b_adapterSelected = false;
 }
 
+// ------------------------------------
+// Name: setSelectedFrequency
+//		Установка выбранной частоты для работы can
+// Variables: 
+//			Qstring frequency: Выбираемая частота.
+// ------------------------------------
 void Can::setSelectedFrequency(QString frequency)
 {
 	if (frequency == "...")
@@ -210,6 +254,14 @@ void Can::setSelectedFrequency(QString frequency)
 	}
 }
 
+// ------------------------------------
+// Name: getNameAdapters
+// Return: std::vector<QString>
+//			Массив названий Can-адаптеров которые подключены к ПК и мы можем с ними работат.
+//			Примечание:
+//				У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
+//				Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
+// ------------------------------------
 std::vector<QString> Can::getNameAdapters()
 {
 	// Чистим массив с названияями адаптеров, для того что бы актуализировать подключенные адаптеры
@@ -283,7 +335,7 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 
 	switch (frequency)
 	{
-	case 50000:
+	case FREQUENCY_50K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_50K;
 		else
@@ -292,7 +344,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_50K_bt1;
 		}
 		break;
-	case 100000:
+
+	case FREQUENCY_100K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_100K;
 		else
@@ -301,7 +354,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_100K_bt1;
 		}
 		break;
-	case 125000:
+
+	case FREQUENCY_125K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_125K;
 		else
@@ -310,7 +364,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_125K_bt1;
 		}
 		break;
-	case 250000:
+
+	case FREQUENCY_250K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_250K;
 		else
@@ -319,7 +374,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_250K_bt1;
 		}
 		break;
-	case 500000:
+
+	case FREQUENCY_500K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_500K;
 		else
@@ -328,7 +384,8 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_500K_bt1;
 		}
 		break;
-	case 1000000:
+
+	case FREQUENCY_1000K:
 		if (modelAdapter == KVASER)
 			resultPair.first = BAUD_1M;
 		else
@@ -337,6 +394,7 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 			resultPair.second = BCI_1M_bt1;
 		}
 		break;
+
 	default:
 		break;
 	}
@@ -384,8 +442,13 @@ Measureds* getMeasureds(int* msg)
 
 void Can::Timer_ReadCan()
 {
+#ifdef DEBUG_OUTPUT
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Start";
+#endif
+
 	int id = NOT_SET;
 	int msgReceive[8];
+	bool isValueChange = false;
 	if (Can::readWaitCan(&id, msgReceive, 1))
 	{
 		switch (windowType)
@@ -395,15 +458,25 @@ void Can::Timer_ReadCan()
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			if (id == ID_CAN_MANUALSTAND)// сообшение о конекте
 			{
-				b_flagStandConnectionCheck = true;
-				if (!b_flagStatusConnection)
+				if(b_flagStatusConnection)
+					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
+				else
 				{
-
 					Signal_ChangedStatusStandConnect(true);
 					b_flagStatusConnection = true;
+					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
+
 				}
 			}
+			for (int i = 0; i < mapCable[id].size(); i++)
+				if (mapCable[id][i].second != msgReceive[mapCable[id][i].first.getBit()])
+				{
+					mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
+					Signal_ChangedByte(mapCable[id][i].first.getId(), mapCable[id][i].second);
+				}
+
 			break;
+
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -439,7 +512,6 @@ void Can::Timer_ReadCan()
 				msgReceive[7] == 0xFA)
 			{
 				timerCheckStandConnection->start(TIME_CHECKCONNECTION);
-				b_flagStandConnectionCheck = true;
 				counterConnectMsg++;
 #ifdef DEBUG_CAN
 				qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "I received a message about a periodic connection";
@@ -447,7 +519,6 @@ void Can::Timer_ReadCan()
 			}
 			else if (id == 2 ) // Сообщение о результате теста
 			{
-				
 				measureds.push_back(getMeasureds(msgReceive));
 				if ((msgReceive[2] & 0x01) == 1) // Конец теста
 				{
@@ -459,17 +530,17 @@ void Can::Timer_ReadCan()
 					Signal_AfterTest(msgReceive[0], msgReceive[1], measureds);
 					measureds.clear();
 				}
-
 			}
 			break;
 		}
-
-			
 	}
 
 #ifdef DEBUG_CAN
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Send";
 #endif // DEBUG_CAN
+#ifdef DEBUG_OUTPUT
+	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "end";
+#endif
 }
 
 void Can::Timer_SendConnectMsg()
@@ -485,33 +556,19 @@ void Can::Timer_SendConnectMsg()
 		int msgSendConnect[8] = { 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0xAF };
 		writeCan(ID_CAN_AUTOSTAND, msgSendConnect);
 	}
-}
 
+}
 void Can::Timer_CheckStandConnection()
 {
-
 	timerCheckStandConnection->stop();
 	Signal_ChangedStatusStandConnect(false);
 	b_flagStatusConnection = false;
-
-	//if (b_flagStatusConnection)
-	//{
-	//	if(b_flagStandConnectionCheck)
-	//		b_flagStandConnectionCheck = false;
-	//	else
-	//	{
-	//		b_flagStandConnectionCheck = false;
-	//		b_flagStatusConnection = false;
-	//		Signal_ChangedStatusStandConnect(false);
-	//	}
-	//}
 	
 #ifdef DEBUG_CAN
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
 #endif // DEBUG_CAN
 }
-
-uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
+uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 {
 	uint8_t flags = 0;
 	// Block
@@ -550,25 +607,187 @@ uint8_t generateFlags(TypeCable typeCable, NameTestingBlock nameBlock)
 	}
 	flags = flags << 4;
 
-
 	return flags;
 }
-bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, NameTestingBlock nameBlock)
-{
 
+// ------------------------------------
+// Name: sendTestMsg
+// Variables: 
+//			ConnectorId pad - enum переедающий в себе идентификатор коложки (A - 1; B - 2; C - 3; C - 4; ...).
+//			int pin - номер пина в колодки.
+//			int type - bдентификатор показывающий какого типа пин.
+// Return: bool
+//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
+//			true  - в случае если сообщение отправилось.
+// ------------------------------------
+bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, TestBlockName nameBlock)
+{
 	if ((int)typeCable == NOT_SET)
 		return false;
 
 	int msgSendConnect[8] = { (int)pad, pin, generateFlags(typeCable, nameBlock), 0, 0, 0, 0, 0 };
-	//generateFlags(typeCable, nameBlock);
 	
 	writeCan(10, msgSendConnect); // Дописать проверку ошибок kvasera
 	return true;
 }
 
+// ------------------------------------
+// Name: sendTestMsg
+//		Отправка сообщения на can
+// Variables: 
+//			ConnectorId pad: Коннектор отправляемого кабеля
+//			int pin: Пин отправляемого кабеля
+//			int digValue: Цифровое значение отправляемого кабеля
+//			int pwmValue: ШИМ значение отправляемого кабеля
+// ------------------------------------
 void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 {
 	int msgSendConnect[8] = { (int)pad, pin, digValue, pwmValue, 0, 0, 0, 0 };
+#ifndef FOR_DEVELOPER
+	if (viewWindowState->selectedBlock == TestBlockName::DTM)
+	{
+		if (pad == ConnectorId::D && pin == 7) // D7
+		{
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 6;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 6;
+				msgSendConnect[2] = 2;
+
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 6;
+				msgSendConnect[2] = 1;
+
+			}
+		}
+		else if (pad == ConnectorId::D && pin == 6) // D6
+		{
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 2;
+
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 1;
+
+			}
+		}
+		else if (pad == ConnectorId::D && pin == 5) // D5
+		{
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 2;
+
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 1;
+
+			}
+		}
+		else if (pad == ConnectorId::C && pin == 11) // С11
+		{
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 12;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 12;
+				msgSendConnect[2] = 2;
+
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 12;
+				msgSendConnect[2] = 1;
+
+			}
+		}
+		else if (pad == ConnectorId::C && pin == 12) // С12
+		{
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 11;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 11;
+				msgSendConnect[2] = 2;
+
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 11;
+				msgSendConnect[2] = 1;
+
+			}
+		}
+		else if (pad == ConnectorId::D && pin == 8) // D8
+		{
+			if (digValue == 0) // zero
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+			}
+			else if (digValue == 1) // high
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 2;
+
+			}
+			else if (digValue == 2) // low
+			{
+				Can::writeCan(0x55, msgSendConnect);
+				msgSendConnect[1] = 7;
+				msgSendConnect[2] = 1;
+
+			}
+		}
+	}
+#endif // !FOR_DEVELOPER
+	Can::writeCan(0x55, msgSendConnect);
+}
+
+void Can::sendGoToSleepMsg(bool isGoToSleep)
+{
+	int msgSendConnect[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	if (isGoToSleep)
+		msgSendConnect[0] = 0xFF;
 	Can::writeCan(0x55, msgSendConnect);
 } 
 

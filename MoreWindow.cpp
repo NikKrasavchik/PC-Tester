@@ -2,14 +2,14 @@
 
 #define BUTTON_SIZE						100, 40
 
-#define MEASUREMENT_COLUMN_POSITION	5
+#define MEASUREMENT_COLUMN_POSITION		5
 
-#define IND_COLUMN_BASE_COMMENT				5
+#define IND_COLUMN_BASE_COMMENT			5
 
-#define CELL_MIN_CURRENT	6
-#define CELL_MAX_CURRENT	7
-#define CELL_MIN_VOLTAGE	8
-#define CELL_MAX_VOLTAGE	9
+#define CELL_MIN_CURRENT				6
+#define CELL_MAX_CURRENT				7
+#define CELL_MIN_VOLTAGE				8
+#define CELL_MAX_VOLTAGE				9
 
 MoreWindow::MoreWindow(TestTableRowProperties* row)
 {
@@ -23,8 +23,6 @@ MoreWindow::MoreWindow(TestTableRowProperties* row)
 
 	initBaseUi();
 	fillBaseTable();
-
-	QMetaObject::connectSlotsByName(this);
 }
 
 MoreWindow::~MoreWindow() {}
@@ -82,6 +80,11 @@ void MoreWindow::initBaseUi()
 	mainVLayout->addLayout(bottomHLayout);
 }
 
+void MoreWindow::initConnections()
+{
+	connect(startTestButton, &QPushButton::clicked, this, &MoreWindow::on_startTestButton_clicked);
+}
+
 void MoreWindow::fillBaseTable()
 {
 	mainTableWidget->setColumnCount(BASE_COLUMN_COUNT);
@@ -135,6 +138,15 @@ void MoreWindow::fillBaseTable()
 	mainTableWidget->verticalHeader()->setSectionResizeMode(IND_ROW_BASE_VALUE, QHeaderView::Stretch);
 }
 
+// ------------------------------------
+// Name: prepareItem
+//		Подготовка ячейки для записи в него данных
+// Variables: 
+//			int row: индекс строчки ячейки
+//			int column: индекс столбца ячйки
+//			int rowSpan: количество ячейек для горизонтального соединения
+//			int columnSpan: количество ячейук для вертикального соединения
+// ------------------------------------
 void MoreWindow::prepareItem(int row, int column, int rowSpan, int columnSpan)
 {
 	QFont font;
@@ -149,6 +161,10 @@ void MoreWindow::prepareItem(int row, int column, int rowSpan, int columnSpan)
 	mainTableWidget->item(row, column)->setFont(font);
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindow::setValues()
 {
 	mainTableWidget->item(CELL_VALUE_BASE_CONNECTOR)->setText(row->connectorStr);
@@ -158,6 +174,12 @@ void MoreWindow::setValues()
 	mainTableWidget->item(CELL_VALUE_BASE_NAME)->setText(row->name);
 }
 
+// ------------------------------------
+// Name: resetLanguage
+//		Обновление данных в ячейках под актуальный язык
+// Variables: 
+//			int offset: Значение смещения. По умолчанию OFFSET_NULL
+// ------------------------------------
 void MoreWindow::resetLanguage(int offset)
 {
 	switch (viewWindowState->appLanguage)
@@ -278,6 +300,10 @@ void MoreWindowOut::resetBlockLanguage(int measuredNum)
 	}
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindowOut::setValues()
 {
 	for (int i = 0; i < row->thresholds.size(); i++)
@@ -297,30 +323,30 @@ void MoreWindowOut::setValues()
 		if (row->measureds[i]->current != -1)
 			if (row->measureds[i]->current < row->thresholds[i].minCurrent)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else if (row->measureds[i]->current > row->thresholds[i].maxCurrent)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(GREEN_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_GREEN);
 
 		if (row->measureds[i]->voltage != -1)
 			if (row->measureds[i]->voltage < row->thresholds[i].minVoltage)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else if (row->measureds[i]->voltage > row->thresholds[i].maxVoltage)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(GREEN_COLOR);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_GREEN);
 	}
 }
 
@@ -360,19 +386,23 @@ void MoreWindowIn::generateSigns()
 	}
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindowIn::setValues()
 {
 	if (row->measureds[0]->voltage == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(GREEN_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(COLOR_GREEN));
 	else if (row->measureds[0]->voltage == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(RED_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(COLOR_RED));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setText("-");
 
 	if (row->measureds[0]->current == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(GREEN_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(COLOR_GREEN));
 	else if (row->measureds[0]->current == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(RED_COLOR));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(COLOR_RED));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setText("-");
 }
@@ -469,6 +499,10 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 	}
 }
 
+// ------------------------------------
+// Name: setValues
+//		Запись значений кабеля в таблицу
+// ------------------------------------
 void MoreWindowInAnalog::setValues()
 {
 	for (int i = 0; i < row->thresholds.size(); i++)
@@ -479,16 +513,16 @@ void MoreWindowInAnalog::setValues()
 		else
 			if (row->measureds[i]->voltage < row->thresholds[i].minValue)
 			{
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else if (row->measureds[i]->voltage > row->thresholds[i].maxValue)
 			{
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(RED_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
 			}
 			else
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(GREEN_COLOR);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_GREEN);
 
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
@@ -567,15 +601,46 @@ void MoreWindow::resaveFile()
 	QFile fin("cables.cfg");
 	if (!fin.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		//generateError(EMPTY_FILLING, Errors::Configurator::FILE_OPEN);
+		MoreWindow::generateWarning(Warnings::MoreWindow::OPEN_FILE_ERROR);
 		return;
 	}
 
 	QString outputString = "";
+	bool isFound = false;
+	bool admissionBlock = false;
+	bool admissionVersion = false;
 	while (!fin.atEnd())
 	{
 		QString dataLine = fin.readLine();
+		
+		if (dataLine == "DM\n" && viewWindowState->selectedBlock == TestBlockName::DTM)
+			if (viewWindowState->selectedBlock == TestBlockName::DTM)
+				admissionBlock = true;
+			else
+				admissionBlock = false;
+
+		if (dataLine == "BCM\n")
+			if (viewWindowState->selectedBlock == TestBlockName::BCM)
+				admissionBlock = true;
+			else
+				admissionBlock = false;
+
+		QString proccessedDataLine = dataLine;
+		proccessedDataLine.remove(":");
+		proccessedDataLine.remove("\n");
+
+		if (dataLine[0] == ":")
+			if (proccessedDataLine == viewWindowState->actualVersion)
+				admissionVersion = true;
+			else
+				admissionVersion = false;
+
 		if (dataLine == "DM\n" || dataLine == "BCM\n")
+		{
+			outputString += dataLine;
+			continue;
+		}
+		if (dataLine[0] == ":")
 		{
 			outputString += dataLine;
 			continue;
@@ -602,39 +667,41 @@ void MoreWindow::resaveFile()
 			else if (row->typeStr == "HALL")
 				typeCheck = (dataList[3].toInt() == TYPE_HALL);
 
-		if ((dataList[0].toInt() == (int)row->connectorInt) &&
-			(dataList[1] == row->pin) &&
-			((dataList[2].toInt() ? "IN" : "OUT") == row->direction) &&
-			typeCheck &&
-			(dataList[4].toInt(nullptr, 16) == row->canId) &&
-			(dataList[5].toInt() == row->bit) &&
-			(dataList[6] == row->name) &&
-			(dataList[7] == row->component))
-		{
-			switch (row->typeInt)
+		if (admissionBlock && admissionVersion)
+			if ((dataList[0].toInt() == (int)row->connectorInt) &&
+				(dataList[1] == row->pin) &&
+				((dataList[2].toInt() ? "IN" : "OUT") == row->direction) &&
+				typeCheck &&
+				(dataList[4].toInt(nullptr, 16) == row->canId) &&
+				(dataList[5].toInt() == row->bit) &&
+				(dataList[6] == row->name) &&
+				(dataList[7] == row->component))
 			{
-			case TypeCable::DIG_OUT:
-			case TypeCable::PWM_OUT:
-			case TypeCable::VNH_OUT:
-			case TypeCable::HLD_OUT:
-				for (int i = 0; i < row->thresholds.size(); i++)
+				isFound = true;
+				switch (row->typeInt)
 				{
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4] = QString::number(row->thresholds[i].minVoltage);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 1] = QString::number(row->thresholds[i].maxVoltage);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 2] = QString::number(row->thresholds[i].minCurrent);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 3] = QString::number(row->thresholds[i].maxCurrent);
-				}
-				break;
+				case TypeCable::DIG_OUT:
+				case TypeCable::PWM_OUT:
+				case TypeCable::VNH_OUT:
+				case TypeCable::HLD_OUT:
+					for (int i = 0; i < row->thresholds.size(); i++)
+					{
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4] = QString::number(row->thresholds[i].minVoltage);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 1] = QString::number(row->thresholds[i].maxVoltage);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 2] = QString::number(row->thresholds[i].minCurrent);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 4 + 3] = QString::number(row->thresholds[i].maxCurrent);
+					}
+					break;
 
-			case TypeCable::ANALOG_IN:
-				for (int i = 0; i < row->thresholds.size(); i++)
-				{
-					dataList[FILE_MEASUREMENT_OFFSET + i * 2] = QString::number(row->thresholds[i].minValue);
-					dataList[FILE_MEASUREMENT_OFFSET + i * 2 + 1] = QString::number(row->thresholds[i].maxValue);
+				case TypeCable::ANALOG_IN:
+					for (int i = 0; i < row->thresholds.size(); i++)
+					{
+						dataList[FILE_MEASUREMENT_OFFSET + i * 2] = QString::number(row->thresholds[i].minValue);
+						dataList[FILE_MEASUREMENT_OFFSET + i * 2 + 1] = QString::number(row->thresholds[i].maxValue);
+					}
+					break;
 				}
-				break;
 			}
-		}
 
 		for (int i = 0; i < dataList.size(); i++)
 			outputString += dataList[i] + ";";
@@ -642,6 +709,12 @@ void MoreWindow::resaveFile()
 	}
 	outputString.remove(outputString.size() - 1, 1);
 	fin.close();
+
+	if (!isFound)
+	{
+		generateWarning(Warnings::MoreWindow::FILE_NOT_FOUND);
+		return;
+	}
 
 	std::ofstream fout;
 	fout.open("cables.cfg");
@@ -651,5 +724,33 @@ void MoreWindow::resaveFile()
 
 void MoreWindow::on_startTestButton_clicked()
 {
-	Can::sendTestMsg(row->connectorInt, row->pin.toInt(), row->typeInt, NameTestingBlock::BCM);
+	Can::sendTestMsg(row->connectorInt, row->pin.toInt(), row->typeInt, TestBlockName::BCM);
+}
+
+void MoreWindow::generateWarning(Warnings::MoreWindow warning)
+{
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		switch (warning)
+		{
+		case Warnings::MoreWindow::OPEN_FILE_ERROR:
+			break;
+
+		case Warnings::MoreWindow::FILE_NOT_FOUND:
+			break;
+		}
+		break;
+
+	case ENGLISH_LANG:
+		switch (warning)
+		{
+		case Warnings::MoreWindow::OPEN_FILE_ERROR:
+			break;
+
+		case Warnings::MoreWindow::FILE_NOT_FOUND:
+			break;
+		}
+		break;
+	}
 }

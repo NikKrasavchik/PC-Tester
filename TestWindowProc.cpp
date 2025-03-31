@@ -4,14 +4,13 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 {
 	for (int i = 0; i < cables.size(); i++)
 	{
-		cableRows.push_back(new TestTableRowProperties(this));
+		cableRows.push_back(new TestTableRowProperties());
 		// Test
 		for (int j = 0; j < cables[i].getThresholds().size(); j++)
 		{
 			Measureds* tmpMeasured = new Measureds;
 			cableRows[i]->measureds.push_back(tmpMeasured);
 		}
-		cableRows[i]->comment = QString::fromLocal8Bit("Привет, у этого кабеля всё плохо. Он сломан Сломанно A6 и вообще Vnh Как быв не понятно ткак сейчас тработает а это текст для теста");
 		// Test
 		cableRows[i]->id = cables[i].getId();
 		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].getConnector());
@@ -68,6 +67,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 
 			case TYPE_HALL:
 				cableRows[i]->typeStr = "HALL";
+				hallLabels.push_back(std::pair<int, QLabel*> {-1, new QLabel()});
 				break;
 
 			default:
@@ -103,15 +103,15 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 				break;
 			}
 		}
-		//else if (testType != WindowType::FULL_TEST_AUTO_STAND || testType != WindowType::FULL_TEST_MANUAL_STAND)
-		//	cableRows[i]->direction = "";
 
 		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
+
+		m[cableRows[i]->id] = i;
 	}
 }
 
-TestTableRowProperties::TestTableRowProperties(TestWindow* testwindow)
+TestTableRowProperties::TestTableRowProperties()
 {
 	id = -1;
 	canId = -1;
@@ -125,13 +125,14 @@ TestTableRowProperties::TestTableRowProperties(TestWindow* testwindow)
 	typeStr = "";
 	typeInt = TypeCable::EMPTY;
 	comment = "";
+	manualChecked = false;
 }
 
-void TestTableRowProperties::generateInteractionButtons(WindowType testType, int typeStr)
+void TestTableRowProperties::generateInteractionButtons(WindowType testType, int type)
 {
 	if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
 		testType == WindowType::FULL_TEST_MANUAL_STAND)
-		switch (typeStr)
+		switch (type)
 		{
 		case TYPE_DIGITAL:
 			if (direction == "OUT")
@@ -192,6 +193,7 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((VNHButtons*)buttons)->load0Button = new QPushButton();
 			((VNHButtons*)buttons)->load0Button->setObjectName("load0Button");
 			((VNHButtons*)buttons)->load0Button->setText("0%");
+
 			((VNHButtons*)buttons)->load0Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((VNHButtons*)buttons)->load0Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
@@ -571,7 +573,6 @@ void TestTableRowProperties::on_zero_clicked()
 	stateHLD = ZERO_BUTTON_PRESSED;
 
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, 0);
-
 }
 
 void TestTableRowProperties::on_load75Button_clicked()
@@ -605,3 +606,65 @@ void TestTableRowProperties::sendSignal()
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
+void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
+{
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		switch (warning)
+		{
+		case Warnings::TestWindow::OPEN_MORE_WINDOW:
+			break;
+		}
+		break;
+
+	case ENGLISH_LANG:
+		switch (warning)
+		{
+		case Warnings::TestWindow::OPEN_MORE_WINDOW:
+			break;
+		}
+		break;
+	}
+}
+
+void TestWindow::slot_mainTableWidget_cellClicked(int row, int column)
+{
+	if (column == mainTableWidget->columnCount() - 1)
+		manualChecks[row]->setChecked(!manualChecks[row]->isChecked());
+}
+
+void TestWindow::on_rotateTimer_timeout()
+{
+
+	for (int i = 0; i < hallLabels.size(); i++)
+	{
+		if (hallLabels[i].first == -1)
+			continue;
+
+		hallLabels[i].second->setText("");
+		hallLabels[i].first++;
+		
+		if (hallLabels[i].second->pixmap() != nullptr)
+		{
+			QPixmap pixmap = *hallLabels[i].second->pixmap();
+			pixmap.transformed(QTransform().rotate(1));
+			hallLabels[i].second->setPixmap(pixmap);
+		}
+		
+		if (hallLabels[i].first == 360)
+		{
+			hallLabels[i].first = -1;
+			switch (viewWindowState->appTheme)
+			{
+			case DARK_THEME:
+				hallLabels[i].second->setPixmap(QPixmap(*noClockwiseDarkPixmap));
+				break;
+
+			case LIGHT_THEME:
+				hallLabels[i].second->setPixmap(QPixmap(*noClockwiseLightPixmap));
+				break;
+			}
+		}	
+	}
+}

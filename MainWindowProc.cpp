@@ -3,7 +3,7 @@
 #define IND_CFG             0
 #define IND_STAND_TYPE      1
 
-#define COLUMN_COUNT       12
+#define COLUMN_COUNT		12
 #define IND_CONNECTOR_ID    0
 #define IND_PIN             1
 #define IND_DIRECTION       2
@@ -21,69 +21,6 @@
 #define MASK_CFG            "CFG"
 #define MASK_STAND_MANUAL   "MANUAL"
 #define MASK_STAND_AUTO     "AUTO"
-
-static bool verifyData(int column, QString data)
-{
-	switch (column)
-	{
-	case IND_CONNECTOR_ID:
-		if (false)
-			return false;
-		break;
-
-	case IND_PIN:
-		if (false)
-			return false;
-		break;
-
-	case IND_DIRECTION:
-		if (false)
-			return false;
-		break;
-
-	case IND_TYPE:
-		if (false)
-			return false;
-		break;
-
-	case IND_CAN_ID:
-		if (false)
-			return false;
-		break;
-
-	case IND_BIT:
-		if (false)
-			return false;
-		break;
-
-	case IND_MIN_CURRENT:
-		if (false)
-			return false;
-		break;
-
-	case IND_MAX_CURRENT:
-		if (false)
-			return false;
-		break;
-
-	case IND_MIN_VOLTAGE:
-		if (false)
-			return false;
-		break;
-
-	case IND_MAX_VOLTAGE:
-		if (false)
-			return false;
-		break;
-
-	case IND_NAME:
-		if (false)
-			return false;
-		break;
-	}
-
-	return true;
-}
 
 void MainWindow::generateWarning(Warnings::MainWindow warning)
 {
@@ -107,11 +44,16 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 		case Warnings::MainWindow::ADAPTERS_CHANGED:
 			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Изменился список активных адаптеров"));
 			break;
+
 		case Warnings::MainWindow::SIZE_CABLE_NUL:
 			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Кол-во тестируемых проводов равно нулю"));
 			break;
+
 		case Warnings::MainWindow::NOT_SELECTED_BLOCK:
 			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите блок для тестирования"));
+			break;
+
+		case Warnings::MainWindow::FILE_NOT_FOUND:
 			break;
 
 		default:
@@ -141,8 +83,12 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 		case Warnings::MainWindow::SIZE_CABLE_NUL:
 			QMessageBox::warning(this, QString("Warning"), QString("The number of wires tested is zero"));
 			break;
+
 		case Warnings::MainWindow::NOT_SELECTED_BLOCK:
 			QMessageBox::warning(this, QString("Warning"), QString("Select a block to test"));
+			break;
+
+		case Warnings::MainWindow::FILE_NOT_FOUND:
 			break;
 
 		default:

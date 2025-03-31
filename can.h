@@ -14,10 +14,10 @@
 #include "chai.h"
 #include "Cable.h"
 
-#define ID_CAN_AUTOSTAND 0x51
-#define ID_CAN_MANUALSTAND 0x100
+#define ID_CAN_AUTOSTAND		0x51
+#define ID_CAN_MANUALSTAND		0x100
 
-#define TIME_CHECKCONNECTION 200
+#define TIME_CHECKCONNECTION	200
 
 class Can : public QObject
 {
@@ -28,10 +28,10 @@ public:
 	// ------------------------------------
 	// Name: initCan
 	// Varibals: 
-	//			WindowType windowType - enum хранищий в себе идентификатор опрделяющий какое окно сейчас открыто.
+	//	WindowType windowType - enum хранищий в себе идентификатор опрделяющий какое окно сейчас открыто.
 	// Return: bool
-	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-	//			true  - в случае если can прошёл инициализацию.
+	//	false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
+	//	true  - в случае если can прошёл инициализацию.
 	// ------------------------------------
 	bool initCan(WindowType windowType);
 
@@ -45,15 +45,36 @@ public:
 
 	// ------------------------------------
 	// Name: setSelectedAdapterNeme
-	// Varibals: 
+	// Variables: 
 	//			QString adapter - имя адаптера который будет выбран в качестве рабочего.
 	//			Значения обезательно должно соответсвовать какому либо элементу полученному из метода getNameAdapters().
 	// ------------------------------------
 	void setSelectedAdapterNeme(QString adapter);
 
+	// ------------------------------------
+	// Name: setSelectedFrequency
+	//		Установка выбранной частоты для работы can
+	// Variables: 
+	//			Qstring frequency: Выбираемая частота.
+	// ------------------------------------
 	void setSelectedFrequency(QString frequency);
 
+	// ------------------------------------
+	// Name: getStatusAdapterSelected
+	//		Возвращение статуса выбора адаптера.
+	// Return: bool
+	//			true: Адаптер выбран.
+	//			false: Адаптер не выбран.
+	// ------------------------------------
 	bool getStatusAdapterSelected() { return b_adapterSelected; }
+
+	// ------------------------------------
+	// Name: getStatusFrequencySelected
+	//		Возврвщения статуса выбора статуса.
+	// Return: bool
+	//			true: Частота выбрана
+	//			false: Частота не выбрана.
+	// ------------------------------------
 	bool getStatusFrequencySelected() { return b_frequencySelected; }
 
 	// ------------------------------------
@@ -61,14 +82,14 @@ public:
 	// Return: std::vector<QString>
 	//			Массив названий Can-адаптеров которые подключены к ПК и мы можем с ними работат.
 	//			Примечание:
-	//				У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
-	//				Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
+	//		    У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
+	//		    Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
 	// ------------------------------------
 	std::vector<QString> getNameAdapters();
 
 	// ------------------------------------
 	// Name: sendTestMsg
-	// Varibals: 
+	// Variables: 
 	//			ConnectorId pad - enum переедающий в себе идентификатор коложки (A - 1; B - 2; C - 3; C - 4; ...).
 	//			int pin - номер пина в колодки.
 	//			int type - bдентификатор показывающий какого типа пин.
@@ -76,9 +97,27 @@ public:
 	//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
 	//			true  - в случае если сообщение отправилось.
 	// ------------------------------------
-	static bool sendTestMsg(ConnectorId pad, int pin, TypeCable type, NameTestingBlock nameBlock);
+	static bool sendTestMsg(ConnectorId pad, int pin, TypeCable type, TestBlockName nameBlock);
+
+	// ------------------------------------
+	// Name: sendTestMsg
+	//			Отправка сообщения на can
+	// Variables: 
+	//			ConnectorId pad: Коннектор отправляемого кабеля
+	//			int pin: Пин отправляемого кабеля
+	//			int digValue: Цифровое значение отправляемого кабеля
+	//			int pwmValue: ШИМ значение отправляемого кабеля
+	// ------------------------------------
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
+	// Отправляет сообщение блоку о засыпании или просыпании.
+	// @name sendGoToSleepMsg
+	// 
+	// @param boolisGoToSleep == true - команда на засыпание.
+	// @param          isGoToSleep == false - команда на пробуждение.
+	// 
+	// @return void
+	static void sendGoToSleepMsg(bool isGoToSleep);
 
 	static QString getSerialNumber();
 
@@ -86,19 +125,18 @@ public:
 	void setCable(std::vector<Cable> cable);
 	static void clearOldValue();
 private:
-	// ------------------------------------
-	// Name: writeCan
-	// Varibals:
-	//			int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
-	//			int* msg - указатель на переменную в которая отправиться в can.
-	// Return: bool
-	//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-	//			true  - в случае если can-сообщение отправленно.
-	// ------------------------------------
+	// Отправляет сообщение в CAN.
+	// @name writeCan
+	// 
+	// @param int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
+	// @param int* msg - указатель на переменную которая отправиться в can.
+	// 
+	// @return bool - В случае удачой отправки возращает true.
 	static bool writeCan(int id, int* msg);
+
 	// ------------------------------------
 	// Name: readWaitCan
-	// Varibals:
+	// Variables:
 	//			int* id - указатель на переменную в которую запишеться id пришедшего can-сообщения.
 	//			int* msg - указатель на переменную в которую запишеться сообщение пришедшее из can.
 	//			int  timeout - время в миллисикундах сколько мы будем ждать сообщение из can-шыны.
@@ -109,9 +147,9 @@ private:
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
-	//uint8_t generateFlags(int typeCable, NameTestingBlock nameBlock);
-	
-// Variables:
+//
+// Varibals
+//
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;
@@ -122,7 +160,8 @@ private:
 	static modelAdapter *marathon;
 	static canHandle hnd;
 
-	WindowType windowType;
+	
+	WindowType windowType; // Переменная хранящая идентификатор окна которое сейчас открыто
 	std::vector<Measureds*> measureds;
 	uint8_t counterConnectMsg;
 
@@ -131,22 +170,21 @@ private:
 	bool b_adapterSelected;
 	bool b_frequencySelected;
 	bool b_flagStandConnectionCheck;
-	bool b_flagStatusConnection;		// Флаг показывающий присоединён ли Stand
+	static bool b_flagStatusConnection;		// Флаг показывающий присоединён ли Stand
 
 	QTimer* timerReadCan;				// Таймер для считывания Can-сообщений.
 	QTimer* timerSendConnectMsg;		// Таймер для отправки сообщений на подключение или проверки подключения.
 	QTimer* timerCheckStandConnection;	// Таймер для проверки времени времени прихода переодического сообщения конекта.
 
-
 private slots:
 	void Timer_ReadCan();				// Слот для считывания Can-сообщений.
-	void Timer_SendConnectMsg();		// Слот для отправки сообщений на подключение или проверки подключения.
+	void Timer_SendConnectMsg();		// @doc Слот для отправки сообщений на подключение или подтверждения подключения.
 	void Timer_CheckStandConnection();	// Слот для проверки времени времени прихода переодического сообщения конекта.
 
 signals:
-	void Signal_ChangedStatusStandConnect(bool statusConnect);
-	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 
-
+	void Signal_ChangedStatusStandConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён 
+	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // Сигнал означающий завершение теста у автостенда
+	void Signal_ChangedByte(int idCable, int newValue);
 };
 

@@ -2,10 +2,10 @@
 
 #define COLUMN_COUNT	7
 
-#define COLUMN_TYPE	3
+#define COLUMN_TYPE		3
 #define COLUMN_STAND	4
 #define COLUMN_PC		5
-#define COLUMN_MORE	6
+#define COLUMN_MORE		6
 
 void TestWindow::initUiOutAutoTestAutoStand()
 {
@@ -142,7 +142,9 @@ void TestWindow::initUiTableRowsOutAutoTestAutoStand()
 	QAbstractItemModel* model = mainTableWidget->model();
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 	{
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr);
+		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
+			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
+		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
 

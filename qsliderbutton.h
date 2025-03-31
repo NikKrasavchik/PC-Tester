@@ -4,17 +4,40 @@
 #include <QWidget>
 #include "Components.h"
 
-#define ROUND_COLOR "#979797"
-#define BG_COLOR    "#E8E8E8"
-
 class QSliderButton : public QWidget
 {
 	Q_OBJECT
+
 public:
 	explicit QSliderButton(bool isHorizontal, QWidget* parent);
 
+	// ------------------------------------
+	// Name: getStatus
+	//		Возврат текущего статуса
+	// Return: 
+	//			TypeStand: Переменная, хранящая в себе информацию о выбранном стенде. Возвращаемые данные:
+ //    		MANUAL
+ //    		AUTO
+	// ------------------------------------
 	TypeStand getStatus();
+
+	// ------------------------------------
+	// Name: setStatus
+	//		Установка текущего статуса
+	// Variables: 
+	//			TypeStand newValue: Переменная, хранящая в себе информация о выбранном стенде. Обрабатываемые аргументы:
+ //    				MANUAL
+ //    				AUTO
+	// ------------------------------------
 	void setStatus(TypeStand newValue);
+
+	// ------------------------------------
+	// Name: setStyleSheet
+	//		Установка стиля
+	// Variables: 
+	//			QString roundColor: Переменная, хранящая в себе информацию о стиле грани
+	//			QString bgColor: Переменная, хранящая в себе информацию о стиле заднего фона
+	// ------------------------------------
 	void setStyleSheet(QString roundColor, QString bgColor);
 
 private:
@@ -37,4 +60,5 @@ public slots:
 signals:
 	void on_sliderSwitchStand_click();
 };
+
 #endif QSLIDERBUTTON_H
