@@ -782,6 +782,14 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 	Can::writeCan(0x55, msgSendConnect);
 }
 
+void Can::sendGoToSleepMsg(bool isGoToSleep)
+{
+	int msgSendConnect[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	if (isGoToSleep)
+		msgSendConnect[0] = 0xFF;
+	Can::writeCan(0x55, msgSendConnect);
+} 
+
 
 void Can::setCable(std::vector<Cable> cable)
 {

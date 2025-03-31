@@ -230,10 +230,20 @@ void TestWindow::initUiMainFooter()
 	footerSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
 	footerMainHLayout->addItem(footerSpacer);
 
+
+
+
 	reportHLayout = new QHBoxLayout(footerLayoutWidget);
 	reportHLayout->setObjectName("reportHLayout");
 	footerMainHLayout->addItem(reportHLayout);
 
+	reportSpacerTwo = new QSpacerItem(10, 0, QSizePolicy::Fixed);
+	reportHLayout->addItem(reportSpacerTwo);
+
+	sleepButton = new QPushButton(footerLayoutWidget);
+	sleepButton->setObjectName("sleepButton");
+	sleepButton->setFixedSize(FIXED_REPORT_BUTTON_WIDTH + 50, FIXED_REPORT_BUTTON_HEIGHT);
+	reportHLayout->addWidget(sleepButton);
 	reportSpacer = new QSpacerItem(50, 0, QSizePolicy::Fixed);
 	reportHLayout->addItem(reportSpacer);
 
@@ -277,6 +287,10 @@ void TestWindow::initTexts()
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
+		if (statusFlags->StatusConnected)
+			sleepButton->setText(QString::fromLocal8Bit("Заснуть"));
+		else
+			sleepButton->setText(QString::fromLocal8Bit("Проснуться"));
 
 		switch (testType)
 		{
@@ -345,6 +359,10 @@ void TestWindow::initTexts()
 
 	case ENGLISH_LANG:
 		reportButton->setText(QString("Report"));
+		if (statusFlags->StatusConnected)
+			sleepButton->setText(QString("Go to sleep"));
+		else
+			sleepButton->setText(QString("Wake up"));
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
@@ -440,6 +458,7 @@ void TestWindow::initConnections()
 	connect(switchThemeButton, &QPushButton::clicked, this, &TestWindow::slot_switchThemeButton_clicked);
 	connect(switchLanguageButton, &QPushButton::clicked, this, &TestWindow::slot_switchLanguageButton_clicked);
 	connect(reportButton, &QPushButton::clicked, this, &TestWindow::slot_reportButton_clicked);
+	connect(sleepButton, &QPushButton::clicked, this, &TestWindow::slot_sleepButton_clicked);
 	connect(autoStandConnectButton, &QPushButton::clicked, this, &TestWindow::slot_autoStandConnectButton_clicked);
 	connect(inManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_inManualTestAutoStandTestTimeComboBox_changed(int)));
 	connect(outManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_outManualTestAutoStandTestTimeComboBox_changed(int)));
@@ -610,6 +629,14 @@ void TestWindow::slot_reportButton_clicked()
 	reportWindow->exec();
 }
 
+void TestWindow::slot_sleepButton_clicked()
+{
+	if (statusFlags->StatusConnected)
+		Can::sendGoToSleepMsg(true);
+	else
+		Can::sendGoToSleepMsg(false);
+}
+
 void TestWindow::resetTheme()
 {
 	switch (viewWindowState->appTheme)
@@ -625,6 +652,7 @@ void TestWindow::resetTheme()
 		switchLanguageButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		backButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		reportButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+		sleepButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 		fileNameLabel->setStyleSheet(lightStyles.testwindowLableBlock);
 		resetIconMoreButton(LIGHT_THEME);
@@ -710,6 +738,7 @@ void TestWindow::resetTheme()
 		switchLanguageButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		backButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		reportButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+		sleepButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 		fileNameLabel->setStyleSheet(darkStyles.testwindowLableBlock);
 		resetIconMoreButton(DARK_THEME);
@@ -794,6 +823,10 @@ void TestWindow::resetLanguage()
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
+		if (statusFlags->StatusConnected)
+			sleepButton->setText(QString::fromLocal8Bit("Заснуть"));
+		else
+			sleepButton->setText(QString::fromLocal8Bit("Проснуться"));
 
 		switch (testType)
 		{
@@ -916,6 +949,11 @@ void TestWindow::resetLanguage()
 
 	case ENGLISH_LANG:
 		reportButton->setText(QString("Report"));
+		if (statusFlags->StatusConnected)
+			sleepButton->setText(QString("Go to sleep"));
+		else
+			sleepButton->setText(QString("Wake up"));
+
 
 		switch (testType)
 		{

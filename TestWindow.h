@@ -272,6 +272,7 @@ private:
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* backButton;
+	QPushButton* sleepButton;
 	QPushButton* reportButton;
 	QPushButton* fullTestSortButton;
 	QPushButton* inTestManualStandConnectButton;
@@ -283,6 +284,7 @@ private:
 	QComboBox* outManualTestAutoStandTestTimeComboBox;
 	QSpacerItem* tripleButtonsSpacer;
 	QSpacerItem* reportSpacer;
+	QSpacerItem* reportSpacerTwo;
 	QSpacerItem* footerSpacer;
 	QLabel* logoLabel;
 	QLabel* fileNameLabel;
@@ -424,6 +426,7 @@ public slots:
 	void slot_switchThemeButton_clicked();
 	void slot_switchLanguageButton_clicked();
 	void slot_reportButton_clicked();
+	void slot_sleepButton_clicked();
 
 	void slot_autoStandConnectButton_clicked();
 	void slot_inManualTestAutoStandTestTimeComboBox_changed(int ind);

@@ -110,6 +110,15 @@ public:
 	// ------------------------------------
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
+	// Отправляет сообщение блоку о засыпании или просыпании.
+	// @name sendGoToSleepMsg
+	// 
+	// @param boolisGoToSleep == true - команда на засыпание.
+	// @param          isGoToSleep == false - команда на пробуждение.
+	// 
+	// @return void
+	static void sendGoToSleepMsg(bool isGoToSleep);
+
 
 
 	void setCable(std::vector<Cable> cable);
