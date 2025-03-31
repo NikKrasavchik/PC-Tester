@@ -125,6 +125,10 @@ void ReportWindow::initUiFooter()
 	serialNumberLineEdit->setObjectName("serialNumberLineEdit");
 	serialNumberLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
 	serialNumberLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
+#ifndef FOR_DEVELOPER
+	serialNumberLineEdit->setReadOnly(true);
+#endif // FOR_DEVELOPER
+	serialNumberLineEdit->setText(Can::getSerialNumber());
 	reportDataHLayout->addWidget(serialNumberLineEdit);
 
 	footerSpacer = new QSpacerItem(10000, 0, QSizePolicy::Expanding);
@@ -153,7 +157,6 @@ void ReportWindow::resetBaseLanguage()
 
 		saveButton->setText(QString::fromLocal8Bit("Сохранить"));
 		testerNameLineEdit->setText(QString::fromLocal8Bit("Иванов Иван Иванович"));
-		serialNumberLineEdit->setText(QString("123"));
 		break;
 
 	case ENGLISH_LANG:
@@ -169,7 +172,6 @@ void ReportWindow::resetBaseLanguage()
 
 		saveButton->setText(QString("Save"));
 		testerNameLineEdit->setText(QString("Ivanov Ivan Ivanovich"));
-		serialNumberLineEdit->setText(QString("123"));
 		break;
 	}
 }

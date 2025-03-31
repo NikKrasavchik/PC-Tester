@@ -1,10 +1,11 @@
 #include "can.h"
 #include "Cable.h"
+#include "qmap.h"
 
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
-//QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
+QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
 bool Can::b_flagStatusConnection;
 
 Can::Can()
@@ -113,7 +114,7 @@ bool Can::deinitCan()
 	}
 	return true;
 }
-
+  
 bool Can::writeCan(int id, int* msg)
 {
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
@@ -807,9 +808,13 @@ void Can::setCable(std::vector<Cable> cable)
 }
 void Can::clearOldValue()
 {
+	for (int j = 256; j < 266; j++)
+		for (int i = 0; i < mapCable[j].size(); i++)
+			mapCable[j][i].second = NOT_SET;
+	b_flagStatusConnection = false;
+}
 
-	//for (int j = 256; j < 266; j++)
-	//	for (int i = 0; i < mapCable[j].size(); i++)
-	//		mapCable[j][i].second = NOT_SET;
-	//b_flagStatusConnection = false;
+QString Can::getSerialNumber()
+{
+	return QString("123");
 }

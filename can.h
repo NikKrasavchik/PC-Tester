@@ -2,7 +2,7 @@
 
 //#define DEBUG_CAN
 
-# include <QMap>
+#include "qmap.h"
 #include <vector>
 #include "qobject.h"
 #include "qtimer.h"
@@ -119,6 +119,7 @@ public:
 	// @return void
 	static void sendGoToSleepMsg(bool isGoToSleep);
 
+	static QString getSerialNumber();
 
 
 	void setCable(std::vector<Cable> cable);
@@ -164,8 +165,7 @@ private:
 	std::vector<Measureds*> measureds;
 	uint8_t counterConnectMsg;
 
-	static std::vector<std::pair<Cable, int>> Cables;
-	QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
+	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
 
 	bool b_adapterSelected;
 	bool b_frequencySelected;
