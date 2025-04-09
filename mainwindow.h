@@ -218,6 +218,9 @@ private:
 	void initUiAutoStandAutoTest();	
 	void initUiAutoStandFullTest();
 
+	void initConfig();
+	void resetConfig();
+
 	void fillComboBoxes();
 
 	void switchStandButtons();
@@ -259,8 +262,6 @@ private slots:
 	void slot_outAutoTestAutoStandButton_clicked();
 	void slot_fullTestAutoStandButton_clicked();
 
-	// Timer
-	void Timer_CheckAdapter();
 
 
 signals:

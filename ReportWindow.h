@@ -85,8 +85,8 @@
 #define IND_COLUMN_MANUAL_VALUE			5
 
 // Save File
-#define HEIGHT_HEADERFILE				7	
-#define START_ROW_TABLE					9
+#define HEIGHT_HEADERFILE				10	
+#define START_ROW_TABLE					12
 
 class TestTableRowProperties;
 class TestWindow;

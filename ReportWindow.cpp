@@ -126,9 +126,10 @@ void ReportWindow::initUiFooter()
 	serialNumberLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
 	serialNumberLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
 #ifndef FOR_DEVELOPER
-	serialNumberLineEdit->setReadOnly(true);
+	//serialNumberLineEdit->setReadOnly(true);
 #endif // FOR_DEVELOPER
-	serialNumberLineEdit->setText(Can::getSerialNumber());
+
+	serialNumberLineEdit->setText(Can::getDiagBlock(DiagInformation::Serial_NUMBER, testingBlock));
 	reportDataHLayout->addWidget(serialNumberLineEdit);
 
 	footerSpacer = new QSpacerItem(10000, 0, QSizePolicy::Expanding);
@@ -1141,7 +1142,7 @@ void writeHorizontalAlignCell(Document& xlsx, int row, int columnStart, int colu
 	xlsx.mergeCells(r, formatText);
 }
 
-void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testingBlock, QString actualVersion, QString serialNumber)
+void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testingBlock, QString actualVersion)
 {
 	Format dateFormat;
 	dateFormat.setNumberFormatIndex(14);
@@ -1156,8 +1157,11 @@ void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testi
 	writeHorizontalAlignCell(xlsx, 2, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Время проверки") : QString("Time of inspection"), Format::AlignLeft, format);
 	writeHorizontalAlignCell(xlsx, 3, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Имя оператора") : QString("Operator name"), Format::AlignLeft, format);
 	writeHorizontalAlignCell(xlsx, 4, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название ЭБУ") : QString("Block name"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 5, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Номер детали") : QString("Part number"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 6, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Серийный номер") : QString("Serial number"), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 5, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название программы") : QString("App name"), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 6, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комплектация") : QString("Equipment"), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 7, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("PART номер") : QString("Part number"), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 8, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Серийный номер") : QString("Serial number"), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 9, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Дата производства") : QString("Manufacture date"), Format::AlignLeft, format);
 
 	QDateTime time = QDateTime::currentDateTime();
 
@@ -1165,7 +1169,13 @@ void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testi
 	writeHorizontalAlignCell(xlsx, 2, 3, 6, time.time(), Format::AlignLeft, timeFormat);
 	writeHorizontalAlignCell(xlsx, 3, 3, 6, testerName, Format::AlignLeft, format);
 	writeHorizontalAlignCell(xlsx, 4, 3, 6, testingBlock == TestBlockName::DTM ? QString("DTM ") + actualVersion : QString("BCM ") + actualVersion, Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 5, 3, 6, serialNumber, Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 5, 3, 6, Can::getDiagBlock(DiagInformation::Calibration_NAME, testingBlock), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 6, 3, 6, Can::getDiagBlock(DiagInformation::Equipment_NAME, testingBlock), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 7, 3, 6, Can::getDiagBlock(DiagInformation::Part_NUMBER, testingBlock), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 8, 3, 6, Can::getDiagBlock(DiagInformation::Serial_NUMBER, testingBlock), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 9, 3, 6, Can::getDiagBlock(DiagInformation::Manufacture_DATE, testingBlock), Format::AlignLeft, format);
+
+
 }
 
 void genereateHeaderTable(Document& xlsx, int maxOffset, bool isAutoStand)
@@ -1360,7 +1370,7 @@ void ReportWindow::generateXlsx()
 		int numRow = START_ROW_TABLE;
 		bool color = false;
 
-		genereateHeaderFile(xlsx, testerName, testingBlock, viewWindowState->actualVersion, serialNumber);
+		genereateHeaderFile(xlsx, testerName, testingBlock, viewWindowState->actualVersion);
 		if (checkedState.size())
 		{
 			genereateHeaderTable(xlsx, maxOffset, false);
@@ -1639,7 +1649,7 @@ void ReportWindow::generateXlsx()
 			nameFile += "DTM_";
 		else
 			nameFile += "BCM_";
-		nameFile += serialNumber + "-";
+		nameFile += serialNumber.remove("0") + "-";
 		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
 		for (int i = 1;; i++)
 		{

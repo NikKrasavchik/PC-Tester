@@ -106,18 +106,19 @@ void MainWindow::initUi()
 	viewWindowState->appTheme = LIGHT_THEME;
 	viewWindowState->appLanguage = RUSSIAN_LANG;
 
-	initStyles();
-	initTexts();
 	initIcons();
 	initConnections();
 	fillComboBoxes();
 
 	can = new Can();
 
+	checkAdaptersButton->click();
+	initConfig();
 	isAllInit = true;
 
-	checkAdaptersButton->click();
+	
 	resetTheme();
+	resetLanguage();
 }
 
 void MainWindow::initUiLogo()
@@ -667,58 +668,6 @@ void MainWindow::initUiManualStand()
 	manualStandMainHLayout->addItem(manualStandMainRightSpacer);
 }
 
-void MainWindow::initStyles()
-{
-	// Header
-	// selectStand
-	manualStandButton->setStyleSheet(lightStyles.standButtons); // manualButton
-	autoStandButton->setStyleSheet(lightStyles.standButtons); // autoButton
-
-	// themeLanguage
-	switchThemeButton->setStyleSheet(lightStyles.mainButton);
-	switchLanguageButton->setStyleSheet(lightStyles.mainButton);
-
-	// Main
-	// button
-	outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-	inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-	outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-	inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-	fullTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-	outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-	inAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-	fullTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
-
-	// substrate
-	backgroundManualStandWidget->setStyleSheet(lightStyles.mainSubstrateButtons);
-	autoTestAutoStandWidget->setStyleSheet(lightStyles.mainSubstrateButtons);
-	manualTestAutoStandWidget->setStyleSheet(lightStyles.mainSubstrateButtons);
-	fullTestAutoStandWidget->setStyleSheet(lightStyles.mainSubstrateButtons);
-
-	// Setting
-	checkAdaptersButton->setStyleSheet(lightStyles.mainButton);
-}
-
-void MainWindow::initTexts()
-{
-	manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
-	autoStandButton->setText(QString::fromLocal8Bit("Автомат."));
-	inTestManualStandButton->setText(QString::fromLocal8Bit("Входы"));
-	outTestManualStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	fullTestManualStandButton->setText(QString::fromLocal8Bit("Полная"));
-	inManualTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
-	outManualTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	inAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Входы"));
-	outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Выходы"));
-	fullTestAutoStandButton->setText(QString::fromLocal8Bit("Полная"));
-	manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
-	autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
-	selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
-	selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
-	manualStandLabel->setText(QString::fromLocal8Bit("Ручная"));
-	selectBlockVersionLabel->setText(QString::fromLocal8Bit("Версия блока"));
-}
-
 void MainWindow::fillComboBoxes()
 {
 	selectFrequencyComboBox->addItem("...");
@@ -776,6 +725,189 @@ void MainWindow::initConnections()
 	connect(inAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_inAutoTestAutoStandButton_clicked);
 	connect(outAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_outAutoTestAutoStandButton_clicked);
 	connect(fullTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_fullTestAutoStandButton_clicked);
+}
+
+void MainWindow::initConfig()
+{
+	QFile file("cables.cfg");
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
+		return;
+	}
+	QTextStream cable(&file);
+
+	QString config = cable.readLine();
+	config = cable.readLine();
+	QStringList list = config.split(u';');
+
+	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // ????
+		viewWindowState->appTheme = LIGHT_THEME;
+	else
+		viewWindowState->appTheme = DARK_THEME;
+
+	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // ????
+		viewWindowState->appLanguage = RUSSIAN_LANG;
+	else
+		viewWindowState->appLanguage = ENGLISH_LANG;
+
+	if (list[2] != "NOT_SET") // ????
+	{
+		if (list[2].left(3) == "DTM")
+			leftBlockDMButton->click();
+		else
+			leftBlockBCMButton->click();
+
+		QString version = list[2].remove(list[2].left(3));
+		for (int i = 0; i < selectBlockVersionComboBox->count(); i++)
+			if (selectBlockVersionComboBox->itemText(i) == version)
+			{
+				selectBlockVersionComboBox->setCurrentIndex(i);
+				cables.clear();
+				loadCables(viewWindowState->selectedBlock, selectBlockVersionComboBox->itemText(i));
+			}
+	}
+
+	if (list[3] == "MANUAL_STAND") // ?????
+	{
+		selectedTypeStand = TypeStand::MANUAL;
+		switchStandSlider->setStatus(TypeStand::MANUAL);
+	}
+	else
+	{
+		selectedTypeStand = TypeStand::AUTO;
+		switchStandSlider->setStatus(TypeStand::AUTO);
+	}
+	switchStandButtons();
+
+	bool search = false;
+	if (list[4] == "FREQUENCY_50K") // Частота
+	{
+
+		selectFrequencyComboBox->setCurrentIndex(2);
+		search = true;
+	}
+	else if (list[4] == "FREQUENCY_100K")
+	{
+		selectFrequencyComboBox->setCurrentIndex(3);
+		search = true;
+	}
+	else if (list[4] == "FREQUENCY_125K")
+	{
+		selectFrequencyComboBox->setCurrentIndex(4);
+		search = true;
+	}
+	else if (list[4] == "FREQUENCY_250K")
+	{
+		selectFrequencyComboBox->setCurrentIndex(5);
+		search = true;
+	}
+	else if (list[4] == "FREQUENCY_500K")
+	{
+		selectFrequencyComboBox->setCurrentIndex(6);
+		search = true;
+	}
+	else if (list[4] == "FREQUENCY_1000K")
+	{
+		selectFrequencyComboBox->setCurrentIndex(7);
+		search = true;
+	}
+	if (search)
+	{
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			selectFrequencyLabel->setText(QString("Частота: ") + selectFrequencyComboBox->currentText());
+		else if (viewWindowState->appLanguage == ENGLISH_LANG)
+			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
+		can->setSelectedFrequency(selectFrequencyComboBox->currentText());
+		search = false;
+	}
+
+
+	if (list[5] != "NOT_SET") // ???????
+	{
+		std::vector<QString> nameAdapters = can->getNameAdapters();
+
+		for (int i = 0; i < nameAdapters.size(); i++)
+			if (nameAdapters[i].remove("\n") == list[5])
+			{
+				selectAdapterComboBox->setCurrentIndex(i + 1);
+				search = true;
+
+			}
+	}
+	if (search)
+	{
+		can->setSelectedAdapterNeme(selectAdapterComboBox->currentText());
+		selectAdapterLabel->setText("");
+		timerCheckAdapter->start(1000);
+	}
+
+	switchStyleMainButtons();
+	file.close();
+}
+void MainWindow::resetConfig()
+{
+	QFile file("cables.cfg");
+	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+	{
+		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
+		return;
+	}
+	QTextStream cable(&file);
+
+	QString config = cable.readLine();
+	QString conf = cable.readLine();
+
+	if (viewWindowState->appTheme == LIGHT_THEME) // ????
+		conf = "LIGHT_THEME;";
+	else
+		conf = "DARK_THEME;";
+
+	if (viewWindowState->appLanguage == RUSSIAN_LANG) // ????
+		conf += "RUSSIAN_LANG;";
+	else
+		conf += "ENGLISH_LANG;";
+
+	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // ????
+		conf += "NOT_SET;";
+	else if (viewWindowState->selectedBlock == TestBlockName::DTM)
+		conf += "DTM" + selectBlockVersionComboBox->currentText() + ";";
+	else if (viewWindowState->selectedBlock == TestBlockName::BCM)
+		conf += "BCM" + selectBlockVersionComboBox->currentText() + ";";
+
+	if (selectedTypeStand == TypeStand::MANUAL) // ?????
+		conf += "MANUAL_STAND;";
+	else if(selectedTypeStand == TypeStand::AUTO)
+		conf += "AUTO_STAND;";
+
+	if (selectFrequencyComboBox->currentIndex() == 2) // ???????
+		conf += "FREQUENCY_50K;";
+	else if (selectFrequencyComboBox->currentIndex() == 3)
+		conf += "FREQUENCY_100K;";
+	else if (selectFrequencyComboBox->currentIndex() == 4)
+		conf += "FREQUENCY_125K;";
+	else if (selectFrequencyComboBox->currentIndex() == 5)
+		conf += "FREQUENCY_250K;";
+	else if (selectFrequencyComboBox->currentIndex() == 6)
+		conf += "FREQUENCY_500K;";
+	else if (selectFrequencyComboBox->currentIndex() == 7)
+		conf += "FREQUENCY_1000K;";
+
+	if (selectAdapterComboBox->currentText() == "...")
+		conf += "NOT_SET";
+	else
+		conf += selectAdapterComboBox->currentText().remove("\n");
+
+
+	config += "\n" + conf;
+	config += "\n" + cable.readAll();
+
+	file.close();
+
+	std::ofstream fout;
+	fout.open("cables.cfg");
+	fout << config.toStdString();
+	fout.close();
 }
 
 void MainWindow::switchStyleMainButtons()
@@ -869,7 +1001,7 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 
 	leftHWidget->setFixedWidth(FIXED_LOGO_WIDTH + (viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON);
 
-	// Выбор стенда
+	// ????? ??????
 	// manual
 	manualStandButton->setFixedWidth(MIN_STAND_BUTTON_WIDTH + ((viewWindowState->appSize.width - MIN_SCREEN_WIDTH) * COEF_STAND_BUTTON));
 	manualStandButton->setFixedHeight(MIN_STAND_BUTTON_HEIGHT + ((viewWindowState->appSize.height - MIN_SCREEN_HEIGHT) * COEF_STAND_BUTTON));
@@ -930,6 +1062,7 @@ void MainWindow::slot_switchThemeButton_clicked()
 		viewWindowState->appTheme = LIGHT_THEME;
 		break;
 	}
+	resetConfig();
 	resetTheme();
 }
 
@@ -963,16 +1096,16 @@ void MainWindow::resetTheme()
 		switchLanguageButton->setStyleSheet(lightStyles.themeLangButton); // language
 
 		// Setting
-		// адаптер
-		checkAdaptersButton->setStyleSheet(lightStyles.themeLangButton); // button обновления
+		// ???????
+		checkAdaptersButton->setStyleSheet(lightStyles.themeLangButton); // button ??????????
 		selectAdapterComboBox->setStyleSheet(lightStyles.settingComboBox); // settingComboBox
-		selectAdapterLabel->setStyleSheet(lightStyles.settingSelectText); // lable адаптера
+		selectAdapterLabel->setStyleSheet(lightStyles.settingSelectText); // lable ????????
 		selectBlockVersionComboBox->setStyleSheet(lightStyles.settingComboBox);
 		selectBlockVersionLabel->setStyleSheet(lightStyles.settingSelectText);
 
-		// частота
+		// ???????
 		selectFrequencyComboBox->setStyleSheet(lightStyles.settingComboBox); // settingComboBox
-		selectFrequencyLabel->setStyleSheet(lightStyles.settingSelectText);  // lable частоты
+		selectFrequencyLabel->setStyleSheet(lightStyles.settingSelectText);  // lable ???????
 
 		// Main
 		// button
@@ -987,7 +1120,7 @@ void MainWindow::resetTheme()
 			leftBlockDMButton->setStyleSheet(lightStyles.standButtons);
 			leftBlockBCMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
 		}
-		else if(viewWindowState->selectedBlock == TestBlockName::DTM)
+		else if (viewWindowState->selectedBlock == TestBlockName::DTM)
 		{
 			leftBlockDMButton->setStyleSheet(lightStyles.alwaysActiveStandButton);
 			leftBlockBCMButton->setStyleSheet(lightStyles.standButtons);
@@ -1026,16 +1159,16 @@ void MainWindow::resetTheme()
 		switchLanguageButton->setStyleSheet(darkStyles.themeLangButton); // language
 
 		// Setting
-		// адаптер
-		checkAdaptersButton->setStyleSheet(darkStyles.themeLangButton); // button обновления
+		// ???????
+		checkAdaptersButton->setStyleSheet(darkStyles.themeLangButton); // button ??????????
 		selectAdapterComboBox->setStyleSheet(darkStyles.settingComboBox); // settingComboBox
-		selectAdapterLabel->setStyleSheet(darkStyles.settingSelectText); // lable адаптера
+		selectAdapterLabel->setStyleSheet(darkStyles.settingSelectText); // lable ????????
 		selectBlockVersionComboBox->setStyleSheet(darkStyles.settingComboBox);
 		selectBlockVersionLabel->setStyleSheet(darkStyles.settingSelectText);
 
-		// частота
+		// ???????
 		selectFrequencyComboBox->setStyleSheet(darkStyles.settingComboBox); // settingComboBox
-		selectFrequencyLabel->setStyleSheet(darkStyles.settingSelectText);  // lable частоты
+		selectFrequencyLabel->setStyleSheet(darkStyles.settingSelectText);  // lable ???????
 
 		// Main
 		// button
@@ -1050,7 +1183,7 @@ void MainWindow::resetTheme()
 			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
 			leftBlockBCMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
 		}
-		else if(viewWindowState->selectedBlock == TestBlockName::DTM)
+		else if (viewWindowState->selectedBlock == TestBlockName::DTM)
 		{
 			leftBlockDMButton->setStyleSheet(darkStyles.alwaysActiveStandButton);
 			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
@@ -1068,7 +1201,19 @@ void MainWindow::resetTheme()
 
 void MainWindow::slot_sliderSwitchStand_clicked()
 {
+	if (selectedTypeStand == TypeStand::MANUAL)
+	{
+		selectedTypeStand = TypeStand::AUTO;
+		switchStandSlider->setStatus(TypeStand::AUTO);
+
+	}
+	else
+	{
+		selectedTypeStand = TypeStand::MANUAL;
+		switchStandSlider->setStatus(TypeStand::MANUAL);
+	}
 	switchStandButtons();
+	resetConfig();
 }
 
 void MainWindow::slot_autoStandButton_clicked()
@@ -1078,6 +1223,7 @@ void MainWindow::slot_autoStandButton_clicked()
 		selectedTypeStand = TypeStand::AUTO;
 		switchStandSlider->setStatus(TypeStand::AUTO);
 		switchStandButtons();
+		resetConfig();
 	}
 }
 
@@ -1088,6 +1234,7 @@ void MainWindow::slot_manualStandButton_clicked()
 		selectedTypeStand = TypeStand::MANUAL;
 		switchStandSlider->setStatus(TypeStand::MANUAL);
 		switchStandButtons();
+		resetConfig();
 	}
 }
 
@@ -1144,7 +1291,7 @@ void MainWindow::slot_switchLanguageButton_clicked()
 		viewWindowState->appLanguage = RUSSIAN_LANG;
 		break;
 	}
-
+	resetConfig();
 	resetLanguage();
 }
 
@@ -1168,8 +1315,9 @@ void MainWindow::resetLanguage()
 			selectAdapterLabel->setText(QString::fromLocal8Bit("Выберите адаптер"));
 		if (!can->getStatusFrequencySelected())
 			selectFrequencyLabel->setText(QString::fromLocal8Bit("Выберите частоту"));
-		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручная"));
+		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручной"));
 		autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
+		manualStandLabel->setText(QString::fromLocal8Bit("Ручной"));
 		break;
 
 	case ENGLISH_LANG:
@@ -1190,7 +1338,8 @@ void MainWindow::resetLanguage()
 			selectFrequencyLabel->setText(QString("Select frequency"));
 		manualTestAutoStandLabel->setText(QString("Manual"));
 		autoTestAutoStandLabel->setText(QString("Auto"));
-		
+		manualStandLabel->setText(QString("Manual"));
+
 		break;
 	}
 	if (can->getStatusFrequencySelected())
@@ -1206,7 +1355,7 @@ void MainWindow::slot_selectFrequencyComboBox_changed(int index)
 	switchStyleMainButtons();
 
 	if (index == 0)
-		resetLanguage(); // Ставим предупреждающий lable согласно языку
+		resetLanguage(); // ?????? ??????????????? lable ???????? ?????
 	else if (index > 0)
 	{
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
@@ -1214,6 +1363,7 @@ void MainWindow::slot_selectFrequencyComboBox_changed(int index)
 		else if (viewWindowState->appLanguage == ENGLISH_LANG)
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
 	}
+	resetConfig();
 }
 
 void MainWindow::slot_selectAdapterComboBox_changed(int index)
@@ -1231,12 +1381,12 @@ void MainWindow::slot_selectAdapterComboBox_changed(int index)
 		selectAdapterLabel->setText("");
 		timerCheckAdapter->start(1000);
 	}
+	resetConfig();
 }
 
 void MainWindow::slot_checkAdaptersButton_clicked()
 {
-	if (!isAllInit)
-		return;
+
 
 	selectAdapterComboBox->clear();
 	selectAdapterComboBox->addItem("...");
@@ -1397,6 +1547,20 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		generateWarning(Warnings::MainWindow::SIZE_CABLE_NUL);
 		return;
 	}
+	std::vector<QString> nameAdapters = can->getNameAdapters();
+	bool isHaveAdapter = false;
+	for (int j = 0; j < nameAdapters.size(); j++)
+		if (selectAdapterComboBox->currentText() == nameAdapters[j])
+		{
+			isHaveAdapter = true;
+			break;
+}
+	if (!isHaveAdapter)
+	{
+		generateWarning(Warnings::MainWindow::ADAPTERS_CHANGED);
+		slot_checkAdaptersButton_clicked();
+		return;
+	}
 #ifdef DEBUG_OUTPUT
 	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Start constructor TestWindow";
 #endif
@@ -1435,9 +1599,9 @@ void MainWindow::resetWindowView()
 
 // ------------------------------------
 // Name: setParentFrame
-//		Сохранение родительского элемента
+//		?????????? ????????????? ????????
 // Variables: 
-//			WindowFrame* parentFrame: родительских элемент
+//			WindowFrame* parentFrame: ???????????? ???????
 // ------------------------------------
 void MainWindow::setParentFrame(WindowFrame* parentFrame)
 {
@@ -1477,7 +1641,13 @@ void MainWindow::initBlockVersions()
 	while (!cable.atEnd())
 	{
 		QString line = cable.readLine();
-		if (line == "DM")
+		if (line == "CONFIG")
+		{
+			QString config = cable.readLine();
+
+			continue;
+		}
+		if (line == "DTM")
 		{
 			block = TestBlockName::DTM;
 			continue;
@@ -1531,8 +1701,13 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 	while (!cable.atEnd())
 	{
 		QString line = cable.readLine();
+		if (line == "CONFIG")
+		{
+			QString config = cable.readLine();
 
-		if (line == "DM")
+			continue;
+		}
+		if (line == "DTM")
 			if (block == TestBlockName::DTM)
 			{
 				admissionBlock = true;
@@ -1623,6 +1798,8 @@ void MainWindow::slot_leftBlockBCMButton_clicked()
 			selectBlockVersionComboBox->addItem(blockVersionsBCM[i]);
 		selectBlockVersionComboBox->setCurrentIndex((int)blockVersionsBCM.size() - 1);
 		switchStyleMainButtons();
+		if (isAllInit)
+			resetConfig();
 	}
 }
 
@@ -1638,6 +1815,8 @@ void MainWindow::slot_leftBlockDMButton_clicked()
 			selectBlockVersionComboBox->addItem(blockVersionsDTM[i]);
 		selectBlockVersionComboBox->setCurrentIndex((int)blockVersionsDTM.size() - 1);
 		switchStyleMainButtons();
+		if(isAllInit)
+		resetConfig();
 	}
 }
 
@@ -1646,25 +1825,9 @@ void MainWindow::slot_selectBlockVersionComboBox_changed(int index)
 	if (!isAllInit)
 		return;
 
-		cables.clear();
-		loadCables(viewWindowState->selectedBlock, selectBlockVersionComboBox->itemText(index));
+	cables.clear();
+	loadCables(viewWindowState->selectedBlock, selectBlockVersionComboBox->itemText(index));
+	resetConfig();
 
 }
 
-void MainWindow::Timer_CheckAdapter()
-{
-
-	std::vector<QString> nameAdapters = can->getNameAdapters();
-	bool isHaveAdapter = false;
-	for (int j = 0; j < nameAdapters.size(); j++)
-		if (selectAdapterComboBox->currentText() == nameAdapters[j])
-		{
-			isHaveAdapter = true;
-			break;
-		}
-	if (!isHaveAdapter)
-	{
-		slot_checkAdaptersButton_clicked();
-		return;
-	}
-}

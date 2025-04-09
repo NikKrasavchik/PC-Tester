@@ -451,6 +451,13 @@ void Can::Timer_ReadCan()
 	bool isValueChange = false;
 	if (Can::readWaitCan(&id, msgReceive, 1))
 	{
+		if (id == DIAG_ID_FROM_DMFL)
+		{
+			if (1)
+			{
+				1; // —юда не должно заходить. »наче в методе getDiagBlock будет сбой в логике
+			}
+		}
 		switch (windowType)
 		{
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -814,7 +821,121 @@ void Can::clearOldValue()
 	b_flagStatusConnection = false;
 }
 
-QString Can::getSerialNumber()
+int intToAscii(int number) {
+	return '0' + number;
+}
+
+QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 {
-	return QString("123");
+	int msgSend[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	QTime timeWork = QTime::currentTime().addMSecs(200); // ¬рем€ дл€ авариного выхода из цикла.
+	int id;
+	int msg[8];
+	int counter = 0;
+	int sizeArr = 0;
+
+	QString ansverStr;
+	int idTmp = DIAG_ID_FROM_BLOCK(blockName);
+
+	switch (diagInf)
+	{
+	case DiagInformation::Application_NAME:
+		DIAG_GET_APP_NAME(msgSend);
+		sizeArr = 31;
+		break;
+	case DiagInformation::Calibration_NAME:
+		DIAG_GET_APP_CALIBRATION(msgSend);
+		sizeArr = 79;
+		break;
+	case DiagInformation::Equipment_NAME:
+		DIAG_GET_EQUIPMENT_NAME(msgSend);
+		sizeArr = 9;
+		break;
+	case DiagInformation::Manufacture_DATE:
+		DIAG_GET_DATA_MANUFACTURE(msgSend);
+		writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+		while (true)
+		{
+			if (readWaitCan(&id, msg, 20))
+				if (id == idTmp)
+				{
+					if (counter == 0)
+					{
+
+						ansverStr = QString::number(msg[5],16);
+						ansverStr += ".";
+						ansverStr += QString::number(msg[6],16);
+						ansverStr += ".";
+						ansverStr += QString::number(msg[7],16);
+	
+
+						counter++;
+						DIAG_VERIFICATION(msgSend);
+						writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+					}
+					else
+					{
+						ansverStr += QString::number(msg[1], 16);
+
+
+						return ansverStr;
+					}
+				}
+			if (QTime::currentTime() > timeWork)
+				return QString("Error. Long delay");
+		}
+		sizeArr = 15;
+		break;
+	case DiagInformation::Hardware_NUMBER:
+		DIAG_GET_NUMBER_HARDWARE(msgSend);
+		sizeArr = 15;
+		break;
+	case DiagInformation::Part_NUMBER:
+		DIAG_GET_NUMBER_PART(msgSend);
+		sizeArr = 26;
+		break;
+	case DiagInformation::Serial_NUMBER:
+		DIAG_GET_NUMBER_SERIAL(msgSend);
+		sizeArr = 19;
+		break;
+	}
+
+	writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+	while (true)
+	{
+		if (readWaitCan(&id, msg, 20))
+			if (id == idTmp)
+			{
+				if (counter == 0)
+				{
+					if(msg[5] != 0)
+						ansverStr[counter++] = msg[5];
+					if(msg[5] != 0)
+					ansverStr[counter++] = msg[6];
+					if(msg[7] != 0)
+					ansverStr[counter++] = msg[7];
+
+					DIAG_VERIFICATION(msgSend);
+					writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+				}
+				else
+					for (int i = 1; i < 8; i++)
+					{
+						if (msg[i] == 0)
+						{
+							counter++;
+							if (counter > sizeArr)
+								return ansverStr;
+							continue;
+						}
+						ansverStr[counter++] = msg[i];
+						if (counter > sizeArr)
+							return ansverStr;
+					}
+			}
+		if (QTime::currentTime() > timeWork)
+			return QString("Error. Long delay");
+	}
+
+
 }

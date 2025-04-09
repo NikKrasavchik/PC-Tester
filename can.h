@@ -14,8 +14,28 @@
 #include "chai.h"
 #include "Cable.h"
 
+// Diag
+#define DIAG_ID_TO_BLOCK(NameBlock) (NameBlock == TestBlockName::DTM) ? DIAG_ID_TO_DMFL : DIAG_ID_TO_BCM
+#define DIAG_ID_TO_DMFL 0x7A4
+#define DIAG_ID_TO_BCM 0x7A3
+
+#define DIAG_ID_FROM_BLOCK(NameBlock) (NameBlock == TestBlockName::DTM) ? DIAG_ID_FROM_DMFL : DIAG_ID_FROM_BCM
+#define DIAG_ID_FROM_DMFL 0x7B4
+#define DIAG_ID_FROM_BCM 0x7B3
+
+#define DIAG_GET_APP_NAME(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x81; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_APP_CALIBRATION(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x82; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_EQUIPMENT_NAME(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x97; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_DATA_MANUFACTURE(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x8B; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_NUMBER_HARDWARE(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x92; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_NUMBER_PART(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x87; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_NUMBER_SERIAL(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x8C; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+
+#define DIAG_VERIFICATION(arr) arr[0] = 0x30; arr[1] = 0x00; arr[2] = 0x05; arr[3] = 0; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+
 #define ID_CAN_AUTOSTAND		0x51
 #define ID_CAN_MANUALSTAND		0x100
+
 
 #define TIME_CHECKCONNECTION	200
 
@@ -119,7 +139,7 @@ public:
 	// @return void
 	static void sendGoToSleepMsg(bool isGoToSleep);
 
-	static QString getSerialNumber();
+	static QString getDiagBlock(DiagInformation diagInf, TestBlockName blockName);
 
 
 	void setCable(std::vector<Cable> cable);
@@ -147,6 +167,7 @@ private:
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
+
 //
 // Varibals
 //

@@ -166,6 +166,17 @@ enum class ConnectorId
 	K
 };
 
+enum class DiagInformation
+{
+	Application_NAME,
+	Calibration_NAME,
+	Equipment_NAME,
+	Manufacture_DATE,
+	Hardware_NUMBER,
+	Part_NUMBER,
+	Serial_NUMBER
+};
+
 enum class TypeResetTableButtonsTheme
 {
 	STAND_DISCONNECTED,
