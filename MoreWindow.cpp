@@ -68,7 +68,7 @@ void MoreWindow::initBaseUi()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		startTestButton->setText(QString::fromLocal8Bit("Тест"));
+		startTestButton->setText(QString::fromLocal8Bit	("Тест"));
 		saveChangesButton->setText(QString::fromLocal8Bit("Сохранить"));
 		break;
 	case ENGLISH_LANG:
@@ -605,6 +605,9 @@ void MoreWindow::resaveFile()
 		return;
 	}
 
+	QString config = fin.readLine();
+	config += fin.readLine();
+
 	QString outputString = "";
 	bool isFound = false;
 	bool admissionBlock = false;
@@ -613,7 +616,7 @@ void MoreWindow::resaveFile()
 	{
 		QString dataLine = fin.readLine();
 		
-		if (dataLine == "DM\n" && viewWindowState->selectedBlock == TestBlockName::DTM)
+		if (dataLine == "DTM\n" && viewWindowState->selectedBlock == TestBlockName::DTM)
 			if (viewWindowState->selectedBlock == TestBlockName::DTM)
 				admissionBlock = true;
 			else
@@ -635,7 +638,7 @@ void MoreWindow::resaveFile()
 			else
 				admissionVersion = false;
 
-		if (dataLine == "DM\n" || dataLine == "BCM\n")
+		if (dataLine == "DTM\n" || dataLine == "BCM\n")
 		{
 			outputString += dataLine;
 			continue;
@@ -708,6 +711,7 @@ void MoreWindow::resaveFile()
 		outputString[outputString.size() - 1] = '\n';
 	}
 	outputString.remove(outputString.size() - 1, 1);
+	outputString.insert(0, config);
 	fin.close();
 
 	if (!isFound)

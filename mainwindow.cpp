@@ -114,11 +114,11 @@ void MainWindow::initUi()
 
 	checkAdaptersButton->click();
 	initConfig();
-	isAllInit = true;
 
-	
 	resetTheme();
 	resetLanguage();
+
+	isAllInit = true;
 }
 
 void MainWindow::initUiLogo()
@@ -858,29 +858,29 @@ void MainWindow::resetConfig()
 	QString config = cable.readLine();
 	QString conf = cable.readLine();
 
-	if (viewWindowState->appTheme == LIGHT_THEME) // ????
+	if (viewWindowState->appTheme == LIGHT_THEME) // Тема
 		conf = "LIGHT_THEME;";
 	else
 		conf = "DARK_THEME;";
 
-	if (viewWindowState->appLanguage == RUSSIAN_LANG) // ????
+	if (viewWindowState->appLanguage == RUSSIAN_LANG) // Язык
 		conf += "RUSSIAN_LANG;";
 	else
 		conf += "ENGLISH_LANG;";
 
-	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // ????
+	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // Блок
 		conf += "NOT_SET;";
 	else if (viewWindowState->selectedBlock == TestBlockName::DTM)
 		conf += "DTM" + selectBlockVersionComboBox->currentText() + ";";
 	else if (viewWindowState->selectedBlock == TestBlockName::BCM)
 		conf += "BCM" + selectBlockVersionComboBox->currentText() + ";";
 
-	if (selectedTypeStand == TypeStand::MANUAL) // ?????
+	if (selectedTypeStand == TypeStand::MANUAL) // Стенд
 		conf += "MANUAL_STAND;";
 	else if(selectedTypeStand == TypeStand::AUTO)
 		conf += "AUTO_STAND;";
 
-	if (selectFrequencyComboBox->currentIndex() == 2) // ???????
+	if (selectFrequencyComboBox->currentIndex() == 2) // Частота
 		conf += "FREQUENCY_50K;";
 	else if (selectFrequencyComboBox->currentIndex() == 3)
 		conf += "FREQUENCY_100K;";
@@ -893,7 +893,7 @@ void MainWindow::resetConfig()
 	else if (selectFrequencyComboBox->currentIndex() == 7)
 		conf += "FREQUENCY_1000K;";
 
-	if (selectAdapterComboBox->currentText() == "...")
+	if (selectAdapterComboBox->currentText() == "...") // Адаптер
 		conf += "NOT_SET";
 	else
 		conf += selectAdapterComboBox->currentText().remove("\n");
@@ -1827,7 +1827,7 @@ void MainWindow::slot_selectBlockVersionComboBox_changed(int index)
 
 	cables.clear();
 	loadCables(viewWindowState->selectedBlock, selectBlockVersionComboBox->itemText(index));
-	resetConfig();
+	//resetConfig();
 
 }
 

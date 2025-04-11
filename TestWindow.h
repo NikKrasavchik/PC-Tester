@@ -310,7 +310,6 @@ private:
 	QPixmap* noClockwiseDarkPixmap;
 
 	int fullTestSortType;
-	
 	bool isFullTestEnabled;
 
 	QString fileName;
