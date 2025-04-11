@@ -77,6 +77,7 @@ void TestWindow::resetTableHeaderLanguageOutManualTestAutoStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
+#ifdef QT5
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Разъём"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
@@ -84,6 +85,9 @@ void TestWindow::resetTableHeaderLanguageOutManualTestAutoStand()
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Проверка"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Стенд"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("ПК"));
+#elif QT6
+
+#endif // QT5
 		mainTableHeaderLabels->push_back("");
 		break;
 
@@ -112,6 +116,7 @@ void TestWindow::resetTableTypeLanguageOutManualTestAutoStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
+#ifdef QT5
 			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Цифровой"));
 			else if (cableRows[currentRowNum]->typeStr == "PWM")
@@ -124,6 +129,9 @@ void TestWindow::resetTableTypeLanguageOutManualTestAutoStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
 			else if (cableRows[currentRowNum]->typeStr == "HLD")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
+#elif QT6
+
+#endif // QT5
 			break;
 
 		case ENGLISH_LANG:

@@ -29,6 +29,7 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 	case RUSSIAN_LANG:
 		switch (warning)
 		{
+#ifdef QT5
 		case Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL:
 			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Выберите Can-адаптер перед началом работы"));
 			break;
@@ -58,6 +59,9 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 
 		default:
 			break;
+#elif QT6
+
+#endif // QT5
 		}
 		break;
 

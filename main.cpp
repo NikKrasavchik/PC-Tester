@@ -25,8 +25,12 @@ ViewWindowState* viewWindowState;
 
 int main(int argc, char* argv[])
 {
-	//QLocale curLoc(QLocale("ru_RU"));
-	//QLocale::setDefault(curLoc);
+#ifdef QT5
+
+#elif QT6
+	QLocale curLoc(QLocale("ru_RU"));
+	QLocale::setDefault(curLoc);
+#endif // QT5
 	// Создание глобальной переменной, в которой хранится информация о размере экрана, языке и теме
 	viewWindowState = new ViewWindowState;
 	viewWindowState->appLanguage = RUSSIAN_LANG;

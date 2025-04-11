@@ -382,7 +382,11 @@ void WindowFrame::setTitle(WindowType windowType) {
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		tmpStr = QString::fromLocal8Bit(" | Для разработчика");
+#elif QT6
+
+#endif // QT5
 		break;
 	case ENGLISH_LANG:
 		tmpStr = " | For developer";
@@ -395,6 +399,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 	case RUSSIAN_LANG:
 		switch (windowType)
 		{
+#ifdef QT5
 		case WindowType::MAINWINDOW:
 			ui->title->setText("PC-Tester" + tmpStr);
 			break;
@@ -444,6 +449,9 @@ void WindowFrame::setTitle(WindowType windowType) {
 			break;
 		}
 		break;
+#elif QT6
+
+#endif // QT5
 
 	case ENGLISH_LANG:
 		switch (windowType)

@@ -3,6 +3,8 @@
 //#define DEBUG
 //#define FOR_DEVELOPER
 //#define DEBUG_OUTPUT
+#define QT5
+//#define QT6
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600

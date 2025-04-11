@@ -99,6 +99,7 @@ void TestWindow::resetTableHeaderLanguageFullTestManualStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
+#ifdef QT5
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Разъём"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
@@ -108,6 +109,9 @@ void TestWindow::resetTableHeaderLanguageFullTestManualStand()
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Проверка"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Статус"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Исправно"));
+#elif QT6
+
+#endif // QT5
 		mainTableHeaderLabels->push_back("");
 		break;
 
@@ -137,10 +141,14 @@ void TestWindow::resetTableDirectionLanguageFullTestManualStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
+#ifdef QT5
 			if (cableRows[currentRowNum]->direction == "OUT")
 				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString::fromLocal8Bit("Выход"));
 			else if (cableRows[currentRowNum]->direction == "IN")
 				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString::fromLocal8Bit("Вход"));
+#elif QT6
+
+#endif // QT5
 			break;
 
 		case ENGLISH_LANG:
@@ -161,6 +169,7 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
+#ifdef QT5
 			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Цифровой"));
 			else if (cableRows[currentRowNum]->typeStr == "PWM")
@@ -173,6 +182,9 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
 			else if (cableRows[currentRowNum]->typeStr == "HLD")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
+#elif QT6
+
+#endif // QT5
 			break;
 
 		case ENGLISH_LANG:

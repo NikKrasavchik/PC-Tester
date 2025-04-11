@@ -1300,6 +1300,7 @@ void MainWindow::resetLanguage()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		manualStandButton->setText(QString::fromLocal8Bit("Ручной"));
 		autoStandButton->setText(QString::fromLocal8Bit("Автомат."));
 		inTestManualStandButton->setText(QString::fromLocal8Bit("Входы"));
@@ -1318,6 +1319,9 @@ void MainWindow::resetLanguage()
 		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ручной"));
 		autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Авто"));
 		manualStandLabel->setText(QString::fromLocal8Bit("Ручной"));
+#elif QT6
+
+#endif // QT5
 		break;
 
 	case ENGLISH_LANG:
@@ -1561,14 +1565,8 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 		slot_checkAdaptersButton_clicked();
 		return;
 	}
-#ifdef DEBUG_OUTPUT
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Start constructor TestWindow";
-#endif
-	TestWindow* testWindow = new TestWindow(testType, preparedCables, viewWindowState->selectedBlock, this);
-#ifdef DEBUG_OUTPUT
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "End constructor TestWindow";
-#endif
 
+	TestWindow* testWindow = new TestWindow(testType, preparedCables, viewWindowState->selectedBlock, this);
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
 	connect(can, &Can::Signal_ChangedByte, testWindow, &TestWindow::Slot_ChangedByte);
@@ -1580,9 +1578,6 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	testWindow->setParentFrame(&w);
 	w.show();
 	this->hide();
-#ifdef DEBUG_OUTPUT
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Exec window";
-#endif
 	testWindow->exec();
 	resetWindowView();
 	can->deinitCan();

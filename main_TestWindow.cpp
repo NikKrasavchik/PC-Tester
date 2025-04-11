@@ -657,6 +657,7 @@ void TestWindow::resetLanguage()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
 		if (statusFlags->StatusConnected)
 			sleepButton->setText(QString::fromLocal8Bit("Заснуть"));
@@ -769,6 +770,9 @@ void TestWindow::resetLanguage()
 				break;
 			}
 			resetLanguageFullTestAutoStand();
+#elif QT6
+
+#endif // QT5
 			break;
 
 		default:
@@ -794,7 +798,7 @@ void TestWindow::resetLanguage()
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
-				fullTestSortButton->setText(QString("Sort:\in order"));
+				fullTestSortButton->setText(QString("Sort:\nin order"));
 				break;
 			case SortType::SortComponents:
 				fullTestSortButton->setText(QString("Sort:\nby component"));
@@ -878,7 +882,7 @@ void TestWindow::resetLanguage()
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
-				fullTestSortButton->setText(QString("Sort:\in order"));
+				fullTestSortButton->setText(QString("Sort:\nin order"));
 				break;
 			case SortType::SortComponents:
 				fullTestSortButton->setText(QString("Sort:\nby component"));
@@ -911,12 +915,16 @@ void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboB
 	comboBox->clear();
 	if (viewWindowState->appLanguage == RUSSIAN_LANG)
 	{
+#ifdef QT5
 		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n5 секунд"));
 		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n10 секунд"));
 		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n15 секунд"));
 		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n20 секунд"));
 		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n25 секунд"));
 		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n30 секунд"));
+#elif QT6
+
+#endif // QT5
 	}
 	else
 	{
@@ -1444,8 +1452,8 @@ void TestWindow::rewriteCableRows()
 				break;
 		}
 		break;
-	case SortType::SortComponents:
 
+	case SortType::SortComponents:
 		for (int i = 0; i < sortComponents.size(); i++)
 			for (int j = 0; j < cableRows.size(); j++)
 			{
@@ -1475,6 +1483,7 @@ void TestWindow::rewriteCableRows()
 				}
 		}
 		break;
+
 	case SortType::SortType:
 		for (int i = 0; i < cableRows.size(); i++)
 			sortTypeMap[cableRows[i]->typeInt].push_back(cableRows[i]);
@@ -1482,56 +1491,8 @@ void TestWindow::rewriteCableRows()
 		for(TypeCable type : sortTypeMap.keys())
 			for (int i = 0; i < sortTypeMap[type].size(); i++)
 				cableRows.push_back(sortTypeMap[type][i]);
-
-		break;
-	default:
 		break;
 	}
-	/*switch (sortType)
-	{
-	case SORT_TYPE_INDEX:
-
-		break;
-
-	case SORT_TYPE_DIRECTION_OUT:
-		cableRows->clear();
-
-		for (int i = 0; i < (int)tmpCableRows.size(); i++)
-			if (tmpCableRows[i]->direction == "OUT")
-			{
-				cableRows->push_back(new TestTableRowProperties());
-				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
-			}
-		for (int i = 0; i < (int)tmpCableRows.size(); i++)
-			if (tmpCableRows[i]->direction == "IN")
-			{
-				cableRows->push_back(new TestTableRowProperties());
-				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
-			}
-		break;
-
-	case SORT_TYPE_DIRECTION_IN:
-		cableRows->clear();
-		for (int i = 0; i < (int)tmpCableRows.size(); i++)
-			if (tmpCableRows[i]->direction == "IN")
-			{
-				cableRows->push_back(new TestTableRowProperties());
-				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
-
-			}
-		for (int i = 0; i < (int)tmpCableRows.size(); i++)
-			if (tmpCableRows[i]->direction == "OUT")
-			{
-				cableRows->push_back(new TestTableRowProperties());
-				(*cableRows)[(int)cableRows->size() - 1] = tmpCableRows[i];
-				m[(*cableRows)[(int)cableRows->size() - 1]->id] = (int)cableRows->size() - 1;
-			}
-		break;
-	}*/
-
 }
 
 void TestWindow::slot_fullTestSortButton_clicked()
@@ -1554,13 +1515,6 @@ void TestWindow::slot_fullTestSortButton_clicked()
 	}
 	resetLanguage();
 
-	//if (testType == WindowType::FULL_TEST_MANUAL_STAND)
-	//{
-	//	for (int i = 0; i < cableRows.size(); i++)
-	//		cableRows[i]->manualChecked = manualChecks[i]->isChecked();
-	//	manualChecks.clear();
-	//}
-
 	rewriteCableRows();
 
 	mainTableWidget->clear();
@@ -1569,9 +1523,6 @@ void TestWindow::slot_fullTestSortButton_clicked()
 	{
 		resetTableHeaderFullTestManualStand();
 		resetTableRowsFullTestManualStand();
-
-		//for (int i = 0; i < manualChecks.size(); i++)
-		//	manualChecks[i]->setChecked(cableRows[i]->manualChecked);
 	}
 	else if (testType == WindowType::FULL_TEST_AUTO_STAND)
 	{

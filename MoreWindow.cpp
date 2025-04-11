@@ -68,8 +68,12 @@ void MoreWindow::initBaseUi()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		startTestButton->setText(QString::fromLocal8Bit	("Тест"));
 		saveChangesButton->setText(QString::fromLocal8Bit("Сохранить"));
+#elif QT6
+
+#endif // QT5
 		break;
 	case ENGLISH_LANG:
 		startTestButton->setText("Test");
@@ -185,12 +189,16 @@ void MoreWindow::resetLanguage(int offset)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		mainTableWidget->item(CELL_SIGN_BASE_CONNECTOR)->setText(QString::fromLocal8Bit("Колодка"));
 		mainTableWidget->item(CELL_SIGN_BASE_PIN)->setText(QString::fromLocal8Bit("Пин"));
 		mainTableWidget->item(CELL_SIGN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Направление"));
 		mainTableWidget->item(CELL_SIGN_BASE_TYPE)->setText(QString::fromLocal8Bit("Тип"));
 		mainTableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString::fromLocal8Bit("Название"));
 		mainTableWidget->item(CELL_SIGN_FILLED_COMMENT(offset))->setText(QString::fromLocal8Bit("Комментарий"));
+#elif QT6
+
+#endif // QT5
 		break;
 
 	case ENGLISH_LANG:
@@ -271,6 +279,7 @@ void MoreWindowOut::resetBlockLanguage(int measuredNum)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		mainTableWidget->item(CELL_OUT_SIGN_MEASURED)->setText(QString::fromLocal8Bit("Измерение ") + QString::number(measuredNum));
 		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VALUES)->setText(QString::fromLocal8Bit("Измеренное значение"));
 		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_CURRENT)->setText(QString::fromLocal8Bit("U, В"));
@@ -282,6 +291,9 @@ void MoreWindowOut::resetBlockLanguage(int measuredNum)
 		mainTableWidget->item(CELL_OUT_SIGN_MAX_CURRENT)->setText(QString::fromLocal8Bit("Макс."));
 		mainTableWidget->item(CELL_OUT_SING_MIN_VOLTAGE)->setText(QString::fromLocal8Bit("Мин."));
 		mainTableWidget->item(CELL_OUT_SING_MAX_VOLTAGE)->setText(QString::fromLocal8Bit("Макс."));
+#elif QT6
+
+#endif // QT5
 		break;
 
 	case ENGLISH_LANG:
@@ -412,8 +424,12 @@ void MoreWindowIn::resetBlockLanguage(int measuredNum)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		mainTableWidget->item(CELL_IN_SIGN_MEASURED_1)->setText(QString::fromLocal8Bit("Значение 1"));
 		mainTableWidget->item(CELL_IN_SIGN_MEASURED_2)->setText(QString::fromLocal8Bit("Значение 2"));
+#elif QT6
+
+#endif // QT5
 		break;
 
 	case ENGLISH_LANG:
@@ -482,11 +498,15 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+#ifdef QT5
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED)->setText(QString::fromLocal8Bit("Измерение ") + QString::number(measuredNum));
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED_VALUES)->setText(QString::fromLocal8Bit("Измеренное значение"));
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS)->setText(QString::fromLocal8Bit("Пороги"));
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MIN)->setText(QString::fromLocal8Bit("Мин"));
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MAX)->setText(QString::fromLocal8Bit("Макс"));
+#elif QT6
+
+#endif // QT5
 		break;
 
 	case ENGLISH_LANG:
@@ -719,6 +739,9 @@ void MoreWindow::resaveFile()
 		generateWarning(Warnings::MoreWindow::FILE_NOT_FOUND);
 		return;
 	}
+#ifdef QT_5
+
+#endif // QT_5
 
 	std::ofstream fout;
 	fout.open("cables.cfg");
