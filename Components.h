@@ -166,6 +166,13 @@ enum class ConnectorId
 	K
 };
 
+enum class SortType
+{
+	SortIndex,
+	SortComponents,
+	SortType
+};
+
 enum class DiagInformation
 {
 	Application_NAME,
@@ -193,7 +200,7 @@ enum class TypeResetTableButtonsTheme
 #define TYPE_VNH					2
 #define TYPE_ANALOG					3
 #define TYPE_HALL					4
-#define TYPE_HLD					5
+#define TYPE_HLD					5	
 
 enum class TypeCable
 {

@@ -60,18 +60,19 @@ void TestWindow::initUiTableHeaderOutTestManualStand()
 void TestWindow::resetLanguageOutTestManualStand()
 {
 	std::vector<bool> checkedManualChecks;
-	for (int i = 0; i < manualChecks.size(); i++)
-		checkedManualChecks.push_back(manualChecks[i]->isChecked());
-	for (int i = 0; i < manualChecks.size(); i++)
-		delete manualChecks[i];
-	manualChecks.clear();
+	for (int i = 0; i < cableRows.size(); i++)
+	{
+		checkedManualChecks.push_back(cableRows[i]->manualCheckBox->isChecked());
+		delete cableRows[i]->manualCheckBox;
+	}
+
 
 	resetTableHeaderLanguageOutTestManualStand();
 	resetTableTypeLanguageOutTestManualStand();
 	initUiTableRowsInTestManualStand();
 
 	for (int i = 0; i < checkedManualChecks.size(); i++)
-		manualChecks[i]->setChecked(checkedManualChecks[i]);
+		cableRows[i]->manualCheckBox->setChecked(checkedManualChecks[i]);
 }
 
 void TestWindow::resetTableHeaderLanguageOutTestManualStand()

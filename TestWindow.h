@@ -12,6 +12,7 @@
 #include <QComboBox>
 #include <QHeaderView>
 #include <qmessagebox.h>
+#include <qlist.h>
 
 #include "WindowFrame.h"
 #include "can.h"
@@ -24,6 +25,7 @@
 #define COLUMN_PIN					1
 #define COLUMN_NAME					2
 
+#define COLUMN_STANDART_HEIGHT		40
 #define COLUMN_DIGITAL_HEIGHT		50
 #define COLUMN_PWM_HEIGHT			128
 #define COLUMN_VNH_HEIGHT			169
@@ -56,11 +58,7 @@
 #define LOW_BUTTON_PRESSED			1
 #define ZERO_BUTTON_PRESSED			2
 
-#define SORT_TYPE_INDEX				0
-#define SORT_TYPE_DIRECTION_OUT		1
-#define SORT_TYPE_DIRECTION_IN		2
-
-#define FIXED_HEADER_BUTTON_WIDTH	120
+#define FIXED_HEADER_BUTTON_WIDTH	130
 #define FIXED_HEADER_BUTTON_HEIGHT	50
 #define FIXED_HEADER_COMBO_WIDTH	200
 #define FIXED_HEADER_COMBO_HEIGHT	40
@@ -151,6 +149,7 @@ public:
 
 	void* buttons;
 	QPushButton* moreButton;
+	QCheckBox* manualCheckBox = nullptr;
 
 	int stateDigital;
 	int statePWM;
@@ -309,16 +308,13 @@ private:
 	QPixmap* noClockwiseLightPixmap;
 	QPixmap* noClockwiseDarkPixmap;
 
-	int fullTestSortType;
+	SortType fullTestSortType;
+
+	WindowType testType;
 	bool isFullTestEnabled;
 
-	QString fileName;
-	WindowType testType;
-	TestBlockName testingBlock;
-	//Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
-	QMap <int, int> m;
-	std::vector<QCheckBox*> manualChecks;
+	QMap <int, int> offsetMap;
 	Cable *nextCheckCable;
 	QTimer* rotateTimer;
 	int timerCounter;
@@ -418,7 +414,7 @@ private:
 	void initMoreButton(int currentRowNum, QWidget* moreCellWidget);
 	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);
-	void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType);
+	void rewriteCableRows();
 
 public slots:
 	void slot_backButton_clicked();
@@ -442,4 +438,148 @@ public slots:
 	void selectCurrentCell(QString conector, QString pin);
 
 	void on_rotateTimer_timeout();
+private:
+	std::vector<std::pair<QString, TestTableRowProperties*>> sortComponents{  {QString("ARc5"),nullptr }, // ¬ходы
+															{QString("ARc7"),nullptr }, 
+															{QString("ARc3"),nullptr }, 
+															{QString("ARc2"),nullptr }, 
+															{QString("ARc1"),nullptr }, 
+															{QString("ARc4"),nullptr }, 
+															{QString("Sw18"),nullptr }, 
+															{QString("IHall4"),nullptr }, 
+															{QString("Sw17"),nullptr }, 
+															{QString("ARc8"),nullptr }, 
+															{QString("Sw4"),nullptr }, 
+															{QString("Sw24"),nullptr }, 
+															{QString("Sw2"),nullptr }, 
+															{QString("Sw8"),nullptr }, 
+															{QString("ARc6"),nullptr }, 
+															{QString("Sw16"),nullptr }, 
+															{QString("Arv1"),nullptr }, 
+															{QString("Sw23"),nullptr }, 
+															{QString("Sw20"),nullptr }, 
+															{QString("Sw3"),nullptr }, 
+															{QString("Sw22"),nullptr }, 
+															{QString("Sw12"),nullptr }, 
+															{QString("Sw10"),nullptr }, 
+															{QString("Sw19"),nullptr }, 
+															{QString("Sw1"),nullptr }, 
+															{QString("Sw15"),nullptr }, 
+															{QString("Sw7"),nullptr }, 
+															{QString("Sw14"),nullptr }, 
+															{QString("Sw6"),nullptr }, 
+															{QString("Sw13"),nullptr }, 
+															{QString("Sw5"),nullptr }, 
+															{QString("IHall1"),nullptr }, 
+															{QString("IHall2"),nullptr }, 
+															{QString("IHall3"),nullptr }, 
+															{QString("IHall5"),nullptr }, 
+															{QString("Enc1"),nullptr }, 
+															{QString("Enc1"),nullptr }, 
+															{QString("Enc2"),nullptr }, 
+															{QString("Enc2"),nullptr }, 
+															{QString("Enc3"),nullptr }, 
+															{QString("Sw21"),nullptr }, 
+															{QString("Sw11"),nullptr }, 
+															{QString("Sw9"),nullptr }, 
+															{QString("ARc9"),nullptr }, 
+															{QString("Arv8"),nullptr }, 
+															{QString("Arv3"),nullptr }, 
+															{QString("Arv4"),nullptr }, 
+															{QString("Arv7"),nullptr }, 
+															{QString("Arv2"),nullptr }, 
+															{QString("Arv5"),nullptr }, 
+															{QString("Arv6"),nullptr }, 
+															{QString("LOUT1"),nullptr }, 
+															{QString("LOUT2"),nullptr }, 
+															{QString("LOUT3"),nullptr }, 
+															{QString("LOUT4"),nullptr }, 
+															{QString("LOUT5"),nullptr }, 
+															{QString("LOUT6"),nullptr }, 
+															{QString("LOUT7"),nullptr }, 
+															{QString("LOUT8"),nullptr }, 
+															{QString("LOUT9"),nullptr }, 
+															{QString("LOUT10"),nullptr }, 
+															{QString("LOUT11"),nullptr }, 
+															{QString("LOUT12"),nullptr }, 
+															{QString("LOUT13"),nullptr }, 
+															{QString("LOUT14"),nullptr }, 
+															{QString("LOUT15"),nullptr }, 
+															{QString("LOUT16"),nullptr }, 
+															{QString("LOUT17"),nullptr }, 
+															{QString("LOUT18"),nullptr }, 
+															{QString("LOUT19"),nullptr }, 
+															{QString("LOUT20"),nullptr }, 
+															{QString("Hsd32"),nullptr }, 
+															{QString("Hsd33"),nullptr }, 
+															{QString("Hsd34"),nullptr }, 
+															{QString("Hsd35"),nullptr }, 
+															{QString("Hsd36"),nullptr }, 
+															{QString("Hsd37"),nullptr }, 
+															{QString("Hsd38"),nullptr }, 
+															{QString("Hsd39"),nullptr }, 
+															{QString("Hsd40"),nullptr }, 
+															{QString("Hsd41"),nullptr }, 
+															{QString("Hsd42"),nullptr }, 
+															{QString("Hsd43"),nullptr }, 
+															{QString("Hsd44"),nullptr }, 
+															{QString("Hsd45"),nullptr }, 
+															{QString("Hsd46"),nullptr }, 
+															{QString("Hsd47"),nullptr }, 
+															{QString("Hsd48"),nullptr }, 
+															{QString("Hsd49"),nullptr }, 
+															{QString("Hsd50"),nullptr }, 
+															{QString("Hsd51"),nullptr }, 
+															{QString("Hsd12"),nullptr }, 
+															{QString("Hsd13"),nullptr }, 
+															{QString("Hsd14"),nullptr }, 
+															{QString("Hsd15"),nullptr }, 
+															{QString("Hsd16"),nullptr }, 
+															{QString("Hsd17"),nullptr }, 
+															{QString("Hsd18"),nullptr }, 
+															{QString("Hsd19"),nullptr }, 
+															{QString("Hsd20"),nullptr }, 
+															{QString("Hsd21"),nullptr }, 
+															{QString("Hsd22"),nullptr }, 
+															{QString("Hsd23"),nullptr }, 
+															{QString("Hsd24"),nullptr }, 
+															{QString("Hsd25"),nullptr }, 
+															{QString("Hsd26"),nullptr }, 
+															{QString("Hsd27"),nullptr }, 
+															{QString("Hsd28"),nullptr }, 
+															{QString("Hsd29"),nullptr }, 
+															{QString("Hsd30"),nullptr }, 
+															{QString("Hsd31"),nullptr }, 
+															{QString("Br1"),nullptr }, 
+															{QString("Br1"),nullptr }, 
+															{QString("Br2"),nullptr }, 
+															{QString("Br2"),nullptr }, 
+															{QString("Br3"),nullptr }, 
+															{QString("Br3"),nullptr }, 
+															{QString("Br4"),nullptr }, 
+															{QString("Br4"),nullptr }, 
+															{QString("Br5"),nullptr }, 
+															{QString("Br5"),nullptr }, 
+															{QString("Br6"),nullptr }, 
+															{QString("Br6"),nullptr }, 
+															{QString("Br7"),nullptr }, 
+															{QString("Br7"),nullptr }, 
+															{QString("Br8"),nullptr }, 
+															{QString("Br8"),nullptr }, 
+															{QString("Br9"),nullptr }, 
+															{QString("Br9"),nullptr }, 
+															{QString("Br10"),nullptr }, 
+															{QString("Br10"),nullptr }, 
+															{QString("Hsd1"),nullptr }, 
+															{QString("Hsd2"),nullptr }, 
+															{QString("Hsd3"),nullptr }, 
+															{QString("Hsd4"),nullptr }, 
+															{QString("Hsd5"),nullptr }, 
+															{QString("Hsd6"),nullptr }, 
+															{QString("Hsd7"),nullptr }, 
+															{QString("Hsd8"),nullptr }, 
+															{QString("Hsd9"),nullptr }, 
+															{QString("Hsd10"),nullptr }, 
+															{QString("Hsd11"),nullptr }};
+
 };

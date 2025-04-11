@@ -741,17 +741,17 @@ void MainWindow::initConfig()
 	config = cable.readLine();
 	QStringList list = config.split(u';');
 
-	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // ????
+	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // Тема
 		viewWindowState->appTheme = LIGHT_THEME;
 	else
 		viewWindowState->appTheme = DARK_THEME;
 
-	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // ????
+	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // Язык
 		viewWindowState->appLanguage = RUSSIAN_LANG;
 	else
 		viewWindowState->appLanguage = ENGLISH_LANG;
 
-	if (list[2] != "NOT_SET") // ????
+	if (list[2] != "NOT_SET") // Блок
 	{
 		if (list[2].left(3) == "DTM")
 			leftBlockDMButton->click();
@@ -768,7 +768,7 @@ void MainWindow::initConfig()
 			}
 	}
 
-	if (list[3] == "MANUAL_STAND") // ?????
+	if (list[3] == "MANUAL_STAND") // Стенд
 	{
 		selectedTypeStand = TypeStand::MANUAL;
 		switchStandSlider->setStatus(TypeStand::MANUAL);
@@ -815,7 +815,7 @@ void MainWindow::initConfig()
 	if (search)
 	{
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			selectFrequencyLabel->setText(QString("Частота: ") + selectFrequencyComboBox->currentText());
+			selectFrequencyLabel->setText(QString::fromLocal8Bit("Частота: ") + selectFrequencyComboBox->currentText());
 		else if (viewWindowState->appLanguage == ENGLISH_LANG)
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
 		can->setSelectedFrequency(selectFrequencyComboBox->currentText());

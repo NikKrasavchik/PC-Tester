@@ -107,7 +107,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
 
-		m[cableRows[i]->id] = i;
+		offsetMap[cableRows[i]->id] = i;
 	}
 }
 
@@ -630,8 +630,8 @@ void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
 
 void TestWindow::slot_mainTableWidget_cellClicked(int row, int column)
 {
-	if (column == mainTableWidget->columnCount() - 1)
-		manualChecks[row]->setChecked(!manualChecks[row]->isChecked());
+	//if (column == mainTableWidget->columnCount() - 1)
+	//	manualChecks[row]->setChecked(!manualChecks[row]->isChecked());
 }
 
 void TestWindow::on_rotateTimer_timeout()

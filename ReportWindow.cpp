@@ -23,17 +23,6 @@ ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, TestB
 	initConnections();
 }
 
-ReportWindow::ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, TestBlockName testingBlock)
-{
-	for (int i = 0; i < checkedState.size(); i++)
-		this->checkedState.push_back(checkedState[i]->isChecked());
-	this->cableRows = cableRows;
-	this->testingBlock = testingBlock;
-
-	initUi();
-	initConnections();
-}
-
 ReportWindow::~ReportWindow()
 {
 	resaveComments();
@@ -63,7 +52,7 @@ void ReportWindow::initUi()
 	initUiFooter();
 	resetTheme();
 	generateTableBaseSign();
-	if (checkedState.size())
+	if (cableRows[0]->manualCheckBox != nullptr)
 		generateTableManual();
 	else
 		generateTableAuto();
@@ -279,7 +268,7 @@ void ReportWindow::generateTableManual()
 		tableWidget->item(row, IND_COLUMN_BASE_CONNECTOR)->setText(cableRows[i]->connectorStr);
 		tableWidget->item(row, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
 		tableWidget->item(row, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
-		tableWidget->item(row, IND_COLUMN_MANUAL_VALUE)->setBackgroundColor(checkedState[i] ? QColor(COLOR_GREEN) : QColor(COLOR_RED));
+		tableWidget->item(row, IND_COLUMN_MANUAL_VALUE)->setBackgroundColor(cableRows[i]->manualCheckBox->isChecked() ? QColor(COLOR_GREEN) : QColor(COLOR_RED));
 
 
 		commentsTextEdits.push_back(new QTextEdit());
@@ -1117,7 +1106,7 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 
 void ReportWindow::resaveComments()
 {
-	if (checkedState.size())
+	if (cableRows[0]->manualCheckBox != nullptr)
 		for (int i = 0; i < cableRows.size(); i++)
 			cableRows[i]->comment = commentsTextEdits[i]->toPlainText();
 	else
@@ -1371,7 +1360,7 @@ void ReportWindow::generateXlsx()
 		bool color = false;
 
 		genereateHeaderFile(xlsx, testerName, testingBlock, viewWindowState->actualVersion);
-		if (checkedState.size())
+		if (cableRows[0]->manualCheckBox != nullptr)
 		{
 			genereateHeaderTable(xlsx, maxOffset, false);
 			for (int i = 0; i < cableRows.size(); i++)
@@ -1391,7 +1380,7 @@ void ReportWindow::generateXlsx()
 				xlsx.write(numRow, 8, cableRows[i]->comment, formatLeftAlg);
 
 				Format tmpManualStandFormat(format);
-				if (checkedState[i])
+				if (cableRows[i]->manualCheckBox->isChecked())
 					tmpManualStandFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_GREEN));
 				else
 					tmpManualStandFormat.setPatternBackgroundColor(QColor(COLOR_LIGHT_RED));

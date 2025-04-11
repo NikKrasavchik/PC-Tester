@@ -96,10 +96,8 @@ class ReportWindow : public QDialog
 
 public:
 	ReportWindow(std::vector<TestTableRowProperties*> cableRows, TestBlockName testingBlock);
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, TestBlockName testingBlock);
 	~ReportWindow();
 
-	void setTestingBlock(TestBlockName testingBlock) { this->testingBlock = testingBlock; }
 	void setTestingType(WindowType testType) { this->testType = testType; }
 
 private:
@@ -124,7 +122,6 @@ private:
 
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
-	std::vector<bool> checkedState;
 	std::vector<QTextEdit*> commentsTextEdits;
 	QString testerName;
 	QString serialNumber;

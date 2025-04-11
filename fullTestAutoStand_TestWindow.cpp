@@ -25,7 +25,7 @@ void TestWindow::initUiFullTestAutoStand()
 	fullTestSortButton->setObjectName("fullTestSortButton");
 	fullTestSortButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
 	usefulSpaceHLayout->addWidget(fullTestSortButton);
-	fullTestSortType = SORT_TYPE_INDEX;
+	fullTestSortType = SortType::SortIndex;
 	
 	initUiTableFullTestAutoStand();
 }
