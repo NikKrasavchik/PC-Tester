@@ -145,13 +145,13 @@ public:
 	void setCable(std::vector<Cable> cable);
 	static void clearOldValue();
 private:
-	// Отправляет сообщение в CAN.
+	// Отправляет сообщение в CAN
 	// @name writeCan
 	// 
-	// @param int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
-	// @param int* msg - указатель на переменную которая отправиться в can.
+	// @param int id - id по которому отправиться can-сообщения
+	// @param int* msg - указатель на переменную которая отправиться в can
 	// 
-	// @return bool - В случае удачой отправки возращает true.
+	// @return bool - В случае удачой отправки возращает tru
 	static bool writeCan(int id, int* msg);
 
 	// ------------------------------------

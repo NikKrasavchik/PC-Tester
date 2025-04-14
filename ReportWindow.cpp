@@ -1152,52 +1152,84 @@ void ReportWindow::resaveComments()
 	}
 }
 
-void writeHorizontalAlignCell(Document& xlsx, int row, int columnStart, int columnEnd, const QVariant& text, QXlsx::Format::HorizontalAlignment align, Format formatText = Format(), const QColor& color = nullptr)
+// Запись данных в диапозон ячеек.
+// 
+// @name writeHorizontalAlignCell
+// 
+// @param Document& xlsx				- Ссылка на обьект класса Document.
+// @param int rowStart					- Строка начала диапозона.
+// @param int columnStart				- Столбец начала диапозона.
+// @param int rowEnd					- Строка конца диапозона.
+// @param int columnEnd					- Столбец конца диапозона.
+// @param const QVariant& text			- Текст для записи.
+// @param Format formatText				- Format с указаными стилями.
+// @param const QColor& color = nullptr	- Цыет текста, если не передавать параметр, цвет будет стандартным - черный.
+// 
+// @return void
+void writeHorizontalAlignCell(Document& xlsx, int rowStart, int columnStart, int rowEnd, int columnEnd, const QVariant& text, Format formatText, const QColor& color = nullptr)
 {
-	CellRange r(row, columnStart, row, columnEnd);
+
 	if(color != nullptr)
 		formatText.setPatternBackgroundColor(color);
-	xlsx.write(r.firstRow(), r.firstColumn(), text, formatText);
-	formatText.setHorizontalAlignment(align);
-	xlsx.mergeCells(r, formatText);
+	xlsx.write(rowStart, columnStart, text, formatText);
+	xlsx.mergeCells(CellRange(rowStart, columnStart, rowEnd, columnEnd), formatText);
 }
 
+// Создание заголовка листа документа .xlsx.
+// 
+// @name genereateHeaderFile
+// 
+// @param Document& xlsx			 - Ссылка на обьект класса Document.
+// @param QString testerName		 - Строка с именем тестировщика.
+// @param TestBlockName testingBlock - Идентификатор названия блока, который проверялся.
+// @param QString actualVersion		 - Строка версии блока, который проверялся.
+// 
+// @return void
 void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testingBlock, QString actualVersion)
 {
-	Format dateFormat;
-	dateFormat.setNumberFormatIndex(14);
-	dateFormat.setBorderStyle(Format::BorderThin);
-	Format timeFormat;
-	timeFormat.setNumberFormatIndex(21);
-	timeFormat.setBorderStyle(Format::BorderThin);
+	// Созлание Format, с указанием стилей у ячеек
 	Format format;
+	format.setHorizontalAlignment(Format::AlignLeft);
 	format.setBorderStyle(Format::BorderThin);
+	Format dateFormat(format);
+	dateFormat.setNumberFormatIndex(14);
+	Format timeFormat(format);
+	timeFormat.setNumberFormatIndex(21);
+	Format commentHeader(format);
+	commentHeader.setHorizontalAlignment(Format::AlignHCenter);
+	commentHeader.setVerticalAlignment(Format::AlignTop);
 
+	// Запись данных в ячейки таблицы
 #ifdef QT5
-	writeHorizontalAlignCell(xlsx, 1, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Дата проверки") : QString("Date of inspection"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 2, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Время проверки") : QString("Time of inspection"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 3, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Имя оператора") : QString("Operator name"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 4, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название ЭБУ") : QString("Block name"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 5, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название программы") : QString("App name"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 6, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комплектация") : QString("Equipment"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 7, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("PART номер") : QString("Part number"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 8, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Серийный номер") : QString("Serial number"), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 9, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Дата производства") : QString("Manufacture date"), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 1, 1, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Дата проверки") : QString("Date of inspection"), format);
+	writeHorizontalAlignCell(xlsx, 2, 1, 2, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Время проверки") : QString("Time of inspection"), format);
+	writeHorizontalAlignCell(xlsx, 3, 1, 3, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Имя оператора") : QString("Operator name"), format);
+	writeHorizontalAlignCell(xlsx, 4, 1, 4, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название ЭБУ") : QString("Block name"), format);
+	writeHorizontalAlignCell(xlsx, 5, 1, 5, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Название программы") : QString("App name"), format);
+	writeHorizontalAlignCell(xlsx, 6, 1, 6, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комплектация") : QString("Equipment"), format);
+	writeHorizontalAlignCell(xlsx, 7, 1, 7, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("PART номер") : QString("Part number"), format);
+	writeHorizontalAlignCell(xlsx, 8, 1, 8, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Серийный номер") : QString("Serial number"), format);
+	writeHorizontalAlignCell(xlsx, 9, 1, 9, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Дата производства") : QString("Manufacture date"), format);
+
+	writeHorizontalAlignCell(xlsx, 1, 7, 1, 8, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Комментарий") : QString("Comment"), commentHeader);
+	commentHeader.setHorizontalAlignment(Format::AlignLeft);
+	writeHorizontalAlignCell(xlsx, 2, 7, HEIGHT_HEADERFILE - 1, 8, "", commentHeader);
 #elif QT6
 
 #endif // QT5
 
 	QDateTime time = QDateTime::currentDateTime();
 
-	writeHorizontalAlignCell(xlsx, 1, 3, 6, time.date(), Format::AlignLeft, dateFormat);
-	writeHorizontalAlignCell(xlsx, 2, 3, 6, time.time(), Format::AlignLeft, timeFormat);
-	writeHorizontalAlignCell(xlsx, 3, 3, 6, testerName, Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 4, 3, 6, testingBlock == TestBlockName::DTM ? QString("DTM ") + actualVersion : QString("BCM ") + actualVersion, Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 5, 3, 6, Can::getDiagBlock(DiagInformation::Calibration_NAME, testingBlock), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 6, 3, 6, Can::getDiagBlock(DiagInformation::Equipment_NAME, testingBlock), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 7, 3, 6, Can::getDiagBlock(DiagInformation::Part_NUMBER, testingBlock), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 8, 3, 6, Can::getDiagBlock(DiagInformation::Serial_NUMBER, testingBlock), Format::AlignLeft, format);
-	writeHorizontalAlignCell(xlsx, 9, 3, 6, Can::getDiagBlock(DiagInformation::Manufacture_DATE, testingBlock), Format::AlignLeft, format);
+	writeHorizontalAlignCell(xlsx, 1, 3, 1, 6, time.date(), dateFormat);
+	writeHorizontalAlignCell(xlsx, 2, 3, 2, 6, time.time(), timeFormat);
+	writeHorizontalAlignCell(xlsx, 3, 3, 3, 6, testerName, format);
+	writeHorizontalAlignCell(xlsx, 4, 3, 4, 6, testingBlock == TestBlockName::DTM ? QString("DTM ") + actualVersion : QString("BCM ") + actualVersion, format);
+	writeHorizontalAlignCell(xlsx, 5, 3, 5, 6, Can::getDiagBlock(DiagInformation::Calibration_NAME, testingBlock), format);
+	writeHorizontalAlignCell(xlsx, 6, 3, 6, 6, Can::getDiagBlock(DiagInformation::Equipment_NAME, testingBlock), format);
+	writeHorizontalAlignCell(xlsx, 7, 3, 7, 6, Can::getDiagBlock(DiagInformation::Part_NUMBER, testingBlock), format);
+	writeHorizontalAlignCell(xlsx, 8, 3, 8, 6, Can::getDiagBlock(DiagInformation::Serial_NUMBER, testingBlock), format);
+	writeHorizontalAlignCell(xlsx, 9, 3, 9, 6, Can::getDiagBlock(DiagInformation::Manufacture_DATE, testingBlock), format);
+
 
 
 }
@@ -1352,6 +1384,7 @@ QString ReportWindow::getStrType(TypeCable type)
 
 void ReportWindow::on_saveButton_clicked()
 {
+	QString tmpStr = testerNameLineEdit->text();
 	if (testerNameLineEdit->text() != "")
 		testerName = testerNameLineEdit->text();
 	else
@@ -1360,6 +1393,7 @@ void ReportWindow::on_saveButton_clicked()
 		return;
 	}
 
+	tmpStr = serialNumberLineEdit->text();
 	if (serialNumberLineEdit->text() != "")
 		serialNumber = serialNumberLineEdit->text();
 	else
@@ -1393,6 +1427,7 @@ void ReportWindow::generateXlsx()
 		xlsx.currentWorksheet()->setGridLinesVisible(false);
 		xlsx.setColumnWidth(1, 5, 13);
 
+		genereateHeaderFile(xlsx, testerName, testingBlock, viewWindowState->actualVersion);
 
 
 		Format format;
@@ -1400,20 +1435,9 @@ void ReportWindow::generateXlsx()
 		format.setFontBold(true);
 		format.setBorderStyle(Format::BorderThin);
 
-		//for (int i = 0; i < cableRows.size(); i++)
-		//{
-		//	xlsx.write(i + 5, 30, cableRows[i]->connectorStr, format);
-		//	xlsx.write(i + 5, 31, cableRows[i]->pin, format);
-		//	if(checkedState[i])
-		//		xlsx.write(i + 5, 32, "Work", format);
-		//	else
-		//		xlsx.write(i + 5, 32, "No", format);
-
-		//}
 		int numRow = START_ROW_TABLE;
 		bool color = false;
 
-		genereateHeaderFile(xlsx, testerName, testingBlock, viewWindowState->actualVersion);
 		if (cableRows[0]->manualCheckBox != nullptr)
 		{
 			genereateHeaderTable(xlsx, maxOffset, false);
@@ -1474,8 +1498,8 @@ void ReportWindow::generateXlsx()
 						if (i == 0) // header type
 						{
 #ifdef QT5
-							writeHorizontalAlignCell(xlsx, numRow, 6, 7, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 1") : QString("Value 1"), Format::AlignHCenter, tmpHeaderFormat);
-							writeHorizontalAlignCell(xlsx, numRow, 8, 9, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 2") : QString("Value 2"), Format::AlignHCenter, tmpHeaderFormat);
+							writeHorizontalAlignCell(xlsx, numRow, 6, numRow, 7, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 1") : QString("Value 1"), tmpHeaderFormat);
+							writeHorizontalAlignCell(xlsx, numRow, 8, numRow, 9, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 2") : QString("Value 2"), tmpHeaderFormat);
 #elif QT6
 
 #endif // QT5
@@ -1496,13 +1520,13 @@ void ReportWindow::generateXlsx()
 
 						if (typedCableRows[type][i]->measureds[0]->voltage == NOT_SET)
 						{
-							writeHorizontalAlignCell(xlsx, numRow, 6, 7, "-", Format::AlignHCenter, tmpRowFormat);
-							writeHorizontalAlignCell(xlsx, numRow, 8, 9, "-", Format::AlignHCenter, tmpRowFormat);
+							writeHorizontalAlignCell(xlsx, numRow, 6, numRow, 7, "-", tmpRowFormat);
+							writeHorizontalAlignCell(xlsx, numRow, 8, numRow, 9, "-", tmpRowFormat);
 						}
 						else
 						{
-							writeHorizontalAlignCell(xlsx, numRow, 6, 7, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->voltage == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
-							writeHorizontalAlignCell(xlsx, numRow, 8, 9, "", Format::AlignHCenter, Format(), (typedCableRows[type][i]->measureds[0]->current == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
+							writeHorizontalAlignCell(xlsx, numRow, 6, numRow, 7, "", Format(), (typedCableRows[type][i]->measureds[0]->voltage == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
+							writeHorizontalAlignCell(xlsx, numRow, 8, numRow, 9, "", Format(), (typedCableRows[type][i]->measureds[0]->current == 0 ? QColor(COLOR_LIGHT_RED) : QColor(COLOR_LIGHT_GREEN)));
 						}
 						numRow++;
 						break;
@@ -1512,7 +1536,7 @@ void ReportWindow::generateXlsx()
 						{
 							for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 							{
-								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), Format::AlignHCenter, tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), numRow, 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), tmpHeaderFormat);
 
 								CellRange r(numRow + 1, 6 + (4 * j), numRow + 2, 7 + (4 * j));
 #ifdef QT5
@@ -1524,7 +1548,7 @@ void ReportWindow::generateXlsx()
 								xlsx.mergeCells(r, tmpHeaderFormat);
 								tmpHeaderFormat.setTextWarp(false);
 #ifdef QT5
-								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (4 * j), 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), Format::AlignHCenter, tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (4 * j), numRow + 1, 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), tmpHeaderFormat);
 								xlsx.write(numRow + 2, 8 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
 								xlsx.write(numRow + 2, 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Макс") : QString("Max"), tmpHeaderFormat);
 #elif QT6
@@ -1552,7 +1576,7 @@ void ReportWindow::generateXlsx()
 						{
 							if (typedCableRows[type][i]->measureds[j]->voltage == NOT_SET)
 							{
-								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), "-", Format::AlignHCenter, tmpRowFormat);
+								writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), numRow, 7 + (4 * j), "-", tmpRowFormat);
 								xlsx.write(numRow, 8 + (4 * j), "-", tmpRowFormat); // red
 								xlsx.write(numRow, 9 + (4 * j), "-", tmpRowFormat);
 							}
@@ -1565,19 +1589,19 @@ void ReportWindow::generateXlsx()
 
 								if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].minValue && typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].maxValue)
 								{
-									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpGreenFormat);
+									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), numRow, 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpGreenFormat);
 									xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRowFormat);
 									xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRowFormat);
 								}
 								else if (typedCableRows[type][i]->measureds[j]->voltage < typedCableRows[type][i]->thresholds[j].minValue)
 								{
-									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpRedFormat);
+									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), numRow, 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpRedFormat);
 									xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRedFormat); // red
 									xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRowFormat);
 								}
 								else if (typedCableRows[type][i]->measureds[j]->voltage > typedCableRows[type][i]->thresholds[j].maxValue)
 								{
-									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, Format::AlignHCenter, tmpRedFormat);
+									writeHorizontalAlignCell(xlsx, numRow, 6 + (4 * j), numRow, 7 + (4 * j), typedCableRows[type][i]->measureds[j]->voltage, tmpRedFormat);
 									xlsx.write(numRow, 8 + (4 * j), typedCableRows[type][i]->thresholds[j].minValue, tmpRowFormat);
 									xlsx.write(numRow, 9 + (4 * j), typedCableRows[type][i]->thresholds[j].maxValue, tmpRedFormat); // red
 								}
@@ -1591,14 +1615,14 @@ void ReportWindow::generateXlsx()
 					case TypeCable::DIG_OUT:
 					case TypeCable::PWM_OUT:
 					case TypeCable::VNH_OUT:
-					case TypeCable::HLD_OUT:
-						if (i == 0) // header type
+					case TypeCable::HLD_OUT: 
+						if (i == 0) // Заголовок типа
 						{
 							for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 							{
 								CellRange r(numRow + 1, 6 + (6 * j), numRow + 2, 7 + (6 * j));
 #ifdef QT5
-								writeHorizontalAlignCell(xlsx, numRow, 6 + (6 * j), 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), Format::AlignHCenter, tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow, 6 + (6 * j), numRow, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), tmpHeaderFormat);
 								xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Измеренное значение") : QString("Measured values"), tmpHeaderFormat);
 #elif QT6
 
@@ -1607,9 +1631,9 @@ void ReportWindow::generateXlsx()
 								xlsx.mergeCells(r, tmpHeaderFormat);
 								tmpHeaderFormat.setTextWarp(false);
 #ifdef QT5
-								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (6 * j), 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), Format::AlignHCenter, tmpHeaderFormat);
-								writeHorizontalAlignCell(xlsx, numRow + 2, 8 + (6 * j), 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("U, В") : QString("U, V"), Format::AlignHCenter, tmpHeaderFormat);
-								writeHorizontalAlignCell(xlsx, numRow + 2, 10 + (6 * j), 11 + (6 * j), QString("I, A"), Format::AlignHCenter, tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (6 * j), numRow + 1, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Пороги") : QString("Thresholds "), tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow + 2, 8 + (6 * j), numRow + 2, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("U, В") : QString("U, V"), tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow + 2, 10 + (6 * j), numRow + 2, 11 + (6 * j), QString("I, A"), tmpHeaderFormat);
 								xlsx.write(numRow + 3, 6 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("U, В") : QString("U, V"), tmpHeaderFormat);
 								xlsx.write(numRow + 3, 7 + (6 * j), QString("I, A"), tmpHeaderFormat);
 								xlsx.write(numRow + 3, 8 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Мин") : QString("Min"), tmpHeaderFormat);
@@ -1700,6 +1724,8 @@ void ReportWindow::generateXlsx()
 				}
 			}
 		}
+
+		// Создание названия и сохранение файла
 		QDir dir;
 		QDateTime time = QDateTime::currentDateTime();
 
@@ -1711,7 +1737,7 @@ void ReportWindow::generateXlsx()
 			nameFile += "BCM_";
 		nameFile += serialNumber.remove("0") + "-";
 		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
-		for (int i = 1;; i++)
+		for (int i = 1;; i++) // Поиск файлов с таким же названием, если находим уникальное название => выходим из цикла
 		{
 			QString tmpNameFile = nameFile + "-test" + QString::number(i) + ".xlsx";
 			if (!QFile::exists(tmpNameFile))
@@ -1740,7 +1766,15 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 	case RUSSIAN_LANG:
 		switch (warning)
 		{
-		case Warnings::ReportWindow::XLSX_SAVE_ERROR:
+		case Warnings::ReportWindow::XLSX_SAVE_ERROR: // Warning 0x101
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Неизвестная ошибка при создании документа .xlsx\nWarning 0x101"));
+			break;
+
+		case Warnings::ReportWindow::EMPTY_INITIALS: // Warning 0x104
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Пустое поля \"ФИО\". Заполните его\nWarning 0x104"));
+			break;
+		case Warnings::ReportWindow::EMPTY_SERIAL: // Warning 0x105
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Пустое поля \"Серийный номер\". Заполните его\nWarning 0x105"));
 			break;
 		}
 		break;
@@ -1748,7 +1782,14 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 	case ENGLISH_LANG:
 		switch (warning)
 		{
-		case Warnings::ReportWindow::XLSX_SAVE_ERROR:
+		case Warnings::ReportWindow::XLSX_SAVE_ERROR: // Warning 0x101
+			QMessageBox::warning(this, QString("Warning"), QString("Unknown error while creating .xlsx document\nWarning 0x101"));
+			break;
+		case Warnings::ReportWindow::EMPTY_INITIALS: // Warning 0x104
+			QMessageBox::warning(this, QString("Warning"), QString("Empty field \"Initiale\". Fill it in\nWarning 0x104"));
+			break;
+		case Warnings::ReportWindow::EMPTY_SERIAL: // Warning 0x105
+			QMessageBox::warning(this, QString("Warning"), QString("Empty field \"Serial number\". Fill it in\nWarning 0x105"));
 			break;
 		}
 		break;

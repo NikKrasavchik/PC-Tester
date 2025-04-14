@@ -225,34 +225,34 @@ namespace Warnings
 {
 	enum class MainWindow
 	{
-		TEST_ACCESS_FILE_SEL,
-		TEST_ACCESS_FREQUENCY_SEL,
-		TEST_ACCESS_ADAPTER_SEL,
-		ADAPTERS_CHANGED,
-		SIZE_CABLE_NUL,
-		NOT_SELECTED_BLOCK,
-		FILE_NOT_FOUND
+		TEST_ACCESS_FILE_SEL,		// warning 0x001
+		TEST_ACCESS_FREQUENCY_SEL,	// warning 0x002
+		TEST_ACCESS_ADAPTER_SEL,	// warning 0x003
+		ADAPTERS_CHANGED,			// warning 0x004
+		SIZE_CABLE_NUL,				// warning 0x005
+		NOT_SELECTED_BLOCK,			// warning 0x006
+		FILE_NOT_FOUND				// warning 0x007
 	};
 
 	enum class ReportWindow
 	{
-		XLSX_SAVE_ERROR,
-		TYPE_CHANGE_ERROR,
-		INCORRECT_TEST_TYPE,
-		EMPTY_INITIALS,
-		EMPTY_SERIAL
+		XLSX_SAVE_ERROR,			// warning 0x101
+		TYPE_CHANGE_ERROR,			// warning 0x102
+		INCORRECT_TEST_TYPE,		// warning 0x103
+		EMPTY_INITIALS,				// warning 0x104
+		EMPTY_SERIAL				// warning 0x105
 	};
 
 	enum class MoreWindow
 	{
-		OPEN_FILE_ERROR,
-		FILE_NOT_FOUND
+		FILE_NOT_FOUND,				// warning 0x201
+		OPEN_FILE_ERROR				// warning 0x202
 	};
 
 	enum class TestWindow
 	{
-		OPEN_MORE_WINDOW,
-		INCORRECT_TEST_TYPE
+		OPEN_MORE_WINDOW,			// warning 0x301
+		INCORRECT_TEST_TYPE			// warning 0x302
 	};
 }
 

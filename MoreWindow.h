@@ -236,6 +236,10 @@ private:
 
 	void resizeEvent(QResizeEvent* event) { mainWidget->resize(geometry().width() - (PADDING_MAINWIDGET * 2), geometry().height() - PADDING_MAINWIDGET); };
 
+	// ћетод пересохран€ющий файл при необходимости внести в него изменени€.
+	// @name resaveFile
+	// 
+	// @return void
 	void resaveFile();
 	void generateWarning(Warnings::MoreWindow warning);
 

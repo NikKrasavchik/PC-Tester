@@ -621,18 +621,18 @@ void MoreWindow::resaveFile()
 	QFile fin("cables.cfg");
 	if (!fin.open(QIODevice::ReadOnly | QIODevice::Text))
 	{
-		MoreWindow::generateWarning(Warnings::MoreWindow::OPEN_FILE_ERROR);
+		MoreWindow::generateWarning(Warnings::MoreWindow::FILE_NOT_FOUND);
 		return;
 	}
 
-	QString config = fin.readLine();
+	QString config = fin.readLine(); // Обрезаеи и запоминаем раздел файла с информацией о  CONFIG
 	config += fin.readLine();
 
 	QString outputString = "";
 	bool isFound = false;
 	bool admissionBlock = false;
 	bool admissionVersion = false;
-	while (!fin.atEnd())
+	while (!fin.atEnd()) // Посик нужного места в файле и изменение его в соответствие с правками пользователя
 	{
 		QString dataLine = fin.readLine();
 		
@@ -730,19 +730,19 @@ void MoreWindow::resaveFile()
 			outputString += dataList[i] + ";";
 		outputString[outputString.size() - 1] = '\n';
 	}
-	outputString.remove(outputString.size() - 1, 1);
-	outputString.insert(0, config);
+	outputString.remove(outputString.size() - 1, 1); 
+	outputString.insert(0, config); // Вставляем в начало строки информацию о разделе CONFIG
 	fin.close();
 
-	if (!isFound)
+	if (!isFound) // Если не найден нужный кабель
 	{
-		generateWarning(Warnings::MoreWindow::FILE_NOT_FOUND);
+		generateWarning(Warnings::MoreWindow::OPEN_FILE_ERROR);
 		return;
 	}
 #ifdef QT_5
 
 #endif // QT_5
-
+	// Перезапись с новыми значениями
 	std::ofstream fout;
 	fout.open("cables.cfg");
 	fout << outputString.toStdString();
@@ -761,10 +761,12 @@ void MoreWindow::generateWarning(Warnings::MoreWindow warning)
 	case RUSSIAN_LANG:
 		switch (warning)
 		{
-		case Warnings::MoreWindow::OPEN_FILE_ERROR:
+		case Warnings::MoreWindow::FILE_NOT_FOUND: // Warning 0x201
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Нет конфигурационного файла. Проверьте наличие в папке и перезапустите приложение\nWarning 0x201"));
 			break;
-
-		case Warnings::MoreWindow::FILE_NOT_FOUND:
+		
+		case Warnings::MoreWindow::OPEN_FILE_ERROR: // Warning 0x202
+			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Не обнаружен нужный кабель, попробуйте вернутся к исходному конфигурационному файлу\nWarning 0x202"));
 			break;
 		}
 		break;
@@ -772,10 +774,12 @@ void MoreWindow::generateWarning(Warnings::MoreWindow warning)
 	case ENGLISH_LANG:
 		switch (warning)
 		{
-		case Warnings::MoreWindow::OPEN_FILE_ERROR:
+		case Warnings::MoreWindow::FILE_NOT_FOUND: // Warning 0x201
+			QMessageBox::warning(this, QString("Warning"), QString("No configuration file. Check for presence in the folder and restart the application\nWarning 0x201"));
 			break;
 
-		case Warnings::MoreWindow::FILE_NOT_FOUND:
+		case Warnings::MoreWindow::OPEN_FILE_ERROR: // Warning 0x202
+			QMessageBox::warning(this, QString("Warning"), QString("The required cable was not found, try to return to the original configuration file\nWarning 0x202"));
 			break;
 		}
 		break;

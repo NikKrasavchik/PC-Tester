@@ -731,10 +731,7 @@ void MainWindow::initConfig()
 {
 	QFile file("cables.cfg");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
 		return;
-	}
 	QTextStream cable(&file);
 
 	QString config = cable.readLine();
@@ -849,10 +846,8 @@ void MainWindow::resetConfig()
 {
 	QFile file("cables.cfg");
 	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
 		return;
-	}
+
 	QTextStream cable(&file);
 
 	QString config = cable.readLine();
@@ -1684,10 +1679,7 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 
 	QFile config("cables.cfg");
 	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
 		return;
-	}
 
 	QTextStream cable(&config);
 	bool admissionBlock = false;
