@@ -1384,7 +1384,6 @@ QString ReportWindow::getStrType(TypeCable type)
 
 void ReportWindow::on_saveButton_clicked()
 {
-	QString tmpStr = testerNameLineEdit->text();
 	if (testerNameLineEdit->text() != "")
 		testerName = testerNameLineEdit->text();
 	else
@@ -1393,7 +1392,6 @@ void ReportWindow::on_saveButton_clicked()
 		return;
 	}
 
-	tmpStr = serialNumberLineEdit->text();
 	if (serialNumberLineEdit->text() != "")
 		serialNumber = serialNumberLineEdit->text();
 	else
@@ -1402,9 +1400,9 @@ void ReportWindow::on_saveButton_clicked()
 		return;
 	}
 
-	resaveComments();
+	resaveComments(); // Пересохроняем данные из коментов
 
-	generateXlsx();
+	generateXlsx(); // Создаем файл .xlsx
 }
 
 void ReportWindow::generateXlsx()
@@ -1495,7 +1493,7 @@ void ReportWindow::generateXlsx()
 					{
 					case TypeCable::DIG_IN:
 					case TypeCable::HALL_IN:
-						if (i == 0) // header type
+						if (i == 0) // Заголовок типа
 						{
 #ifdef QT5
 							writeHorizontalAlignCell(xlsx, numRow, 6, numRow, 7, viewWindowState->appLanguage == RUSSIAN_LANG ? QString::fromLocal8Bit("Значение 1") : QString("Value 1"), tmpHeaderFormat);
@@ -1532,7 +1530,7 @@ void ReportWindow::generateXlsx()
 						break;
 
 					case TypeCable::ANALOG_IN:
-						if (i == 0) // header type
+						if (i == 0) // Заголовок типа
 						{
 							for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 							{

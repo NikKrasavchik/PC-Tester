@@ -630,8 +630,8 @@ void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
 
 void TestWindow::slot_mainTableWidget_cellClicked(int row, int column)
 {
-	//if (column == mainTableWidget->columnCount() - 1)
-	//	manualChecks[row]->setChecked(!manualChecks[row]->isChecked());
+	if (column == mainTableWidget->columnCount() - 1)
+		cableRows[row]->manualCheckBox->setChecked(!cableRows[row]->manualCheckBox->isChecked());
 }
 
 void TestWindow::on_rotateTimer_timeout()

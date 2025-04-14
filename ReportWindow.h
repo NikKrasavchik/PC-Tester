@@ -152,5 +152,10 @@ private:
 	void resizeEvent(QResizeEvent* event);
 
 public slots:
+	// Слот срабатывающий при нажатии на кнопку Сохранить
+	// 
+	// @name on_saveButton_clicked
+	// 
+	// @return void
 	void on_saveButton_clicked();
 };

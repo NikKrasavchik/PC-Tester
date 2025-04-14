@@ -213,6 +213,3 @@ void TestWindow::resetTableRowsFullTestAutoStand()
 	resetTableTypeLanguageFullTestAutoStand();
 }
 
-void TestWindow::slot_autoStandConnectButton_clicked()
-{
-}

@@ -314,11 +314,9 @@ void TestWindow::initConnections()
 	connect(switchLanguageButton, &QPushButton::clicked, this, &TestWindow::slot_switchLanguageButton_clicked);
 	connect(reportButton, &QPushButton::clicked, this, &TestWindow::slot_reportButton_clicked);
 	connect(sleepButton, &QPushButton::clicked, this, &TestWindow::slot_sleepButton_clicked);
-	connect(autoStandConnectButton, &QPushButton::clicked, this, &TestWindow::slot_autoStandConnectButton_clicked);
-	connect(inManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_inManualTestAutoStandTestTimeComboBox_changed(int)));
-	connect(outManualTestAutoStandTestTimeComboBox, SIGNAL(currentIndexChanged(int)), this, SLOT(slot_outManualTestAutoStandTestTimeComboBox_changed(int)));
 	connect(autoStandStartTestButton, &QPushButton::clicked, this, &TestWindow::slot_autoStandStartTestButton_clicked);
 	connect(fullTestSortButton, &QPushButton::clicked, this, &TestWindow::slot_fullTestSortButton_clicked);
+	connect(mainTableWidget, &QTableWidget::cellClicked, this, &TestWindow::slot_mainTableWidget_cellClicked);
 }
 
 void TestWindow::initStyles()
