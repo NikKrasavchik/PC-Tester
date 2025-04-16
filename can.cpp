@@ -815,7 +815,7 @@ void Can::setCable(std::vector<Cable> cable)
 }
 void Can::clearOldValue()
 {
-	for (int j = 256; j < 266; j++)
+	for (int j : mapCable.keys())
 		for (int i = 0; i < mapCable[j].size(); i++)
 			mapCable[j][i].second = NOT_SET;
 	b_flagStatusConnection = false;

@@ -1501,32 +1501,38 @@ void TestWindow::slot_fullTestSortButton_clicked()
 	{
 	case SortType::SortIndex:
 		fullTestSortType = SortType::SortComponents;
+		if(viewWindowState->appLanguage == RUSSIAN_LANG)
+			fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
+		else
+			fullTestSortButton->setText(QString("Sort:\nby type"));
 		break;
 	case SortType::SortComponents:
 		fullTestSortType = SortType::SortType;
+		if(viewWindowState->appLanguage == RUSSIAN_LANG)
+			fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо компонентам"));
+		else
+			fullTestSortButton->setText(QString("Sort:\nby component"));
 		break;
 	case SortType::SortType:
 		fullTestSortType = SortType::SortIndex;
+		if(viewWindowState->appLanguage == RUSSIAN_LANG)
+			fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо порядку"));
+		else
+			fullTestSortButton->setText(QString("Sort:\nin order"));
 		break;
 	default:
 		break;
 	}
-	resetLanguage();
 
 	rewriteCableRows();
 
 	mainTableWidget->clear();
 
 	if (testType == WindowType::FULL_TEST_MANUAL_STAND)
-	{
-		resetTableHeaderFullTestManualStand();
-		resetTableRowsFullTestManualStand();
-	}
+		resetLanguageFullTestManualStand();
 	else if (testType == WindowType::FULL_TEST_AUTO_STAND)
-	{
-		resetTableHeaderFullTestAutoStand();
-		resetTableRowsFullTestAutoStand();
-	}
+		resetLanguageFullTestAutoStand();
+
 
 	Can::clearOldValue();
 }

@@ -502,8 +502,8 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED)->setText(QString::fromLocal8Bit("Измерение ") + QString::number(measuredNum));
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED_VALUES)->setText(QString::fromLocal8Bit("Измеренное значение"));
 		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS)->setText(QString::fromLocal8Bit("Пороги"));
-		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MIN)->setText(QString::fromLocal8Bit("Мин"));
-		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MAX)->setText(QString::fromLocal8Bit("Макс"));
+		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MIN)->setText(QString::fromLocal8Bit("Мин."));
+		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MAX)->setText(QString::fromLocal8Bit("Макс."));
 #elif QT6
 
 #endif // QT5
