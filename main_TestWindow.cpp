@@ -1366,6 +1366,30 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_HLD_HEIGHT);
 		}
+		else if(cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
+		{
+			QHBoxLayout *hLayout = new QHBoxLayout(interactionButtonsWidget);
+			QVBoxLayout *vLayout = new QVBoxLayout();
+
+			QSpacerItem* leftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+			QSpacerItem* centerSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
+			QSpacerItem* rightSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
+
+			interactionButtonsCellVLayout->addLayout(hLayout);
+
+			hLayout->addItem(leftSpacer);
+			hLayout->addLayout(vLayout);
+			hLayout->addItem(rightSpacer);
+			vLayout->addWidget(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->checkButton);
+			vLayout->addItem(centerSpacer);
+			vLayout->addWidget(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->comboBox);
+
+			connect(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->checkButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_check_clicked);
+
+
+
+			mainTableWidget->setRowHeight(currentRowNum, COLUMN_INFORMATION_HEIGHT);
+		}
 	}
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
@@ -1495,8 +1519,6 @@ void TestWindow::rewriteCableRows()
 
 void TestWindow::slot_fullTestSortButton_clicked()
 {
-
-		
 	switch (fullTestSortType)
 	{
 	case SortType::SortIndex:

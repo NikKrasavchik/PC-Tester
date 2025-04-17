@@ -25,6 +25,35 @@ Can::Can()
 	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
 }
 
+bool Can::checkInformationBus(QString checkAdapter, int canId)
+{
+
+
+	for (int i = 0; i < kvaser->nameAdapters.size(); i++) // Проходим по kvaser
+		if (kvaser->nameAdapters[i] == checkAdapter)
+		{
+
+			// Дописать проверку ошибок kvasera
+			canInitializeLibrary(); // Инициализация api kvaser
+			canHandle hndTmp = canOpenChannel(i, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
+			canSetBusParams(hndTmp, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Установка параматров на CAN-шину.
+			canBusOn(hndTmp); // Запуск CAN-шины
+
+			unsigned char msgSendKvase[8] = { 1,0,0,0,0,0,0,0 };
+
+
+			canWrite(hndTmp, canId, msgSendKvase, 8, 0); // Дописать проверку ошибок kvasera
+		}
+
+	for (int i = 0; i < marathon->nameAdapters.size(); i++) // Проходим по marathon
+		if (marathon->nameAdapters[i] == checkAdapter)
+		{
+
+
+
+		}
+	return true;
+}
 bool Can::initCan(WindowType windowType)
 {
 	if (!b_adapterSelected)
@@ -227,6 +256,16 @@ void Can::setSelectedAdapterNeme(QString adapter)
 		}
 
 	b_adapterSelected = false;
+}
+
+QString Can::getSelectedAdapterNeme()
+{
+	if (kvaser->activeAdapter != NOT_SET)
+		return QString(kvaser->nameAdapters[kvaser->activeAdapter]);
+	else if (marathon->activeAdapter != NOT_SET)
+		return QString(marathon->nameAdapters[marathon->activeAdapter]);
+	else
+		return QString();
 }
 
 // ------------------------------------

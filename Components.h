@@ -203,6 +203,8 @@ enum class TypeResetTableButtonsTheme
 #define TYPE_ANALOG					3
 #define TYPE_HALL					4
 #define TYPE_HLD					5	
+#define TYPE_CAN					6	
+#define TYPE_LIN					7	
 
 enum class TypeCable
 {
@@ -213,7 +215,9 @@ enum class TypeCable
 	DIG_OUT,
 	PWM_OUT,
 	VNH_OUT,
-	HLD_OUT
+	HLD_OUT,
+	CAN_OUT,
+	LIN_OUT
 };
 
 #define DIRECTION_OUT			0

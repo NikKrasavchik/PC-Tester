@@ -1,5 +1,5 @@
 #include "MainWindow.h"
-
+#include <QDesktopServices>
 #define GRID_COLUMN_0	0
 #define GRID_COLUMN_1	1
 #define GRID_ROW_0      0
@@ -1188,8 +1188,6 @@ void MainWindow::resetTheme()
 			leftBlockDMButton->setStyleSheet(darkStyles.standButtons);
 			leftBlockBCMButton->setStyleSheet(darkStyles.standButtons);
 		}
-
-
 		break;
 	}
 }
@@ -1736,6 +1734,17 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 		{
 			QStringList list = line.split(u';');
 			id += 1;
+			if (list.size() == 6)
+			{
+				Cable cable;
+				cable.setId(id);
+				cable.setConnector((ConnectorId)(list[0].toInt()));
+				cable.setComponent(list[1]);
+				cable.setType(list[3].toInt());
+				cable.setName(list[4]);
+				cables.push_back(cable);
+				continue;
+			}
 			ConnectorId connector = (ConnectorId)(list[0].toInt());
 			int pin = list[1].toInt();
 			int direction = list[2].toInt();

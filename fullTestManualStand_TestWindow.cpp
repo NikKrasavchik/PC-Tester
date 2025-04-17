@@ -182,6 +182,8 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
 			else if (cableRows[currentRowNum]->typeStr == "HLD")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
+			else if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
 #elif QT6
 
 #endif // QT5
@@ -200,6 +202,8 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
 			else if (cableRows[currentRowNum]->typeStr == "HLD")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HLD");
+			else if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
 			break;
 		}
 	}
@@ -214,10 +218,14 @@ void TestWindow::resetTableRowsFullTestManualStand()
 	{
 		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
 			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
+		if(cableRows[currentRowNum]->connectorInt != ConnectorId::EMPTY)
+			model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
-		model->setData(model->index(currentRowNum, COLUMN_COMPONENT), cableRows[currentRowNum]->component);
+		if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
+			model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->component);
+		else
+			model->setData(model->index(currentRowNum, COLUMN_COMPONENT), cableRows[currentRowNum]->component);
 
 		QWidget* interactionButtonsWidget = new QWidget(mainLayoutWidget);
 		QWidget* manualChecksWidget = new QWidget(mainLayoutWidget);

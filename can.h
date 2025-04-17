@@ -32,6 +32,8 @@
 #define DIAG_GET_NUMBER_SERIAL(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x8C; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
 
 #define DIAG_VERIFICATION(arr) arr[0] = 0x30; arr[1] = 0x00; arr[2] = 0x05; arr[3] = 0; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+//// Diag
+
 
 #define ID_CAN_AUTOSTAND		0x51
 #define ID_CAN_MANUALSTAND		0x100
@@ -71,6 +73,8 @@ public:
 	// ------------------------------------
 	void setSelectedAdapterNeme(QString adapter);
 
+	static QString getSelectedAdapterNeme();
+
 	// ------------------------------------
 	// Name: setSelectedFrequency
 	//		Установка выбранной частоты для работы can
@@ -105,7 +109,7 @@ public:
 	//		    У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
 	//		    Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
 	// ------------------------------------
-	std::vector<QString> getNameAdapters();
+	static std::vector<QString> getNameAdapters();
 
 	// ------------------------------------
 	// Name: sendTestMsg
@@ -143,7 +147,10 @@ public:
 
 
 	void setCable(std::vector<Cable> cable);
+
 	static void clearOldValue();
+
+	static bool checkInformationBus(QString checkAdapter, int canId);
 private:
 	// Отправляет сообщение в CAN
 	// @name writeCan
@@ -184,28 +191,27 @@ private:
 	
 	WindowType windowType; // Переменная хранящая идентификатор окна которое сейчас открыто
 	std::vector<Measureds*> measureds;
-	uint8_t counterConnectMsg;
+	uint8_t counterConnectMsg; 
 
-	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
+	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable; // Мапа в которой ключ это id can, а значение массив пар. Пара состоит из кабеля и значение которое у него было до этого значения. Такая сложная структура необходима для более оптимального поиска кабеля при приходе сообщения.
 
-	bool b_adapterSelected;
+	bool b_adapterSelected; 
 	bool b_frequencySelected;
-	bool b_flagStandConnectionCheck;
 	static bool b_flagStatusConnection;		// Флаг показывающий присоединён ли Stand
 
-	QTimer* timerReadCan;				// Таймер для считывания Can-сообщений.
-	QTimer* timerSendConnectMsg;		// Таймер для отправки сообщений на подключение или проверки подключения.
-	QTimer* timerCheckStandConnection;	// Таймер для проверки времени времени прихода переодического сообщения конекта.
+	QTimer* timerReadCan;					// Таймер для считывания Can-сообщений.
+	QTimer* timerSendConnectMsg;			// Таймер для отправки сообщений на первичное подключение или подтверждение подключения.
+	QTimer* timerCheckStandConnection;		// Таймер для проверки времени времени прихода переодического сообщения конекта.
 
 private slots:
-	void Timer_ReadCan();				// Слот для считывания Can-сообщений.
-	void Timer_SendConnectMsg();		// @doc Слот для отправки сообщений на подключение или подтверждения подключения.
-	void Timer_CheckStandConnection();	// Слот для проверки времени времени прихода переодического сообщения конекта.
+	void Timer_ReadCan();					// Слот для считывания Can-сообщений.
+	void Timer_SendConnectMsg();			// Слот для отправки сообщений на подключение или подтверждения подключения.
+	void Timer_CheckStandConnection();		// Слот для проверки времени прихода переодического сообщения конекта.
 
 signals:
 
 	void Signal_ChangedStatusStandConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён 
 	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // Сигнал означающий завершение теста у автостенда
-	void Signal_ChangedByte(int idCable, int newValue);
+	void Signal_ChangedByte(int idCable, int newValue); // Сигнал срабатывающий когда поменялся байт у какого либо кабеля из mapCable
 };
 

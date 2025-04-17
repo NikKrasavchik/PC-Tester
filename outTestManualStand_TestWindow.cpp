@@ -163,7 +163,8 @@ void TestWindow::initUiTableRowsOutTestManualStand()
 	{
 		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
 			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
+		if (cableRows[currentRowNum]->connectorInt != ConnectorId::EMPTY)
+			model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN),				cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME),			cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLUMN_COMPONENT),		cableRows[currentRowNum]->component);

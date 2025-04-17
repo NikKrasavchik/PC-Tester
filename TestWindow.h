@@ -30,6 +30,7 @@
 #define COLUMN_PWM_HEIGHT			128
 #define COLUMN_VNH_HEIGHT			169
 #define COLUMN_HLD_HEIGHT			128
+#define COLUMN_INFORMATION_HEIGHT	90
 
 #define COLUMN_CONNECTOR_WIDTH		70
 #define COLUMN_PIN_WIDTH			40
@@ -118,6 +119,11 @@ struct HLDButtons
 
 struct CheckButton
 {
+	QPushButton* checkButton;
+};
+struct CheckInfomationBus
+{
+	QComboBox* comboBox;
 	QPushButton* checkButton;
 };
 
@@ -217,6 +223,7 @@ public slots:
 	void on_high_clicked();
 	void on_low_clicked();
 	void on_zero_clicked();
+	void on_check_clicked();
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
 

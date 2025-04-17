@@ -48,6 +48,12 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			else if (cables[i].getType() == TYPE_HALL)
 				cableRows[i]->typeInt = TypeCable::HALL_IN;
 			break;
+		case NOT_SET:
+			if (cables[i].getType() == TYPE_CAN)
+				cableRows[i]->typeInt = TypeCable::CAN_OUT;
+			else if (cables[i].getType() == TYPE_LIN)
+				cableRows[i]->typeInt = TypeCable::LIN_OUT;
+			break;
 		}
 
 		if (testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
@@ -255,9 +261,27 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((HLDButtons*)buttons)->zeroButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((HLDButtons*)buttons)->zeroButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 			break;
+		case TYPE_CAN:
+		case TYPE_LIN:
+			buttons = new CheckInfomationBus();
 
-		default:
+			((CheckInfomationBus*)buttons)->checkButton = new QPushButton();
+			((CheckInfomationBus*)buttons)->checkButton->setText("Check");
+			((CheckInfomationBus*)buttons)->checkButton->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
+			((CheckInfomationBus*)buttons)->checkButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			((CheckInfomationBus*)buttons)->comboBox = new QComboBox();
+			((CheckInfomationBus*)buttons)->comboBox->setStyleSheet(lightStyles.settingComboBox);
+			((CheckInfomationBus*)buttons)->comboBox->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
+			((CheckInfomationBus*)buttons)->comboBox->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			std::vector<QString> nameAdapters = Can::getNameAdapters();
+			QString activeAdapter = Can::getSelectedAdapterNeme();
+			for (int i = 0; i < nameAdapters.size(); i++)
+				if(activeAdapter != nameAdapters[i])
+					((CheckInfomationBus*)buttons)->comboBox->addItem(nameAdapters[i]);
 			break;
+
 		}
 	else if (testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
 			 testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
@@ -599,6 +623,14 @@ void TestTableRowProperties::on_load100Button_clicked()
 	statePWM = LOAD100_BUTTON_PRESSED;
 
 	sendSignal();
+}
+void TestTableRowProperties::on_check_clicked()
+{
+
+
+	selectCurrentCell(connectorStr, pin);
+
+	Can::checkInformationBus(((CheckInfomationBus*)buttons)->comboBox->currentText(), 1024);
 }
 
 void TestTableRowProperties::sendSignal()
