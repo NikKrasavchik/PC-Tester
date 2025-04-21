@@ -1212,6 +1212,27 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 	resetTheme();
 }
 
+void TestWindow::Slot_changeStatusCheckInformationBus(int id, bool status)
+{
+	QAbstractItemModel* model = mainTableWidget->model();
+
+	switch (testType)
+	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+		if(status)
+		model->setData(model->index(offsetMap[id], 5), QString::number(1));
+		else
+		model->setData(model->index(offsetMap[id], 5), QString::number(0));
+		break;
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		if(status)
+		mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::green);
+		else
+		mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::red);
+		break;
+	}
+}
+
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)
 {
 	interactionButtonsWidget->setObjectName("interactionButtonsWidget");

@@ -49,6 +49,10 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 				cableRows[i]->typeInt = TypeCable::HALL_IN;
 			break;
 		case NOT_SET:
+			cableRows[i]->timerCheckInformationBus = new QTimer();
+			connect(cableRows[i]->timerCheckInformationBus, SIGNAL(timeout()), cableRows[i], SLOT(Timer_timerCheckInformationBus_Timeout()));
+			cableRows[i]->timerCheckInformationBus->start(500);
+			connect(cableRows[i], &TestTableRowProperties::Signal_changeStatusCheckInformationBus, this, &TestWindow::Slot_changeStatusCheckInformationBus);
 			if (cables[i].getType() == TYPE_CAN)
 				cableRows[i]->typeInt = TypeCable::CAN_OUT;
 			else if (cables[i].getType() == TYPE_LIN)
@@ -627,10 +631,21 @@ void TestTableRowProperties::on_load100Button_clicked()
 void TestTableRowProperties::on_check_clicked()
 {
 
-
 	selectCurrentCell(connectorStr, pin);
+	if (timerCheckInformationBus->isActive())
+		return;
+	if (Can::checkInformationBus(((CheckInfomationBus*)buttons)->comboBox->currentText(), canId))
+	{
+		Signal_changeStatusCheckInformationBus(id, true);
+		timerCheckInformationBus->start(500);
+	}
+}
 
-	Can::checkInformationBus(((CheckInfomationBus*)buttons)->comboBox->currentText(), 1024);
+void TestTableRowProperties::Timer_timerCheckInformationBus_Timeout()
+{
+
+		Signal_changeStatusCheckInformationBus(id, false);
+		timerCheckInformationBus->stop();
 }
 
 void TestTableRowProperties::sendSignal()

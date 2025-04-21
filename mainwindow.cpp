@@ -1734,14 +1734,15 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 		{
 			QStringList list = line.split(u';');
 			id += 1;
-			if (list.size() == 6)
+			if (list.size() == 7)
 			{
 				Cable cable;
 				cable.setId(id);
 				cable.setConnector((ConnectorId)(list[0].toInt()));
 				cable.setComponent(list[1]);
 				cable.setType(list[3].toInt());
-				cable.setName(list[4]);
+				cable.setCanId(list[4].toInt(nullptr,16));
+				cable.setName(list[5]);
 				cables.push_back(cable);
 				continue;
 			}

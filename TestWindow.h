@@ -157,6 +157,8 @@ public:
 	QPushButton* moreButton;
 	QCheckBox* manualCheckBox = nullptr;
 
+	QTimer *timerCheckInformationBus;
+
 	int stateDigital;
 	int statePWM;
 	int stateHLD;
@@ -227,8 +229,12 @@ public slots:
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
 
+	void Timer_timerCheckInformationBus_Timeout();
+
+
 signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
+	void Signal_changeStatusCheckInformationBus(int id, bool status);
 
 	void selectCurrentCell(QString connector, QString pin);
 };
@@ -468,6 +474,7 @@ public slots:
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 	void Slot_ChangedByte(int idCable, int newValue);
+	void Slot_changeStatusCheckInformationBus(int id, bool status);
 	void selectCurrentCell(QString conector, QString pin);
 
 	void on_rotateTimer_timeout();

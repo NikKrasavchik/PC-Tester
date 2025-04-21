@@ -43,6 +43,21 @@ bool Can::checkInformationBus(QString checkAdapter, int canId)
 
 
 			canWrite(hndTmp, canId, msgSendKvase, 8, 0); // Дописать проверку ошибок kvasera
+
+			int* id = new int();
+
+			unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
+			unsigned long* timestamp = new unsigned long();
+			unsigned char msgReceive[8] = { 0, };
+
+			*id = NOT_SET;
+			canReadWait(hndTmp, (long*)id, msgReceive, dlc, flags, timestamp, 10);
+			if (*id == 1025)
+			{
+				return true;
+			}
+			return false;
+
 		}
 
 	for (int i = 0; i < marathon->nameAdapters.size(); i++) // Проходим по marathon

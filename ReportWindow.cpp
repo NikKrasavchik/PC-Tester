@@ -273,7 +273,10 @@ void ReportWindow::generateTableManual()
 			prepareItem(tableWidget, row, column, SPAN_NONE);
 
 		tableWidget->item(row, IND_COLUMN_BASE_CONNECTOR)->setText(cableRows[i]->connectorStr);
-		tableWidget->item(row, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
+		if (cableRows[i]->pin != "-1")
+			tableWidget->item(row, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->pin);
+		else
+			tableWidget->item(row, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->component);
 		tableWidget->item(row, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
 		tableWidget->item(row, IND_COLUMN_MANUAL_VALUE)->setBackgroundColor(cableRows[i]->manualCheckBox->isChecked() ? QColor(COLOR_GREEN) : QColor(COLOR_RED));
 
@@ -321,6 +324,13 @@ void ReportWindow::generateTableManual()
 			case TypeCable::HLD_OUT:
 				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
 				break;
+			case TypeCable::CAN_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("CAN"));
+				break;
+			case TypeCable::LIN_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("LIN"));
+				break;
+
 			}
 #elif QT6
 
@@ -349,6 +359,12 @@ void ReportWindow::generateTableManual()
 			case TypeCable::VNH_OUT:
 			case TypeCable::HLD_OUT:
 				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				break;
+			case TypeCable::CAN_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("CAN"));
+				break;
+			case TypeCable::LIN_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("LIN"));
 				break;
 			}
 			break;
@@ -1344,6 +1360,14 @@ QString ReportWindow::getStrType(TypeCable type)
 		case TypeCable::HLD_OUT:
 			str = "HLD";
 			break;
+
+		case TypeCable::CAN_OUT:
+			str = "CAN";
+			break;
+
+		case TypeCable::LIN_OUT:
+			str = "LIN";
+			break;
 		}
 		break;
 
@@ -1377,6 +1401,14 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HLD_OUT:
 			str = "HLD";
+
+		case TypeCable::CAN_OUT:
+			str = "CAN";
+			break;
+
+		case TypeCable::LIN_OUT:
+			str = "LIN";
+			break;
 		}
 	}
 	return str;
@@ -1449,7 +1481,10 @@ void ReportWindow::generateXlsx()
 				Format formatLeftAlg(tmpRowFormat);
 				formatLeftAlg.setHorizontalAlignment(Format::AlignLeft);
 				xlsx.write(numRow, 1, cableRows[i]->connectorStr + "  (XP" + QString::number((int)cableRows[i]->connectorInt) + ")", tmpRowFormat);
-				xlsx.write(numRow, 2, cableRows[i]->pin, tmpRowFormat);
+				if (cableRows[i]->pin != "-1")
+					xlsx.write(numRow, 2, cableRows[i]->pin, tmpRowFormat);
+				else
+					xlsx.write(numRow, 2, cableRows[i]->component, tmpRowFormat);
 				xlsx.write(numRow, 3, getStrDirection(cableRows[i]->direction), tmpRowFormat);
 				xlsx.write(numRow, 4, getStrType(cableRows[i]->typeInt), tmpRowFormat);
 				xlsx.write(numRow, 5, cableRows[i]->name, tmpRowFormat);
