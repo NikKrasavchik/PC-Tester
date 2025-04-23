@@ -157,8 +157,6 @@ public:
 	QPushButton* moreButton;
 	QCheckBox* manualCheckBox = nullptr;
 
-	QTimer *timerCheckInformationBus;
-
 	int stateDigital;
 	int statePWM;
 	int stateHLD;
@@ -229,7 +227,6 @@ public slots:
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
 
-	void Timer_timerCheckInformationBus_Timeout();
 
 
 signals:

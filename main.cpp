@@ -41,6 +41,7 @@ int main(int argc, char* argv[])
 	viewWindowState->actualVersion = "";
 	viewWindowState->selectedBlock = TestBlockName::EMPTY;
 
+
 	// Запуск приложения
 	QApplication a(argc, argv);
 	a.setStyle(new QProxyStyle(QStyleFactory::create(style)));

@@ -11,6 +11,7 @@
 #include "qstring.h"
 
 #include "canlib.h"
+#include "linlib.h"
 #include "chai.h"
 #include "Cable.h"
 
@@ -150,7 +151,8 @@ public:
 
 	static void clearOldValue();
 
-	static bool checkInformationBus(QString checkAdapter, int canId);
+	static bool checkInformationBus_Can(QString checkAdapter, int canId);
+	static bool checkInformationBus_Lin(QString checkAdapter, int canId);
 private:
 	// Отправляет сообщение в CAN
 	// @name writeCan

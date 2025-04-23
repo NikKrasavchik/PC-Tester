@@ -25,9 +25,8 @@ Can::Can()
 	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
 }
 
-bool Can::checkInformationBus(QString checkAdapter, int canId)
+bool Can::checkInformationBus_Can(QString checkAdapter, int canId)
 {
-
 
 	for (int i = 0; i < kvaser->nameAdapters.size(); i++) // Проходим по kvaser
 		if (kvaser->nameAdapters[i] == checkAdapter)
@@ -52,6 +51,8 @@ bool Can::checkInformationBus(QString checkAdapter, int canId)
 
 			*id = NOT_SET;
 			canReadWait(hndTmp, (long*)id, msgReceive, dlc, flags, timestamp, 10);
+			canBusOff(hndTmp);
+			canClose(hndTmp);
 			if (*id == 1025)
 			{
 				return true;
@@ -68,6 +69,57 @@ bool Can::checkInformationBus(QString checkAdapter, int canId)
 
 		}
 	return true;
+}
+
+bool Can::checkInformationBus_Lin(QString checkAdapter, int canId)
+{
+	bool allTrue = true;
+	QTime timeWork = QTime::currentTime().addMSecs(100); // Время для авариного выхода из цикла.
+	for (int i = 0; i < kvaser->nameAdapters.size(); i++) // Проходим по kvaser
+		if (kvaser->nameAdapters[i] == checkAdapter)
+		{
+			linInitializeLibrary();
+ 			LinHandle hndTmp = linOpenChannel(i, LIN_SLAVE);
+			int status = linSetBitrate(hndTmp, 19200);
+			status = linBusOn(hndTmp);
+			status =  linSetupLIN(hndTmp, 3, 19200);
+			unsigned char msgSendKvase[8] = { 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA, 0xAA };
+			unsigned char msgResiveKvase[8] = { 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+			unsigned int id, dlc, flags;
+			LinMessageInfo inf;
+
+			while (true)
+			{
+				status = linUpdateMessage(hndTmp, canId, msgSendKvase, 8);
+				status = linReadMessageWait(hndTmp, &id, msgResiveKvase, &dlc, &flags, &inf, 500);
+				if (id == canId + 1)
+				{
+					for (int j = 0; j < 8; j++)
+					{
+						if (msgSendKvase[i] != msgResiveKvase[i])
+						{
+							allTrue = false;
+						}
+					}
+					break;
+				}
+				if (QTime::currentTime() > timeWork)
+				{
+					allTrue = false;
+					break;
+				}
+			}
+
+
+			status = linBusOff(hndTmp);
+			linClose(hndTmp);
+			status = 0;
+			
+		}
+	if (allTrue)
+		return true;
+	else
+		return false;
 }
 bool Can::initCan(WindowType windowType)
 {

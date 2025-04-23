@@ -1,4 +1,4 @@
-#include "TestWindow.h"
+ #include "TestWindow.h"
 
 #define COLUMN_COUNT			9
 
@@ -184,6 +184,8 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
 			else if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+			else if (cableRows[currentRowNum]->typeInt == TypeCable::LIN_OUT)
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
 #elif QT6
 
 #endif // QT5
@@ -204,6 +206,8 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HLD");
 			else if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+			else if (cableRows[currentRowNum]->typeInt == TypeCable::LIN_OUT)
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
 			break;
 		}
 	}
@@ -222,7 +226,7 @@ void TestWindow::resetTableRowsFullTestManualStand()
 			model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
-		if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
+		if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT || cableRows[currentRowNum]->typeInt == TypeCable::LIN_OUT)
 			model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->component);
 		else
 			model->setData(model->index(currentRowNum, COLUMN_COMPONENT), cableRows[currentRowNum]->component);

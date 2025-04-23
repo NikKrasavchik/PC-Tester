@@ -49,9 +49,6 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 				cableRows[i]->typeInt = TypeCable::HALL_IN;
 			break;
 		case NOT_SET:
-			cableRows[i]->timerCheckInformationBus = new QTimer();
-			connect(cableRows[i]->timerCheckInformationBus, SIGNAL(timeout()), cableRows[i], SLOT(Timer_timerCheckInformationBus_Timeout()));
-			cableRows[i]->timerCheckInformationBus->start(500);
 			connect(cableRows[i], &TestTableRowProperties::Signal_changeStatusCheckInformationBus, this, &TestWindow::Slot_changeStatusCheckInformationBus);
 			if (cables[i].getType() == TYPE_CAN)
 				cableRows[i]->typeInt = TypeCable::CAN_OUT;
@@ -160,6 +157,9 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 				((DigitalButtons*)buttons)->offButton->setText("off");
 				((DigitalButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 				((DigitalButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+				connect(((DigitalButtons*)buttons)->onButton, &QPushButton::clicked, this, &TestTableRowProperties::on_onButton_clicked);
+				connect(((DigitalButtons*)buttons)->offButton, &QPushButton::clicked, this, &TestTableRowProperties::on_offButton_clicked);
 			}
 			break;
 
@@ -195,6 +195,12 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((PWMButtons*)buttons)->load100Button->setText("100%");
 			((PWMButtons*)buttons)->load100Button->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
 			((PWMButtons*)buttons)->load100Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			connect(((PWMButtons*)buttons)->load0Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load0Button_clicked);
+			connect(((PWMButtons*)buttons)->load25Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load25Button_clicked);
+			connect(((PWMButtons*)buttons)->load50Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load50Button_clicked);
+			connect(((PWMButtons*)buttons)->load75Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load75Button_clicked);
+			connect(((PWMButtons*)buttons)->load100Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load100Button_clicked);
 			break;
 
 		case TYPE_VNH:
@@ -242,6 +248,14 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((VNHButtons*)buttons)->offButton->setText("off");
 			((VNHButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((VNHButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			connect(((VNHButtons*)buttons)->load0Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load0Button_clicked);
+			connect(((VNHButtons*)buttons)->load25Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load25Button_clicked);
+			connect(((VNHButtons*)buttons)->load50Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load50Button_clicked);
+			connect(((VNHButtons*)buttons)->load75Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load75Button_clicked);
+			connect(((VNHButtons*)buttons)->load100Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load100Button_clicked);
+			connect(((VNHButtons*)buttons)->onButton, &QPushButton::clicked, this, &TestTableRowProperties::on_onButton_clicked);
+			connect(((VNHButtons*)buttons)->offButton, &QPushButton::clicked, this, &TestTableRowProperties::on_offButton_clicked);
 			break;
 
 		case TYPE_HLD:
@@ -264,6 +278,10 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((HLDButtons*)buttons)->zeroButton->setText("Zero");
 			((HLDButtons*)buttons)->zeroButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((HLDButtons*)buttons)->zeroButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			connect(((HLDButtons*)buttons)->highButton, &QPushButton::clicked, this, &TestTableRowProperties::on_high_clicked);
+			connect(((HLDButtons*)buttons)->lowButton, &QPushButton::clicked, this, &TestTableRowProperties::on_low_clicked);
+			connect(((HLDButtons*)buttons)->zeroButton, &QPushButton::clicked, this, &TestTableRowProperties::on_zero_clicked);
 			break;
 		case TYPE_CAN:
 		case TYPE_LIN:
@@ -284,6 +302,9 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			for (int i = 0; i < nameAdapters.size(); i++)
 				if(activeAdapter != nameAdapters[i])
 					((CheckInfomationBus*)buttons)->comboBox->addItem(nameAdapters[i]);
+
+			connect(((CheckInfomationBus*)buttons)->checkButton, &QPushButton::clicked, this, &TestTableRowProperties::on_check_clicked);
+
 			break;
 
 		}
@@ -631,22 +652,17 @@ void TestTableRowProperties::on_load100Button_clicked()
 void TestTableRowProperties::on_check_clicked()
 {
 
-	selectCurrentCell(connectorStr, pin);
-	if (timerCheckInformationBus->isActive())
-		return;
-	if (Can::checkInformationBus(((CheckInfomationBus*)buttons)->comboBox->currentText(), canId))
-	{
-		Signal_changeStatusCheckInformationBus(id, true);
-		timerCheckInformationBus->start(500);
-	}
+	//selectCurrentCell(connectorStr, pin);
+
+	if (typeInt == TypeCable::CAN_OUT)
+		Signal_changeStatusCheckInformationBus(id, Can::checkInformationBus_Can(((CheckInfomationBus*)buttons)->comboBox->currentText(), canId));
+
+	else if (typeInt == TypeCable::LIN_OUT)
+		Signal_changeStatusCheckInformationBus(id, Can::checkInformationBus_Lin(((CheckInfomationBus*)buttons)->comboBox->currentText(), canId));
+
 }
 
-void TestTableRowProperties::Timer_timerCheckInformationBus_Timeout()
-{
 
-		Signal_changeStatusCheckInformationBus(id, false);
-		timerCheckInformationBus->stop();
-}
 
 void TestTableRowProperties::sendSignal()
 {

@@ -1257,9 +1257,6 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			interactionButtonsCellHLayout->addWidget(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton);
 			interactionButtonsCellHLayout->addItem(rightSpacer);
 
-			connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
-			connect(((DigitalButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
-
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_DIGITAL_HEIGHT);
 		}
 		else if (cableRows[currentRowNum]->typeStr == "PWM")
@@ -1292,12 +1289,6 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			interactionButtonsCellSecondHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button);
 			interactionButtonsCellSecondHLayout->addItem(secondRightSpacer);
 			interactionButtonsCellThirdHLayout->addWidget(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button);
-
-			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load0Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load0Button_clicked);
-			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load25Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load25Button_clicked);
-			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load50Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load50Button_clicked);
-			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load75Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load75Button_clicked);
-			connect(((PWMButtons*)cableRows[currentRowNum]->buttons)->load100Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load100Button_clicked);
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_PWM_HEIGHT);
 		}
@@ -1343,14 +1334,6 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			interactionButtonsCellFourthHLayout->addWidget(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton);
 			interactionButtonsCellFourthHLayout->addItem(thirdRightSpacer);
 
-			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load0Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load0Button_clicked);
-			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load25Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load25Button_clicked);
-			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load50Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load50Button_clicked);
-			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load75Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load75Button_clicked);
-			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->load100Button, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_load100Button_clicked);
-			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->onButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_onButton_clicked);
-			connect(((VNHButtons*)cableRows[currentRowNum]->buttons)->offButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_offButton_clicked);
-
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_VNH_HEIGHT);
 		}
 		else if (cableRows[currentRowNum]->typeStr == "HLD")
@@ -1381,13 +1364,10 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			interactionButtonsActiveVLayout->addWidget(((HLDButtons*)cableRows[currentRowNum]->buttons)->zeroButton);
 			interactionButtonsActiveVLayout->addItem(downSpacer);
 
-			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->highButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_high_clicked);
-			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->lowButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_low_clicked);
-			connect(((HLDButtons*)cableRows[currentRowNum]->buttons)->zeroButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_zero_clicked);
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_HLD_HEIGHT);
 		}
-		else if(cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT)
+		else if(cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT || cableRows[currentRowNum]->typeInt == TypeCable::LIN_OUT)
 		{
 			QHBoxLayout *hLayout = new QHBoxLayout(interactionButtonsWidget);
 			QVBoxLayout *vLayout = new QVBoxLayout();
@@ -1405,8 +1385,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			vLayout->addItem(centerSpacer);
 			vLayout->addWidget(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->comboBox);
 
-			connect(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->checkButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_check_clicked);
-
+			//((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->checkButton->click();
 
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_INFORMATION_HEIGHT);
