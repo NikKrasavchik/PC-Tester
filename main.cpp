@@ -26,6 +26,11 @@ ViewWindowState* viewWindowState;
 
 int main(int argc, char* argv[])
 {
+#ifndef _DEBUG
+	QFile::remove("x64/PC-Tester/PC-Tester.exe");
+	QFile::copy("x64/Release/PC-Tester.exe", "x64/PC-Tester/PC-Tester.exe");
+#endif
+	
 #ifdef QT5
 
 #elif QT6

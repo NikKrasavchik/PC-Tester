@@ -364,6 +364,10 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((HLDButtons*)(cableRows[i]->buttons))->lowButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
+				case TypeCable::CAN_OUT:
+				case TypeCable::LIN_OUT:
+					((CheckInfomationBus*)(cableRows[i]->buttons))->checkButton->setStyleSheet(lightStyles.inactiveTableButton);
+					break;
 
 				default:
 					break;
@@ -405,7 +409,10 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 					((HLDButtons*)(cableRows[i]->buttons))->lowButton->setStyleSheet(lightStyles.inactiveTableButton);
 					((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setStyleSheet(lightStyles.inactiveTableButton);
 					break;
-
+				case TypeCable::CAN_OUT:
+				case TypeCable::LIN_OUT:
+					((CheckInfomationBus*)(cableRows[i]->buttons))->checkButton->setStyleSheet(lightStyles.inactiveTableButton);
+					break;
 				default:
 					break;
 				}
@@ -972,6 +979,10 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 				((HLDButtons*)(cableRows[i]->buttons))->lowButton->setDisabled(statusButton);
 				((HLDButtons*)(cableRows[i]->buttons))->zeroButton->setDisabled(statusButton);
 				break;
+			case TypeCable::CAN_OUT:
+			case TypeCable::LIN_OUT:
+				((CheckInfomationBus*)(cableRows[i]->buttons))->checkButton->setDisabled(statusButton);
+				break;
 
 			default:
 				break;
@@ -1131,7 +1142,13 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 			}
 		}
 		else
+		{
+			if (idCable == 0)
+			{
+				1;
+			}
 			model->setData(model->index(offsetMap[idCable], 5), QString::number(newValue));
+		}
 		break;
 	case WindowType::FULL_TEST_MANUAL_STAND:
 		if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::HALL_IN)
@@ -1214,21 +1231,19 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 
 void TestWindow::Slot_changeStatusCheckInformationBus(int id, bool status)
 {
-	QAbstractItemModel* model = mainTableWidget->model();
-
 	switch (testType)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
 		if(status)
-		model->setData(model->index(offsetMap[id], 5), QString::number(1));
+			mainTableWidget->item(offsetMap[id], 5)->setBackgroundColor(Qt::green);
 		else
-		model->setData(model->index(offsetMap[id], 5), QString::number(0));
+			mainTableWidget->item(offsetMap[id], 5)->setBackgroundColor(Qt::red);
 		break;
 	case WindowType::FULL_TEST_MANUAL_STAND:
 		if(status)
-		mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::green);
+			mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::green);
 		else
-		mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::red);
+			mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::red);
 		break;
 	}
 }

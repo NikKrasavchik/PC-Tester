@@ -906,6 +906,7 @@ void Can::sendGoToSleepMsg(bool isGoToSleep)
 
 void Can::setCable(std::vector<Cable> cable)
 {
+	mapCable.clear();
 	for (int i = 0; i < cable.size(); i++)
 	{
 		std::vector<std::pair<Cable, int>> tmpVector(mapCable[cable[i].getCanId()]);

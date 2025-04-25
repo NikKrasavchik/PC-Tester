@@ -22,6 +22,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			cableRows[i]->thresholds.push_back(cables[i].getThresholds()[j]);
 		cableRows[i]->stateDigital = BUTTON_NOT_SET;
 		cableRows[i]->statePWM = BUTTON_NOT_SET;
+		cableRows[i]->stateHLD = BUTTON_NOT_SET;
 		cableRows[i]->canId = cables[i].getCanId();
 		cableRows[i]->bit = cables[i].getBit();
 
@@ -295,7 +296,7 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((CheckInfomationBus*)buttons)->comboBox = new QComboBox();
 			((CheckInfomationBus*)buttons)->comboBox->setStyleSheet(lightStyles.settingComboBox);
 			((CheckInfomationBus*)buttons)->comboBox->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
-			((CheckInfomationBus*)buttons)->comboBox->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+			((CheckInfomationBus*)buttons)->comboBox->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT + 10);
 
 			std::vector<QString> nameAdapters = Can::getNameAdapters();
 			QString activeAdapter = Can::getSelectedAdapterNeme();
@@ -346,9 +347,9 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		currentStyles = &darkStyles;
 		break;
 	}
-
-	if (typeStr == "DIGITAL")
+	switch (typeInt)
 	{
+	case TypeCable::DIG_OUT:
 		((DigitalButtons*)buttons)->onButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((DigitalButtons*)buttons)->offButton->setStyleSheet(currentStyles->inactiveTableButton);
 
@@ -370,13 +371,12 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		default:
 			break;
 		}
-	}
-	else if (typeStr == "PWM")
-	{
+		break;
+	case TypeCable::PWM_OUT:
 		((PWMButtons*)buttons)->load0Button->setStyleSheet(currentStyles->inactiveTableButton);
 		((PWMButtons*)buttons)->load25Button->setStyleSheet(currentStyles->inactiveTableButton);
 		((PWMButtons*)buttons)->load50Button->setStyleSheet(currentStyles->inactiveTableButton);
-		((PWMButtons*)buttons)->load75Button ->setStyleSheet(currentStyles->inactiveTableButton);
+		((PWMButtons*)buttons)->load75Button->setStyleSheet(currentStyles->inactiveTableButton);
 		((PWMButtons*)buttons)->load100Button->setStyleSheet(currentStyles->inactiveTableButton);
 
 		((PWMButtons*)buttons)->load0Button->setDisabled(false);
@@ -415,9 +415,8 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		default:
 			break;
 		}
-	}
-	else if (typeStr == "VNH")
-	{
+		break;
+	case TypeCable::VNH_OUT:
 		switch (testButton)
 		{
 		case TestButtons::BUTTON_ON:
@@ -485,9 +484,8 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 			}
 			break;
 		}
-	}
-	else if (typeStr == "HLD")
-	{
+		break;
+	case TypeCable::HLD_OUT:
 		((HLDButtons*)buttons)->highButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((HLDButtons*)buttons)->lowButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((HLDButtons*)buttons)->zeroButton->setStyleSheet(currentStyles->inactiveTableButton);
@@ -516,7 +514,13 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		default:
 			break;
 		}
+		break;
+
+	default:
+		break;
 	}
+
+
 }
 
 void TestTableRowProperties::on_onButton_clicked()

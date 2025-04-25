@@ -195,7 +195,7 @@ enum class TypeResetTableButtonsTheme
 
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
-#define TYPE_COUNT					8
+#define TYPE_COUNT					9
 
 #define TYPE_DIGITAL				0
 #define TYPE_PWM					1
