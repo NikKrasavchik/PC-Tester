@@ -97,7 +97,7 @@ public:
 	// Name: getStatusFrequencySelected
 	//		Возврвщения статуса выбора статуса.
 	// Return: bool
-	//			true: Частота выбрана
+	//			true: Частота выбрана.
 	//			false: Частота не выбрана.
 	// ------------------------------------
 	bool getStatusFrequencySelected() { return b_frequencySelected; }
@@ -128,18 +128,18 @@ public:
 	// Name: sendTestMsg
 	//			Отправка сообщения на can
 	// Variables: 
-	//			ConnectorId pad: Коннектор отправляемого кабеля
-	//			int pin: Пин отправляемого кабеля
-	//			int digValue: Цифровое значение отправляемого кабеля
-	//			int pwmValue: ШИМ значение отправляемого кабеля
+	//			ConnectorId pad: Коннектор отправляемого кабеля.
+	//			int pin: Пин отправляемого кабеля.
+	//			int digValue: Цифровое значение отправляемого кабеля.
+	//			int pwmValue: ШИМ значение отправляемого кабеля.
 	// ------------------------------------
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
-	// Отправляет сообщение блоку о засыпании или просыпании.
+	// Отправляет сообщение блоку о засыпании или просыпании. 
 	// @name sendGoToSleepMsg
 	// 
-	// @param boolisGoToSleep == true - команда на засыпание.
-	// @param          isGoToSleep == false - команда на пробуждение.
+	// @param bool isGoToSleep == true - команда на засыпание.
+	// @param bool isGoToSleep == false - команда на пробуждение.
 	// 
 	// @return void
 	static void sendGoToSleepMsg(bool isGoToSleep);
@@ -149,9 +149,30 @@ public:
 
 	void setCable(std::vector<Cable> cable);
 
+	// Отчишает старые значения кабеля. После вызова сработает большое количество сигналов Signal_ChangedByte.
+	// @name clearOldValue
+	// 
+	// @param void
+	// 
+	// @return void
 	static void clearOldValue();
 
+	// Метод для проверки не основных CAN канов
+	// @name checkInformationBus_Can
+	// 
+	// @param QString checkAdapter - Название адаптера по которому будет производится проверка.
+	// @param int canId - Can id по которому отправится тест сообщение
+	// 
+	// @return bool true - can исправен / false - не пришло сообщение или оно неправильное.
 	static bool checkInformationBus_Can(QString checkAdapter, int canId);
+
+	// Метод для проверки LIN канов
+	// @name checkInformationBus_Lin
+	// 
+	// @param QString checkAdapter - Название адаптера по которому будет производится проверка.
+	// @param int canId - Lin id по мы как slave будем отвечать.
+	// 
+	// @return bool true - can исправен / false - не пришло сообщение или оно неправильное.
 	static bool checkInformationBus_Lin(QString checkAdapter, int canId);
 private:
 	// Отправляет сообщение в CAN

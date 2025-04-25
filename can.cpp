@@ -25,57 +25,56 @@ Can::Can()
 	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
 }
 
+
 bool Can::checkInformationBus_Can(QString checkAdapter, int canId)
 {
-
-	for (int i = 0; i < kvaser->nameAdapters.size(); i++) // Проходим по kvaser
-		if (kvaser->nameAdapters[i] == checkAdapter)
+	for (int numAdapter = 0; numAdapter < kvaser->nameAdapters.size(); numAdapter++) // Ищем номер адаптера по его названию
+		if (kvaser->nameAdapters[numAdapter] == checkAdapter)
 		{
 
-			// Дописать проверку ошибок kvasera
-			canInitializeLibrary(); // Инициализация api kvaser
-			canHandle hndTmp = canOpenChannel(i, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
+			// Инит адаптера
+			canInitializeLibrary();
+			canHandle hndTmp = canOpenChannel(numAdapter, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
 			canSetBusParams(hndTmp, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Установка параматров на CAN-шину.
-			canBusOn(hndTmp); // Запуск CAN-шины
+			canBusOn(hndTmp);
 
+			// Отправка проверочного сообщения
 			unsigned char msgSendKvase[8] = { 1,0,0,0,0,0,0,0 };
-
-
 			canWrite(hndTmp, canId, msgSendKvase, 8, 0); // Дописать проверку ошибок kvasera
 
-			int* id = new int();
-
+			// Ждем обратноее сообщение в течении 100 мс
+			long id = NOT_SET;
 			unsigned int* dlc = new unsigned int(), * flags = new unsigned int();
 			unsigned long* timestamp = new unsigned long();
 			unsigned char msgReceive[8] = { 0, };
+			canReadWait(hndTmp, &id, msgReceive, dlc, flags, timestamp, 100);
 
-			*id = NOT_SET;
-			canReadWait(hndTmp, (long*)id, msgReceive, dlc, flags, timestamp, 10);
+			// Выключаем адаптер
 			canBusOff(hndTmp);
 			canClose(hndTmp);
-			if (*id == 1025)
-			{
+
+			// Проверка пришедшего сообщения
+			if (id == canId + 1 && msgReceive[0] == 2)
 				return true;
-			}
 			return false;
 
 		}
 
-	for (int i = 0; i < marathon->nameAdapters.size(); i++) // Проходим по marathon
-		if (marathon->nameAdapters[i] == checkAdapter)
+	for (int numAdapter = 0; numAdapter < marathon->nameAdapters.size(); numAdapter++) // Ищем номер адаптера по его названию
+		if (marathon->nameAdapters[numAdapter] == checkAdapter)
 		{
 
 
 
+			return true;
 		}
-	return true;
 }
 
 bool Can::checkInformationBus_Lin(QString checkAdapter, int canId)
 {
 	bool allTrue = true;
 	QTime timeWork = QTime::currentTime().addMSecs(100); // Время для авариного выхода из цикла.
-	for (int i = 0; i < kvaser->nameAdapters.size(); i++) // Проходим по kvaser
+	for (int i = 0; i < kvaser->nameAdapters.size(); i++) // Ищем номер адаптера по его названию
 		if (kvaser->nameAdapters[i] == checkAdapter)
 		{
 			linInitializeLibrary();

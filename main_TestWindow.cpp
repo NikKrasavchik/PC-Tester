@@ -1385,9 +1385,6 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			vLayout->addItem(centerSpacer);
 			vLayout->addWidget(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->comboBox);
 
-			//((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->checkButton->click();
-
-
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_INFORMATION_HEIGHT);
 		}
 	}
@@ -1486,7 +1483,7 @@ void TestWindow::rewriteCableRows()
 				}
 
 			}
-		cableRows.clear();
+		//cableRows.clear();
 		hallLabels.clear();
 		for (int i = 0; i < sortComponents.size(); i++)
 		{
