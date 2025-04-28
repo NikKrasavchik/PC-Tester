@@ -218,14 +218,14 @@ void WindowFrame::on_collapse_clicked() {
 /// @param event Pointer to the QMouseEvent object containing event information.
 void WindowFrame::mousePressEvent(QMouseEvent* event) {
 	if (event->buttons() == Qt::LeftButton) {
-		QWidget* widget = childAt(event->x(), event->y());
+		QWidget* widget = childAt(event->position().x(), event->position().y());
 		if (widget == ui->LHeader || widget == ui->title || widget == ui->icon) {
-			mPosition.setX(event->x());
-			mPosition.setY(event->y());
+			mPosition.setX(event->position().x());
+			mPosition.setY(event->position().y());
 		}
 	}
 	if (event->button() == Qt::RightButton) {
-		QWidget* widget = childAt(event->x(), event->y());
+		QWidget* widget = childAt(event->position().x(), event->position().y());
 		if (widget == ui->LHeader || widget == ui->title || widget == ui->icon) {
 			showHeaderContextMenu(event->pos());
 		}
@@ -238,7 +238,7 @@ void WindowFrame::mousePressEvent(QMouseEvent* event) {
 void WindowFrame::mouseMoveEvent(QMouseEvent* event) {
 	if (event->buttons() == Qt::LeftButton) {
 		if (mPosition.x() != 0 || mPosition.y() != 0) {
-			move(event->globalX() - mPosition.x(), event->globalY() - mPosition.y());
+			move(event->globalPosition().x() - mPosition.x(), event->globalPosition().y() - mPosition.y());
 		}
 	}
 }
@@ -255,7 +255,7 @@ void WindowFrame::mouseReleaseEvent(QMouseEvent* event) {
 /// @param event Pointer to the mouse double-click event object (QMouseEvent).
 void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) {
 	if (event->buttons() == Qt::LeftButton) {
-		QWidget* widget = childAt(event->x(), event->y());
+		QWidget* widget = childAt(event->position().x(), event->position().y());
 		if (widget == ui->LHeader) {
 			if (isMaximized()) {
 				switch (viewWindowState->appTheme)
@@ -337,13 +337,13 @@ bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, long* 
 			*result = HTBOTTOM;
 		}
 		else {
-			return QWidget::nativeEvent(eventType, message, result);
+			return QWidget::nativeEvent(eventType, message, (qintptr*)result);
 		}
 
 		return true;
 	}
 
-	return QWidget::nativeEvent(eventType, message, result);
+	return QWidget::nativeEvent(eventType, message, (qintptr*)result);
 }
 
 /// @brief Show or hide the window minimization button.
@@ -383,7 +383,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 	{
 	case RUSSIAN_LANG:
 #ifdef QT5
-		tmpStr = QString::fromLocal8Bit(" | Для разработчика");
+		tmpStr = QString(" | Г„Г«Гї Г°Г Г§Г°Г ГЎГ®ГІГ·ГЁГЄГ ");
 #elif QT6
 
 #endif // QT5
@@ -399,59 +399,55 @@ void WindowFrame::setTitle(WindowType windowType) {
 	case RUSSIAN_LANG:
 		switch (windowType)
 		{
-#ifdef QT5
 		case WindowType::MAINWINDOW:
 			ui->title->setText("PC-Tester" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
-			ui->title->setText(QString::fromLocal8Bit("Конфигуратор") + tmpStr);
+			ui->title->setText(QString("РљРѕРЅС„РёРіСѓСЂР°С‚РѕСЂ") + tmpStr);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Входы | Ручной стенд") + tmpStr);
+			ui->title->setText(QString("Р’С…РѕРґС‹ | Р СѓС‡РЅРѕР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Выходы | Ручной стенд") + tmpStr);
+			ui->title->setText(QString("Р’С‹С…РѕРґС‹ | Р СѓС‡РЅРѕР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Полная проверка | Ручной стенд") + tmpStr);
+			ui->title->setText(QString("РџРѕР»РЅР°СЏ РїСЂРѕРІРµСЂРєР° | Р СѓС‡РЅРѕР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Входы ручная проверка | Автоматический стенд") + tmpStr);
+			ui->title->setText(QString("Р’С…РѕРґС‹ СЂСѓС‡РЅР°СЏ РїСЂРѕРІРµСЂРєР° | РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Выходы ручная проверка | Автоматический стенд") + tmpStr);
+			ui->title->setText(QString("Р’С‹С…РѕРґС‹ СЂСѓС‡РЅР°СЏ РїСЂРѕРІРµСЂРєР° | РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Входы автоматическая проверка | Автоматический стенд") + tmpStr);
+			ui->title->setText(QString("Р’С…РѕРґС‹ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ РїСЂРѕРІРµСЂРєР° | РђРІС‚СЊРѕРјР°С‚РёС‡РµСЃРєРёР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Выходы автоматическаяя проверка | Автоматический стенд") + tmpStr);
+			ui->title->setText(QString("Р’С‹С…РѕРґС‹ Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєР°СЏ РїСЂРѕРІРµСЂРєР° | РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Полная автоматическая проверка | Автоматический стенд") + tmpStr);
+			ui->title->setText(QString("РџРѕР»РЅР°СЏ Р°РІС‚РіРѕРјР°С‚РёС‡РµСЃРєР°СЏ РїСЂРѕРІРµСЂРєР° | РђРІС‚РѕРјР°С‚РёС‡РµСЃРєРёР№ СЃС‚РµРЅРґ") + tmpStr);
 			break;
 
 		case WindowType::MOREWINDOW:
-			ui->title->setText(QString::fromLocal8Bit("Подробнее...") + tmpStr);
+			ui->title->setText(QString("РџРѕРґСЂРѕР±РЅРµРµ...") + tmpStr);
 			break;
 
 		case WindowType::REPORTWINDOW:
-			ui->title->setText(QString::fromLocal8Bit("Отчёт") + tmpStr);
+			ui->title->setText(QString("РћС‚С‡С‘С‚") + tmpStr);
 			break;
 		}
 		break;
-#elif QT6
-
-#endif // QT5
 
 	case ENGLISH_LANG:
 		switch (windowType)

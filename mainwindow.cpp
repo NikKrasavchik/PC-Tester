@@ -738,17 +738,17 @@ void MainWindow::initConfig()
 	config = cable.readLine();
 	QStringList list = config.split(u';');
 
-	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // Òåìà
+	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // Ã’Ã¥Ã¬Ã 
 		viewWindowState->appTheme = LIGHT_THEME;
 	else
 		viewWindowState->appTheme = DARK_THEME;
 
-	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // ßçûê
+	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // ÃŸÃ§Ã»Ãª
 		viewWindowState->appLanguage = RUSSIAN_LANG;
 	else
 		viewWindowState->appLanguage = ENGLISH_LANG;
 
-	if (list[2] != "NOT_SET") // Áëîê
+	if (list[2] != "NOT_SET") // ÃÃ«Ã®Ãª
 	{
 		if (list[2].left(3) == "DTM")
 			leftBlockDMButton->click();
@@ -765,7 +765,7 @@ void MainWindow::initConfig()
 			}
 	}
 
-	if (list[3] == "MANUAL_STAND") // Ñòåíä
+	if (list[3] == "MANUAL_STAND") // Ã‘Ã²Ã¥Ã­Ã¤
 	{
 		selectedTypeStand = TypeStand::MANUAL;
 		switchStandSlider->setStatus(TypeStand::MANUAL);
@@ -778,7 +778,7 @@ void MainWindow::initConfig()
 	switchStandButtons();
 
 	bool search = false;
-	if (list[4] == "FREQUENCY_50K") // ×àñòîòà
+	if (list[4] == "FREQUENCY_50K") // Ã—Ã Ã±Ã²Ã®Ã²Ã 
 	{
 
 		selectFrequencyComboBox->setCurrentIndex(2);
@@ -812,7 +812,7 @@ void MainWindow::initConfig()
 	if (search)
 	{
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			selectFrequencyLabel->setText(QString::fromLocal8Bit("×àñòîòà: ") + selectFrequencyComboBox->currentText());
+			selectFrequencyLabel->setText(QString("Ð§Ð°ÑÑ‚Ð¾Ñ‚Ð°: ") + selectFrequencyComboBox->currentText());
 		else if (viewWindowState->appLanguage == ENGLISH_LANG)
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
 		can->setSelectedFrequency(selectFrequencyComboBox->currentText());
@@ -853,29 +853,29 @@ void MainWindow::resetConfig()
 	QString config = cable.readLine();
 	QString conf = cable.readLine();
 
-	if (viewWindowState->appTheme == LIGHT_THEME) // Òåìà
+	if (viewWindowState->appTheme == LIGHT_THEME) // Ã’Ã¥Ã¬Ã 
 		conf = "LIGHT_THEME;";
 	else
 		conf = "DARK_THEME;";
 
-	if (viewWindowState->appLanguage == RUSSIAN_LANG) // ßçûê
+	if (viewWindowState->appLanguage == RUSSIAN_LANG) // ÃŸÃ§Ã»Ãª
 		conf += "RUSSIAN_LANG;";
 	else
 		conf += "ENGLISH_LANG;";
 
-	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // Áëîê
+	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // ÃÃ«Ã®Ãª
 		conf += "NOT_SET;";
 	else if (viewWindowState->selectedBlock == TestBlockName::DTM)
 		conf += "DTM" + selectBlockVersionComboBox->currentText() + ";";
 	else if (viewWindowState->selectedBlock == TestBlockName::BCM)
 		conf += "BCM" + selectBlockVersionComboBox->currentText() + ";";
 
-	if (selectedTypeStand == TypeStand::MANUAL) // Ñòåíä
+	if (selectedTypeStand == TypeStand::MANUAL) // Ã‘Ã²Ã¥Ã­Ã¤
 		conf += "MANUAL_STAND;";
 	else if(selectedTypeStand == TypeStand::AUTO)
 		conf += "AUTO_STAND;";
 
-	if (selectFrequencyComboBox->currentIndex() == 2) // ×àñòîòà
+	if (selectFrequencyComboBox->currentIndex() == 2) // Ã—Ã Ã±Ã²Ã®Ã²Ã 
 		conf += "FREQUENCY_50K;";
 	else if (selectFrequencyComboBox->currentIndex() == 3)
 		conf += "FREQUENCY_100K;";
@@ -888,7 +888,7 @@ void MainWindow::resetConfig()
 	else if (selectFrequencyComboBox->currentIndex() == 7)
 		conf += "FREQUENCY_1000K;";
 
-	if (selectAdapterComboBox->currentText() == "...") // Àäàïòåð
+	if (selectAdapterComboBox->currentText() == "...") // Ã€Ã¤Ã Ã¯Ã²Ã¥Ã°
 		conf += "NOT_SET";
 	else
 		conf += selectAdapterComboBox->currentText().remove("\n");
@@ -1293,28 +1293,24 @@ void MainWindow::resetLanguage()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-#ifdef QT5
-		manualStandButton->setText(QString::fromLocal8Bit("Ðó÷íîé"));
-		autoStandButton->setText(QString::fromLocal8Bit("Àâòîìàò."));
-		inTestManualStandButton->setText(QString::fromLocal8Bit("Âõîäû"));
-		outTestManualStandButton->setText(QString::fromLocal8Bit("Âûõîäû"));
-		fullTestManualStandButton->setText(QString::fromLocal8Bit("Ïîëíàÿ"));
-		inManualTestAutoStandButton->setText(QString::fromLocal8Bit("Âõîäû"));
-		outManualTestAutoStandButton->setText(QString::fromLocal8Bit("Âûõîäû"));
-		inAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Âõîäû"));
-		outAutoTestAutoStandButton->setText(QString::fromLocal8Bit("Âûõîäû"));
-		fullTestAutoStandButton->setText(QString::fromLocal8Bit("Ïîëíàÿ"));
-		selectBlockVersionLabel->setText(QString::fromLocal8Bit("Âåðñèÿ áëîêà"));
+		manualStandButton->setText(QString("Ð ÑƒÑ‡Ð½Ð¾Ð¹"));
+		autoStandButton->setText(QString("ÐÑ‚Ð¾Ð¼Ð°Ñ‚."));
+		inTestManualStandButton->setText(QString("Ð’Ñ…Ð¾Ð´Ñ‹"));
+		outTestManualStandButton->setText(QString("Ð’Ñ‹Ñ…Ð¾Ð´Ñ‹"));
+		fullTestManualStandButton->setText(QString("ÐŸÐ¾Ð»Ð½Ð°Ñ"));
+		inManualTestAutoStandButton->setText(QString("Ð’Ñ…Ð¾Ð´Ñ‹"));
+		outManualTestAutoStandButton->setText(QString("Ð’Ñ‹Ñ…Ð¾Ð´Ñ‹"));
+		inAutoTestAutoStandButton->setText(QString("Ð’Ñ…Ð¾Ð´Ñ‹"));
+		outAutoTestAutoStandButton->setText(QString("Ð’Ñ‹Ñ…Ð¾Ð´Ñ‹"));
+		fullTestAutoStandButton->setText(QString("ÐŸÐ¾Ð»Ð½Ð°Ñ"));
+		selectBlockVersionLabel->setText(QString("Ð’ÐµÑ€ÑÐ¸Ñ Ð±Ð»Ð¾ÐºÐ°"));
 		if (!can->getStatusAdapterSelected())
-			selectAdapterLabel->setText(QString::fromLocal8Bit("Âûáåðèòå àäàïòåð"));
+			selectAdapterLabel->setText(QString("Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ð°Ð´Ð°Ð¿Ñ‚ÐµÑ€"));
 		if (!can->getStatusFrequencySelected())
-			selectFrequencyLabel->setText(QString::fromLocal8Bit("Âûáåðèòå ÷àñòîòó"));
-		manualTestAutoStandLabel->setText(QString::fromLocal8Bit("Ðó÷íîé"));
-		autoTestAutoStandLabel->setText(QString::fromLocal8Bit("Àâòî"));
-		manualStandLabel->setText(QString::fromLocal8Bit("Ðó÷íîé"));
-#elif QT6
-
-#endif // QT5
+			selectFrequencyLabel->setText(QString("Ð’Ñ‹Ð±ÐµÑ€Ð¸Ñ‚Ðµ Ñ‡Ð°ÑÑ‚Ð¾Ñ‚Ñƒ"));
+		manualTestAutoStandLabel->setText(QString("Ð ÑƒÑ‡Ð½Ð¾Ð¹"));
+		autoTestAutoStandLabel->setText(QString("ÐÐ²Ñ‚Ð¾"));
+		manualStandLabel->setText(QString("Ð ÑƒÑ‡Ð½Ð¾Ð¹"));
 		break;
 
 	case ENGLISH_LANG:
@@ -1356,7 +1352,7 @@ void MainWindow::slot_selectFrequencyComboBox_changed(int index)
 	else if (index > 0)
 	{
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			selectFrequencyLabel->setText(QString::fromLocal8Bit("×àñòîòà: ") + selectFrequencyComboBox->currentText());
+			selectFrequencyLabel->setText(QString("Ð§Ð°ÑÑ‚Ð¾Ñ‚Ð°: ") + selectFrequencyComboBox->currentText());
 		else if (viewWindowState->appLanguage == ENGLISH_LANG)
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
 	}
@@ -1372,7 +1368,7 @@ void MainWindow::slot_selectAdapterComboBox_changed(int index)
 	switchStyleMainButtons();
 
 	if (index == 0)
-		resetLanguage(); // Ñòàâèì ïðåäóïðåæäàþùèé lable ñîãëàñíî ÿçûêó
+		resetLanguage(); // Ã‘Ã²Ã Ã¢Ã¨Ã¬ Ã¯Ã°Ã¥Ã¤Ã³Ã¯Ã°Ã¥Ã¦Ã¤Ã Ã¾Ã¹Ã¨Ã© lable Ã±Ã®Ã£Ã«Ã Ã±Ã­Ã® Ã¿Ã§Ã»ÃªÃ³
 	else if (index > 0)
 	{
 		selectAdapterLabel->setText("");

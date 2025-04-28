@@ -1015,11 +1015,11 @@ QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 				if (counter == 0)
 				{
 					if(msg[5] != 0)
-						ansverStr[counter++] = msg[5];
+						//ansverStr[counter++] = msg[5];
 					if(msg[5] != 0)
-					ansverStr[counter++] = msg[6];
+					//ansverStr[counter++] = msg[6];
 					if(msg[7] != 0)
-					ansverStr[counter++] = msg[7];
+					//ansverStr[counter++] = msg[7];
 
 					DIAG_VERIFICATION(msgSend);
 					writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
@@ -1034,7 +1034,7 @@ QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 								return ansverStr;
 							continue;
 						}
-						ansverStr[counter++] = msg[i];
+						//ansverStr[counter++] = msg[i];
 						if (counter > sizeArr)
 							return ansverStr;
 					}

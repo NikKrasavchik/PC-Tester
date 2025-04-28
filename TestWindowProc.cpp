@@ -724,12 +724,12 @@ void TestWindow::on_rotateTimer_timeout()
 		hallLabels[i].second->setText("");
 		hallLabels[i].first++;
 		
-		if (hallLabels[i].second->pixmap() != nullptr)
-		{
-			QPixmap pixmap = *hallLabels[i].second->pixmap();
-			pixmap.transformed(QTransform().rotate(1));
-			hallLabels[i].second->setPixmap(pixmap);
-		}
+		//if (hallLabels[i].second->pixmap() != nullptr)
+		//{
+		//	QPixmap pixmap = *hallLabels[i].second->pixmap();
+		//	pixmap.transformed(QTransform().rotate(1));
+		//	hallLabels[i].second->setPixmap(pixmap);
+		//}
 		
 		if (hallLabels[i].first == 360)
 		{

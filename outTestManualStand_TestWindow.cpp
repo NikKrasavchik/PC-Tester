@@ -71,13 +71,13 @@ void TestWindow::resetTableHeaderLanguageOutTestManualStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ðàçú¸ì"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ïèí"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Íàçâàíèå"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Êîìïîíåíò"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Òèï"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ïðîâåðêà"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Èñïðàâíî"));
+		mainTableHeaderLabels->push_back(QString("Ð Ð°Ð·ÑŠÑ‘Ð¼"));
+		mainTableHeaderLabels->push_back(QString("ÐŸÐ¸Ð½"));
+		mainTableHeaderLabels->push_back(QString("ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ"));
+		mainTableHeaderLabels->push_back(QString("ÐšÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚"));
+		mainTableHeaderLabels->push_back(QString("Ð¢Ð¸Ð¿"));
+		mainTableHeaderLabels->push_back(QString("ÐŸÑ€Ð¾Ð²ÐµÑ€ÐºÐ°"));
+		mainTableHeaderLabels->push_back(QString("Ð˜ÑÐ¿Ñ€Ð°Ð²Ð½Ð¾"));
 		mainTableHeaderLabels->push_back("");
 		break;
 
@@ -105,22 +105,18 @@ void TestWindow::resetTableTypeLanguageOutTestManualStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-#ifdef QT5
 			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Öèôðîâîé"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¦Ð¸Ñ„Ñ€Ð¾Ð²Ð¾Ð¹"));
 			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("ØÈÌ"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¨Ð˜Ðœ"));
 			else if (cableRows[currentRowNum]->typeStr == "VNH")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("VNH"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("VNH"));
 			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Àíàëîãîâûé"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ÐÐ½Ð°Ð»Ð¾Ð³Ð¾Ð²Ñ‹Ð¹"));
 			else if (cableRows[currentRowNum]->typeStr == "HALL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HALL"));
 			else if (cableRows[currentRowNum]->typeStr == "HLD")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
-#elif QT6
-
-#endif // QT5
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HLD"));
 			break;
 
 		case ENGLISH_LANG:

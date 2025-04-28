@@ -42,7 +42,7 @@ protected:
 	/// Handler for the mouse double-click event within the window.
 	void mouseDoubleClickEvent(QMouseEvent* event) override;
 	/// Handler for the native window event.
-	bool nativeEvent(const QByteArray& eventType, void* message, long* result) override;
+	bool nativeEvent(const QByteArray& eventType, void* message, long* result);
 	/// Override event filtering function for the WindowFrame class.
 	bool eventFilter(QObject* obj, QEvent* event) override;
 

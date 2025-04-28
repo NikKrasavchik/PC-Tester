@@ -31,12 +31,9 @@ int main(int argc, char* argv[])
 	QFile::copy("x64/Release/PC-Tester.exe", "x64/PC-Tester/PC-Tester.exe");
 #endif
 	
-#ifdef QT5
-
-#elif QT6
 	QLocale curLoc(QLocale("ru_RU"));
 	QLocale::setDefault(curLoc);
-#endif // QT5
+
 	// Создание глобальной переменной, в которой хранится информация о размере экрана, языке и теме
 	viewWindowState = new ViewWindowState;
 	viewWindowState->appLanguage = RUSSIAN_LANG;

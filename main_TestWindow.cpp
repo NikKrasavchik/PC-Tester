@@ -442,7 +442,6 @@ void TestWindow::slot_switchThemeButton_clicked()
 
 void TestWindow::slot_switchLanguageButton_clicked()
 {
-	//hallLabels[0].first = 0;
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
@@ -670,30 +669,29 @@ void TestWindow::resetLanguage()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-#ifdef QT5
-		reportButton->setText(QString::fromLocal8Bit("Отчёт"));
+		reportButton->setText(QString("РћС‚С‡С‘С‚"));
 		if (statusFlags->StatusConnected)
-			sleepButton->setText(QString::fromLocal8Bit("Заснуть"));
+			sleepButton->setText(QString("Р—Р°СЃРЅСѓС‚СЊ"));
 		else
-			sleepButton->setText(QString::fromLocal8Bit("Проснуться"));
+			sleepButton->setText(QString("РџСЂРѕСЃРЅСѓС‚СЃСЏ"));
 
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
-				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
+				fullTestManualStandConnectButton->setText(QString("Р‘Р»РѕРє\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				fullTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
+				fullTestManualStandConnectButton->setText(QString("Р‘Р»РѕРє\nРѕС‚РєР»СЋС‡РµРЅ"));
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
-				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо порядку"));
+				fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ РїРѕСЂСЏРґРєСѓ"));
 				break;
 			case SortType::SortComponents:
-				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо компонентам"));
+				fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ РєРѕРјРїРѕРЅРµРЅС‚Р°Рј"));
 				break;
 			case SortType::SortType:
-				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
+				fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ С‚РёРїСѓ"));
 				break;
 			default:
 				break;
@@ -703,89 +701,86 @@ void TestWindow::resetLanguage()
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
-				outTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
+				outTestManualStandConnectButton->setText(QString("Р‘Р»РѕРє\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				outTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
+				outTestManualStandConnectButton->setText(QString("Р‘Р»РѕРє\nРѕС‚РєР»СЋС‡РµРЅ"));
 			resetLanguageOutTestManualStand();
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
-				inTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nподключён"));
+				inTestManualStandConnectButton->setText(QString("Р‘Р»РѕРє\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				inTestManualStandConnectButton->setText(QString::fromLocal8Bit("Блок\nотключен"));
+				inTestManualStandConnectButton->setText(QString("Р‘Р»РѕРє\nРѕС‚РєР»СЋС‡РµРЅ"));
 			resetLanguageInTestManualStand();
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРѕС‚РєР»СЋС‡РµРЅ"));
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
 			resetLanguageOutManualTestAutoStand();
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРѕС‚РєР»СЋС‡РµРЅ"));
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
 			resetLanguageInManualTestAutoStand();
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРѕС‚РєР»СЋС‡РµРЅ"));
 			if(isFullTestEnabled)
-				autoStandStartTestButton->setText(QString::fromLocal8Bit("Пауза"));
+				autoStandStartTestButton->setText(QString("РџР°СѓР·Р°"));
 			else
-				autoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+				autoStandStartTestButton->setText(QString("РЎС‚Р°СЂС‚"));
 			resetLanguageOutAutoTestAutoStand();
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРѕС‚РєР»СЋС‡РµРЅ"));
 			if (isFullTestEnabled)
-				autoStandStartTestButton->setText(QString::fromLocal8Bit("Пауза"));
+				autoStandStartTestButton->setText(QString("РџР°СѓР·Р°"));
 			else
-				autoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+				autoStandStartTestButton->setText(QString("РЎС‚Р°СЂС‚"));
 			resetLanguageInAutoTestAutoStand();
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nподключён"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРїРѕРґРєР»СЋС‡С‘РЅ"));
 			else
-				autoStandConnectButton->setText(QString::fromLocal8Bit("Стенд\nотключен"));
+				autoStandConnectButton->setText(QString("РЎС‚РµРЅРґ\nРѕС‚РєР»СЋС‡РµРЅ"));
 			if (isFullTestEnabled)
-				autoStandStartTestButton->setText(QString::fromLocal8Bit("Пауза"));
+				autoStandStartTestButton->setText(QString("РџР°СѓР·Р°"));
 			else
-				autoStandStartTestButton->setText(QString::fromLocal8Bit("Старт"));
+				autoStandStartTestButton->setText(QString("РЎС‚Р°СЂС‚"));
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
-				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо порядку"));
+				fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ РїРѕСЂСЏРґРєСѓ"));
 				break;
 			case SortType::SortComponents:
-				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо компонентам"));
+				fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ РєРѕРјРїРѕРЅРµРЅС‚Р°Рј"));
 				break;
 			case SortType::SortType:
-				fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
+				fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ С‚РёРїСѓ"));
 				break;
 			default:
 				break;
 			}
 			resetLanguageFullTestAutoStand();
-#elif QT6
-
-#endif // QT5
 			break;
 
 		default:
@@ -928,16 +923,12 @@ void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboB
 	comboBox->clear();
 	if (viewWindowState->appLanguage == RUSSIAN_LANG)
 	{
-#ifdef QT5
-		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n5 секунд"));
-		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n10 секунд"));
-		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n15 секунд"));
-		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n20 секунд"));
-		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n25 секунд"));
-		comboBox->addItem(QString::fromLocal8Bit("Длительность проверки:\n30 секунд"));
-#elif QT6
-
-#endif // QT5
+		comboBox->addItem(QString("Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРѕРІРµСЂРєРё:\n5 СЃРµРєСѓРЅРґ"));
+		comboBox->addItem(QString("Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРѕРІРµСЂРєРё:\n10 СЃРµРєСѓРЅРґ"));
+		comboBox->addItem(QString("Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРѕРІРµСЂРєРё:\n15 СЃРµРєСѓРЅРґ"));
+		comboBox->addItem(QString("Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРѕРІРµСЂРєРё:\n20 СЃРµРєСѓРЅРґ"));
+		comboBox->addItem(QString("Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРѕРІРµСЂРєРё:\n25 СЃРµРєСѓРЅРґ"));
+		comboBox->addItem(QString("Р”Р»РёС‚РµР»СЊРЅРѕСЃС‚СЊ РїСЂРѕРІРµСЂРєРё:\n30 СЃРµРєСѓРЅРґ"));
 	}
 	else
 	{
@@ -1025,10 +1016,10 @@ void TestWindow::slot_autoStandStartTestButton_clicked()
 			{
 				if (i == cableRows.size() - 1)
 				{
-					// Тест закончен
+					// Г’ГҐГ±ГІ Г§Г ГЄГ®Г­Г·ГҐГ­
 					nextCheckCable->setConnector(cableRows[0]->connectorInt);
 					nextCheckCable->setPin(cableRows[0]->pin.toInt());
-					QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
+					QMessageBox::warning(this, QString("Р’РЅРёРјР°РЅРёРµ"), QString("????????????????"));
 					isFullTestEnabled = false;
 					return;
 				}
@@ -1039,18 +1030,18 @@ void TestWindow::slot_autoStandStartTestButton_clicked()
 	}
 	else
 	{
-		if (!statusFlags->StatusConnected) // Если стенд не подключён, ничего не делаем
+		if (!statusFlags->StatusConnected) // Г…Г±Г«ГЁ Г±ГІГҐГ­Г¤ Г­ГҐ ГЇГ®Г¤ГЄГ«ГѕГ·ВёГ­, Г­ГЁГ·ГҐГЈГ® Г­ГҐ Г¤ГҐГ«Г ГҐГ¬
 		{
 			if (viewWindowState->appLanguage == RUSSIAN_LANG)
-				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Стенд не подключен"));
+				QMessageBox::warning(this, QString("Р’РЅРёРјР°РЅРёРµ"), QString("РЎС‚РµРЅРґ РЅРµ РїРѕРґРєР»СЋС‡РµРЅ"));
 			else
 				QMessageBox::warning(this, QString("Warning"), QString("Stand is not connected"));
 			return;
 		}
-		else if (statusFlags->StatusTest) // Если идёт тест, ничего не делаем
+		else if (statusFlags->StatusTest) // Г…Г±Г«ГЁ ГЁГ¤ВёГІ ГІГҐГ±ГІ, Г­ГЁГ·ГҐГЈГ® Г­ГҐ Г¤ГҐГ«Г ГҐГ¬
 		{
 			if (viewWindowState->appLanguage == RUSSIAN_LANG)
-				QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("В данный момент проходит тест"));
+				QMessageBox::warning(this, QString("Р’РЅРёРјР°РЅРёРµ"), QString("Р’ РґР°РЅРЅС‹Р№ РјРѕРјРµРЅС‚ РїСЂРѕС…РѕРґРёС‚ С‚РµСЃС‚"));
 			else
 				QMessageBox::warning(this, QString("Warning"), QString("Currently being tested"));
 			return;
@@ -1059,7 +1050,7 @@ void TestWindow::slot_autoStandStartTestButton_clicked()
 		isFullTestEnabled = true;
 		for (int i = 0; i < cableRows.size(); i++)
 			if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
-				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
+				mainTableWidget->item(i, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackground(QBrush(Qt::yellow));
 				
 		ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 	}
@@ -1069,7 +1060,7 @@ void TestWindow::slot_autoStandStartTestButton_clicked()
 
 void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds)
 {
-	// Красим нужную ячейку 
+	// ГЉГ°Г Г±ГЁГ¬ Г­ГіГ¦Г­ГіГѕ ГїГ·ГҐГ©ГЄГі 
 	for (int i = 0; i < cableRows.size(); i++)
 		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
 		{
@@ -1083,20 +1074,20 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 					cableRows[i]->thresholds[j].maxVoltage < measureds[j]->voltage ||
 					cableRows[i]->thresholds[j].minCurrent > measureds[j]->current || 
 					cableRows[i]->thresholds[j].maxCurrent < measureds[j]->current)
-					mainTableWidget->item(i, 6)->setBackgroundColor(Qt::red);
-			if (mainTableWidget->item(i, 6)->backgroundColor() != Qt::red)
-				mainTableWidget->item(i, 6)->setBackgroundColor(Qt::green);
-			if (isFullTestEnabled)// запускаем следующий тест
+					mainTableWidget->item(i, 6)->setBackground(QBrush(Qt::red));
+			if (mainTableWidget->item(i, 6)->background() != Qt::red)
+				mainTableWidget->item(i, 6)->setBackground(QBrush(Qt::green));
+			if (isFullTestEnabled)// Г§Г ГЇГіГ±ГЄГ ГҐГ¬ Г±Г«ГҐГ¤ГіГѕГ№ГЁГ© ГІГҐГ±ГІ
 			{
 				for (int i = 0; i < cableRows.size(); i++)
 					if (nextCheckCable->getConnector() == cableRows[i]->connectorInt && nextCheckCable->getPin() == cableRows[i]->pin.toInt())
 					{
 						if (i == cableRows.size() - 1)
 						{
-							// Тест закончен
+							// Г’ГҐГ±ГІ Г§Г ГЄГ®Г­Г·ГҐГ­
 							nextCheckCable->setConnector(cableRows[0]->connectorInt);
 							nextCheckCable->setPin(cableRows[0]->pin.toInt());
-							QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Тест закончен"));
+							QMessageBox::warning(this, QString("Р’РЅРёРјР°РЅРёРµ"), QString("РўРµСЃС‚ Р·Р°РєРѕРЅС‡РµРЅ"));
 							isFullTestEnabled = false;
 							resetLanguage();
 							return;
@@ -1105,7 +1096,7 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 						nextCheckCable->setPin(cableRows[i + 1]->pin.toInt());
 						break;
 					}
-				mainTableWidget->item(i + 1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackgroundColor(Qt::yellow);
+				mainTableWidget->item(i + 1, testType == WindowType::FULL_TEST_AUTO_STAND ? 6 : 5)->setBackground(QBrush(Qt::yellow));
 				ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 			}
 		}
@@ -1243,15 +1234,15 @@ void TestWindow::Slot_changeStatusCheckInformationBus(int id, bool status)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
 		if(status)
-			mainTableWidget->item(offsetMap[id], 5)->setBackgroundColor(Qt::green);
+			mainTableWidget->item(offsetMap[id], 5)->setBackground(QBrush(Qt::green));
 		else
-			mainTableWidget->item(offsetMap[id], 5)->setBackgroundColor(Qt::red);
+			mainTableWidget->item(offsetMap[id], 5)->setBackground(QBrush(Qt::red));
 		break;
 	case WindowType::FULL_TEST_MANUAL_STAND:
 		if(status)
-			mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::green);
+			mainTableWidget->item(offsetMap[id], 7)->setBackground(QBrush(Qt::green));
 		else
-			mainTableWidget->item(offsetMap[id], 7)->setBackgroundColor(Qt::red);
+			mainTableWidget->item(offsetMap[id], 7)->setBackground(QBrush(Qt::red));
 		break;
 	}
 }
@@ -1541,21 +1532,21 @@ void TestWindow::slot_fullTestSortButton_clicked()
 	case SortType::SortIndex:
 		fullTestSortType = SortType::SortComponents;
 		if(viewWindowState->appLanguage == RUSSIAN_LANG)
-			fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо типу"));
+			fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ РєРѕРјРїРѕРЅРµРЅС‚Р°Рј"));
 		else
-			fullTestSortButton->setText(QString("Sort:\nby type"));
+			fullTestSortButton->setText(QString("Sort:\nby component"));
 		break;
 	case SortType::SortComponents:
 		fullTestSortType = SortType::SortType;
 		if(viewWindowState->appLanguage == RUSSIAN_LANG)
-			fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо компонентам"));
+			fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ С‚РёРїСѓ"));
 		else
-			fullTestSortButton->setText(QString("Sort:\nby component"));
+			fullTestSortButton->setText(QString("Sort:\nby type"));
 		break;
 	case SortType::SortType:
 		fullTestSortType = SortType::SortIndex;
 		if(viewWindowState->appLanguage == RUSSIAN_LANG)
-			fullTestSortButton->setText(QString::fromLocal8Bit("Сортировка:\nпо порядку"));
+			fullTestSortButton->setText(QString("РЎРѕСЂС‚РёСЂРѕРІРєР°:\nРїРѕ РїРѕСЂСЏРґРєСѓ"));
 		else
 			fullTestSortButton->setText(QString("Sort:\nin order"));
 		break;

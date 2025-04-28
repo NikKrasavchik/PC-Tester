@@ -68,12 +68,9 @@ void MoreWindow::initBaseUi()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-#ifdef QT5
-		startTestButton->setText(QString::fromLocal8Bit	("Тест"));
-		saveChangesButton->setText(QString::fromLocal8Bit("Сохранить"));
-#elif QT6
+		startTestButton->setText(QString	("РўРµСЃС‚"));
+		saveChangesButton->setText(QString("РЎРѕС…СЂР°РЅРёС‚СЊ"));
 
-#endif // QT5
 		break;
 	case ENGLISH_LANG:
 		startTestButton->setText("Test");
@@ -144,12 +141,12 @@ void MoreWindow::fillBaseTable()
 
 // ------------------------------------
 // Name: prepareItem
-//		Подготовка ячейки для записи в него данных
+//		ГЏГ®Г¤ГЈГ®ГІГ®ГўГЄГ  ГїГ·ГҐГ©ГЄГЁ Г¤Г«Гї Г§Г ГЇГЁГ±ГЁ Гў Г­ГҐГЈГ® Г¤Г Г­Г­Г»Гµ
 // Variables: 
-//			int row: индекс строчки ячейки
-//			int column: индекс столбца ячйки
-//			int rowSpan: количество ячейек для горизонтального соединения
-//			int columnSpan: количество ячейук для вертикального соединения
+//			int row: ГЁГ­Г¤ГҐГЄГ± Г±ГІГ°Г®Г·ГЄГЁ ГїГ·ГҐГ©ГЄГЁ
+//			int column: ГЁГ­Г¤ГҐГЄГ± Г±ГІГ®Г«ГЎГ¶Г  ГїГ·Г©ГЄГЁ
+//			int rowSpan: ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГїГ·ГҐГ©ГҐГЄ Г¤Г«Гї ГЈГ®Г°ГЁГ§Г®Г­ГІГ Г«ГјГ­Г®ГЈГ® Г±Г®ГҐГ¤ГЁГ­ГҐГ­ГЁГї
+//			int columnSpan: ГЄГ®Г«ГЁГ·ГҐГ±ГІГўГ® ГїГ·ГҐГ©ГіГЄ Г¤Г«Гї ГўГҐГ°ГІГЁГЄГ Г«ГјГ­Г®ГЈГ® Г±Г®ГҐГ¤ГЁГ­ГҐГ­ГЁГї
 // ------------------------------------
 void MoreWindow::prepareItem(int row, int column, int rowSpan, int columnSpan)
 {
@@ -167,7 +164,7 @@ void MoreWindow::prepareItem(int row, int column, int rowSpan, int columnSpan)
 
 // ------------------------------------
 // Name: setValues
-//		Запись значений кабеля в таблицу
+//		Г‡Г ГЇГЁГ±Гј Г§Г­Г Г·ГҐГ­ГЁГ© ГЄГ ГЎГҐГ«Гї Гў ГІГ ГЎГ«ГЁГ¶Гі
 // ------------------------------------
 void MoreWindow::setValues()
 {
@@ -180,25 +177,21 @@ void MoreWindow::setValues()
 
 // ------------------------------------
 // Name: resetLanguage
-//		Обновление данных в ячейках под актуальный язык
+//		ГЋГЎГ­Г®ГўГ«ГҐГ­ГЁГҐ Г¤Г Г­Г­Г»Гµ Гў ГїГ·ГҐГ©ГЄГ Гµ ГЇГ®Г¤ Г ГЄГІГіГ Г«ГјГ­Г»Г© ГїГ§Г»ГЄ
 // Variables: 
-//			int offset: Значение смещения. По умолчанию OFFSET_NULL
+//			int offset: Г‡Г­Г Г·ГҐГ­ГЁГҐ Г±Г¬ГҐГ№ГҐГ­ГЁГї. ГЏГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ OFFSET_NULL
 // ------------------------------------
 void MoreWindow::resetLanguage(int offset)
 {
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-#ifdef QT5
-		mainTableWidget->item(CELL_SIGN_BASE_CONNECTOR)->setText(QString::fromLocal8Bit("Колодка"));
-		mainTableWidget->item(CELL_SIGN_BASE_PIN)->setText(QString::fromLocal8Bit("Пин"));
-		mainTableWidget->item(CELL_SIGN_BASE_DIRECTION)->setText(QString::fromLocal8Bit("Направление"));
-		mainTableWidget->item(CELL_SIGN_BASE_TYPE)->setText(QString::fromLocal8Bit("Тип"));
-		mainTableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString::fromLocal8Bit("Название"));
-		mainTableWidget->item(CELL_SIGN_FILLED_COMMENT(offset))->setText(QString::fromLocal8Bit("Комментарий"));
-#elif QT6
-
-#endif // QT5
+		mainTableWidget->item(CELL_SIGN_BASE_CONNECTOR)->setText(QString("РљРѕР»РѕРґРєР°"));
+		mainTableWidget->item(CELL_SIGN_BASE_PIN)->setText(QString("РџРёРЅ"));
+		mainTableWidget->item(CELL_SIGN_BASE_DIRECTION)->setText(QString("РќР°РїСЂР°РІР»РµРЅРёРµ"));
+		mainTableWidget->item(CELL_SIGN_BASE_TYPE)->setText(QString("РўРёРї"));
+		mainTableWidget->item(CELL_SIGN_BASE_NAME)->setText(QString("РќР°Р·РІР°РЅРёРµ"));
+		mainTableWidget->item(CELL_SIGN_FILLED_COMMENT(offset))->setText(QString("РљРѕРјРјРµРЅС‚Р°СЂРёР№"));
 		break;
 
 	case ENGLISH_LANG:
@@ -279,21 +272,17 @@ void MoreWindowOut::resetBlockLanguage(int measuredNum)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-#ifdef QT5
-		mainTableWidget->item(CELL_OUT_SIGN_MEASURED)->setText(QString::fromLocal8Bit("Измерение ") + QString::number(measuredNum));
-		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VALUES)->setText(QString::fromLocal8Bit("Измеренное значение"));
-		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_CURRENT)->setText(QString::fromLocal8Bit("U, В"));
-		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VOLTAGE)->setText(QString::fromLocal8Bit("I, А"));
-		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS)->setText(QString::fromLocal8Bit("Пороги"));
-		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_CURRENT)->setText(QString::fromLocal8Bit("U, В"));
-		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_VOLTAGE)->setText(QString::fromLocal8Bit("I, А"));
-		mainTableWidget->item(CELL_OUT_SIGN_MIN_CURRENT)->setText(QString::fromLocal8Bit("Мин."));
-		mainTableWidget->item(CELL_OUT_SIGN_MAX_CURRENT)->setText(QString::fromLocal8Bit("Макс."));
-		mainTableWidget->item(CELL_OUT_SING_MIN_VOLTAGE)->setText(QString::fromLocal8Bit("Мин."));
-		mainTableWidget->item(CELL_OUT_SING_MAX_VOLTAGE)->setText(QString::fromLocal8Bit("Макс."));
-#elif QT6
-
-#endif // QT5
+		mainTableWidget->item(CELL_OUT_SIGN_MEASURED)->setText(QString("РР·РјРµСЂРµРЅРёРµ ") + QString::number(measuredNum));
+		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VALUES)->setText(QString("РР·РјРµСЂРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ"));
+		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_CURRENT)->setText(QString("U, Г‚"));
+		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VOLTAGE)->setText(QString("I, ГЂ"));
+		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS)->setText(QString("РџРѕСЂРѕРіРё"));
+		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_CURRENT)->setText(QString("U, Г‚"));
+		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_VOLTAGE)->setText(QString("I, ГЂ"));
+		mainTableWidget->item(CELL_OUT_SIGN_MIN_CURRENT)->setText(QString("РњРёРЅ"));
+		mainTableWidget->item(CELL_OUT_SIGN_MAX_CURRENT)->setText(QString("РњР°РєСЃ"));
+		mainTableWidget->item(CELL_OUT_SING_MIN_VOLTAGE)->setText(QString("РњРёРЅ"));
+		mainTableWidget->item(CELL_OUT_SING_MAX_VOLTAGE)->setText(QString("РњР°РєСЃ"));
 		break;
 
 	case ENGLISH_LANG:
@@ -314,7 +303,7 @@ void MoreWindowOut::resetBlockLanguage(int measuredNum)
 
 // ------------------------------------
 // Name: setValues
-//		Запись значений кабеля в таблицу
+//		Г‡Г ГЇГЁГ±Гј Г§Г­Г Г·ГҐГ­ГЁГ© ГЄГ ГЎГҐГ«Гї Гў ГІГ ГЎГ«ГЁГ¶Гі
 // ------------------------------------
 void MoreWindowOut::setValues()
 {
@@ -335,30 +324,30 @@ void MoreWindowOut::setValues()
 		if (row->measureds[i]->current != -1)
 			if (row->measureds[i]->current < row->thresholds[i].minCurrent)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
-				mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
 			}
 			else if (row->measureds[i]->current > row->thresholds[i].maxCurrent)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
-				mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
 			}
 			else
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_GREEN);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_CURRENT + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_GREEN));
 
 		if (row->measureds[i]->voltage != -1)
 			if (row->measureds[i]->voltage < row->thresholds[i].minVoltage)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
-				mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
+				mainTableWidget->item(CELL_OUT_VALUES_MIN_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
 			}
 			else if (row->measureds[i]->voltage > row->thresholds[i].maxVoltage)
 			{
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
-				mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
+				mainTableWidget->item(CELL_OUT_VALUES_MAX_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_RED));
 			}
 			else
-				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackgroundColor(COLOR_GREEN);
+				mainTableWidget->item(CELL_OUT_VALUES_MEASURED_VOLTAGE + (i * MEASURED_OFFSET_SEXTUPLE))->setBackground(QBrush(COLOR_GREEN));
 	}
 }
 
@@ -400,21 +389,21 @@ void MoreWindowIn::generateSigns()
 
 // ------------------------------------
 // Name: setValues
-//		Запись значений кабеля в таблицу
+//		Г‡Г ГЇГЁГ±Гј Г§Г­Г Г·ГҐГ­ГЁГ© ГЄГ ГЎГҐГ«Гї Гў ГІГ ГЎГ«ГЁГ¶Гі
 // ------------------------------------
 void MoreWindowIn::setValues()
 {
 	if (row->measureds[0]->voltage == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(COLOR_GREEN));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackground(QBrush(QColor(COLOR_GREEN)));
 	else if (row->measureds[0]->voltage == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackgroundColor(QColor(COLOR_RED));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setBackground(QBrush(QColor(COLOR_RED)));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_1)->setText("-");
 
 	if (row->measureds[0]->current == 1)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(COLOR_GREEN));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackground(QBrush(QColor(COLOR_GREEN)));
 	else if (row->measureds[0]->current == 0)
-		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackgroundColor(QColor(COLOR_RED));
+		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setBackground(QBrush(QColor(COLOR_RED)));
 	else
 		mainTableWidget->item(CELL_IN_VALUE_MEASURED_2)->setText("-");
 }
@@ -424,12 +413,8 @@ void MoreWindowIn::resetBlockLanguage(int measuredNum)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-#ifdef QT5
-		mainTableWidget->item(CELL_IN_SIGN_MEASURED_1)->setText(QString::fromLocal8Bit("Значение 1"));
-		mainTableWidget->item(CELL_IN_SIGN_MEASURED_2)->setText(QString::fromLocal8Bit("Значение 2"));
-#elif QT6
-
-#endif // QT5
+		mainTableWidget->item(CELL_IN_SIGN_MEASURED_1)->setText(QString("Р—РЅР°С‡РµРЅРµРё 1"));
+		mainTableWidget->item(CELL_IN_SIGN_MEASURED_2)->setText(QString("Р—РЅР°С‡РµРЅРёРµ 2"));
 		break;
 
 	case ENGLISH_LANG:
@@ -498,15 +483,11 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-#ifdef QT5
-		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED)->setText(QString::fromLocal8Bit("Измерение ") + QString::number(measuredNum));
-		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED_VALUES)->setText(QString::fromLocal8Bit("Измеренное значение"));
-		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS)->setText(QString::fromLocal8Bit("Пороги"));
-		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MIN)->setText(QString::fromLocal8Bit("Мин."));
-		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MAX)->setText(QString::fromLocal8Bit("Макс."));
-#elif QT6
-
-#endif // QT5
+		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED)->setText(QString("РР·РјРµСЂРµРЅРёРµ ") + QString::number(measuredNum));
+		mainTableWidget->item(CELL_SIGN_IN_ANALOG_MEASURED_VALUES)->setText(QString("РР·РјРµСЂРµРЅРЅРѕРµ Р·РЅР°С‡РµРЅРёРµ"));
+		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS)->setText(QString("РџРѕСЂРѕРіРё"));
+		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MIN)->setText(QString("РњРёРЅ"));
+		mainTableWidget->item(CELL_SIGN_IN_ANALOG_THRESHOLDS_MAX)->setText(QString("РњР°РєСЃ"));
 		break;
 
 	case ENGLISH_LANG:
@@ -521,7 +502,7 @@ void MoreWindowInAnalog::resetBlockLanguage(int measuredNum)
 
 // ------------------------------------
 // Name: setValues
-//		Запись значений кабеля в таблицу
+//		Г‡Г ГЇГЁГ±Гј Г§Г­Г Г·ГҐГ­ГЁГ© ГЄГ ГЎГҐГ«Гї Гў ГІГ ГЎГ«ГЁГ¶Гі
 // ------------------------------------
 void MoreWindowInAnalog::setValues()
 {
@@ -533,16 +514,16 @@ void MoreWindowInAnalog::setValues()
 		else
 			if (row->measureds[i]->voltage < row->thresholds[i].minValue)
 			{
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackground(QBrush(COLOR_RED));
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setBackground(QBrush(COLOR_RED));
 			}
 			else if (row->measureds[i]->voltage > row->thresholds[i].maxValue)
 			{
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_RED);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackground(QBrush(COLOR_RED));
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setBackground(QBrush(COLOR_RED));
 			}
 			else
-				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackgroundColor(COLOR_GREEN);
+				mainTableWidget->item(CELL_VALUE_IN_ANALOG_MEASURED_VALUES + (i * MEASURED_OFFSET_TRIPPLE))->setBackground(QBrush(COLOR_GREEN));
 
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MIN + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].minValue) != "-1" ? QString::number(row->thresholds[i].minValue) : "-");
 		mainTableWidget->item(CELL_VALUE_IN_ANALOG_THRESHOLDS_MAX + (i * MEASURED_OFFSET_TRIPPLE))->setText(QString::number(row->thresholds[i].maxValue) != "-1" ? QString::number(row->thresholds[i].maxValue) : "-");
@@ -625,14 +606,14 @@ void MoreWindow::resaveFile()
 		return;
 	}
 
-	QString config = fin.readLine(); // Обрезаеи и запоминаем раздел файла с информацией о  CONFIG
+	QString config = fin.readLine(); // ГЋГЎГ°ГҐГ§Г ГҐГЁ ГЁ Г§Г ГЇГ®Г¬ГЁГ­Г ГҐГ¬ Г°Г Г§Г¤ГҐГ« ГґГ Г©Г«Г  Г± ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГҐГ© Г®  CONFIG
 	config += fin.readLine();
 
 	QString outputString = "";
 	bool isFound = false;
 	bool admissionBlock = false;
 	bool admissionVersion = false;
-	while (!fin.atEnd()) // Посик нужного места в файле и изменение его в соответствие с правками пользователя
+	while (!fin.atEnd()) // ГЏГ®Г±ГЁГЄ Г­ГіГ¦Г­Г®ГЈГ® Г¬ГҐГ±ГІГ  Гў ГґГ Г©Г«ГҐ ГЁ ГЁГ§Г¬ГҐГ­ГҐГ­ГЁГҐ ГҐГЈГ® Гў Г±Г®Г®ГІГўГҐГІГ±ГІГўГЁГҐ Г± ГЇГ°Г ГўГЄГ Г¬ГЁ ГЇГ®Г«ГјГ§Г®ГўГ ГІГҐГ«Гї
 	{
 		QString dataLine = fin.readLine();
 		
@@ -731,10 +712,10 @@ void MoreWindow::resaveFile()
 		outputString[outputString.size() - 1] = '\n';
 	}
 	outputString.remove(outputString.size() - 1, 1); 
-	outputString.insert(0, config); // Вставляем в начало строки информацию о разделе CONFIG
+	outputString.insert(0, config); // Г‚Г±ГІГ ГўГ«ГїГҐГ¬ Гў Г­Г Г·Г Г«Г® Г±ГІГ°Г®ГЄГЁ ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГѕ Г® Г°Г Г§Г¤ГҐГ«ГҐ CONFIG
 	fin.close();
 
-	if (!isFound) // Если не найден нужный кабель
+	if (!isFound) // Г…Г±Г«ГЁ Г­ГҐ Г­Г Г©Г¤ГҐГ­ Г­ГіГ¦Г­Г»Г© ГЄГ ГЎГҐГ«Гј
 	{
 		generateWarning(Warnings::MoreWindow::OPEN_FILE_ERROR);
 		return;
@@ -742,7 +723,7 @@ void MoreWindow::resaveFile()
 #ifdef QT_5
 
 #endif // QT_5
-	// Перезапись с новыми значениями
+	// ГЏГҐГ°ГҐГ§Г ГЇГЁГ±Гј Г± Г­Г®ГўГ»Г¬ГЁ Г§Г­Г Г·ГҐГ­ГЁГїГ¬ГЁ
 	std::ofstream fout;
 	fout.open("cables.cfg");
 	fout << outputString.toStdString();
@@ -762,11 +743,11 @@ void MoreWindow::generateWarning(Warnings::MoreWindow warning)
 		switch (warning)
 		{
 		case Warnings::MoreWindow::FILE_NOT_FOUND: // Warning 0x201
-			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Нет конфигурационного файла. Проверьте наличие в папке и перезапустите приложение\nWarning 0x201"));
+			QMessageBox::warning(this, QString("Г‚Г­ГЁГ¬Г Г­ГЁГҐ"), QString("РќРµС‚ РєРѕРЅС„РёРіСѓСЂР°С†РёРѕРЅРЅРѕРіРѕ С„Р°Р№Р»Р°. РџСЂРѕРІРµСЂСЊС‚Рµ РЅР°Р»РёС‡РёРµ РІ РїР°РїРєРµ Рё РїРµСЂРµР·Р°РїСѓСЃС‚РёС‚Рµ РїСЂРёР»РѕР¶РµРЅРёРµ\nWarning 0x201"));
 			break;
 		
 		case Warnings::MoreWindow::OPEN_FILE_ERROR: // Warning 0x202
-			QMessageBox::warning(this, QString::fromLocal8Bit("Внимание"), QString::fromLocal8Bit("Не обнаружен нужный кабель, попробуйте вернутся к исходному конфигурационному файлу\nWarning 0x202"));
+			QMessageBox::warning(this, QString("Г‚Г­ГЁГ¬Г Г­ГЁГҐ"), QString("РќРµ РѕР±РЅР°СЂСѓР¶РµРЅ РЅСѓР¶РЅС‹Р№ РєР°Р±РµР»СЊ, РїРѕРїСЂРѕР±СѓР№С‚Рµ РІРµСЂРЅСѓС‚СЃСЏ Рє РёСЃС…РѕРґРЅРѕРјСѓ РєРѕРЅС„РёРіСѓСЂР°С†РёРѕРЅРЅРѕРјСѓ С„Р°Р№Р»Сѓ\nWarning 0x202"));
 			break;
 		}
 		break;
