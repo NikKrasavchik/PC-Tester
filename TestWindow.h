@@ -171,13 +171,8 @@ public:
 	//								OUT_MANUAL_TEST_AUTO_STAND
 	//								IN_MANUAL_TEST_AUTO_STAND
 	//								OUT_AUTO_TEST_AUTO_STAND
-	//			int type: Содержит тип кабеля. Обрабатываемые аргументы:
-	//						TYPE_DIGITAL
-	//						TYPE_PWM
-	//						TYPE_VNH
-	//						TYPE_HLD
 	// ------------------------------------
-	void generateInteractionButtons(WindowType testType, int type);
+	void generateInteractionButtons(WindowType testType);
 
 	// ------------------------------------
 	// Name: switchButtonState
@@ -226,6 +221,7 @@ public slots:
 	void on_check_clicked();
 	void on_checkButton_clicked();
 	void on_moreButton_clicked();
+	void on_manualCheckBox_clicked();
 
 
 
@@ -233,7 +229,7 @@ signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
 	void Signal_changeStatusCheckInformationBus(int id, bool status);
 
-	void selectCurrentCell(QString connector, QString pin);
+	void selectCurrentCell(int id);
 };
 
 class TestWindow : public QDialog
@@ -472,7 +468,7 @@ public slots:
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 	void Slot_ChangedByte(int idCable, int newValue);
 	void Slot_changeStatusCheckInformationBus(int id, bool status);
-	void selectCurrentCell(QString conector, QString pin);
+	void selectCurrentCell(int id);
 
 	void on_rotateTimer_timeout();
 private:

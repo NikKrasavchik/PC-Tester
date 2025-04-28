@@ -75,21 +75,10 @@ void TestWindow::resetTableHeaderFullTestManualStand()
 
 void TestWindow::resetLanguageFullTestManualStand()
 {
-	std::vector<bool> checkedManualChecks;
-	for (int i = 0; i < cableRows.size(); i++)
-	{
-		checkedManualChecks.push_back(cableRows[i]->manualCheckBox->isChecked());
-		delete cableRows[i]->manualCheckBox;
-	}
-
-
 	resetTableHeaderFullTestManualStand();
 	resetTableTypeLanguageFullTestManualStand();
 	resetTableDirectionLanguageFullTestManualStand();
 	resetTableRowsFullTestManualStand();
-
-	for (int i = 0; i < checkedManualChecks.size(); i++)
-		cableRows[i]->manualCheckBox->setChecked(checkedManualChecks[i]);
 }
 
 void TestWindow::resetTableHeaderLanguageFullTestManualStand()
@@ -99,7 +88,6 @@ void TestWindow::resetTableHeaderLanguageFullTestManualStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
-#ifdef QT5
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Разъём"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
@@ -109,9 +97,7 @@ void TestWindow::resetTableHeaderLanguageFullTestManualStand()
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Проверка"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Статус"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Исправно"));
-#elif QT6
 
-#endif // QT5
 		mainTableHeaderLabels->push_back("");
 		break;
 

@@ -197,7 +197,7 @@ void TestWindow::initUiTable()
 	mainTableWidget = new QTableWidget(mainLayoutWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
 	mainTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
-	mainTableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+	mainTableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
 	mainTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 	mainTableHeaderLabels = new QStringList();
 	mainVLayout->addWidget(mainTableWidget);
@@ -495,7 +495,6 @@ void TestWindow::resetTheme()
 		sleepButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 		fileNameLabel->setStyleSheet(lightStyles.testwindowLableBlock);
-		resetIconMoreButton(LIGHT_THEME);
 
 		switch (testType)
 		{
@@ -527,6 +526,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
 			outManualTestAutoStandTestTimeComboBox->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
+			resetIconMoreButton(LIGHT_THEME);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -535,6 +535,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
 			inManualTestAutoStandTestTimeComboBox->setStyleSheet(lightStyles.testwindowTestTimeComboBox);
+			resetIconMoreButton(LIGHT_THEME);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
@@ -543,6 +544,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
 			autoStandStartTestButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+			resetIconMoreButton(LIGHT_THEME);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -551,6 +553,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
 			autoStandStartTestButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+			resetIconMoreButton(LIGHT_THEME);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
@@ -560,6 +563,7 @@ void TestWindow::resetTheme()
 				autoStandConnectButton->setStyleSheet(lightStyles.testwindowConnectButtonStyleDisconnected);
 			autoStandStartTestButton->setStyleSheet(lightStyles.testwindowButtonStyle);
 			fullTestSortButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+			resetIconMoreButton(LIGHT_THEME);
 			break;
 
 		default:
@@ -581,7 +585,6 @@ void TestWindow::resetTheme()
 		sleepButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 		fileNameLabel->setStyleSheet(darkStyles.testwindowLableBlock);
-		resetIconMoreButton(DARK_THEME);
 
 		switch (testType)
 		{
@@ -614,6 +617,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
 			outManualTestAutoStandTestTimeComboBox->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
+			resetIconMoreButton(DARK_THEME);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -622,6 +626,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
 			inManualTestAutoStandTestTimeComboBox->setStyleSheet(darkStyles.testwindowTestTimeComboBox);
+			resetIconMoreButton(DARK_THEME);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
@@ -630,6 +635,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
 			autoStandStartTestButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+			resetIconMoreButton(DARK_THEME);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -638,6 +644,7 @@ void TestWindow::resetTheme()
 			else
 				autoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
 			autoStandStartTestButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+			resetIconMoreButton(DARK_THEME);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
@@ -647,6 +654,7 @@ void TestWindow::resetTheme()
 				autoStandConnectButton->setStyleSheet(darkStyles.testwindowConnectButtonStyleDisconnected);
 			autoStandStartTestButton->setStyleSheet(darkStyles.testwindowButtonStyle);
 			fullTestSortButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+			resetIconMoreButton(DARK_THEME);
 			break;
 
 		default:
@@ -1420,9 +1428,6 @@ void TestWindow::initTableAdditionalManualChecks(int currentRowNum, QWidget* man
 	QSpacerItem* leftSpacer = new QSpacerItem(10, 1, QSizePolicy::Expanding);
 	manualChecksHLayout->addItem(leftSpacer);
 
-	QCheckBox* checkBox = new QCheckBox(manualChecksWidget);
-	checkBox->setStyleSheet(lightStyles.testwindowManualCheckBox);
-	cableRows[currentRowNum]->manualCheckBox = checkBox;
 	manualChecksHLayout->addWidget(cableRows[currentRowNum]->manualCheckBox);
 
 	QSpacerItem* rightSpacer = new QSpacerItem(10, 1, QSizePolicy::Expanding);

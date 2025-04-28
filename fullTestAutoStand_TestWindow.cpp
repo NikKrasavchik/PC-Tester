@@ -87,7 +87,6 @@ void TestWindow::resetTableHeaderLanguageFullTestAutoStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
-#ifdef QT5
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Разъём"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Пин"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Название"));
@@ -95,9 +94,6 @@ void TestWindow::resetTableHeaderLanguageFullTestAutoStand()
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Тип"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Стенд"));
 		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("ПК"));
-#elif QT6
-
-#endif // QT5
 
 		mainTableHeaderLabels->push_back("");
 		break;
