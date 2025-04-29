@@ -38,8 +38,9 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 	initDarkStyleSheets();
 	resetTheme();
 
-	//ui->title->setText("PC-Tester");
 	setTitle(windowType);
+
+	this->windowType = windowType;
 
 	setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
 	setAttribute(Qt::WA_TranslucentBackground);
@@ -133,6 +134,8 @@ void WindowFrame::showHeaderContextMenu(const QPoint& pos) {
 /// @brief Handler for the "Close" button click signal.
 void WindowFrame::on_close_clicked()
 {
+	if(windowType == WindowType::MAINWINDOW)
+		close();
 	mMainBody->close();
 }
 
@@ -253,7 +256,8 @@ void WindowFrame::mouseReleaseEvent(QMouseEvent* event) {
 
 /// @brief Handler for the mouse double-click event within the window.
 /// @param event Pointer to the mouse double-click event object (QMouseEvent).
-void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) {
+void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) 
+{
 	if (event->buttons() == Qt::LeftButton) {
 		QWidget* widget = childAt(event->position().x(), event->position().y());
 		if (widget == ui->LHeader) {
@@ -297,8 +301,9 @@ void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) {
 /// @param message Pointer to a structure containing event information (void*).
 /// @param result Pointer to a variable for returning the result (long*).
 /// @return The return value, true if the event was handled, otherwise false.
-bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, long* result) {
-	Q_UNUSED(eventType)
+bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintptr* result)
+{
+	//Q_UNUSED(eventType)
 		MSG* param = static_cast<MSG*>(message);
 
 	if (param->message == WM_NCHITTEST) {
@@ -337,13 +342,13 @@ bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, long* 
 			*result = HTBOTTOM;
 		}
 		else {
-			return QWidget::nativeEvent(eventType, message, (qintptr*)result);
+			return QWidget::nativeEvent(eventType, message, result);
 		}
 
 		return true;
 	}
 
-	return QWidget::nativeEvent(eventType, message, (qintptr*)result);
+	return QWidget::nativeEvent(eventType, message, result);
 }
 
 /// @brief Show or hide the window minimization button.
