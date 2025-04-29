@@ -1,31 +1,11 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxcellreference.cpp
+
 #include "xlsxcellreference.h"
-#include <QStringList>
+#include "xlsxworksheet_p.h"
+
 #include <QMap>
 #include <QRegularExpression>
+#include <QStringList>
 
 QT_BEGIN_NAMESPACE_XLSX
 
@@ -47,27 +27,21 @@ int intPow(int x, int p)
 
 QString col_to_name(int col_num)
 {
-    static QMap<int, QString> col_cache;
-
-    if (!col_cache.contains(col_num)) {
-        QString col_str;
-        int remainder;
-        while (col_num) {
-            remainder = col_num % 26;
-            if (remainder == 0)
-                remainder = 26;
-            col_str.prepend(QChar('A' + remainder - 1));
-            col_num = (col_num - 1) / 26;
-        }
-        col_cache.insert(col_num, col_str);
+    QString col_str;
+    int remainder;
+    while (col_num) {
+        remainder = col_num % 26;
+        if (remainder == 0)
+            remainder = 26;
+        col_str.prepend(QChar('A' + remainder - 1));
+        col_num = (col_num - 1) / 26;
     }
-
-    return col_cache[col_num];
+    return col_str;
 }
 
 int col_from_name(const QString &col_str)
 {
-    int col = 0;
+    int col  = 0;
     int expn = 0;
     for (int i = col_str.size() - 1; i > -1; --i) {
         col += (col_str[i].unicode() - 'A' + 1) * intPow(26, expn);
@@ -89,20 +63,7 @@ int col_from_name(const QString &col_str)
 /*!
     Constructs an invalid Cell Reference
 */
-CellReference::CellReference()
-    : _row(-1)
-    , _column(-1)
-{
-}
-
-/*!
-    Constructs the Reference from the given \a row, and \a column.
-*/
-CellReference::CellReference(int row, int column)
-    : _row(row)
-    , _column(column)
-{
-}
+CellReference::CellReference() = default;
 
 /*!
     \overload
@@ -124,13 +85,13 @@ CellReference::CellReference(const char *cell)
 
 void CellReference::init(const QString &cell_str)
 {
-    static QRegularExpression re(QStringLiteral("^\\$?([A-Z]{1,3})\\$?(\\d+)$"));
+    static const QRegularExpression re(QStringLiteral("^\\$?([A-Z]{1,3})\\$?(\\d+)$"));
     QRegularExpressionMatch match = re.match(cell_str);
     if (match.hasMatch()) {
         const QString col_str = match.captured(1);
         const QString row_str = match.captured(2);
-        _row = row_str.toInt();
-        _column = col_from_name(col_str);
+        _row                  = row_str.toInt();
+        _column               = col_from_name(col_str);
     }
 }
 
@@ -158,7 +119,7 @@ CellReference::~CellReference()
 QString CellReference::toString(bool row_abs, bool col_abs) const
 {
     if (!isValid())
-        return QString();
+        return {};
 
     QString cell_str;
     if (col_abs)

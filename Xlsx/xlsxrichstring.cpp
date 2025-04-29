@@ -1,30 +1,10 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxrichstring.cpp
+
 #include "xlsxrichstring.h"
-#include "xlsxrichstring_p.h"
+
 #include "xlsxformat_p.h"
+#include "xlsxrichstring_p.h"
+
 #include <QDebug>
 #include <QTextDocument>
 #include <QTextFragment>
@@ -66,7 +46,7 @@ RichString::RichString()
 /*!
     Constructs a plain string with the given \a text.
 */
-RichString::RichString(const QString text)
+RichString::RichString(const QString &text)
     : d(new RichStringPrivate)
 {
     addFragment(text, Format());
@@ -92,7 +72,10 @@ RichString::~RichString()
  */
 RichString &RichString::operator=(const RichString &other)
 {
-    this->d = other.d;
+    if (this != &other) // Self-assignment check [cert-oop54-cpp]
+    {
+        this->d = other.d;
+    }
     return *this;
 }
 
@@ -101,7 +84,13 @@ RichString &RichString::operator=(const RichString &other)
 */
 RichString::operator QVariant() const
 {
-    return QVariant(qMetaTypeId<RichString>(), this);
+    const auto &cref
+#if QT_VERSION >= 0x060000 // Qt 6.0 or over
+        = QMetaType::fromType<RichString>();
+#else
+        = qMetaTypeId<RichString>();
+#endif
+    return QVariant(cref, this);
 }
 
 /*!
@@ -119,7 +108,7 @@ bool RichString::isRichString() const
  */
 bool RichString::isNull() const
 {
-    return d->fragmentTexts.size() == 0;
+    return d->fragmentTexts.isEmpty();
 }
 
 /*!
@@ -127,12 +116,8 @@ bool RichString::isNull() const
  */
 bool RichString::isEmtpy() const
 {
-    foreach (const QString str, d->fragmentTexts) {
-        if (!str.isEmpty())
-            return false;
-    }
-
-    return true;
+    return std::all_of(d->fragmentTexts.begin(), d->fragmentTexts.end(),
+                       [](const QString &str) { return str.isEmpty(); });
 }
 
 /*!
@@ -224,7 +209,7 @@ Format RichString::fragmentFormat(int index) const
 QByteArray RichStringPrivate::idKey() const
 {
     if (_dirty) {
-        RichStringPrivate *rs = const_cast<RichStringPrivate *>(this);
+        auto rs = const_cast<RichStringPrivate *>(this);
         QByteArray bytes;
         if (fragmentTexts.size() == 1) {
             bytes = fragmentTexts[0].toUtf8();

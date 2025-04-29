@@ -1,36 +1,15 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxformat.h
+
 #ifndef QXLSX_FORMAT_H
 #define QXLSX_FORMAT_H
 
 #include "xlsxglobal.h"
-#include <QFont>
-#include <QColor>
+
 #include <QByteArray>
-#include <QList>
+#include <QColor>
 #include <QExplicitlySharedDataPointer>
+#include <QFont>
+#include <QList>
 #include <QVariant>
 
 class FormatTest;
@@ -44,7 +23,8 @@ class RichStringPrivate;
 class SharedStrings;
 
 class FormatPrivate;
-class Q_XLSX_EXPORT Format
+
+class QXLSX_EXPORT Format
 {
 public:
     enum FontScript { FontScriptNormal, FontScriptSuper, FontScriptSub };
@@ -160,7 +140,7 @@ public:
     VerticalAlignment verticalAlignment() const;
     void setVerticalAlignment(VerticalAlignment align);
     bool textWrap() const;
-    void setTextWarp(bool textWrap);
+    void setTextWrap(bool textWrap);
     int rotation() const;
     void setRotation(int rotation);
     int indent() const;
@@ -213,8 +193,10 @@ public:
     bool operator!=(const Format &format) const;
 
     QVariant property(int propertyId, const QVariant &defaultValue = QVariant()) const;
-    void setProperty(int propertyId, const QVariant &value, const QVariant &clearValue = QVariant(),
-                     bool detach = true);
+    void setProperty(int propertyId,
+                     const QVariant &value,
+                     const QVariant &clearValue = QVariant(),
+                     bool detach                = true);
     void clearProperty(int propertyId);
     bool hasProperty(int propertyId) const;
 
@@ -257,7 +239,7 @@ public:
 private:
     friend class Styles;
     friend class ::FormatTest;
-    friend Q_XLSX_EXPORT QDebug operator<<(QDebug, const Format &f);
+    friend QDebug operator<<(QDebug, const Format &f);
 
     int theme() const;
 
@@ -265,7 +247,7 @@ private:
 };
 
 #ifndef QT_NO_DEBUG_STREAM
-Q_XLSX_EXPORT QDebug operator<<(QDebug dbg, const Format &f);
+QDebug operator<<(QDebug dbg, const Format &f);
 #endif
 
 QT_END_NAMESPACE_XLSX

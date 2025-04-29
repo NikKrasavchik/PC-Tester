@@ -37,21 +37,21 @@
 //
 
 #include "xlsxglobal.h"
+
+#include <QIODevice>
 #include <QList>
 #include <QString>
-class QIODevice;
 
-namespace QXlsx {
+QT_BEGIN_NAMESPACE_XLSX
 
-struct XlsxRelationship
-{
+struct XlsxRelationship {
     QString id;
     QString type;
     QString target;
     QString targetMode;
 };
 
-class XLSX_AUTOTEST_EXPORT Relationships
+class Relationships
 {
 public:
     Relationships();
@@ -64,7 +64,8 @@ public:
     void addDocumentRelationship(const QString &relativeType, const QString &target);
     void addPackageRelationship(const QString &relativeType, const QString &target);
     void addMsPackageRelationship(const QString &relativeType, const QString &target);
-    void addWorksheetRelationship(const QString &relativeType, const QString &target,
+    void addWorksheetRelationship(const QString &relativeType,
+                                  const QString &target,
                                   const QString &targetMode = QString());
 
     void saveToXmlFile(QIODevice *device) const;
@@ -79,10 +80,13 @@ public:
 
 private:
     QList<XlsxRelationship> relationships(const QString &type) const;
-    void addRelationship(const QString &type, const QString &target,
+    void addRelationship(const QString &type,
+                         const QString &target,
                          const QString &targetMode = QString());
 
     QList<XlsxRelationship> m_relationships;
 };
-}
+
+QT_END_NAMESPACE_XLSX
+
 #endif // XLSXRELATIONSHIPS_H

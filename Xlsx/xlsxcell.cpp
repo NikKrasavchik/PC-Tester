@@ -1,35 +1,20 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxcell.cpp
+
 #include "xlsxcell.h"
+
 #include "xlsxcell_p.h"
 #include "xlsxformat.h"
 #include "xlsxformat_p.h"
 #include "xlsxutility_p.h"
-#include "xlsxworksheet.h"
 #include "xlsxworkbook.h"
+#include "xlsxworksheet.h"
+
+#include <cmath>
+
+#include <QDate>
 #include <QDateTime>
+#include <QDebug>
+#include <QTime>
 
 QT_BEGIN_NAMESPACE_XLSX
 
@@ -39,12 +24,13 @@ CellPrivate::CellPrivate(Cell *p)
 }
 
 CellPrivate::CellPrivate(const CellPrivate *const cp)
-    : value(cp->value)
-    , formula(cp->formula)
+    : parent(cp->parent)
     , cellType(cp->cellType)
+    , value(cp->value)
+    , formula(cp->formula)
     , format(cp->format)
     , richString(cp->richString)
-    , parent(cp->parent)
+    , styleNumber(cp->styleNumber)
 {
 }
 
@@ -58,10 +44,10 @@ CellPrivate::CellPrivate(const CellPrivate *const cp)
 /*!
   \enum Cell::CellType
   \value BooleanType      Boolean type
-  \value NumberType       Number type, can be blank or used with forumula
+  \value NumberType       Number type, can be blank or used with formula
   \value ErrorType        Error type
   \value SharedStringType Shared string type
-  \value StringType       String type, can be used with forumula
+  \value StringType       String type, can be used with formula
   \value InlineStringType Inline string type
   */
 
@@ -69,13 +55,19 @@ CellPrivate::CellPrivate(const CellPrivate *const cp)
  * \internal
  * Created by Worksheet only.
  */
-Cell::Cell(const QVariant &data, CellType type, const Format &format, Worksheet *parent)
+// qint32 styleIndex = (-1)
+Cell::Cell(const QVariant &data,
+           CellType type,
+           const Format &format,
+           Worksheet *parent,
+           qint32 styleIndex)
     : d_ptr(new CellPrivate(this))
 {
-    d_ptr->value = data;
-    d_ptr->cellType = type;
-    d_ptr->format = format;
-    d_ptr->parent = parent;
+    d_ptr->value       = data;
+    d_ptr->cellType    = type;
+    d_ptr->format      = format;
+    d_ptr->parent      = parent;
+    d_ptr->styleNumber = styleIndex;
 }
 
 /*!
@@ -101,6 +93,7 @@ Cell::~Cell()
 Cell::CellType Cell::cellType() const
 {
     Q_D(const Cell);
+
     return d->cellType;
 }
 
@@ -110,7 +103,115 @@ Cell::CellType Cell::cellType() const
 QVariant Cell::value() const
 {
     Q_D(const Cell);
+
     return d->value;
+}
+
+/*!
+ * Return the data content of this Cell for reading
+ */
+QVariant Cell::readValue() const
+{
+    Q_D(const Cell);
+
+    QVariant ret; // return value
+    ret = d->value;
+
+    Format fmt = this->format();
+
+    if (isDateTime()) {
+        QVariant vDT = dateTime();
+        if (vDT.isNull()) {
+            return QVariant();
+        }
+
+// https://github.com/QtExcel/QXlsx/issues/171
+// https://www.qt.io/blog/whats-new-in-qmetatype-qvariant
+#if QT_VERSION >= 0x060000 // Qt 6.0 or over
+        if (vDT.metaType().id() == QMetaType::QDateTime) {
+            ret = vDT;
+        } else if (vDT.metaType().id() == QMetaType::QDate) {
+            ret = vDT;
+        } else if (vDT.metaType().id() == QMetaType::QTime) {
+            ret = vDT;
+        } else {
+            return QVariant();
+        }
+#else
+        if (vDT.type() == QVariant::DateTime) {
+            ret = vDT;
+        } else if (vDT.type() == QVariant::Date) {
+            ret = vDT;
+        } else if (vDT.type() == QVariant::Time) {
+            ret = vDT;
+        } else {
+            return QVariant();
+        }
+#endif
+
+        // QDateTime dt = dateTime();
+        // ret = dt;
+
+        // QString strFormat = fmt.numberFormat();
+        // if (!strFormat.isEmpty())
+        // {
+        // 	// TODO: use number format
+        // }
+
+        // qint32 styleNo = d->styleNumber;
+
+        // if (styleNo == 10)
+        // {
+        // }
+
+        // if (styleNo == 11)
+        // {
+        // QTime timeValue = dt.time(); // only time. (HH:mm:ss)
+        // ret = timeValue;
+        // return ret;
+        // }
+
+        // if (styleNo == 12)
+        // {
+        // }
+
+        // if (styleNo == 13) // (HH:mm:ss)
+        // {
+        // double dValue = d->value.toDouble();
+        // int day = int(dValue); // unit is day.
+        // double deciamlPointValue1 = dValue - double(day);
+
+        // double dHour = deciamlPointValue1 * (double(1.0) / double(24.0));
+        // int hour = int(dHour);
+
+        // double deciamlPointValue2 = deciamlPointValue1 - (double(hour) * (double(1.0) /
+        // double(24.0))); double dMin = deciamlPointValue2 * (double(1.0) / double(60.0)); int min
+        // = int(dMin);
+
+        // double deciamlPointValue3 = deciamlPointValue2 - (double(min) * (double(1.0) /
+        // double(60.0))); double dSec = deciamlPointValue3 * (double(1.0) / double(60.0)); int sec
+        // = int(dSec);
+
+        // int totalHour = hour + (day * 24);
+
+        // QString strTime;
+        // strTime = QString("%1:%2:%3").arg(totalHour).arg(min).arg(sec);
+        // ret = strTime;
+
+        // return ret;
+        // }
+
+        // return ret;
+        // */
+    }
+
+    if (hasFormula()) {
+        QString formulaString = this->formula().formulaText();
+        ret                   = formulaString;
+        return ret; // return formula string
+    }
+
+    return ret;
 }
 
 /*!
@@ -119,6 +220,7 @@ QVariant Cell::value() const
 Format Cell::format() const
 {
     Q_D(const Cell);
+
     return d->format;
 }
 
@@ -128,6 +230,7 @@ Format Cell::format() const
 bool Cell::hasFormula() const
 {
     Q_D(const Cell);
+
     return d->formula.isValid();
 }
 
@@ -137,6 +240,7 @@ bool Cell::hasFormula() const
 CellFormula Cell::formula() const
 {
     Q_D(const Cell);
+
     return d->formula;
 }
 
@@ -146,22 +250,52 @@ CellFormula Cell::formula() const
 bool Cell::isDateTime() const
 {
     Q_D(const Cell);
-    if (d->cellType == NumberType && d->value.toDouble() >= 0 && d->format.isValid()
-        && d->format.isDateTimeFormat()) {
-        return true;
+
+    Cell::CellType cellType = d->cellType;
+    double dValue           = d->value.toDouble(); // number
+    //	QString strValue = d->value.toString().toUtf8();
+    bool isValidFormat    = d->format.isValid();
+    bool isDateTimeFormat = d->format.isDateTimeFormat(); // datetime format
+
+    // dev67
+    if (cellType == NumberType || cellType == DateType || cellType == CustomType) {
+        if (dValue >= 0 && isValidFormat && isDateTimeFormat) {
+            return true;
+        }
     }
+
     return false;
 }
 
 /*!
  * Return the data time value.
  */
+/*
 QDateTime Cell::dateTime() const
 {
+        Q_D(const Cell);
+
+        if (!isDateTime())
+                return QDateTime();
+
+        return datetimeFromNumber(d->value.toDouble(), d->parent->workbook()->isDate1904());
+}
+*/
+QVariant Cell::dateTime() const
+{
     Q_D(const Cell);
-    if (!isDateTime())
-        return QDateTime();
-    return datetimeFromNumber(d->value.toDouble(), d->parent->workbook()->isDate1904());
+
+    if (!isDateTime()) {
+        return QVariant();
+    }
+
+    // dev57
+
+    QVariant ret;
+    double dValue   = d->value.toDouble();
+    bool isDate1904 = d->parent->workbook()->isDate1904();
+    ret             = datetimeFromNumber(dValue, isDate1904);
+    return ret;
 }
 
 /*!
@@ -170,11 +304,29 @@ QDateTime Cell::dateTime() const
 bool Cell::isRichString() const
 {
     Q_D(const Cell);
-    if (d->cellType != SharedStringType && d->cellType != InlineStringType
-        && d->cellType != StringType)
+
+    if (d->cellType != SharedStringType && d->cellType != InlineStringType &&
+        d->cellType != StringType) {
         return false;
+    }
 
     return d->richString.isRichString();
+}
+
+qint32 Cell::styleNumber() const
+{
+    Q_D(const Cell);
+
+    qint32 ret = d->styleNumber;
+    return ret;
+}
+
+bool Cell::isDateType(CellType cellType, const Format &format)
+{
+    if (cellType == NumberType || cellType == DateType || cellType == CustomType) {
+        return format.isValid() && format.isDateTimeFormat();
+    }
+    return false;
 }
 
 QT_END_NAMESPACE_XLSX

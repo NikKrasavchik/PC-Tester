@@ -36,18 +36,17 @@
 // We mean it.
 //
 
+#include "xlsxabstractooxmlfile.h"
 #include "xlsxglobal.h"
 #include "xlsxrichstring.h"
-#include "xlsxabstractooxmlfile.h"
+
 #include <QHash>
+#include <QIODevice>
 #include <QStringList>
-#include <QSharedPointer>
+#include <QXmlStreamReader>
+#include <QXmlStreamWriter>
 
-class QIODevice;
-class QXmlStreamReader;
-class QXmlStreamWriter;
-
-namespace QXlsx {
+QT_BEGIN_NAMESPACE_XLSX
 
 class XlsxSharedStringInfo
 {
@@ -62,7 +61,7 @@ public:
     int count;
 };
 
-class XLSX_AUTOTEST_EXPORT SharedStrings : public AbstractOOXmlFile
+class SharedStrings : public AbstractOOXmlFile
 {
 public:
     SharedStrings(CreateFlag flag);
@@ -80,12 +79,12 @@ public:
     RichString getSharedString(int index) const;
     QList<RichString> getSharedStrings() const;
 
-    void saveToXmlFile(QIODevice *device) const;
-    bool loadFromXmlFile(QIODevice *device);
+    void saveToXmlFile(QIODevice *device) const override;
+    bool loadFromXmlFile(QIODevice *device) override;
 
 private:
-    void readString(QXmlStreamReader &reader); // <si>
-    void readRichStringPart(QXmlStreamReader &reader, RichString &rich); // <r>
+    void readString(QXmlStreamReader &reader);                            // <si>
+    void readRichStringPart(QXmlStreamReader &reader, RichString &rich);  // <r>
     void readPlainStringPart(QXmlStreamReader &reader, RichString &rich); // <v>
     Format readRichStringPart_rPr(QXmlStreamReader &reader);
     void writeRichStringPart_rPr(QXmlStreamWriter &writer, const Format &format) const;
@@ -94,5 +93,7 @@ private:
     QList<RichString> m_stringList;
     int m_stringCount;
 };
-}
+
+QT_END_NAMESPACE_XLSX
+
 #endif // XLSXSHAREDSTRINGS_H

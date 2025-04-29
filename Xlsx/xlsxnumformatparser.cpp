@@ -1,32 +1,10 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxnumformatparser.cpp
+
 #include "xlsxnumformatparser_p.h"
 
 #include <QString>
 
-namespace QXlsx {
+QT_BEGIN_NAMESPACE_XLSX
 
 bool NumFormatParser::isDateTime(const QString &formatCode)
 {
@@ -51,8 +29,12 @@ bool NumFormatParser::isDateTime(const QString &formatCode)
 
         // quoted plain text block: don't care, ignore
         case '"':
-            while (i < formatCode.length() - 1 && formatCode[++i] != QLatin1Char('"'))
-                ;
+            while (i < formatCode.length() - 1) {
+                ++i;
+                if (formatCode[i] == QLatin1Char('"')) {
+                    break;
+                }
+            }
             break;
 
         // escaped char: don't care, ignore
@@ -63,6 +45,7 @@ bool NumFormatParser::isDateTime(const QString &formatCode)
 
         // date/time can only be positive number,
         // so only the first section of the format make sense.
+        case '#': // this is new an working // https://github.com/QtExcel/QXlsx/issues/190
         case ';':
             return false;
             break;
@@ -91,4 +74,4 @@ bool NumFormatParser::isDateTime(const QString &formatCode)
     return false;
 }
 
-} // namespace QXlsx
+QT_END_NAMESPACE_XLSX

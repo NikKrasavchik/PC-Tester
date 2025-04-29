@@ -1150,7 +1150,7 @@ void ReportWindow::resaveComments()
 // @param const QColor& color = nullptr	- Öûåò òåêñòà, åñëè íå ïåðåäàâàòü ïàðàìåòð, öâåò áóäåò ñòàíäàðòíûì - ÷åðíûé.
 // 
 // @return void
-/*
+
 void writeHorizontalAlignCell(Document& xlsx, int rowStart, int columnStart, int rowEnd, int columnEnd, const QVariant& text, Format formatText, const QColor& color = nullptr)
 {
 
@@ -1256,7 +1256,7 @@ void genereateHeaderTable(Document& xlsx, int maxOffset, bool isAutoStand)
 		xlsx.mergeCells(range, format);
 	}
 }
-*/
+
 QString getStrDirection(QString direction)
 {
 	QString str;
@@ -1394,8 +1394,8 @@ void ReportWindow::on_saveButton_clicked()
 }
 void ReportWindow::generateXlsx()
 {
-}
-/*
+
+
 	typedCableRows.clear();
 		typedCableRows.resize(TYPE_COUNT);
 	for (int i = 0; i < cableRows.size(); i++)
@@ -1524,9 +1524,9 @@ void ReportWindow::generateXlsx()
 								CellRange r(numRow + 1, 6 + (4 * j), numRow + 2, 7 + (4 * j));
 								xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Измереное значени") : QString("Measured values"), tmpHeaderFormat);
 
-								tmpHeaderFormat.setTextWarp(true);
+								tmpHeaderFormat.setTextWrap(true);// 
 								xlsx.mergeCells(r, tmpHeaderFormat);
-								tmpHeaderFormat.setTextWarp(false);
+								tmpHeaderFormat.setTextWrap(false);
 
 								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (4 * j), numRow + 1, 9 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Пороги") : QString("Thresholds "), tmpHeaderFormat);
 								xlsx.write(numRow + 2, 8 + (4 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Мин") : QString("Min"), tmpHeaderFormat);
@@ -1602,9 +1602,9 @@ void ReportWindow::generateXlsx()
 								writeHorizontalAlignCell(xlsx, numRow, 6 + (6 * j), numRow, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Измерение ") + QString::number(j + 1) : QString("Measured ") + QString::number(j + 1), tmpHeaderFormat);
 								xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Измереное значение") : QString("Measured values"), tmpHeaderFormat);
 
-								tmpHeaderFormat.setTextWarp(true);
+								tmpHeaderFormat.setTextWrap(true);
 								xlsx.mergeCells(r, tmpHeaderFormat);
-								tmpHeaderFormat.setTextWarp(false);
+								tmpHeaderFormat.setTextWrap(false);
 
 								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (6 * j), numRow + 1, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Пороги") : QString("Thresholds "), tmpHeaderFormat);
 								writeHorizontalAlignCell(xlsx, numRow + 2, 8 + (6 * j), numRow + 2, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("U, Â") : QString("U, V"), tmpHeaderFormat);
@@ -1729,7 +1729,7 @@ void ReportWindow::generateXlsx()
 		generateWarning(Warnings::ReportWindow::XLSX_SAVE_ERROR);
 	}
 }
-*/
+
 void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 {
 	switch (viewWindowState->appLanguage)

@@ -1,34 +1,10 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxzipreader.cpp
 
 #include "xlsxzipreader_p.h"
 
-#include <C:/Qt/Qt5.12.10/5.12.10/winrt_x64_msvc2017/include/QtGui/5.12.10/QtGui/private/qzipreader_p.h>
-#include <QtCore/qvector.h>
-
-namespace QXlsx {
+#include <C:/Qt/6.9.0/msvc2022_64/include/QtCore/6.9.0/QtCore/private/qzipreader_p.h>
+//C:/Qt/6.9.0/msvc2022_64/include/QtCore/6.9.0/QtCore/private
+QT_BEGIN_NAMESPACE_XLSX
 
 ZipReader::ZipReader(const QString &filePath)
     : m_reader(new QZipReader(filePath))
@@ -48,9 +24,9 @@ ZipReader::~ZipReader()
 
 void ZipReader::init()
 {
-    auto allFiles = m_reader->fileInfoList();
-    foreach (const QZipReader::FileInfo &fi, allFiles) {
-        if (fi.isFile)
+    const auto &allFiles = m_reader->fileInfoList();
+    for (const auto &fi : allFiles) {
+        if (fi.isFile || (!fi.isDir && !fi.isFile && !fi.isSymLink))
             m_filePaths.append(fi.filePath);
     }
 }
@@ -70,4 +46,4 @@ QByteArray ZipReader::fileData(const QString &fileName) const
     return m_reader->fileData(fileName);
 }
 
-} // namespace QXlsx
+QT_END_NAMESPACE_XLSX

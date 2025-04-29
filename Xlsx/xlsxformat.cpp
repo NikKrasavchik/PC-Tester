@@ -1,31 +1,11 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxformat.cpp
+
 #include "xlsxformat.h"
-#include "xlsxformat_p.h"
+
 #include "xlsxcolor_p.h"
+#include "xlsxformat_p.h"
 #include "xlsxnumformatparser_p.h"
+
 #include <QDataStream>
 #include <QDebug>
 
@@ -216,7 +196,10 @@ Format::Format(const Format &other)
  */
 Format &Format::operator=(const Format &other)
 {
-    d = other.d;
+    if (this != &other) // Self-assignment check [cert-oop54-cpp]
+    {
+        this->d = other.d;
+    }
     return *this;
 }
 
@@ -273,6 +256,8 @@ void Format::setNumberFormat(const QString &format)
  */
 bool Format::isDateTimeFormat() const
 {
+    // NOTICE:
+
     if (hasProperty(FormatPrivate::P_NumFmt_FormatCode)) {
         // Custom numFmt, so
         // Gauss from the number string
@@ -293,8 +278,8 @@ bool Format::isDateTimeFormat() const
 }
 
 /*!
-    \internal
-    Set a custom num \a format with the given \a id.
+        \internal
+        Set a custom num \a format with the given \a id.
  */
 void Format::setNumberFormat(int id, const QString &format)
 {
@@ -303,8 +288,8 @@ void Format::setNumberFormat(int id, const QString &format)
 }
 
 /*!
-    \internal
-    Called by styles to fix the numFmt
+        \internal
+        Called by styles to fix the numFmt
  */
 void Format::fixNumberFormat(int id, const QString &format)
 {
@@ -313,16 +298,16 @@ void Format::fixNumberFormat(int id, const QString &format)
 }
 
 /*!
-    \internal
-    Return true if the format has number format.
+        \internal
+        Return true if the format has number format.
  */
 bool Format::hasNumFmtData() const
 {
     if (!d)
         return false;
 
-    if (hasProperty(FormatPrivate::P_NumFmt_Id)
-        || hasProperty(FormatPrivate::P_NumFmt_FormatCode)) {
+    if (hasProperty(FormatPrivate::P_NumFmt_Id) ||
+        hasProperty(FormatPrivate::P_NumFmt_FormatCode)) {
         return true;
     }
     return false;
@@ -532,7 +517,7 @@ int Format::fontIndex() const
  */
 void Format::setFontIndex(int index)
 {
-    d->font_index = index;
+    d->font_index       = index;
     d->font_index_valid = true;
 }
 
@@ -548,11 +533,12 @@ QByteArray Format::fontKey() const
         QByteArray key;
         QDataStream stream(&key, QIODevice::WriteOnly);
         for (int i = FormatPrivate::P_Font_STARTID; i < FormatPrivate::P_Font_ENDID; ++i) {
-            if (d->properties.contains(i))
-                stream << i << d->properties[i];
+            auto it = d->properties.constFind(i);
+            if (it != d->properties.constEnd())
+                stream << i << it.value();
         };
 
-        const_cast<Format *>(this)->d->font_key = key;
+        const_cast<Format *>(this)->d->font_key   = key;
         const_cast<Format *>(this)->d->font_dirty = false;
     }
 
@@ -560,8 +546,8 @@ QByteArray Format::fontKey() const
 }
 
 /*!
-    \internal
-    Return true if the format has font format, otherwise return false.
+        \internal
+        Return true if the format has font format, otherwise return false.
  */
 bool Format::hasFontData() const
 {
@@ -589,14 +575,14 @@ Format::HorizontalAlignment Format::horizontalAlignment() const
  */
 void Format::setHorizontalAlignment(HorizontalAlignment align)
 {
-    if (hasProperty(FormatPrivate::P_Alignment_Indent)
-        && (align != AlignHGeneral && align != AlignLeft && align != AlignRight
-            && align != AlignHDistributed)) {
+    if (hasProperty(FormatPrivate::P_Alignment_Indent) &&
+        (align != AlignHGeneral && align != AlignLeft && align != AlignRight &&
+         align != AlignHDistributed)) {
         clearProperty(FormatPrivate::P_Alignment_Indent);
     }
 
-    if (hasProperty(FormatPrivate::P_Alignment_ShinkToFit)
-        && (align == AlignHFill || align == AlignHJustify || align == AlignHDistributed)) {
+    if (hasProperty(FormatPrivate::P_Alignment_ShinkToFit) &&
+        (align == AlignHFill || align == AlignHJustify || align == AlignHDistributed)) {
         clearProperty(FormatPrivate::P_Alignment_ShinkToFit);
     }
 
@@ -631,7 +617,7 @@ bool Format::textWrap() const
 /*!
  * Enable the text wrap if \a wrap is true.
  */
-void Format::setTextWarp(bool wrap)
+void Format::setTextWrap(bool wrap)
 {
     if (wrap && hasProperty(FormatPrivate::P_Alignment_ShinkToFit))
         clearProperty(FormatPrivate::P_Alignment_ShinkToFit);
@@ -648,7 +634,7 @@ int Format::rotation() const
 }
 
 /*!
- * Set the text roation with the given \a rotation. Must be in the range [0, 180] or 255.
+ * Set the text rotation with the given \a rotation. Must be in the range [0, 180] or 255.
  */
 void Format::setRotation(int rotation)
 {
@@ -766,7 +752,7 @@ QColor Format::leftBorderColor() const
 }
 
 /*!
-    Sets the left border color to the given \a color
+        Sets the left border color to the given \a color
 */
 void Format::setLeftBorderColor(const QColor &color)
 {
@@ -774,7 +760,7 @@ void Format::setLeftBorderColor(const QColor &color)
 }
 
 /*!
-    Returns the right border style.
+        Returns the right border style.
 */
 Format::BorderStyle Format::rightBorderStyle() const
 {
@@ -782,7 +768,7 @@ Format::BorderStyle Format::rightBorderStyle() const
 }
 
 /*!
-    Sets the right border style to the given \a style.
+        Sets the right border style to the given \a style.
 */
 void Format::setRightBorderStyle(BorderStyle style)
 {
@@ -790,7 +776,7 @@ void Format::setRightBorderStyle(BorderStyle style)
 }
 
 /*!
-    Returns the right border color.
+        Returns the right border color.
 */
 QColor Format::rightBorderColor() const
 {
@@ -798,7 +784,7 @@ QColor Format::rightBorderColor() const
 }
 
 /*!
-    Sets the right border color to the given \a color
+        Sets the right border color to the given \a color
 */
 void Format::setRightBorderColor(const QColor &color)
 {
@@ -806,7 +792,7 @@ void Format::setRightBorderColor(const QColor &color)
 }
 
 /*!
-    Returns the top border style.
+        Returns the top border style.
 */
 Format::BorderStyle Format::topBorderStyle() const
 {
@@ -814,7 +800,7 @@ Format::BorderStyle Format::topBorderStyle() const
 }
 
 /*!
-    Sets the top border style to the given \a style.
+        Sets the top border style to the given \a style.
 */
 void Format::setTopBorderStyle(BorderStyle style)
 {
@@ -822,7 +808,7 @@ void Format::setTopBorderStyle(BorderStyle style)
 }
 
 /*!
-    Returns the top border color.
+        Returns the top border color.
 */
 QColor Format::topBorderColor() const
 {
@@ -830,7 +816,7 @@ QColor Format::topBorderColor() const
 }
 
 /*!
-    Sets the top border color to the given \a color.
+        Sets the top border color to the given \a color.
 */
 void Format::setTopBorderColor(const QColor &color)
 {
@@ -838,7 +824,7 @@ void Format::setTopBorderColor(const QColor &color)
 }
 
 /*!
-    Returns the bottom border style.
+        Returns the bottom border style.
 */
 Format::BorderStyle Format::bottomBorderStyle() const
 {
@@ -846,7 +832,7 @@ Format::BorderStyle Format::bottomBorderStyle() const
 }
 
 /*!
-    Sets the bottom border style to the given \a style.
+        Sets the bottom border style to the given \a style.
 */
 void Format::setBottomBorderStyle(BorderStyle style)
 {
@@ -854,7 +840,7 @@ void Format::setBottomBorderStyle(BorderStyle style)
 }
 
 /*!
-    Returns the bottom border color.
+        Returns the bottom border color.
 */
 QColor Format::bottomBorderColor() const
 {
@@ -862,7 +848,7 @@ QColor Format::bottomBorderColor() const
 }
 
 /*!
-    Sets the bottom border color to the given \a color.
+        Sets the bottom border color to the given \a color.
 */
 void Format::setBottomBorderColor(const QColor &color)
 {
@@ -870,7 +856,7 @@ void Format::setBottomBorderColor(const QColor &color)
 }
 
 /*!
-    Return the diagonla border style.
+        Return the diagonla border style.
 */
 Format::BorderStyle Format::diagonalBorderStyle() const
 {
@@ -878,7 +864,7 @@ Format::BorderStyle Format::diagonalBorderStyle() const
 }
 
 /*!
-    Sets the diagonal border style to the given \a style.
+        Sets the diagonal border style to the given \a style.
 */
 void Format::setDiagonalBorderStyle(BorderStyle style)
 {
@@ -886,7 +872,7 @@ void Format::setDiagonalBorderStyle(BorderStyle style)
 }
 
 /*!
-    Returns the diagonal border type.
+        Returns the diagonal border type.
 */
 Format::DiagonalBorderType Format::diagonalBorderType() const
 {
@@ -894,7 +880,7 @@ Format::DiagonalBorderType Format::diagonalBorderType() const
 }
 
 /*!
-    Sets the diagonal border type to the given \a style
+        Sets the diagonal border type to the given \a style
 */
 void Format::setDiagonalBorderType(DiagonalBorderType style)
 {
@@ -902,7 +888,7 @@ void Format::setDiagonalBorderType(DiagonalBorderType style)
 }
 
 /*!
-    Returns the diagonal border color.
+        Returns the diagonal border color.
 */
 QColor Format::diagonalBorderColor() const
 {
@@ -910,7 +896,7 @@ QColor Format::diagonalBorderColor() const
 }
 
 /*!
-    Sets the diagonal border color to the given \a color
+        Sets the diagonal border color to the given \a color
 */
 void Format::setDiagonalBorderColor(const QColor &color)
 {
@@ -918,8 +904,8 @@ void Format::setDiagonalBorderColor(const QColor &color)
 }
 
 /*!
-    \internal
-    Returns whether this format has been set valid border index.
+        \internal
+        Returns whether this format has been set valid border index.
 */
 bool Format::borderIndexValid() const
 {
@@ -929,8 +915,8 @@ bool Format::borderIndexValid() const
 }
 
 /*!
-    \internal
-    Returns the border index.
+        \internal
+        Returns the border index.
 */
 int Format::borderIndex() const
 {
@@ -944,7 +930,7 @@ int Format::borderIndex() const
  */
 void Format::setBorderIndex(int index)
 {
-    d->border_index = index;
+    d->border_index       = index;
     d->border_index_valid = true;
 }
 
@@ -959,11 +945,12 @@ QByteArray Format::borderKey() const
         QByteArray key;
         QDataStream stream(&key, QIODevice::WriteOnly);
         for (int i = FormatPrivate::P_Border_STARTID; i < FormatPrivate::P_Border_ENDID; ++i) {
-            if (d->properties.contains(i))
-                stream << i << d->properties[i];
+            auto it = d->properties.constFind(i);
+            if (it != d->properties.constEnd())
+                stream << i << it.value();
         };
 
-        const_cast<Format *>(this)->d->border_key = key;
+        const_cast<Format *>(this)->d->border_key   = key;
         const_cast<Format *>(this)->d->border_dirty = false;
     }
 
@@ -971,8 +958,8 @@ QByteArray Format::borderKey() const
 }
 
 /*!
-    \internal
-    Return true if the format has border format, otherwise return false.
+        \internal
+        Return true if the format has border format, otherwise return false.
  */
 bool Format::hasBorderData() const
 {
@@ -987,7 +974,7 @@ bool Format::hasBorderData() const
 }
 
 /*!
-    Return the fill pattern.
+        Return the fill pattern.
 */
 Format::FillPattern Format::fillPattern() const
 {
@@ -995,7 +982,7 @@ Format::FillPattern Format::fillPattern() const
 }
 
 /*!
-    Sets the fill pattern to the given \a pattern.
+        Sets the fill pattern to the given \a pattern.
 */
 void Format::setFillPattern(FillPattern pattern)
 {
@@ -1003,7 +990,7 @@ void Format::setFillPattern(FillPattern pattern)
 }
 
 /*!
-    Returns the foreground color of the pattern.
+        Returns the foreground color of the pattern.
 */
 QColor Format::patternForegroundColor() const
 {
@@ -1011,7 +998,7 @@ QColor Format::patternForegroundColor() const
 }
 
 /*!
-    Sets the foreground color of the pattern with the given \a color.
+        Sets the foreground color of the pattern with the given \a color.
 */
 void Format::setPatternForegroundColor(const QColor &color)
 {
@@ -1021,7 +1008,7 @@ void Format::setPatternForegroundColor(const QColor &color)
 }
 
 /*!
-    Returns the background color of the pattern.
+        Returns the background color of the pattern.
 */
 QColor Format::patternBackgroundColor() const
 {
@@ -1029,7 +1016,7 @@ QColor Format::patternBackgroundColor() const
 }
 
 /*!
-    Sets the background color of the pattern with the given \a color.
+        Sets the background color of the pattern with the given \a color.
 */
 void Format::setPatternBackgroundColor(const QColor &color)
 {
@@ -1063,7 +1050,7 @@ int Format::fillIndex() const
  */
 void Format::setFillIndex(int index)
 {
-    d->fill_index = index;
+    d->fill_index       = index;
     d->fill_index_valid = true;
 }
 
@@ -1079,11 +1066,12 @@ QByteArray Format::fillKey() const
         QByteArray key;
         QDataStream stream(&key, QIODevice::WriteOnly);
         for (int i = FormatPrivate::P_Fill_STARTID; i < FormatPrivate::P_Fill_ENDID; ++i) {
-            if (d->properties.contains(i))
-                stream << i << d->properties[i];
+            auto it = d->properties.constFind(i);
+            if (it != d->properties.constEnd())
+                stream << i << it.value();
         };
 
-        const_cast<Format *>(this)->d->fill_key = key;
+        const_cast<Format *>(this)->d->fill_key   = key;
         const_cast<Format *>(this)->d->fill_dirty = false;
     }
 
@@ -1091,8 +1079,8 @@ QByteArray Format::fillKey() const
 }
 
 /*!
-    \internal
-    Return true if the format has fill format, otherwise return false.
+        \internal
+        Return true if the format has fill format, otherwise return false.
  */
 bool Format::hasFillData() const
 {
@@ -1107,7 +1095,7 @@ bool Format::hasFillData() const
 }
 
 /*!
-    Returns whether the hidden protection property is set to true.
+        Returns whether the hidden protection property is set to true.
 */
 bool Format::hidden() const
 {
@@ -1115,7 +1103,7 @@ bool Format::hidden() const
 }
 
 /*!
-    Sets the hidden protection property with the given \a hidden.
+        Sets the hidden protection property with the given \a hidden.
 */
 void Format::setHidden(bool hidden)
 {
@@ -1123,7 +1111,7 @@ void Format::setHidden(bool hidden)
 }
 
 /*!
-    Returns whether the locked protection property is set to true.
+        Returns whether the locked protection property is set to true.
 */
 bool Format::locked() const
 {
@@ -1131,7 +1119,7 @@ bool Format::locked() const
 }
 
 /*!
-    Sets the locked protection property with the given \a locked.
+        Sets the locked protection property with the given \a locked.
 */
 void Format::setLocked(bool locked)
 {
@@ -1139,22 +1127,23 @@ void Format::setLocked(bool locked)
 }
 
 /*!
-    \internal
-    Return true if the format has protection data, otherwise return false.
+        \internal
+        Return true if the format has protection data, otherwise return false.
  */
 bool Format::hasProtectionData() const
 {
     if (!d)
         return false;
 
-    if (hasProperty(FormatPrivate::P_Protection_Hidden || FormatPrivate::P_Protection_Locked)) {
+    if (hasProperty(FormatPrivate::P_Protection_Hidden) ||
+        hasProperty(FormatPrivate::P_Protection_Locked)) {
         return true;
     }
     return false;
 }
 
 /*!
-    Merges the current format with the properties described by format \a modifier.
+        Merges the current format with the properties described by format \a modifier.
  */
 void Format::mergeFormat(const Format &modifier)
 {
@@ -1174,7 +1163,7 @@ void Format::mergeFormat(const Format &modifier)
 }
 
 /*!
-    Returns true if the format is valid; otherwise returns false.
+        Returns true if the format is valid; otherwise returns false.
  */
 bool Format::isValid() const
 {
@@ -1184,7 +1173,7 @@ bool Format::isValid() const
 }
 
 /*!
-    Returns true if the format is empty; otherwise returns false.
+        Returns true if the format is empty; otherwise returns false.
  */
 bool Format::isEmpty() const
 {
@@ -1212,7 +1201,7 @@ QByteArray Format::formatKey() const
         }
 
         d->formatKey = key;
-        d->dirty = false;
+        d->dirty     = false;
     }
 
     return d->formatKey;
@@ -1226,7 +1215,7 @@ void Format::setXfIndex(int index)
 {
     if (!d)
         d = new FormatPrivate;
-    d->xf_index = index;
+    d->xf_index      = index;
     d->xf_indexValid = true;
 }
 
@@ -1258,7 +1247,7 @@ void Format::setDxfIndex(int index)
 {
     if (!d)
         d = new FormatPrivate;
-    d->dxf_index = index;
+    d->dxf_index      = index;
     d->dxf_indexValid = true;
 }
 
@@ -1285,7 +1274,7 @@ bool Format::dxfIndexValid() const
 }
 
 /*!
-    Returns ture if the \a format is equal to this format.
+        Returns true if the \a format is equal to this format.
 */
 bool Format::operator==(const Format &format) const
 {
@@ -1293,7 +1282,7 @@ bool Format::operator==(const Format &format) const
 }
 
 /*!
-    Returns ture if the \a format is not equal to this format.
+        Returns true if the \a format is not equal to this format.
 */
 bool Format::operator!=(const Format &format) const
 {
@@ -1310,48 +1299,58 @@ int Format::theme() const
  */
 QVariant Format::property(int propertyId, const QVariant &defaultValue) const
 {
-    if (d && d->properties.contains(propertyId))
-        return d->properties[propertyId];
+    if (d) {
+        auto it = d->properties.constFind(propertyId);
+        if (it != d->properties.constEnd())
+            return it.value();
+    }
     return defaultValue;
 }
 
 /*!
  * \internal
  */
-void Format::setProperty(int propertyId, const QVariant &value, const QVariant &clearValue,
+void Format::setProperty(int propertyId,
+                         const QVariant &value,
+                         const QVariant &clearValue,
                          bool detach)
 {
     if (!d)
         d = new FormatPrivate;
 
     if (value != clearValue) {
-        if (d->properties.contains(propertyId) && d->properties[propertyId] == value)
+        auto it = d->properties.constFind(propertyId);
+        if (it != d->properties.constEnd() && it.value() == value)
             return;
+
         if (detach)
             d.detach();
+
         d->properties[propertyId] = value;
     } else {
         if (!d->properties.contains(propertyId))
             return;
+
         if (detach)
             d.detach();
+
         d->properties.remove(propertyId);
     }
 
-    d->dirty = true;
-    d->xf_indexValid = false;
+    d->dirty          = true;
+    d->xf_indexValid  = false;
     d->dxf_indexValid = false;
 
     if (propertyId >= FormatPrivate::P_Font_STARTID && propertyId < FormatPrivate::P_Font_ENDID) {
-        d->font_dirty = true;
+        d->font_dirty       = true;
         d->font_index_valid = false;
-    } else if (propertyId >= FormatPrivate::P_Border_STARTID
-               && propertyId < FormatPrivate::P_Border_ENDID) {
-        d->border_dirty = true;
+    } else if (propertyId >= FormatPrivate::P_Border_STARTID &&
+               propertyId < FormatPrivate::P_Border_ENDID) {
+        d->border_dirty       = true;
         d->border_index_valid = false;
-    } else if (propertyId >= FormatPrivate::P_Fill_STARTID
-               && propertyId < FormatPrivate::P_Fill_ENDID) {
-        d->fill_dirty = true;
+    } else if (propertyId >= FormatPrivate::P_Fill_STARTID &&
+               propertyId < FormatPrivate::P_Fill_ENDID) {
+        d->fill_dirty       = true;
         d->fill_index_valid = false;
     }
 }

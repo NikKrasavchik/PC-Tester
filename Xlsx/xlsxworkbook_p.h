@@ -1,60 +1,26 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxworkbook_p.h
+
 #ifndef XLSXWORKBOOK_P_H
 #define XLSXWORKBOOK_P_H
 
-//
-//  W A R N I N G
-//  -------------
-//
-// This file is not part of the Qt Xlsx API.  It exists for the convenience
-// of the Qt Xlsx.  This header file may change from
-// version to version without notice, or even be removed.
-//
-// We mean it.
-//
-
-#include "xlsxworkbook.h"
 #include "xlsxabstractooxmlfile_p.h"
-#include "xlsxtheme_p.h"
-#include "xlsxsimpleooxmlfile_p.h"
 #include "xlsxrelationships_p.h"
+#include "xlsxsimpleooxmlfile_p.h"
+#include "xlsxtheme_p.h"
+#include "xlsxworkbook.h"
 
-#include <QSharedPointer>
-#include <QPair>
 #include <QStringList>
 
-namespace QXlsx {
+QT_BEGIN_NAMESPACE_XLSX
 
-struct XlsxDefineNameData
-{
+struct XlsxDefineNameData {
     XlsxDefineNameData()
         : sheetId(-1)
     {
     }
-    XlsxDefineNameData(const QString &name, const QString &formula, const QString &comment,
+    XlsxDefineNameData(const QString &name,
+                       const QString &formula,
+                       const QString &comment,
                        int sheetId = -1)
         : name(name)
         , formula(formula)
@@ -75,14 +41,14 @@ class WorkbookPrivate : public AbstractOOXmlFilePrivate
 public:
     WorkbookPrivate(Workbook *q, Workbook::CreateFlag flag);
 
-    QSharedPointer<SharedStrings> sharedStrings;
-    QList<QSharedPointer<AbstractSheet>> sheets;
-    QList<QSharedPointer<SimpleOOXmlFile>> externalLinks;
+    std::shared_ptr<SharedStrings> sharedStrings;
+    QList<std::shared_ptr<AbstractSheet>> sheets;
+    QList<std::shared_ptr<SimpleOOXmlFile>> externalLinks;
     QStringList sheetNames;
-    QSharedPointer<Styles> styles;
-    QSharedPointer<Theme> theme;
-    QList<QSharedPointer<MediaFile>> mediaFiles;
-    QList<QSharedPointer<Chart>> chartFiles;
+    std::shared_ptr<Styles> styles;
+    std::shared_ptr<Theme> theme;
+    QList<std::shared_ptr<MediaFile>> mediaFiles;
+    QList<std::shared_ptr<Chart>> chartFiles;
     QList<XlsxDefineNameData> definedNamesList;
 
     bool strings_to_numbers_enabled;
@@ -105,6 +71,7 @@ public:
     int last_chartsheet_index;
     int last_sheet_id;
 };
-}
+
+QT_END_NAMESPACE_XLSX
 
 #endif // XLSXWORKBOOK_P_H
