@@ -23,7 +23,6 @@
 #include <QFile>
 
 ViewWindowState* viewWindowState;
-#define QT_PATH C:/Qt/6.9.0
 
 int main(int argc, char* argv[])
 {

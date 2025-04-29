@@ -128,9 +128,9 @@ void TestWindow::resetTableDirectionLanguageFullTestManualStand()
 		{
 		case RUSSIAN_LANG:
 			if (cableRows[currentRowNum]->direction == "OUT")
-				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString("Âûõîä"));
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString("Выход"));
 			else if (cableRows[currentRowNum]->direction == "IN")
-				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString("Âõîä"));
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString("Вход"));
 			break;
 
 		case ENGLISH_LANG:
@@ -152,13 +152,13 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 		{
 		case RUSSIAN_LANG:
 			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Öèôðîâîé"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Цифровой"));
 			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ØÈÌ"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ШИМ"));
 			else if (cableRows[currentRowNum]->typeStr == "VNH")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("VNH"));
 			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Àíàëîãîâûé"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Аналоговый"));
 			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HALL"));
 			else if (cableRows[currentRowNum]->typeStr == "HLD")

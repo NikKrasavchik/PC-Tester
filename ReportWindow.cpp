@@ -249,7 +249,7 @@ void ReportWindow::generateTableManual()
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		tableWidget->item(CELL_SIGN_CORRECT)->setText(QString("Ñòàòóñ\nïðîâåðêè"));
+		tableWidget->item(CELL_SIGN_CORRECT)->setText(QString("Статус\nпроверки"));
 		break;
 
 	case ENGLISH_LANG:
@@ -499,8 +499,8 @@ static void generateTableSignOut(QTableWidget* tableWidget, int maxTypeOffset)
 			tableWidget->item(indRowMeasuredVoltage, indColumnMeasuredValuesVoltage)->setText(QString(QString("U, Â")));
 			tableWidget->item(indRowMeasuredCurrent, indColumnMeasuredValuesCurrent)->setText(QString(QString("I, À")));
 			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString(QString("Пороги")));
-			tableWidget->item(indRowThresholdsVoltage, indColumnThresholdsVoltage)->setText(QString(QString("U, Â")));
-			tableWidget->item(indRowThresholdsCurrent, indColumnThresholdsCurrent)->setText(QString(QString("I, À")));
+			tableWidget->item(indRowThresholdsVoltage, indColumnThresholdsVoltage)->setText(QString(QString("U, A")));
+			tableWidget->item(indRowThresholdsCurrent, indColumnThresholdsCurrent)->setText(QString(QString("I, A")));
 			tableWidget->item(indRowThresholdsVoltageMin, indColumnThresholdsVoltageMin)->setText(QString(QString("Мин")));
 			tableWidget->item(indRowThresholdsVoltageMax, indColumnThresholdsVoltageMax)->setText(QString(QString("Макс")));
 			tableWidget->item(indRowThresholdsCurrentMin, indColumnThresholdsCurrentMin)->setText(QString(QString("Мин")));
@@ -511,10 +511,10 @@ static void generateTableSignOut(QTableWidget* tableWidget, int maxTypeOffset)
 			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Measured ") + QString::number(i + 1));
 			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString("Measured values"));
 			tableWidget->item(indRowMeasuredVoltage, indColumnMeasuredValuesVoltage)->setText(QString("U, V"));
-			tableWidget->item(indRowMeasuredCurrent, indColumnMeasuredValuesCurrent)->setText(QString("I, À"));
+			tableWidget->item(indRowMeasuredCurrent, indColumnMeasuredValuesCurrent)->setText(QString("I, A"));
 			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString("Thresholds"));
 			tableWidget->item(indRowThresholdsVoltage, indColumnThresholdsVoltage)->setText(QString("U, V"));
-			tableWidget->item(indRowThresholdsCurrent, indColumnThresholdsCurrent)->setText(QString("I, À"));
+			tableWidget->item(indRowThresholdsCurrent, indColumnThresholdsCurrent)->setText(QString("I, A"));
 			tableWidget->item(indRowThresholdsVoltageMin, indColumnThresholdsVoltageMin)->setText(QString("Min"));
 			tableWidget->item(indRowThresholdsVoltageMax, indColumnThresholdsVoltageMax)->setText(QString("Max"));
 			tableWidget->item(indRowThresholdsCurrentMin, indColumnThresholdsCurrentMin)->setText(QString("Min"));
@@ -1191,7 +1191,7 @@ void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumbe
 	writeHorizontalAlignCell(xlsx, 3, 1, 3, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Имя оператора") : QString("Operator name"), format);
 	writeHorizontalAlignCell(xlsx, 4, 1, 4, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Название блока") : QString("Block name"), format);
 	writeHorizontalAlignCell(xlsx, 5, 1, 5, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Название программы") : QString("App name"), format);
-	writeHorizontalAlignCell(xlsx, 6, 1, 6, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Êîìïëåêòàöèÿ") : QString("Equipment"), format);
+	writeHorizontalAlignCell(xlsx, 6, 1, 6, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Комплектация") : QString("Equipment"), format);
 	writeHorizontalAlignCell(xlsx, 7, 1, 7, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("PART номер") : QString("Part number"), format);
 	writeHorizontalAlignCell(xlsx, 8, 1, 8, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Серийный номер") : QString("Serial number"), format);
 	writeHorizontalAlignCell(xlsx, 9, 1, 9, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Дата производства") : QString("Manufacture date"), format);
