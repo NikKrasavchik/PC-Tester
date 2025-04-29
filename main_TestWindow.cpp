@@ -457,6 +457,12 @@ void TestWindow::slot_switchLanguageButton_clicked()
 
 void TestWindow::slot_reportButton_clicked()
 {
+	if (fullTestSortType != SortType::SortIndex)
+	{
+		fullTestSortType = SortType::SortIndex;
+		rewriteCableRows();
+	}
+	
 	ReportWindow* reportWindow;
 
 	reportWindow = new ReportWindow(cableRows, viewWindowState->selectedBlock);
@@ -1494,7 +1500,7 @@ void TestWindow::rewriteCableRows()
 				}
 
 			}
-		//cableRows.clear();
+
 		hallLabels.clear();
 		for (int i = 0; i < sortComponents.size(); i++)
 		{

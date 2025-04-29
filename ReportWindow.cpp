@@ -1170,7 +1170,7 @@ void writeHorizontalAlignCell(Document& xlsx, int rowStart, int columnStart, int
 // @param QString actualVersion		 - Ñòðîêà âåðñèè áëîêà, êîòîðûé ïðîâåðÿëñÿ.
 // 
 // @return void
-void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testingBlock, QString actualVersion)
+void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumber, TestBlockName testingBlock, QString actualVersion)
 {
 	// Ñîçëàíèå Format, ñ óêàçàíèåì ñòèëåé ó ÿ÷ååê
 	Format format;
@@ -1209,7 +1209,7 @@ void genereateHeaderFile(Document& xlsx, QString testerName, TestBlockName testi
 	writeHorizontalAlignCell(xlsx, 5, 3, 5, 6, Can::getDiagBlock(DiagInformation::Calibration_NAME, testingBlock), format);
 	writeHorizontalAlignCell(xlsx, 6, 3, 6, 6, Can::getDiagBlock(DiagInformation::Equipment_NAME, testingBlock), format);
 	writeHorizontalAlignCell(xlsx, 7, 3, 7, 6, Can::getDiagBlock(DiagInformation::Part_NUMBER, testingBlock), format);
-	writeHorizontalAlignCell(xlsx, 8, 3, 8, 6, Can::getDiagBlock(DiagInformation::Serial_NUMBER, testingBlock), format);
+	writeHorizontalAlignCell(xlsx, 8, 3, 8, 6, serialNumber, format);
 	writeHorizontalAlignCell(xlsx, 9, 3, 9, 6, Can::getDiagBlock(DiagInformation::Manufacture_DATE, testingBlock), format);
 
 
@@ -1410,7 +1410,7 @@ void ReportWindow::generateXlsx()
 		xlsx.currentWorksheet()->setGridLinesVisible(false);
 		xlsx.setColumnWidth(1, 5, 13);
 
-		genereateHeaderFile(xlsx, testerName, testingBlock, viewWindowState->actualVersion);
+		genereateHeaderFile(xlsx, testerName, serialNumber, testingBlock, viewWindowState->actualVersion);
 
 
 		Format format;
