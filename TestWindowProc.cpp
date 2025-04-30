@@ -326,13 +326,14 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType)
 		((CheckButton*)buttons)->checkButton->setFixedSize(FIXED_ACHECK_BUTTON_WIDTH, FIXED_ACHECK_BUTTON_HEIGHT);
 		connect(((CheckButton*)buttons)->checkButton, &QPushButton::clicked, this, &TestTableRowProperties::on_checkButton_clicked);
 	case WindowType::IN_AUTO_TEST_AUTO_STAND:
-
 	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-
 	case WindowType::FULL_TEST_AUTO_STAND:
 		moreButton = new QPushButton();
 		moreButton->setObjectName("moreButton");
 		moreButton->setFixedSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE);
+
+		connect(moreButton, &QPushButton::clicked, this, &TestTableRowProperties::on_moreButton_clicked);
+
 		break;
 
 	}

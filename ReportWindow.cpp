@@ -1710,7 +1710,7 @@ void ReportWindow::generateXlsx()
 			nameFile += "BCM_";
 		nameFile += serialNumber.remove("0") + "-";
 		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
-		for (int i = 1;; i++) // Ïîèñê ôàéëîâ ñ òàêèì æå íàçâàíèåì, åñëè íàõîäèì óíèêàëüíîå íàçâàíèå => âûõîäèì èç öèêëà
+		for (int i = 1;; i++) 
 		{
 			QString tmpNameFile = nameFile + "-test" + QString::number(i) + ".xlsx";
 			if (!QFile::exists(tmpNameFile))
@@ -1721,7 +1721,7 @@ void ReportWindow::generateXlsx()
 		}
 		xlsx.saveAs(nameFile);
 
-		QMessageBox::warning(this, QString("Внимание"), QString("Îò÷¸ò \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
+		QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
 
 	}
 	catch (...)

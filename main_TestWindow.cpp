@@ -1453,7 +1453,6 @@ void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
 	moreCellHLayout->setObjectName("moreCellHLayout");
 	moreCellHLayout->addWidget(cableRows[currentRowNum]->moreButton);
 	moreCellHLayout->setContentsMargins(0, 0, 0, 0);
-	connect(cableRows[currentRowNum]->moreButton, &QPushButton::clicked, cableRows[currentRowNum], &TestTableRowProperties::on_moreButton_clicked);
 	moreCellWidget->setLayout(moreCellHLayout);
 }
 
@@ -1482,8 +1481,9 @@ void TestWindow::rewriteCableRows()
 				{
 					flag = false;
 					std::swap(cableRows[j], cableRows[j + 1]);
-					std::swap(offsetMap[j + 1], offsetMap[j + 2]);
+					std::swap(offsetMap[cableRows[j]->id], offsetMap[cableRows[j+1]->id]);
 				}
+
 			if (flag)
 				break;
 		}
@@ -1526,7 +1526,10 @@ void TestWindow::rewriteCableRows()
 		cableRows.clear();
 		for(TypeCable type : sortTypeMap.keys())
 			for (int i = 0; i < sortTypeMap[type].size(); i++)
+			{
 				cableRows.push_back(sortTypeMap[type][i]);
+				offsetMap[cableRows[cableRows.size() - 1]->id] = cableRows.size() - 1;
+			}
 		break;
 	}
 }

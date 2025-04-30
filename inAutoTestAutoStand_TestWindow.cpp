@@ -152,7 +152,9 @@ void TestWindow::initUiTableRowsInAutoTestAutoStand()
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
 
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
-		initMoreButton(currentRowNum, moreCellWidget);
+		if (cableRows[currentRowNum]->typeInt != TypeCable::CAN_OUT &&
+			cableRows[currentRowNum]->typeInt != TypeCable::LIN_OUT)
+			initMoreButton(currentRowNum, moreCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MORE, moreCellWidget);
 	}
 	resetTableTypeLanguageInAutoTestAutoStand();

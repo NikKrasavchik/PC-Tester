@@ -161,7 +161,9 @@ void TestWindow::initUiTableRowsInManualTestAutoStand()
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
 
 		initAutoCheckButton(currentRowNum, autoCheckCellWidget);
-		initMoreButton(currentRowNum, moreCellWidget);
+		if (cableRows[currentRowNum]->typeInt != TypeCable::CAN_OUT &&
+			cableRows[currentRowNum]->typeInt != TypeCable::LIN_OUT)
+			initMoreButton(currentRowNum, moreCellWidget);
 
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_CHECK, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MORE, moreCellWidget);
