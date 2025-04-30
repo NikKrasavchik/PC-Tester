@@ -2,8 +2,8 @@
 
 #include "xlsxzipreader_p.h"
 
-#include <C:/Qt/6.9.0/msvc2022_64/include/QtCore/6.9.0/QtCore/private/qzipreader_p.h>
-//C:/Qt/6.9.0/msvc2022_64/include/QtCore/6.9.0/QtCore/private
+#include <C:/Qt/6.8.0/msvc2022_64/include/QtCore/6.8.0/QtCore/private/qzipreader_p.h>
+
 QT_BEGIN_NAMESPACE_XLSX
 
 ZipReader::ZipReader(const QString &filePath)
