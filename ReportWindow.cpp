@@ -494,17 +494,17 @@ static void generateTableSignOut(QTableWidget* tableWidget, int maxTypeOffset)
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString(QString("Измерение ") + QString::number(i + 1)));
-			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString(QString("Измереное значение")));
-			tableWidget->item(indRowMeasuredVoltage, indColumnMeasuredValuesVoltage)->setText(QString(QString("U, Â")));
-			tableWidget->item(indRowMeasuredCurrent, indColumnMeasuredValuesCurrent)->setText(QString(QString("I, À")));
-			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString(QString("Пороги")));
-			tableWidget->item(indRowThresholdsVoltage, indColumnThresholdsVoltage)->setText(QString(QString("U, A")));
-			tableWidget->item(indRowThresholdsCurrent, indColumnThresholdsCurrent)->setText(QString(QString("I, A")));
-			tableWidget->item(indRowThresholdsVoltageMin, indColumnThresholdsVoltageMin)->setText(QString(QString("Мин")));
-			tableWidget->item(indRowThresholdsVoltageMax, indColumnThresholdsVoltageMax)->setText(QString(QString("Макс")));
-			tableWidget->item(indRowThresholdsCurrentMin, indColumnThresholdsCurrentMin)->setText(QString(QString("Мин")));
-			tableWidget->item(indRowThresholdsCurrentMax, indColumnThresholdsCurrentMax)->setText(QString(QString("Макс")));
+			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Измерение ") + QString::number(i + 1));
+			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString("Измереное значение"));
+			tableWidget->item(indRowMeasuredVoltage, indColumnMeasuredValuesVoltage)->setText(QString("U, A"));
+			tableWidget->item(indRowMeasuredCurrent, indColumnMeasuredValuesCurrent)->setText(QString("I, A"));
+			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString("Пороги"));
+			tableWidget->item(indRowThresholdsVoltage, indColumnThresholdsVoltage)->setText(QString("U, A"));
+			tableWidget->item(indRowThresholdsCurrent, indColumnThresholdsCurrent)->setText(QString("I, A"));
+			tableWidget->item(indRowThresholdsVoltageMin, indColumnThresholdsVoltageMin)->setText(QString("Мин"));
+			tableWidget->item(indRowThresholdsVoltageMax, indColumnThresholdsVoltageMax)->setText(QString("Макс"));
+			tableWidget->item(indRowThresholdsCurrentMin, indColumnThresholdsCurrentMin)->setText(QString("Мин"));
+			tableWidget->item(indRowThresholdsCurrentMax, indColumnThresholdsCurrentMax)->setText(QString("Макс"));
 			break;
 
 		case ENGLISH_LANG:
@@ -596,11 +596,11 @@ static void generateTableSignInAnalog(QTableWidget* tableWidget, int maxTypeOffs
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString(QString("Измерение ") + QString::number(i + 1)));
-			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString(QString("Измереное значение")));
-			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString(QString("Пороги")));
-			tableWidget->item(indRowThresholdsMin, indColumnThresholdsMin)->setText(QString(QString("Мин")));
-			tableWidget->item(indRowThresholdsMax, indColumnThresholdsMax)->setText(QString(QString("Макс")));
+			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Измерение ") + QString::number(i + 1)));
+			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString("Измереное значение")));
+			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString("Пороги")));
+			tableWidget->item(indRowThresholdsMin, indColumnThresholdsMin)->setText(QString("Мин")));
+			tableWidget->item(indRowThresholdsMax, indColumnThresholdsMax)->setText(QString("Макс")));
 			break;
 
 		case ENGLISH_LANG:
@@ -1388,9 +1388,9 @@ void ReportWindow::on_saveButton_clicked()
 		return;
 	}
 
-	resaveComments(); // Ïåðåñîõðîíÿåì äàííûå èç êîìåíòîâ
+	resaveComments(); 
 
-	generateXlsx(); // Ñîçäàåì ôàéë .xlsx
+	generateXlsx(); 
 }
 void ReportWindow::generateXlsx()
 {
@@ -1607,9 +1607,9 @@ void ReportWindow::generateXlsx()
 								tmpHeaderFormat.setTextWrap(false);
 
 								writeHorizontalAlignCell(xlsx, numRow + 1, 8 + (6 * j), numRow + 1, 11 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Пороги") : QString("Thresholds "), tmpHeaderFormat);
-								writeHorizontalAlignCell(xlsx, numRow + 2, 8 + (6 * j), numRow + 2, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("U, Â") : QString("U, V"), tmpHeaderFormat);
+								writeHorizontalAlignCell(xlsx, numRow + 2, 8 + (6 * j), numRow + 2, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("U, A") : QString("U, V"), tmpHeaderFormat);
 								writeHorizontalAlignCell(xlsx, numRow + 2, 10 + (6 * j), numRow + 2, 11 + (6 * j), QString("I, A"), tmpHeaderFormat);
-								xlsx.write(numRow + 3, 6 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("U, Â") : QString("U, V"), tmpHeaderFormat);
+								xlsx.write(numRow + 3, 6 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("U, A") : QString("U, V"), tmpHeaderFormat);
 								xlsx.write(numRow + 3, 7 + (6 * j), QString("I, A"), tmpHeaderFormat);
 								xlsx.write(numRow + 3, 8 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Мин") : QString("Min"), tmpHeaderFormat);
 								xlsx.write(numRow + 3, 9 + (6 * j), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Макс") : QString("Max"), tmpHeaderFormat);
@@ -1738,14 +1738,14 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 		switch (warning)
 		{
 		case Warnings::ReportWindow::XLSX_SAVE_ERROR: // Warning 0x101
-			QMessageBox::warning(this, QString("Внимание"), QString("Íåèçâåñòíàÿ îøèáêà ïðè ñîçäàíèè äîêóìåíòà .xlsx\nWarning 0x101"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Неизвестная ошибка при создании документа .xlsx\nWarning 0x101"));
 			break;
 
 		case Warnings::ReportWindow::EMPTY_INITIALS: // Warning 0x104
-			QMessageBox::warning(this, QString("Внимание"), QString("Ïóñòîå ïîëÿ \"ÔÈÎ\". Çàïîëíèòå åãî\nWarning 0x104"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Пустое поле \"ФИО\". Заполните его\nWarning 0x104"));
 			break;
 		case Warnings::ReportWindow::EMPTY_SERIAL: // Warning 0x105
-			QMessageBox::warning(this, QString("Внимание"), QString("Ïóñòîå ïîëÿ \"Ñåðèéíûé íîìåð\". Çàïîëíèòå åãî\nWarning 0x105"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Пустое поле \"Серийный номер\". Заполните его\nWarning 0x105"));
 			break;
 		}
 		break;

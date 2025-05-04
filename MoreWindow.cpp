@@ -274,11 +274,11 @@ void MoreWindowOut::resetBlockLanguage(int measuredNum)
 	case RUSSIAN_LANG:
 		mainTableWidget->item(CELL_OUT_SIGN_MEASURED)->setText(QString("Измерение ") + QString::number(measuredNum));
 		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VALUES)->setText(QString("Измеренное значение"));
-		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_CURRENT)->setText(QString("U, Â"));
-		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VOLTAGE)->setText(QString("I, À"));
+		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_CURRENT)->setText(QString("U, A"));
+		mainTableWidget->item(CELL_OUT_SIGN_MEASURED_VOLTAGE)->setText(QString("I, A"));
 		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS)->setText(QString("Пороги"));
-		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_CURRENT)->setText(QString("U, Â"));
-		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_VOLTAGE)->setText(QString("I, À"));
+		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_CURRENT)->setText(QString("U, A"));
+		mainTableWidget->item(CELL_OUT_SIGN_THRESHOLDS_VOLTAGE)->setText(QString("I, A"));
 		mainTableWidget->item(CELL_OUT_SIGN_MIN_CURRENT)->setText(QString("Мин"));
 		mainTableWidget->item(CELL_OUT_SIGN_MAX_CURRENT)->setText(QString("Макс"));
 		mainTableWidget->item(CELL_OUT_SING_MIN_VOLTAGE)->setText(QString("Мин"));
@@ -743,11 +743,11 @@ void MoreWindow::generateWarning(Warnings::MoreWindow warning)
 		switch (warning)
 		{
 		case Warnings::MoreWindow::FILE_NOT_FOUND: // Warning 0x201
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Нет конфигурационного файла. Проверьте наличие в папке и перезапустите приложение\nWarning 0x201"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Нет конфигурационного файла. Проверьте наличие в папке и перезапустите приложение\nWarning 0x201"));
 			break;
 		
 		case Warnings::MoreWindow::OPEN_FILE_ERROR: // Warning 0x202
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Не обнаружен нужный кабель, попробуйте вернутся к исходному конфигурационному файлу\nWarning 0x202"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Не обнаружен нужный кабель, попробуйте вернутся к исходному конфигурационному файлу\nWarning 0x202"));
 			break;
 		}
 		break;

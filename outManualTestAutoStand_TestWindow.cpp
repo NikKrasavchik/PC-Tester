@@ -77,7 +77,7 @@ void TestWindow::resetTableHeaderLanguageOutManualTestAutoStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
-		mainTableHeaderLabels->push_back(QString("Разъём"));
+		mainTableHeaderLabels->push_back(QString("Колодка"));
 		mainTableHeaderLabels->push_back(QString("Пин"));
 		mainTableHeaderLabels->push_back(QString("Название"));
 		mainTableHeaderLabels->push_back(QString("Тип"));

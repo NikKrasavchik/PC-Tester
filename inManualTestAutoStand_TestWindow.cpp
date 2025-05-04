@@ -77,7 +77,7 @@ void TestWindow::resetTableHeaderLanguageInManualTestAutoStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
-		mainTableHeaderLabels->push_back(QString("Разъём"));
+		mainTableHeaderLabels->push_back(QString("Колодка"));
 		mainTableHeaderLabels->push_back(QString("Пин"));
 		mainTableHeaderLabels->push_back(QString("Название"));
 		mainTableHeaderLabels->push_back(QString("Тип"));
@@ -113,13 +113,13 @@ void TestWindow::resetTableTypeLanguageInManualTestAutoStand()
 		{
 		case RUSSIAN_LANG:
 			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Öèôðîâîé"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Цифровой"));
 			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ØÈÌ"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ШИМ"));
 			else if (cableRows[currentRowNum]->typeStr == "VNH")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("VNH"));
 			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Àíàëîãîâûé"));
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Аналоговый"));
 			else if (cableRows[currentRowNum]->typeStr == "HALL")
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HALL"));
 			else if (cableRows[currentRowNum]->typeStr == "HLD")

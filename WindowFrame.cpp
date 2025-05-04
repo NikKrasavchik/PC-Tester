@@ -388,7 +388,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 	{
 	case RUSSIAN_LANG:
 #ifdef QT5
-		tmpStr = QString(" | Äëÿ ðàçðàáîò÷èêà");
+		tmpStr = QString(" | Для разработчика");
 #elif QT6
 
 #endif // QT5
