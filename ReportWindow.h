@@ -22,6 +22,7 @@
 #define LEFT_PADDING_MAIN_WIDGET		10
 #define UP_PADDING_MAIN_WIDGET			10
 
+#define MEASUREMENT_OFFSET_ONE			1
 #define MEASUREMENT_OFFSET_DOUBLE		2
 #define MEASUREMENT_OFFSET_QUADRUPLE	4
 #define MEASUREMENT_OFFSET_SEXTUPLE		6
@@ -29,6 +30,8 @@
 #define MEASUREMENT_OFFSET_OUT			MEASUREMENT_OFFSET_SEXTUPLE
 #define MEASUREMENT_OFFSET_IN			MEASUREMENT_OFFSET_DOUBLE
 #define MEASUREMENT_OFFSET_IN_ANALOG	MEASUREMENT_OFFSET_QUADRUPLE
+#define MEASUREMENT_OFFSET_INFORMATION	MEASUREMENT_OFFSET_DOUBLE
+
 
 #define ROW_COUNT_BASE_TABLE			1
 #define COLUMN_COUNT_BASE_TABLE			6
@@ -142,6 +145,7 @@ private:
 	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
+	void fillTableInformation(std::vector<TestTableRowProperties*> cableRows);
 	
 	void resaveComments();
 

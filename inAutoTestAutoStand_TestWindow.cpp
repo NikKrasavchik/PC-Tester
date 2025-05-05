@@ -107,33 +107,77 @@ void TestWindow::resetTableTypeLanguageInAutoTestAutoStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
+			switch (cableRows[currentRowNum]->typeInt)
+			{
+			case TypeCable::EMPTY:
+				break;
+			case TypeCable::DIG_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Цифровой"));
-			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ШИМ"));
-			else if (cableRows[currentRowNum]->typeStr == "VNH")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("VNH"));
-			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Аналоговый"));
-			else if (cableRows[currentRowNum]->typeStr == "HALL")
+				break;
+			case TypeCable::ANALOG_IN:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Аналоговоый"));
+				break;
+			case TypeCable::HALL_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HALL"));
-			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				break;
+			case TypeCable::DIG_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Цифровой"));
+				break;
+			case TypeCable::PWM_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ШИМ"));
+				break;
+			case TypeCable::VNH_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("VNH"));
+				break;
+			case TypeCable::HLD_OUT:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HLD"));
+				break;
+			case TypeCable::CAN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+				break;
+			case TypeCable::LIN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
+				break;
+			default:
+				break;
+			}
 			break;
 
 		case ENGLISH_LANG:
-			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
+			switch (cableRows[currentRowNum]->typeInt)
+			{
+			case TypeCable::EMPTY:
+				break;
+			case TypeCable::DIG_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
-			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
-			else if (cableRows[currentRowNum]->typeStr == "VNH")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
-			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
+				break;
+			case TypeCable::ANALOG_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Analog");
-			else if (cableRows[currentRowNum]->typeStr == "HALL")
+				break;
+			case TypeCable::HALL_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
-			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				break;
+			case TypeCable::DIG_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
+				break;
+			case TypeCable::PWM_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
+				break;
+			case TypeCable::VNH_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
+				break;
+			case TypeCable::HLD_OUT:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HLD");
+				break;
+			case TypeCable::CAN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+				break;
+			case TypeCable::LIN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
+				break;
+			default:
+				break;
+			}
 			break;
 		}
 	}

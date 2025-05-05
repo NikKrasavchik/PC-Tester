@@ -77,6 +77,14 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 				cableRows[i]->typeStr = "HALL";
 				hallLabels.push_back(std::pair<int, QLabel*> {-1, new QLabel()});
 				break;
+			
+			case TYPE_CAN:
+				cableRows[i]->typeStr = "CAN";
+				break;
+
+			case TYPE_LIN:
+				cableRows[i]->typeStr = "LIN";
+				break;
 
 			default:
 				break;
@@ -105,6 +113,14 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 
 			case TYPE_HLD:
 				cableRows[i]->typeStr = "HLD";
+				break;
+
+			case TYPE_CAN:
+				cableRows[i]->typeStr = "CAN";
+				break;
+
+			case TYPE_LIN:
+				cableRows[i]->typeStr = "LIN";
 				break;
 
 			default:

@@ -406,6 +406,10 @@ void ReportWindow::generateTableAuto()
 		case TypeCable::HLD_OUT:
 			emptySpanColumn += MEASUREMENT_OFFSET_OUT * maxTypeOffset;
 			break;
+		case TypeCable::CAN_OUT:
+		case TypeCable::LIN_OUT:
+			emptySpanColumn += MEASUREMENT_OFFSET_INFORMATION * maxTypeOffset;
+			break;
 		}
 
 		prepareItem(tableWidget, previousRowCount, emptySpanColumn, emptySpanRow, tableWidget->columnCount() - emptySpanColumn - 1);
@@ -596,11 +600,11 @@ static void generateTableSignInAnalog(QTableWidget* tableWidget, int maxTypeOffs
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Измерение ") + QString::number(i + 1)));
-			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString("Измереное значение")));
-			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString("Пороги")));
-			tableWidget->item(indRowThresholdsMin, indColumnThresholdsMin)->setText(QString("Мин")));
-			tableWidget->item(indRowThresholdsMax, indColumnThresholdsMax)->setText(QString("Макс")));
+			tableWidget->item(indRowMeasured, indColumnMeasured)->setText(QString("Измерение ") + QString::number(i + 1));
+			tableWidget->item(indRowMeasuredValues, indColumnMeasuredValues)->setText(QString("Измереное значение"));
+			tableWidget->item(indRowThresholds, indColumnThresholds)->setText(QString("Пороги"));
+			tableWidget->item(indRowThresholdsMin, indColumnThresholdsMin)->setText(QString("Мин"));
+			tableWidget->item(indRowThresholdsMax, indColumnThresholdsMax)->setText(QString("Макс"));
 			break;
 
 		case ENGLISH_LANG:
@@ -617,6 +621,35 @@ static void generateTableSignInAnalog(QTableWidget* tableWidget, int maxTypeOffs
 		indColumnThresholds += MEASUREMENT_OFFSET_IN_ANALOG;
 		indColumnThresholdsMin += MEASUREMENT_OFFSET_IN_ANALOG;
 		indColumnThresholdsMax += MEASUREMENT_OFFSET_IN_ANALOG;
+	}
+}
+
+static void generateTableSignInformation(QTableWidget* tableWidget)
+{
+	int indRowMeasured = tableWidget->rowCount();
+
+	int indColumnMeasured1 = MEASUREMENT_COLUMN_POSITION;
+	int indColumnMeasured2 = MEASUREMENT_COLUMN_POSITION + 2;
+
+	tableWidget->insertRow(tableWidget->rowCount());
+
+	tableWidget->setSpan(indRowMeasured, 0, SPAN_TYPE_IN);
+	tableWidget->setSpan(indRowMeasured, tableWidget->columnCount() - 1, SPAN_TYPE_COMMENT_IN);
+
+	prepareItem(tableWidget, indRowMeasured, indColumnMeasured1, SPAN_HORIZONTAL_DOUBLE);
+	//prepareItem(tableWidget, indRowMeasured, indColumnMeasured2, SPAN_HORIZONTAL_DOUBLE);
+
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		tableWidget->item(indRowMeasured, indColumnMeasured1)->setText(QString("Значение 1"));
+		//tableWidget->item(indRowMeasured, indColumnMeasured2)->setText(QString("Значение 2"));
+		break;
+
+	case ENGLISH_LANG:
+		tableWidget->item(indRowMeasured, indColumnMeasured1)->setText(QString("Value 1"));
+		//tableWidget->item(indRowMeasured, indColumnMeasured2)->setText(QString("Value 2"));
+		break;
 	}
 }
 
@@ -638,6 +671,15 @@ void ReportWindow::generateTableSign(TypeCable type, int maxTypeOffset)
 
 	case TypeCable::ANALOG_IN:
 		generateTableSignInAnalog(tableWidget, maxTypeOffset);
+		break;
+	case TypeCable::CAN_OUT:
+	case TypeCable::LIN_OUT:
+		generateTableSignInformation(tableWidget);
+		if (1)
+		{
+			1;
+
+		}
 		break;
 	}
 }
@@ -726,6 +768,8 @@ void static fillTableColor(TestTableRowProperties* cableRow, int measuredIndex, 
 		
 	case TypeCable::DIG_IN:
 	case TypeCable::HALL_IN:
+	case TypeCable::CAN_OUT:
+	case TypeCable::LIN_OUT:
 		fillTableColorIn(cableRow, tableItems);
 		break;
 
@@ -1097,6 +1141,66 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 	}
 }
 
+void ReportWindow::fillTableInformation(std::vector<TestTableRowProperties*> cableRows)
+{
+	for (int i = 0; i < cableRows.size(); i++)
+	{
+		int indCurrentRow = tableWidget->rowCount();
+		tableWidget->insertRow(indCurrentRow);
+
+		prepareItem(tableWidget, indCurrentRow, IND_COLUMN_BASE_CONNECTOR, SPAN_NONE);
+		prepareItem(tableWidget, indCurrentRow, IND_COLUMN_BASE_PIN, SPAN_NONE);
+		prepareItem(tableWidget, indCurrentRow, IND_COLUMN_BASE_DIRECTION, SPAN_NONE);
+		prepareItem(tableWidget, indCurrentRow, IND_COLUMN_BASE_TYPE, SPAN_NONE);
+		prepareItem(tableWidget, indCurrentRow, IND_COLUMN_BASE_NAME, SPAN_NONE);
+
+		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_CONNECTOR)->setText(cableRows[i]->connectorStr);
+		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_PIN)->setText(cableRows[i]->component);
+		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_NAME)->setText(cableRows[i]->name);
+
+		switch (viewWindowState->appLanguage)
+		{
+		case RUSSIAN_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("Вход"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("Выход"));
+			break;
+
+		case ENGLISH_LANG:
+			if (cableRows[i]->direction == "IN")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("In"));
+			else if (cableRows[i]->direction == "OUT")
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("Out"));
+			break;
+		}
+		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+
+		int indColumnMeasuredValue1 = MEASUREMENT_COLUMN_POSITION;
+
+		prepareItem(tableWidget, indCurrentRow, indColumnMeasuredValue1, SPAN_HORIZONTAL_DOUBLE);
+
+		QTableWidgetItem* tableItems;
+		tableItems = tableWidget->item(indCurrentRow, indColumnMeasuredValue1);
+
+		fillTableColor(cableRows[i], 0, &tableItems);
+		
+		commentsTextEdits.push_back(new QTextEdit());
+		QWidget* commentWidget = new QWidget();
+		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
+		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
+		commentHLayout->setAlignment(Qt::AlignCenter);
+		commentHLayout->setContentsMargins(0, 0, 0, 0);
+		commentWidget->setLayout(commentHLayout);
+		tableWidget->setCellWidget(indCurrentRow, tableWidget->columnCount() - 1, commentWidget);
+		if (cableRows[i]->comment.size() != 0)
+		{
+			prepareItem(tableWidget, indCurrentRow, tableWidget->columnCount() - 1, SPAN_NONE);
+			commentsTextEdits[commentsTextEdits.size() - 1]->setText(cableRows[i]->comment);
+		}
+	}
+}
+
 void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows)
 {
 	switch (type)
@@ -1115,6 +1219,11 @@ void ReportWindow::fillTable(TypeCable type, std::vector<TestTableRowProperties*
 
 	case TypeCable::ANALOG_IN:
 		fillTableInAnalog(cableRows);
+		break;
+	case TypeCable::CAN_OUT:
+	case TypeCable::LIN_OUT:
+		fillTableInformation(cableRows);
+
 		break;
 	}
 }
