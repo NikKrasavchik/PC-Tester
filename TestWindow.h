@@ -145,7 +145,6 @@ public:
 	QString name;
 	QString component;
 	QString direction;
-	QString typeStr;
 	TypeCable typeInt;
 	QString comment;
 	bool manualChecked;

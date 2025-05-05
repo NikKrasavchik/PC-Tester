@@ -311,9 +311,15 @@ void ReportWindow::generateTableManual()
 				break;
 
 			case TypeCable::HALL_IN:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("HALL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
 				break;
 			case TypeCable::CAN_OUT:
 				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("CAN"));
@@ -343,10 +349,19 @@ void ReportWindow::generateTableManual()
 				break;
 
 			case TypeCable::PWM_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("PWM"));
+				break;
 			case TypeCable::HALL_IN:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("HALL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
+				break;
 				break;
 			case TypeCable::CAN_OUT:
 				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("CAN"));
@@ -830,9 +845,15 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 				break;
 
 			case TypeCable::HALL_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HALL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
 				break;
 			}
 			break;
@@ -855,10 +876,19 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 				break;
 
 			case TypeCable::PWM_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("PWM"));
+				break;
 			case TypeCable::HALL_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HALL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
+				break;
 				break;
 			}
 			break;
@@ -962,9 +992,15 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 				break;
 
 			case TypeCable::HALL_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HALL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
 				break;
 			}
 			break;
@@ -987,10 +1023,19 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 				break;
 
 			case TypeCable::PWM_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("PWM"));
+				break;
+
 			case TypeCable::HALL_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HAL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
 				break;
 			}
 			break;
@@ -1065,9 +1110,15 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 				break;
 
 			case TypeCable::HALL_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HALL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
 				break;
 			}
 			break;
@@ -1090,10 +1141,19 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 				break;
 
 			case TypeCable::PWM_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("PWM"));
+				break;
+
 			case TypeCable::HALL_IN:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HALL"));
+				break;
+
 			case TypeCable::VNH_OUT:
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("VNH"));
+				break;
+
 			case TypeCable::HLD_OUT:
-				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
 				break;
 			}
 			break;
@@ -1174,7 +1234,10 @@ void ReportWindow::fillTableInformation(std::vector<TestTableRowProperties*> cab
 				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_DIRECTION)->setText(QString("Out"));
 			break;
 		}
-		tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(cableRows[i]->typeStr);
+		if(cableRows[i]->typeInt == TypeCable::CAN_OUT)
+			tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("CAN"));
+		else
+			tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("LIN"));
 
 		int indColumnMeasuredValue1 = MEASUREMENT_COLUMN_POSITION;
 
@@ -1503,8 +1566,17 @@ void ReportWindow::on_saveButton_clicked()
 }
 void ReportWindow::generateXlsx()
 {
+	QDateTime time = QDateTime::currentDateTime();
+	QString nameFileLog = "Log/Log_Xlsx_";
+	nameFileLog += time.date().toString("dd.MM.yy").replace(".", "_") + "_";
+	nameFileLog += time.time().toString("hh.mm.ss").replace(".", "_") +".txt";
+	std::ofstream out;          // поток для записи
+	out.open(nameFileLog.toStdString());      // открываем файл для записи
 
-
+	if (out.is_open())
+	{
+		out << "Start function \"generateXlsx\" 0x001 " << std::endl;
+	}
 	typedCableRows.clear();
 		typedCableRows.resize(TYPE_COUNT);
 	for (int i = 0; i < cableRows.size(); i++)
@@ -1520,7 +1592,10 @@ void ReportWindow::generateXlsx()
 		xlsx.setColumnWidth(1, 5, 13);
 
 		genereateHeaderFile(xlsx, testerName, serialNumber, testingBlock, viewWindowState->actualVersion);
-
+		if (out.is_open())
+		{
+			out << "\"genereateHeaderFile\" 0x002 " << std::endl;
+		}
 
 		Format format;
 		format.setHorizontalAlignment(Format::AlignHCenter);
@@ -1533,8 +1608,16 @@ void ReportWindow::generateXlsx()
 		if (cableRows[0]->manualCheckBox != nullptr)
 		{
 			genereateHeaderTable(xlsx, maxOffset, false);
+			if (out.is_open())
+			{
+				out << "\"genereateHeaderTable\" 0x003 " << std::endl;
+			}
 			for (int i = 0; i < cableRows.size(); i++)
 			{
+				if (out.is_open())
+				{
+					out << " Start " << QString::number(i).toStdString() << "\"for\"";
+				}
 				Format tmpRowFormat(format);
 				if (i % 2)
 					tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_LIGHT_GREY));
@@ -1561,6 +1644,10 @@ void ReportWindow::generateXlsx()
 				CellRange range(numRow, 6, numRow, 7);
 				xlsx.mergeCells(range, tmpManualStandFormat);
 				numRow++;
+				if (out.is_open())
+				{
+					out << " ||| end for 0x004" << std::endl;
+				}
 			}
 		}
 		else
@@ -1590,7 +1677,7 @@ void ReportWindow::generateXlsx()
 					{
 					case TypeCable::DIG_IN:
 					case TypeCable::HALL_IN:
-						if (i == 0) // Çàãîëîâîê òèïà
+						if (i == 0) 
 						{
 							writeHorizontalAlignCell(xlsx, numRow, 6, numRow, 7, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Знаычение 1") : QString("Value 1"), tmpHeaderFormat);
 							writeHorizontalAlignCell(xlsx, numRow, 8, numRow, 9, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Знаычение 2") : QString("Value 2"), tmpHeaderFormat);
@@ -1624,7 +1711,7 @@ void ReportWindow::generateXlsx()
 						break;
 
 					case TypeCable::ANALOG_IN:
-						if (i == 0) // Çàãîëîâîê òèïà
+						if (i == 0) 
 						{
 							for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 							{
@@ -1703,7 +1790,7 @@ void ReportWindow::generateXlsx()
 					case TypeCable::PWM_OUT:
 					case TypeCable::VNH_OUT:
 					case TypeCable::HLD_OUT: 
-						if (i == 0) // Çàãîëîâîê òèïà
+						if (i == 0) 
 						{
 							for (int j = 0; j < typedCableRows[type][i]->thresholds.size(); j++)
 							{
@@ -1806,8 +1893,11 @@ void ReportWindow::generateXlsx()
 				}
 			}
 		}
+		if (out.is_open())
+		{
+			out << "\"fileName\" 0x005" << std::endl;
+		}
 
-		// Ñîçäàíèå íàçâàíèÿ è ñîõðàíåíèå ôàéëà
 		QDir dir;
 		QDateTime time = QDateTime::currentDateTime();
 
@@ -1819,6 +1909,10 @@ void ReportWindow::generateXlsx()
 			nameFile += "BCM_";
 		nameFile += serialNumber.remove("0") + "-";
 		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
+		if (out.is_open())
+		{
+			out << "\"start for\" 0x006" << std::endl;
+		}
 		for (int i = 1;; i++) 
 		{
 			QString tmpNameFile = nameFile + "-test" + QString::number(i) + ".xlsx";
@@ -1828,10 +1922,21 @@ void ReportWindow::generateXlsx()
 				break;
 			}
 		}
+		if (out.is_open())
+		{
+			out << "\"end for\" 0x007" << std::endl;
+		}
 		xlsx.saveAs(nameFile);
-
+		if (out.is_open())
+		{
+			out << "\"end\" 0x008" << std::endl;
+		}
 		QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
-
+		if (out.is_open())
+		{
+			out << "End function \"generateXlsx\" 0x100 " << std::endl;
+		}
+		out.close();
 	}
 	catch (...)
 	{

@@ -47,7 +47,10 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			else if(cables[i].getType() == TYPE_ANALOG)
 				cableRows[i]->typeInt = TypeCable::ANALOG_IN;
 			else if (cables[i].getType() == TYPE_HALL)
+			{
 				cableRows[i]->typeInt = TypeCable::HALL_IN;
+				hallLabels.push_back(std::pair<int, QLabel*> {-1, new QLabel()});
+			}
 			break;
 		case NOT_SET:
 			connect(cableRows[i], &TestTableRowProperties::Signal_changeStatusCheckInformationBus, this, &TestWindow::Slot_changeStatusCheckInformationBus);
@@ -58,75 +61,6 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			break;
 		}
 
-		if (testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
-			testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
-			testType == WindowType::IN_TEST_MANUAL_STAND ||
-			testType == WindowType::FULL_TEST_AUTO_STAND ||
-			testType == WindowType::FULL_TEST_MANUAL_STAND)
-			switch (cables[i].getType())
-			{
-			case TYPE_DIGITAL:
-				cableRows[i]->typeStr = "DIGITAL";
-				break;
-
-			case TYPE_ANALOG:
-				cableRows[i]->typeStr = "ANALOG";
-				break;
-
-			case TYPE_HALL:
-				cableRows[i]->typeStr = "HALL";
-				hallLabels.push_back(std::pair<int, QLabel*> {-1, new QLabel()});
-				break;
-			
-			case TYPE_CAN:
-				cableRows[i]->typeStr = "CAN";
-				break;
-
-			case TYPE_LIN:
-				cableRows[i]->typeStr = "LIN";
-				break;
-
-			default:
-				break;
-			}
-
-		if (testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
-			testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
-			testType == WindowType::OUT_TEST_MANUAL_STAND ||
-			testType == WindowType::FULL_TEST_AUTO_STAND ||
-			testType == WindowType::FULL_TEST_MANUAL_STAND)
-		{
-			switch (cables[i].getType())
-			{
-			case TYPE_DIGITAL:
-				if (testType != WindowType::FULL_TEST_AUTO_STAND && testType != WindowType::FULL_TEST_MANUAL_STAND)
-					cableRows[i]->typeStr = "DIGITAL";
-				break;
-
-			case TYPE_PWM:
-				cableRows[i]->typeStr = "PWM";
-				break;
-
-			case TYPE_VNH:
-				cableRows[i]->typeStr = "VNH";
-				break;
-
-			case TYPE_HLD:
-				cableRows[i]->typeStr = "HLD";
-				break;
-
-			case TYPE_CAN:
-				cableRows[i]->typeStr = "CAN";
-				break;
-
-			case TYPE_LIN:
-				cableRows[i]->typeStr = "LIN";
-				break;
-
-			default:
-				break;
-			}
-		}
 
 		cableRows[i]->generateInteractionButtons(testType);
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
@@ -146,7 +80,6 @@ TestTableRowProperties::TestTableRowProperties()
 	name = "";
 	component = "";
 	direction = "";
-	typeStr = "";
 	typeInt = TypeCable::EMPTY;
 	comment = "";
 	manualChecked = false;

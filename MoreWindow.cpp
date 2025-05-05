@@ -171,8 +171,41 @@ void MoreWindow::setValues()
 	mainTableWidget->item(CELL_VALUE_BASE_CONNECTOR)->setText(row->connectorStr);
 	mainTableWidget->item(CELL_VALUE_BASE_PIN)->setText(row->pin);
 	mainTableWidget->item(CELL_VALUE_BASE_DIRECTION)->setText(row->direction);
-	mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(row->typeStr);
 	mainTableWidget->item(CELL_VALUE_BASE_NAME)->setText(row->name);
+	switch (row->typeInt)
+	{
+	case TypeCable::EMPTY:
+		break;
+	case TypeCable::DIG_IN:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("DIG"));
+		break;
+	case TypeCable::ANALOG_IN:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("ANALOG"));
+		break;
+	case TypeCable::HALL_IN:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("HALL"));
+		break;
+	case TypeCable::DIG_OUT:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("DIG"));
+		break;
+	case TypeCable::PWM_OUT:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("PWM"));
+		break;
+	case TypeCable::VNH_OUT:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("VNH"));
+		break;
+	case TypeCable::HLD_OUT:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("HLD"));
+		break;
+	case TypeCable::CAN_OUT:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("CAN"));
+		break;
+	case TypeCable::LIN_OUT:
+		mainTableWidget->item(CELL_VALUE_BASE_TYPE)->setText(QString("LIN"));
+		break;
+	default:
+		break;
+	}
 }
 
 // ------------------------------------
@@ -654,22 +687,41 @@ void MoreWindow::resaveFile()
 		QStringList dataList = dataLine.split(";");
 
 		bool typeCheck = false;
-		if (row->direction == "OUT")
-			if (row->typeStr == "DIGITAL")
+		switch (row->typeInt)
+		{
+		case TypeCable::EMPTY:
+			break;
+		case TypeCable::DIG_IN:
 				typeCheck = (dataList[3].toInt() == TYPE_DIGITAL);
-			else if (row->typeStr == "PWM")
-				typeCheck = (dataList[3].toInt() == TYPE_PWM);
-			else if (row->typeStr == "VNH")
-				typeCheck = (dataList[3].toInt() == TYPE_VNH);
-			else if (row->typeStr == "HLD")
-				typeCheck = (dataList[3].toInt() == TYPE_HLD);
-		else
-			if (row->typeStr == "DIGITAL")
-				typeCheck = (dataList[3].toInt() == TYPE_DIGITAL);
-			else if (row->typeStr == "ANALOG")
+			break;
+		case TypeCable::ANALOG_IN:
 				typeCheck = (dataList[3].toInt() == TYPE_ANALOG);
-			else if (row->typeStr == "HALL")
+			break;
+		case TypeCable::HALL_IN:
 				typeCheck = (dataList[3].toInt() == TYPE_HALL);
+			break;
+		case TypeCable::DIG_OUT:
+				typeCheck = (dataList[3].toInt() == TYPE_DIGITAL);
+			break;
+		case TypeCable::PWM_OUT:
+				typeCheck = (dataList[3].toInt() == TYPE_PWM);
+			break;
+		case TypeCable::VNH_OUT:
+				typeCheck = (dataList[3].toInt() == TYPE_VNH);
+			break;
+		case TypeCable::HLD_OUT:
+				typeCheck = (dataList[3].toInt() == TYPE_HLD);
+			break;
+		case TypeCable::CAN_OUT:
+				typeCheck = (dataList[3].toInt() == TYPE_CAN);
+			break;
+		case TypeCable::LIN_OUT:
+				typeCheck = (dataList[3].toInt() == TYPE_LIN);
+			break;
+		default:
+			break;
+		}
+
 
 		if (admissionBlock && admissionVersion)
 			if ((dataList[0].toInt() == (int)row->connectorInt) &&

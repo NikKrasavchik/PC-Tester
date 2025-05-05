@@ -1261,7 +1261,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 	mainTableWidget->setRowHeight(currentRowNum, COLUMN_STANDART_HEIGHT);
 	if (testType == WindowType::OUT_TEST_MANUAL_STAND || testType == WindowType::FULL_TEST_MANUAL_STAND)
 	{
-		if (cableRows[currentRowNum]->typeStr == "DIGITAL" && cableRows[currentRowNum]->direction == "OUT")
+		if (cableRows[currentRowNum]->typeInt == TypeCable::DIG_OUT)
 		{
 			QHBoxLayout* interactionButtonsCellHLayout = new QHBoxLayout(interactionButtonsWidget);
 			interactionButtonsCellHLayout->setObjectName("interactionButtonsCellHLayout");
@@ -1279,7 +1279,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_DIGITAL_HEIGHT);
 		}
-		else if (cableRows[currentRowNum]->typeStr == "PWM")
+		else if (cableRows[currentRowNum]->typeInt == TypeCable::PWM_OUT)
 		{
 			QHBoxLayout* interactionButtonsCellFirstHLayout = new QHBoxLayout(interactionButtonsWidget);
 			interactionButtonsCellFirstHLayout->setObjectName("interactionButtonsCellFirstHLayout");
@@ -1312,7 +1312,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_PWM_HEIGHT);
 		}
-		else if (cableRows[currentRowNum]->typeStr == "VNH")
+		else if (cableRows[currentRowNum]->typeInt == TypeCable::VNH_OUT)
 		{
 			QHBoxLayout* interactionButtonsCellFirstHLayout = new QHBoxLayout(interactionButtonsWidget);
 			interactionButtonsCellFirstHLayout->setObjectName("interactionButtonsCellFirstHLayout");
@@ -1356,7 +1356,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_VNH_HEIGHT);
 		}
-		else if (cableRows[currentRowNum]->typeStr == "HLD")
+		else if (cableRows[currentRowNum]->typeInt == TypeCable::HLD_OUT)
 		{
 			QHBoxLayout* interactionButtonsActiveHLayout = new QHBoxLayout(interactionButtonsWidget);
 			interactionButtonsActiveHLayout->setObjectName("interactionButtonsActiveHLayout");
@@ -1387,10 +1387,12 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_HLD_HEIGHT);
 		}
-		else if(cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT || cableRows[currentRowNum]->typeInt == TypeCable::LIN_OUT)
+		else if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT ||
+			cableRows[currentRowNum]->typeInt == TypeCable::LIN_OUT)
+
 		{
-			QHBoxLayout *hLayout = new QHBoxLayout(interactionButtonsWidget);
-			QVBoxLayout *vLayout = new QVBoxLayout();
+			QHBoxLayout* hLayout = new QHBoxLayout(interactionButtonsWidget);
+			QVBoxLayout* vLayout = new QVBoxLayout();
 
 			QSpacerItem* leftSpacer = new QSpacerItem(10, 0, QSizePolicy::Expanding);
 			QSpacerItem* centerSpacer = new QSpacerItem(1, 0, QSizePolicy::Expanding);
@@ -1407,6 +1409,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_INFORMATION_HEIGHT);
 		}
+
 	}
 
 	interactionButtonsCellVLayout->setContentsMargins(0, 0, 0, 0);
