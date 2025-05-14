@@ -2,8 +2,8 @@
 
 #define COLUMN_COUNT			7
 
-#define COLUMN_COMPONENT		3
-#define COLUMN_TYPE				4
+#define COLUMN_TYPE				3
+#define COLUMN_COMPONENT		4
 #define COLUMN_STATUS			5
 #define COLUMN_MANUAL_CHECK		6
 
@@ -20,6 +20,7 @@ void TestWindow::initUiInTestManualStand()
 void TestWindow::initUiTableInTestManualStand()
 {
 	initUiTableHeaderInTestManualStand();
+	resetTableTypeLanguageInTestManualStand();
 	initUiTableRowsInTestManualStand();
 }
 
@@ -75,8 +76,8 @@ void TestWindow::resetTableHeaderLanguageInTestManualStand()
 		mainTableHeaderLabels->push_back(QString("Колодка"));
 		mainTableHeaderLabels->push_back(QString("Пин"));
 		mainTableHeaderLabels->push_back(QString("Название"));
-		mainTableHeaderLabels->push_back(QString("Компонент"));
 		mainTableHeaderLabels->push_back(QString("Тип"));
+		mainTableHeaderLabels->push_back(QString("Компонент"));
 		mainTableHeaderLabels->push_back(QString("Статус"));
 		mainTableHeaderLabels->push_back(QString("Исправно"));
 		mainTableHeaderLabels->push_back("");
@@ -88,8 +89,8 @@ void TestWindow::resetTableHeaderLanguageInTestManualStand()
 		mainTableHeaderLabels->push_back("Connector");
 		mainTableHeaderLabels->push_back("Pin");
 		mainTableHeaderLabels->push_back("Name");
-		mainTableHeaderLabels->push_back("Component");
 		mainTableHeaderLabels->push_back("Type");
+		mainTableHeaderLabels->push_back("Component");
 		mainTableHeaderLabels->push_back("Status");
 		mainTableHeaderLabels->push_back("Correctly");
 		mainTableHeaderLabels->push_back("");
@@ -223,5 +224,4 @@ void TestWindow::initUiTableRowsInTestManualStand()
 			mainTableWidget->setCellWidget(currentRowNum, COLUMN_STATUS, wiseWidget);
 		}
 	}
-	resetTableTypeLanguageInTestManualStand();
 }

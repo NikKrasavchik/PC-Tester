@@ -1,11 +1,14 @@
 #include "can.h"
 #include "Cable.h"
 #include "qmap.h"
+#include <iostream>
+#include <fstream>
 
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
 QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
+std::vector<std::pair<int, int>> Can::testInformationBus;
 bool Can::b_flagStatusConnection;
 
 Can::Can()
@@ -120,6 +123,18 @@ bool Can::checkInformationBus_Lin(QString checkAdapter, int canId)
 	else
 		return false;
 }
+
+void Can::checkInformationBus(int canId)
+{
+	int msgSend[8] = { 1, 0, 0, 0, 0, 0, 0, 0 };
+	writeCan(canId, msgSend);
+
+	std::pair<int, int> tmpPair;
+	tmpPair.first = canId;
+	tmpPair.second = 0;
+	testInformationBus.push_back(tmpPair);
+}
+
 bool Can::initCan(WindowType windowType)
 {
 	if (!b_adapterSelected)
@@ -563,6 +578,27 @@ void Can::Timer_ReadCan()
 				1; // —юда не должно заходить. »наче в методе getDiagBlock будет сбой в логике
 			}
 		}
+		if (testInformationBus.size() != 0)
+		{
+			for (int i = 0; i < testInformationBus.size(); i++)
+			{
+				if (id == testInformationBus[i].first)
+				{
+					testInformationBus.erase(testInformationBus.begin() + i);
+					Signal_changeStatusCheckInformationBus(id, true);
+				}
+				else
+				{
+					testInformationBus[i].second++;
+					if (testInformationBus[i].second > 100)
+					{
+						testInformationBus.erase(testInformationBus.begin() + i);
+						Signal_changeStatusCheckInformationBus(id, false);
+					}
+				}
+			}
+			return;
+		}
 		switch (windowType)
 		{
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -989,6 +1025,7 @@ QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 				}
 			if (QTime::currentTime() > timeWork)
 				return QString("Error. Long delay");
+
 		}
 		sizeArr = 15;
 		break;
@@ -1015,32 +1052,35 @@ QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 				if (counter == 0)
 				{
 					if(msg[5] != 0)
-						ansverStr[counter++] = QChar(msg[5]);
+						ansverStr += QChar(msg[5]);
 					if(msg[5] != 0)
-					ansverStr[counter++] = QChar(msg[6]);
+						ansverStr += QChar(msg[6]);
 					if(msg[7] != 0)
-					ansverStr[counter++] = QChar(msg[7]);
+						ansverStr += QChar(msg[7]);
 
+					counter = 3;
 					DIAG_VERIFICATION(msgSend);
 					writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
 				}
 				else
 					for (int i = 1; i < 8; i++)
 					{
+						counter++;
 						if (msg[i] == 0)
 						{
-							counter++;
 							if (counter > sizeArr)
 								return ansverStr;
 							continue;
 						}
-						ansverStr[counter++] = QChar(msg[i]);
+						ansverStr += QChar(msg[i]);
 						if (counter > sizeArr)
 							return ansverStr;
 					}
 			}
 		if (QTime::currentTime() > timeWork)
 			return QString("Error. Long delay");
+
+
 	}
 
 

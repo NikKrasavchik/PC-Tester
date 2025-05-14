@@ -516,6 +516,16 @@ void TestWindow::initLightStyleSheets()
 			font-size: 12px;
 			font-weight: 600;
 		}
+		
+		QLineEdit {
+			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
 
 		QPushButton {
 			border-radius: 4px;
@@ -745,6 +755,16 @@ void TestWindow::initDarkStyleSheets()
 			font-weight: 600;
 		}
 
+		QLineEdit {
+			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		
 		QPushButton {
 			border-radius: 4px;
 			background-color: #474747;

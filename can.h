@@ -174,6 +174,9 @@ public:
 	// 
 	// @return bool true - can исправен / false - не пришло сообщение или оно неправильное.
 	static bool checkInformationBus_Lin(QString checkAdapter, int canId);
+	
+	
+	static void checkInformationBus(int canId);
 private:
 	// ќтправл€ет сообщение в CAN
 	// @name writeCan
@@ -217,6 +220,7 @@ private:
 	uint8_t counterConnectMsg; 
 
 	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable; // ћапа в которой ключ это id can, а значение массив пар. ѕара состоит из кабел€ и значение которое у него было до этого значени€. “ака€ сложна€ структура необходима дл€ более оптимального поиска кабел€ при приходе сообщени€.
+	static std::vector<std::pair<int, int>> testInformationBus;
 
 	bool b_adapterSelected; 
 	bool b_frequencySelected;
@@ -236,5 +240,7 @@ signals:
 	void Signal_ChangedStatusStandConnect(bool statusConnect); // —игнал который говорит что статус присоеденени€ к стенду изменЄн 
 	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // —игнал означающий завершение теста у автостенда
 	void Signal_ChangedByte(int idCable, int newValue); // —игнал срабатывающий когда помен€лс€ байт у какого либо кабел€ из mapCable
+	void Signal_changeStatusCheckInformationBus(int id, bool status);
+
 };
 

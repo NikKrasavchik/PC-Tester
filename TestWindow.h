@@ -226,7 +226,6 @@ public slots:
 
 signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
-	void Signal_changeStatusCheckInformationBus(int id, bool status);
 
 	void selectCurrentCell(int id);
 };
@@ -408,7 +407,7 @@ private:
 	void resetTableRowsFullTestAutoStand();
 
 	void resetTheme();
-	void resetLanguage();
+	void resetLanguage(bool isFullReset);
 	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
 	void resetIconMoreButton(bool theme);
 

@@ -2,8 +2,8 @@
 
 #define COLUMN_COUNT		7
 
-#define COLUMN_COMPONENT	3
-#define COLUMN_TYPE			4
+#define COLUMN_TYPE			3
+#define COLUMN_COMPONENT	4
 #define COLUMN_CHECK		5
 #define COLUMN_MANUAL_CHECK	6
 
@@ -20,6 +20,7 @@ void TestWindow::initUiOutTestManualStand()
 void TestWindow::initUiTableOutTestManualStand()
 {
 	initUiTableHeaderOutTestManualStand();
+	resetTableTypeLanguageOutTestManualStand();
 	initUiTableRowsOutTestManualStand();
 }
 
@@ -61,7 +62,7 @@ void TestWindow::resetLanguageOutTestManualStand()
 {
 	resetTableHeaderLanguageOutTestManualStand();
 	resetTableTypeLanguageOutTestManualStand();
-	initUiTableRowsInTestManualStand();
+	initUiTableRowsOutTestManualStand();
 }
 
 void TestWindow::resetTableHeaderLanguageOutTestManualStand()
@@ -74,9 +75,9 @@ void TestWindow::resetTableHeaderLanguageOutTestManualStand()
 		mainTableHeaderLabels->push_back(QString("Колодка"));
 		mainTableHeaderLabels->push_back(QString("Пин"));
 		mainTableHeaderLabels->push_back(QString("Название"));
-		mainTableHeaderLabels->push_back(QString("Компонент"));
 		mainTableHeaderLabels->push_back(QString("Тип"));
-		mainTableHeaderLabels->push_back(QString("Проверка"));
+		mainTableHeaderLabels->push_back(QString("Компонент"));
+		mainTableHeaderLabels->push_back(QString("Статус"));
 		mainTableHeaderLabels->push_back(QString("Исправно"));
 		mainTableHeaderLabels->push_back("");
 		break;
@@ -87,9 +88,9 @@ void TestWindow::resetTableHeaderLanguageOutTestManualStand()
 		mainTableHeaderLabels->push_back("Connector");
 		mainTableHeaderLabels->push_back("Pin");
 		mainTableHeaderLabels->push_back("Name");
-		mainTableHeaderLabels->push_back("Component");
 		mainTableHeaderLabels->push_back("Type");
-		mainTableHeaderLabels->push_back("Check");
+		mainTableHeaderLabels->push_back("Component");
+		mainTableHeaderLabels->push_back("Status");
 		mainTableHeaderLabels->push_back("Correctly");
 		mainTableHeaderLabels->push_back("");
 		break;
@@ -203,5 +204,4 @@ void TestWindow::initUiTableRowsOutTestManualStand()
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MANUAL_CHECK, manualChecksWidget);
 	}
-	resetTableTypeLanguageOutTestManualStand();
 }

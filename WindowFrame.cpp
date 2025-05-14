@@ -6,7 +6,7 @@
 
 #include <QMouseEvent>
 
-#define BORDER_SIZE 5
+#define BORDER_SIZE 10
 
 const QString appDarkIconPath = ":/Dark/icons/App_Logo_White.png";
 const QString closeDarkIconPath = ":/Dark/icons/Close_White.png";
@@ -41,8 +41,7 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 	setTitle(windowType);
 
 	this->windowType = windowType;
-
-	setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
+	setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
 	setAttribute(Qt::WA_TranslucentBackground);
 	if (child != nullptr) {
 		ui->body->layout()->addWidget(child);
@@ -303,8 +302,9 @@ void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event)
 /// @return The return value, true if the event was handled, otherwise false.
 bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintptr* result)
 {
-	//Q_UNUSED(eventType)
+	Q_UNUSED(eventType)
 		MSG* param = static_cast<MSG*>(message);
+
 
 	if (param->message == WM_NCHITTEST) {
 		QPoint globalPos(GET_X_LPARAM(param->lParam), GET_Y_LPARAM(param->lParam));
@@ -315,31 +315,31 @@ bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintpt
 
 		if (nX >= 0 && nX < mBorderSize) {
 			if (nY >= 0 && nY < mBorderSize) {
-				*result = HTTOPLEFT;
+				*result = HTTOPLEFT; // top left
 			}
 			else if (nY >= height() - mBorderSize) {
-				*result = HTBOTTOMLEFT;
+				*result = HTBOTTOMLEFT; // bottom left
 			}
 			else {
-				*result = HTLEFT;
+				*result = HTLEFT; // left
 			}
 		}
 		else if (nX >= width() - mBorderSize) {
 			if (nY >= 0 && nY < mBorderSize) {
-				*result = HTTOPRIGHT;
+				*result = HTTOPRIGHT; // top right
 			}
 			else if (nY >= height() - mBorderSize) {
-				*result = HTBOTTOMRIGHT;
+				*result = HTBOTTOMRIGHT; // bottom right
 			}
 			else {
-				*result = HTRIGHT;
+				*result = HTRIGHT; // right
 			}
 		}
 		else if (nY >= 0 && nY < mBorderSize) {
-			*result = HTTOP;
+			*result = HTTOP; // top 
 		}
 		else if (nY >= height() - mBorderSize) {
-			*result = HTBOTTOM;
+			*result = HTBOTTOM; // bottom
 		}
 		else {
 			return QWidget::nativeEvent(eventType, message, result);

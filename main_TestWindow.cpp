@@ -94,10 +94,12 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlock
 	Can::clearOldValue();
 
 	rotateTimer->start(3);
+	qDebug() << QString("TestWindow");
 }
 
 TestWindow::~TestWindow()
 {
+	qDebug() << QString("~TestWindow");
 	delete mainLayoutWidget;
 	delete logoLightPixmap;
 	delete logoDarkPixmap;
@@ -113,6 +115,7 @@ TestWindow::~TestWindow()
 
 void TestWindow::initUiMain()
 {
+	qDebug() << QString("initUiMain");
 	setMinimumSize(QSize(MIN_TEST_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
 
 	mainLayoutWidget = new QWidget(this);
@@ -125,6 +128,7 @@ void TestWindow::initUiMain()
 
 void TestWindow::initUiMainHeader()
 {
+	qDebug() << QString("initUiMainHeader");
 	headerLayoutWidget = new QWidget(mainLayoutWidget);
 	headerLayoutWidget->setObjectName("headerLayoutWidget");
 	headerLayoutWidget->setFixedHeight(FIXED_HEADER_HEIGHT);
@@ -155,6 +159,7 @@ void TestWindow::initUiMainHeader()
 
 void TestWindow::initUiLogo()
 {
+	qDebug() << QString("initUiLogo");
 	logoLabel = new QLabel(this);
 	logoLabel->setObjectName("LogoLabel");
 	logoLabel->setText("");
@@ -164,6 +169,7 @@ void TestWindow::initUiLogo()
 
 void TestWindow::initUiTripleButtons()
 {
+	qDebug() << QString("initUiTripleButtons");
 	tripleButtonsHLayout = new QHBoxLayout();
 	tripleButtonsHLayout->setObjectName("tripleButtonsHLayout");
 
@@ -194,6 +200,7 @@ void TestWindow::initUiTripleButtons()
 
 void TestWindow::initUiTable()
 {
+	qDebug() << QString("initUiTable");
 	mainTableWidget = new QTableWidget(mainLayoutWidget);
 	mainTableWidget->setObjectName("mainTableWidget");
 	mainTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
@@ -205,6 +212,7 @@ void TestWindow::initUiTable()
 
 void TestWindow::initUiMainFooter()
 {
+	qDebug() << QString("initUiMainFooter");
 	footerLine = new QFrame(mainLayoutWidget);
 	footerLine->setObjectName("footerLine");
 	footerLine->setFrameShape(QFrame::HLine);
@@ -254,6 +262,7 @@ void TestWindow::initUiMainFooter()
 
 void TestWindow::resizeEvent(QResizeEvent* event)
 {
+	qDebug() << QString("resizeEvent");
 	viewWindowState->appSize.width = geometry().width();
 	viewWindowState->appSize.height = geometry().height();
 
@@ -262,6 +271,7 @@ void TestWindow::resizeEvent(QResizeEvent* event)
 
 void TestWindow::initRecources()
 {
+	qDebug() << QString("initRecources");
 	logoLightPixmap = new QPixmap(":/Light/icons/Logo_Black.png");
 	logoDarkPixmap = new QPixmap(":/Dark/icons/Logo_White.png");
 	themeLightPixmap = new QPixmap(":/Light/icons/Moon_Black.png");
@@ -282,11 +292,13 @@ void TestWindow::initRecources()
 
 void TestWindow::initTexts()
 {
-	resetLanguage();
+	qDebug() << QString("initTexts");
+	resetLanguage(false);
 }
 
 void TestWindow::initIcons()
 {
+	qDebug() << QString("initIcons");
 	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
@@ -309,6 +321,7 @@ void TestWindow::initIcons()
 
 void TestWindow::initConnections()
 {
+	qDebug() << QString("initConnections");
 	connect(backButton, &QPushButton::clicked, this, &TestWindow::slot_backButton_clicked);
 	connect(switchThemeButton, &QPushButton::clicked, this, &TestWindow::slot_switchThemeButton_clicked);
 	connect(switchLanguageButton, &QPushButton::clicked, this, &TestWindow::slot_switchLanguageButton_clicked);
@@ -321,12 +334,14 @@ void TestWindow::initConnections()
 
 void TestWindow::initStyles()
 {
+	qDebug() << QString("initStyles");
 	resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
 	resetTheme();
 }
 
 void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetTheme, int pad, int pin)
 {
+	qDebug() << QString("resetTableButtonsTheme");
 	switch (typeResetTheme)
 	{
 	case TypeResetTableButtonsTheme::STAND_DISCONNECTED:
@@ -422,11 +437,13 @@ void TestWindow::resetTableButtonsTheme(TypeResetTableButtonsTheme typeResetThem
 
 void TestWindow::slot_backButton_clicked()
 {
+	qDebug() << QString("slot_backButton_clicked");
 	this->close();
 }
 
 void TestWindow::slot_switchThemeButton_clicked()
 {
+	qDebug() << QString("slot_switchThemeButton_clicked");
 	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
@@ -442,6 +459,7 @@ void TestWindow::slot_switchThemeButton_clicked()
 
 void TestWindow::slot_switchLanguageButton_clicked()
 {
+	qDebug() << QString("slot_switchLanguageButton_clicked");
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
@@ -452,11 +470,12 @@ void TestWindow::slot_switchLanguageButton_clicked()
 		viewWindowState->appLanguage = RUSSIAN_LANG;
 		break;
 	}
-	resetLanguage();
+	resetLanguage(true);
 }
 
 void TestWindow::slot_reportButton_clicked()
 {
+	qDebug() << QString("slot_reportButton_clicked");
 	if (fullTestSortType != SortType::SortIndex)
 	{
 		fullTestSortType = SortType::SortIndex;
@@ -476,6 +495,7 @@ void TestWindow::slot_reportButton_clicked()
 
 void TestWindow::slot_sleepButton_clicked()
 {
+	qDebug() << QString("slot_sleepButton_clicked");
 	if (statusFlags->StatusConnected)
 		Can::sendGoToSleepMsg(true);
 	else
@@ -484,6 +504,7 @@ void TestWindow::slot_sleepButton_clicked()
 
 void TestWindow::resetTheme()
 {
+	qDebug() << QString("resetTheme");
 	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
@@ -670,8 +691,9 @@ void TestWindow::resetTheme()
 	Can::clearOldValue();
 }
 
-void TestWindow::resetLanguage()
+void TestWindow::resetLanguage(bool isFullReset)
 {
+	qDebug() << QString("resetLanguage");
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
@@ -702,7 +724,8 @@ void TestWindow::resetLanguage()
 			default:
 				break;
 			}
-			resetLanguageFullTestManualStand();
+			if(isFullReset)
+				resetLanguageFullTestManualStand();
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
@@ -710,7 +733,8 @@ void TestWindow::resetLanguage()
 				outTestManualStandConnectButton->setText(QString("Блок\nподключён"));
 			else
 				outTestManualStandConnectButton->setText(QString("Блок\nотключен"));
-			resetLanguageOutTestManualStand();
+			if(isFullReset)
+				resetLanguageOutTestManualStand();
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -718,7 +742,8 @@ void TestWindow::resetLanguage()
 				inTestManualStandConnectButton->setText(QString("Блок\nподключён"));
 			else
 				inTestManualStandConnectButton->setText(QString("Блок\nотключен"));
-			resetLanguageInTestManualStand();
+			if(isFullReset)
+				resetLanguageInTestManualStand();
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
@@ -727,7 +752,8 @@ void TestWindow::resetLanguage()
 			else
 				autoStandConnectButton->setText(QString("Стенд\nотключен"));
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
-			resetLanguageOutManualTestAutoStand();
+			if(isFullReset)
+				resetLanguageOutManualTestAutoStand();
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -736,7 +762,8 @@ void TestWindow::resetLanguage()
 			else
 				autoStandConnectButton->setText(QString("Стенд\nотключен"));
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
-			resetLanguageInManualTestAutoStand();
+			if(isFullReset)
+				resetLanguageInManualTestAutoStand();
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
@@ -748,7 +775,8 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString("Пауза"));
 			else
 				autoStandStartTestButton->setText(QString("Старт"));
-			resetLanguageOutAutoTestAutoStand();
+			if(isFullReset)
+				resetLanguageOutAutoTestAutoStand();
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -760,7 +788,8 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString("Пауза"));
 			else
 				autoStandStartTestButton->setText(QString("Старт"));
-			resetLanguageInAutoTestAutoStand();
+			if(isFullReset)
+				resetLanguageInAutoTestAutoStand();
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
@@ -786,7 +815,8 @@ void TestWindow::resetLanguage()
 			default:
 				break;
 			}
-			resetLanguageFullTestAutoStand();
+			if(isFullReset)
+				resetLanguageFullTestAutoStand();
 			break;
 
 		default:
@@ -823,7 +853,8 @@ void TestWindow::resetLanguage()
 			default:
 				break;
 			}
-			resetLanguageFullTestManualStand();
+			if(isFullReset)
+				resetLanguageFullTestManualStand();
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
@@ -831,7 +862,8 @@ void TestWindow::resetLanguage()
 				outTestManualStandConnectButton->setText(QString("ECU\nconnected"));
 			else
 				outTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
-			resetLanguageOutTestManualStand();
+			if(isFullReset)
+				resetLanguageOutTestManualStand();
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
@@ -839,7 +871,8 @@ void TestWindow::resetLanguage()
 				inTestManualStandConnectButton->setText(QString("ECU\nconnected"));
 			else
 				inTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
-			resetLanguageInTestManualStand();
+			if(isFullReset)
+				resetLanguageInTestManualStand();
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
@@ -848,7 +881,8 @@ void TestWindow::resetLanguage()
 			else
 				autoStandConnectButton->setText(QString("Stand\ndisconnected"));
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
-			resetLanguageOutManualTestAutoStand();
+			if(isFullReset)
+				resetLanguageOutManualTestAutoStand();
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -857,7 +891,8 @@ void TestWindow::resetLanguage()
 			else
 				autoStandConnectButton->setText(QString("Stand\ndisconnected"));
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
-			resetLanguageInManualTestAutoStand();
+			if(isFullReset)
+				resetLanguageInManualTestAutoStand();
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
@@ -869,7 +904,8 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString("Pause"));
 			else
 				autoStandStartTestButton->setText(QString("Start"));
-			resetLanguageOutAutoTestAutoStand();
+			if(isFullReset)
+				resetLanguageOutAutoTestAutoStand();
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
@@ -881,7 +917,8 @@ void TestWindow::resetLanguage()
 				autoStandStartTestButton->setText(QString("Pause"));
 			else
 				autoStandStartTestButton->setText(QString("Start"));
-			resetLanguageInAutoTestAutoStand();
+			if(isFullReset)
+				resetLanguageInAutoTestAutoStand();
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
@@ -907,7 +944,8 @@ void TestWindow::resetLanguage()
 			default:
 				break;
 			}
-			resetLanguageFullTestAutoStand();
+			if(isFullReset)
+				resetLanguageFullTestAutoStand();
 			break;
 
 		default:
@@ -919,6 +957,7 @@ void TestWindow::resetLanguage()
 
 void TestWindow::setParentFrame(WindowFrame* parentFrame)
 {
+	qDebug() << QString("setParentFrame");
 	this->parentFrame = parentFrame;
 
 	connect(switchThemeButton, &QPushButton::clicked, parentFrame, &WindowFrame::slot_switchThemeButton_clicked);
@@ -926,6 +965,7 @@ void TestWindow::setParentFrame(WindowFrame* parentFrame)
 
 void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox)
 {
+	qDebug() << QString("createItemManualTestAutoStandTestTimeComboBox");
 	comboBox->clear();
 	if (viewWindowState->appLanguage == RUSSIAN_LANG)
 	{
@@ -949,6 +989,7 @@ void TestWindow::createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboB
 
 void TestWindow::setStatusTableButtons(bool statusButton)
 {
+	qDebug() << QString("setStatusTableButtons");
 	statusButton = !statusButton;
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -998,6 +1039,7 @@ void TestWindow::setStatusTableButtons(bool statusButton)
 
 static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProperties*> cableRows)
 {
+	qDebug() << QString("determineCurrentRowNum");
 	for (int currentRowNum = 0; currentRowNum < cableRows.size(); currentRowNum++)
 		if ((int)(cableRows[currentRowNum]->connectorStr.toStdString()[0] - PRIMARY_CONNECTOR_SYMBOL) == pad && cableRows[currentRowNum]->pin.toInt() == pin)
 			return currentRowNum;
@@ -1006,6 +1048,7 @@ static int determineCurrentRowNum(int pad, int pin, std::vector<TestTableRowProp
 
 void TestWindow::ProcAutoTest(int connector, int pin)
 {
+	qDebug() << QString("ProcAutoTest");
 	for (int i = 0; i < cableRows.size(); i++)
 		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
 			Can::sendTestMsg(cableRows[i]->connectorInt, cableRows[i]->pin.toInt(), cableRows[i]->typeInt, TestBlockName::BCM);
@@ -1014,6 +1057,7 @@ void TestWindow::ProcAutoTest(int connector, int pin)
 
 void TestWindow::slot_autoStandStartTestButton_clicked()
 {
+	qDebug() << QString("slot_autoStandStartTestButton_clicked");
 	if (isFullTestEnabled)
 	{
 		isFullTestEnabled = false;
@@ -1060,13 +1104,13 @@ void TestWindow::slot_autoStandStartTestButton_clicked()
 				
 		ProcAutoTest((int)nextCheckCable->getConnector(), nextCheckCable->getPin());
 	}
-	resetLanguage();
+	resetLanguage(false);
 }
 	
 
 void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds)
 {
-	// Êðàñèì íóæíóþ ÿ÷åéêó 
+	qDebug() << QString("Slot_AfterTest");
 	for (int i = 0; i < cableRows.size(); i++)
 		if (connector == (int)cableRows[i]->connectorInt && pin == cableRows[i]->pin.toInt())
 		{
@@ -1095,7 +1139,7 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 							nextCheckCable->setPin(cableRows[0]->pin.toInt());
 							QMessageBox::warning(this, QString("Внимание"), QString("Тест закончен"));
 							isFullTestEnabled = false;
-							resetLanguage();
+							resetLanguage(false);
 							return;
 						}
 						nextCheckCable->setConnector(cableRows[i + 1]->connectorInt);
@@ -1110,6 +1154,7 @@ void TestWindow::Slot_AfterTest(int connector, int pin, std::vector<Measureds*> 
 
 static int detectProccessedHall(ConnectorId pad, int pin, std::vector<TestTableRowProperties*> cableRows)
 {
+	qDebug() << QString("detectProccessedHall");
 	int counter = -1;
 	for (int i = 0; i < cableRows.size(); i++)
 	{
@@ -1123,6 +1168,7 @@ static int detectProccessedHall(ConnectorId pad, int pin, std::vector<TestTableR
 
 void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 {
+	qDebug() << QString("Slot_ChangedByte");
 	QAbstractItemModel* model = mainTableWidget->model();
 
 	switch (testType)
@@ -1148,10 +1194,6 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 		}
 		else
 		{
-			if (idCable == 0)
-			{
-				1;
-			}
 			model->setData(model->index(offsetMap[idCable], 5), QString::number(newValue));
 		}
 		break;
@@ -1174,6 +1216,32 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 				}
 			}
 		}
+		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::DIG_OUT)
+		{
+			if (cableRows[offsetMap[idCable]]->connectorInt == ConnectorId::B && cableRows[offsetMap[idCable]]->pin.toInt() == 2)
+			{
+				if (1) 
+				{
+
+				}
+			}
+			int valueAdc = newValue << 4;
+			double volt = (valueAdc * 5.f) / 4096.f;
+			double amper = volt * 7.9487;
+			model->setData(model->index(offsetMap[idCable], 7), QString::number(amper, 'f', 3) + " A");
+
+		}
+		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::VNH_OUT)
+		{
+			int valueAdc = newValue << 4;
+			double volt = (valueAdc * 5.f) / 4096.f;
+			double amper;
+			if(cableRows[offsetMap[idCable]]->connectorInt == ConnectorId::B && (cableRows[offsetMap[idCable]]->pin.toInt() == 9 || cableRows[offsetMap[idCable]]->pin.toInt() == 12))
+				amper = volt * 1.2133;
+			else
+				amper = volt * 3.5227;
+			model->setData(model->index(offsetMap[idCable], 7), QString::number(amper, 'f', 3) + " A");
+		}	
 		else
 			model->setData(model->index(offsetMap[idCable], 7), QString::number(newValue));
 		break;
@@ -1186,6 +1254,7 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 {
+	qDebug() << QString("Slot_ChangedStatusStandConnect");
 	switch (testType)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
@@ -1230,12 +1299,13 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 			resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_DISCONNECTED, 0, 0);
 	}
 	statusFlags->StatusConnected = statusConnect;
-	resetLanguage();
+	resetLanguage(false);
 	resetTheme();
 }
 
 void TestWindow::Slot_changeStatusCheckInformationBus(int id, bool status)
 {
+	qDebug() << QString("Slot_changeStatusCheckInformationBus");
 	switch (testType)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
@@ -1255,6 +1325,7 @@ void TestWindow::Slot_changeStatusCheckInformationBus(int id, bool status)
 
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)
 {
+	qDebug() << QString("initTableRowButtons: ") << QString::number(currentRowNum);
 	interactionButtonsWidget->setObjectName("interactionButtonsWidget");
 	QVBoxLayout* interactionButtonsCellVLayout = new QVBoxLayout(interactionButtonsWidget);
 	interactionButtonsCellVLayout->setObjectName("interactionButtonsCellVLayout");
@@ -1418,7 +1489,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 
 void TestWindow::initTableAdditionalManualChecks(int currentRowNum, QWidget* manualChecksWidget)
 {
-
+	qDebug() << QString("initTableAdditionalManualChecks");
 	manualChecksWidget->setObjectName("manualChecksWidget");
 
 	QHBoxLayout* manualChecksHLayout = new QHBoxLayout(manualChecksWidget);
@@ -1438,6 +1509,7 @@ void TestWindow::initTableAdditionalManualChecks(int currentRowNum, QWidget* man
 
 void TestWindow::initAutoCheckButton(int currentRowNum, QWidget* autoCheckCellWidget)
 {
+	qDebug() << QString("initAutoCheckButton");
 	autoCheckCellWidget->setObjectName("autoCheckCellWidget");
 	QHBoxLayout* autoCheckCellHLayout = new QHBoxLayout(autoCheckCellWidget);
 	autoCheckCellHLayout->setObjectName("autoCheckCellHLayout");
@@ -1448,6 +1520,7 @@ void TestWindow::initAutoCheckButton(int currentRowNum, QWidget* autoCheckCellWi
 
 void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
 {
+	qDebug() << QString("initMoreButton");
 	cableRows[currentRowNum]->moreButton->setIcon(QIcon(*moreButtonLightPixmap));
 	cableRows[currentRowNum]->moreButton->setIconSize(QSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE));
 
@@ -1461,6 +1534,7 @@ void TestWindow::initMoreButton(int currentRowNum, QWidget* moreCellWidget)
 
 void TestWindow::resetIconMoreButton(bool theme)
 {
+	qDebug() << QString("resetIconMoreButton");
 	for (int row = 0; row < cableRows.size(); row++)
 		if (theme)
 			cableRows[row]->moreButton->setIcon(QIcon(*moreButtonDarkPixmap));
@@ -1470,6 +1544,7 @@ void TestWindow::resetIconMoreButton(bool theme)
 
 void TestWindow::rewriteCableRows()
 {
+	qDebug() << QString("rewriteCableRows");
 	std::vector<TestTableRowProperties*> tmpCableRows(cableRows);
 	QMap<TypeCable, std::vector<TestTableRowProperties*>> sortTypeMap;
 
@@ -1539,6 +1614,7 @@ void TestWindow::rewriteCableRows()
 
 void TestWindow::slot_fullTestSortButton_clicked()
 {
+	qDebug() << QString("slot_fullTestSortButton_clicked");
 	switch (fullTestSortType)
 	{
 	case SortType::SortIndex:
@@ -1581,6 +1657,7 @@ void TestWindow::slot_fullTestSortButton_clicked()
 
 void TestTableRowProperties::on_moreButton_clicked()
 {
+	qDebug() << QString("on_moreButton_clicked");
 	MoreWindow* moreWindow = nullptr;
 	switch (typeInt)
 	{
@@ -1613,5 +1690,6 @@ void TestTableRowProperties::on_moreButton_clicked()
 
 void TestTableRowProperties::on_checkButton_clicked()
 {
+	qDebug() << QString("on_checkButton_clicked");
 	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, TestBlockName::BCM);
 }

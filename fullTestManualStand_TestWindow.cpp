@@ -2,9 +2,9 @@
 
 #define COLUMN_COUNT			9
 
-#define COLUMN_COMPONENT		3
-#define COLUMN_DIRECTION		4
-#define COLUMN_TYPE				5
+#define COLUMN_DIRECTION		3
+#define COLUMN_TYPE				4
+#define COLUMN_COMPONENT		5
 #define COLUMN_CHECK			6
 #define COLUMN_STATUS			7
 #define COLUMN_MANUAL_CHECK		8
@@ -29,6 +29,8 @@ void TestWindow::initUiFullTestManualStand()
 void TestWindow::initUiTableFullTestManualStand()
 {
 	resetTableHeaderFullTestManualStand();
+	resetTableDirectionLanguageFullTestManualStand();
+	resetTableTypeLanguageFullTestManualStand();
 	resetTableRowsFullTestManualStand();
 }
 
@@ -91,13 +93,12 @@ void TestWindow::resetTableHeaderLanguageFullTestManualStand()
 		mainTableHeaderLabels->push_back(QString("Колодка"));
 		mainTableHeaderLabels->push_back(QString("Пин"));
 		mainTableHeaderLabels->push_back(QString("Название"));
-		mainTableHeaderLabels->push_back(QString("Компонент"));
 		mainTableHeaderLabels->push_back(QString("Направление"));
 		mainTableHeaderLabels->push_back(QString("Тип"));
+		mainTableHeaderLabels->push_back(QString("Компонент"));
 		mainTableHeaderLabels->push_back(QString("Проверка"));
 		mainTableHeaderLabels->push_back(QString("Статус"));
 		mainTableHeaderLabels->push_back(QString("Исправно"));
-
 		mainTableHeaderLabels->push_back("");
 		break;
 
@@ -107,9 +108,9 @@ void TestWindow::resetTableHeaderLanguageFullTestManualStand()
 		mainTableHeaderLabels->push_back("Connector");
 		mainTableHeaderLabels->push_back("Pin");
 		mainTableHeaderLabels->push_back("Name");
-		mainTableHeaderLabels->push_back("Component");
 		mainTableHeaderLabels->push_back("Direction");
 		mainTableHeaderLabels->push_back("Type");
+		mainTableHeaderLabels->push_back("Component");
 		mainTableHeaderLabels->push_back("Check");
 		mainTableHeaderLabels->push_back("Status");
 		mainTableHeaderLabels->push_back("Correctly");
@@ -150,6 +151,7 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 	{
 		switch (viewWindowState->appLanguage)
 		{
+		case RUSSIAN_LANG:
 			switch (cableRows[currentRowNum]->typeInt)
 			{
 			case TypeCable::EMPTY:
@@ -184,7 +186,6 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 			default:
 				break;
 			}
-		case RUSSIAN_LANG:
 			break;
 
 		case ENGLISH_LANG:
@@ -276,8 +277,5 @@ void TestWindow::resetTableRowsFullTestManualStand()
 			mainTableWidget->setCellWidget(currentRowNum, COLUMN_STATUS, wiseWidget);
 		}
 	}
-
-	resetTableDirectionLanguageFullTestManualStand();
-	resetTableTypeLanguageFullTestManualStand();
 }
 

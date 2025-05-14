@@ -172,11 +172,19 @@ void ReportWindow::resetTheme()
 	case LIGHT_THEME:
 		tableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 		saveButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+		testerNameLabel->setStyleSheet(lightStyles.settingSelectText);
+		serialNumberLabel->setStyleSheet(lightStyles.settingSelectText);
+		testerNameLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
+		serialNumberLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
 		break;
 
 	case DARK_THEME:
 		tableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 		saveButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+		testerNameLabel->setStyleSheet(darkStyles.settingSelectText);
+		serialNumberLabel->setStyleSheet(darkStyles.settingSelectText);
+		testerNameLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
+		serialNumberLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
 		break;
 	}
 }
@@ -1357,7 +1365,6 @@ void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumbe
 	commentHeader.setVerticalAlignment(Format::AlignTop);
 
 	// Çàïèñü äàííûõ â ÿ÷åéêè òàáëèöû
-
 	writeHorizontalAlignCell(xlsx, 1, 1, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Дата проверки") : QString("Date of inspection"), format);
 	writeHorizontalAlignCell(xlsx, 2, 1, 2, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Время проверки") : QString("Time of inspection"), format);
 	writeHorizontalAlignCell(xlsx, 3, 1, 3, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Имя оператора") : QString("Operator name"), format);
@@ -1367,7 +1374,6 @@ void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumbe
 	writeHorizontalAlignCell(xlsx, 7, 1, 7, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("PART номер") : QString("Part number"), format);
 	writeHorizontalAlignCell(xlsx, 8, 1, 8, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Серийный номер") : QString("Serial number"), format);
 	writeHorizontalAlignCell(xlsx, 9, 1, 9, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Дата производства") : QString("Manufacture date"), format);
-
 	writeHorizontalAlignCell(xlsx, 1, 7, 1, 8, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Комментарий") : QString("Comment"), commentHeader);
 	commentHeader.setHorizontalAlignment(Format::AlignLeft);
 	writeHorizontalAlignCell(xlsx, 2, 7, HEIGHT_HEADERFILE - 1, 8, "", commentHeader);
@@ -1578,18 +1584,26 @@ void ReportWindow::generateXlsx()
 		out << "Start function \"generateXlsx\" 0x001 " << std::endl;
 	}
 	typedCableRows.clear();
-		typedCableRows.resize(TYPE_COUNT);
+
+	out << "Start function \"generateXlsx\" 0x011 " << std::endl;
+
+	typedCableRows.resize(TYPE_COUNT);
+	out << "Start function \"generateXlsx\" 0x012 " << std::endl;
 	for (int i = 0; i < cableRows.size(); i++)
 		typedCableRows[(int)cableRows[i]->typeInt].push_back(cableRows[i]);
+	out << "Start function \"generateXlsx\" 0x013 " << std::endl;
 	try
 	{
 		int maxOffset = getMaxColumnOffset(cableRows);
+	out << "Start function \"generateXlsx\" 0x014 " << std::endl;
 
 		Document xlsx;
 		xlsx.addSheet(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Отчёт") : QString("Report"));
+	out << "Start function \"generateXlsx\" 0x015 " << std::endl;
 
 		xlsx.currentWorksheet()->setGridLinesVisible(false);
 		xlsx.setColumnWidth(1, 5, 13);
+	out << "Start function \"generateXlsx\" 0x016 " << std::endl;
 
 		genereateHeaderFile(xlsx, testerName, serialNumber, testingBlock, viewWindowState->actualVersion);
 		if (out.is_open())

@@ -74,6 +74,7 @@ void MainWindow::initUi()
 
 	resize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT);
 	setMinimumSize(QSize(MIN_SCREEN_WIDTH, MIN_SCREEN_HEIGHT));
+	//setMaximumSize(QSize(2000, 2000));
 
 	viewWindowState->appSize.width = MIN_SCREEN_WIDTH;
 	viewWindowState->appSize.height = MIN_SCREEN_HEIGHT;
@@ -1559,6 +1560,8 @@ void MainWindow::createTestWindow(WindowType testType, std::vector<Cable> prepar
 	connect(can, &Can::Signal_ChangedStatusStandConnect, testWindow, &TestWindow::Slot_ChangedStatusStandConnect);
 	connect(can, &Can::Signal_AfterTest, testWindow, &TestWindow::Slot_AfterTest);
 	connect(can, &Can::Signal_ChangedByte, testWindow, &TestWindow::Slot_ChangedByte);
+	connect(can, &Can::Signal_changeStatusCheckInformationBus, testWindow, &TestWindow::Slot_changeStatusCheckInformationBus);
+
 	timerCheckAdapter->stop();
 	can->setCable(preparedCables);
 	can->initCan(testType);

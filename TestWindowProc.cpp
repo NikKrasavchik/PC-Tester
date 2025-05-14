@@ -53,7 +53,6 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			}
 			break;
 		case NOT_SET:
-			connect(cableRows[i], &TestTableRowProperties::Signal_changeStatusCheckInformationBus, this, &TestWindow::Slot_changeStatusCheckInformationBus);
 			if (cables[i].getType() == TYPE_CAN)
 				cableRows[i]->typeInt = TypeCable::CAN_OUT;
 			else if (cables[i].getType() == TYPE_LIN)
@@ -614,14 +613,8 @@ void TestTableRowProperties::on_load100Button_clicked()
 }
 void TestTableRowProperties::on_check_clicked()
 {
-
-	//selectCurrentCell(id);
-
-	if (typeInt == TypeCable::CAN_OUT)
-		Signal_changeStatusCheckInformationBus(id, Can::checkInformationBus_Can(((CheckInfomationBus*)buttons)->comboBox->currentText(), canId));
-
-	else if (typeInt == TypeCable::LIN_OUT)
-		Signal_changeStatusCheckInformationBus(id, Can::checkInformationBus_Lin(((CheckInfomationBus*)buttons)->comboBox->currentText(), canId));
+		Can::checkInformationBus(canId);
+		selectCurrentCell(id);
 
 }
 
