@@ -312,7 +312,7 @@ bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintpt
 
 		int nX = localPos.x();
 		int nY = localPos.y();
-
+		
 		if (nX >= 0 && nX < mBorderSize) {
 			if (nY >= 0 && nY < mBorderSize) {
 				*result = HTTOPLEFT; // top left

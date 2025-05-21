@@ -220,7 +220,6 @@ private:
 	uint8_t counterConnectMsg; 
 
 	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable; // Мапа в которой ключ это id can, а значение массив пар. Пара состоит из кабеля и значение которое у него было до этого значения. Такая сложная структура необходима для более оптимального поиска кабеля при приходе сообщения.
-	static std::vector<std::pair<int, int>> testInformationBus;
 
 	bool b_adapterSelected; 
 	bool b_frequencySelected;

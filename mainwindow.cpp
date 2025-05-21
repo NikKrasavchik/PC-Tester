@@ -1742,6 +1742,7 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 				cable.setType(list[3].toInt());
 				cable.setCanId(list[4].toInt(nullptr,16));
 				cable.setName(list[5]);
+				cable.setBit(0);
 				cables.push_back(cable);
 				continue;
 			}

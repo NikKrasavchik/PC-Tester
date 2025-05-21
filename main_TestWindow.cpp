@@ -1192,6 +1192,13 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 				}
 			}
 		}
+		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::CAN_OUT || cableRows[offsetMap[idCable]]->typeInt == TypeCable::LIN_OUT)
+		{
+			if (newValue == 2)
+				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::green));
+			else
+				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::red));
+		}
 		else
 		{
 			model->setData(model->index(offsetMap[idCable], 5), QString::number(newValue));
@@ -1216,7 +1223,15 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 				}
 			}
 		}
-		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::DIG_OUT)
+		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::CAN_OUT || cableRows[offsetMap[idCable]]->typeInt == TypeCable::LIN_OUT)
+		{
+			if (newValue == 2)
+				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::green));
+			else
+				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::red));
+
+		}
+		/*else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::DIG_OUT)
 		{
 			if (cableRows[offsetMap[idCable]]->connectorInt == ConnectorId::B && cableRows[offsetMap[idCable]]->pin.toInt() == 2)
 			{
@@ -1241,7 +1256,7 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 			else
 				amper = volt * 3.5227;
 			model->setData(model->index(offsetMap[idCable], 7), QString::number(amper, 'f', 3) + " A");
-		}	
+		}	*/
 		else
 			model->setData(model->index(offsetMap[idCable], 7), QString::number(newValue));
 		break;
@@ -1305,22 +1320,7 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 
 void TestWindow::Slot_changeStatusCheckInformationBus(int id, bool status)
 {
-	qDebug() << QString("Slot_changeStatusCheckInformationBus");
-	switch (testType)
-	{
-	case WindowType::IN_TEST_MANUAL_STAND:
-		if(status)
-			mainTableWidget->item(offsetMap[id], 5)->setBackground(QBrush(Qt::green));
-		else
-			mainTableWidget->item(offsetMap[id], 5)->setBackground(QBrush(Qt::red));
-		break;
-	case WindowType::FULL_TEST_MANUAL_STAND:
-		if(status)
-			mainTableWidget->item(offsetMap[id], 7)->setBackground(QBrush(Qt::green));
-		else
-			mainTableWidget->item(offsetMap[id], 7)->setBackground(QBrush(Qt::red));
-		break;
-	}
+
 }
 
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)

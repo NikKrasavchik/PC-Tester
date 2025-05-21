@@ -8,7 +8,6 @@ Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
 QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
-std::vector<std::pair<int, int>> Can::testInformationBus;
 bool Can::b_flagStatusConnection;
 
 Can::Can()
@@ -127,12 +126,9 @@ bool Can::checkInformationBus_Lin(QString checkAdapter, int canId)
 void Can::checkInformationBus(int canId)
 {
 	int msgSend[8] = { 1, 0, 0, 0, 0, 0, 0, 0 };
-	writeCan(canId, msgSend);
+	writeCan(canId - 1, msgSend);
+	mapCable[canId][0].second = 3;
 
-	std::pair<int, int> tmpPair;
-	tmpPair.first = canId;
-	tmpPair.second = 0;
-	testInformationBus.push_back(tmpPair);
 }
 
 bool Can::initCan(WindowType windowType)
@@ -571,33 +567,23 @@ void Can::Timer_ReadCan()
 	bool isValueChange = false;
 	if (Can::readWaitCan(&id, msgReceive, 1))
 	{
+		for (int key : mapCable.keys())
+		{
+			if (mapCable[key].size() == 1)
+			{
+
+				mapCable[key][0].second++;
+				if (mapCable[key][0].second > 200 && mapCable[key][0].second < 202)
+					Signal_ChangedByte(mapCable[key][0].first.getId(), mapCable[key][0].second);
+			}
+		}
+
 		if (id == DIAG_ID_FROM_DMFL)
 		{
 			if (1)
 			{
 				1; // —юда не должно заходить. »наче в методе getDiagBlock будет сбой в логике
 			}
-		}
-		if (testInformationBus.size() != 0)
-		{
-			for (int i = 0; i < testInformationBus.size(); i++)
-			{
-				if (id == testInformationBus[i].first)
-				{
-					testInformationBus.erase(testInformationBus.begin() + i);
-					Signal_changeStatusCheckInformationBus(id, true);
-				}
-				else
-				{
-					testInformationBus[i].second++;
-					if (testInformationBus[i].second > 100)
-					{
-						testInformationBus.erase(testInformationBus.begin() + i);
-						Signal_changeStatusCheckInformationBus(id, false);
-					}
-				}
-			}
-			return;
 		}
 		switch (windowType)
 		{
@@ -619,8 +605,9 @@ void Can::Timer_ReadCan()
 			for (int i = 0; i < mapCable[id].size(); i++)
 				if (mapCable[id][i].second != msgReceive[mapCable[id][i].first.getBit()])
 				{
-					mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
-					Signal_ChangedByte(mapCable[id][i].first.getId(), mapCable[id][i].second);
+					if(!(mapCable[id][i].first.getType() == TYPE_CAN || mapCable[id][i].first.getType() == TYPE_LIN))
+						mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
+					Signal_ChangedByte(mapCable[id][i].first.getId(), msgReceive[mapCable[id][i].first.getBit()]);
 				}
 
 			break;
