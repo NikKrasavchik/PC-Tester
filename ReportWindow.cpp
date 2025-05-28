@@ -1,4 +1,4 @@
-#include "ReportWindow.h"
+#include "ReportWindow.h"                                                                                           
 
 #define BUTTON_WIDTH					100
 #define BUTTON_HEIGHT					40
@@ -282,6 +282,8 @@ void ReportWindow::generateTableManual()
 
 
 		commentsTextEdits.push_back(new QTextEdit());
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
@@ -474,29 +476,29 @@ void ReportWindow::generateTableBaseSign()
 
 static void generateTableSignOut(QTableWidget* tableWidget, int maxTypeOffset)
 {
-	int indRowMeasured = tableWidget->rowCount();
-	int indRowMeasuredValues = tableWidget->rowCount() + 1;
-	int indRowMeasuredVoltage = tableWidget->rowCount() + 3;
-	int indRowMeasuredCurrent = tableWidget->rowCount() + 3;
-	int indRowThresholds = tableWidget->rowCount() + 1;
-	int indRowThresholdsVoltage = tableWidget->rowCount() + 2;
-	int indRowThresholdsCurrent = tableWidget->rowCount() + 2;
-	int indRowThresholdsVoltageMin = tableWidget->rowCount() + 3;
-	int indRowThresholdsVoltageMax = tableWidget->rowCount() + 3;
-	int indRowThresholdsCurrentMin = tableWidget->rowCount() + 3;
-	int indRowThresholdsCurrentMax = tableWidget->rowCount() + 3;
+	int indRowMeasured				 = tableWidget->rowCount();
+	int indRowMeasuredValues		 = tableWidget->rowCount() + 1;
+	int indRowMeasuredVoltage		 = tableWidget->rowCount() + 3;
+	int indRowMeasuredCurrent		 = tableWidget->rowCount() + 3;
+	int indRowThresholds			 = tableWidget->rowCount() + 1;
+	int indRowThresholdsVoltage		 = tableWidget->rowCount() + 2;
+	int indRowThresholdsCurrent		 = tableWidget->rowCount() + 2;
+	int indRowThresholdsVoltageMin	 = tableWidget->rowCount() + 3;
+	int indRowThresholdsVoltageMax	 = tableWidget->rowCount() + 3;
+	int indRowThresholdsCurrentMin	 = tableWidget->rowCount() + 3;
+	int indRowThresholdsCurrentMax	 = tableWidget->rowCount() + 3;
 
-	int indColumnMeasured = MEASUREMENT_COLUMN_POSITION;
-	int indColumnMeasuredValues = MEASUREMENT_COLUMN_POSITION;
-	int indColumnMeasuredValuesVoltage = MEASUREMENT_COLUMN_POSITION;
-	int indColumnMeasuredValuesCurrent = MEASUREMENT_COLUMN_POSITION + 1;
-	int indColumnThresholds = MEASUREMENT_COLUMN_POSITION + 2;
-	int indColumnThresholdsVoltage = MEASUREMENT_COLUMN_POSITION + 2;
-	int indColumnThresholdsCurrent = MEASUREMENT_COLUMN_POSITION + 4;
-	int indColumnThresholdsVoltageMin = MEASUREMENT_COLUMN_POSITION + 2;
-	int indColumnThresholdsVoltageMax = MEASUREMENT_COLUMN_POSITION + 3;
-	int indColumnThresholdsCurrentMin = MEASUREMENT_COLUMN_POSITION + 4;
-	int indColumnThresholdsCurrentMax = MEASUREMENT_COLUMN_POSITION + 5;
+	int indColumnMeasured				 = MEASUREMENT_COLUMN_POSITION;
+	int indColumnMeasuredValues			 = MEASUREMENT_COLUMN_POSITION;
+	int indColumnMeasuredValuesVoltage	 = MEASUREMENT_COLUMN_POSITION;
+	int indColumnMeasuredValuesCurrent	 = MEASUREMENT_COLUMN_POSITION + 1;
+	int indColumnThresholds				 = MEASUREMENT_COLUMN_POSITION + 2;
+	int indColumnThresholdsVoltage		 = MEASUREMENT_COLUMN_POSITION + 2;
+	int indColumnThresholdsCurrent		 = MEASUREMENT_COLUMN_POSITION + 4;
+	int indColumnThresholdsVoltageMin	 = MEASUREMENT_COLUMN_POSITION + 2;
+	int indColumnThresholdsVoltageMax	 = MEASUREMENT_COLUMN_POSITION + 3;
+	int indColumnThresholdsCurrentMin	 = MEASUREMENT_COLUMN_POSITION + 4;
+	int indColumnThresholdsCurrentMax	 = MEASUREMENT_COLUMN_POSITION + 5;
 
 	for (int i = 0; i < ROW_COUNT_SIGN_OUT; i++)
 		tableWidget->insertRow(tableWidget->rowCount());
@@ -944,6 +946,8 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 		}
 
 		commentsTextEdits.push_back(new QTextEdit());
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
@@ -1062,6 +1066,8 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 		fillTableColor(cableRows[i], 0, tableItems);
 
 		commentsTextEdits.push_back(new QTextEdit());
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
@@ -1194,6 +1200,8 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 		}
 
 		commentsTextEdits.push_back(new QTextEdit());
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit :  lightStyles.testwindowNameLineEdit);
+
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);
@@ -1257,6 +1265,8 @@ void ReportWindow::fillTableInformation(std::vector<TestTableRowProperties*> cab
 		fillTableColor(cableRows[i], 0, &tableItems);
 		
 		commentsTextEdits.push_back(new QTextEdit());
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
 		commentHLayout->addWidget(commentsTextEdits[commentsTextEdits.size() - 1]);

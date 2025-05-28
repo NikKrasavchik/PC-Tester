@@ -294,17 +294,8 @@ void TestWindow::selectCurrentCell(int id)
 
 void TestTableRowProperties::switchButtonState(TestButtons testButton)
 {
-	Styles* currentStyles = nullptr;
-	switch (viewWindowState->appTheme)
-	{
-	case (LIGHT_THEME):
-		currentStyles = &lightStyles;
-		break;
+	Styles* currentStyles = &lightStyles;
 
-	case (DARK_THEME):
-		currentStyles = &darkStyles;
-		break;
-	}
 	switch (typeInt)
 	{
 	case TypeCable::DIG_OUT:

@@ -767,21 +767,20 @@ void TestWindow::initDarkStyleSheets()
 		
 		QPushButton {
 			border-radius: 4px;
-			background-color: #474747;
+			background-color: #949494;
 
-			color: white;
+			color: black;
 			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
+			font-size: 12px;
+			font-weight: 400;
 		}
 
 		QPushButton:hover {
-			background-color: #6E6E6E;
+			background-color: #9D9D9D;
 		}
 
 		QPushButton:hover:pressed {
-			background-color: #858383;
-		}
+			
 	)";
 
 	darkStyles.testwindowNameLineEdit =

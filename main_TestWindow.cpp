@@ -443,7 +443,6 @@ void TestWindow::slot_backButton_clicked()
 
 void TestWindow::slot_switchThemeButton_clicked()
 {
-	qDebug() << QString("slot_switchThemeButton_clicked");
 	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
@@ -1231,32 +1230,7 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::red));
 
 		}
-		/*else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::DIG_OUT)
-		{
-			if (cableRows[offsetMap[idCable]]->connectorInt == ConnectorId::B && cableRows[offsetMap[idCable]]->pin.toInt() == 2)
-			{
-				if (1) 
-				{
 
-				}
-			}
-			int valueAdc = newValue << 4;
-			double volt = (valueAdc * 5.f) / 4096.f;
-			double amper = volt * 7.9487;
-			model->setData(model->index(offsetMap[idCable], 7), QString::number(amper, 'f', 3) + " A");
-
-		}
-		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::VNH_OUT)
-		{
-			int valueAdc = newValue << 4;
-			double volt = (valueAdc * 5.f) / 4096.f;
-			double amper;
-			if(cableRows[offsetMap[idCable]]->connectorInt == ConnectorId::B && (cableRows[offsetMap[idCable]]->pin.toInt() == 9 || cableRows[offsetMap[idCable]]->pin.toInt() == 12))
-				amper = volt * 1.2133;
-			else
-				amper = volt * 3.5227;
-			model->setData(model->index(offsetMap[idCable], 7), QString::number(amper, 'f', 3) + " A");
-		}	*/
 		else
 			model->setData(model->index(offsetMap[idCable], 7), QString::number(newValue));
 		break;
