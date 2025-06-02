@@ -125,6 +125,11 @@ bool Can::checkInformationBus_Lin(QString checkAdapter, int canId)
 
 void Can::checkInformationBus(int canId)
 {
+	if (b_flagStatusConnection && canId == 1)
+	{
+		mapCable[canId][0].second = -1;
+		return;
+	}
 	int msgSend[8] = { 1, 0, 0, 0, 0, 0, 0, 0 };
 	writeCan(canId - 1, msgSend);
 	mapCable[canId][0].second = 3;
@@ -572,6 +577,13 @@ void Can::Timer_ReadCan()
 		{
 			if (mapCable[key].size() == 1)
 			{
+				if (mapCable[key][0].second == -1 && key == 1)
+				{
+					Signal_ChangedByte(mapCable[key][0].first.getId(), 2);
+					mapCable[key][0].second = 400;
+					continue; 
+				}
+
 				if (mapCable[key][0].second == 2)
 					continue;
 

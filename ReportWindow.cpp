@@ -1931,6 +1931,8 @@ void ReportWindow::generateXlsx()
 			nameFile += "DTM_";
 		else
 			nameFile += "BCM_";
+		while (serialNumber[0] == "0")
+			serialNumber.remove(0,1);
 		nameFile += serialNumber + "-";
 		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
 		if (out.is_open())

@@ -608,7 +608,6 @@ void TestTableRowProperties::on_check_clicked()
 {
 	Signal_ChangedByte(id, NOT_SET);
 		Can::checkInformationBus(canId);
-		//selectCurrentCell(id);
 
 }
 

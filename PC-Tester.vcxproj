@@ -137,6 +137,7 @@
     </ClCompile>
     <ClCompile Include="StyleSheets.cpp" />
     <ClCompile Include="TestWindowProc.cpp" />
+    <ClCompile Include="verificationtest.cpp" />
     <ClCompile Include="WindowFrame.cpp" />
     <ClCompile Include="Xlsx\xlsxabstractooxmlfile.cpp" />
     <ClCompile Include="Xlsx\xlsxabstractsheet.cpp" />
@@ -179,6 +180,7 @@
     <QtUic Include="MoreWindow.ui" />
     <QtUic Include="ReportWindow.ui" />
     <QtUic Include="TestWindow.ui" />
+    <QtUic Include="verificationtest.ui" />
     <QtUic Include="WindowFrame.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -186,6 +188,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cable.h" />
+    <QtMoc Include="verificationtest.h" />
     <ClInclude Include="Xlsx\xlsxabstractooxmlfile.h" />
     <ClInclude Include="Xlsx\xlsxabstractooxmlfile_p.h" />
     <ClInclude Include="Xlsx\xlsxabstractsheet.h" />
