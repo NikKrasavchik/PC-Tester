@@ -61,7 +61,7 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 		}
 
 
-		cableRows[i]->generateInteractionButtons(testType);
+		cableRows[i]->generateInteractionButtons(testType, this);
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
 
 		offsetMap[cableRows[i]->id] = i;
@@ -84,7 +84,7 @@ TestTableRowProperties::TestTableRowProperties()
 	manualChecked = false;
 }
 
-void TestTableRowProperties::generateInteractionButtons(WindowType testType)
+void TestTableRowProperties::generateInteractionButtons(WindowType testType, TestWindow *testwindow)
 {
 	switch (testType)
 	{
@@ -256,6 +256,8 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType)
 
 
 			connect(((CheckInfomationBus*)buttons)->checkButton, &QPushButton::clicked, this, &TestTableRowProperties::on_check_clicked);
+			connect(this, &TestTableRowProperties::Signal_ChangedByte, testwindow, &TestWindow::Slot_ChangedByte);
+
 			break;
 
 		default:
@@ -604,8 +606,9 @@ void TestTableRowProperties::on_load100Button_clicked()
 }
 void TestTableRowProperties::on_check_clicked()
 {
+	Signal_ChangedByte(id, NOT_SET);
 		Can::checkInformationBus(canId);
-		selectCurrentCell(id);
+		//selectCurrentCell(id);
 
 }
 

@@ -171,7 +171,7 @@ public:
 	//								IN_MANUAL_TEST_AUTO_STAND
 	//								OUT_AUTO_TEST_AUTO_STAND
 	// ------------------------------------
-	void generateInteractionButtons(WindowType testType);
+	void generateInteractionButtons(WindowType testType, TestWindow *testwindow);
 
 	// ------------------------------------
 	// Name: switchButtonState
@@ -226,6 +226,7 @@ public slots:
 
 signals:
 	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
+	void Signal_ChangedByte(int idCable, int newValue); 
 
 	void selectCurrentCell(int id);
 };

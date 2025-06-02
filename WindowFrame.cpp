@@ -405,7 +405,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester" + tmpStr);
+			ui->title->setText("PC-Tester_v2" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
@@ -458,7 +458,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester" + tmpStr);
+			ui->title->setText("PC-Tester_2" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:

@@ -555,6 +555,7 @@ Measureds* getMeasureds(int* msg)
 
 	return measured;
 }
+int count = 0;
 
 void Can::Timer_ReadCan()
 {
@@ -571,6 +572,8 @@ void Can::Timer_ReadCan()
 		{
 			if (mapCable[key].size() == 1)
 			{
+				if (mapCable[key][0].second == 2)
+					continue;
 
 				mapCable[key][0].second++;
 				if (mapCable[key][0].second > 200 && mapCable[key][0].second < 202)
@@ -605,8 +608,11 @@ void Can::Timer_ReadCan()
 			for (int i = 0; i < mapCable[id].size(); i++)
 				if (mapCable[id][i].second != msgReceive[mapCable[id][i].first.getBit()])
 				{
-					if(!(mapCable[id][i].first.getType() == TYPE_CAN || mapCable[id][i].first.getType() == TYPE_LIN))
+					//if(!(mapCable[id][i].first.getType() == TYPE_CAN || mapCable[id][i].first.getType() == TYPE_LIN)) // если не can и не lin
 						mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
+					//else
+						//mapCable[id][0].second == 10000;
+
 					Signal_ChangedByte(mapCable[id][i].first.getId(), msgReceive[mapCable[id][i].first.getBit()]);
 				}
 

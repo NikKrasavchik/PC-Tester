@@ -1195,6 +1195,8 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 		{
 			if (newValue == 2)
 				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::green));
+			else if (newValue == NOT_SET)
+				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::transparent));
 			else
 				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::red));
 		}
@@ -1226,6 +1228,8 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 		{
 			if (newValue == 2)
 				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::green));
+			else if (newValue == NOT_SET)
+				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::transparent));
 			else
 				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::red));
 
