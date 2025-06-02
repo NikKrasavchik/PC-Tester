@@ -458,7 +458,6 @@ void TestWindow::slot_switchThemeButton_clicked()
 
 void TestWindow::slot_switchLanguageButton_clicked()
 {
-	qDebug() << QString("slot_switchLanguageButton_clicked");
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
@@ -474,7 +473,7 @@ void TestWindow::slot_switchLanguageButton_clicked()
 
 void TestWindow::slot_reportButton_clicked()
 {
-	qDebug() << QString("slot_reportButton_clicked");
+	SortType tmpType = fullTestSortType;
 	if (fullTestSortType != SortType::SortIndex)
 	{
 		fullTestSortType = SortType::SortIndex;
@@ -490,6 +489,10 @@ void TestWindow::slot_reportButton_clicked()
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	w.show();
 	reportWindow->exec();
+
+	fullTestSortType = tmpType;
+	rewriteCableRows();
+
 }
 
 void TestWindow::slot_sleepButton_clicked()
