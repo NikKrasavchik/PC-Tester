@@ -629,7 +629,7 @@ void MainWindow::initUiManualStand()
 	manualStandLabel->setAlignment(Qt::AlignCenter);
 	testManualStandVLayout->addWidget(manualStandLabel);
 
-	testManualStandMiddleUpSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	testManualStandMiddleUpSpacer = new QSpacerItem(0, 20, QSizePolicy::Fixed);
 	testManualStandVLayout->addItem(testManualStandMiddleUpSpacer);
 
 	// out test manual stand
@@ -638,7 +638,7 @@ void MainWindow::initUiManualStand()
 	outTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
 	testManualStandVLayout->addWidget(outTestManualStandButton);
 
-	testManualStandMiddleBottomSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	testManualStandMiddleBottomSpacer = new QSpacerItem(0, 10, QSizePolicy::Fixed);
 	testManualStandVLayout->addItem(testManualStandMiddleBottomSpacer);
 
 	// in test manual stand
@@ -647,7 +647,7 @@ void MainWindow::initUiManualStand()
 	inTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
 	testManualStandVLayout->addWidget(inTestManualStandButton);
 
-	testManualStandMiddleFooterSpacer = new QSpacerItem(0, 30, QSizePolicy::Fixed);
+	testManualStandMiddleFooterSpacer = new QSpacerItem(0, 10, QSizePolicy::Fixed);
 	testManualStandVLayout->addItem(testManualStandMiddleFooterSpacer);
 
 	// full test manual stand
@@ -656,8 +656,21 @@ void MainWindow::initUiManualStand()
 	fullTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
 	testManualStandVLayout->addWidget(fullTestManualStandButton);
 
-	backgroundManualStandMainBottomSpacer = new QSpacerItem(0, 40, QSizePolicy::Fixed);
+	backgroundManualStandMainBottomSpacer = new QSpacerItem(0, 10, QSizePolicy::Fixed);
 	testManualStandVLayout->addItem(backgroundManualStandMainBottomSpacer);
+
+	// verificationtest test manual stand
+	verificationtestTestManualStandButton = new QPushButton(backgroundManualStandWidget);
+	verificationtestTestManualStandButton->setObjectName("verificationtest");
+	verificationtestTestManualStandButton->setFixedSize(MIN_MAIN_IN_OUT_BUTTON_WIDTH, MIN_MAIN_IN_OUT_BUTTON_HEIGHT);
+	testManualStandVLayout->addWidget(verificationtestTestManualStandButton);
+
+#ifndef VERIFACATION_TEST
+	verificationtestTestManualStandButton->hide();
+#endif // VERIFACATION_TEST
+
+	backgroundManualStandMainBottomSecondSpacer = new QSpacerItem(0, 20, QSizePolicy::Fixed);
+	testManualStandVLayout->addItem(backgroundManualStandMainBottomSecondSpacer);
 
 	backgroundManualStandMainRightSpacer = new QSpacerItem(25, 0, QSizePolicy::Fixed);
 	backgroundManualStandHLayout->addItem(backgroundManualStandMainRightSpacer);
@@ -721,6 +734,7 @@ void MainWindow::initConnections()
 	connect(outTestManualStandButton, &QPushButton::clicked, this, &MainWindow::slot_outTestManualStandButton_clicked);
 	connect(inTestManualStandButton, &QPushButton::clicked, this, &MainWindow::slot_inTestManualStandButton_clicked);
 	connect(fullTestManualStandButton, &QPushButton::clicked, this, &MainWindow::slot_fullTestManualStandButton_clicked);
+	connect(verificationtestTestManualStandButton, &QPushButton::clicked, this, &MainWindow::slot_verificationtestTestManualStandButton_clicked);
 	connect(inManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_inManualTestAutoStandButton_clicked);
 	connect(outManualTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_outManualTestAutoStandButton_clicked);
 	connect(inAutoTestAutoStandButton, &QPushButton::clicked, this, &MainWindow::slot_inAutoTestAutoStandButton_clicked);
@@ -916,6 +930,7 @@ void MainWindow::switchStyleMainButtons()
 			outTestManualStandButton->setStyleSheet(lightStyles.mainButton);
 			inTestManualStandButton->setStyleSheet(lightStyles.mainButton);
 			fullTestManualStandButton->setStyleSheet(lightStyles.mainButton);
+			verificationtestTestManualStandButton->setStyleSheet(lightStyles.mainButton);
 			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
 			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
 			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButton);
@@ -933,6 +948,7 @@ void MainWindow::switchStyleMainButtons()
 			outTestManualStandButton->setStyleSheet(darkStyles.mainButton);
 			inTestManualStandButton->setStyleSheet(darkStyles.mainButton);
 			fullTestManualStandButton->setStyleSheet(darkStyles.mainButton);
+			verificationtestTestManualStandButton->setStyleSheet(darkStyles.mainButton);
 			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
 			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
 			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButton);
@@ -953,6 +969,7 @@ void MainWindow::switchStyleMainButtons()
 			outTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 			inTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 			fullTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
+			verificationtestTestManualStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 			outManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 			inManualTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
 			outAutoTestAutoStandButton->setStyleSheet(lightStyles.mainButtonNoActive);
@@ -970,6 +987,7 @@ void MainWindow::switchStyleMainButtons()
 			outTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
 			inTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
 			fullTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
+			verificationtestTestManualStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
 			outManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
 			inManualTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
 			outAutoTestAutoStandButton->setStyleSheet(darkStyles.mainButtonNoActive);
@@ -1024,6 +1042,10 @@ void MainWindow::resizeEvent(QResizeEvent* event)
 	// full stend manual
 	fullTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 	fullTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	
+	// full stend manual
+	verificationtestTestManualStandButton->setFixedWidth(MIN_MAIN_IN_OUT_BUTTON_WIDTH + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
+	verificationtestTestManualStandButton->setFixedHeight(MIN_MAIN_IN_OUT_BUTTON_HEIGHT + ((normalizedManualTestButtonWidth - MIN_SCREEN_WIDTH) * COEF_MAIN_BUTTON));
 
 	int normalizedAutoTestButtonWidth = geometry().height() * 1.645;
 	// out manual stend auto
@@ -1299,6 +1321,7 @@ void MainWindow::resetLanguage()
 		inTestManualStandButton->setText(QString("Входы"));
 		outTestManualStandButton->setText(QString("Выходы"));
 		fullTestManualStandButton->setText(QString("Полная"));
+		verificationtestTestManualStandButton->setText(QString("Валид."));
 		inManualTestAutoStandButton->setText(QString("Входы"));
 		outManualTestAutoStandButton->setText(QString("Выходы"));
 		inAutoTestAutoStandButton->setText(QString("Входы"));
@@ -1320,6 +1343,7 @@ void MainWindow::resetLanguage()
 		inTestManualStandButton->setText(QString("In"));
 		outTestManualStandButton->setText(QString("Out"));
 		fullTestManualStandButton->setText(QString("Full"));
+		verificationtestTestManualStandButton->setText(QString("Verificationtest"));
 		inManualTestAutoStandButton->setText(QString("In"));
 		outManualTestAutoStandButton->setText(QString("Out"));
 		inAutoTestAutoStandButton->setText(QString("In"));
@@ -1438,7 +1462,17 @@ void MainWindow::slot_fullTestManualStandButton_clicked()
 #endif
 	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND, cables);
 }
+void MainWindow::slot_verificationtestTestManualStandButton_clicked()
+{
+	this->hide();
+	VerificationTest dlgVerification;
 
+	WindowFrame w(WindowType::MAINWINDOW, this, &dlgVerification);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+	
+	dlgVerification.exec();
+	this->show();
+}
 void MainWindow::slot_inManualTestAutoStandButton_clicked()
 {
 #ifdef DEBUG
@@ -1802,6 +1836,8 @@ void MainWindow::slot_leftBlockBCMButton_clicked()
 
 void MainWindow::slot_leftBlockDMButton_clicked()
 {
+	verificationtestTestManualStandButton->click(); // УБРАТЬ!!!
+	return; // УБРАТЬ!!!
 	if (viewWindowState->selectedBlock != TestBlockName::DTM)
 	{
 		viewWindowState->selectedBlock = TestBlockName::DTM;

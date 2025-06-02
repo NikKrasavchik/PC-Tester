@@ -20,6 +20,7 @@
 #include "WindowFrame.h"
 #include "Components.h"
 #include "mainwindow.h"
+#include "verificationtest.h"
 #include "Cable.h"
 
 #include <QDebug>
@@ -110,6 +111,7 @@ private:
 	QPushButton* outTestManualStandButton;
 	QPushButton* inTestManualStandButton;
 	QPushButton* fullTestManualStandButton;
+	QPushButton* verificationtestTestManualStandButton;
 	QPushButton* outManualTestAutoStandButton;
 	QPushButton* inManualTestAutoStandButton;
 	QPushButton* outAutoTestAutoStandButton;
@@ -135,6 +137,7 @@ private:
 	QSpacerItem* manualStandMainBottomSpacer;
 	QSpacerItem* backgroundManualStandMainUpSpacer;
 	QSpacerItem* backgroundManualStandMainBottomSpacer;
+	QSpacerItem* backgroundManualStandMainBottomSecondSpacer;
 	QSpacerItem* backgroundManualStandMainRightSpacer;
 	QSpacerItem* backgroundManualStandMainLeftSpacer;
 	QSpacerItem* manualTestAutoStandLeftSpacer;
@@ -256,6 +259,7 @@ private slots:
 	void slot_outTestManualStandButton_clicked();
 	void slot_inTestManualStandButton_clicked();
 	void slot_fullTestManualStandButton_clicked();
+	void slot_verificationtestTestManualStandButton_clicked();
 	void slot_inManualTestAutoStandButton_clicked();
 	void slot_outManualTestAutoStandButton_clicked();
 	void slot_inAutoTestAutoStandButton_clicked();

@@ -315,31 +315,31 @@ bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintpt
 		
 		if (nX >= 0 && nX < mBorderSize) {
 			if (nY >= 0 && nY < mBorderSize) {
-				*result = HTTOPLEFT; // top left
+				//*result = HTTOPLEFT; // top left
 			}
 			else if (nY >= height() - mBorderSize) {
-				*result = HTBOTTOMLEFT; // bottom left
+				//*result = HTBOTTOMLEFT; // bottom left
 			}
 			else {
-				*result = HTLEFT; // left
+				//*result = HTLEFT; // left
 			}
 		}
 		else if (nX >= width() - mBorderSize) {
 			if (nY >= 0 && nY < mBorderSize) {
-				*result = HTTOPRIGHT; // top right
+				//*result = HTTOPRIGHT; // top right
 			}
 			else if (nY >= height() - mBorderSize) {
-				*result = HTBOTTOMRIGHT; // bottom right
+				//*result = HTBOTTOMRIGHT; // bottom right
 			}
 			else {
-				*result = HTRIGHT; // right
+				//*result = HTRIGHT; // right
 			}
 		}
 		else if (nY >= 0 && nY < mBorderSize) {
-			*result = HTTOP; // top 
+			//*result = HTTOP; // top 
 		}
 		else if (nY >= height() - mBorderSize) {
-			*result = HTBOTTOM; // bottom
+			//*result = HTBOTTOM; // bottom
 		}
 		else {
 			return QWidget::nativeEvent(eventType, message, result);
