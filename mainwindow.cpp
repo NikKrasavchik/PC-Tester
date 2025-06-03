@@ -1467,10 +1467,14 @@ void MainWindow::slot_verificationtestTestManualStandButton_clicked()
 	this->hide();
 	VerificationTest dlgVerification;
 
-	WindowFrame w(WindowType::MAINWINDOW, this, &dlgVerification);
-	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+	can->initCan(WindowType::VERIFICATIONTEST);
+	connect(can, &Can::Signal_ReciveMsg, &dlgVerification, &VerificationTest::Slot_ReciveMsg);
+
+	//WindowFrame w(WindowType::MAINWINDOW, this, &dlgVerification);
+	//w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	
 	dlgVerification.exec();
+	can->deinitCan();
 	this->show();
 }
 void MainWindow::slot_inManualTestAutoStandButton_clicked()

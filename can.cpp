@@ -685,6 +685,13 @@ void Can::Timer_ReadCan()
 				}
 			}
 			break;
+		case WindowType::VERIFICATIONTEST:
+			if (id == 0xAA &&
+				msgReceive[0] == 0xBC)
+			{
+				Signal_ReciveMsg(msgReceive);
+			}
+			break;
 		}
 	}
 

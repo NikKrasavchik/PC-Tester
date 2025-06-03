@@ -240,6 +240,7 @@ signals:
 	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // Сигнал означающий завершение теста у автостенда
 	void Signal_ChangedByte(int idCable, int newValue); // Сигнал срабатывающий когда поменялся байт у какого либо кабеля из mapCable
 	void Signal_changeStatusCheckInformationBus(int id, bool status);
+	void Signal_ReciveMsg(int msg[8]);
 
 };
 
