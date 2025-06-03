@@ -451,6 +451,9 @@ void WindowFrame::setTitle(WindowType windowType) {
 		case WindowType::REPORTWINDOW:
 			ui->title->setText(QString("Отчёт") + tmpStr);
 			break;
+		case WindowType::VERIFICATIONTEST:
+			ui->title->setText(QString("Валидационный тест") + tmpStr);
+			break;
 		}
 		break;
 
@@ -503,6 +506,9 @@ void WindowFrame::setTitle(WindowType windowType) {
 
 		case WindowType::REPORTWINDOW:
 			ui->title->setText(QString("Report") + tmpStr);
+			break;
+		case WindowType::VERIFICATIONTEST:
+			ui->title->setText(QString("Verification test") + tmpStr);
 			break;
 		}
 	}

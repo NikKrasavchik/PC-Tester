@@ -1470,8 +1470,8 @@ void MainWindow::slot_verificationtestTestManualStandButton_clicked()
 	can->initCan(WindowType::VERIFICATIONTEST);
 	connect(can, &Can::Signal_ReciveMsg, &dlgVerification, &VerificationTest::Slot_ReciveMsg);
 
-	//WindowFrame w(WindowType::MAINWINDOW, this, &dlgVerification);
-	//w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+	WindowFrame w(WindowType::VERIFICATIONTEST, this, &dlgVerification);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	
 	dlgVerification.exec();
 	can->deinitCan();

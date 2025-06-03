@@ -67,14 +67,14 @@ void VerificationTest::setTimeTest(QTime time)
 QString VerificationTest::getTextByMsg(int msg[8])
 {
 
-	if (msg[7] == 0 && msg[6] == 0 && msg[5] == 0 && msg[4] && msg[3] == 0 && msg[2] == 0)
+	if (msg[7] == 0 && msg[6] == 0 && msg[5] == 0 && msg[4] == 0 && msg[3] == 0 && msg[2] == 0)
 	{
 		if (msg[1] == 0)
 			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Тест остановлен") : QString("");
-		else
+		else if(msg[1] == 1)
 			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Тест запущен") : QString("");
 	}
-	else if (msg[7] == 0 && msg[6] == 0 && msg[5] == 0 && msg[4])
+	else if (msg[7] == 0 && msg[6] == 0 && msg[5] == 0 && msg[4] == 0)
 	{
 		if (msg[2] == 1)
 		{
@@ -148,7 +148,7 @@ QString VerificationTest::getTextByMsg(int msg[8])
 		}
 
 	}
-	QString tmpStr = "Нераспознаное сообщение. С CAN пришло: id: 0xAA msg: " + QString::number(msg[0], 16) + " " + QString::number(msg[1], 16) + " " + QString::number(msg[2], 16) + " " + QString::number(msg[3], 16) + " " + QString::number(msg[4], 16) + " " + QString::number(msg[5], 16) + " " + QString::number(msg[6], 16) + " " + QString::number(msg[7], 16);
+	QString tmpStr = "Нераспознаное сообщение. С CAN пришло: id: 0xAA msg: 0x" + QString::number(msg[0], 16) + " 0x" + QString::number(msg[1], 16) + " 0x" + QString::number(msg[2], 16) + " 0x" + QString::number(msg[3], 16) + " 0x" + QString::number(msg[4], 16) + " 0x" + QString::number(msg[5], 16) + " 0x" + QString::number(msg[6], 16) + " 0x" + QString::number(msg[7], 16);
 	return tmpStr;
 }
 
@@ -184,6 +184,9 @@ void VerificationTest::slot_TimerTimeTest()
 
 void VerificationTest::Slot_ReciveMsg(int msg[8])
 {
+	//int tmpMsg[8];
+	//for (int i = 0, j = 7; i < 8; i++, j--)
+	//	tmpMsg[i] = msg[j];
 	QListWidgetItem* item = new QListWidgetItem(ui.listWidget);
 	CustomListItem* widget = new CustomListItem(getTextByMsg(msg), timeTest.toString("hh.mm.ss") + " | " + QTime::currentTime().toString("hh:mm:ss"));
 
