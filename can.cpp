@@ -136,6 +136,13 @@ void Can::checkInformationBus(int canId)
 
 }
 
+void Can::verificationStartStop(bool isStart)
+{
+	int msg[8] = { 0xBC, isStart ? 1 : 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+
+	writeCan(0x55, msg);
+}
+
 bool Can::initCan(WindowType windowType)
 {
 	if (!b_adapterSelected)
@@ -172,6 +179,7 @@ bool Can::initCan(WindowType windowType)
 	case WindowType::IN_TEST_MANUAL_STAND:
 	case WindowType::OUT_TEST_MANUAL_STAND:
 	case WindowType::FULL_TEST_MANUAL_STAND:
+	case WindowType::VERIFICATIONTEST:
 		timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100); // И запустим таймер
 		break;
 
@@ -686,6 +694,18 @@ void Can::Timer_ReadCan()
 			}
 			break;
 		case WindowType::VERIFICATIONTEST:
+			if (id == ID_CAN_MANUALSTAND)// сообшение о конекте
+			{
+				if (b_flagStatusConnection)
+					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
+				else
+				{
+					Signal_ChangedStatusStandConnect(true);
+					b_flagStatusConnection = true;
+					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
+
+				}
+			}
 			if (id == 0xAA &&
 				msgReceive[0] == 0xBC)
 			{

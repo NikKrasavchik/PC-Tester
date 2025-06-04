@@ -1465,15 +1465,17 @@ void MainWindow::slot_fullTestManualStandButton_clicked()
 void MainWindow::slot_verificationtestTestManualStandButton_clicked()
 {
 	this->hide();
-	VerificationTest dlgVerification;
+	VerificationTest* dlgVerification = new VerificationTest;
 
 	can->initCan(WindowType::VERIFICATIONTEST);
-	connect(can, &Can::Signal_ReciveMsg, &dlgVerification, &VerificationTest::Slot_ReciveMsg);
+	connect(can, &Can::Signal_ReciveMsg, dlgVerification, &VerificationTest::Slot_ReciveMsg);
+	connect(can, &Can::Signal_ChangedStatusStandConnect, dlgVerification, &VerificationTest::Slot_ChangedStatusStandConnect);
 
-	WindowFrame w(WindowType::VERIFICATIONTEST, this, &dlgVerification);
+
+	WindowFrame w(WindowType::VERIFICATIONTEST, this, dlgVerification);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
-	
-	dlgVerification.exec();
+	w.show();
+	dlgVerification->exec();
 	can->deinitCan();
 	this->show();
 }
@@ -1840,8 +1842,6 @@ void MainWindow::slot_leftBlockBCMButton_clicked()
 
 void MainWindow::slot_leftBlockDMButton_clicked()
 {
-	verificationtestTestManualStandButton->click(); // УБРАТЬ!!!
-	return; // УБРАТЬ!!!
 	if (viewWindowState->selectedBlock != TestBlockName::DTM)
 	{
 		viewWindowState->selectedBlock = TestBlockName::DTM;

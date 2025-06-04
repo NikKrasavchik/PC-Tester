@@ -4,9 +4,9 @@
 #include "ui_verificationtest.h"
 #include <QDateTime>
 #include <qtimer.h>
-
+#include <qmessagebox.h>
 #include "Components.h"
-
+#include "Can.h"
 #define TIME_SECOND		1000 // Необходимо для отладки и стандартное значение 1000. Уменьшает задержки
 class VerificationTest : public QDialog
 {
@@ -22,7 +22,8 @@ private:
 	QTimer* TimerTimeTest; 
 	
 	bool isTestRun;
-	QTime timeTest; // Время начала теста
+	bool isStendConnection;
+	QTime timeTest; // Время теста
 	// init
 	void initConnect();
 	void initStyles();
@@ -42,6 +43,7 @@ private slots:
 public slots:
 	// Signals
 	void Slot_ReciveMsg(int msg[8]); // Сообщение с этапом теста
+	void Slot_ChangedStatusStandConnect(bool statusConnect);
 };
 
 

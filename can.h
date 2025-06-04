@@ -177,6 +177,7 @@ public:
 	
 	
 	static void checkInformationBus(int canId);
+	static void verificationStartStop(bool isStart);
 private:
 	// Отправляет сообщение в CAN
 	// @name writeCan
