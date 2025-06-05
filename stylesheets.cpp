@@ -252,6 +252,80 @@ void MainWindow::initLightStyleSheets()
 			font-size: 12px;
 			font-weight: 600;
 	)";
+	lightStyles.testwindowTableWidget =
+		R"(
+		QScrollBar:horizontal {
+    		background-color: #6E6E6E;
+		}
+
+		QScrollBar:vertical {
+    		background-color: #6E6E6E;
+		}
+
+		QHeaderView {
+			background-color: #D3D3D3;
+		}
+
+		QHeaderView::section {
+			background-color: #9D9D9D;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QTableView {
+			background-color: #B0B0B0;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QTableView::item:selected {
+			background-color: #6E6E6E;
+		}
+
+		QComboBox {
+			background-color: #B0B0B0;
+			border-radius: 10px;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		
+		QLineEdit {
+			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QPushButton {
+			border-radius: 4px;
+			background-color: #949494;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+
+		QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+
+		QPushButton:hover:pressed {
+			background-color: #767676;
+		}
+	)";
 }
 
 void MainWindow::initDarkStyleSheets()
@@ -379,6 +453,75 @@ void MainWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+	)";
+	darkStyles.testwindowTableWidget =
+		R"(
+		QScrollBar:horizontal {
+    		background-color: #6E6E6E;
+		}
+
+		QScrollBar:vertical {
+    		background-color: #6E6E6E;
+		}
+
+		QHeaderView::section {
+			background-color: #414141;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QTableView {
+			background-color: #535353;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QTableView::item:selected {
+			background-color: #9D9D9D;
+		}
+
+		QComboBox {
+			background-color: #535353;
+			border-radius: 10px;
+
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+
+		QLineEdit {
+			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		
+		QPushButton {
+			border-radius: 4px;
+			background-color: #949494;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+
+		QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+
+		QPushButton:hover:pressed {
+			
 	)";
 }
 

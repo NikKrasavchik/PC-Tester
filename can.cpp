@@ -136,9 +136,32 @@ void Can::checkInformationBus(int canId)
 
 }
 
-void Can::verificationStartStop(bool isStart)
+void Can::verificationStartStop(bool seq1, bool seq2, bool seq3, bool seq4, bool seq5, bool seq6, bool seq7, bool seq8, bool seq9, bool seq10)
 {
-	int msg[8] = { 0xBC, isStart ? 1 : 0, 0x0, 0x0, 0x0, 0x0, 0x0, 0x0 };
+	int byte1 = 0;
+	int byte2 = 0;
+	if (seq1)
+		byte1 += 128;
+	if (seq2)
+		byte1 += 64;
+	if (seq3)
+		byte1 += 32;
+	if (seq4)
+		byte1 += 16;
+	if (seq5)
+		byte1 += 8;
+	if (seq6)
+		byte1 += 4;
+	if (seq7)
+		byte1 += 2;
+	if (seq8)
+		byte1 += 1;
+	if (seq9)
+		byte2 += 128;
+	if (seq10)
+		byte2 += 64;
+
+	int msg[8] = { 0xBC, byte1, byte2, 0x0, 0x0, 0x0, 0x0, 0x0 };
 
 	writeCan(0x55, msg);
 }

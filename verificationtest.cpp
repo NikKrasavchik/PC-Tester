@@ -9,7 +9,7 @@ VerificationTest::VerificationTest(QWidget *parent)
 	isStendConnection = false;
 	TimerTimeTest = new QTimer();
 
-
+	initTable();
 	initConnect();
 	initStyles();
 	initText();
@@ -19,11 +19,122 @@ VerificationTest::VerificationTest(QWidget *parent)
 VerificationTest::~VerificationTest()
 {}
 
+void VerificationTest::initTable()
+{
+	ui.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+	ui.tableWidget->setSelectionMode(QAbstractItemView::NoSelection);
+	ui.tableWidget->horizontalHeader()->hide();
+	ui.tableWidget->verticalHeader()->hide();
+
+	if (viewWindowState->selectedBlock == TestBlockName::DTM)
+	{
+
+		ui.tableWidget->setRowCount(11);
+		ui.tableWidget->setColumnCount(14);
+
+		ui.tableWidget->setRowHeight(0, 30);
+		for (int i = 1; i < 11; i++)
+			ui.tableWidget->verticalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
+
+		for (int i = 0; i < 14; i++)
+			ui.tableWidget->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
+
+		ui.tableWidget->setSpan(0, 0, 1, 8);
+		ui.tableWidget->setSpan(0, 8, 1, 14);
+
+		setTextTable(0, 0, QString("Постоянно включен"), QString("Continiously ON"));
+		setTextTable(0, 8, QString("Переодические"), QString("Periodic"));
+
+		setTextTable(1, 0, QString("Mirror"));
+		setTextTable(1, 8, QString("Mirror Adj Y Up (D7-D5)"));
+		setTextTable(1, 9, QString("Mirror Adj Y Down (D5-D7)"));
+		setTextTable(1, 10, QString("Mirror Adj X Right (D6-D7)"));
+		setTextTable(1, 11, QString("Mirror Adj X Left (D7-D6)"));
+		setTextTable(1, 12, QString("Mirror Fold (2A) / Mirror Adj (D7-D8)"));
+		setTextTable(1, 13, QString("Mirror Unfold (2A) (D8-D7)"));
+
+
+		setTextTable(2, 0, QString("Lights"));
+		setTextTable(2, 1, QString("Background Illumination (A14)"));
+		setTextTable(2, 2, QString("Indication Door Lock Switch (A17)"));
+		setTextTable(2, 3, QString("Reserved (D15)"));
+		setTextTable(2, 4, QString("Reserved (D16)"));
+		setTextTable(2, 5, QString("Reserved (D17)"));
+		setTextTable(2, 6, QString("Reserved (D18)"));
+		setTextTable(2, 7, QString("Brake Light High Mounted (B2)"));
+		setTextTable(2, 8, QString("Door Handle Light (A6)"));
+		setTextTable(2, 9, QString("Safety light / Sill light (A16)"));
+		setTextTable(2, 10, QString("Turn Indicator (D9)"));
+		setTextTable(2, 11, QString("Blind Spot LED (D13)"));
+
+		setTextTable(3, 0, QString("Lock"));
+		setTextTable(3, 1, QString("Soft close Motor Feed (B3)"));
+		setTextTable(3, 8, QString("Single Lock (C11-C12)"));
+		setTextTable(3, 9, QString("Single Unlock (C12-C11)"));
+		setTextTable(3, 10, QString("Double Lock (C12-C9)"));
+		setTextTable(3, 11, QString("Double Unlock (C9-C12)"));
+
+		setTextTable(4, 0, QString("Window"));
+		setTextTable(4, 1, QString("Window Lifter Feed (B15)"));
+		setTextTable(4, 8, QString("Window Up (A19)"));
+		setTextTable(4, 9, QString("Window Down (A20)"));
+
+		setTextTable(5, 0, QString("Heat"));
+		setTextTable(5, 8, QString("Mirror Heating DefrostM (D1)"));
+		setTextTable(5, 9, QString("Armrest Heat (B7)"));
+
+		setTextTable(6, 0, QString("Child"));
+		setTextTable(6, 8, QString("Child lock (4A) (B9)"));
+		setTextTable(6, 9, QString("Child Unlock (4A) (B12)"));
+
+		setTextTable(7, 0, QString("Terminals"));
+		setTextTable(7, 1, QString("DMx_T15_1 (B5)"));
+		setTextTable(7, 2, QString("Interior Light (B11)"));
+		setTextTable(7, 3, QString("DMx_T30d (B14)"));
+
+		setTextTable(8, 0, QString("Actuator"));
+		setTextTable(8, 8, QString("Door_movement_motor (+ close) (B10)"));
+		setTextTable(8, 9, QString("Door_movement_motor (+ open) (B13)"));
+
+		setTextTable(9, 0, QString("Others"));
+		setTextTable(9, 1, QString("Reserved (B8)"));
+		setTextTable(9, 2, QString("Fire extinguisher system relay (C3)"));
+		setTextTable(9, 3, QString("ExMr+ (D4)"));
+		setTextTable(9, 4, QString("Additional (T30*) battery relay (C8)"));
+		setTextTable(9, 8, QString("Reserved (A15)"));
+		setTextTable(9, 9, QString("Reserved (C6)"));
+
+		setTextTable(10, 0, QString("SunShade"));
+		setTextTable(10, 8, QString("SunShade Motor Door Open (B1)"));
+		setTextTable(10, 9, QString("SunShade Motor Door Close (B4)"));
+		setTextTable(10, 10, QString("Sun Shade Motor Rear Window Close (C7)"));
+		setTextTable(10, 11, QString("Sun Shade Motor Rear Window Open (C10)"));
+
+
+	}
+	else
+	{
+
+	}
+
+
+}
+
 void VerificationTest::initConnect()
 {
 	connect(ui.StartStopButton, &QPushButton::clicked, this, &VerificationTest::slot_StartStopButton_clicked);
 	connect(TimerTimeTest, SIGNAL(timeout()), this, SLOT(slot_TimerTimeTest()));
 
+	connect(ui.checkBox, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_2, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_3, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_4, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_5, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_6, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_7, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_8, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_9, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
+	connect(ui.checkBox_10, &QCheckBox::clicked, this, &VerificationTest::slot_CheckBox);
 }
 
 void VerificationTest::initStyles()
@@ -33,6 +144,7 @@ void VerificationTest::initStyles()
 		ui.StartTimeLabel->setStyleSheet(lightStyles.settingSelectText);
 		ui.EndTimeLable->setStyleSheet(lightStyles.settingSelectText);
 		ui.TimeTestLable->setStyleSheet(lightStyles.settingSelectText);
+		ui.tableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 
 	}
 	else
@@ -40,6 +152,7 @@ void VerificationTest::initStyles()
 		ui.StartTimeLabel->setStyleSheet(darkStyles.settingSelectText);
 		ui.EndTimeLable->setStyleSheet(darkStyles.settingSelectText);
 		ui.TimeTestLable->setStyleSheet(darkStyles.settingSelectText);
+		ui.tableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 
 	}
 
@@ -155,37 +268,89 @@ QString VerificationTest::getTextByMsg(int msg[8])
 		if (msg[4] == 1)
 		{
 			if (msg[5] == 0)
+			{
+				ui.tableWidget->item(7, 1)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(7, 2)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(7, 3)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. ContiniouslyTerminals") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(7, 1)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(7, 2)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(7, 3)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. ContiniouslyTerminals") : QString("");
+			}
 		}
 		else if (msg[4] == 2)
 		{
 			if (msg[5] == 0)
+			{
+				ui.tableWidget->item(2, 1)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 2)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 3)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 4)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 5)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 6)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 7)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. ContiniouslyLights") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(2, 1)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 2)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 3)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 4)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 5)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 6)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 7)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. ContiniouslyLights") : QString("");
+			}
 		}
 		else if (msg[4] == 3)
 		{
 			if (msg[5] == 0)
+			{
+				ui.tableWidget->item(3, 1)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. ContiniouslyLock") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(3, 1)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. ContiniouslyLock") : QString("");
+			}
 		}
 		else if (msg[4] == 4)
 		{
 			if (msg[5] == 0)
+			{
+				ui.tableWidget->item(4, 1)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. ContiniouslyWindow") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(4, 1)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. ContiniouslyWindow") : QString("");
+			}
 		}
 		else if (msg[4] == 5)
 		{
 			if (msg[5] == 0)
+			{
+				ui.tableWidget->item(9, 1)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(9, 2)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(9, 3)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(9, 4)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. ContiniouslyOthers") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(9, 1)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(9, 2)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(9, 3)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(9, 4)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. ContiniouslyOthers") : QString("");
+			}
 		}
 	}
 	else
@@ -193,168 +358,352 @@ QString VerificationTest::getTextByMsg(int msg[8])
 		if (msg[6] == 1)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(1, 10)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj X Right(D6-D7)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(1, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj X Right(D6-D7)") : QString("");
+			}
 		}
 		else if (msg[6] == 2)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(1, 11)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj X Left(D7-D6)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(1, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj X Left(D7-D6)") : QString("");
+			}
 		}
 		else if (msg[6] == 3)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(1, 8)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj Y Up(D7-D5)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(1, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj Y Up(D7-D5)") : QString("");
+			}
 		}
 		else if (msg[6] == 4)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(1, 9)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj Y Down(D5-D7)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(1, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj Y Down(D5-D7)") : QString("");
+			}
 		}
 		else if (msg[6] == 5)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(1, 12)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Fold (2A) / Mirror Adj(D7-D8)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(1, 12)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Fold (2A) / Mirror Adj(D7-D8)") : QString("");
+			}
 		}
 		else if (msg[6] == 6)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(1, 13)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Unfold (2A)(D8-D7)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(1, 13)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Unfold (2A)(D8-D7)") : QString("");
+			}
 		}
 		else if (msg[6] == 7)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(2, 8)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door Handle Light(A6) | Safety light / Sill light(A16) | DMFx: Turn Indicator(D9) | DMFx: Blind Spot LED(D13)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(2, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door Handle Light(A6) | Safety light / Sill light(A16) | DMFx: Turn Indicator(D9) | DMFx: Blind Spot LED(D13)") : QString("");
+			}
 		}
 		else if (msg[6] == 8)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(5, 8)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Heating DefrostM(D1) | Armrest Heat(B7)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(5, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Heating DefrostM(D1) | Armrest Heat(B7)") : QString("");
+			}
 		}
 		else if (msg[6] == 9)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(6, 8)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Child lock(4A)(B9)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(6, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Child lock(4A)(B9)") : QString("");
+			}
 		}
 		else if (msg[6] == 10)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(6, 9)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Child Unlock(4A)(B12)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(6, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Child Unlock(4A)(B12)") : QString("");
+			}
 		}
 		else if (msg[6] == 11)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(3, 8)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Single Lock(C11-C12)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(3, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Single Lock(C11-C12)") : QString("");
+			}
 		}
 		else if (msg[6] == 12)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(3, 9)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Single Unlock(C12-C11)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(3, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Single Unlock(C12-C11)") : QString("");
+			}
 		}
 		else if (msg[6] == 13)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(3, 10)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Double Lock(C12-C9)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(3, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Double Lock(C12-C9)") : QString("");
+			}
 		}
 		else if (msg[6] == 14)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(3, 11)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Double Unlock(C9-C12)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(3, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Double Unlock(C9-C12)") : QString("");
+			}
 		}
 		else if (msg[6] == 15)
 		{
 			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(4, 8)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Window Up(A19)") : QString("");
+			}
 			else
+			{
+				ui.tableWidget->item(4, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Window Up(A19)	") : QString("");
+			}
 		}
 		else if (msg[6] == 16)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Window Down(A20)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Window Down(A20)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(4, 9)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Window Down(A20)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(4, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Window Down(A20)") : QString("");
+			}
 		}
 		else if (msg[6] == 17)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Reserved(A15) | Reserved(C6)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Reserved(A15) | Reserved(C6)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(9, 8)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(9, 9)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Reserved(A15) | Reserved(C6)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(9, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(9, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Reserved(A15) | Reserved(C6)") : QString("");
+			}
 		}
 		else if (msg[6] == 18)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ close)(B10)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ close)(B10)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(8, 8)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ close)(B10)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(8, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ close)(B10)") : QString("");
+			}
 		}
 		else if (msg[6] == 19)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ open)(B13)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ open)(B13)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(8, 9)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ open)(B13)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(8, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ open)(B13)") : QString("");
+			}
 		}
 		else if (msg[6] == 20)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Open(B1)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Open(B1)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(10, 8)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Open(B1)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(10, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Open(B1)") : QString("");
+			}
 		}
 		else if (msg[6] == 21)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Close(B4)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Close(B4)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(10, 9)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Close(B4)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(10, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Close(B4)") : QString("");
+			}
 		}
 		else if (msg[6] == 22)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Close(C7)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Close(C7)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(10, 10)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Close(C7)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(10, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Close(C7)") : QString("");
+			}
 		}
 		else if (msg[6] == 23)
 		{
-		if (msg[7] == 0)
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Open(C10)") : QString("");
-		else
-			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Open(C10)") : QString("");
+			if (msg[7] == 0)
+			{
+				ui.tableWidget->item(10, 11)->setBackground(QColor(Qt::transparent));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Open(C10)") : QString("");
+			}
+			else
+			{
+				ui.tableWidget->item(10, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Open(C10)") : QString("");
+			}
 		}
 
 	}
 	QString tmpStr = "Нераспознаное сообщение. С CAN пришло: id: 0xAA msg: 0x" + QString::number(msg[0], 16) + " 0x" + QString::number(msg[1], 16) + " 0x" + QString::number(msg[2], 16) + " 0x" + QString::number(msg[3], 16) + " 0x" + QString::number(msg[4], 16) + " 0x" + QString::number(msg[5], 16) + " 0x" + QString::number(msg[6], 16) + " 0x" + QString::number(msg[7], 16);
 	return tmpStr;
+}
+
+void VerificationTest::setTextTable(int row, int column, QString textRus, QString textEng)
+{
+	ui.tableWidget->setItem(row, column, new QTableWidgetItem(viewWindowState->appLanguage == RUSSIAN_LANG ? textRus : textEng));
+	ui.tableWidget->item(row, column)->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
+}
+
+void VerificationTest::configProgressBar()
+{
+	int tmpValue = 0;
+	if (ui.checkBox->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_2->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_3->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_4->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_5->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_6->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_7->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_8->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_9->isChecked())
+		tmpValue += 3600;
+	if (ui.checkBox_10->isChecked())
+		tmpValue += 3600;
+	ui.progressBar->setValue(tmpValue);
+}
+
+void VerificationTest::resizeEvent(QResizeEvent* event)
+{
+	if (viewWindowState->selectedBlock == TestBlockName::DTM)
+	{
+
+	}
+	else
+	{
+
+	}
 }
 
 void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт/стоп тест
@@ -365,7 +714,7 @@ void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт
 		TimerTimeTest->stop();
 
 		ui.StartStopButton->setText(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Старт") : QString("Start"));
-		Can::verificationStartStop(false);
+		Can::verificationStartStop();
 	}
 	else
 	{
@@ -377,13 +726,14 @@ void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт
 		// Начинаем тест
 		timeTest = QTime(0,0,0);
 		setTimeTest(timeTest);
-		
+		configProgressBar();
+
 		ui.StartStopButton->setText(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Стоп") : QString("Stop"));
 		ui.progressBar->setValue(0);
 		ui.listWidget->clear();
 
 		TimerTimeTest->start(TIME_SECOND);
-		Can::verificationStartStop(true);
+		Can::verificationStartStop(ui.checkBox->isChecked(), ui.checkBox_2->isChecked(), ui.checkBox_3->isChecked(), ui.checkBox_4->isChecked(), ui.checkBox_5->isChecked(), ui.checkBox_6->isChecked(), ui.checkBox_7->isChecked(), ui.checkBox_8->isChecked(), ui.checkBox_9->isChecked(), ui.checkBox_10->isChecked());
 	}
 	isTestRun = !isTestRun;
 }
@@ -392,15 +742,41 @@ void VerificationTest::slot_TimerTimeTest()
 {
 	timeTest = timeTest.addMSecs(TIME_SECOND);
 	setTimeTest(timeTest);
+
+
 	int tmpInt = ui.progressBar->value() + 1;
 	ui.progressBar->setValue(tmpInt);
 }
 
+void VerificationTest::slot_CheckBox()
+{
+	int tmpValue = 0;
+	if (ui.checkBox->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_2->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_3->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_4->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_5->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_6->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_7->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_8->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_9->isChecked())
+		tmpValue += 1;
+	if (ui.checkBox_10->isChecked())
+		tmpValue += 1;
+
+	ui.EndTimeLable->setText(QString::number(tmpValue) + ":00:00");
+}
+
 void VerificationTest::Slot_ReciveMsg(int msg[8])
 {
-	//int tmpMsg[8];
-	//for (int i = 0, j = 7; i < 8; i++, j--)
-	//	tmpMsg[i] = msg[j];
 	QListWidgetItem* item = new QListWidgetItem(ui.listWidget);
 	CustomListItem* widget = new CustomListItem(getTextByMsg(msg), timeTest.toString("hh.mm.ss") + " | " + QTime::currentTime().toString("hh:mm:ss"));
 

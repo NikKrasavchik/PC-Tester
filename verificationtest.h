@@ -24,7 +24,9 @@ private:
 	bool isTestRun;
 	bool isStendConnection;
 	QTime timeTest; // Время теста
+
 	// init
+	void initTable();
 	void initConnect();
 	void initStyles();
 	void initText();
@@ -33,17 +35,24 @@ private:
 	//
 	void setTimeTest(QTime time);
 	QString getTextByMsg(int msg[8]);
+	void setTextTable(int row, int column, QString textRus, QString textEng = QString(""));
+	void configProgressBar();
+
+	void resizeEvent(QResizeEvent* event);
 
 private slots:
 	// Buttons
 	void slot_StartStopButton_clicked();
 	// Timer
 	void slot_TimerTimeTest();
+	// CheckBox
+	void slot_CheckBox();
 
 public slots:
 	// Signals
 	void Slot_ReciveMsg(int msg[8]); // Сообщение с этапом теста
 	void Slot_ChangedStatusStandConnect(bool statusConnect);
+
 };
 
 
