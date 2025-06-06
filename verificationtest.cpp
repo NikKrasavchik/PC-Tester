@@ -46,7 +46,7 @@ void VerificationTest::initTable()
 		setTextTable(0, 8, QString("Переодические"), QString("Periodic"));
 
 		setTextTable(1, 0, QString("Mirror"));
-		setTextTable(1, 8, QString("Mirror Adj Y Up (D7-D5)"));
+		setTextTable(1, 8, QString("Mirror Adj Y Up (D7-D5) "));
 		setTextTable(1, 9, QString("Mirror Adj Y Down (D5-D7)"));
 		setTextTable(1, 10, QString("Mirror Adj X Right (D6-D7)"));
 		setTextTable(1, 11, QString("Mirror Adj X Left (D7-D6)"));
@@ -438,11 +438,17 @@ QString VerificationTest::getTextByMsg(int msg[8])
 			if (msg[7] == 0)
 			{
 				ui.tableWidget->item(2, 8)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 9)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 10)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(2, 11)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door Handle Light(A6) | Safety light / Sill light(A16) | DMFx: Turn Indicator(D9) | DMFx: Blind Spot LED(D13)") : QString("");
 			}
 			else
 			{
 				ui.tableWidget->item(2, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(2, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door Handle Light(A6) | Safety light / Sill light(A16) | DMFx: Turn Indicator(D9) | DMFx: Blind Spot LED(D13)") : QString("");
 			}
 		}
@@ -451,11 +457,13 @@ QString VerificationTest::getTextByMsg(int msg[8])
 			if (msg[7] == 0)
 			{
 				ui.tableWidget->item(5, 8)->setBackground(QColor(Qt::transparent));
+				ui.tableWidget->item(5, 9)->setBackground(QColor(Qt::transparent));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Heating DefrostM(D1) | Armrest Heat(B7)") : QString("");
 			}
 			else
 			{
 				ui.tableWidget->item(5, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
+				ui.tableWidget->item(5, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
 				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Heating DefrostM(D1) | Armrest Heat(B7)") : QString("");
 			}
 		}
@@ -668,7 +676,7 @@ void VerificationTest::setTextTable(int row, int column, QString textRus, QStrin
 	ui.tableWidget->item(row, column)->setTextAlignment(Qt::AlignHCenter | Qt::AlignVCenter);
 }
 
-void VerificationTest::configProgressBar()
+bool VerificationTest::configProgressBar()
 {
 	int tmpValue = 0;
 	if (ui.checkBox->isChecked())
@@ -691,7 +699,13 @@ void VerificationTest::configProgressBar()
 		tmpValue += 3600;
 	if (ui.checkBox_10->isChecked())
 		tmpValue += 3600;
-	ui.progressBar->setValue(tmpValue);
+	if (tmpValue == 0)
+	{
+		QMessageBox::warning(this, QString("Внимание"), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Хотябы один тест должен быть выбран") : QString("The block is not connected"));
+		return false;
+	}
+	ui.progressBar->setMaximum(tmpValue);
+	return true;
 }
 
 void VerificationTest::resizeEvent(QResizeEvent* event)
@@ -723,10 +737,13 @@ void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт
 			QMessageBox::warning(this, QString("Внимание"), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Блок не подключкен") : QString("The block is not connected"));
 			return;
 		}
+		if (!configProgressBar())
+			return;
+
+
 		// Начинаем тест
 		timeTest = QTime(0,0,0);
 		setTimeTest(timeTest);
-		configProgressBar();
 
 		ui.StartStopButton->setText(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Стоп") : QString("Stop"));
 		ui.progressBar->setValue(0);
@@ -740,7 +757,7 @@ void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт
 
 void VerificationTest::slot_TimerTimeTest()
 {
-	timeTest = timeTest.addMSecs(TIME_SECOND);
+	timeTest = timeTest.addMSecs(TIME_SECOND*10);
 	setTimeTest(timeTest);
 
 
