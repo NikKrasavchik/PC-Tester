@@ -7,7 +7,7 @@
 #include <qmessagebox.h>
 #include "Components.h"
 #include "Can.h"
-#define TIME_SECOND		100 // Необходимо для отладки и стандартное значение 1000. Уменьшает задержки
+#define TIME_SECOND		1000 // Необходимо для отладки и стандартное значение 1000. Уменьшает задержки
 class VerificationTest : public QDialog
 {
 	Q_OBJECT

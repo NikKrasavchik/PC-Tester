@@ -38,7 +38,7 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 			break;
 
 		case Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL: // Warning 0x003
-			QMessageBox::warning(this, QString("Внимание"), QString("Выберите Can-адаптер перед началом работы\nWarning 0x003"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Выберите Can-адаптер перед началом работвы\nWarning 0x003"));
 			break;
 
 		case Warnings::MainWindow::ADAPTERS_CHANGED: // Warning 0x004

@@ -603,7 +603,12 @@ void MainWindow::initUiManualStand()
 	manualStandMainVLayout->setObjectName("manualStandMainVLayout");
 	manualStandMainHLayout->addItem(manualStandMainVLayout);
 
-	manualStandMainUpSpacer = new QSpacerItem(0, 100, QSizePolicy::Expanding);
+#ifndef VERIFACATION_TEST
+	manualStandMainUpSpacer = new QSpacerItem(0, 60, QSizePolicy::Expanding);
+#else 
+	manualStandMainUpSpacer = new QSpacerItem(0, 20, QSizePolicy::Expanding);
+#endif // VERIFACATION_TEST
+
 	manualStandMainVLayout->addItem(manualStandMainUpSpacer);
 
 	backgroundManualStandWidget = new QWidget(manualStandWidget);
@@ -1464,6 +1469,22 @@ void MainWindow::slot_fullTestManualStandButton_clicked()
 }
 void MainWindow::slot_verificationtestTestManualStandButton_clicked()
 {
+	if (!can->getStatusAdapterSelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL);
+		return;
+	}
+	if (!can->getStatusFrequencySelected())
+	{
+		generateWarning(Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL);
+		return;
+	}
+	if (viewWindowState->selectedBlock == TestBlockName::EMPTY)
+	{
+		generateWarning(Warnings::MainWindow::NOT_SELECTED_BLOCK);
+		return;
+	}
+
 	this->hide();
 	VerificationTest* dlgVerification = new VerificationTest;
 
