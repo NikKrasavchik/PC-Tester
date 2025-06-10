@@ -1073,38 +1073,38 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(2, 17)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Heated Aquablade") : QString("");
+					ui.tableWidget->item(2, 18)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(2, 19)->setBackground(QColor(Qt::transparent));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Heated Aquablade | Выкл. Heated windshield | Выкл. Windscreen FCU film heater") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(2, 17)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Heated Aquablade") : QString("");
+					ui.tableWidget->item(2, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(2, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Heated Aquablade | Вкл. Heated windshield | Вкл. Windscreen FCU film heater") : QString("");
 				}
 			}
 			else if (msg[6] == 6)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(2, 18)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Heated windshield") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(2, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Heated windshield") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 7)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(2, 19)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Windscreen FCU film heater") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(2, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Windscreen FCU film heater") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 8)
@@ -1112,64 +1112,64 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(3, 17)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Armrest Heat Front Right Inner") : QString("");
+					ui.tableWidget->item(3, 18)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(3, 19)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(3, 20)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(3, 21)->setBackground(QColor(Qt::transparent));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Armrest Heat Front Right Inner | Выкл. Armrest Heat Front Left Inner | Выкл. Armrest Heat Rear Left Inner | Выкл. Armrest Heat Rear Right Inner | Вкл. Armrest Heat Rear Right Inner") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(3, 17)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Armrest Heat Front Right Inner") : QString("");
+					ui.tableWidget->item(3, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(3, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(3, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(3, 21)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Armrest Heat Front Right Inner | Вкл. Armrest Heat Front Left Inner | Вкл. Armrest Heat Rear Left Inner | Вкл. Armrest Heat Rear Right Inner | Выкл. Steering Wheel Heating Indicator") : QString("");
 				}
 			}
 			else if (msg[6] == 9)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(3, 18)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Armrest Heat Front Left Inner") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(3, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Armrest Heat Front Left Inner") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 10)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(3, 19)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Armrest Heat Rear Left Inner") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(3, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Armrest Heat Rear Left Inner") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 11)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(3, 20)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Armrest Heat Rear Right Inner") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(3, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Armrest Heat Rear Right Inner") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 12)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(3, 21)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Steering Wheel Heating Indicator") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(3, 21)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Steering Wheel Heating Indicator") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 13)
@@ -1177,90 +1177,90 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(4, 17)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Rear Window Wash") : QString("");
+					ui.tableWidget->item(4, 18)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(4, 19)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(4, 20)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(4, 21)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(4, 22)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(4, 23)->setBackground(QColor(Qt::transparent));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Rear Window Wash | Выкл. Windscreen Wash | Выкл. Washer system valve 1 | Выкл. Washer system valve 2 (radar) | Выкл. Washer system valve 3 (thermal imager) | Выкл. Washer system valve 4 (headlights) | Выкл. Headlights and ADAS washer pump") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(4, 17)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Rear Window Wash") : QString("");
+					ui.tableWidget->item(4, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(4, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(4, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(4, 21)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(4, 22)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(4, 23)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Rear Window Wash | Вкл. Windscreen Wash | Вкл. Washer system valve 1 | Вкл. Washer system valve 2 (radar) | Вкл. Washer system valve 3 (thermal imager) | Вкл. Washer system valve 4 (headlights) | Вкл. Headlights and ADAS washer pump") : QString("");
 				}
 			}
 			else if (msg[6] == 14)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(4, 18)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Windscreen Wash") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(4, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Windscreen Wash") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 15)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(4, 19)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Washer system valve 1") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(4, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Washer system valve 1") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 16)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(4, 20)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Washer system valve 2 (radar)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(4, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Washer system valve 2 (radar)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 17)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(4, 21)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Washer system valve 3 (thermal imager)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(4, 21)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Washer system valve 3 (thermal imager)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 18)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(4, 22)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Washer system valve 4 (headlights)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(4, 22)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Washer system valve 4 (headlights)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 19)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(4, 23)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Headlights and ADAS washer pump") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(4, 23)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Headlights and ADAS washer pump") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 20)
@@ -1268,51 +1268,51 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(6, 17)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Rear Courtesy Light (MPV)") : QString("");
+					ui.tableWidget->item(6, 18)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(6, 19)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(6, 20)->setBackground(QColor(Qt::transparent));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Rear Courtesy Light (MPV) | Выкл. Ultraviolet ceiling plafon Light | Выкл. Underhood box illumination light (BEV) | Выкл. Glove box light") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(6, 17)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Rear Courtesy Light (MPV)") : QString("");
+					ui.tableWidget->item(6, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(6, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(6, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Rear Courtesy Light (MPV) | Вкл. Ultraviolet ceiling plafon Light | Вкл. Underhood box illumination light (BEV) | Вкл. Glove box light") : QString("");
 				}
 			}
 			else if (msg[6] == 21)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(6, 18)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Ultraviolet ceiling plafon Light") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(6, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Ultraviolet ceiling plafon Light") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 22)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(6, 19)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Underhood box illumination light (BEV)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(6, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Underhood box illumination light (BEV)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 23)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(6, 20)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Glove box light") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(6, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Glove box light") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 24)
@@ -1320,38 +1320,38 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(9, 17)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. HV lid unlock motor") : QString("");
+					ui.tableWidget->item(9, 18)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(9, 19)->setBackground(QColor(Qt::transparent));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. HV lid unlock motor | Выкл. Vibration motor (CDA) | Выкл. Horn Ctrl") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(9, 17)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. HV lid unlock motor") : QString("");
+					ui.tableWidget->item(9, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(9, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. HV lid unlock motor | Вкл. Vibration motor (CDA) | Вкл. Horn Ctrl") : QString("");
 				}
 			}
 			else if (msg[6] == 25)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(9, 18)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Vibration motor (CDA)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(9, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Vibration motor (CDA)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 26)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(9, 19)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Horn Ctrl") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(9, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Horn Ctrl") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 27)
@@ -1359,51 +1359,51 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(10, 17)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. RL passenger footrest motor (up)") : QString("");
+					ui.tableWidget->item(10, 18)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(10, 19)->setBackground(QColor(Qt::transparent));
+					ui.tableWidget->item(10, 20)->setBackground(QColor(Qt::transparent));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. RL passenger footrest motor (up) | Выкл. RL passenger footrest motor (down) | Выкл. RR passenger footrest motor (down) | Выкл. RR passenger footrest motor(up)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(10, 17)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. RL passenger footrest motor (up)") : QString("");
+					ui.tableWidget->item(10, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(10, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					ui.tableWidget->item(10, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. RL passenger footrest motor (up) | Вкл. RL passenger footrest motor (down) | Вкл. RR passenger footrest motor (down) Вкл. RR passenger footrest motor(up)") : QString("");
 				}
 			}
 			else if (msg[6] == 28)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(10, 18)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. RL passenger footrest motor (down)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(10, 18)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. RL passenger footrest motor (down)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 29)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(10, 19)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. RR passenger footrest motor (down)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(10, 19)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. RR passenger footrest motor (down)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 30)
 			{
 				if (msg[7] == 0)
 				{
-					ui.tableWidget->item(10, 20)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. RR passenger footrest motor(up)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 				else
 				{
-					ui.tableWidget->item(10, 20)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. RR passenger footrest motor(up)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("") : QString("");
 				}
 			}
 			else if (msg[6] == 31)
