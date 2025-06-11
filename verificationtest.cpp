@@ -1502,6 +1502,37 @@ bool VerificationTest::configProgressBar()
 	return true;
 }
 
+void VerificationTest::createLogFile(bool isStart)
+{
+	if (isStart)
+	{
+		QString fileName = "Log/log_" + QDateTime::currentDateTime().date().toString("dd.MM.yy") + "_" + QDateTime::currentDateTime().time().toString("hh.mm.ss") + ".txt";
+		
+		fout.open(fileName.toStdString());
+		writeLogFile(QString("Start test"));
+	}
+	else
+	{
+		writeLogFile(QString("End test"));
+		fout.close();
+	}
+}
+
+void VerificationTest::writeLogFile(QString textRus, QString textEng)
+{
+	QString strTmp;
+	if (textEng.length() != 0)
+		strTmp = viewWindowState->appLanguage == RUSSIAN_LANG ? textRus : textEng;
+	else
+		strTmp = textRus;
+
+	while (strTmp.length() < 100)
+		strTmp += " ";
+
+	strTmp += timeTest.toString("hh.mm.ss") + " | " + QTime::currentTime().toString("hh:mm:ss") + "\n";
+	fout << strTmp.toStdString();
+}
+
 void VerificationTest::resizeEvent(QResizeEvent* event)
 {
 	if (viewWindowState->selectedBlock == TestBlockName::DTM)
@@ -1520,6 +1551,7 @@ void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт
 	{
 		// Заканчиваем тест
 		TimerTimeTest->stop();
+		createLogFile(false);
 
 		ui.StartStopButton->setText(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Старт") : QString("Start"));
 		Can::verificationStartStop();
@@ -1538,6 +1570,7 @@ void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт
 		// Начинаем тест
 		timeTest = QTime(0,0,0);
 		setTimeTest(timeTest);
+		createLogFile(true);
 
 		ui.StartStopButton->setText(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Стоп") : QString("Stop"));
 		ui.progressBar->setValue(0);
@@ -1593,6 +1626,8 @@ void VerificationTest::Slot_ReciveMsg(int msg[8])
 
 	item->setSizeHint(widget->sizeHint());
 	ui.listWidget->setItemWidget(item, widget);
+
+	writeLogFile(getTextByMsg(msg));
 }
 
 void VerificationTest::Slot_ChangedStatusStandConnect(bool statusConnect)

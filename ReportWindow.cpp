@@ -1586,40 +1586,28 @@ void ReportWindow::generateXlsx()
 	QString nameFileLog = "Log/Log_Xlsx_";
 	nameFileLog += time.date().toString("dd.MM.yy").replace(".", "_") + "_";
 	nameFileLog += time.time().toString("hh.mm.ss").replace(".", "_") +".txt";
-	std::ofstream out;          // поток для записи
-	out.open(nameFileLog.toStdString());      // открываем файл для записи
 
-	if (out.is_open())
-	{
-		out << "Start function \"generateXlsx\" 0x001 " << std::endl;
-	}
 	typedCableRows.clear();
 
-	out << "Start function \"generateXlsx\" 0x011 " << std::endl;
+
 
 	typedCableRows.resize(TYPE_COUNT);
-	out << "Start function \"generateXlsx\" 0x012 " << std::endl;
+
 	for (int i = 0; i < cableRows.size(); i++)
 		typedCableRows[(int)cableRows[i]->typeInt].push_back(cableRows[i]);
-	out << "Start function \"generateXlsx\" 0x013 " << std::endl;
+
 	try
 	{
 		int maxOffset = getMaxColumnOffset(cableRows);
-	out << "Start function \"generateXlsx\" 0x014 " << std::endl;
 
 		Document xlsx;
 		xlsx.addSheet(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Отчёт") : QString("Report"));
-	out << "Start function \"generateXlsx\" 0x015 " << std::endl;
 
 		xlsx.currentWorksheet()->setGridLinesVisible(false);
 		xlsx.setColumnWidth(1, 5, 13);
-	out << "Start function \"generateXlsx\" 0x016 " << std::endl;
 
 		genereateHeaderFile(xlsx, testerName, serialNumber, testingBlock, viewWindowState->actualVersion);
-		if (out.is_open())
-		{
-			out << "\"genereateHeaderFile\" 0x002 " << std::endl;
-		}
+
 
 		Format format;
 		format.setHorizontalAlignment(Format::AlignHCenter);
@@ -1632,16 +1620,10 @@ void ReportWindow::generateXlsx()
 		if (cableRows[0]->manualCheckBox != nullptr)
 		{
 			genereateHeaderTable(xlsx, maxOffset, false);
-			if (out.is_open())
-			{
-				out << "\"genereateHeaderTable\" 0x003 " << std::endl;
-			}
+
 			for (int i = 0; i < cableRows.size(); i++)
 			{
-				if (out.is_open())
-				{
-					out << " Start " << QString::number(i).toStdString() << "\"for\"";
-				}
+
 				Format tmpRowFormat(format);
 				if (i % 2)
 					tmpRowFormat.setPatternBackgroundColor(QColor(COLOR_DIRTY_LIGHT_GREY));
@@ -1668,10 +1650,6 @@ void ReportWindow::generateXlsx()
 				CellRange range(numRow, 6, numRow, 7);
 				xlsx.mergeCells(range, tmpManualStandFormat);
 				numRow++;
-				if (out.is_open())
-				{
-					out << " ||| end for 0x004" << std::endl;
-				}
 			}
 		}
 		else
@@ -1917,10 +1895,6 @@ void ReportWindow::generateXlsx()
 				}
 			}
 		}
-		if (out.is_open())
-		{
-			out << "\"fileName\" 0x005" << std::endl;
-		}
 
 		QDir dir;
 		QDateTime time = QDateTime::currentDateTime();
@@ -1935,10 +1909,7 @@ void ReportWindow::generateXlsx()
 			serialNumber.remove(0,1);
 		nameFile += serialNumber + "-";
 		nameFile += time.date().toString("dd.MM.yy").replace(".", "_");
-		if (out.is_open())
-		{
-			out << "\"start for\" 0x006" << std::endl;
-		}
+
 		for (int i = 1;; i++) 
 		{
 			QString tmpNameFile = nameFile + "-test" + QString::number(i) + ".xlsx";
@@ -1948,21 +1919,11 @@ void ReportWindow::generateXlsx()
 				break;
 			}
 		}
-		if (out.is_open())
-		{
-			out << "\"end for\" 0x007" << std::endl;
-		}
+
 		xlsx.saveAs(nameFile);
-		if (out.is_open())
-		{
-			out << "\"end\" 0x008" << std::endl;
-		}
+
 		QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
-		if (out.is_open())
-		{
-			out << "End function \"generateXlsx\" 0x100 " << std::endl;
-		}
-		out.close();
+
 	}
 	catch (...)
 	{

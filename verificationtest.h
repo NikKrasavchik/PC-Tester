@@ -5,6 +5,8 @@
 #include <QDateTime>
 #include <qtimer.h>
 #include <qmessagebox.h>
+#include <fstream>
+
 #include "Components.h"
 #include "Can.h"
 #define TIME_SECOND		1000 // Необходимо для отладки и стандартное значение 1000. Уменьшает задержки
@@ -24,6 +26,7 @@ private:
 	bool isTestRun;
 	bool isStendConnection;
 	QTime timeTest; // Время теста
+	std::ofstream fout;
 
 	// init
 	void initTable();
@@ -37,6 +40,8 @@ private:
 	QString getTextByMsg(int msg[8]);
 	void setTextTable(int row, int column, QString textRus, QString textEng = QString(""));
 	bool configProgressBar();
+	void createLogFile(bool isStart);
+	void writeLogFile(QString textRus, QString textEng = QString(""));
 
 	void resizeEvent(QResizeEvent* event);
 
