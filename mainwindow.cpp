@@ -758,12 +758,12 @@ void MainWindow::initConfig()
 	config = cable.readLine();
 	QStringList list = config.split(u';');
 
-	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // Òåìà
+	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // 
 		viewWindowState->appTheme = LIGHT_THEME;
 	else
 		viewWindowState->appTheme = DARK_THEME;
 
-	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // ßçûê
+	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // 
 		viewWindowState->appLanguage = RUSSIAN_LANG;
 	else
 		viewWindowState->appLanguage = ENGLISH_LANG;
@@ -785,7 +785,7 @@ void MainWindow::initConfig()
 			}
 	}
 
-	if (list[3] == "MANUAL_STAND") // Ñòåíä
+	if (list[3] == "MANUAL_STAND") // 
 	{
 		selectedTypeStand = TypeStand::MANUAL;
 		switchStandSlider->setStatus(TypeStand::MANUAL);
@@ -798,7 +798,7 @@ void MainWindow::initConfig()
 	switchStandButtons();
 
 	bool search = false;
-	if (list[4] == "FREQUENCY_50K") // ×àñòîòà
+	if (list[4] == "FREQUENCY_50K") // 
 	{
 
 		selectFrequencyComboBox->setCurrentIndex(2);
@@ -840,7 +840,7 @@ void MainWindow::initConfig()
 	}
 
 
-	if (list[5] != "NOT_SET") // ???????
+	if (list[5] != "NOT_SET") // 
 	{
 		std::vector<QString> nameAdapters = can->getNameAdapters();
 
@@ -873,29 +873,29 @@ void MainWindow::resetConfig()
 	QString config = cable.readLine();
 	QString conf = cable.readLine();
 
-	if (viewWindowState->appTheme == LIGHT_THEME) // Òåìà
+	if (viewWindowState->appTheme == LIGHT_THEME) // 
 		conf = "LIGHT_THEME;";
 	else
 		conf = "DARK_THEME;";
 
-	if (viewWindowState->appLanguage == RUSSIAN_LANG) // ßçûê
+	if (viewWindowState->appLanguage == RUSSIAN_LANG) // 
 		conf += "RUSSIAN_LANG;";
 	else
 		conf += "ENGLISH_LANG;";
 
-	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // Áëîê
+	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // 
 		conf += "NOT_SET;";
 	else if (viewWindowState->selectedBlock == TestBlockName::DTM)
 		conf += "DTM" + selectBlockVersionComboBox->currentText() + ";";
 	else if (viewWindowState->selectedBlock == TestBlockName::BCM)
 		conf += "BCM" + selectBlockVersionComboBox->currentText() + ";";
 
-	if (selectedTypeStand == TypeStand::MANUAL) // Ñòåíä
+	if (selectedTypeStand == TypeStand::MANUAL) // 
 		conf += "MANUAL_STAND;";
 	else if(selectedTypeStand == TypeStand::AUTO)
 		conf += "AUTO_STAND;";
 
-	if (selectFrequencyComboBox->currentIndex() == 2) // ×àñòîòà
+	if (selectFrequencyComboBox->currentIndex() == 2) // 
 		conf += "FREQUENCY_50K;";
 	else if (selectFrequencyComboBox->currentIndex() == 3)
 		conf += "FREQUENCY_100K;";
@@ -908,7 +908,7 @@ void MainWindow::resetConfig()
 	else if (selectFrequencyComboBox->currentIndex() == 7)
 		conf += "FREQUENCY_1000K;";
 
-	if (selectAdapterComboBox->currentText() == "...") // Àäàïòåð
+	if (selectAdapterComboBox->currentText() == "...") // 
 		conf += "NOT_SET";
 	else
 		conf += selectAdapterComboBox->currentText().remove("\n");
@@ -1126,7 +1126,7 @@ void MainWindow::resetTheme()
 		selectBlockVersionComboBox->setStyleSheet(lightStyles.settingComboBox);
 		selectBlockVersionLabel->setStyleSheet(lightStyles.settingSelectText);
 
-		// ???????
+		// 
 		selectFrequencyComboBox->setStyleSheet(lightStyles.settingComboBox); // settingComboBox
 		selectFrequencyLabel->setStyleSheet(lightStyles.settingSelectText);  // lable ???????
 
@@ -1183,9 +1183,9 @@ void MainWindow::resetTheme()
 
 		// Setting
 		// ???????
-		checkAdaptersButton->setStyleSheet(darkStyles.themeLangButton); // button ??????????
+		checkAdaptersButton->setStyleSheet(darkStyles.themeLangButton); // button `
 		selectAdapterComboBox->setStyleSheet(darkStyles.settingComboBox); // settingComboBox
-		selectAdapterLabel->setStyleSheet(darkStyles.settingSelectText); // lable ????????
+		selectAdapterLabel->setStyleSheet(darkStyles.settingSelectText); // lable 
 		selectBlockVersionComboBox->setStyleSheet(darkStyles.settingComboBox);
 		selectBlockVersionLabel->setStyleSheet(darkStyles.settingSelectText);
 
@@ -1378,7 +1378,7 @@ void MainWindow::slot_selectFrequencyComboBox_changed(int index)
 	switchStyleMainButtons();
 
 	if (index == 0)
-		resetLanguage(); // ?????? ??????????????? lable ???????? ?????
+		resetLanguage(); //
 	else if (index > 0)
 	{
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
@@ -1398,7 +1398,7 @@ void MainWindow::slot_selectAdapterComboBox_changed(int index)
 	switchStyleMainButtons();
 
 	if (index == 0)
-		resetLanguage(); // Ñòàâèì ïðåäóïðåæäàþùèé lable ñîãëàñíî ÿçûêó
+		resetLanguage(); // 
 	else if (index > 0)
 	{
 		selectAdapterLabel->setText("");
@@ -1422,13 +1422,6 @@ void MainWindow::slot_checkAdaptersButton_clicked()
 
 void MainWindow::slot_outTestManualStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-
 	std::vector<Cable> preparedCables = {};
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].getDirection() == DIRECTION_OUT)
@@ -1439,13 +1432,6 @@ void MainWindow::slot_outTestManualStandButton_clicked()
 
 void MainWindow::slot_inTestManualStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-
 	std::vector<Cable> preparedCables = {};
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].getDirection() == DIRECTION_IN)
@@ -1456,15 +1442,6 @@ void MainWindow::slot_inTestManualStandButton_clicked()
 
 void MainWindow::slot_fullTestManualStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-#ifdef DEBUG_OUTPUT
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Press button";
-#endif
 	createTestWindow(WindowType::FULL_TEST_MANUAL_STAND, cables);
 }
 void MainWindow::slot_verificationtestTestManualStandButton_clicked()
@@ -1503,13 +1480,6 @@ void MainWindow::slot_verificationtestTestManualStandButton_clicked()
 }
 void MainWindow::slot_inManualTestAutoStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].getDirection() == DIRECTION_IN)
@@ -1520,13 +1490,6 @@ void MainWindow::slot_inManualTestAutoStandButton_clicked()
 
 void MainWindow::slot_outManualTestAutoStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].getDirection() == DIRECTION_OUT)
@@ -1537,13 +1500,6 @@ void MainWindow::slot_outManualTestAutoStandButton_clicked()
 
 void MainWindow::slot_inAutoTestAutoStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].getDirection() == DIRECTION_IN)
@@ -1554,13 +1510,6 @@ void MainWindow::slot_inAutoTestAutoStandButton_clicked()
 
 void MainWindow::slot_outAutoTestAutoStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-
 	std::vector<Cable> preparedCables;
 	for (int i = 0; i < cables.size(); i++)
 		if (cables[i].getDirection() == DIRECTION_OUT)
@@ -1571,13 +1520,6 @@ void MainWindow::slot_outAutoTestAutoStandButton_clicked()
 
 void MainWindow::slot_fullTestAutoStandButton_clicked()
 {
-#ifdef DEBUG
-	selectAdapterComboBox->setCurrentIndex(1);
-	selectFrequencyComboBox->setCurrentIndex(6);
-	//selectedFileStandType = CFG_STAND_MANUAL;
-	leftBlockDMButton->click();
-#endif // DEBUG
-
 	createTestWindow(WindowType::FULL_TEST_AUTO_STAND, cables);
 }
 
@@ -1864,9 +1806,6 @@ void MainWindow::slot_leftBlockBCMButton_clicked()
 
 void MainWindow::slot_leftBlockDMButton_clicked()
 {
-	//viewWindowState->selectedBlock = TestBlockName::DTM;
-	//verificationtestTestManualStandButton->click();
-	//return;
 	if (viewWindowState->selectedBlock != TestBlockName::DTM)
 	{
 		viewWindowState->selectedBlock = TestBlockName::DTM;

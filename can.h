@@ -42,7 +42,7 @@
 
 #define TIME_CHECKCONNECTION	200
 
-class Can : public QObject
+class Can     : public QObject
 {
 	Q_OBJECT
 public:
@@ -186,7 +186,7 @@ private:
 	// @param int* msg - указатель на переменную которая отправиться в can
 	// 
 	// @return bool - В случае удачой отправки возращает tru
-	static bool writeCan(int id, int* msg);
+	static bool writeCan(int id, int* msg, unsigned int flags = canMSG_STD);
 
 	// ------------------------------------
 	// Name: readWaitCan

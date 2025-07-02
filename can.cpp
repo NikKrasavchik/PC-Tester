@@ -131,7 +131,10 @@ void Can::checkInformationBus(int canId)
 		return;
 	}
 	int msgSend[8] = { 1, 0, 0, 0, 0, 0, 0, 0 };
-	writeCan(canId - 1, msgSend);
+	if(canId > 0x7FF)
+		writeCan(canId - 1, msgSend, canMSG_EXT);
+	else
+		writeCan(canId - 1, msgSend);
 	mapCable[canId][0].second = 3;
 
 }
@@ -257,15 +260,15 @@ bool Can::deinitCan()
 	return true;
 }
   
-bool Can::writeCan(int id, int* msg)
+bool Can::writeCan(int id, int* msg, unsigned int flags)
 {
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned char msgSendKvase[8];
 		for (int i = 0; i < 8; i++)
 			msgSendKvase[i] = msg[i];
-
-		canWrite(hnd, id, msgSendKvase, 8, 0); // Дописать проверку ошибок kvasera
+		
+		canWrite(hnd, id, msgSendKvase, 8, flags); // Дописать проверку ошибок kvasera
 		return true;
 	}
 	else
@@ -830,7 +833,7 @@ bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, TestBlockNa
 
 	int msgSendConnect[8] = { (int)pad, pin, generateFlags(typeCable, nameBlock), 0, 0, 0, 0, 0 };
 	
-	writeCan(10, msgSendConnect); // Дописать проверку ошибок kvasera
+	writeCan(10, msgSendConnect);
 	return true;
 }
 

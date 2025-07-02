@@ -30,7 +30,7 @@
 #define COLUMN_PWM_HEIGHT			128
 #define COLUMN_VNH_HEIGHT			169
 #define COLUMN_HLD_HEIGHT			128
-#define COLUMN_INFORMATION_HEIGHT	90
+#define COLUMN_INFORMATION_HEIGHT	50
 
 #define COLUMN_CONNECTOR_WIDTH		70
 #define COLUMN_PIN_WIDTH			40
@@ -322,6 +322,7 @@ private:
 	QMap <int, int> offsetMap;
 	Cable *nextCheckCable;
 	QTimer* rotateTimer;
+	QTimer* delayStartTimer;
 	int timerCounter;
 	std::vector<std::pair<int, QLabel*>> hallLabels;
 
@@ -470,6 +471,7 @@ public slots:
 	void selectCurrentCell(int id);
 
 	void on_rotateTimer_timeout();
+	void on_delayStartTimer();
 private:
 	std::vector<std::pair<QString, TestTableRowProperties*>> sortComponents{ // Вектор необходим для сортировки таблицы по компонентам стенда
 															{QString("ARc5"),	nullptr }, // Входы

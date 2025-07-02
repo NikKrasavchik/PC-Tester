@@ -709,12 +709,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(1, 10)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj X Right(D6-D7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj X Right (D6-D7)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(1, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj X Right(D6-D7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj X Right (D6-D7)") : QString("");
 				}
 			}
 			else if (msg[6] == 2)
@@ -722,12 +722,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(1, 11)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj X Left(D7-D6)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj X Left (D7-D6)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(1, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj X Left(D7-D6)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj X Left (D7-D6)") : QString("");
 				}
 			}
 			else if (msg[6] == 3)
@@ -735,12 +735,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(1, 8)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj Y Up(D7-D5)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj Y Up (D7-D5)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(1, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj Y Up(D7-D5)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj Y Up (D7-D5)") : QString("");
 				}
 			}
 			else if (msg[6] == 4)
@@ -748,12 +748,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(1, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj Y Down(D5-D7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Adj Y Down (D5-D7)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(1, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj Y Down(D5-D7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Adj Y Down (D5-D7)") : QString("");
 				}
 			}
 			else if (msg[6] == 5)
@@ -761,12 +761,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(1, 12)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Fold (2A) / Mirror Adj(D7-D8)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Fold (2A) / Mirror Adj (D7-D8)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(1, 12)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Fold (2A) / Mirror Adj(D7-D8)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Fold (2A) / Mirror Adj (D7-D8)") : QString("");
 				}
 			}
 			else if (msg[6] == 6)
@@ -774,12 +774,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(1, 13)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Unfold (2A)(D8-D7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Unfold (2A) (D8-D7)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(1, 13)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Unfold (2A)(D8-D7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Unfold (2A) (D8-D7)") : QString("");
 				}
 			}
 			else if (msg[6] == 7)
@@ -790,7 +790,7 @@ QString VerificationTest::getTextByMsg(int msg[8])
 					ui.tableWidget->item(2, 9)->setBackground(QColor(Qt::transparent));
 					ui.tableWidget->item(2, 10)->setBackground(QColor(Qt::transparent));
 					ui.tableWidget->item(2, 11)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door Handle Light(A6) | Safety light / Sill light(A16) | DMFx: Turn Indicator(D9) | DMFx: Blind Spot LED(D13)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door Handle Light (A6) | Safety light / Sill light (A16) | DMFx: Turn Indicator (D9) | DMFx: Blind Spot LED (D13)") : QString("");
 				}
 				else
 				{
@@ -798,7 +798,7 @@ QString VerificationTest::getTextByMsg(int msg[8])
 					ui.tableWidget->item(2, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
 					ui.tableWidget->item(2, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
 					ui.tableWidget->item(2, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door Handle Light(A6) | Safety light / Sill light(A16) | DMFx: Turn Indicator(D9) | DMFx: Blind Spot LED(D13)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door Handle Light (A6) | Safety light / Sill light (A16) | DMFx: Turn Indicator (D9) | DMFx: Blind Spot LED (D13)") : QString("");
 				}
 			}
 			else if (msg[6] == 8)
@@ -807,13 +807,13 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				{
 					ui.tableWidget->item(5, 8)->setBackground(QColor(Qt::transparent));
 					ui.tableWidget->item(5, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Heating DefrostM(D1) | Armrest Heat(B7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Mirror Heating DefrostM (D1) | Armrest Heat (B7)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(5, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 					ui.tableWidget->item(5, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Heating DefrostM(D1) | Armrest Heat(B7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Mirror Heating DefrostM (D1) | Armrest Heat (B7)") : QString("");
 				}
 			}
 			else if (msg[6] == 9)
@@ -821,12 +821,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(6, 8)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Child lock(4A)(B9)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Child lock (4A) (B9)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(6, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Child lock(4A)(B9)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Child lock (4A) (B9)") : QString("");
 				}
 			}
 			else if (msg[6] == 10)
@@ -834,12 +834,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(6, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Child Unlock(4A)(B12)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Child Unlock (4A) (B12)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(6, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Child Unlock(4A)(B12)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Child Unlock (4A) (B12)") : QString("");
 				}
 			}
 			else if (msg[6] == 11)
@@ -847,12 +847,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(3, 8)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Single Lock(C11-C12)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Single Lock (C11-C12)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(3, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Single Lock(C11-C12)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Single Lock (C11-C12)") : QString("");
 				}
 			}
 			else if (msg[6] == 12)
@@ -860,12 +860,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(3, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Single Unlock(C12-C11)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Single Unlock (C12-C11)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(3, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Single Unlock(C12-C11)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Single Unlock (C12-C11)") : QString("");
 				}
 			}
 			else if (msg[6] == 13)
@@ -873,12 +873,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(3, 10)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Double Lock(C12-C9)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Double Lock (C12-C9)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(3, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Double Lock(C12-C9)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Double Lock (C12-C9)") : QString("");
 				}
 			}
 			else if (msg[6] == 14)
@@ -886,12 +886,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(3, 11)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Double Unlock(C9-C12)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Double Unlock (C9-C12)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(3, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Double Unlock(C9-C12)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Double Unlock (C9-C12)") : QString("");
 				}
 			}
 			else if (msg[6] == 15)
@@ -899,12 +899,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(4, 8)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Window Up(A19)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Window Up (A19)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(4, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Window Up(A19)	") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Window Up (A19)	") : QString("");
 				}
 			}
 			else if (msg[6] == 16)
@@ -912,12 +912,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(4, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Window Down(A20)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Window Down (A20)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(4, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Window Down(A20)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Window Down (A20)") : QString("");
 				}
 			}
 			else if (msg[6] == 17)
@@ -926,13 +926,13 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				{
 					ui.tableWidget->item(9, 8)->setBackground(QColor(Qt::transparent));
 					ui.tableWidget->item(9, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Reserved(A15) | Reserved(C6)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Reserved (A15) | Reserved (C6)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(9, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
 					ui.tableWidget->item(9, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Reserved(A15) | Reserved(C6)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Reserved (A15) | Reserved (C6)") : QString("");
 				}
 			}
 			else if (msg[6] == 18)
@@ -940,12 +940,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(8, 8)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ close)(B10)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ close) (B10)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(8, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ close)(B10)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ close) (B10)") : QString("");
 				}
 			}
 			else if (msg[6] == 19)
@@ -953,12 +953,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(8, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ open)(B13)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Door_movement_motor (+ open) (B13)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(8, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ open)(B13)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Door_movement_motor (+ open) (B13)") : QString("");
 				}
 			}
 			else if (msg[6] == 20)
@@ -966,12 +966,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(10, 8)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Open(B1)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Open (B1)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(10, 8)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Open(B1)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Open (B1)") : QString("");
 				}
 			}
 			else if (msg[6] == 21)
@@ -979,12 +979,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(10, 9)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Close(B4)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. SunShade Motor Door Close (B4)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(10, 9)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Close(B4)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. SunShade Motor Door Close (B4)") : QString("");
 				}
 			}
 			else if (msg[6] == 22)
@@ -992,12 +992,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(10, 10)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Close(C7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Close (C7)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(10, 10)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Close(C7)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Close (C7)") : QString("");
 				}
 			}
 			else if (msg[6] == 23)
@@ -1005,12 +1005,12 @@ QString VerificationTest::getTextByMsg(int msg[8])
 				if (msg[7] == 0)
 				{
 					ui.tableWidget->item(10, 11)->setBackground(QColor(Qt::transparent));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Open(C10)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл. Sun Shade Motor Rear Window Open (C10)") : QString("");
 				}
 				else
 				{
 					ui.tableWidget->item(10, 11)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Open(C10)") : QString("");
+					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Sun Shade Motor Rear Window Open (C10)") : QString("");
 				}
 			}
 		}
@@ -1023,11 +1023,7 @@ QString VerificationTest::getTextByMsg(int msg[8])
 					ui.tableWidget->item(1, 17)->setBackground(QColor(Qt::transparent));
 					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Выкл.Steering Wheel In Motor") : QString("");
 				}
-				else
-				{
-					ui.tableWidget->item(1, 17)->setBackground(QColor(COLOR_LIGHT_GREEN));
-					return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Вкл. Steering Wheel In Motor") : QString("");
-				}
+ 
 			}
 			else if (msg[6] == 2)
 			{
@@ -1526,7 +1522,7 @@ void VerificationTest::writeLogFile(QString textRus, QString textEng)
 	else
 		strTmp = textRus;
 
-	while (strTmp.length() < 100)
+	while (strTmp.length() < 150)
 		strTmp += " ";
 
 	strTmp += timeTest.toString("hh.mm.ss") + " | " + QTime::currentTime().toString("hh:mm:ss") + "\n";
@@ -1555,6 +1551,10 @@ void VerificationTest::slot_StartStopButton_clicked() // Кнопка старт
 
 		ui.StartStopButton->setText(viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Старт") : QString("Start"));
 		Can::verificationStartStop();
+		Sleep(50);
+		Can::sendGoToSleepMsg(true);
+		Sleep(1000);
+		Can::sendGoToSleepMsg(false);
 	}
 	else
 	{

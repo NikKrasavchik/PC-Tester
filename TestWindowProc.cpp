@@ -682,3 +682,14 @@ void TestWindow::on_rotateTimer_timeout()
 		}
 	}
 }
+
+void TestWindow::on_delayStartTimer()
+{
+	for (int i = 0; i < cableRows.size(); i++)
+		if (cableRows[i]->canId > 0x300)
+		{
+			Can::checkInformationBus(cableRows[i]->canId);
+			Sleep(25);
+		}
+	delayStartTimer->stop();
+}

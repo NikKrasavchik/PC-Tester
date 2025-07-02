@@ -34,6 +34,9 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlock
 
 	rotateTimer = new QTimer();
 	connect(rotateTimer, &QTimer::timeout, this, &TestWindow::on_rotateTimer_timeout);
+
+	delayStartTimer = new QTimer();
+	connect(delayStartTimer, &QTimer::timeout, this, &TestWindow::on_delayStartTimer);
 	
 	initUiMain();
 	initUiMainHeader();
@@ -94,6 +97,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlock
 	Can::clearOldValue();
 
 	rotateTimer->start(3);
+	delayStartTimer->start(300);
 	qDebug() << QString("TestWindow");
 }
 
@@ -1250,7 +1254,6 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 {
-	qDebug() << QString("Slot_ChangedStatusStandConnect");
 	switch (testType)
 	{
 	case WindowType::IN_TEST_MANUAL_STAND:
@@ -1259,6 +1262,7 @@ void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
 		setStatusTableButtons(statusConnect);
 		if (statusConnect)
 		{
+			delayStartTimer->start(300);
 			resetTableButtonsTheme(TypeResetTableButtonsTheme::STAND_CONNECTED, 0, 0);
 			for (int i = 0; i < cableRows.size(); i++)
 			{
@@ -1457,7 +1461,7 @@ void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButt
 			hLayout->addItem(rightSpacer);
 			vLayout->addWidget(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->checkButton);
 			vLayout->addItem(centerSpacer);
-			vLayout->addWidget(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->comboBox);
+			//vLayout->addWidget(((CheckInfomationBus*)cableRows[currentRowNum]->buttons)->comboBox);
 
 			mainTableWidget->setRowHeight(currentRowNum, COLUMN_INFORMATION_HEIGHT);
 		}

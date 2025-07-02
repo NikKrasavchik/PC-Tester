@@ -30,31 +30,31 @@ void MainWindow::generateWarning(Warnings::MainWindow warning)
 		switch (warning)
 		{
 		case Warnings::MainWindow::TEST_ACCESS_FILE_SEL: // Warning 0x001
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Выберите конфигурационный файл перед началом работы\nWarning 0x001"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Выберите конфигурационный файл перед началом работы\nWarning 0x001"));
 			break;
 
 		case Warnings::MainWindow::TEST_ACCESS_FREQUENCY_SEL: // Warning 0x002
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Выберите частоту Can-шины перед началом работы\nWarning 0x002"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Выберите частоту Can-шины перед началом работы\nWarning 0x002"));
 			break;
 
 		case Warnings::MainWindow::TEST_ACCESS_ADAPTER_SEL: // Warning 0x003
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Выберите Can-адаптер перед началом работы\nWarning 0x003"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Выберите Can-адаптер перед началом работы\nWarning 0x003"));
 			break;
 
 		case Warnings::MainWindow::ADAPTERS_CHANGED: // Warning 0x004
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Изменился список активных адаптеров\nWarning 0x004"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Изменился список активных адаптеров\nWarning 0x004"));
 			break;
 
 		case Warnings::MainWindow::SIZE_CABLE_NUL: // Warning 0x005
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Кол-во тестируемых проводов равно нулю\nWarning 0x005"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Кол-во тестируемых проводов равно нулю\nWarning 0x005"));
 			break;
 
 		case Warnings::MainWindow::NOT_SELECTED_BLOCK: // Warning 0x006
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Выберите блок для тестирования\nWarning 0x006"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Выберите блок для тестирования\nWarning 0x006"));
 			break;
 
 		case Warnings::MainWindow::FILE_NOT_FOUND: // Warning 0x007
-			QMessageBox::warning(this, QString("Âíèìàíèå"), QString("Нет конфиг файла. Проверьте наличие в папке и перезапустите приложения\nWarning 0x007"));
+			QMessageBox::warning(this, QString("Внимание"), QString("Нет конфиг файла. Проверьте наличие в папке и перезапустите приложения\nWarning 0x007"));
 			break;
 
 		default:
