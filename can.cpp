@@ -984,6 +984,28 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 
 			}
 		}
+		else if (pad == ConnectorId::C && pin == 9) // C9
+		{
+		if (digValue == 0) // zero
+		{
+			Can::writeCan(0x55, msgSendConnect);
+			msgSendConnect[1] = 12;
+		}
+		else if (digValue == 1) // high
+		{
+			Can::writeCan(0x55, msgSendConnect);
+			msgSendConnect[1] = 12;
+			msgSendConnect[2] = 2;
+
+		}
+		else if (digValue == 2) // low
+		{
+			Can::writeCan(0x55, msgSendConnect);
+			msgSendConnect[1] = 12;
+			msgSendConnect[2] = 1;
+
+		}
+		}
 	}
 #endif // !FOR_DEVELOPER
 	Can::writeCan(0x55, msgSendConnect);

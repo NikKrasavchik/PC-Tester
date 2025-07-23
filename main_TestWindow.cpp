@@ -232,7 +232,7 @@ void TestWindow::initUiMainFooter()
 	fileNameLabel = new QLabel(footerLayoutWidget);
 	fileNameLabel->setObjectName("fileNameLabel");
 	if(viewWindowState->selectedBlock == TestBlockName::DTM)
-		fileNameLabel->setText("DM");
+		fileNameLabel->setText("DTM");
 	else
 		fileNameLabel->setText("BCM");
 	fileNameLabel->setFixedSize(FIXED_FILE_NAME_WIDTH, FIXED_FILE_NAME_HEIGHT);
@@ -707,7 +707,7 @@ void TestWindow::resetLanguage(bool isFullReset)
 		if (statusFlags->StatusConnected)
 			sleepButton->setText(QString("Заснуть"));
 		else
-			sleepButton->setText(QString("Проснутся"));
+			sleepButton->setText(QString("Проснуться"));
 
 		switch (testType)
 		{

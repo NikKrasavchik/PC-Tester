@@ -690,13 +690,13 @@ void MainWindow::initUiManualStand()
 void MainWindow::fillComboBoxes()
 {
 	selectFrequencyComboBox->addItem("...");
-	selectFrequencyComboBox->addItem("10 000 pbs");
-	selectFrequencyComboBox->addItem("50 000 pbs");
-	selectFrequencyComboBox->addItem("100 000 pbs");
-	selectFrequencyComboBox->addItem("125 000 pbs");
-	selectFrequencyComboBox->addItem("250 000 pbs");
-	selectFrequencyComboBox->addItem("500 000 pbs");
-	selectFrequencyComboBox->addItem("1 000 000 pbs");
+	selectFrequencyComboBox->addItem("10 000 bps");
+	selectFrequencyComboBox->addItem("50 000 bps");
+	selectFrequencyComboBox->addItem("100 000 bps");
+	selectFrequencyComboBox->addItem("125 000 bps");
+	selectFrequencyComboBox->addItem("250 000 bps");
+	selectFrequencyComboBox->addItem("500 000 bps");
+	selectFrequencyComboBox->addItem("1 000 000 bps");
 
 	selectAdapterComboBox->addItem("...");
 }
@@ -1322,7 +1322,7 @@ void MainWindow::resetLanguage()
 	{
 	case RUSSIAN_LANG:
 		manualStandButton->setText(QString("Ручной"));
-		autoStandButton->setText(QString("Атомат."));
+		autoStandButton->setText(QString("Автомат."));
 		inTestManualStandButton->setText(QString("Входы"));
 		outTestManualStandButton->setText(QString("Выходы"));
 		fullTestManualStandButton->setText(QString("Полная"));
