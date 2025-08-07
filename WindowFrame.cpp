@@ -302,17 +302,26 @@ void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event)
 /// @return The return value, true if the event was handled, otherwise false.
 bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintptr* result)
 {
+
 	Q_UNUSED(eventType)
 		MSG* param = static_cast<MSG*>(message);
 
-
 	if (param->message == WM_NCHITTEST) {
-		QPoint globalPos(GET_X_LPARAM(param->lParam), GET_Y_LPARAM(param->lParam));
-		QPoint localPos = mapFromGlobal(globalPos);
+		// Физические координаты курсора
+		QPoint nativePos(GET_X_LPARAM(param->lParam), GET_Y_LPARAM(param->lParam));
+
+		// Получаем devicePixelRatio для окна (может быть разным на разных экранах)
+		qreal dpr = this->windowHandle() ? this->windowHandle()->devicePixelRatio() : 1.0;
+
+		// Преобразуем физические координаты в логические
+		QPoint logicalGlobalPos = nativePos / dpr;
+
+		// Преобразуем в локальные координаты окна
+		QPoint localPos = mapFromGlobal(logicalGlobalPos);
 
 		int nX = localPos.x();
 		int nY = localPos.y();
-		
+
 		if (nX >= 0 && nX < mBorderSize) {
 			if (nY >= 0 && nY < mBorderSize) {
 				*result = HTTOPLEFT; // top left
@@ -324,7 +333,7 @@ bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintpt
 				*result = HTLEFT; // left
 			}
 		}
-		else if (nX >= width() - mBorderSize) {
+		else if ((nX >= width() - mBorderSize) && nX <= width()) {
 			if (nY >= 0 && nY < mBorderSize) {
 				*result = HTTOPRIGHT; // top right
 			}

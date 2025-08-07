@@ -3,6 +3,7 @@
 #include <QFrame>
 #include <QMenuBar>
 #include <QMenu>
+#include <QWindow>
 
 #include "Components.h"
 
