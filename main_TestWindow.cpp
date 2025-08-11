@@ -699,7 +699,6 @@ void TestWindow::resetTheme()
 
 void TestWindow::resetLanguage(bool isFullReset)
 {
-	qDebug() << QString("resetLanguage");
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
