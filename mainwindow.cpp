@@ -48,7 +48,6 @@ MainWindow::MainWindow(QWidget* parent)
 	viewWindowState->selectedBlock = TestBlockName::EMPTY;
 	timerCheckAdapter = new QTimer();
 
-
 	initBlockVersions();
 
 	initUi();
@@ -108,6 +107,7 @@ void MainWindow::initUi()
 	viewWindowState->appLanguage = RUSSIAN_LANG;
 
 	initIcons();
+	initTips();
 	initConnections();
 	fillComboBoxes();
 
@@ -173,6 +173,7 @@ void MainWindow::initUiSwitchType()
 	manualStandButton->setObjectName("manualStandButton");
 	manualStandButton->setFixedSize(MIN_STAND_BUTTON_WIDTH, MIN_STAND_BUTTON_HEIGHT);
 	switchTypeHLayout->addWidget(manualStandButton);
+
 
 	leftSwitchStandSpacer = new QSpacerItem(100, 0, QSizePolicy::Preferred);
 	switchTypeHLayout->addItem(leftSwitchStandSpacer);
@@ -276,6 +277,8 @@ void MainWindow::initUiSwitchStand()
 	leftBlockBCMButton = new QPushButton(leftSwitchBlockWidget);
 	leftBlockBCMButton->setObjectName("blockBCMButton");
 	leftBlockBCMButton->setText("BCM");
+
+
 	leftSwitchBlockVLayout->addWidget(leftBlockBCMButton);
 
 	connect(leftBlockBCMButton, &QPushButton::clicked, this, &MainWindow::slot_leftBlockBCMButton_clicked);
@@ -305,8 +308,6 @@ void MainWindow::initUiSwitchStand()
 	selectBlockVersionLabel = new QLabel(selectBlockVersionVWidget);
 	selectBlockVersionLabel->setObjectName("selectBlockVersionLabel");
 	selectBlockVersionLabel->setAlignment(Qt::AlignmentFlag::AlignCenter);
-	selectBlockVersionLabel->setStyleSheet("color: white;");
-	selectBlockVersionLabel->setText("asdf");
 	selectBlockVersionVLayout->addWidget(selectBlockVersionLabel);
 
 	selectBlockVersionHWidget = new QWidget(selectBlockVersionVWidget);
@@ -708,6 +709,12 @@ void MainWindow::initIcons()
 	checkAdaptersButton->setIcon(QIcon(*checkAdapterLightPixmap));
 	logoLabel->setPixmap(*logoLightPixmap);
 }
+void MainWindow::initTips()
+{
+	QFont p("Kartika", 10);
+	p.setBold(true);
+	QToolTip::setFont(p);
+}
 
 void MainWindow::initRecources()
 {
@@ -895,7 +902,9 @@ void MainWindow::resetConfig()
 	else if(selectedTypeStand == TypeStand::AUTO)
 		conf += "AUTO_STAND;";
 
-	if (selectFrequencyComboBox->currentIndex() == 2) // 
+	if (selectFrequencyComboBox->currentText() == "...") // 
+		conf += "NOT_SET;";
+	else if (selectFrequencyComboBox->currentIndex() == 2) 
 		conf += "FREQUENCY_50K;";
 	else if (selectFrequencyComboBox->currentIndex() == 3)
 		conf += "FREQUENCY_100K;";
@@ -1094,6 +1103,8 @@ void MainWindow::resetTheme()
 	switch (viewWindowState->appTheme)
 	{
 	case LIGHT_THEME:
+		//QToolTip::setPalette(lightPalette);
+
 		switchThemeButton->setIcon(QIcon(*themeLightPixmap));
 		switchLanguageButton->setIcon(QIcon(*languageLightPixmap));
 		checkAdaptersButton->setIcon(QIcon(*checkAdapterLightPixmap));
@@ -1157,6 +1168,8 @@ void MainWindow::resetTheme()
 		break;
 
 	case DARK_THEME:
+		//QToolTip::setPalette(DarkPalette);
+
 		switchThemeButton->setIcon(QIcon(*themeDarkPixmap));
 		switchLanguageButton->setIcon(QIcon(*languageDarkPixmap));
 		checkAdaptersButton->setIcon(QIcon(*checkAdapterDarkPixmap));
@@ -1318,51 +1331,104 @@ void MainWindow::slot_switchLanguageButton_clicked()
 
 void MainWindow::resetLanguage()
 {
+
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
+
 		manualStandButton->setText(QString("Ручной"));
+		manualStandButton->setToolTip(QString("Меню ручного стенда"));
 		autoStandButton->setText(QString("Автомат."));
+		autoStandButton->setToolTip(QString("Меню автоматического стенда"));
 		inTestManualStandButton->setText(QString("Входы"));
+		inTestManualStandButton->setToolTip(QString("Окно проверки входов блока"));
 		outTestManualStandButton->setText(QString("Выходы"));
+		outTestManualStandButton->setToolTip(QString("Окно проверки выходов блока"));
 		fullTestManualStandButton->setText(QString("Полная"));
+		fullTestManualStandButton->setToolTip(QString("Окно проверки всего блока"));
 		verificationtestTestManualStandButton->setText(QString("Валид."));
+		verificationtestTestManualStandButton->setToolTip(QString("Окно проведения валидационнонго испытания"));
 		inManualTestAutoStandButton->setText(QString("Входы"));
+		inManualTestAutoStandButton->setToolTip(QString("Окно проверки входов блока в ручном режиме"));
 		outManualTestAutoStandButton->setText(QString("Выходы"));
+		outManualTestAutoStandButton->setToolTip(QString("Окно проверки выходов блока в ручном режиме"));
 		inAutoTestAutoStandButton->setText(QString("Входы"));
+		inAutoTestAutoStandButton->setToolTip(QString("Окно проверки входов блока в автоматическом режиме"));
 		outAutoTestAutoStandButton->setText(QString("Выходы"));
+		outAutoTestAutoStandButton->setToolTip(QString("Окно проверки выходов блока в автоматическом режиме"));
 		fullTestAutoStandButton->setText(QString("Полная"));
+		fullTestAutoStandButton->setToolTip(QString("Окно проверки всего блока"));
 		selectBlockVersionLabel->setText(QString("Версия блока"));
+		selectBlockVersionLabel->setToolTip(QString("Версия схемотехники блока"));
+		selectBlockVersionComboBox->setToolTip(QString("Версия схемотехники блока"));
 		if (!can->getStatusAdapterSelected())
+		{
 			selectAdapterLabel->setText(QString("Выберите адаптер"));
+			selectAdapterLabel->setToolTip(QString("Выберите Can-адаптер при помощи которого осуществляется подключение к стенду"));
+			selectAdapterComboBox->setToolTip(QString("Выберите Can-адаптер при помощи которого осуществляется подключение к стенду"));
+		}
 		if (!can->getStatusFrequencySelected())
+		{
 			selectFrequencyLabel->setText(QString("Выберите частоту"));
+			selectFrequencyLabel->setToolTip(QString("Выберите частоту Can шины"));
+			selectFrequencyComboBox->setToolTip(QString("Выберите частоту Can шины"));
+		}
 		manualTestAutoStandLabel->setText(QString("Ручной"));
 		autoTestAutoStandLabel->setText(QString("Авто"));
 		manualStandLabel->setText(QString("Ручной"));
+		leftBlockBCMButton->setToolTip(QString("Проверка блока BCM"));
+		leftBlockDMButton->setToolTip(QString("Проверка блока DTM"));
+		switchThemeButton->setToolTip(QString("Смена темы"));
+		switchLanguageButton->setToolTip(QString("Смена языка (Eng)"));
+		checkAdaptersButton->setToolTip(QString("Обновить активные адаптеры"));
 		break;
 
 	case ENGLISH_LANG:
 		manualStandButton->setText(QString("Manual"));
+		manualStandButton->setToolTip(QString("Manual stand menu"));
 		autoStandButton->setText(QString("Auto"));
+		autoStandButton->setToolTip(QString("Automatic stand menu"));
 		inTestManualStandButton->setText(QString("In"));
+		inTestManualStandButton->setToolTip(QString("Block input Check Window"));
 		outTestManualStandButton->setText(QString("Out"));
+		outTestManualStandButton->setToolTip(QString("Block output check window"));
 		fullTestManualStandButton->setText(QString("Full"));
+		fullTestManualStandButton->setToolTip(QString("Whole Block Check Window"));
 		verificationtestTestManualStandButton->setText(QString("Verificationtest"));
+		verificationtestTestManualStandButton->setToolTip(QString("Validation test execution window"));
 		inManualTestAutoStandButton->setText(QString("In"));
+		inManualTestAutoStandButton->setToolTip(QString("Block input Check Window in manual mode"));
 		outManualTestAutoStandButton->setText(QString("Out"));
+		outManualTestAutoStandButton->setToolTip(QString("Block output check window in manual mode"));
 		inAutoTestAutoStandButton->setText(QString("In"));
+		inAutoTestAutoStandButton->setToolTip(QString("Block input Check Window in automatic mode"));
 		outAutoTestAutoStandButton->setText(QString("Out"));
+		outAutoTestAutoStandButton->setToolTip(QString("Block output check window in automatic mode"));
 		fullTestAutoStandButton->setText(QString("Full"));
+		fullTestAutoStandButton->setToolTip(QString("Whole Block Check Window"));
 		selectBlockVersionLabel->setText(QString("Block version"));
+		selectBlockVersionLabel->setToolTip(QString("Block schematic version"));
+		selectBlockVersionComboBox->setToolTip(QString("Block schematic version"));		
 		if (!can->getStatusAdapterSelected())
+		{
 			selectAdapterLabel->setText(QString("Select adapter"));
+			selectAdapterLabel->setToolTip(QString("Select the Can-adapter with which you connect to the stand"));
+			selectAdapterComboBox->setToolTip(QString("Select the Can-adapter with which you connect to the stand"));
+		}
 		if (!can->getStatusFrequencySelected())
+		{
 			selectFrequencyLabel->setText(QString("Select frequency"));
+			selectFrequencyLabel->setToolTip(QString("Select Can bus frequency"));
+			selectFrequencyComboBox->setToolTip(QString("Select Can bus frequency"));
+		}
 		manualTestAutoStandLabel->setText(QString("Manual"));
 		autoTestAutoStandLabel->setText(QString("Auto"));
 		manualStandLabel->setText(QString("Manual"));
-
+		leftBlockBCMButton->setToolTip(QString("Checking the BCM"));
+		leftBlockDMButton->setToolTip(QString("Checking the DTM"));
+		switchThemeButton->setToolTip(QString("Switch theme"));
+		switchLanguageButton->setToolTip(QString("Switch language (Rus)"));
+		checkAdaptersButton->setToolTip(QString("Update active adapters"));
 		break;
 	}
 	if (can->getStatusFrequencySelected())
@@ -1382,9 +1448,18 @@ void MainWindow::slot_selectFrequencyComboBox_changed(int index)
 	else if (index > 0)
 	{
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+		{
 			selectFrequencyLabel->setText(QString("Частота: ") + selectFrequencyComboBox->currentText());
+			selectFrequencyLabel->setToolTip(QString("Частота Can шины: ") + selectFrequencyComboBox->currentText());
+			selectFrequencyComboBox->setToolTip(QString("Частота Can шины: ") + selectFrequencyComboBox->currentText());
+		}
 		else if (viewWindowState->appLanguage == ENGLISH_LANG)
+		{
+
 			selectFrequencyLabel->setText(QString("Frequency: ") + selectFrequencyComboBox->currentText());
+			selectFrequencyLabel->setToolTip(QString("Can bus frequency: ") + selectFrequencyComboBox->currentText());
+			selectFrequencyComboBox->setToolTip(QString("Can bus frequency: ") + selectFrequencyComboBox->currentText());
+		}
 	}
 	resetConfig();
 }
@@ -1402,6 +1477,12 @@ void MainWindow::slot_selectAdapterComboBox_changed(int index)
 	else if (index > 0)
 	{
 		selectAdapterLabel->setText("");
+		selectAdapterLabel->setToolTip(QString(""));
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			selectAdapterComboBox->setToolTip(QString("Выбранный адаптер: ") + selectAdapterComboBox->currentText().remove("\n"));
+		else if (viewWindowState->appLanguage == ENGLISH_LANG)
+			selectAdapterComboBox->setToolTip(QString("Selected adapter: ") + selectAdapterComboBox->currentText().remove("\n"));
+
 		timerCheckAdapter->start(1000);
 	}
 	resetConfig();

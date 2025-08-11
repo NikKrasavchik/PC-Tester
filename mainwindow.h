@@ -12,6 +12,8 @@
 #include <QFile>
 #include <qmessagebox.h>
 #include <utility>
+#include <qtooltip.h>
+#include <qpalette.h>
 
 #include "ui_mainwindow.h"
 #include "TestWindow.h"
@@ -183,7 +185,8 @@ private:
 	QPixmap* checkAdapterDarkPixmap;
 	QPixmap* languageLightPixmap;
 	QPixmap* languageDarkPixmap;
-
+	
+	QPalette DarkPalette;
 	QTimer* timerCheckAdapter;
 
 	Can* can;
@@ -198,8 +201,9 @@ private:
 	void initStyles();
 	void initLightStyleSheets();
 	void initDarkStyleSheets();
-	void initTexts();
 	void initIcons();
+	void initTips();
+
 	void initConnections();
 	void initBlockVersions();
 	void loadCables(TestBlockName block, QString version);
@@ -209,6 +213,7 @@ private:
 	void initUiTopHLayout();
 	void initUiLeftHLayout();
 	void initUiMainVLayout();
+	
 
 	void initUiSwitchType();
 	void initUiSwitchThemeLang();

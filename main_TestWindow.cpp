@@ -296,7 +296,6 @@ void TestWindow::initRecources()
 
 void TestWindow::initTexts()
 {
-	qDebug() << QString("initTexts");
 	resetLanguage(false);
 }
 
@@ -703,18 +702,31 @@ void TestWindow::resetLanguage(bool isFullReset)
 	{
 	case RUSSIAN_LANG:
 		reportButton->setText(QString("Отчёт"));
+		reportButton->setToolTip(QString("Окно создания отчёта"));
 		if (statusFlags->StatusConnected)
+		{ 
 			sleepButton->setText(QString("Заснуть"));
+			sleepButton->setToolTip(QString("Перевести блок в режим сна"));
+		}
 		else
+		{
 			sleepButton->setText(QString("Проснуться"));
+			sleepButton->setToolTip(QString("Перевести блок в режим работы"));
+		}
 
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				fullTestManualStandConnectButton->setText(QString("Блок\nподключён"));
+				fullTestManualStandConnectButton->setToolTip(QString("Блок подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				fullTestManualStandConnectButton->setText(QString("Блок\nотключен"));
+				fullTestManualStandConnectButton->setToolTip(QString("Блок неподключен к приложению, тестирование невозможно"));
+			}
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
@@ -729,33 +741,52 @@ void TestWindow::resetLanguage(bool isFullReset)
 			default:
 				break;
 			}
+			fullTestSortButton->setToolTip(QString("Виды сортировки элементов:\n- по порядку\n- по компонентам\n- по типу"));
 			if(isFullReset)
 				resetLanguageFullTestManualStand();
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				outTestManualStandConnectButton->setText(QString("Блок\nподключён"));
+				outTestManualStandConnectButton->setToolTip(QString("Блок подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				outTestManualStandConnectButton->setText(QString("Блок\nотключен"));
+				fullTestManualStandConnectButton->setToolTip(QString("Блок неподключен к приложению, тестирование невозможно"));
+			}
 			if(isFullReset)
 				resetLanguageOutTestManualStand();
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				inTestManualStandConnectButton->setText(QString("Блок\nподключён"));
+				inTestManualStandConnectButton->setToolTip(QString("Блок подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				inTestManualStandConnectButton->setText(QString("Блок\nотключен"));
+				inTestManualStandConnectButton->setToolTip(QString("Блок неподключен к приложению, тестирование невозможно"));
+			}
 			if(isFullReset)
 				resetLanguageInTestManualStand();
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				autoStandConnectButton->setText(QString("Стенд\nподключён"));
+				autoStandConnectButton->setToolTip(QString("Стенд подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				autoStandConnectButton->setText(QString("Стенд\nотключен"));
+				autoStandConnectButton->setToolTip(QString("Стенд неподключен к приложению, тестирование невозможно"));
+			}
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
 			if(isFullReset)
 				resetLanguageOutManualTestAutoStand();
@@ -763,9 +794,15 @@ void TestWindow::resetLanguage(bool isFullReset)
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				autoStandConnectButton->setText(QString("Стенд\nподключён"));
+				autoStandConnectButton->setToolTip(QString("Стенд подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				autoStandConnectButton->setText(QString("Стенд\nотключен"));
+				autoStandConnectButton->setToolTip(QString("Стенд неподключен к приложению, тестирование невозможно"));
+			}
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
 			if(isFullReset)
 				resetLanguageInManualTestAutoStand();
@@ -773,39 +810,75 @@ void TestWindow::resetLanguage(bool isFullReset)
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				autoStandConnectButton->setText(QString("Стенд\nподключён"));
+				autoStandConnectButton->setToolTip(QString("Стенд подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				autoStandConnectButton->setText(QString("Стенд\nотключен"));
-			if(isFullTestEnabled)
+				autoStandConnectButton->setToolTip(QString("Стенд неподключен к приложению, тестирование невозможно"));
+			}
+			if (isFullTestEnabled)
+			{
 				autoStandStartTestButton->setText(QString("Пауза"));
+				autoStandStartTestButton->setToolTip(QString("Тест запущен"));
+			}
 			else
+			{
 				autoStandStartTestButton->setText(QString("Старт"));
+				autoStandStartTestButton->setToolTip(QString("Тест остановлен"));
+			}
 			if(isFullReset)
 				resetLanguageOutAutoTestAutoStand();
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				autoStandConnectButton->setText(QString("Стенд\nподключён"));
+				autoStandConnectButton->setToolTip(QString("Стенд подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				autoStandConnectButton->setText(QString("Стенд\nотключен"));
+				autoStandConnectButton->setToolTip(QString("Стенд неподключен к приложению, тестирование невозможно"));
+			}
 			if (isFullTestEnabled)
+			{
 				autoStandStartTestButton->setText(QString("Пауза"));
+				autoStandStartTestButton->setToolTip(QString("Тест запущен"));
+			}
 			else
+			{
 				autoStandStartTestButton->setText(QString("Старт"));
+				autoStandStartTestButton->setToolTip(QString("Тест остановлен"));
+			}
 			if(isFullReset)
 				resetLanguageInAutoTestAutoStand();
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				autoStandConnectButton->setText(QString("Стенд\nподключён"));
+				autoStandConnectButton->setToolTip(QString("Стенд подключен к приложению, можно тестировать"));
+			}
 			else
+			{
 				autoStandConnectButton->setText(QString("Стенд\nотключен"));
+				autoStandConnectButton->setToolTip(QString("Стенд неподключен к приложению, тестирование невозможно"));
+			}
 			if (isFullTestEnabled)
+			{
 				autoStandStartTestButton->setText(QString("Пауза"));
+				autoStandStartTestButton->setToolTip(QString("Тест запущен"));
+			}
 			else
+			{
 				autoStandStartTestButton->setText(QString("Старт"));
+				autoStandStartTestButton->setToolTip(QString("Тест остановлен"));
+			}
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
@@ -820,6 +893,7 @@ void TestWindow::resetLanguage(bool isFullReset)
 			default:
 				break;
 			}
+			fullTestSortButton->setToolTip(QString("Виды сортировки элементов:\n- по порядку\n- по компонентам\n- по типу"));
 			if(isFullReset)
 				resetLanguageFullTestAutoStand();
 			break;
@@ -827,23 +901,42 @@ void TestWindow::resetLanguage(bool isFullReset)
 		default:
 			break;
 		}
+		switchThemeButton->setToolTip(QString("Смена темы"));
+		switchLanguageButton->setToolTip(QString("Смена языка (Eng)"));
+		backButton->setToolTip(QString("Выход в главное меню"));
+		if (viewWindowState->selectedBlock == TestBlockName::DTM)
+			fileNameLabel->setToolTip(QString("Тестируется блок: DTM"));
+		else
+			fileNameLabel->setToolTip("Тестируется блок: BCM");
 		break;
 
 	case ENGLISH_LANG:
 		reportButton->setText(QString("Report"));
+		reportButton->setToolTip(QString("Report creation window"));
 		if (statusFlags->StatusConnected)
+		{
 			sleepButton->setText(QString("Go to sleep"));
+			sleepButton->setToolTip(QString("Put the unit into sleep mode"));
+		}
 		else
+		{
 			sleepButton->setText(QString("Wake up"));
-
+			sleepButton->setToolTip(QString("Switch the unit to operation mode"));
+		}
 
 		switch (testType)
 		{
 		case WindowType::FULL_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				fullTestManualStandConnectButton->setText(QString("ECU\nconnected"));
+				fullTestManualStandConnectButton->setToolTip(QString("The block is connected to the application, you can test it"));
+			}
 			else
+			{
 				fullTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
+				fullTestManualStandConnectButton->setToolTip(QString("The unit is not connected to the application, testing is not possible"));
+			}
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
@@ -858,33 +951,52 @@ void TestWindow::resetLanguage(bool isFullReset)
 			default:
 				break;
 			}
+			fullTestSortButton->setToolTip(QString("Types of element sorting:\n- in order\n- by component\n- by type"));
 			if(isFullReset)
 				resetLanguageFullTestManualStand();
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				outTestManualStandConnectButton->setText(QString("ECU\nconnected"));
+				outTestManualStandConnectButton->setToolTip(QString("The block is connected to the application, you can test it"));
+			}
 			else
+			{
 				outTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
+				outTestManualStandConnectButton->setToolTip(QString("The unit is not connected to the application, testing is not possible"));
+			}
 			if(isFullReset)
 				resetLanguageOutTestManualStand();
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
 			if (statusFlags->StatusConnected)
+			{
 				inTestManualStandConnectButton->setText(QString("ECU\nconnected"));
+				inTestManualStandConnectButton->setToolTip(QString("The block is connected to the application, you can test it"));
+			}
 			else
+			{
 				inTestManualStandConnectButton->setText(QString("ECU\ndisconnected"));
+				inTestManualStandConnectButton->setToolTip(QString("The unit is not connected to the application, testing is not possible"));
+			}
 			if(isFullReset)
 				resetLanguageInTestManualStand();
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString("Stand\nconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\nconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is connected to the application, you can test it"));
+			}
 			else
-				autoStandConnectButton->setText(QString("Stand\ndisconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\ndisconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is not connected to the application, testing is impossible"));
+			}
 			createItemManualTestAutoStandTestTimeComboBox(outManualTestAutoStandTestTimeComboBox);
 			if(isFullReset)
 				resetLanguageOutManualTestAutoStand();
@@ -892,9 +1004,15 @@ void TestWindow::resetLanguage(bool isFullReset)
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString("Stand\nconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\nconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is connected to the application, you can test it"));
+			}
 			else
-				autoStandConnectButton->setText(QString("Stand\ndisconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\ndisconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is not connected to the application, testing is impossible"));
+			}
 			createItemManualTestAutoStandTestTimeComboBox(inManualTestAutoStandTestTimeComboBox);
 			if(isFullReset)
 				resetLanguageInManualTestAutoStand();
@@ -902,39 +1020,75 @@ void TestWindow::resetLanguage(bool isFullReset)
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString("Stand\nconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\nconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is connected to the application, you can test it"));
+			}
 			else
-				autoStandConnectButton->setText(QString("Stand\ndisconnected"));
-			if(isFullTestEnabled)
+			{
+				autoStandConnectButton->setText(QString("ECU\ndisconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is not connected to the application, testing is impossible"));
+			}
+			if (isFullTestEnabled)
+			{
 				autoStandStartTestButton->setText(QString("Pause"));
+				autoStandStartTestButton->setToolTip(QString("Test started"));
+			}
 			else
+			{
 				autoStandStartTestButton->setText(QString("Start"));
+				autoStandStartTestButton->setToolTip(QString("Test stopped"));
+			}
 			if(isFullReset)
 				resetLanguageOutAutoTestAutoStand();
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString("Stand\nconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\nconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is connected to the application, you can test it"));
+			}
 			else
-				autoStandConnectButton->setText(QString("Stand\ndisconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\ndisconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is not connected to the application, testing is impossible"));
+			}
 			if (isFullTestEnabled)
+			{
 				autoStandStartTestButton->setText(QString("Pause"));
+				autoStandStartTestButton->setToolTip(QString("Test started"));
+			}
 			else
+			{
 				autoStandStartTestButton->setText(QString("Start"));
+				autoStandStartTestButton->setToolTip(QString("Test stopped"));
+			}
 			if(isFullReset)
 				resetLanguageInAutoTestAutoStand();
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
 			if (statusFlags->StatusConnected)
-				autoStandConnectButton->setText(QString("Stand\nconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\nconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is connected to the application, you can test it"));
+			}
 			else
-				autoStandConnectButton->setText(QString("Stand\ndisconnected"));
+			{
+				autoStandConnectButton->setText(QString("ECU\ndisconnected"));
+				autoStandConnectButton->setToolTip(QString("The stand is not connected to the application, testing is impossible"));
+			}
 			if (isFullTestEnabled)
+			{
 				autoStandStartTestButton->setText(QString("Pause"));
+				autoStandStartTestButton->setToolTip(QString("Test started"));
+			}
 			else
+			{
 				autoStandStartTestButton->setText(QString("Start"));
+				autoStandStartTestButton->setToolTip(QString("Test stopped"));
+			}
 			switch (fullTestSortType)
 			{
 			case SortType::SortIndex:
@@ -949,6 +1103,7 @@ void TestWindow::resetLanguage(bool isFullReset)
 			default:
 				break;
 			}
+			fullTestSortButton->setToolTip(QString("Types of element sorting:\n- in order\n- by component\n- by type"));
 			if(isFullReset)
 				resetLanguageFullTestAutoStand();
 			break;
@@ -956,6 +1111,13 @@ void TestWindow::resetLanguage(bool isFullReset)
 		default:
 			break;
 		}
+		switchThemeButton->setToolTip(QString("Switch theme"));
+		switchLanguageButton->setToolTip(QString("Switch language (Rus)"));
+		backButton->setToolTip(QString("Exit to main menu"));
+		if (viewWindowState->selectedBlock == TestBlockName::DTM)
+			fileNameLabel->setToolTip(QString("Block being tested: DTM"));
+		else
+			fileNameLabel->setToolTip("Block being tested: BCM");
 		break;
 	}
 }

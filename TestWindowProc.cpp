@@ -123,6 +123,7 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, Tes
 			((PWMButtons*)buttons)->load0Button = new QPushButton();
 			((PWMButtons*)buttons)->load0Button->setObjectName("load0Button");
 			((PWMButtons*)buttons)->load0Button->setText("0%");
+			((PWMButtons*)buttons)->load0Button->setToolTip("0% PWM");
 			((PWMButtons*)buttons)->load0Button->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((PWMButtons*)buttons)->load0Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
 
