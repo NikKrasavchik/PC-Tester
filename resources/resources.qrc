@@ -3,6 +3,7 @@
         <file>style/appstyles.qss</file>
         <file>icons/App_Logo.png</file>
         <file>icons/DTM_Block.png</file>
+        <file>icons/BCM_Block.png</file>
     </qresource>
     <qresource prefix="/Dark">
         <file>icons/Close_White.png</file>

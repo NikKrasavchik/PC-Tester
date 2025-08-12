@@ -1348,21 +1348,6 @@ void ReportWindow::resaveComments()
 	}
 }
 
-// Çàïèñü äàííûõ â äèàïîçîí ÿ÷ååê.
-// 
-// @name writeHorizontalAlignCell
-// 
-// @param Document& xlsx				- Ññûëêà íà îáüåêò êëàññà Document.
-// @param int rowStart					- Ñòðîêà íà÷àëà äèàïîçîíà.
-// @param int columnStart				- Ñòîëáåö íà÷àëà äèàïîçîíà.
-// @param int rowEnd					- Ñòðîêà êîíöà äèàïîçîíà.
-// @param int columnEnd					- Ñòîëáåö êîíöà äèàïîçîíà.
-// @param const QVariant& text			- Òåêñò äëÿ çàïèñè.
-// @param Format formatText				- Format ñ óêàçàíûìè ñòèëÿìè.
-// @param const QColor& color = nullptr	- Öûåò òåêñòà, åñëè íå ïåðåäàâàòü ïàðàìåòð, öâåò áóäåò ñòàíäàðòíûì - ÷åðíûé.
-// 
-// @return void
-
 void writeHorizontalAlignCell(Document& xlsx, int rowStart, int columnStart, int rowEnd, int columnEnd, const QVariant& text, Format formatText, const QColor& color = nullptr)
 {
 
@@ -1372,16 +1357,6 @@ void writeHorizontalAlignCell(Document& xlsx, int rowStart, int columnStart, int
 	xlsx.mergeCells(CellRange(rowStart, columnStart, rowEnd, columnEnd), formatText);
 }
 
-// Ñîçäàíèå çàãîëîâêà ëèñòà äîêóìåíòà .xlsx.
-// 
-// @name genereateHeaderFile
-// 
-// @param Document& xlsx			 - Ññûëêà íà îáüåêò êëàññà Document.
-// @param QString testerName		 - Ñòðîêà ñ èìåíåì òåñòèðîâùèêà.
-// @param TestBlockName testingBlock - Èäåíòèôèêàòîð íàçâàíèÿ áëîêà, êîòîðûé ïðîâåðÿëñÿ.
-// @param QString actualVersion		 - Ñòðîêà âåðñèè áëîêà, êîòîðûé ïðîâåðÿëñÿ.
-// 
-// @return void
 void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumber, TestBlockName testingBlock, QString actualVersion)
 {
 	// Ñîçëàíèå Format, ñ óêàçàíèåì ñòèëåé ó ÿ÷ååê
