@@ -98,6 +98,10 @@ void ReportWindow::initUiFooter()
 	testerNameLineEdit->setObjectName("testerNameLineEdit");
 	testerNameLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
 	testerNameLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
+	if (viewWindowState->appLanguage == RUSSIAN_LANG)
+		testerNameLineEdit->setToolTip(QString("Фамилия Имя Отчесто оператора"));
+	else if (viewWindowState->appLanguage == ENGLISH_LANG)
+		testerNameLineEdit->setToolTip(QString("Surname Name Operator's patronymic"));
 	reportDataHLayout->addWidget(testerNameLineEdit);
 
 	reportDataSpacer = new QSpacerItem(100, 0, QSizePolicy::Expanding);
@@ -114,10 +118,24 @@ void ReportWindow::initUiFooter()
 	serialNumberLineEdit->setObjectName("serialNumberLineEdit");
 	serialNumberLineEdit->setAlignment(Qt::AlignmentFlag::AlignCenter);
 	serialNumberLineEdit->setFixedSize(FIXED_DATA_LINE_EDIT_WIDTH, FIXED_DATA_LINE_EDIT_HEIGHT);
+	if (viewWindowState->appLanguage == RUSSIAN_LANG)
+	{
+		if(testingBlock == TestBlockName::DTM)
+			serialNumberLineEdit->setToolTip(QString("<p>  Серийный номер блока</p><p><img src = \":/app/icons/DTM_Block.png\"/></p>"));
+		else if(testingBlock == TestBlockName::BCM)
+			serialNumberLineEdit->setToolTip(QString("<p>  Серийный номер блока</p><p><img src = \":/app/icons/BCM_Block.png\"/></p>"));
+	}
+	else if (viewWindowState->appLanguage == ENGLISH_LANG)
+	{
+		if(testingBlock == TestBlockName::DTM)
+			serialNumberLineEdit->setToolTip(QString("<p>  Block serial number</p><p><img src = \":/app/icons/DTM_Block.png\"/></p>"));
+		else if(testingBlock == TestBlockName::BCM)
+			serialNumberLineEdit->setToolTip(QString("<p>  Block serial number</p><p><img src = \":/app/icons/BCM_Block.png\"/></p>"));
+	}
+
 #ifndef FOR_DEVELOPER
 	//serialNumberLineEdit->setReadOnly(true);
 #endif // FOR_DEVELOPER
-
 	serialNumberLineEdit->setText(Can::getDiagBlock(DiagInformation::Serial_NUMBER, testingBlock));
 	reportDataHLayout->addWidget(serialNumberLineEdit);
 
@@ -127,6 +145,10 @@ void ReportWindow::initUiFooter()
 	saveButton = new QPushButton(footerWidget);
 	saveButton->setObjectName("saveButton");
 	saveButton->setFixedSize(BUTTON_SIZE);
+	if (viewWindowState->appLanguage == RUSSIAN_LANG)
+		saveButton->setToolTip(QString("Сохранить отчет о проверхе в формате Excel"));
+	else if (viewWindowState->appLanguage == ENGLISH_LANG)
+		saveButton->setToolTip(QString("Save the report on the top in Excel format"));
 	footerHLayout->addWidget(saveButton);
 }
 
@@ -174,8 +196,8 @@ void ReportWindow::resetTheme()
 		saveButton->setStyleSheet(lightStyles.testwindowButtonStyle);
 		testerNameLabel->setStyleSheet(lightStyles.settingSelectText);
 		serialNumberLabel->setStyleSheet(lightStyles.settingSelectText);
-		testerNameLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
-		serialNumberLineEdit->setStyleSheet(lightStyles.testwindowNameLineEdit);
+		testerNameLineEdit->setStyleSheet(lightStyles.reportwindowNameLineEdit);
+		serialNumberLineEdit->setStyleSheet(lightStyles.reportwindowSerialLineEdit);
 		break;
 
 	case DARK_THEME:
@@ -183,8 +205,8 @@ void ReportWindow::resetTheme()
 		saveButton->setStyleSheet(darkStyles.testwindowButtonStyle);
 		testerNameLabel->setStyleSheet(darkStyles.settingSelectText);
 		serialNumberLabel->setStyleSheet(darkStyles.settingSelectText);
-		testerNameLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
-		serialNumberLineEdit->setStyleSheet(darkStyles.testwindowNameLineEdit);
+		testerNameLineEdit->setStyleSheet(darkStyles.reportwindowNameLineEdit);
+		serialNumberLineEdit->setStyleSheet(darkStyles.reportwindowSerialLineEdit);
 		break;
 	}
 }
@@ -282,7 +304,7 @@ void ReportWindow::generateTableManual()
 
 
 		commentsTextEdits.push_back(new QTextEdit());
-		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.reportwindowNameLineEdit : lightStyles.reportwindowNameLineEdit);
 
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
@@ -946,7 +968,7 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 		}
 
 		commentsTextEdits.push_back(new QTextEdit());
-		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.reportwindowNameLineEdit : lightStyles.reportwindowNameLineEdit);
 
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
@@ -1066,7 +1088,7 @@ void ReportWindow::fillTableIn(std::vector<TestTableRowProperties*> cableRows)
 		fillTableColor(cableRows[i], 0, tableItems);
 
 		commentsTextEdits.push_back(new QTextEdit());
-		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.reportwindowNameLineEdit : lightStyles.reportwindowNameLineEdit);
 
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
@@ -1200,7 +1222,7 @@ void ReportWindow::fillTableInAnalog(std::vector<TestTableRowProperties*> cableR
 		}
 
 		commentsTextEdits.push_back(new QTextEdit());
-		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit :  lightStyles.testwindowNameLineEdit);
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.reportwindowNameLineEdit :  lightStyles.reportwindowNameLineEdit);
 
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);
@@ -1265,7 +1287,7 @@ void ReportWindow::fillTableInformation(std::vector<TestTableRowProperties*> cab
 		fillTableColor(cableRows[i], 0, &tableItems);
 		
 		commentsTextEdits.push_back(new QTextEdit());
-		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.testwindowNameLineEdit : lightStyles.testwindowNameLineEdit);
+		commentsTextEdits[commentsTextEdits.size() - 1]->setStyleSheet(viewWindowState->appTheme ? darkStyles.reportwindowNameLineEdit : lightStyles.reportwindowNameLineEdit);
 
 		QWidget* commentWidget = new QWidget();
 		QHBoxLayout* commentHLayout = new QHBoxLayout(commentWidget);

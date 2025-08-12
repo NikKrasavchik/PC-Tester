@@ -203,5 +203,7 @@ void TestWindow::initUiTableRowsOutTestManualStand()
 
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MANUAL_CHECK, manualChecksWidget);
+
+		resetLanguageToolTipButtonTable(currentRowNum, NOT_SET);
 	}
 }

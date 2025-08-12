@@ -410,6 +410,7 @@ private:
 
 	void resetTheme();
 	void resetLanguage(bool isFullReset);
+	void resetLanguageToolTipButtonTable(int RowNum, int columnStatus);
 	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
 	void resetIconMoreButton(bool theme);
 

@@ -152,6 +152,7 @@ void TestWindow::resetTableTypeLanguageFullTestManualStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
+
 			switch (cableRows[currentRowNum]->typeInt)
 			{
 			case TypeCable::EMPTY:
@@ -276,6 +277,7 @@ void TestWindow::resetTableRowsFullTestManualStand()
 				mainTableWidget->removeCellWidget(currentRowNum, COLUMN_STATUS);
 			mainTableWidget->setCellWidget(currentRowNum, COLUMN_STATUS, wiseWidget);
 		}
+		resetLanguageToolTipButtonTable(currentRowNum, COLUMN_STATUS);
 	}
 }
 

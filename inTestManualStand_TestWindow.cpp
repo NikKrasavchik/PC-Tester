@@ -223,5 +223,6 @@ void TestWindow::initUiTableRowsInTestManualStand()
 				mainTableWidget->removeCellWidget(currentRowNum, COLUMN_STATUS);
 			mainTableWidget->setCellWidget(currentRowNum, COLUMN_STATUS, wiseWidget);
 		}
+		resetLanguageToolTipButtonTable(currentRowNum, COLUMN_STATUS);
 	}
 }

@@ -151,7 +151,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -170,7 +170,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -196,7 +196,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -223,7 +223,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -242,7 +242,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -256,7 +256,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -284,7 +284,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -302,7 +302,7 @@ void MainWindow::initLightStyleSheets()
 			color: #3f3f3f;
 			background-color: #F0F0F0;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 }
@@ -332,7 +332,7 @@ void MainWindow::initDarkStyleSheets()
         color: #bebebe;
         background-color: #3A3A3A;
 		border-radius: 5px;
-        border: 1px solid #cccccc;
+        border: 1px solid #bebebe;
 		}
 	)";
 
@@ -351,7 +351,7 @@ void MainWindow::initDarkStyleSheets()
         color: #bebebe;
         background-color: #3A3A3A;
 		border-radius: 5px;
-        border: 1px solid #cccccc;
+        border: 1px solid #bebebe;
 		}
 	)";
 
@@ -377,7 +377,7 @@ void MainWindow::initDarkStyleSheets()
         color: #bebebe;
         background-color: #3A3A3A;
 		border-radius: 5px;
-        border: 1px solid #cccccc;
+        border: 1px solid #bebebe;
 		}
 	)";
 
@@ -404,7 +404,7 @@ void MainWindow::initDarkStyleSheets()
         color: #bebebe;
         background-color: #3A3A3A;
 		border-radius: 5px;
-        border: 1px solid #cccccc;
+        border: 1px solid #bebebe;
 		}
 	)";
 
@@ -423,7 +423,7 @@ void MainWindow::initDarkStyleSheets()
         color: #bebebe;
         background-color: #3A3A3A;
 		border-radius: 5px;
-        border: 1px solid #cccccc;
+        border: 1px solid #bebebe;
 		}
 	)";
 
@@ -437,7 +437,7 @@ void MainWindow::initDarkStyleSheets()
 			color: #bebebe;
 			background-color: #3A3A3A;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #bebebe;
 		}
 
 	)";
@@ -466,7 +466,7 @@ void MainWindow::initDarkStyleSheets()
 			color: #bebebe;
 			background-color: #3A3A3A;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #bebebe;
 		}
 
 	)";
@@ -485,7 +485,7 @@ void MainWindow::initDarkStyleSheets()
 			color: #bebebe;
 			background-color: #3A3A3A;
 			border-radius: 5px;
-			border: 1px solid #cccccc;
+			border: 1px solid #bebebe;
 			}
 	)";
 }
@@ -513,6 +513,12 @@ void TestWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowConnectButtonStyleConnect =
@@ -528,6 +534,12 @@ void TestWindow::initLightStyleSheets()
 			font-size: 13px;
 			font-weight: 600;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowConnectButtonStyleDisconnected =
@@ -542,6 +554,12 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 13px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -566,17 +584,31 @@ void TestWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowTestTimeComboBox =
 		R"(
-		background-color: #B0B0B0;
-		border-radius: 10px;
+		QWidget {
+			background-color: #B0B0B0;
+			border-radius: 10px;
 
-		color: black;
-		font-family: Kartika;
-		font-size: 12px;
-		font-weight: 600;
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowTableWidget =
@@ -652,10 +684,17 @@ void TestWindow::initLightStyleSheets()
 		QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
-	lightStyles.testwindowNameLineEdit =
+	lightStyles.reportwindowNameLineEdit =
 		R"(
+		QWidget {
 			color: black;
 			background-color: #D3D3D3;
 
@@ -663,16 +702,52 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
+	)";
+
+	lightStyles.reportwindowSerialLineEdit =
+		R"(
+		QWidget {
+			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			font-size: 15px;
+			font-weight: 600;
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowLableBlock =
 		R"(
+		QWidget {
 			color: black;
 
 			line-height: 1px;
 			font-family: Kartika;
 			font-size: 30px;
 			font-weight: 800;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.activeTableButton =
@@ -687,6 +762,12 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 400;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -711,6 +792,12 @@ void TestWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowManualCheckBox =
@@ -728,6 +815,12 @@ void TestWindow::initLightStyleSheets()
 		.QCheckBox::indicator:checked {
 			border: 3px solid rgb(135, 135, 135);
 			background-color: rgb(124, 199, 112);
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 }
@@ -755,6 +848,12 @@ void TestWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowConnectButtonStyleConnect =
@@ -770,6 +869,12 @@ void TestWindow::initDarkStyleSheets()
 			font-size: 13px;
 			font-weight: 600;
 		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowConnectButtonStyleDisconnected =
@@ -784,6 +889,12 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 13px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
 		}
 	)";
 
@@ -808,17 +919,31 @@ void TestWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowTestTimeComboBox =
 		R"(
-		background-color: #535353;
-		border-radius: 10px;
+		QWidget {
+			background-color: #535353;
+			border-radius: 10px;
 
-		color: white;
-		font-family: Kartika;
-		font-size: 12px;
-		font-weight: 600;
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowTableWidget =
@@ -886,13 +1011,21 @@ void TestWindow::initDarkStyleSheets()
 		QPushButton:hover {
 			background-color: #9D9D9D;
 		}
-
 		QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 			
 	)";
 
-	darkStyles.testwindowNameLineEdit =
+	darkStyles.reportwindowNameLineEdit =
 		R"(
+		QWidget {
 			color: white;
 			background-color: #414141;
 
@@ -900,16 +1033,52 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
+	)";
+
+	darkStyles.reportwindowSerialLineEdit =
+		R"(
+		QWidget {
+			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			font-size: 15px;
+			font-weight: 600;
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowLableBlock =
 		R"(
+		QWidget {
 			color: white;
 
 			line-height: 1px;
 			font-family: Kartika;
 			font-size: 30px;
 			font-weight: 800;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.activeTableButton =
@@ -924,6 +1093,12 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 13px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
 		}
 	)";
 
@@ -947,6 +1122,12 @@ void TestWindow::initDarkStyleSheets()
 
 		.QPushButton:hover:pressed {
 			background-color: #858383;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
 		}
 	)";
 }

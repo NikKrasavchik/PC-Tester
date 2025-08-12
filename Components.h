@@ -87,7 +87,8 @@ struct Styles
 	QString testwindowConnectButtonStyleDisconnected;
 	QString testwindowTestTimeComboBox;
 	QString testwindowTableWidget;
-	QString testwindowNameLineEdit;
+	QString reportwindowNameLineEdit;
+	QString reportwindowSerialLineEdit;
 	QString testwindowLableBlock;
 	QString testwindowManualCheckBox;
 

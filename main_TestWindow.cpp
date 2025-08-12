@@ -755,7 +755,7 @@ void TestWindow::resetLanguage(bool isFullReset)
 			else
 			{
 				outTestManualStandConnectButton->setText(QString("Блок\nотключен"));
-				fullTestManualStandConnectButton->setToolTip(QString("Блок неподключен к приложению, тестирование невозможно"));
+				outTestManualStandConnectButton->setToolTip(QString("Блок неподключен к приложению, тестирование невозможно"));
 			}
 			if(isFullReset)
 				resetLanguageOutTestManualStand();
@@ -1118,6 +1118,151 @@ void TestWindow::resetLanguage(bool isFullReset)
 			fileNameLabel->setToolTip(QString("Block being tested: DTM"));
 		else
 			fileNameLabel->setToolTip("Block being tested: BCM");
+		break;
+	}
+}
+
+void TestWindow::resetLanguageToolTipButtonTable(int RowNum, int columnStatus)
+{
+	QAbstractItemModel* model = mainTableWidget->model();
+	switch (viewWindowState->appLanguage)
+	{
+	case RUSSIAN_LANG:
+		switch (cableRows[RowNum]->typeInt)
+		{
+		case TypeCable::EMPTY:
+			break;
+		case TypeCable::DIG_IN:
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Цифровое значение входа"));
+			break;
+		case TypeCable::ANALOG_IN:
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Значение АЦП входа"));
+			break;
+		case TypeCable::HALL_IN:
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Статус датчика HALL"));
+			break;
+		case TypeCable::DIG_OUT:
+			((DigitalButtons*)cableRows[RowNum]->buttons)->onButton->setToolTip(QString("Включить выход"));
+			((DigitalButtons*)cableRows[RowNum]->buttons)->offButton->setToolTip(QString("Выключить выход"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Обратная связь с блоком"));
+			break;
+		case TypeCable::PWM_OUT:
+			((PWMButtons*)cableRows[RowNum]->buttons)->load0Button->setToolTip(QString("0% ШИМ"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load25Button->setToolTip(QString("25% ШИМ"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load50Button->setToolTip(QString("50% ШИМ"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load75Button->setToolTip(QString("75% ШИМ"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load100Button->setToolTip(QString("100% ШИМ"));
+			if(columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Обратная связь с блоком"));
+			break;
+		case TypeCable::VNH_OUT:
+			((VNHButtons*)cableRows[RowNum]->buttons)->onButton->setToolTip(QString("Включить выход"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->offButton->setToolTip(QString("Выключить выход"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load0Button->setToolTip(QString("0% ШИМ"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load25Button->setToolTip(QString("25% ШИМ"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load50Button->setToolTip(QString("50% ШИМ"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load75Button->setToolTip(QString("75% ШИМ"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load100Button->setToolTip(QString("100% ШИМ"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Обратная связь с блоком"));
+			break;
+		case TypeCable::HLD_OUT:
+			((HLDButtons*)cableRows[RowNum]->buttons)->highButton->setToolTip(QString("Включить верхний полумост"));
+			((HLDButtons*)cableRows[RowNum]->buttons)->lowButton->setToolTip(QString("Включить нижний полумост"));
+			((HLDButtons*)cableRows[RowNum]->buttons)->zeroButton->setToolTip(QString("Выключить"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Обратная связь с блоком"));
+			break;
+		case TypeCable::CAN_OUT:
+			((CheckInfomationBus*)cableRows[RowNum]->buttons)->checkButton->setToolTip(QString("Проверить Can шину"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Статус проверки Can шины"));
+			break;
+		case TypeCable::LIN_OUT:
+			((CheckInfomationBus*)cableRows[RowNum]->buttons)->checkButton->setToolTip(QString("Проверить Lin шину"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Статус проверки Lin шины"));
+			break;
+		default:
+			break;
+		}
+		if (cableRows[RowNum]->manualCheckBox->isChecked())
+			cableRows[RowNum]->manualCheckBox->setToolTip(QString("Элемент исправен"));
+		else
+			cableRows[RowNum]->manualCheckBox->setToolTip(QString("Элемент неисправен"));
+		break;
+
+	case ENGLISH_LANG:
+		switch (cableRows[RowNum]->typeInt)
+		{
+		case TypeCable::EMPTY:
+			break;
+		case TypeCable::DIG_IN:
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Digital input value"));
+			break;
+		case TypeCable::ANALOG_IN:
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("ADC input value"));
+			break;
+		case TypeCable::HALL_IN:
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("HALL sensor status"));
+			break;
+		case TypeCable::DIG_OUT:
+			((DigitalButtons*)cableRows[RowNum]->buttons)->onButton->setToolTip(QString("Enable output"));
+			((DigitalButtons*)cableRows[RowNum]->buttons)->offButton->setToolTip(QString("Turn off output"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Feedback to the block"));
+			break;
+		case TypeCable::PWM_OUT:
+			((PWMButtons*)cableRows[RowNum]->buttons)->load0Button->setToolTip(QString("0% PWM"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load25Button->setToolTip(QString("25% PWM"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load50Button->setToolTip(QString("50% PWM"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load75Button->setToolTip(QString("75% PWM"));
+			((PWMButtons*)cableRows[RowNum]->buttons)->load100Button->setToolTip(QString("100% PWM"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Feedback to the block"));
+			break;
+		case TypeCable::VNH_OUT:
+			((VNHButtons*)cableRows[RowNum]->buttons)->onButton->setToolTip(QString("Enable output"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->offButton->setToolTip(QString("Turn off output"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load0Button->setToolTip(QString("0% PWM"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load25Button->setToolTip(QString("25% PWM"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load50Button->setToolTip(QString("50% PWM"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load75Button->setToolTip(QString("75% PWM"));
+			((VNHButtons*)cableRows[RowNum]->buttons)->load100Button->setToolTip(QString("100% PWM"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Feedback to the block"));
+			break;
+		case TypeCable::HLD_OUT:
+			((HLDButtons*)cableRows[RowNum]->buttons)->highButton->setToolTip(QString("Turn on the upper half-bridge"));
+			((HLDButtons*)cableRows[RowNum]->buttons)->lowButton->setToolTip(QString("Turn on the lower half-bridge"));
+			((HLDButtons*)cableRows[RowNum]->buttons)->zeroButton->setToolTip(QString("Turn off"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Feedback to the block"));
+			break;
+		case TypeCable::CAN_OUT:
+			((CheckInfomationBus*)cableRows[RowNum]->buttons)->checkButton->setToolTip(QString("Check Can tire"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Can bus check status"));
+			break;
+		case TypeCable::LIN_OUT:
+			((CheckInfomationBus*)cableRows[RowNum]->buttons)->checkButton->setToolTip(QString("Check Lin tire"));
+			if (columnStatus != NOT_SET)
+				mainTableWidget->item(RowNum, columnStatus)->setToolTip(QString("Lin bus check status"));
+			break;
+		default:
+			break;
+		}
+		if (cableRows[RowNum]->manualCheckBox->isChecked())
+			cableRows[RowNum]->manualCheckBox->setToolTip(QString("Item is OK"));
+		else
+			cableRows[RowNum]->manualCheckBox->setToolTip(QString("Item is defective"));
 		break;
 	}
 }
