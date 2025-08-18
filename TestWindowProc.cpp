@@ -508,15 +508,8 @@ void TestTableRowProperties::on_load0Button_clicked()
 	selectCurrentCell(id);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_0);
-		if (connectorInt == ConnectorId::A && pin == "15")
-		{
-			Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, LOAD100_BUTTON_PRESSED);
 
-			statePWM = LOAD0_BUTTON_PRESSED;
-			return;
-		}
-	else
-		statePWM = LOAD0_BUTTON_PRESSED;
+	statePWM = LOAD0_BUTTON_PRESSED;
 
 	sendSignal();
 }
@@ -529,15 +522,8 @@ void TestTableRowProperties::on_load25Button_clicked()
 	selectCurrentCell(id);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_25);
-		if (connectorInt == ConnectorId::A && pin == "15")
-		{
-			Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, LOAD75_BUTTON_PRESSED);
 
-			statePWM = LOAD25_BUTTON_PRESSED;
-			return;
-		}
-	else
-		statePWM = LOAD25_BUTTON_PRESSED;
+	statePWM = LOAD25_BUTTON_PRESSED;
 
 	sendSignal();
 }
@@ -603,15 +589,8 @@ void TestTableRowProperties::on_load75Button_clicked()
 	selectCurrentCell(id);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_75);
-		if (connectorInt == ConnectorId::A && pin == "15")
-		{
-			Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, LOAD25_BUTTON_PRESSED);
 
-			statePWM = LOAD75_BUTTON_PRESSED;
-			return;
-		}
-	else
-		statePWM = LOAD75_BUTTON_PRESSED;
+	statePWM = LOAD75_BUTTON_PRESSED;
 
 	sendSignal();
 }
@@ -624,15 +603,8 @@ void TestTableRowProperties::on_load100Button_clicked()
 	selectCurrentCell(id);
 
 	switchButtonState(TestButtons::BUTTON_LOAD_100);
-	if (connectorInt == ConnectorId::A && pin == "15")
-	{
-		Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, LOAD0_BUTTON_PRESSED);
 
-		statePWM = LOAD100_BUTTON_PRESSED;
-		return;
-	}
-	else
-		statePWM = LOAD100_BUTTON_PRESSED;
+	statePWM = LOAD100_BUTTON_PRESSED;
 
 	sendSignal();
 }
@@ -728,21 +700,6 @@ void TestWindow::on_delayStartTimer()
 			Can::checkInformationBus(cableRows[i]->canId);
 			Sleep(25);
 		}
-	const int costil = 0;
 
-	if (costil == 0)
-	{
-		for (int i = 0; i < cableRows.size(); i++)
-		{
-			if (cableRows[i]->connectorInt == ConnectorId::A && cableRows[i]->pin == "15")
-			{
-				Can::sendTestMsg(cableRows[i]->connectorInt, cableRows[i]->pin.toInt(), 0, LOAD100_BUTTON_PRESSED);
-
-				//((PWMButtons*)cableRows[i]->buttons)->load0Button->click();
-				selectCurrentCell(0);
-			}
-
-		}
-	}
 	delayStartTimer->stop();
 }

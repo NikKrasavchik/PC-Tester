@@ -3,7 +3,7 @@
 //#define DEBUG
 //#define FOR_DEVELOPER
 //#define DEBUG_OUTPUT
-#define VERIFACATION_TEST
+//	#define VERIFACATION_TEST
 
 
 #define MIN_SCREEN_WIDTH    800
