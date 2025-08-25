@@ -146,6 +146,7 @@ public:
 
 	static QString getDiagBlock(DiagInformation diagInf, TestBlockName blockName);
 
+	static void eraseApp(QString typeBlock);
 
 	void setCable(std::vector<Cable> cable);
 
@@ -229,12 +230,13 @@ private:
 	QTimer* timerReadCan;					// Таймер для считывания Can-сообщений.
 	QTimer* timerSendConnectMsg;			// Таймер для отправки сообщений на первичное подключение или подтверждение подключения.
 	QTimer* timerCheckStandConnection;		// Таймер для проверки времени времени прихода переодического сообщения конекта.
+	static QTimer* wakeBoot;
 
 private slots:
 	void Timer_ReadCan();					// Слот для считывания Can-сообщений.
 	void Timer_SendConnectMsg();			// Слот для отправки сообщений на подключение или подтверждения подключения.
 	void Timer_CheckStandConnection();		// Слот для проверки времени прихода переодического сообщения конекта.
-
+	void Timer_wakeBoot();
 signals:
 
 	void Signal_ChangedStatusStandConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён 
@@ -242,6 +244,7 @@ signals:
 	void Signal_ChangedByte(int idCable, int newValue); // Сигнал срабатывающий когда поменялся байт у какого либо кабеля из mapCable
 	void Signal_changeStatusCheckInformationBus(int id, bool status);
 	void Signal_ReciveMsg(int msg[8]);
+	void Signal_StatusEraseApp(QString status);
 
 };
 

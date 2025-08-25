@@ -414,7 +414,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester_v2" + tmpStr);
+			ui->title->setText("PC-Tester_v3" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
@@ -463,6 +463,9 @@ void WindowFrame::setTitle(WindowType windowType) {
 		case WindowType::VERIFICATIONTEST:
 			ui->title->setText(QString("Валидационный тест") + tmpStr);
 			break;
+		case WindowType::ERASEWINDOW:
+			ui->title->setText(QString("Стирание") + tmpStr);
+			break;
 		}
 		break;
 
@@ -470,7 +473,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester_2" + tmpStr);
+			ui->title->setText("PC-Tester_v3" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
@@ -519,6 +522,8 @@ void WindowFrame::setTitle(WindowType windowType) {
 		case WindowType::VERIFICATIONTEST:
 			ui->title->setText(QString("Verification test") + tmpStr);
 			break;
+		case WindowType::ERASEWINDOW:
+			ui->title->setText(QString("Erase") + tmpStr);
 		}
 	}
 }

@@ -90,6 +90,7 @@ struct Styles
 	QString reportwindowNameLineEdit;
 	QString reportwindowSerialLineEdit;
 	QString testwindowLableBlock;
+	QString eraseWindowLable;
 	QString testwindowManualCheckBox;
 
 	// TABLEBUTTON
@@ -144,7 +145,8 @@ enum class WindowType
 	FULL_TEST_AUTO_STAND,
 	MOREWINDOW,
 	REPORTWINDOW,
-	VERIFICATIONTEST
+	VERIFICATIONTEST,
+	ERASEWINDOW
 };
 
 enum class TypeStand

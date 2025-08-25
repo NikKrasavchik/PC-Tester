@@ -7,6 +7,7 @@
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 canHandle Can::hnd = 0;
+QTimer* Can::wakeBoot = new QTimer();
 QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
 bool Can::b_flagStatusConnection;
 
@@ -25,6 +26,8 @@ Can::Can()
 	connect(timerCheckStandConnection, SIGNAL(timeout()), this, SLOT(Timer_CheckStandConnection()));
 	timerSendConnectMsg = new QTimer();
 	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
+	connect(wakeBoot, SIGNAL(timeout()), this, SLOT(Timer_wakeBoot()));
+
 }
 
 
@@ -1163,5 +1166,88 @@ QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 
 	}
 
+
+}
+
+void Can::eraseApp(QString typeBlock)
+{
+	//int idSend;
+	int idReceive;
+	//int idReceiveRef;
+
+	int msgSend[8] = { 0x31, 0x31, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00 };
+	int msgReceive[8];
+	//QTime timeWork = QTime::currentTime().addMSecs(200); // Время для авариного выхода из цикла.
+
+
+	//if (typeBlock == "DMFL")
+	//{
+	//	idSend = 0x7A4;
+	//	idReceiveRef = 0x7B4;
+	//}
+	//else if (typeBlock == "DMFR")
+	//{
+	//	idSend = 0x7A5;
+	//	idReceiveRef = 0x7B5;
+	//}
+	//else if (typeBlock == "DMRL")
+	//{
+	//	idSend = 0x7A6;
+	//	idReceiveRef = 0x7B6;
+	//}
+	//else if (typeBlock == "DMRR")
+	//{
+	//	idSend = 0x7A7;
+	//	idReceiveRef = 0x7B7;
+	//}
+	//else if (typeBlock == "DMRR")
+	//{
+	//	idSend = 0x7AA;
+	//	idReceiveRef = 0x7BA;
+	//}
+
+
+	wakeBoot->start(500);
+	writeCan(0x55, msgSend); // to boot
+	Sleep(50);
+
+	int msgSend1[8] = { 0x02, 0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 }; // programming session
+	writeCan(DIAG_ID_TO_DMFL, msgSend1);
+	Sleep(50);
+
+	int msgSend2[8] = { 0x02, 0x27, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Request seed key
+	writeCan(DIAG_ID_TO_DMFL, msgSend2);
+	while (true) // Ждём ключ от boot
+	{
+		if (readWaitCan(&idReceive, msgReceive, 20))
+			if (msgReceive[0] == 0x06 && msgReceive[0] == 0x67 && msgReceive[0] == 0x01)
+			{
+
+			}
+		
+	}
+	Sleep(50);
+
+
+	//while (true)
+	//{
+	//	if (readWaitCan(&idReceive, msgReceive, 20))
+	//	{
+	//		if (idReceive == idReceiveRef)
+	//		{
+
+	//		}
+	//	}
+	//	if (QTime::currentTime() > timeWork)
+	//		Signal_StatusEraseApp("nnn");
+	//}
+
+}
+
+
+void Can::Timer_wakeBoot()
+{
+	int msgSend[8] = { 0x04, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
+	writeCan(DIAG_ID_TO_DMFL, msgSend);
 
 }

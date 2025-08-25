@@ -173,6 +173,7 @@
     <ClCompile Include="Xlsx\xlsxzipreader.cpp" />
     <ClCompile Include="Xlsx\xlsxzipwriter.cpp" />
     <QtRcc Include="resources\resources.qrc" />
+    <QtUic Include="EraseWindow.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />

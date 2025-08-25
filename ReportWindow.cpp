@@ -1357,7 +1357,7 @@ void writeHorizontalAlignCell(Document& xlsx, int rowStart, int columnStart, int
 	xlsx.mergeCells(CellRange(rowStart, columnStart, rowEnd, columnEnd), formatText);
 }
 
-void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumber, TestBlockName testingBlock, QString actualVersion)
+void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumber, TestBlockName testingBlock, QString actualVersion, QString& equipmentName)
 {
 	// Ñîçëàíèå Format, ñ óêàçàíèåì ñòèëåé ó ÿ÷ååê
 	Format format;
@@ -1392,7 +1392,8 @@ void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumbe
 	writeHorizontalAlignCell(xlsx, 3, 3, 3, 6, testerName, format);
 	writeHorizontalAlignCell(xlsx, 4, 3, 4, 6, testingBlock == TestBlockName::DTM ? QString("DTM ") + actualVersion : QString("BCM ") + actualVersion, format);
 	writeHorizontalAlignCell(xlsx, 5, 3, 5, 6, Can::getDiagBlock(DiagInformation::Calibration_NAME, testingBlock), format);
-	writeHorizontalAlignCell(xlsx, 6, 3, 6, 6, Can::getDiagBlock(DiagInformation::Equipment_NAME, testingBlock), format);
+	equipmentName = Can::getDiagBlock(DiagInformation::Equipment_NAME, testingBlock);
+	writeHorizontalAlignCell(xlsx, 6, 3, 6, 6, equipmentName, format);
 	writeHorizontalAlignCell(xlsx, 7, 3, 7, 6, Can::getDiagBlock(DiagInformation::Part_NUMBER, testingBlock), format);
 	writeHorizontalAlignCell(xlsx, 8, 3, 8, 6, serialNumber, format);
 	writeHorizontalAlignCell(xlsx, 9, 3, 9, 6, Can::getDiagBlock(DiagInformation::Manufacture_DATE, testingBlock), format);
@@ -1577,6 +1578,7 @@ void ReportWindow::on_saveButton_clicked()
 
 	generateXlsx(); 
 }
+
 void ReportWindow::generateXlsx()
 {
 	QDateTime time = QDateTime::currentDateTime();
@@ -1603,7 +1605,7 @@ void ReportWindow::generateXlsx()
 		xlsx.currentWorksheet()->setGridLinesVisible(false);
 		xlsx.setColumnWidth(1, 5, 13);
 
-		genereateHeaderFile(xlsx, testerName, serialNumber, testingBlock, viewWindowState->actualVersion);
+		genereateHeaderFile(xlsx, testerName, serialNumber, testingBlock, viewWindowState->actualVersion, equipmentName);
 
 
 		Format format;
@@ -1920,12 +1922,69 @@ void ReportWindow::generateXlsx()
 		xlsx.saveAs(nameFile);
 
 		QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
+		//if (equipmentName != "Error. Long delay")
+		if (equipmentName != "Error. Long del")
+		{
+			QDialog dlgErase;
+			
+			Ui::EraseWindowClass ui;
+			ui.setupUi(&dlgErase);
+			WindowFrame w(WindowType::ERASEWINDOW, this, &dlgErase);
+			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 
+			connect(ui.erasePushButton, &QPushButton::clicked, this, &ReportWindow::on_erasePushButton_clicked);
+			connect(ui.cancelPushButton, &QPushButton::clicked, this, &ReportWindow::on_cancelPushButton_clicked);
+
+			if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			{
+				ui.erasePushButton->setText(QString("Стереть"));
+				ui.cancelPushButton->setText(QString("Выйти"));
+				ui.headerLabel->setText(QString("Произвести стирание программы\nблока ") + equipmentName + " ?");
+
+			}
+			else
+			{
+				ui.erasePushButton->setText(QString("Erasing"));
+				ui.cancelPushButton->setText(QString("Exit"));
+				ui.headerLabel->setText(QString("Erase the program\nblock ") + equipmentName + " ?");
+
+			}
+			if (viewWindowState->appTheme == LIGHT_THEME)
+			{
+				ui.erasePushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+				ui.cancelPushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+				ui.headerLabel->setStyleSheet(lightStyles.eraseWindowLable);
+
+			}
+			else
+			{
+				ui.erasePushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+				ui.cancelPushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+				ui.headerLabel->setStyleSheet(darkStyles.eraseWindowLable);
+
+			}
+			
+			
+			
+			w.show();
+			dlgErase.exec();
+		}
 	}
 	catch (...)
 	{
 		generateWarning(Warnings::ReportWindow::XLSX_SAVE_ERROR);
 	}
+}
+
+void ReportWindow::on_erasePushButton_clicked()
+{
+	Can::eraseApp("DMFL");
+
+}
+void ReportWindow::on_cancelPushButton_clicked()
+{
+	
+
 }
 
 void ReportWindow::generateWarning(Warnings::ReportWindow warning)

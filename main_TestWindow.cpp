@@ -491,10 +491,12 @@ void TestWindow::slot_reportButton_clicked()
 	WindowFrame w(WindowType::REPORTWINDOW, nullptr, reportWindow);
 	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 	w.show();
+	//this->hide();
 	reportWindow->exec();
 
 	fullTestSortType = tmpType;
 	rewriteCableRows();
+	//this->show();
 
 }
 

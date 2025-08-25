@@ -567,7 +567,7 @@ void TestWindow::initLightStyleSheets()
 		R"(
 		.QPushButton {
 			margin: 3px;
-
+			padding: 3px;
 			border-radius: 10px;
 			background-color: #B0B0B0;
 
@@ -741,6 +741,24 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 30px;
 			font-weight: 800;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
+	)";
+
+	lightStyles.eraseWindowLable =
+		R"(
+		QWidget {
+			color: black;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 15px;
+			font-weight: 500;
 		}
 		QToolTip {
 			color: #3f3f3f;
@@ -1072,6 +1090,24 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 30px;
 			font-weight: 800;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
+	)";
+
+	darkStyles.eraseWindowLable =
+		R"(
+		QWidget {
+			color: white;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 15px;
+			font-weight: 500;
 		}
 		QToolTip {
 			color: #bebebe;

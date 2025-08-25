@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ui_ReportWindow.h"
+#include "ui_EraseWindow.h"
 #include <QDialog>
 #include <QFormLayout>
 #include <qtablewidget.h>
@@ -128,6 +129,8 @@ private:
 	std::vector<QTextEdit*> commentsTextEdits;
 	QString testerName;
 	QString serialNumber;
+	QString equipmentName;
+
 
 	void initUi();
 	void initUiTable();
@@ -162,4 +165,6 @@ public slots:
 	// 
 	// @return void
 	void on_saveButton_clicked();
+	void on_erasePushButton_clicked();
+	void on_cancelPushButton_clicked();
 };

@@ -50,6 +50,9 @@
     <QtUic Include="verificationtest.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="EraseWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
