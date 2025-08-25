@@ -51,6 +51,10 @@ MainWindow::MainWindow(QWidget* parent)
 	initBlockVersions();
 
 	initUi();
+
+	//test
+	Can::eraseApp("DMFL");
+	//test
 }
 
 MainWindow::~MainWindow()

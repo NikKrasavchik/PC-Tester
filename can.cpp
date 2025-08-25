@@ -1169,60 +1169,74 @@ QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 
 }
 
+int gereteSeedKey(UINT32 key)
+{
+	int result;
+	if (!((key & 0x200000) >> 21)) // —двиг в право
+		key = (key >> 1) + ((key & 0x1) << 31);
+	else // —двиг влево
+		key = (key << 1) + ((key & 0x80000000) >> 31);
+
+	int p = 0x1 & 0x1;
+	return 1;
+}
+
 void Can::eraseApp(QString typeBlock)
 {
-	//int idSend;
+	int idSend;
 	int idReceive;
-	//int idReceiveRef;
+	int idReceiveRef;
 
 	int msgSend[8] = { 0x31, 0x31, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00 };
-	int msgReceive[8];
+	UINT8 msgReceive[8];
 	//QTime timeWork = QTime::currentTime().addMSecs(200); // ¬рем€ дл€ авариного выхода из цикла.
 
 
-	//if (typeBlock == "DMFL")
-	//{
-	//	idSend = 0x7A4;
-	//	idReceiveRef = 0x7B4;
-	//}
-	//else if (typeBlock == "DMFR")
-	//{
-	//	idSend = 0x7A5;
-	//	idReceiveRef = 0x7B5;
-	//}
-	//else if (typeBlock == "DMRL")
-	//{
-	//	idSend = 0x7A6;
-	//	idReceiveRef = 0x7B6;
-	//}
-	//else if (typeBlock == "DMRR")
-	//{
-	//	idSend = 0x7A7;
-	//	idReceiveRef = 0x7B7;
-	//}
-	//else if (typeBlock == "DMRR")
-	//{
-	//	idSend = 0x7AA;
-	//	idReceiveRef = 0x7BA;
-	//}
-
-
+	if (typeBlock == "DMFL")
+	{
+		idSend = 0x7A4;
+		idReceiveRef = 0x7B4;
+	}
+	else if (typeBlock == "DMFR")
+	{
+		idSend = 0x7A5;
+		idReceiveRef = 0x7B5;
+	}
+	else if (typeBlock == "DMRL")
+	{
+		idSend = 0x7A6;
+		idReceiveRef = 0x7B6;
+	}
+	else if (typeBlock == "DMRR")
+	{
+		idSend = 0x7A7;
+		idReceiveRef = 0x7B7;
+	}
+	else if (typeBlock == "TM")
+	{
+		idSend = 0x7AA;
+		idReceiveRef = 0x7BA;
+	}
+	////test
+	//gereteSeedKey(0x853A08FB);
+	//return;
+	////test
 	wakeBoot->start(500);
 	writeCan(0x55, msgSend); // to boot
 	Sleep(50);
 
 	int msgSend1[8] = { 0x02, 0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 }; // programming session
-	writeCan(DIAG_ID_TO_DMFL, msgSend1);
+	writeCan(idSend, msgSend1);
 	Sleep(50);
 
 	int msgSend2[8] = { 0x02, 0x27, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Request seed key
-	writeCan(DIAG_ID_TO_DMFL, msgSend2);
+	writeCan(idSend, msgSend2);
 	while (true) // ∆дЄм ключ от boot
 	{
-		if (readWaitCan(&idReceive, msgReceive, 20))
-			if (msgReceive[0] == 0x06 && msgReceive[0] == 0x67 && msgReceive[0] == 0x01)
+		if (readWaitCan(&idReceive, (int*)msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[0] == 0x67 && msgReceive[0] == 0x01)
 			{
-
+				gereteSeedKey((msgReceive[3] << 24) + (msgReceive[3] << 16) + (msgReceive[3] << 8) + msgReceive[3]);
 			}
 		
 	}
