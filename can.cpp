@@ -1181,7 +1181,7 @@ int gereteSeedKey(UINT32 key)
 	return 1;
 }
 
-void Can::eraseApp(QString typeBlock)
+QString Can::eraseApp(QString typeBlock)
 {
 	int idSend;
 	int idReceive;
@@ -1189,7 +1189,7 @@ void Can::eraseApp(QString typeBlock)
 
 	int msgSend[8] = { 0x31, 0x31, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00 };
 	UINT8 msgReceive[8];
-	//QTime timeWork = QTime::currentTime().addMSecs(200); // Время для авариного выхода из цикла.
+	QTime timeWork = QTime::currentTime().addMSecs(500); // Время для авариного выхода из цикла.
 
 
 	if (typeBlock == "DMFL")
@@ -1217,44 +1217,67 @@ void Can::eraseApp(QString typeBlock)
 		idSend = 0x7AA;
 		idReceiveRef = 0x7BA;
 	}
-	////test
-	//gereteSeedKey(0x853A08FB);
-	//return;
-	////test
-	wakeBoot->start(500);
-	writeCan(0x55, msgSend); // to boot
+
+	wakeBoot->start(500); // Запускаем таймер, который не выпускает блок из boot
+	writeCan(0x55, msgSend); // переходим в boot
 	Sleep(50);
 
-	int msgSend1[8] = { 0x02, 0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 }; // programming session
-	writeCan(idSend, msgSend1);
-	Sleep(50);
 
-	int msgSend2[8] = { 0x02, 0x27, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Request seed key
-	writeCan(idSend, msgSend2);
+	int msgSend_ProgrammingSession[8] = { 0x02, 0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 }; // переходим в programming session
+	writeCan(idSend, msgSend_ProgrammingSession);
+	while (true) // Ждём ответа о переходе в programming session
+	{
+		if (readWaitCan(&idReceive, (int*)msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x67 && msgReceive[2] == 0x01)
+				break;
+
+		if (QTime::currentTime() > timeWork)
+			return QString("No response about switching to programming session");
+	}
+	//test
+	return QString("lol");
+	//test
+
+
+	int msgSend_RequestSeedKey[8] = { 0x02, 0x27, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 }; // переходим в Request seed key
+	writeCan(idSend, msgSend_RequestSeedKey);
 	while (true) // Ждём ключ от boot
 	{
 		if (readWaitCan(&idReceive, (int*)msgReceive, 20))
-			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[0] == 0x67 && msgReceive[0] == 0x01)
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x67 && msgReceive[2] == 0x01)
 			{
-				gereteSeedKey((msgReceive[3] << 24) + (msgReceive[3] << 16) + (msgReceive[3] << 8) + msgReceive[3]);
+				int sendMsgKey[8] = { 0x06, 0x27, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
+				UINT32 tmpKey = gereteSeedKey((msgReceive[3] << 24) + (msgReceive[4] << 16) + (msgReceive[5] << 8) + msgReceive[6]);
+				sendMsgKey[3] = (tmpKey >> 24);
+				sendMsgKey[4] = ((tmpKey >> 16) & 0xFF);
+				sendMsgKey[5] = ((tmpKey >> 8) & 0xFF);
+				sendMsgKey[6] = (tmpKey & 0xFF);
+
+				writeCan(idSend, sendMsgKey); // отправляем ключ
+
+				break;
 			}
-		
+		if (QTime::currentTime() > timeWork)
+			return QString("No answer with key");
 	}
-	Sleep(50);
+	while (true) // Ждём ключ от boot
+	{
+		if (readWaitCan(&idReceive, (int*)msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x02 && msgReceive[1] == 0x67 && msgReceive[2] == 0x02)
+				break;
+		if (QTime::currentTime() > timeWork)
+			return QString("Didn't receive a response about the validity of the key");
+	}
+
+	// тут еще фингер принт
 
 
-	//while (true)
-	//{
-	//	if (readWaitCan(&idReceive, msgReceive, 20))
-	//	{
-	//		if (idReceive == idReceiveRef)
-	//		{
+	int msgSend_EraseMemory_1[8] = { 0x10, 0x0D, 0x31, 0x01, 0xFF, 0x00, 0x44, 0x80 }; // Делаем удаление памяти
+	writeCan(idSend, msgSend_EraseMemory_1); // отправляем ключ
 
-	//		}
-	//	}
-	//	if (QTime::currentTime() > timeWork)
-	//		Signal_StatusEraseApp("nnn");
-	//}
+	int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00 }; // Делаем удаление памяти
+	writeCan(idSend, msgSend_EraseMemory_2); // отправляем ключ
+
 
 }
 

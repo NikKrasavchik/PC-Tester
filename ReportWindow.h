@@ -105,6 +105,10 @@ public:
 	void setTestingType(WindowType testType) { this->testType = testType; }
 
 private:
+	QDialog* dlgErase;
+	Ui::EraseWindowClass uiErase;
+
+
 	QWidget* mainWidget;
 	QWidget* footerWidget;
 	QWidget* reportDataWidget;

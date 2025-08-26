@@ -1925,49 +1925,50 @@ void ReportWindow::generateXlsx()
 		//if (equipmentName != "Error. Long delay")
 		if (equipmentName != "Error. Long del")
 		{
-			QDialog dlgErase;
-			
-			Ui::EraseWindowClass ui;
-			ui.setupUi(&dlgErase);
-			WindowFrame w(WindowType::ERASEWINDOW, this, &dlgErase);
+			dlgErase = new QDialog;
+			uiErase.setupUi(dlgErase);
+			WindowFrame w(WindowType::ERASEWINDOW, this, dlgErase);
 			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
 
-			connect(ui.erasePushButton, &QPushButton::clicked, this, &ReportWindow::on_erasePushButton_clicked);
-			connect(ui.cancelPushButton, &QPushButton::clicked, this, &ReportWindow::on_cancelPushButton_clicked);
+			connect(uiErase.erasePushButton, &QPushButton::clicked, this, &ReportWindow::on_erasePushButton_clicked);
+			connect(uiErase.cancelPushButton, &QPushButton::clicked, this, &ReportWindow::on_cancelPushButton_clicked);
 
 			if (viewWindowState->appLanguage == RUSSIAN_LANG)
 			{
-				ui.erasePushButton->setText(QString("Стереть"));
-				ui.cancelPushButton->setText(QString("Выйти"));
-				ui.headerLabel->setText(QString("Произвести стирание программы\nблока ") + equipmentName + " ?");
+				uiErase.erasePushButton->setText(QString("Стереть"));
+				uiErase.cancelPushButton->setText(QString("Выйти"));
+				uiErase.headerLabel->setText(QString("Произвести стирание программы\nблока ") + equipmentName + " ?");
 
 			}
 			else
 			{
-				ui.erasePushButton->setText(QString("Erasing"));
-				ui.cancelPushButton->setText(QString("Exit"));
-				ui.headerLabel->setText(QString("Erase the program\nblock ") + equipmentName + " ?");
+				uiErase.erasePushButton->setText(QString("Erasing"));
+				uiErase.cancelPushButton->setText(QString("Exit"));
+				uiErase.headerLabel->setText(QString("Erase the program\nblock ") + equipmentName + " ?");
 
 			}
 			if (viewWindowState->appTheme == LIGHT_THEME)
 			{
-				ui.erasePushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
-				ui.cancelPushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
-				ui.headerLabel->setStyleSheet(lightStyles.eraseWindowLable);
+				uiErase.erasePushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+				uiErase.cancelPushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+				uiErase.headerLabel->setStyleSheet(lightStyles.eraseWindowLable);
 
 			}
 			else
 			{
-				ui.erasePushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
-				ui.cancelPushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
-				ui.headerLabel->setStyleSheet(darkStyles.eraseWindowLable);
+				uiErase.erasePushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+				uiErase.cancelPushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+				uiErase.headerLabel->setStyleSheet(darkStyles.eraseWindowLable);
 
 			}
 			
-			
-			
+
 			w.show();
-			dlgErase.exec();
+			dlgErase->exec();
+		}
+		else
+		{
+
 		}
 	}
 	catch (...)
@@ -1978,12 +1979,12 @@ void ReportWindow::generateXlsx()
 
 void ReportWindow::on_erasePushButton_clicked()
 {
+	//Can::eraseApp(equipmentName);
 	Can::eraseApp("DMFL");
-
 }
 void ReportWindow::on_cancelPushButton_clicked()
 {
-	
+	dlgErase->close();
 
 }
 

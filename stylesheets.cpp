@@ -920,7 +920,7 @@ void TestWindow::initDarkStyleSheets()
 		R"(
 		.QPushButton {
 			margin: 3px;
-
+			padding: 3px;
 			border-radius: 10px;
 			background-color: #535353;
 

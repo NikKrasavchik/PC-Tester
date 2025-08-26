@@ -146,7 +146,7 @@ public:
 
 	static QString getDiagBlock(DiagInformation diagInf, TestBlockName blockName);
 
-	static void eraseApp(QString typeBlock);
+	static QString eraseApp(QString typeBlock);
 
 	void setCable(std::vector<Cable> cable);
 

@@ -53,7 +53,7 @@ MainWindow::MainWindow(QWidget* parent)
 	initUi();
 
 	//test
-	Can::eraseApp("DMFL");
+	//Can::eraseApp("DMFL");
 	//test
 }
 
