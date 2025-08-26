@@ -1168,17 +1168,118 @@ QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
 
 
 }
+//DMxx
+const unsigned int _rot_dir_DMxx = 21;
+const unsigned int _rot_num_DMxx[] = { 12, 25, 13, 26 };
+const unsigned int _inv_type_DMxx[] = { 29, 3 };
+const unsigned int _bitwise_op_DMxx[] = { 2, 22 };
+const unsigned int _inv_bits_DMxx[3][3] = { {27,28,30}, {8,19,14}, {29,24,6} };
+//TM
+const unsigned int _rot_dir_TM = 21;
+const unsigned int _rot_num_TM[] = { 13, 19, 22, 8 };
+const unsigned int _inv_type_TM[] = { 15, 26 };
+const unsigned int _bitwise_op_TM[] = { 0, 29 };
+const unsigned int _inv_bits_TM[3][3] = { {19,28,7}, {26,12,16}, {17,2,24} };
 
-int gereteSeedKey(UINT32 key)
+static unsigned int _bit_val(unsigned int num, unsigned int bit)
 {
-	int result;
-	if (!((key & 0x200000) >> 21)) // Сдвиг в право
-		key = (key >> 1) + ((key & 0x1) << 31);
-	else // Сдвиг влево
-		key = (key << 1) + ((key & 0x80000000) >> 31);
+	return (num >> bit) & 1;
+}
 
-	int p = 0x1 & 0x1;
-	return 1;
+static unsigned int _field_val(unsigned int num, const unsigned int* field, unsigned int len)
+{
+	unsigned int res = 0;
+	for (unsigned int i = 0; i < len; i++)
+	{
+		res <<= 1;
+		res += _bit_val(num, field[i]);
+	}
+	return res;
+}
+
+enum VKeyGenResultEx_enum
+{
+	KGRE_Ok = 0,
+	KGRE_BufferToSmall = 1,
+	KGRE_SecurityLevelInvalid = 2,
+	KGRE_VariantInvalid = 3,
+	KGRE_UnspecifiedError = 4,
+	KGRE_BadDll = 5,
+	KGRE_FunctionNotFound = 6
+};
+
+uint32_t custom_bswap32(uint32_t value) {
+	return (value >> 24) | ((value << 8) & 0x00FF0000) | ((value >> 8) & 0x0000FF00) | (value << 24);
+}
+
+VKeyGenResultEx_enum GenerateKeyEx_TM(
+	const unsigned char* ipSeedArray, unsigned int iSeedArraySize,
+	unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize,
+	unsigned int* oActualKeyArraySize)
+{
+	if (iSeedArraySize != 4) return KGRE_BadDll;
+	if (iMaxKeyArraySize < 4) return KGRE_BufferToSmall;
+
+	unsigned int seed = custom_bswap32(*((unsigned int*)ipSeedArray));
+
+	unsigned int res;
+	unsigned int rot_num = _field_val(seed, _rot_num_TM, sizeof(_rot_num_TM) / sizeof(int));
+	if (_bit_val(seed, _rot_dir_TM)) { rot_num = (32 - rot_num); }
+	res = seed << rot_num;
+	res = (res & 0xFFFFFFFF) | (seed >> (32 - rot_num));
+
+	unsigned int inv_type = _field_val(seed, _inv_type_TM, sizeof(_inv_type_TM) / sizeof(int));
+	if (inv_type > 0)
+	{
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			res ^= (1 << _inv_bits_TM[inv_type - 1][i]);
+		}
+	}
+
+	unsigned int bitwise_op = _field_val(seed, _bitwise_op_TM, sizeof(_bitwise_op_TM) / sizeof(int));
+	if (1 == bitwise_op) { res &= seed; }
+	else if (2 == bitwise_op) { res ^= seed; }
+	else if (3 == bitwise_op) { res |= seed; }
+
+	*((unsigned int*)iopKeyArray) = custom_bswap32(res);
+	*oActualKeyArraySize = 4;
+	return KGRE_Ok;
+}
+
+VKeyGenResultEx_enum GenerateKeyEx_DMxx(
+	const unsigned char* ipSeedArray, unsigned int iSeedArraySize,
+	unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize,
+	unsigned int* oActualKeyArraySize)
+{
+	if (iSeedArraySize != 4) return KGRE_BadDll;
+	if (iMaxKeyArraySize < 4) return KGRE_BufferToSmall;
+
+	unsigned int seed = custom_bswap32(*((unsigned int*)ipSeedArray));
+
+	unsigned int res;
+	unsigned int rot_num = _field_val(seed, _rot_num_DMxx, sizeof(_rot_num_DMxx) / sizeof(int));
+	if (_bit_val(seed, _rot_dir_DMxx)) { rot_num = (32 - rot_num); }
+	res = seed << rot_num;
+	res = (res & 0xFFFFFFFF) | (seed >> (32 - rot_num));
+
+	unsigned int inv_type = _field_val(seed, _inv_type_DMxx, sizeof(_inv_type_DMxx) / sizeof(int));
+	if (inv_type > 0)
+	{
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			res ^= (1 << _inv_bits_DMxx[inv_type - 1][i]);
+		}
+	}
+
+	unsigned int bitwise_op = _field_val(seed, _bitwise_op_DMxx, sizeof(_bitwise_op_DMxx) / sizeof(int));
+	if (1 == bitwise_op) { res &= seed; }
+	else if (2 == bitwise_op) { res ^= seed; }
+	else if (3 == bitwise_op) { res |= seed; }
+
+	*((unsigned int*)iopKeyArray) = custom_bswap32(res);
+	*oActualKeyArraySize = 4;
+	return KGRE_Ok;
 }
 
 QString Can::eraseApp(QString typeBlock)
@@ -1188,31 +1289,31 @@ QString Can::eraseApp(QString typeBlock)
 	int idReceiveRef;
 
 	int msgSend[8] = { 0x31, 0x31, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00 };
-	UINT8 msgReceive[8];
+	int msgReceive[8];
 	QTime timeWork = QTime::currentTime().addMSecs(500); // Время для авариного выхода из цикла.
 
 
-	if (typeBlock == "DMFL")
+	if (typeBlock == "DMFL_NAMI")
 	{
 		idSend = 0x7A4;
 		idReceiveRef = 0x7B4;
 	}
-	else if (typeBlock == "DMFR")
+	else if (typeBlock == "DMFR_NAMI")
 	{
 		idSend = 0x7A5;
 		idReceiveRef = 0x7B5;
 	}
-	else if (typeBlock == "DMRL")
+	else if (typeBlock == "DMRL_NAMI")
 	{
 		idSend = 0x7A6;
 		idReceiveRef = 0x7B6;
 	}
-	else if (typeBlock == "DMRR")
+	else if (typeBlock == "DMRR_NAMI")
 	{
 		idSend = 0x7A7;
 		idReceiveRef = 0x7B7;
 	}
-	else if (typeBlock == "TM")
+	else if (typeBlock == "TM_NAMI")
 	{
 		idSend = 0x7AA;
 		idReceiveRef = 0x7BA;
@@ -1227,31 +1328,42 @@ QString Can::eraseApp(QString typeBlock)
 	writeCan(idSend, msgSend_ProgrammingSession);
 	while (true) // Ждём ответа о переходе в programming session
 	{
-		if (readWaitCan(&idReceive, (int*)msgReceive, 20))
-			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x67 && msgReceive[2] == 0x01)
+		if (readWaitCan(&idReceive, msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x50 && msgReceive[2] == 0x02 && msgReceive[3] == 0x00 && msgReceive[4] == 0x32 && msgReceive[5] == 0x01 && msgReceive[6] == 0xF4 && msgReceive[7] == 0xAA)
 				break;
 
 		if (QTime::currentTime() > timeWork)
 			return QString("No response about switching to programming session");
 	}
-	//test
-	return QString("lol");
-	//test
+
 
 
 	int msgSend_RequestSeedKey[8] = { 0x02, 0x27, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 }; // переходим в Request seed key
 	writeCan(idSend, msgSend_RequestSeedKey);
 	while (true) // Ждём ключ от boot
 	{
-		if (readWaitCan(&idReceive, (int*)msgReceive, 20))
+		if (readWaitCan(&idReceive, msgReceive, 20))
 			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x67 && msgReceive[2] == 0x01)
 			{
 				int sendMsgKey[8] = { 0x06, 0x27, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
-				UINT32 tmpKey = gereteSeedKey((msgReceive[3] << 24) + (msgReceive[4] << 16) + (msgReceive[5] << 8) + msgReceive[6]);
-				sendMsgKey[3] = (tmpKey >> 24);
-				sendMsgKey[4] = ((tmpKey >> 16) & 0xFF);
-				sendMsgKey[5] = ((tmpKey >> 8) & 0xFF);
-				sendMsgKey[6] = (tmpKey & 0xFF);
+				//UINT32 tmpKey = gereteSeedKey((msgReceive[3] << 24) + (msgReceive[4] << 16) + (msgReceive[5] << 8) + msgReceive[6]);
+				//unsigned char key[4];
+				unsigned char* ipSeedArray = new unsigned char[4];
+				ipSeedArray[0] = msgReceive[3];
+				ipSeedArray[1] = msgReceive[4];
+				ipSeedArray[2] = msgReceive[5];
+				ipSeedArray[3] = msgReceive[6];
+				unsigned char* keyAnswer = new unsigned char[4];
+				unsigned int size;
+				if(typeBlock == "TM")
+					GenerateKeyEx_TM(ipSeedArray, 4, keyAnswer, 4, &size);
+				else
+					GenerateKeyEx_DMxx(ipSeedArray, 4, keyAnswer, 4, &size);
+				//int p[4];
+				sendMsgKey[3] = keyAnswer[0];
+				sendMsgKey[4] = keyAnswer[1];
+				sendMsgKey[5] = keyAnswer[2];
+				sendMsgKey[6] = keyAnswer[3];
 
 				writeCan(idSend, sendMsgKey); // отправляем ключ
 
@@ -1260,9 +1372,9 @@ QString Can::eraseApp(QString typeBlock)
 		if (QTime::currentTime() > timeWork)
 			return QString("No answer with key");
 	}
-	while (true) // Ждём ключ от boot
+	while (true) // Ждём подтверждение о валидности ключа
 	{
-		if (readWaitCan(&idReceive, (int*)msgReceive, 20))
+		if (readWaitCan(&idReceive, msgReceive, 20))
 			if (idReceive == idReceiveRef && msgReceive[0] == 0x02 && msgReceive[1] == 0x67 && msgReceive[2] == 0x02)
 				break;
 		if (QTime::currentTime() > timeWork)
@@ -1275,16 +1387,25 @@ QString Can::eraseApp(QString typeBlock)
 	int msgSend_EraseMemory_1[8] = { 0x10, 0x0D, 0x31, 0x01, 0xFF, 0x00, 0x44, 0x80 }; // Делаем удаление памяти
 	writeCan(idSend, msgSend_EraseMemory_1); // отправляем ключ
 
+	while (true) // ждём ответ
+	{
+		if (readWaitCan(&idReceive, msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x30 && msgReceive[1] == 0x00 && msgReceive[2] == 0x01)
+				break;
+		if (QTime::currentTime() > timeWork)
+			return QString("Didn't receive a response about the validity of the key");
+	}
+
 	int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00 }; // Делаем удаление памяти
 	writeCan(idSend, msgSend_EraseMemory_2); // отправляем ключ
 
-	return QString("GOOD");
+		return QString("GOOD");
 }
 
 
 void Can::Timer_wakeBoot()
 {
 	int msgSend[8] = { 0x04, 0x3E, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00 };
-	writeCan(DIAG_ID_TO_DMFL, msgSend);
+	//writeCan(DIAG_ID_TO_DMFL, msgSend);
 
 }

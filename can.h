@@ -10,6 +10,7 @@
 #include "QTime"
 #include "qstring.h"
 
+
 #include "canlib.h"
 #include "linlib.h"
 #include "chai.h"
@@ -42,10 +43,13 @@
 
 #define TIME_CHECKCONNECTION	200
 
+
+
 class Can     : public QObject
 {
 	Q_OBJECT
 public:
+
 	Can();
 
 	// ------------------------------------
@@ -202,7 +206,7 @@ private:
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
 	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
-
+	//static VKeyGenResultEx_enum GenerateKeyEx(const unsigned char* ipSeedArray, unsigned int iSeedArraySize, unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize, unsigned int* oActualKeyArraySize);
 //
 // Varibals
 //

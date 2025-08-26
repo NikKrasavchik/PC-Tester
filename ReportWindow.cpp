@@ -1986,7 +1986,7 @@ void ReportWindow::on_erasePushButton_clicked()
 	else
 		uiErase.headerLabel->setText(QString("") + equipmentName);
 
-	QString result = Can::eraseApp("DMFL");
+	QString result = Can::eraseApp(equipmentName);
 
 	if (result == QString("GOOD"))
 	{
