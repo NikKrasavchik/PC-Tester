@@ -1979,12 +1979,36 @@ void ReportWindow::generateXlsx()
 
 void ReportWindow::on_erasePushButton_clicked()
 {
-	//Can::eraseApp(equipmentName);
-	Can::eraseApp("DMFL");
+	startErase = true;
+	uiErase.progressBar->setValue(0);
+	if (viewWindowState->appLanguage == RUSSIAN_LANG)
+		uiErase.headerLabel->setText(QString("Стирание программы\nблока ") + equipmentName);
+	else
+		uiErase.headerLabel->setText(QString("") + equipmentName);
+
+	QString result = Can::eraseApp("DMFL");
+
+	if (result == QString("GOOD"))
+	{
+		uiErase.progressBar->setValue(100);
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			uiErase.headerLabel->setText(QString("Программа успешно удалена."));
+		else
+			uiErase.headerLabel->setText(QString(""));
+	}
+	startErase = false;
 }
 void ReportWindow::on_cancelPushButton_clicked()
 {
-	dlgErase->close();
+	if(!startErase)
+		dlgErase->close();
+	else
+	{
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			QMessageBox::warning(this, QString("Внимание"), QString("Во время стирание памяти, невозможно выйти. Дождитесь окончание процесса."));
+		else
+			QMessageBox::warning(this, QString("Warning"), QString(""));
+	}
 
 }
 

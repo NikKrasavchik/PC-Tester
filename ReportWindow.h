@@ -134,7 +134,7 @@ private:
 	QString testerName;
 	QString serialNumber;
 	QString equipmentName;
-
+	bool startErase;
 
 	void initUi();
 	void initUiTable();

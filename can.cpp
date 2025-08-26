@@ -1278,7 +1278,7 @@ QString Can::eraseApp(QString typeBlock)
 	int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00 }; // Делаем удаление памяти
 	writeCan(idSend, msgSend_EraseMemory_2); // отправляем ключ
 
-
+	return QString("GOOD");
 }
 
 
