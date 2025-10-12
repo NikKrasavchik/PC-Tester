@@ -1551,7 +1551,14 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 		}
 
 		else
+		{
+			if(cableRows[offsetMap[idCable]]->thresholds[0].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[0].maxValue)
+				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::green));
+			else
+				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::red));
+
 			model->setData(model->index(offsetMap[idCable], 7), QString::number(newValue));
+		}
 		break;
 
 	default:

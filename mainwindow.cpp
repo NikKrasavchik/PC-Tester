@@ -769,17 +769,17 @@ void MainWindow::initConfig()
 	config = cable.readLine();
 	QStringList list = config.split(u';');
 
-	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // 
+	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // Them
 		viewWindowState->appTheme = LIGHT_THEME;
 	else
 		viewWindowState->appTheme = DARK_THEME;
 
-	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // 
+	if (list[1] == "RUSSIAN_LANG" || list[1] == "NOT_SET") // Language
 		viewWindowState->appLanguage = RUSSIAN_LANG;
 	else
 		viewWindowState->appLanguage = ENGLISH_LANG;
 
-	if (list[2] != "NOT_SET") // Áëîê
+	if (list[2] != "NOT_SET") // Block
 	{
 		if (list[2].left(3) == "DTM")
 			leftBlockDMButton->click();
@@ -1848,15 +1848,17 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 			std::vector<Measureds> measureds;
 			for (int i = 8; i < list.size(); i += 2)
 			{
-				if (direction != DIRECTION_IN)
+				if (direction == DIRECTION_OUT)
 				{
 					int minCurrent = list[i].toInt();
 					int maxCurrent = list[i + 1].toInt();
 					int minVoltage = list[i + 2].toInt();
 					int maxVoltage = list[i + 3].toInt();
+					int minValue = list[i + 4].toInt();
+					int maxValue = list[i + 5].toInt();
 
-					thresholds.push_back(Thresholds(minCurrent, maxCurrent, minVoltage, maxVoltage));
-					i += 2;
+					thresholds.push_back(Thresholds(minCurrent, maxCurrent, minVoltage, maxVoltage, minValue, maxValue));
+					i += 4;
 				}
 				else
 				{

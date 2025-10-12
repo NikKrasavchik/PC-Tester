@@ -1923,7 +1923,7 @@ void ReportWindow::generateXlsx()
 
 		QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
 		//if (equipmentName != "Error. Long delay")
-		if (equipmentName != "Error. Long del")
+		if (equipmentName != "Errorк. Long del")
 		{
 			dlgErase = new QDialog;
 			uiErase.setupUi(dlgErase);

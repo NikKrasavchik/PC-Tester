@@ -2,7 +2,7 @@
 
 #include "xlsxzipwriter_p.h"
 
-#include <C:/Qt/6.8.0/msvc2022_64/include/QtCore/6.8.0/QtCore/private/qzipwriter_p.h>
+#include <C:/Qt/6.9.0/msvc2022_64/include/QtCore/6.9.0/QtCore/private/qzipwriter_p.h>
 
 #include <QDebug>
 
