@@ -331,7 +331,7 @@ void ReportWindow::generateTableManual()
 			{
 			case TypeCable::DIG_IN:
 			case TypeCable::DIG_OUT:
-				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("Цифравой"));
+				tableWidget->item(row, IND_COLUMN_BASE_TYPE)->setText(QString("Цифровой"));
 				break;
 
 			case TypeCable::ANALOG_IN:
@@ -1359,7 +1359,7 @@ void writeHorizontalAlignCell(Document& xlsx, int rowStart, int columnStart, int
 
 void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumber, TestBlockName testingBlock, QString actualVersion, QString& equipmentName)
 {
-	// Ñîçëàíèå Format, ñ óêàçàíèåì ñòèëåé ó ÿ÷ååê
+	// 
 	Format format;
 	format.setHorizontalAlignment(Format::AlignLeft);
 	format.setBorderStyle(Format::BorderThin);
@@ -1371,7 +1371,7 @@ void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumbe
 	commentHeader.setHorizontalAlignment(Format::AlignHCenter);
 	commentHeader.setVerticalAlignment(Format::AlignTop);
 
-	// Çàïèñü äàííûõ â ÿ÷åéêè òàáëèöû
+	// 
 	writeHorizontalAlignCell(xlsx, 1, 1, 1, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Дата проверки") : QString("Date of inspection"), format);
 	writeHorizontalAlignCell(xlsx, 2, 1, 2, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Время проверки") : QString("Time of inspection"), format);
 	writeHorizontalAlignCell(xlsx, 3, 1, 3, 2, viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Имя оператора") : QString("Operator name"), format);
@@ -1921,9 +1921,12 @@ void ReportWindow::generateXlsx()
 
 		xlsx.saveAs(nameFile);
 
-		QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
-		//if (equipmentName != "Error. Long delay")
-		if (equipmentName != "Errorк. Long del")
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+			QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
+		else
+			QMessageBox::warning(this, QString("Warning"), QString(" \"" + nameFile.toLocal8Bit() + "\" the file is saved in the Reports folder"));
+
+		if (equipmentName != "Error. Long delay")
 		{
 			dlgErase = new QDialog;
 			uiErase.setupUi(dlgErase);
@@ -1984,7 +1987,7 @@ void ReportWindow::on_erasePushButton_clicked()
 	if (viewWindowState->appLanguage == RUSSIAN_LANG)
 		uiErase.headerLabel->setText(QString("Стирание программы\nблока ") + equipmentName);
 	else
-		uiErase.headerLabel->setText(QString("") + equipmentName);
+		uiErase.headerLabel->setText(QString("Erasing the program\nblock ") + equipmentName);
 
 	QString result = Can::eraseApp(equipmentName);
 
@@ -1994,7 +1997,12 @@ void ReportWindow::on_erasePushButton_clicked()
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
 			uiErase.headerLabel->setText(QString("Программа успешно удалена."));
 		else
-			uiErase.headerLabel->setText(QString(""));
+			uiErase.headerLabel->setText(QString("The program has been successfully removed."));
+	}
+	else
+	{
+		uiErase.headerLabel->setText(QString("Error. ") + result);
+
 	}
 	startErase = false;
 }
@@ -2007,7 +2015,7 @@ void ReportWindow::on_cancelPushButton_clicked()
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
 			QMessageBox::warning(this, QString("Внимание"), QString("Во время стирание памяти, невозможно выйти. Дождитесь окончание процесса."));
 		else
-			QMessageBox::warning(this, QString("Warning"), QString(""));
+			QMessageBox::warning(this, QString("Warning"), QString("During the erasing of memory, it is impossible to exit. Wait until the process is completed."));
 	}
 
 }

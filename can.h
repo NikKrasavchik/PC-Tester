@@ -162,25 +162,6 @@ public:
 	// @return void
 	static void clearOldValue();
 
-	// Метод для проверки не основных CAN канов
-	// @name checkInformationBus_Can
-	// 
-	// @param QString checkAdapter - Название адаптера по которому будет производится проверка.
-	// @param int canId - Can id по которому отправится тест сообщение
-	// 
-	// @return bool true - can исправен / false - не пришло сообщение или оно неправильное.
-	static bool checkInformationBus_Can(QString checkAdapter, int canId);
-
-	// Метод для проверки LIN канов
-	// @name checkInformationBus_Lin
-	// 
-	// @param QString checkAdapter - Название адаптера по которому будет производится проверка.
-	// @param int canId - Lin id по мы как slave будем отвечать.
-	// 
-	// @return bool true - can исправен / false - не пришло сообщение или оно неправильное.
-	static bool checkInformationBus_Lin(QString checkAdapter, int canId);
-	
-	
 	static void checkInformationBus(int canId);
 	static void verificationStartStop(bool seq1 = false, bool seq2 = false, bool seq3 = false, bool seq4 = false, bool seq5 = false, bool seq6 = false, bool seq7 = false, bool seq8 = false, bool seq9 = false, bool seq10 = false);
 private:
