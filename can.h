@@ -14,6 +14,7 @@
 #include "canlib.h"
 #include "linlib.h"
 #include "chai.h"
+#include "PCANBasic.h"
 #include "Cable.h"
 
 // Diag
@@ -186,7 +187,7 @@ private:
 	// ------------------------------------
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
-	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
+	std::pair<int, int> conversionFrequency(int frequency, ModelAdapter modelAdapter);
 	//static VKeyGenResultEx_enum GenerateKeyEx(const unsigned char* ipSeedArray, unsigned int iSeedArraySize, unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize, unsigned int* oActualKeyArraySize);
 //
 // Varibals
@@ -199,6 +200,7 @@ private:
 	};
 	static modelAdapter *kvaser;
 	static modelAdapter *marathon;
+	static modelAdapter *pcan;
 	static canHandle hnd;
 
 	

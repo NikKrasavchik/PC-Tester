@@ -1542,21 +1542,23 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::CAN_OUT || cableRows[offsetMap[idCable]]->typeInt == TypeCable::LIN_OUT)
 		{
 			if (newValue == 2)
-				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::green));
+				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
 			else if (newValue == NOT_SET)
 				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::transparent));
 			else
-				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::red));
+				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
 
 		}
 
 		else
 		{
-			if(cableRows[offsetMap[idCable]]->thresholds[0].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[0].maxValue)
-				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::green));
-			else
-				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::red));
-
+			if (cableRows[offsetMap[idCable]]->thresholds[0].minValue != -1)
+			{
+				if (cableRows[offsetMap[idCable]]->thresholds[0].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[0].maxValue)
+					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
+				else
+					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
+			}
 			model->setData(model->index(offsetMap[idCable], 7), QString::number(newValue));
 		}
 		break;

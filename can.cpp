@@ -6,6 +6,7 @@
 
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
+Can::modelAdapter *Can::pcan = new modelAdapter;
 canHandle Can::hnd = 0;
 QTimer* Can::wakeBoot = new QTimer();
 QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
@@ -91,7 +92,7 @@ bool Can::initCan(WindowType windowType)
 		canSetBusParams(hnd, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Установка параматров на CAN-шину.
 		canBusOn(hnd); // Запуск CAN-шины
 	}
-	else
+	else if(marathon->activeAdapter != NOT_SET)
 	{ // Дописать проверку ошибок Marathon
 		auto statusTmp = CiInit();
 		statusTmp = CiOpen( marathon->activeAdapter, CIO_CAN11);
@@ -103,6 +104,12 @@ bool Can::initCan(WindowType windowType)
 		statusTmp = CiRcQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
 		statusTmp = CiStart(marathon->activeAdapter);
 	}
+	else if (pcan->activeAdapter != NOT_SET)
+	{
+		CAN_Initialize(pcan->activeAdapter, pcan->p_frequency.first);
+	}
+
+
 
 	timerReadCan->start(2); // И запустим таймер]
 	switch (windowType)
@@ -159,10 +166,14 @@ bool Can::deinitCan()
 		canBusOff(hnd);  // Дописать проверку ошибок kvasera
 		canClose(hnd);
 	}
-	else
+	else if(marathon->activeAdapter != NOT_SET)
 	{
 		CiStop(marathon->activeAdapter);  // Дописать проверку ошибок Marathon
 		CiClose(marathon->activeAdapter);
+	}
+	else if (pcan->activeAdapter != NOT_SET)
+	{
+		CAN_Uninitialize(pcan->activeAdapter);
 	}
 	return true;
 }
@@ -178,7 +189,7 @@ bool Can::writeCan(int id, int* msg, unsigned int flags)
 		canWrite(hnd, id, msgSendKvase, 8, flags); // Дописать проверку ошибок kvasera
 		return true;
 	}
-	else
+	else if(marathon->activeAdapter != NOT_SET)
 	{
 		static canmsg_t msgTransmit;
 		msgTransmit.id = id;
@@ -188,6 +199,17 @@ bool Can::writeCan(int id, int* msg, unsigned int flags)
 		
 		auto statusTmp = CiTransmit(marathon->activeAdapter, &msgTransmit); // Дописать проверку ошибок Marathon
 		return true;
+	}
+	else if (pcan->activeAdapter != NOT_SET)
+	{
+		TPCANMsg msgPCAN;
+		msgPCAN.ID = id;
+		msgPCAN.MSGTYPE = PCAN_MESSAGE_STANDARD;
+		msgPCAN.LEN = 8;
+		for (int i = 0; i < 8; i++)
+			msgPCAN.DATA[i] = msg[i];
+		CAN_Write(pcan->activeAdapter, &msgPCAN);
+
 	}
 	return false;
 }
@@ -229,7 +251,7 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 		else
 			return false;
 	}
-	else
+	else if(marathon->activeAdapter != NOT_SET)
 	{
 		msgReceive.id = 0;
 		auto statusTmp = CiRead(marathon->activeAdapter, &msgReceive, 1);
@@ -242,6 +264,14 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 		}
 		else
 			return false;
+	}
+	else if (pcan->activeAdapter != NOT_SET)
+	{
+		TPCANMsg msgPCAN;
+		TPCANTimestamp timestamp;
+		CAN_Read(pcan->activeAdapter, &msgPCAN, &timestamp);
+		for (int i = 0; i < 8; i++)
+			msg[i] = msgPCAN.DATA[i];
 	}
 }
 
@@ -277,6 +307,13 @@ void Can::setSelectedAdapterNeme(QString adapter)
 			b_adapterSelected = true;
 			return;
 		}
+	for (int i = 0; i < pcan->nameAdapters.size(); i++) // Проходим по pcan
+		if (pcan->nameAdapters[i] == adapter)
+		{
+			pcan->activeAdapter = i;
+			b_adapterSelected = true;
+			return;
+		}
 
 	b_adapterSelected = false;
 }
@@ -287,6 +324,8 @@ QString Can::getSelectedAdapterNeme()
 		return QString(kvaser->nameAdapters[kvaser->activeAdapter]);
 	else if (marathon->activeAdapter != NOT_SET)
 		return QString(marathon->nameAdapters[marathon->activeAdapter]);
+	else if (pcan->activeAdapter != NOT_SET)
+		return QString(pcan->nameAdapters[pcan->activeAdapter]);
 	else
 		return QString();
 }
@@ -301,16 +340,18 @@ void Can::setSelectedFrequency(QString frequency)
 {
 	if (frequency == "...")
 	{
-		kvaser->p_frequency = conversionFrequency(0, KVASER);
-		marathon->p_frequency = conversionFrequency(0, MARATHON);
+		kvaser->p_frequency = conversionFrequency(0, ModelAdapter::Kvase);
+		marathon->p_frequency = conversionFrequency(0, ModelAdapter::Marathon);
+		marathon->p_frequency = conversionFrequency(0, ModelAdapter::PCan);
 
 		b_frequencySelected = false;
 	}
 	else
 	{
 		frequency.remove(-4, 5);																// Обрезаем конец строки
-		kvaser->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), KVASER);		// Удаляем пробелы в строке, переводим строку в int, записываем частоту
-		marathon->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), MARATHON);
+		kvaser->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::Kvase);		// Удаляем пробелы в строке, переводим строку в int, записываем частоту
+		marathon->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::Marathon);
+		marathon->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::PCan);
 
 		b_frequencySelected = true;
 	}
@@ -329,6 +370,7 @@ std::vector<QString> Can::getNameAdapters()
 	// Чистим массив с названияями адаптеров, для того что бы актуализировать подключенные адаптеры
 	kvaser->nameAdapters.clear();
 	marathon->nameAdapters.clear();	
+	pcan->nameAdapters.clear();	
 
 	std::vector<QString> resultVector;
 
@@ -339,7 +381,8 @@ std::vector<QString> Can::getNameAdapters()
 	canInitializeLibrary();
 	canGetNumberOfChannels(&chanCount);
 	QString strNameAdapter;
-	for (int i = 0; i < chanCount; i++) {
+	for (int i = 0; i < chanCount; i++) 
+	{
 		canGetChannelData(i, canCHANNELDATA_CHANNEL_NAME, charNameAdapter, sizeof(charNameAdapter));
 		if (charNameAdapter[0] == 0)
 			continue;
@@ -386,10 +429,29 @@ std::vector<QString> Can::getNameAdapters()
 		}
 	}
 
+	//pcan
+
+	TPCANChannelInformation channelInfo[16]; // буфер для информации о каналах
+	DWORD bufferSize = sizeof(channelInfo);
+	for (int i = 0; i < bufferSize / sizeof(TPCANChannelInformation); i++)
+		channelInfo[i].device_type = 0;
+	CAN_GetValue(PCAN_NONEBUS, PCAN_ATTACHED_CHANNELS, channelInfo, bufferSize);
+
+	int count = bufferSize / sizeof(TPCANChannelInformation);
+	for (int i = 0; i < count; i++)
+	{
+		TPCANChannelInformation& info = channelInfo[i];
+		if (info.device_type != 0)
+		{
+			pcan->nameAdapters.push_back(QString::fromStdString(info.device_name));
+			resultVector.push_back(QString::fromStdString(info.device_name));
+		}
+	}
+
 	return resultVector;
 }
 
-std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
+std::pair<int, int> Can::conversionFrequency(int frequency, ModelAdapter modelAdapter)
 {
 	std::pair<int, int> resultPair;
 	resultPair.first = 0;
@@ -398,65 +460,124 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 	switch (frequency)
 	{
 	case FREQUENCY_50K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_50K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_50K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_50K_bt0;
 			resultPair.second = BCI_50K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_50K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_100K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_100K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_100K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_100K_bt0;
 			resultPair.second = BCI_100K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_100K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_125K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_125K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_125K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_125K_bt0;
 			resultPair.second = BCI_125K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_125K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_250K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_250K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_250K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_250K_bt0;
 			resultPair.second = BCI_250K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_250K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_500K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_500K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_500K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_500K_bt0;
 			resultPair.second = BCI_500K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_500K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_1000K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_1M;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_1M;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_1M_bt0;
 			resultPair.second = BCI_1M_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_1M;
+			break;
+		default:
+			break;
 		}
 		break;
-
 	default:
 		break;
 	}

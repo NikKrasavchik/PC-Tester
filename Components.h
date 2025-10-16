@@ -21,8 +21,10 @@
 #define RUSSIAN_LANG		0
 #define ENGLISH_LANG		1
 
+
 #define KVASER				0
 #define MARATHON			1
+#define PCAN				2
 
 #define FREQUENCY_50K		50000
 #define FREQUENCY_100K		100000
@@ -107,6 +109,14 @@ struct Size
 {
 	int width;
 	int height;
+};
+
+enum class ModelAdapter
+{
+	EMPTY = NOT_SET,
+	Kvase,
+	Marathon,
+	PCan
 };
 
 enum class TestBlockName
@@ -269,7 +279,9 @@ const QString appstylePath = ":/recources/style/appstyles.qss";
 const QString appLogoPath = ":/Dark/icons/App_Logo_White.png";
 
 #define COLOR_RED				"#FF8686"
-#define COLOR_GREEN				"#7CC770"
+#define COLOR_LIGNT_RED			"#EB634E"
+#define COLOR_GREEN				"#37EB00"
+#define COLOR_LIGHT_GREEN		"#7CC770"
 #define COLOR_WHITE				"#FFFFFF"
 #define COLOR_GREY				"#979797"
 #define COLOR_LIGHT_GREY		"#E8E8E8"
