@@ -37,12 +37,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>6.8.0_msvc2022_64</QtInstall>
+    <QtInstall>6.9.0_msvc2022_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>6.8.0_msvc2022_64</QtInstall>
+    <QtInstall>6.9.0_msvc2022_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -67,23 +67,23 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495;4267</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495;4267</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">

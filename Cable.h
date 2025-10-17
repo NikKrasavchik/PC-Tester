@@ -44,6 +44,16 @@ struct Thresholds
 		this->maxValue = -1;
 	}
 
+	Thresholds(double minVoltage, double maxVoltage, double minCurrent, double maxCurrent, int minValue, int maxValue)
+	{
+		this->minVoltage = minVoltage;
+		this->maxVoltage = maxVoltage;
+		this->minCurrent = minCurrent;
+		this->maxCurrent = maxCurrent;
+		this->minValue = minValue;
+		this->maxValue = maxValue;
+	}
+
 	Thresholds(const Thresholds& thresholds)
 	{
 		this->minVoltage = thresholds.minVoltage;
