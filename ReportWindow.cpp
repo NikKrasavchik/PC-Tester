@@ -1575,8 +1575,53 @@ void ReportWindow::on_saveButton_clicked()
 	}
 
 	resaveComments(); 
-
+//	if()
 	generateXlsx(); 
+
+	if (equipmentName != "Error. Long delay")
+	{
+		dlgErase = new QDialog;
+		uiErase.setupUi(dlgErase);
+		WindowFrame w(WindowType::ERASEWINDOW, this, dlgErase);
+		w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+
+		connect(uiErase.erasePushButton, &QPushButton::clicked, this, &ReportWindow::on_erasePushButton_clicked);
+		connect(uiErase.cancelPushButton, &QPushButton::clicked, this, &ReportWindow::on_cancelPushButton_clicked);
+
+		if (viewWindowState->appLanguage == RUSSIAN_LANG)
+		{
+			uiErase.erasePushButton->setText(QString("Стереть"));
+			uiErase.cancelPushButton->setText(QString("Выйти"));
+			uiErase.headerLabel->setText(QString("Произвести стирание программы\nблока ") + equipmentName + " ?");
+
+		}
+		else
+		{
+			uiErase.erasePushButton->setText(QString("Erasing"));
+			uiErase.cancelPushButton->setText(QString("Exit"));
+			uiErase.headerLabel->setText(QString("Erase the program\nblock ") + equipmentName + " ?");
+
+		}
+		if (viewWindowState->appTheme == LIGHT_THEME)
+		{
+			uiErase.erasePushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+			uiErase.cancelPushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+			uiErase.headerLabel->setStyleSheet(lightStyles.eraseWindowLable);
+
+		}
+		else
+		{
+			uiErase.erasePushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+			uiErase.cancelPushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+			uiErase.headerLabel->setStyleSheet(darkStyles.eraseWindowLable);
+
+		}
+
+
+		w.show();
+		dlgErase->exec();
+	}
+
 }
 
 void ReportWindow::generateXlsx()
@@ -1925,59 +1970,25 @@ void ReportWindow::generateXlsx()
 			QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
 		else
 			QMessageBox::warning(this, QString("Warning"), QString(" \"" + nameFile.toLocal8Bit() + "\" the file is saved in the Reports folder"));
-
-		if (equipmentName != "Error. Long delay")
-		{
-			dlgErase = new QDialog;
-			uiErase.setupUi(dlgErase);
-			WindowFrame w(WindowType::ERASEWINDOW, this, dlgErase);
-			w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
-
-			connect(uiErase.erasePushButton, &QPushButton::clicked, this, &ReportWindow::on_erasePushButton_clicked);
-			connect(uiErase.cancelPushButton, &QPushButton::clicked, this, &ReportWindow::on_cancelPushButton_clicked);
-
-			if (viewWindowState->appLanguage == RUSSIAN_LANG)
-			{
-				uiErase.erasePushButton->setText(QString("Стереть"));
-				uiErase.cancelPushButton->setText(QString("Выйти"));
-				uiErase.headerLabel->setText(QString("Произвести стирание программы\nблока ") + equipmentName + " ?");
-
-			}
-			else
-			{
-				uiErase.erasePushButton->setText(QString("Erasing"));
-				uiErase.cancelPushButton->setText(QString("Exit"));
-				uiErase.headerLabel->setText(QString("Erase the program\nblock ") + equipmentName + " ?");
-
-			}
-			if (viewWindowState->appTheme == LIGHT_THEME)
-			{
-				uiErase.erasePushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
-				uiErase.cancelPushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
-				uiErase.headerLabel->setStyleSheet(lightStyles.eraseWindowLable);
-
-			}
-			else
-			{
-				uiErase.erasePushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
-				uiErase.cancelPushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
-				uiErase.headerLabel->setStyleSheet(darkStyles.eraseWindowLable);
-
-			}
-			
-
-			w.show();
-			dlgErase->exec();
-		}
-		else
-		{
-
-		}
 	}
 	catch (...)
 	{
 		generateWarning(Warnings::ReportWindow::XLSX_SAVE_ERROR);
 	}
+}
+
+void ReportWindow::keyPressEvent(QKeyEvent* event)
+{
+	isCtrlPressed = event->modifiers() & Qt::ControlModifier;
+	if (event->modifiers() & Qt::ControlModifier) {
+		qDebug() << "Клавиша Ctrl была нажата";
+	}
+	else
+	{
+		qDebug() << "yt Ctrl была нажата";
+
+	}
+	QWidget::keyPressEvent(event); // Важно вызвать базовый метод, если не хотите переопределять всю логику
 }
 
 void ReportWindow::on_erasePushButton_clicked()

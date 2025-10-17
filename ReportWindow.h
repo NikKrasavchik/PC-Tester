@@ -11,6 +11,7 @@
 #include <QString>
 #include <QDateTime>
 #include <QCheckBox>
+#include "QKeyEvent"
 
 #include "Components.h"
 #include "TestWindow.h"
@@ -135,6 +136,8 @@ private:
 	QString serialNumber;
 	QString equipmentName;
 	bool startErase;
+	bool isCtrlPressed;
+
 
 	void initUi();
 	void initUiTable();
@@ -161,6 +164,8 @@ private:
 	QString getStrType(TypeCable type);
 
 	void resizeEvent(QResizeEvent* event);
+
+	void keyPressEvent(QKeyEvent* event);
 
 public slots:
 	// Слот срабатывающий при нажатии на кнопку Сохранить
