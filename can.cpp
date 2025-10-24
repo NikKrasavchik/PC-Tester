@@ -8,6 +8,7 @@ Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
 Can::modelAdapter *Can::pcan = new modelAdapter;
 canHandle Can::hnd = 0;
+HANDLE Can::hEventPcan = 0;
 QTimer* Can::wakeBoot = new QTimer();
 QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
 bool Can::b_flagStatusConnection;
@@ -79,6 +80,7 @@ void Can::verificationStartStop(bool seq1, bool seq2, bool seq3, bool seq4, bool
 
 bool Can::initCan(WindowType windowType)
 {
+	int status = -1;
 	if (!b_adapterSelected)
 		return false;
 	
@@ -106,7 +108,9 @@ bool Can::initCan(WindowType windowType)
 	}
 	else if (pcan->activeAdapter != NOT_SET)
 	{
-		CAN_Initialize(pcan->activeAdapter, pcan->p_frequency.first);
+		status = CAN_Initialize(pcan->handlerChanel[pcan->activeAdapter], pcan->p_frequency.first);
+		hEventPcan = CreateEvent(NULL, FALSE, FALSE, NULL);
+		CAN_SetValue(pcan->handlerChanel[pcan->activeAdapter], PCAN_RECEIVE_EVENT, &hEventPcan, sizeof(hEventPcan));
 	}
 
 
@@ -180,6 +184,8 @@ bool Can::deinitCan()
   
 bool Can::writeCan(int id, int* msg, unsigned int flags)
 {
+	int status = -1;
+
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned char msgSendKvase[8];
@@ -208,7 +214,7 @@ bool Can::writeCan(int id, int* msg, unsigned int flags)
 		msgPCAN.LEN = 8;
 		for (int i = 0; i < 8; i++)
 			msgPCAN.DATA[i] = msg[i];
-		CAN_Write(pcan->activeAdapter, &msgPCAN);
+		 status = CAN_Write(pcan->handlerChanel[pcan->activeAdapter], &msgPCAN);
 
 	}
 	return false;
@@ -227,6 +233,8 @@ bool Can::writeCan(int id, int* msg, unsigned int flags)
 canmsg_t msgReceive;
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
+	int status = -1;
+
 	//Can::coun++;
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
@@ -267,11 +275,21 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 	}
 	else if (pcan->activeAdapter != NOT_SET)
 	{
-		TPCANMsg msgPCAN;
-		TPCANTimestamp timestamp;
-		CAN_Read(pcan->activeAdapter, &msgPCAN, &timestamp);
-		for (int i = 0; i < 8; i++)
-			msg[i] = msgPCAN.DATA[i];
+		//DWORD wait_result = WaitForSingleObject(hEventPcan, timeout);
+		//if (wait_result == WAIT_OBJECT_0)
+		//{
+			TPCANMsg msgPCAN;
+			TPCANTimestamp timestamp;
+			if (CAN_Read(pcan->handlerChanel[pcan->activeAdapter], &msgPCAN, NULL) != 32)
+			{
+				*id = msgPCAN.ID;
+				for (int i = 0; i < 8; i++)
+					msg[i] = msgPCAN.DATA[i];
+				return true;
+			}
+
+		//}
+		return false;
 	}
 }
 
@@ -351,7 +369,7 @@ void Can::setSelectedFrequency(QString frequency)
 		frequency.remove(-4, 5);																// ќбрезаем конец строки
 		kvaser->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::Kvase);		// ”дал€ем пробелы в строке, переводим строку в int, записываем частоту
 		marathon->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::Marathon);
-		marathon->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::PCan);
+		pcan->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::PCan);
 
 		b_frequencySelected = true;
 	}
@@ -371,7 +389,7 @@ std::vector<QString> Can::getNameAdapters()
 	kvaser->nameAdapters.clear();
 	marathon->nameAdapters.clear();	
 	pcan->nameAdapters.clear();	
-
+	pcan->handlerChanel.clear();
 	std::vector<QString> resultVector;
 
 	// kvaser
@@ -444,6 +462,7 @@ std::vector<QString> Can::getNameAdapters()
 		if (info.device_type != 0)
 		{
 			pcan->nameAdapters.push_back(QString::fromStdString(info.device_name));
+			pcan->handlerChanel.push_back(info.channel_handle);
 			resultVector.push_back(QString::fromStdString(info.device_name));
 		}
 	}
@@ -633,7 +652,7 @@ void Can::Timer_ReadCan()
 	int id = NOT_SET;
 	int msgReceive[8];
 	bool isValueChange = false;
-	if (Can::readWaitCan(&id, msgReceive, 1))
+	if (Can::readWaitCan(&id, msgReceive, 20))
 	{
 		for (int key : mapCable.keys())
 		{
@@ -682,11 +701,7 @@ void Can::Timer_ReadCan()
 			for (int i = 0; i < mapCable[id].size(); i++)
 				if (mapCable[id][i].second != msgReceive[mapCable[id][i].first.getBit()])
 				{
-					//if(!(mapCable[id][i].first.getType() == TYPE_CAN || mapCable[id][i].first.getType() == TYPE_LIN)) // если не can и не lin
-						mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
-					//else
-						//mapCable[id][0].second == 10000;
-
+					mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
 					Signal_ChangedByte(mapCable[id][i].first.getId(), msgReceive[mapCable[id][i].first.getBit()]);
 				}
 

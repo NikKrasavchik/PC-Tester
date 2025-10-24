@@ -292,6 +292,23 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, Tes
 void TestWindow::selectCurrentCell(int id)
 {
 	mainTableWidget->setCurrentCell(offsetMap[id], 2);
+
+	if (mainTableWidget->item(offsetMap[id], 0) != nullptr)
+		mainTableWidget->item(offsetMap[id], 0)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 1) != nullptr)
+		mainTableWidget->item(offsetMap[id], 1)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 2) != nullptr)
+		mainTableWidget->item(offsetMap[id], 2)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 3) != nullptr)
+		mainTableWidget->item(offsetMap[id], 3)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 4) != nullptr)
+		mainTableWidget->item(offsetMap[id], 4)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 5) != nullptr)
+		mainTableWidget->item(offsetMap[id], 5)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 6) != nullptr)
+		mainTableWidget->item(offsetMap[id], 6)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 8) != nullptr)
+		mainTableWidget->item(offsetMap[id], 8)->setSelected(true);
 }
 
 void TestTableRowProperties::switchButtonState(TestButtons testButton)
@@ -492,7 +509,6 @@ void TestTableRowProperties::on_offButton_clicked()
 	if (stateDigital == OFF_BUTTON_PRESSED)
 		return;
 
-
 	switchButtonState(TestButtons::BUTTON_OFF);
 	stateDigital = OFF_BUTTON_PRESSED;
 
@@ -505,12 +521,10 @@ void TestTableRowProperties::on_load0Button_clicked()
 	if (statePWM == LOAD0_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_0);
-
 	statePWM = LOAD0_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	sendSignal();
 }
 
@@ -519,12 +533,10 @@ void TestTableRowProperties::on_load25Button_clicked()
 	if (statePWM == LOAD25_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_25);
-
 	statePWM = LOAD25_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	sendSignal();
 }
 
@@ -533,11 +545,10 @@ void TestTableRowProperties::on_load50Button_clicked()
 	if (statePWM == LOAD50_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_50);
 	statePWM = LOAD50_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	sendSignal();
 }
 
@@ -546,11 +557,10 @@ void TestTableRowProperties::on_high_clicked()
 	if (stateHLD == HIGH_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_HIGH);
 	stateHLD = HIGH_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 1, 0);
 
 }
@@ -560,11 +570,10 @@ void TestTableRowProperties::on_low_clicked()
 	if (stateHLD == LOW_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_LOW);
 	stateHLD = LOW_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 2, 0);
 }
 
@@ -573,11 +582,10 @@ void TestTableRowProperties::on_zero_clicked()
 	if (stateHLD == ZERO_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_ZERO);
 	stateHLD = ZERO_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, 0);
 }
 
@@ -586,12 +594,10 @@ void TestTableRowProperties::on_load75Button_clicked()
 	if (statePWM == LOAD75_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_75);
-
 	statePWM = LOAD75_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	sendSignal();
 }
 
@@ -600,18 +606,18 @@ void TestTableRowProperties::on_load100Button_clicked()
 	if (statePWM == LOAD100_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(id);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_100);
-
 	statePWM = LOAD100_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	sendSignal();
 }
 void TestTableRowProperties::on_check_clicked()
 {
 	Signal_ChangedByte(id, NOT_SET);
-		Can::checkInformationBus(canId);
+	Can::checkInformationBus(canId);
+	selectCurrentCell(id);
+
 
 }
 
@@ -654,6 +660,23 @@ void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
 
 void TestWindow::slot_mainTableWidget_cellClicked(int row, int column)
 {
+	if (mainTableWidget->item(row, 0) != nullptr)
+		mainTableWidget->item(row, 0)->setSelected(true);
+	if (mainTableWidget->item(row, 1) != nullptr)
+		mainTableWidget->item(row, 1)->setSelected(true);
+	if (mainTableWidget->item(row, 2) != nullptr)
+		mainTableWidget->item(row, 2)->setSelected(true);
+	if (mainTableWidget->item(row, 3) != nullptr)
+		mainTableWidget->item(row, 3)->setSelected(true);
+	if (mainTableWidget->item(row, 4) != nullptr)
+		mainTableWidget->item(row, 4)->setSelected(true);
+	if (mainTableWidget->item(row, 5) != nullptr)
+		mainTableWidget->item(row, 5)->setSelected(true);
+	if (mainTableWidget->item(row, 6) != nullptr)
+		mainTableWidget->item(row, 6)->setSelected(true);
+	if (mainTableWidget->item(row, 8) != nullptr)
+		mainTableWidget->item(row, 8)->setSelected(true);
+	
 	if (column == mainTableWidget->columnCount() - 1)
 		cableRows[row]->manualCheckBox->setChecked(!cableRows[row]->manualCheckBox->isChecked());
 }

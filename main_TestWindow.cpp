@@ -209,7 +209,7 @@ void TestWindow::initUiTable()
 	mainTableWidget->setObjectName("mainTableWidget");
 	mainTableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
 	mainTableWidget->setSelectionMode(QAbstractItemView::ExtendedSelection);
-	mainTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
+	//mainTableWidget->setSelectionBehavior(QAbstractItemView::SelectRows);
 	mainTableHeaderLabels = new QStringList();
 	mainVLayout->addWidget(mainTableWidget);
 }
@@ -1556,6 +1556,13 @@ void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 			{
 				if (cableRows[offsetMap[idCable]]->thresholds[0].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[0].maxValue)
 					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
+				else if (cableRows[offsetMap[idCable]]->thresholds.size() > 1)
+				{
+					if(cableRows[offsetMap[idCable]]->thresholds[1].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[1].maxValue)
+						mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
+					else
+						mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
+				}
 				else
 					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
 			}
@@ -1627,7 +1634,6 @@ void TestWindow::Slot_changeStatusCheckInformationBus(int id, bool status)
 
 void TestWindow::initTableRowButtons(int currentRowNum, QWidget* interactionButtonsWidget)
 {
-	qDebug() << QString("initTableRowButtons: ") << QString::number(currentRowNum);
 	interactionButtonsWidget->setObjectName("interactionButtonsWidget");
 	QVBoxLayout* interactionButtonsCellVLayout = new QVBoxLayout(interactionButtonsWidget);
 	interactionButtonsCellVLayout->setObjectName("interactionButtonsCellVLayout");

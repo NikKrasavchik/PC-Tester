@@ -253,6 +253,8 @@ void TestWindow::resetTableRowsFullTestManualStand()
 		initTableRowButtons(currentRowNum, interactionButtonsWidget);
 		initTableAdditionalManualChecks(currentRowNum, manualChecksWidget);
 
+		QTableWidgetItem *item = new QTableWidgetItem("");
+		mainTableWidget->setItem(currentRowNum, COLUMN_CHECK, item);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_CHECK, interactionButtonsWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MANUAL_CHECK, manualChecksWidget);
 

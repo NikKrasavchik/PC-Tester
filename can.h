@@ -42,7 +42,7 @@
 #define ID_CAN_MANUALSTAND		0x100
 
 
-#define TIME_CHECKCONNECTION	200
+constexpr auto TIME_CHECKCONNECTION = 300;
 
 
 
@@ -195,6 +195,7 @@ private:
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;
+		std::vector<int> handlerChanel;
 		int activeAdapter;
 		std::pair<int, int> p_frequency;
 	};
@@ -202,6 +203,7 @@ private:
 	static modelAdapter *marathon;
 	static modelAdapter *pcan;
 	static canHandle hnd;
+	static HANDLE hEventPcan;
 
 	
 	WindowType windowType; // Переменная хранящая идентификатор окна которое сейчас открыто
