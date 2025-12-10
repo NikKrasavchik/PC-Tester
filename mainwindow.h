@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include "ui_mainwindow.h"
+
 #include <QFormLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -14,8 +16,9 @@
 #include <utility>
 #include <qtooltip.h>
 #include <qpalette.h>
+#include <zip.h>
+#include <QStandardPaths>
 
-#include "ui_mainwindow.h"
 #include "TestWindow.h"
 #include "qsliderbutton.h"
 #include "can.h"
@@ -228,6 +231,10 @@ private:
 
 	void initConfig();
 	void resetConfig();
+
+	QStringList  ReadFileFromArchiv();
+	bool RemoveArchiv();
+	void GenerateNewArchiv(QStringList filesToAdd);
 
 	void fillComboBoxes();
 

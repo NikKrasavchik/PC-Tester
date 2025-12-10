@@ -67,23 +67,23 @@
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
       <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495;4267</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
       <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495;4267</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -178,8 +178,10 @@
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="moremanualwindow.ui" />
     <QtUic Include="MoreWindow.ui" />
     <QtUic Include="ReportWindow.ui" />
+    <QtUic Include="SemiautomaticWindow.ui" />
     <QtUic Include="TestWindow.ui" />
     <QtUic Include="verificationtest.ui" />
     <QtUic Include="WindowFrame.ui" />

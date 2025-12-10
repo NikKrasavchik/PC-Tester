@@ -41,7 +41,7 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 	setTitle(windowType);
 
 	this->windowType = windowType;
-	setWindowFlags(Qt::Window | Qt::FramelessWindowHint );
+	setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TranslucentBackground);
 	if (child != nullptr) {
 		ui->body->layout()->addWidget(child);
@@ -50,6 +50,8 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 		resize(child->size());
 	}
 	mIsCollapse = false;
+	//child->setWindowModality(Qt::ApplicationModal);
+
 }
 
 /// @brief Destructor for the WindowFrame class.
@@ -414,7 +416,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester_v4" + tmpStr);
+			ui->title->setText("PC-Tester_v5" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
@@ -466,6 +468,12 @@ void WindowFrame::setTitle(WindowType windowType) {
 		case WindowType::ERASEWINDOW:
 			ui->title->setText(QString("Стирание") + tmpStr);
 			break;
+		case WindowType::SEMIAUTOMATICWINDOW:
+			ui->title->setText(QString("Полуавтоматический тест") + tmpStr);
+			break;
+		case WindowType::MOREMANUALWINDOW:
+			ui->title->setText(QString("Пороги") + tmpStr);
+			break;
 		}
 		break;
 
@@ -473,7 +481,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester_v4" + tmpStr);
+			ui->title->setText("PC-Tester_v5" + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
@@ -524,6 +532,13 @@ void WindowFrame::setTitle(WindowType windowType) {
 			break;
 		case WindowType::ERASEWINDOW:
 			ui->title->setText(QString("Erase") + tmpStr);
+			break;
+		case WindowType::SEMIAUTOMATICWINDOW:
+			ui->title->setText(QString("Semi-automatic test") + tmpStr);
+			break;
+		case WindowType::MOREMANUALWINDOW:
+			ui->title->setText(QString("Threshold") + tmpStr);
+			break;
 		}
 	}
 }

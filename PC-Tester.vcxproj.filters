@@ -53,6 +53,12 @@
     <QtUic Include="EraseWindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
+    <QtUic Include="SemiautomaticWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="moremanualwindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

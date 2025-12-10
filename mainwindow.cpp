@@ -760,14 +760,8 @@ void MainWindow::initConnections()
 
 void MainWindow::initConfig()
 {
-	QFile file("cables.cfg");
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-		return;
-	QTextStream cable(&file);
-
-	QString config = cable.readLine();
-	config = cable.readLine();
-	QStringList list = config.split(u';');
+	QStringList data = ReadFileFromArchiv();
+	QStringList list = data[1].split(u';');
 
 	if (list[0] == "LIGHT_THEME" || list[0] == "NOT_SET") // Them
 		viewWindowState->appTheme = LIGHT_THEME;
@@ -871,71 +865,55 @@ void MainWindow::initConfig()
 	}
 
 	switchStyleMainButtons();
-	file.close();
 }
 void MainWindow::resetConfig()
 {
-	QFile file("cables.cfg");
-	if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
-		return;
-
-	QTextStream cable(&file);
-
-	QString config = cable.readLine();
-	QString conf = cable.readLine();
+	QStringList data = ReadFileFromArchiv();
 
 	if (viewWindowState->appTheme == LIGHT_THEME) // 
-		conf = "LIGHT_THEME;";
+		data[1] = "LIGHT_THEME;";
 	else
-		conf = "DARK_THEME;";
+		data[1] = "DARK_THEME;";
 
 	if (viewWindowState->appLanguage == RUSSIAN_LANG) // 
-		conf += "RUSSIAN_LANG;";
+		data[1] += "RUSSIAN_LANG;";
 	else
-		conf += "ENGLISH_LANG;";
+		data[1] += "ENGLISH_LANG;";
 
 	if(viewWindowState->selectedBlock == TestBlockName::EMPTY) // 
-		conf += "NOT_SET;";
+		data[1] += "NOT_SET;";
 	else if (viewWindowState->selectedBlock == TestBlockName::DTM)
-		conf += "DTM" + selectBlockVersionComboBox->currentText() + ";";
+		data[1] += "DTM" + selectBlockVersionComboBox->currentText() + ";";
 	else if (viewWindowState->selectedBlock == TestBlockName::BCM)
-		conf += "BCM" + selectBlockVersionComboBox->currentText() + ";";
+		data[1] += "BCM" + selectBlockVersionComboBox->currentText() + ";";
 
 	if (selectedTypeStand == TypeStand::MANUAL) // 
-		conf += "MANUAL_STAND;";
+		data[1] += "MANUAL_STAND;";
 	else if(selectedTypeStand == TypeStand::AUTO)
-		conf += "AUTO_STAND;";
+		data[1] += "AUTO_STAND;";
 
 	if (selectFrequencyComboBox->currentText() == "...") // 
-		conf += "NOT_SET;";
+		data[1] += "NOT_SET;";
 	else if (selectFrequencyComboBox->currentIndex() == 2) 
-		conf += "FREQUENCY_50K;";
+		data[1] += "FREQUENCY_50K;";
 	else if (selectFrequencyComboBox->currentIndex() == 3)
-		conf += "FREQUENCY_100K;";
+		data[1] += "FREQUENCY_100K;";
 	else if (selectFrequencyComboBox->currentIndex() == 4)
-		conf += "FREQUENCY_125K;";
+		data[1] += "FREQUENCY_125K;";
 	else if (selectFrequencyComboBox->currentIndex() == 5)
-		conf += "FREQUENCY_250K;";
+		data[1] += "FREQUENCY_250K;";
 	else if (selectFrequencyComboBox->currentIndex() == 6)
-		conf += "FREQUENCY_500K;";
+		data[1] += "FREQUENCY_500K;";
 	else if (selectFrequencyComboBox->currentIndex() == 7)
-		conf += "FREQUENCY_1000K;";
+		data[1] += "FREQUENCY_1000K;";
 
 	if (selectAdapterComboBox->currentText() == "...") // 
-		conf += "NOT_SET";
+		data[1] += "NOT_SET";
 	else
-		conf += selectAdapterComboBox->currentText().remove("\n");
+		data[1] += selectAdapterComboBox->currentText().remove("\n");
 
+	GenerateNewArchiv(data);
 
-	config += "\n" + conf;
-	config += "\n" + cable.readAll();
-
-	file.close();
-
-	std::ofstream fout;
-	fout.open("cables.cfg");
-	fout << config.toStdString();
-	fout.close();
 }
 
 void MainWindow::switchStyleMainButtons()
@@ -1705,21 +1683,16 @@ static Cable fillCable(int id, ConnectorId connector, int pin, int direction, in
 
 void MainWindow::initBlockVersions()
 {
-	QFile config("cables.cfg");
-	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
-	{
-		generateWarning(Warnings::MainWindow::FILE_NOT_FOUND);
-		return;
-	}
 
-	QTextStream cable(&config);
+
+	QStringList data = ReadFileFromArchiv();
 	TestBlockName block = TestBlockName::EMPTY;
-	while (!cable.atEnd())
+	for (int i = 0; i < data.size(); i++)
 	{
-		QString line = cable.readLine();
+		QString line = data[i];
 		if (line == "CONFIG")
 		{
-			QString config = cable.readLine();
+			QString config = data[++i];
 
 			continue;
 		}
@@ -1763,20 +1736,19 @@ void MainWindow::loadCables(TestBlockName block, QString version)
 
 	viewWindowState->actualVersion = version;
 
-	QFile config("cables.cfg");
-	if (!config.open(QIODevice::ReadOnly | QIODevice::Text))
-		return;
 
-	QTextStream cable(&config);
+	QStringList data = ReadFileFromArchiv();
+
+
 	bool admissionBlock = false;
 	bool admissionVersion = false;
 	int id = 0;
-	while (!cable.atEnd())
+	for(int i = 0; i < data.size();i++)
 	{
-		QString line = cable.readLine();
+		QString line = data[i];
 		if (line == "CONFIG")
 		{
-			QString config = cable.readLine();
+			QString config = data[++i];
 
 			continue;
 		}
@@ -1918,4 +1890,132 @@ void MainWindow::slot_selectBlockVersionComboBox_changed(int index)
 	//resetConfig();
 
 }
+
+QStringList MainWindow::ReadFileFromArchiv()
+{
+	QString zipFilePath = "cables.zip";
+	QByteArray* filesData = new QByteArray;
+	int err = 0;
+
+	zip_t* zip = zip_open(zipFilePath.toStdString().c_str(), 0, &err);
+	if (!zip) {
+		qDebug() << "Ошибка открытия архива. Код:" << err;
+		return QStringList();
+	}
+
+	QString password = "Zaqxcvbnm220033!!NAMI";
+	int pop = zip_set_default_password(zip, password.toStdString().c_str());
+
+	zip_file_t* file = zip_fopen_index(zip, 0, 0);
+	if (!file) {
+		qDebug() << "Ошибка открытия файла в архиве";
+		return QStringList();
+	}
+
+	zip_stat_t stat;
+	zip_stat_init(&stat);
+	zip_stat_index(zip, 0, 0, &stat);
+	QByteArray fileData;
+	fileData.resize(stat.size);
+	zip_int64_t bytes_read = zip_fread(file, fileData.data(), stat.size);
+
+	zip_fclose(file);
+	zip_close(zip);
+
+	QStringList tmp = QString::fromUtf8(fileData).split("\n");
+	for (int i = 0; i < tmp.size(); i++)
+		tmp[i].remove('\r');
+	return tmp;
+}
+
+bool MainWindow::RemoveArchiv()
+{
+
+	QFile file("cables.zip");
+	if (file.exists()) {
+		if (file.remove()) {
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	return false;
+}
+
+void MainWindow::GenerateNewArchiv(QStringList filesToAdd)
+{
+	RemoveArchiv();
+
+
+	QString outputZipPath = "cables.zip";
+	QString password = "Zaqxcvbnm220033!!NAMI";
+
+	QString tempFilePath = QStandardPaths::writableLocation(QStandardPaths::TempLocation) + "/temp_data.txt";
+
+	QFile tempFile(tempFilePath);
+	if (!tempFile.open(QIODevice::WriteOnly | QIODevice::Text))
+		return;
+
+	QTextStream out(&tempFile);
+	out.setEncoding(QStringConverter::Encoding::Utf8);
+
+	for (int i = 0; i < filesToAdd.size(); i++)
+	{
+		out << filesToAdd[i];
+		if (filesToAdd.size() - 1 != i)
+			out << "\n";
+	}
+	tempFile.close();
+
+
+	int err = 0;
+
+	zip_t* zip = zip_open(outputZipPath.toUtf8().constData(), ZIP_CREATE | ZIP_TRUNCATE, &err);
+
+	if (!zip) {
+		tempFile.remove();
+		return ;
+	}
+
+	zip_set_default_password(zip, password.toUtf8().constData());
+
+	QFile fileToArchive(tempFilePath);
+	if (!fileToArchive.open(QIODevice::ReadOnly)) {
+		zip_close(zip);
+		tempFile.remove();
+		return ;
+	}
+
+	QByteArray fileData = fileToArchive.readAll();
+	fileToArchive.close();
+
+	zip_source_t* source = zip_source_buffer(zip, fileData.constData(), fileData.size(), 0);
+
+	if (!source) {
+		zip_close(zip);
+		tempFile.remove();
+		return ;
+	}
+
+	zip_int64_t idx = zip_file_add(zip, "cables.cfg",source, ZIP_EM_TRAD_PKWARE);
+
+	if (idx < 0) {
+		zip_source_free(source);
+		zip_close(zip);
+		tempFile.remove();
+		return ;
+	}
+
+	zip_file_set_encryption(zip, idx, ZIP_EM_AES_256, password.toUtf8().constData());
+
+
+	if (zip_close(zip) < 0) {
+		tempFile.remove();
+		return ;
+	}
+
+	return ;
+}
+
 

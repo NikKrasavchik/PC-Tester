@@ -28,6 +28,7 @@ TestWindow::TestWindow(WindowType testType, std::vector<Cable> cables, TestBlock
 	isFullTestEnabled = false;
 	if(cables.size() != 0)
 		nextCheckCable = new Cable(cables[0].getConnector(), cables[0].getPin());
+	nextCheckCableSemiautomaticTest = nullptr;
 	statusFlags = new StandStatusFlags;
 	statusFlags->StatusConnected = false;
 	statusFlags->StatusTest = false;
@@ -248,13 +249,24 @@ void TestWindow::initUiMainFooter()
 	reportHLayout->setObjectName("reportHLayout");
 	footerMainHLayout->addItem(reportHLayout);
 
-	reportSpacerTwo = new QSpacerItem(10, 0, QSizePolicy::Fixed);
-	reportHLayout->addItem(reportSpacerTwo);
+#ifdef SEMIAUTOMATIC_TEST
+	semiautomaticSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed);
+	reportHLayout->addItem(semiautomaticSpacer);
+
+	semiautomaticButton = new QPushButton(footerLayoutWidget);
+	semiautomaticButton->setObjectName("semiautomaticButton");
+	semiautomaticButton->setFixedSize(FIXED_REPORT_BUTTON_WIDTH + 50, FIXED_REPORT_BUTTON_HEIGHT);
+	reportHLayout->addWidget(semiautomaticButton);
+
+	sleepSpacer = new QSpacerItem(10, 0, QSizePolicy::Fixed);
+	reportHLayout->addItem(sleepSpacer);
+#endif // SEMIAUTOMATIC_TEST
 
 	sleepButton = new QPushButton(footerLayoutWidget);
 	sleepButton->setObjectName("sleepButton");
 	sleepButton->setFixedSize(FIXED_REPORT_BUTTON_WIDTH + 50, FIXED_REPORT_BUTTON_HEIGHT);
 	reportHLayout->addWidget(sleepButton);
+
 	reportSpacer = new QSpacerItem(50, 0, QSizePolicy::Fixed);
 	reportHLayout->addItem(reportSpacer);
 
@@ -324,15 +336,19 @@ void TestWindow::initIcons()
 
 void TestWindow::initConnections()
 {
-	qDebug() << QString("initConnections");
+
 	connect(backButton, &QPushButton::clicked, this, &TestWindow::slot_backButton_clicked);
 	connect(switchThemeButton, &QPushButton::clicked, this, &TestWindow::slot_switchThemeButton_clicked);
 	connect(switchLanguageButton, &QPushButton::clicked, this, &TestWindow::slot_switchLanguageButton_clicked);
-	connect(reportButton, &QPushButton::clicked, this, &TestWindow::slot_reportButton_clicked);
+#ifdef SEMIAUTOMATIC_TEST
+	connect(semiautomaticButton, &QPushButton::clicked, this, &TestWindow::slot_semiautomaticButton_clicked);
+#endif // SEMIAUTOMATIC_TEST
 	connect(sleepButton, &QPushButton::clicked, this, &TestWindow::slot_sleepButton_clicked);
+	connect(reportButton, &QPushButton::clicked, this, &TestWindow::slot_reportButton_clicked);
 	connect(autoStandStartTestButton, &QPushButton::clicked, this, &TestWindow::slot_autoStandStartTestButton_clicked);
 	connect(fullTestSortButton, &QPushButton::clicked, this, &TestWindow::slot_fullTestSortButton_clicked);
 	connect(mainTableWidget, &QTableWidget::cellClicked, this, &TestWindow::slot_mainTableWidget_cellClicked);
+	connect(mainTableWidget, &QTableWidget::cellDoubleClicked, this, &TestWindow::slot_mainTableWidget_cellDoubleClicked);
 }
 
 void TestWindow::initStyles()
@@ -524,8 +540,11 @@ void TestWindow::resetTheme()
 		switchThemeButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		switchLanguageButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		backButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
-		reportButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+#ifdef SEMIAUTOMATIC_TEST
+		semiautomaticButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+#endif // SEMIAUTOMATIC_TEST
 		sleepButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
+		reportButton->setStyleSheet(lightStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(lightStyles.testwindowTableWidget);
 		fileNameLabel->setStyleSheet(lightStyles.testwindowLableBlock);
 
@@ -614,8 +633,11 @@ void TestWindow::resetTheme()
 		switchThemeButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		switchLanguageButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		backButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
-		reportButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+#ifdef SEMIAUTOMATIC_TEST
+		semiautomaticButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+#endif // SEMIAUTOMATIC_TEST
 		sleepButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
+		reportButton->setStyleSheet(darkStyles.testwindowMoveButtonStyle);
 		mainTableWidget->setStyleSheet(darkStyles.testwindowTableWidget);
 		fileNameLabel->setStyleSheet(darkStyles.testwindowLableBlock);
 
@@ -703,8 +725,10 @@ void TestWindow::resetLanguage(bool isFullReset)
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		reportButton->setText(QString("Отчёт"));
-		reportButton->setToolTip(QString("Окно создания отчёта"));
+#ifdef SEMIAUTOMATIC_TEST
+		semiautomaticButton->setText(QString("Авто-тест"));
+		semiautomaticButton->setToolTip(QString("Программа проверит в автоматическом часть выходов"));
+#endif // SEMIAUTOMATIC_TEST
 		if (statusFlags->StatusConnected)
 		{ 
 			sleepButton->setText(QString("Заснуть"));
@@ -715,6 +739,8 @@ void TestWindow::resetLanguage(bool isFullReset)
 			sleepButton->setText(QString("Проснуться"));
 			sleepButton->setToolTip(QString("Перевести блок в режим работы"));
 		}
+		reportButton->setText(QString("Отчёт"));
+		reportButton->setToolTip(QString("Окно создания отчёта"));
 
 		switch (testType)
 		{
@@ -913,8 +939,10 @@ void TestWindow::resetLanguage(bool isFullReset)
 		break;
 
 	case ENGLISH_LANG:
-		reportButton->setText(QString("Report"));
-		reportButton->setToolTip(QString("Report creation window"));
+#ifdef SEMIAUTOMATIC_TEST
+		reportButton->setText(QString("Auto-test"));
+		reportButton->setToolTip(QString("The program will automatically check some of the outputs"));
+#endif // SEMIAUTOMATIC_TEST
 		if (statusFlags->StatusConnected)
 		{
 			sleepButton->setText(QString("Go to sleep"));
@@ -925,6 +953,8 @@ void TestWindow::resetLanguage(bool isFullReset)
 			sleepButton->setText(QString("Wake up"));
 			sleepButton->setToolTip(QString("Switch the unit to operation mode"));
 		}
+		reportButton->setText(QString("Report"));
+		reportButton->setToolTip(QString("Report creation window"));
 
 		switch (testType)
 		{
@@ -1483,97 +1513,107 @@ static int detectProccessedHall(ConnectorId pad, int pin, std::vector<TestTableR
 void TestWindow::Slot_ChangedByte(int idCable, int newValue)
 {
 	qDebug() << QString("Slot_ChangedByte");
-	QAbstractItemModel* model = mainTableWidget->model();
-
-	switch (testType)
+	if (nextCheckCableSemiautomaticTest == nullptr)
 	{
-	case WindowType::IN_TEST_MANUAL_STAND:
-		if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::HALL_IN)
-		{
-			if (newValue == 0)
-			{
-				int hallId = detectProccessedHall(cableRows[offsetMap[idCable]]->connectorInt, cableRows[offsetMap[idCable]]->pin.toInt(), cableRows);
-				hallLabels[hallId].first = 0;
-				switch (viewWindowState->appTheme)
-				{
-				case DARK_THEME:
-					hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
-					break;
+		QAbstractItemModel* model = mainTableWidget->model();
 
-				case LIGHT_THEME:
-					hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
-					break;
+		switch (testType)
+		{
+		case WindowType::IN_TEST_MANUAL_STAND:
+			if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::HALL_IN)
+			{
+				if (newValue == 0)
+				{
+					int hallId = detectProccessedHall(cableRows[offsetMap[idCable]]->connectorInt, cableRows[offsetMap[idCable]]->pin.toInt(), cableRows);
+					hallLabels[hallId].first = 0;
+					switch (viewWindowState->appTheme)
+					{
+					case DARK_THEME:
+						hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
+						break;
+
+					case LIGHT_THEME:
+						hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
+						break;
+					}
 				}
 			}
-		}
-		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::CAN_OUT || cableRows[offsetMap[idCable]]->typeInt == TypeCable::LIN_OUT)
-		{
-			if (newValue == 2)
-				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::green));
-			else if (newValue == NOT_SET)
-				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::transparent));
-			else
-				mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::red));
-		}
-		else
-		{
-			model->setData(model->index(offsetMap[idCable], 5), QString::number(newValue));
-		}
-		break;
-	case WindowType::FULL_TEST_MANUAL_STAND:
-		if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::HALL_IN)
-		{
-			if (newValue == 0)
+			else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::CAN_OUT || cableRows[offsetMap[idCable]]->typeInt == TypeCable::LIN_OUT)
 			{
-				int hallId = detectProccessedHall(cableRows[offsetMap[idCable]]->connectorInt, cableRows[offsetMap[idCable]]->pin.toInt(), cableRows);
-				hallLabels[hallId].first = 0;
-				switch (viewWindowState->appTheme)
+				if (newValue == 2)
+					mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::green));
+				else if (newValue == NOT_SET)
+					mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::transparent));
+				else
+					mainTableWidget->item(offsetMap[idCable], 5)->setBackground(QBrush(Qt::red));
+			}
+			else
+			{
+				model->setData(model->index(offsetMap[idCable], 5), QString::number(newValue));
+			}
+			break;
+		case WindowType::FULL_TEST_MANUAL_STAND:
+			if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::HALL_IN)
+			{
+				if (newValue == 0)
 				{
-				case DARK_THEME:
-					hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
-					break;
+					int hallId = detectProccessedHall(cableRows[offsetMap[idCable]]->connectorInt, cableRows[offsetMap[idCable]]->pin.toInt(), cableRows);
+					hallLabels[hallId].first = 0;
+					switch (viewWindowState->appTheme)
+					{
+					case DARK_THEME:
+						hallLabels[hallId].second->setPixmap(*clockwiseDarkPixmap);
+						break;
 
-				case LIGHT_THEME:
-					hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
-					break;
+					case LIGHT_THEME:
+						hallLabels[hallId].second->setPixmap(*counterclockwiseLightPixmap);
+						break;
+					}
 				}
 			}
-		}
-		else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::CAN_OUT || cableRows[offsetMap[idCable]]->typeInt == TypeCable::LIN_OUT)
-		{
-			if (newValue == 2)
-				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
-			else if (newValue == NOT_SET)
-				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::transparent));
-			else
-				mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
-
-		}
-
-		else
-		{
-			if (cableRows[offsetMap[idCable]]->thresholds[0].minValue != -1)
+			else if (cableRows[offsetMap[idCable]]->typeInt == TypeCable::CAN_OUT || cableRows[offsetMap[idCable]]->typeInt == TypeCable::LIN_OUT)
 			{
-				if (cableRows[offsetMap[idCable]]->thresholds[0].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[0].maxValue)
+				if (newValue == 2)
 					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
-				else if (cableRows[offsetMap[idCable]]->thresholds.size() > 1)
+				else if (newValue == NOT_SET)
+					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(Qt::transparent));
+				else
+					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
+
+			}
+
+			else
+			{
+				if (cableRows[offsetMap[idCable]]->thresholds[0].minValue != -1)
 				{
-					if(cableRows[offsetMap[idCable]]->thresholds[1].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[1].maxValue)
+					if (cableRows[offsetMap[idCable]]->thresholds[0].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[0].maxValue)
 						mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
+					else if (cableRows[offsetMap[idCable]]->thresholds.size() > 1)
+					{
+						if (cableRows[offsetMap[idCable]]->thresholds[1].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[1].maxValue)
+							mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGHT_GREEN)));
+						else
+							mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
+					}
 					else
 						mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
 				}
-				else
-					mainTableWidget->item(offsetMap[idCable], 7)->setBackground(QBrush(QColor(COLOR_LIGNT_RED)));
+				model->setData(model->index(offsetMap[idCable], 7), QString::number(newValue));
 			}
-			model->setData(model->index(offsetMap[idCable], 7), QString::number(newValue));
+			break;
+
+		default:
+			break;
 		}
-		break;
-
-	default:
-		break;
 	}
-
+	else
+	{
+		if (nextCheckCableSemiautomaticTest == cableRows[offsetMap[idCable]])
+		{
+			if (cableRows[offsetMap[idCable]]->thresholds[0].minValue <= newValue && newValue <= cableRows[offsetMap[idCable]]->thresholds[0].maxValue)
+				checkNextCableSemiautomaticTest(nextCheckCableSemiautomaticTest);
+		}
+	}
 }
 
 void TestWindow::Slot_ChangedStatusStandConnect(bool statusConnect)
@@ -1963,6 +2003,225 @@ void TestWindow::slot_fullTestSortButton_clicked()
 	Can::clearOldValue();
 }
 
+void TestWindow::slot_semiautomaticButton_clicked()
+{
+
+	dlgSemiautomatic = new QDialog(this);
+	
+
+	uiSemiautomatic.setupUi(dlgSemiautomatic);
+	WindowFrame w(WindowType::SEMIAUTOMATICWINDOW, this, dlgSemiautomatic);
+	w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+	
+	connect(uiSemiautomatic.backPushButton, &QPushButton::clicked, this, &TestWindow::on_backPushButtonSemiautomaticWindow_clicked);
+
+
+	if (viewWindowState->appLanguage == RUSSIAN_LANG)
+	{
+		uiSemiautomatic.backPushButton->setText(QString("Выйти"));
+		//dlgSemiautomatic.headerLabel->setText(QString("Произвести стирание программы\nблока ") + equipmentName + " ?");
+	}
+	else
+	{
+		uiSemiautomatic.backPushButton->setText(QString("Exit"));
+		//dlgSemiautomatic.headerLabel->setText(QString("Erase the program\nblock ") + equipmentName + " ?");
+	}
+	if (viewWindowState->appTheme == LIGHT_THEME)
+	{
+		uiSemiautomatic.backPushButton->setStyleSheet(lightStyles.testwindowButtonStyle);
+		uiSemiautomatic.headerLabel->setStyleSheet(lightStyles.eraseWindowLable);
+	}
+	else
+	{
+		uiSemiautomatic.backPushButton->setStyleSheet(darkStyles.testwindowButtonStyle);
+		uiSemiautomatic.headerLabel->setStyleSheet(darkStyles.eraseWindowLable);
+	}
+	int countSizeProgreBar = 0;
+	for (int i = 0; i < cableRows.size(); i++)
+		if (cableRows[i]->direction == "OUT" && cableRows[i]->thresholds[0].minValue != -1)
+			countSizeProgreBar++;
+
+	uiSemiautomatic.progressBar->setMinimum(0);
+	uiSemiautomatic.progressBar->setMaximum(countSizeProgreBar);
+	uiSemiautomatic.progressBar->setValue(0);
+
+	timerSemiautomaticTest = new QTimer();
+	connect(timerSemiautomaticTest, &QTimer::timeout, this, &TestWindow::on_timerSemiautomaticTestTimer);
+
+	nextCheckCableSemiautomaticTest = nullptr;
+	checkNextCableSemiautomaticTest(nextCheckCableSemiautomaticTest);
+
+	w.setWindowModality(Qt::WindowModal);
+	w.show();
+	dlgSemiautomatic->exec();
+}
+
+void TestWindow::on_backPushButtonSemiautomaticWindow_clicked()
+{
+	// остановить проверку.
+	dlgSemiautomatic->close();
+}
+
+void TestWindow::checkNextCableSemiautomaticTest(TestTableRowProperties* nextCable)
+{
+	if(nextCable == nullptr && nextCheckCableSemiautomaticTest == nullptr) // Первый заход
+	{
+		for (int i = 0; i < cableRows.size(); i++)
+			if (cableRows[i]->direction == "OUT" && cableRows[i]->thresholds[0].minValue != -1)
+			{
+				nextCheckCableSemiautomaticTest = cableRows[i];
+				uiSemiautomatic.headerLabel->setText(QString("Проверяется ") + nextCheckCableSemiautomaticTest->connectorStr + "(XP" + QString::number((int)nextCheckCableSemiautomaticTest->connectorInt) + "):" + nextCheckCableSemiautomaticTest->pin);
+				switch (nextCheckCableSemiautomaticTest->typeInt) // Включили
+				{
+				case TypeCable::DIG_OUT:
+					Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 0);
+					break;
+				case TypeCable::PWM_OUT:
+					Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 255);
+					break;
+				case TypeCable::VNH_OUT:
+					Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 255);
+					break;
+				case TypeCable::HLD_OUT:
+					Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 0);
+					break;
+				default:
+					break;
+				}
+				timerSemiautomaticTest->start(500);
+				break;
+			}
+	}
+	else if (nextCable == nullptr && nextCheckCableSemiautomaticTest != nullptr) // Тест непрошёл, вызвал контрольный таймер
+	{
+		timerSemiautomaticTest->stop();
+		switch (nextCheckCableSemiautomaticTest->typeInt) // Выключили
+		{
+		case TypeCable::DIG_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		case TypeCable::PWM_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		case TypeCable::VNH_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		case TypeCable::HLD_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		default:
+			break;
+		}
+		nextCheckCableSemiautomaticTest->manualCheckBox->setChecked(false);
+		uiSemiautomatic.progressBar->setValue(uiSemiautomatic.progressBar->value() + 1);
+		//Sleep(50);
+		for (int i = 0; i < cableRows.size(); i++)
+			if (nextCheckCableSemiautomaticTest == cableRows[i])
+			{
+
+				for (int j = i + 1; j < cableRows.size(); j++)
+				{
+					if (cableRows[j]->direction == "OUT" && cableRows[j]->thresholds[0].minValue != -1)
+					{
+						nextCheckCableSemiautomaticTest = cableRows[j];
+						uiSemiautomatic.headerLabel->setText(QString("Проверяется ") + nextCheckCableSemiautomaticTest->connectorStr + "(XP" + QString::number((int)nextCheckCableSemiautomaticTest->connectorInt) + "):" + nextCheckCableSemiautomaticTest->pin);
+						switch (nextCheckCableSemiautomaticTest->typeInt) // Включили
+						{
+						case TypeCable::DIG_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 0);
+							break;
+						case TypeCable::PWM_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 255);
+							break;
+						case TypeCable::VNH_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 255);
+							break;
+						case TypeCable::HLD_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 0);
+							break;
+						default:
+							break;
+						}
+						timerSemiautomaticTest->start(500);
+
+
+						return;
+					}
+				}
+				nextCheckCableSemiautomaticTest = nullptr;
+				uiSemiautomatic.headerLabel->setText(QString("Тест окончен"));
+				return;
+			}
+	}
+	else if (nextCable != nullptr && nextCheckCableSemiautomaticTest != nullptr) // Тест пройден успешно
+	{
+		timerSemiautomaticTest->stop();
+
+		switch (nextCheckCableSemiautomaticTest->typeInt) // Выключили
+		{
+		case TypeCable::DIG_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		case TypeCable::PWM_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		case TypeCable::VNH_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		case TypeCable::HLD_OUT:
+			Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 0);
+			break;
+		default:
+			break;
+		}
+		nextCheckCableSemiautomaticTest->manualCheckBox->setChecked(true);
+		uiSemiautomatic.progressBar->setValue(uiSemiautomatic.progressBar->value() + 1);
+		//Sleep(50);
+		for (int i = 0; i < cableRows.size(); i++)
+			if (nextCheckCableSemiautomaticTest == cableRows[i])
+			{
+
+				for (int j = i + 1; j < cableRows.size(); j++)
+				{
+					if (cableRows[j]->direction == "OUT" && cableRows[j]->thresholds[0].minValue != -1)
+					{
+						nextCheckCableSemiautomaticTest = cableRows[j];
+						uiSemiautomatic.headerLabel->setText(QString("Проверяется ") + nextCheckCableSemiautomaticTest->connectorStr + "(XP" + QString::number((int)nextCheckCableSemiautomaticTest->connectorInt) + "):" + nextCheckCableSemiautomaticTest->pin);
+						switch (nextCheckCableSemiautomaticTest->typeInt) // Включили
+						{
+						case TypeCable::DIG_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 0);
+							break;
+						case TypeCable::PWM_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 0, 255);
+							break;
+						case TypeCable::VNH_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 255);
+							break;
+						case TypeCable::HLD_OUT:
+							Can::sendTestMsg(nextCheckCableSemiautomaticTest->connectorInt, nextCheckCableSemiautomaticTest->pin.toInt(), 1, 0);
+							break;
+						default:
+							break;
+						}
+						timerSemiautomaticTest->start(500);
+
+
+						return;
+					}
+				}
+				nextCheckCableSemiautomaticTest = nullptr;
+				uiSemiautomatic.headerLabel->setText(QString("Тест окончен"));
+				return;
+			}
+	}
+}
+
+void TestWindow::on_timerSemiautomaticTestTimer()
+{
+	checkNextCableSemiautomaticTest(nullptr);
+}
+
 void TestTableRowProperties::on_moreButton_clicked()
 {
 	qDebug() << QString("on_moreButton_clicked");
@@ -2001,3 +2260,4 @@ void TestTableRowProperties::on_checkButton_clicked()
 	qDebug() << QString("on_checkButton_clicked");
 	Can::sendTestMsg(connectorInt, pin.toInt(), typeInt, TestBlockName::BCM);
 }
+

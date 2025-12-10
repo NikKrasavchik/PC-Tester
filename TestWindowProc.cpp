@@ -676,9 +676,68 @@ void TestWindow::slot_mainTableWidget_cellClicked(int row, int column)
 		mainTableWidget->item(row, 6)->setSelected(true);
 	if (mainTableWidget->item(row, 8) != nullptr)
 		mainTableWidget->item(row, 8)->setSelected(true);
+	if (column == 7)
+	{
+
+	}
 	
 	if (column == mainTableWidget->columnCount() - 1)
 		cableRows[row]->manualCheckBox->setChecked(!cableRows[row]->manualCheckBox->isChecked());
+}
+void TestWindow::slot_mainTableWidget_cellDoubleClicked(int row, int column)
+{
+	if (column == 7 && cableRows[offsetMap[row + 1]]->thresholds[0].minValue != -1)
+	{
+		QDialog *dlgMoreManualWindow = new QDialog(this);
+		Ui::MoreManualWindow MoreManualWindow;
+		MoreManualWindow.setupUi(dlgMoreManualWindow);
+		WindowFrame w(WindowType::MOREMANUALWINDOW, this, dlgMoreManualWindow);
+		w.setWindowIcon(QIcon(QPixmap(appLogoPath)));
+		w.setMinimumSize(QSize(300, 150));
+		w.setMaximumSize(QSize(300, 150));
+
+		int countColumn = 2;
+		if (cableRows[offsetMap[row + 1]]->thresholds.size() > 1 && cableRows[offsetMap[row + 1]]->thresholds[1].minValue != -1)
+			countColumn = 4;
+		MoreManualWindow.tableWidget->setStyleSheet(viewWindowState->appTheme == LIGHT_THEME ? lightStyles.testwindowTableWidget : darkStyles.testwindowTableWidget);
+		MoreManualWindow.tableWidget->setRowCount(3);
+		MoreManualWindow.tableWidget->setColumnCount(countColumn);
+		MoreManualWindow.tableWidget->horizontalHeader()->hide();
+		MoreManualWindow.tableWidget->verticalHeader()->hide();
+		MoreManualWindow.tableWidget->setSpan(0,0,1, countColumn);
+		QAbstractItemModel* model = MoreManualWindow.tableWidget->model();
+		QTableWidgetItem* protoitem = new QTableWidgetItem();
+		protoitem->setTextAlignment(Qt::AlignCenter);
+		for (int i = 0; i < countColumn; i++)
+		{
+			MoreManualWindow.tableWidget->horizontalHeader()->setSectionResizeMode(i, QHeaderView::Stretch);
+			MoreManualWindow.tableWidget->setItem(0, i, protoitem->clone());
+			MoreManualWindow.tableWidget->setItem(1, i, protoitem->clone());
+			MoreManualWindow.tableWidget->setItem(2, i, protoitem->clone());
+			if (i % 2 == 0)
+			{
+				model->setData(model->index(1, i), QString("Min"));
+				model->setData(model->index(2, i), QString::number(cableRows[offsetMap[row + 1]]->thresholds[i/2].minValue));
+			}
+			else
+			{
+				model->setData(model->index(1, i), QString("Max"));
+				model->setData(model->index(2, i), QString::number(cableRows[offsetMap[row + 1]]->thresholds[i/2].maxValue));
+			}
+		}
+		model->setData(model->index(0, 0), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Пороги") : QString("Threshold"));
+		MoreManualWindow.tableWidget->setEditTriggers(QAbstractItemView::NoEditTriggers);
+		MoreManualWindow.tableWidget->verticalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+		MoreManualWindow.tableWidget->verticalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+		MoreManualWindow.tableWidget->verticalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+
+
+
+
+		w.setWindowModality(Qt::WindowModal);
+		w.show();
+		dlgMoreManualWindow->exec();
+	}
 }
 
 void TestWindow::on_rotateTimer_timeout()

@@ -793,7 +793,7 @@ void static fillTableColorInAnalog(TestTableRowProperties* cableRow, int measure
 		disparity = true;
 	}
 	if (cableRow->measureds[measuredIndex]->voltage > cableRow->thresholds[measuredIndex].maxValue)
-	{
+	{               
 		tableItems[0]->setBackground(QBrush(COLOR_RED));
 		tableItems[2]->setBackground(QBrush(COLOR_RED));
 		disparity = true;
@@ -920,7 +920,6 @@ void ReportWindow::fillTableOut(std::vector<TestTableRowProperties*> cableRows)
 
 			case TypeCable::HLD_OUT:
 				tableWidget->item(indCurrentRow, IND_COLUMN_BASE_TYPE)->setText(QString("HLD"));
-				break;
 				break;
 			}
 			break;
@@ -1361,6 +1360,7 @@ void genereateHeaderFile(Document& xlsx, QString testerName, QString serialNumbe
 {
 	// 
 	Format format;
+	format.setLocked(true);
 	format.setHorizontalAlignment(Format::AlignLeft);
 	format.setBorderStyle(Format::BorderThin);
 	Format dateFormat(format);
@@ -1543,6 +1543,7 @@ QString ReportWindow::getStrType(TypeCable type)
 
 		case TypeCable::HLD_OUT:
 			str = "HLD";
+			break;
 
 		case TypeCable::CAN_OUT:
 			str = "CAN";
@@ -1575,7 +1576,7 @@ void ReportWindow::on_saveButton_clicked()
 	}
 
 	resaveComments(); 
-//	if()
+
 	generateXlsx(); 
 
 	if (equipmentName != "Error. Long delay")
@@ -1766,7 +1767,7 @@ void ReportWindow::generateXlsx()
 								CellRange r(numRow + 1, 6 + (4 * j), numRow + 2, 7 + (4 * j));
 								xlsx.write(r.firstRow(), r.firstColumn(), viewWindowState->appLanguage == RUSSIAN_LANG ? QString("Измереное значени") : QString("Measured values"), tmpHeaderFormat);
 
-								tmpHeaderFormat.setTextWrap(true);// 
+								tmpHeaderFormat.setTextWrap(true);
 								xlsx.mergeCells(r, tmpHeaderFormat);
 								tmpHeaderFormat.setTextWrap(false);
 
@@ -1966,6 +1967,20 @@ void ReportWindow::generateXlsx()
 
 		xlsx.saveAs(nameFile);
 
+		QProcess* vbProcess = new QProcess(this);
+		connect(vbProcess, QOverload<int, QProcess::ExitStatus>::of(&QProcess::finished),
+			this, &ReportWindow::onProcessFinished_BlockXlsx);
+		//connect(vbProcess, QOverload<QProcess::ProcessError>::of(&QProcess::error),
+		//	this, &ReportWindow::onProcessError_BlockXlsx);
+
+		QString programPath = "blockXlsx.exe";
+		QStringList arguments;
+		arguments << QString("../") + nameFile;
+		QDir::setCurrent("blockXlsx");
+		vbProcess->start(programPath, arguments);
+		QDir::setCurrent("../");
+
+
 		if (viewWindowState->appLanguage == RUSSIAN_LANG)
 			QMessageBox::warning(this, QString("Внимание"), QString(" \"" + nameFile.toLocal8Bit() + "\" файл сохранён в папку Reports"));
 		else
@@ -1988,7 +2003,7 @@ void ReportWindow::keyPressEvent(QKeyEvent* event)
 		qDebug() << "yt Ctrl была нажата";
 
 	}
-	QWidget::keyPressEvent(event); // Важно вызвать базовый метод, если не хотите переопределять всю логику
+	QWidget::keyPressEvent(event);
 }
 
 void ReportWindow::on_erasePushButton_clicked()
@@ -2066,4 +2081,15 @@ void ReportWindow::generateWarning(Warnings::ReportWindow warning)
 		}
 		break;
 	}
+}
+
+
+void ReportWindow::onProcessFinished_BlockXlsx(int exitCode, QProcess::ExitStatus exitStatus)
+{
+	qDebug() << "GOOD";
+}
+
+void ReportWindow::onProcessError_BlockXlsx(QProcess::ProcessError error)
+{
+	qDebug() << "BAD";
 }

@@ -208,10 +208,15 @@ bool Can::writeCan(int id, int* msg, unsigned int flags)
 	}
 	else if (pcan->activeAdapter != NOT_SET)
 	{
+
 		TPCANMsg msgPCAN;
 		msgPCAN.ID = id;
-		msgPCAN.MSGTYPE = PCAN_MESSAGE_STANDARD;
 		msgPCAN.LEN = 8;
+		if (id <= 0x7FF)
+			msgPCAN.MSGTYPE = PCAN_MESSAGE_STANDARD;
+		else
+			msgPCAN.MSGTYPE = PCAN_MESSAGE_EXTENDED;
+
 		for (int i = 0; i < 8; i++)
 			msgPCAN.DATA[i] = msg[i];
 		 status = CAN_Write(pcan->handlerChanel[pcan->activeAdapter], &msgPCAN);
@@ -699,11 +704,14 @@ void Can::Timer_ReadCan()
 				}
 			}
 			for (int i = 0; i < mapCable[id].size(); i++)
+			{
+
 				if (mapCable[id][i].second != msgReceive[mapCable[id][i].first.getBit()])
 				{
 					mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
 					Signal_ChangedByte(mapCable[id][i].first.getId(), msgReceive[mapCable[id][i].first.getBit()]);
 				}
+			}
 
 			break;
 
@@ -1220,6 +1228,12 @@ const unsigned int _rot_num_TM[] = { 13, 19, 22, 8 };
 const unsigned int _inv_type_TM[] = { 15, 26 };
 const unsigned int _bitwise_op_TM[] = { 0, 29 };
 const unsigned int _inv_bits_TM[3][3] = { {19,28,7}, {26,12,16}, {17,2,24} };
+//BCM
+const unsigned int _rot_dir_BCM = 18;
+const unsigned int _rot_num_BCM[] = { 30, 11, 8, 19 };
+const unsigned int _inv_type_BCM[] = { 14, 13 };
+const unsigned int _bitwise_op_BCM[] = { 25, 5 };
+const unsigned int _inv_bits_BCM[3][3] = { {17,21,15}, {2,7,19}, {29,14,0} };
 
 static unsigned int _bit_val(unsigned int num, unsigned int bit)
 {
@@ -1322,6 +1336,41 @@ VKeyGenResultEx_enum GenerateKeyEx_DMxx(
 	return KGRE_Ok;
 }
 
+VKeyGenResultEx_enum GenerateKeyEx_BCM(
+	const unsigned char* ipSeedArray, unsigned int iSeedArraySize,
+	unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize,
+	unsigned int* oActualKeyArraySize)
+{
+	if (iSeedArraySize != 4) return KGRE_BadDll;
+	if (iMaxKeyArraySize < 4) return KGRE_BufferToSmall;
+
+	unsigned int seed = custom_bswap32(*((unsigned int*)ipSeedArray));
+
+	unsigned int res;
+	unsigned int rot_num = _field_val(seed, _rot_num_BCM, sizeof(_rot_num_BCM) / sizeof(int));
+	if (_bit_val(seed, _rot_dir_BCM)) { rot_num = (32 - rot_num); }
+	res = seed << rot_num;
+	res = (res & 0xFFFFFFFF) | (seed >> (32 - rot_num));
+
+	unsigned int inv_type = _field_val(seed, _inv_type_BCM, sizeof(_inv_type_BCM) / sizeof(int));
+	if (inv_type > 0)
+	{
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			res ^= (1 << _inv_bits_BCM[inv_type - 1][i]);
+		}
+	}
+
+	unsigned int bitwise_op = _field_val(seed, _bitwise_op_BCM, sizeof(_bitwise_op_BCM) / sizeof(int));
+	if (1 == bitwise_op) { res &= seed; }
+	else if (2 == bitwise_op) { res ^= seed; }
+	else if (3 == bitwise_op) { res |= seed; }
+
+	*((unsigned int*)iopKeyArray) = custom_bswap32(res);
+	*oActualKeyArraySize = 4;
+	return KGRE_Ok;
+}
+
 QString Can::eraseApp(QString typeBlock)
 {
 	int idSend = 0;
@@ -1335,8 +1384,8 @@ QString Can::eraseApp(QString typeBlock)
 
 	if (typeBlock == "DMFL_NAMI")
 	{
-		idSend = 0x7A4;
-		idReceiveRef = 0x7B4;
+		idSend = DIAG_ID_TO_DMFL;
+		idReceiveRef = DIAG_ID_FROM_DMFL;
 	}
 	else if (typeBlock == "DMFR_NAMI")
 	{
@@ -1357,6 +1406,11 @@ QString Can::eraseApp(QString typeBlock)
 	{
 		idSend = 0x7AA;
 		idReceiveRef = 0x7BA;
+	}
+	else if (typeBlock == "BCM_NAMI")
+	{
+		idSend = DIAG_ID_TO_BCM;
+		idReceiveRef = DIAG_ID_FROM_BCM;
 	}
 
 	//wakeBoot->start(500); // Запускаем таймер, который не выпускает блок из boot
@@ -1385,7 +1439,6 @@ QString Can::eraseApp(QString typeBlock)
 		if (readWaitCan(&idReceive, msgReceive, 20))
 			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x67 && msgReceive[2] == 0x01) // Получили ключ
 			{
-				/* Для тестовой прошивки не используется
 				int sendMsgKey[8] = { 0x06, 0x27, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
 				unsigned char* ipSeedArray = new unsigned char[4];
 				ipSeedArray[0] = msgReceive[3];
@@ -1394,7 +1447,9 @@ QString Can::eraseApp(QString typeBlock)
 				ipSeedArray[3] = msgReceive[6];
 				unsigned char* keyAnswer = new unsigned char[4];
 				unsigned int size;
-				if(typeBlock == "TM")
+				if (typeBlock == "BCM_NAMI")
+					GenerateKeyEx_BCM(ipSeedArray, 4, keyAnswer, 4, &size);
+				else if(typeBlock == "TM_NAMI")
 					GenerateKeyEx_TM(ipSeedArray, 4, keyAnswer, 4, &size);
 				else
 					GenerateKeyEx_DMxx(ipSeedArray, 4, keyAnswer, 4, &size);
@@ -1403,8 +1458,7 @@ QString Can::eraseApp(QString typeBlock)
 				sendMsgKey[4] = keyAnswer[1];
 				sendMsgKey[5] = keyAnswer[2];
 				sendMsgKey[6] = keyAnswer[3];
-				*/
-				int sendMsgKey[8] = { 0x06, 0x27, 0x02, 0xAA, 0xAA, 0xAA, 0xAA, 0x00 };
+
 				writeCan(idSend, sendMsgKey); // отправляем ключ
 
 				break;
@@ -1433,9 +1487,16 @@ QString Can::eraseApp(QString typeBlock)
 		if (QTime::currentTime() > timeWork)
 			return QString("Didn't receive a response about the validity of the key");
 	}
-
-	int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00 }; // Делаем удаление памяти
-	writeCan(idSend, msgSend_EraseMemory_2);
+	if (typeBlock == "BCM_NAMI")
+	{
+		int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00 }; // Делаем удаление памяти
+		writeCan(idSend, msgSend_EraseMemory_2);
+	}
+	else
+	{
+		int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00 }; // Делаем удаление памяти
+		writeCan(idSend, msgSend_EraseMemory_2);
+	}
 
 		return QString("GOOD");
 }

@@ -11,7 +11,10 @@
 #include <QString>
 #include <QDateTime>
 #include <QCheckBox>
+#include <Windows.h>
 #include "QKeyEvent"
+#include <QProcess>
+
 
 #include "Components.h"
 #include "TestWindow.h"
@@ -176,4 +179,6 @@ public slots:
 	void on_saveButton_clicked();
 	void on_erasePushButton_clicked();
 	void on_cancelPushButton_clicked();
+	void onProcessFinished_BlockXlsx(int exitCode, QProcess::ExitStatus exitStatus);
+	void onProcessError_BlockXlsx(QProcess::ProcessError error);
 };

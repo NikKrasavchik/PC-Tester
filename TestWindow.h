@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ui_TestWindow.h"
+#include "ui_SemiautomaticWindow.h"
+#include "ui_moremanualwindow.h"
 
 #include <QDialog>
 #include <QFormLayout>
@@ -261,7 +263,10 @@ private:
 
 	Ui::TestWindowClass ui;
 	WindowFrame* parentFrame;
+	QDialog* dlgSemiautomatic;
+	Ui::SemiautomaticWindowClass uiSemiautomatic;
 
+	QTableWidget* mainTableWidget;
 	QWidget* mainLayoutWidget;
 	QWidget* headerLayoutWidget;
 	QWidget* footerLayoutWidget;
@@ -276,6 +281,7 @@ private:
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* backButton;
+	QPushButton* semiautomaticButton;
 	QPushButton* sleepButton;
 	QPushButton* reportButton;
 	QPushButton* fullTestSortButton;
@@ -287,14 +293,14 @@ private:
 	QComboBox* inManualTestAutoStandTestTimeComboBox;
 	QComboBox* outManualTestAutoStandTestTimeComboBox;
 	QSpacerItem* tripleButtonsSpacer;
+	QSpacerItem* sleepSpacer;
 	QSpacerItem* reportSpacer;
-	QSpacerItem* reportSpacerTwo;
+	QSpacerItem* semiautomaticSpacer;
 	QSpacerItem* footerSpacer;
 	QLabel* logoLabel;
 	QLabel* fileNameLabel;
 	QFrame* headerLine;
 	QFrame* footerLine;
-	QTableWidget* mainTableWidget;
 	QStringList* mainTableHeaderLabels;
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
@@ -321,8 +327,10 @@ private:
 	std::vector<TestTableRowProperties*> cableRows;
 	QMap <int, int> offsetMap;
 	Cable *nextCheckCable;
+	TestTableRowProperties* nextCheckCableSemiautomaticTest;
 	QTimer* rotateTimer;
 	QTimer* delayStartTimer;
+	QTimer* timerSemiautomaticTest;
 	int timerCounter;
 	std::vector<std::pair<int, QLabel*>> hallLabels;
 
@@ -422,6 +430,7 @@ private:
 	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);
 	void rewriteCableRows();
+	void checkNextCableSemiautomaticTest(TestTableRowProperties* nextCable);
 
 public slots:
 	// BUTTON
@@ -448,7 +457,9 @@ public slots:
 	// Слот срабатывающий при нажатии на кнопку Старт тест
 	// @name slot_autoStandStartTestButton_clicked
 	// @return void
+	void slot_semiautomaticButton_clicked();
 	void slot_autoStandStartTestButton_clicked();
+	void on_backPushButtonSemiautomaticWindow_clicked();
 	// Слот срабатывающий при нажатии на кнопку Сортировка
 	// @name slot_fullTestSortButton_clicked
 	// @return void
@@ -459,6 +470,7 @@ public slots:
 	// @name slot_mainTableWidget_cellClicked
 	// @return void
 	void slot_mainTableWidget_cellClicked(int row, int column);
+	void slot_mainTableWidget_cellDoubleClicked(int row, int column);
 
 	// Слот срабатывающий при изменение состоянии подключения к стендку/блоку
 	// @name slot_mainTableWidget_cellClicked
@@ -473,6 +485,7 @@ public slots:
 
 	void on_rotateTimer_timeout();
 	void on_delayStartTimer();
+	void on_timerSemiautomaticTestTimer();
 private:
 	std::vector<std::pair<QString, TestTableRowProperties*>> sortComponents{ // Вектор необходим для сортировки таблицы по компонентам стенда
 															{QString("ARc5"),	nullptr }, // Входы
