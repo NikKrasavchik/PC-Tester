@@ -44,6 +44,16 @@ struct Thresholds
 		this->maxValue = -1;
 	}
 
+	Thresholds(double minVoltage, double maxVoltage, double minCurrent, double maxCurrent, int minValue, int maxValue)
+	{
+		this->minVoltage = minVoltage;
+		this->maxVoltage = maxVoltage;
+		this->minCurrent = minCurrent;
+		this->maxCurrent = maxCurrent;
+		this->minValue = minValue;
+		this->maxValue = maxValue;
+	}
+
 	Thresholds(const Thresholds& thresholds)
 	{
 		this->minVoltage = thresholds.minVoltage;
@@ -59,23 +69,41 @@ struct Measureds
 {
 	double voltage;
 	double current;
+	int digValue;
 
 	Measureds()
 	{
 		voltage = NOT_SET;
 		current = NOT_SET;
+		digValue = NOT_SET;
 	}
 
 	Measureds(double voltage, double current)
 	{
 		this->voltage = voltage;
 		this->current = current;
+		this->digValue = -1;
+	}
+
+	Measureds(double voltage, double current, int digValue)
+	{
+		this->voltage = voltage;
+		this->current = current;
+		this->digValue = digValue;
+	}
+
+	Measureds(int digValue)
+	{
+		this->voltage = -1;
+		this->current = -1;
+		this->digValue = digValue;
 	}
 
 	Measureds(const Measureds& measureds)
 	{
 		this->voltage = measureds.voltage;
 		this->current = measureds.current;
+		this->digValue = measureds.digValue;
 	}
 };
 
@@ -93,10 +121,12 @@ public:
 	void setType(int type)						{ this->type = type; }
 	void setCanId(int canId)					{ this->canId = canId; }
 	void setBit(int bit)						{ this->bit = bit; }
-	void setThresholds(std::vector<Thresholds> thresholds);
+	void setThresholdsManual(std::vector<Thresholds> thresholdsManual);
+	void setThresholdsAuto(std::vector<Thresholds> thresholdsAuto);
 	void setMeasureds(std::vector<Measureds> measureds);
 	void setName(QString name)					{ this->name = name; }
 	void setComponent(QString component)		{ this->component = component; }
+	
 
 	int	getId()									{ return this->id; }
 	ConnectorId getConnector()					{ return this->connector; }
@@ -105,10 +135,12 @@ public:
 	int getType()								{ return this->type; }
 	int getCanId()								{ return this->canId; }
 	int getBit()								{ return this->bit; }
-	std::vector<Thresholds> getThresholds()		{ return this->thresholds; }
+	std::vector<Thresholds> getThresholdsManual()		{ return this->thresholdsManual; }
+	std::vector<Thresholds> getThresholdsAuto()		{ return this->thresholdsAuto; }
 	std::vector<Measureds> getMeasureds()		{ return this->measureds; }
 	QString getName()							{ return this->name; }
 	QString getComponent()						{ return this->component; }
+	
 
 private:
 	int id;
@@ -118,7 +150,8 @@ private:
 	int type;
 	int canId;
 	int bit;
-	std::vector<Thresholds> thresholds;
+	std::vector<Thresholds> thresholdsManual;
+	std::vector<Thresholds> thresholdsAuto;
 	std::vector<Measureds> measureds;
 	QString name;
 	QString component;

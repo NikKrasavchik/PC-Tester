@@ -10,19 +10,64 @@
 #include "QTime"
 #include "qstring.h"
 
+
 #include "canlib.h"
+#include "linlib.h"
 #include "chai.h"
+#include "PCANBasic.h"
 #include "Cable.h"
 
-#define ID_CAN_AUTOSTAND		0x51
+// Diag
+#define DIAG_ID_TO_BLOCK(NameBlock) (NameBlock == TestBlockName::DTM) ? DIAG_ID_TO_DMFL : DIAG_ID_TO_BCM
+#define DIAG_ID_TO_DMFL 0x7A4
+#define DIAG_ID_TO_DMFR 0x7A5
+#define DIAG_ID_TO_DMRL 0x7A6
+#define DIAG_ID_TO_DMRR 0x7A7
+#define DIAG_ID_TO_TM 0x7AA
+#define DIAG_ID_TO_BCM 0x7A3
+#define DIAG_ID_TO_SMFL 0x7AD
+#define DIAG_ID_TO_SMFR 0x7AE
+#define DIAG_ID_TO_SMRL 0x7AF
+#define DIAG_ID_TO_SMRR 0x7A9
+
+#define DIAG_ID_FROM_BLOCK(NameBlock) (NameBlock == TestBlockName::DTM) ? DIAG_ID_FROM_DMFL : DIAG_ID_FROM_BCM
+#define DIAG_ID_FROM_DMFL 0x7B4
+#define DIAG_ID_FROM_DMFR 0x7B5
+#define DIAG_ID_FROM_DMRL 0x7B6
+#define DIAG_ID_FROM_DMRR 0x7B7
+#define DIAG_ID_FROM_TM 0x7BA
+#define DIAG_ID_FROM_BCM 0x7B3
+#define DIAG_ID_FROM_SMFL 0x7BD
+#define DIAG_ID_FROM_SMFR 0x7BE
+#define DIAG_ID_FROM_SMRL 0x7BF
+#define DIAG_ID_FROM_SMRR 0x7B9
+
+#define DIAG_GET_APP_NAME(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x81; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_APP_CALIBRATION(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x82; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_EQUIPMENT_NAME(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x97; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_DATA_MANUFACTURE(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x8B; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_NUMBER_HARDWARE(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x92; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_NUMBER_PART(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x87; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+#define DIAG_GET_NUMBER_SERIAL(arr) arr[0] = 0x03; arr[1] = 0x22; arr[2] = 0xF1; arr[3] = 0x8C; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+
+#define DIAG_VERIFICATION(arr) arr[0] = 0x30; arr[1] = 0x00; arr[2] = 0x05; arr[3] = 0; arr[4] = 0; arr[5] = 0; arr[6] = 0; arr[7] = 0;
+//// Diag
+
+
+#define ID_CAN_AUTOSTAND_SEND			0x51
+#define ID_CAN_AUTOSTAND_RECEIVE		0x52
 #define ID_CAN_MANUALSTAND		0x100
 
-#define TIME_CHECKCONNECTION	200
+constexpr auto TIME_SENDCONNECTION = 300;
+constexpr auto TIME_CHECKCONNECTION = 600;
+
+
 
 class Can : public QObject
 {
 	Q_OBJECT
 public:
+
 	Can();
 
 	// ------------------------------------
@@ -51,6 +96,8 @@ public:
 	// ------------------------------------
 	void setSelectedAdapterNeme(QString adapter);
 
+	static QString getSelectedAdapterNeme();
+
 	// ------------------------------------
 	// Name: setSelectedFrequency
 	//		Установка выбранной частоты для работы can
@@ -72,7 +119,7 @@ public:
 	// Name: getStatusFrequencySelected
 	//		Возврвщения статуса выбора статуса.
 	// Return: bool
-	//			true: Частота выбрана
+	//			true: Частота выбрана.
 	//			false: Частота не выбрана.
 	// ------------------------------------
 	bool getStatusFrequencySelected() { return b_frequencySelected; }
@@ -85,7 +132,7 @@ public:
 	//		    У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
 	//		    Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
 	// ------------------------------------
-	std::vector<QString> getNameAdapters();
+	static std::vector<QString> getNameAdapters();
 
 	// ------------------------------------
 	// Name: sendTestMsg
@@ -97,42 +144,53 @@ public:
 	//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
 	//			true  - в случае если сообщение отправилось.
 	// ------------------------------------
-	static bool sendTestMsg(ConnectorId pad, int pin, TypeCable type, TestBlockName nameBlock);
+	static bool sendTestMsg(ConnectorId pad, int pin, int canId, int byteCan, TypeCable type, TestBlockName nameBlock);
 
 	// ------------------------------------
 	// Name: sendTestMsg
 	//			Отправка сообщения на can
 	// Variables: 
-	//			ConnectorId pad: Коннектор отправляемого кабеля
-	//			int pin: Пин отправляемого кабеля
-	//			int digValue: Цифровое значение отправляемого кабеля
-	//			int pwmValue: ШИМ значение отправляемого кабеля
+	//			ConnectorId pad: Коннектор отправляемого кабеля.
+	//			int pin: Пин отправляемого кабеля.
+	//			int digValue: Цифровое значение отправляемого кабеля.
+	//			int pwmValue: ШИМ значение отправляемого кабеля.
 	// ------------------------------------
 	static void sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue);
 
-	// Отправляет сообщение блоку о засыпании или просыпании.
+	// Отправляет сообщение блоку о засыпании или просыпании. 
 	// @name sendGoToSleepMsg
 	// 
-	// @param boolisGoToSleep == true - команда на засыпание.
-	// @param          isGoToSleep == false - команда на пробуждение.
+	// @param bool isGoToSleep == true - команда на засыпание.
+	// @param bool isGoToSleep == false - команда на пробуждение.
 	// 
 	// @return void
 	static void sendGoToSleepMsg(bool isGoToSleep);
 
-	static QString getSerialNumber();
+	static QString getDiagBlock(DiagInformation diagInf, TestBlockName blockName);
 
+	static QString eraseApp(QString typeBlock);
 
 	void setCable(std::vector<Cable> cable);
+
+	// Отчишает старые значения кабеля. После вызова сработает большое количество сигналов Signal_ChangedByte.
+	// @name clearOldValue
+	// 
+	// @param void
+	// 
+	// @return void
 	static void clearOldValue();
+
+	static void checkInformationBus(int canId);
+	static void verificationStartStop(bool seq1 = false, bool seq2 = false, bool seq3 = false, bool seq4 = false, bool seq5 = false, bool seq6 = false, bool seq7 = false, bool seq8 = false, bool seq9 = false, bool seq10 = false);
 private:
-	// Отправляет сообщение в CAN.
+	// Отправляет сообщение в CAN
 	// @name writeCan
 	// 
-	// @param int* id - указатель на переменную в которой храниться id по которому отправиться can-сообщения.
-	// @param int* msg - указатель на переменную которая отправиться в can.
+	// @param int id - id по которому отправиться can-сообщения
+	// @param int* msg - указатель на переменную которая отправиться в can
 	// 
-	// @return bool - В случае удачой отправки возращает true.
-	static bool writeCan(int id, int* msg);
+	// @return bool - В случае удачой отправки возращает tru
+	static bool writeCan(int id, int* msg, unsigned int flags = canMSG_STD);
 
 	// ------------------------------------
 	// Name: readWaitCan
@@ -146,45 +204,91 @@ private:
 	// ------------------------------------
 	static bool readWaitCan(int* id, int* msg, int timeout);
 
-	std::pair<int, int> conversionFrequency(int frequency, int modelAdapter);
+	std::pair<int, int> conversionFrequency(int frequency, ModelAdapter modelAdapter);
+
+
+	//int process_frame(uint8_t* data);
+	void reset();
+	int parse_payload();
+	void get_payload();
+
+	//static VKeyGenResultEx_enum GenerateKeyEx(const unsigned char* ipSeedArray, unsigned int iSeedArraySize, unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize, unsigned int* oActualKeyArraySize);
 //
 // Varibals
 //
+	static bool testSleep;
 	struct modelAdapter
 	{
 		std::vector<QString> nameAdapters;
+		std::vector<int> handlerChanel;
 		int activeAdapter;
 		std::pair<int, int> p_frequency;
 	};
 	static modelAdapter *kvaser;
 	static modelAdapter *marathon;
+	static modelAdapter *pcan;
 	static canHandle hnd;
+	static HANDLE hEventPcan;
+
+	//struct {
+	//	uint8_t  buf[21];
+	//	uint8_t  filled = 0;
+	//	uint8_t  complete = 0;
+	//} MyPayloadRxCtx;
+	//MyPayloadRxCtx rxTestInfo;
+	std::array<uint8_t, 21> buf_{};
+	uint8_t filled_ = 0;
+	uint8_t expected_frame_ = 0;
+	bool complete_ = false;
+
+	struct StandConnect
+	{
+		float p;
+		QTimer* TimerSendConnectMsg;
+		QTimer* TimerCheckConnectMsg;
+		int timerIdSend = 0;
+		int timerIdCheck = 0;
+		uint8_t counterConnectMsg = 0;
+		bool standConnection = false;
+		bool sandTestMsg = true;
+
+		int counterStandDisconnecting = 0;
+
+	};
+
+	StandConnect standConnect[COUNT_PCB_STAND];
 
 	
 	WindowType windowType; // Переменная хранящая идентификатор окна которое сейчас открыто
 	std::vector<Measureds*> measureds;
-	uint8_t counterConnectMsg;
+	uint8_t counterConnectMsg; 
 
-	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable;
+	static QMap<int, std::vector<std::pair<Cable, int>>> mapCable; // Мапа в которой ключ это id can, а значение массив пар. Пара состоит из кабеля и значение которое у него было до этого значения. Такая сложная структура необходима для более оптимального поиска кабеля при приходе сообщения.
 
-	bool b_adapterSelected;
+	bool b_adapterSelected; 
 	bool b_frequencySelected;
-	bool b_flagStandConnectionCheck;
-	static bool b_flagStatusConnection;		// Флаг показывающий присоединён ли Stand
+	static bool b_flagStatusConnectionBlock;		// Флаг показывающий присоединён ли Stand
 
-	QTimer* timerReadCan;				// Таймер для считывания Can-сообщений.
-	QTimer* timerSendConnectMsg;		// Таймер для отправки сообщений на подключение или проверки подключения.
-	QTimer* timerCheckStandConnection;	// Таймер для проверки времени времени прихода переодического сообщения конекта.
+	QTimer* timerReadCan;					// Таймер для считывания Can-сообщений.
+	QTimer* timerSendConnectMsg;			// Таймер для отправки сообщений на первичное подключение или подтверждение подключения.
+	QTimer* timerCheckBlockConnection;		// Таймер для проверки времени времени прихода переодического сообщения конекта.
+	static QTimer* wakeBoot;
 
 private slots:
-	void Timer_ReadCan();				// Слот для считывания Can-сообщений.
-	void Timer_SendConnectMsg();		// @doc Слот для отправки сообщений на подключение или подтверждения подключения.
-	void Timer_CheckStandConnection();	// Слот для проверки времени времени прихода переодического сообщения конекта.
-
+	void Timer_ReadCan();					// Слот для считывания Can-сообщений.
+	void Timer_CheckBlockConnection();		// Слот для проверки времени прихода переодического сообщения конекта.
+	void Timer_SendConnectMsgStand();			// Слот для отправки сообщений на подключение или подтверждения подключения.
+	void Timer_CheckStandConnection();	
+	//void Timer_wakeBoot();
 signals:
 
-	void Signal_ChangedStatusStandConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён 
+	void Signal_ChangedStatusStandConnect(bool statusConnect, int idBord); // Сигнал который говорит что статус присоеденения к стенду изменён 
+	void Signal_ChangedStatusBlockConnect(bool statusConnect); // Сигнал который говорит что статус присоеденения к стенду изменён
 	void Signal_AfterTest(int connector, int pin, std::vector<Measureds*> measureds); // Сигнал означающий завершение теста у автостенда
-	void Signal_ChangedByte(int idCable, int newValue);
+	void Signal_ChangedByte(int idCable, int newValue); // Сигнал срабатывающий когда поменялся байт у какого либо кабеля из mapCable
+	void Signal_changeStatusCheckInformationBus(int id, bool status);
+	void Signal_ReciveMsg(int msg[8]);
+	void Signal_StatusEraseApp(QString status);
+
 };
 

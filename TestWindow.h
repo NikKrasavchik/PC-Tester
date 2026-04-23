@@ -1,6 +1,8 @@
 #pragma once
 
 #include "ui_TestWindow.h"
+#include "ui_SemiautomaticWindow.h"
+#include "ui_moremanualwindow.h"
 
 #include <QDialog>
 #include <QFormLayout>
@@ -12,6 +14,7 @@
 #include <QComboBox>
 #include <QHeaderView>
 #include <qmessagebox.h>
+#include <qlist.h>
 
 #include "WindowFrame.h"
 #include "can.h"
@@ -24,10 +27,12 @@
 #define COLUMN_PIN					1
 #define COLUMN_NAME					2
 
+#define COLUMN_STANDART_HEIGHT		40
 #define COLUMN_DIGITAL_HEIGHT		50
 #define COLUMN_PWM_HEIGHT			128
 #define COLUMN_VNH_HEIGHT			169
 #define COLUMN_HLD_HEIGHT			128
+#define COLUMN_INFORMATION_HEIGHT	50
 
 #define COLUMN_CONNECTOR_WIDTH		70
 #define COLUMN_PIN_WIDTH			40
@@ -37,9 +42,7 @@
 #define COLUMN_CHECK_WIDTH			160
 #define COLUMN_AUTOCHECK_WIDTH		70
 #define COLUMN_STATUS_WIDTH			60
-#define COLUMN_STAND_WIDTH			60
-#define COLUMN_PC_WIDTH				60
-#define COLUMN_MORE_WIDTH			25
+#define COLUMN_MORE_WIDTH			40
 #define COLUMN_MANUAL_CHECK_WIDTH	75
 
 #define MIN_ROW_HEIGHT				40
@@ -56,11 +59,7 @@
 #define LOW_BUTTON_PRESSED			1
 #define ZERO_BUTTON_PRESSED			2
 
-#define SORT_TYPE_INDEX				0
-#define SORT_TYPE_DIRECTION_OUT		1
-#define SORT_TYPE_DIRECTION_IN		2
-
-#define FIXED_HEADER_BUTTON_WIDTH	120
+#define FIXED_HEADER_BUTTON_WIDTH	130
 #define FIXED_HEADER_BUTTON_HEIGHT	50
 #define FIXED_HEADER_COMBO_WIDTH	200
 #define FIXED_HEADER_COMBO_HEIGHT	40
@@ -122,6 +121,11 @@ struct CheckButton
 {
 	QPushButton* checkButton;
 };
+struct CheckInfomationBus
+{
+	QComboBox* comboBox;
+	QPushButton* checkButton;
+};
 
 class MoreWindow;
 class ReportWindow;
@@ -132,6 +136,7 @@ class TestTableRowProperties : public QObject
 public:
 	TestTableRowProperties();
 
+	//TestWindow* perent;
 	int id;
 	int canId;
 	int bit;
@@ -141,70 +146,31 @@ public:
 	QString name;
 	QString component;
 	QString direction;
-	QString typeStr;
 	TypeCable typeInt;
 	QString comment;
 	bool manualChecked;
 
+
+	std::vector<Thresholds> thresholdsManual;
+	std::vector<Thresholds> thresholdsAuto;
 	std::vector<Measureds*> measureds;
-	std::vector<Thresholds> thresholds;
 
 	void* buttons;
+	MoreWindow* moreWindow;
 	QPushButton* moreButton;
+	QCheckBox* manualCheckBox = nullptr;
 
 	int stateDigital;
 	int statePWM;
 	int stateHLD;
 
-	// ------------------------------------
-	// Name: generateInteractionButtons
-	//			Производится генерация кнопок в соответствии с типом кабеля
-	// Variables:
-	//			WindowType testType: Содержит тип теста. Обрабатываемые аргументы:
-	//								OUT_TEST_MANUAL_STAND		
-	//								FULL_TEST_MANUAL_STAND
-	//								OUT_MANUAL_TEST_AUTO_STAND
-	//								IN_MANUAL_TEST_AUTO_STAND
-	//								OUT_AUTO_TEST_AUTO_STAND
-	//			int type: Содержит тип кабеля. Обрабатываемые аргументы:
-	//						TYPE_DIGITAL
-	//						TYPE_PWM
-	//						TYPE_VNH
-	//						TYPE_HLD
-	// ------------------------------------
-	void generateInteractionButtons(WindowType testType, int type);
 
-	// ------------------------------------
-	// Name: switchButtonState
-	//			Производится переулючение стиля кнопок в соответствии с нажатием кнопок
-	// Variables: 
-	//			TestButtons testButton: содержит тип кнопки. Обрабатываемые аргументы:
-	//				BUTTON_ON
-	//				BUTTON_OFF
-	//				BUTTON_LOAD_0
-	//				BUTTON_LOAD_25
-	//				BUTTON_LOAD_50
-	//				BUTTON_LOAD_75
-	//				BUTTON_LOAD_100
-	//				BUTTON_HIGH
-	//				BUTTON_LOW
-	//				BUTTON_ZERO
-	// ------------------------------------
+	void generateInteractionButtons(WindowType testType, TestWindow *testwindow);
+
 	void switchButtonState(TestButtons testButton);
+	
+	void createMoreWindow(WindowType testType);
 
-	// ------------------------------------
-	// Name: sendSignal
-	//			Отправляется сигнал на can
-	// ------------------------------------
-	void sendSignal();
-
-	// ------------------------------------
-	// Name: generateWarning
-	//			Вызывается окно сообщения при неожиданных исходах
-	// Variables: 
-	//			Warnings::TestWindow warning: Идентификатор вызываемой ошибки
-	//											OPEN_MORE_WINDOW
-	// ------------------------------------
 	void generateWarning(Warnings::TestWindow warning);
 
 public slots:
@@ -218,13 +184,14 @@ public slots:
 	void on_high_clicked();
 	void on_low_clicked();
 	void on_zero_clicked();
+	void on_check_clicked();
 	void on_checkButton_clicked();
-	void on_moreButton_clicked();
 
+	void on_moreButton_clicked() { createMoreWindow(WindowType::FULL_TEST_AUTO_STAND); };
+	void on_manualCheckBox_clicked();
 signals:
-	void msgToTwoThreadStartTest_ManualTwoThread(int pad, int pin, int digValue, int pwmValue);
-
-	void selectCurrentCell(QString connector, QString pin);
+	void Signal_ChangedByte(int idCable, int newValue); 
+	void selectCurrentCell(int id);
 };
 
 class TestWindow : public QDialog
@@ -235,29 +202,21 @@ public:
 	TestWindow(WindowType testType, std::vector<Cable> cables, TestBlockName testingBlock, QWidget* parent = nullptr);
 	~TestWindow();
 
-	// ------------------------------------
-	// Name: setParentFrame
-	//		Сохранение родительского элемента
-	// Variables: 
-	//			WindowFrame* parentFrame: Родительский элемент
-	// ------------------------------------
-	void setParentFrame(WindowFrame* parentFrame);
 
 	// ------------------------------------
-	// Name: ProcAutoTest
-	//		Отправка сообщения на can
-	// Variables: 
-	//			int pad: Коннектор кабеля для отправки
-	//			int pin: Пин кабеля для отправки
-	// ------------------------------------
-	void ProcAutoTest(int pad, int pin);
+	void setParentFrame(WindowFrame* parentFrame);
+	void ProcAutoTest(TestTableRowProperties* cable);
+
 
 	StandStatusFlags* statusFlags;
 private:
 
 	Ui::TestWindowClass ui;
 	WindowFrame* parentFrame;
+	QDialog* dlgSemiautomatic;
+	Ui::SemiautomaticWindowClass uiSemiautomatic;
 
+	QTableWidget* mainTableWidget;
 	QWidget* mainLayoutWidget;
 	QWidget* headerLayoutWidget;
 	QWidget* footerLayoutWidget;
@@ -272,6 +231,7 @@ private:
 	QPushButton* switchThemeButton;
 	QPushButton* switchLanguageButton;
 	QPushButton* backButton;
+	QPushButton* semiautomaticButton;
 	QPushButton* sleepButton;
 	QPushButton* reportButton;
 	QPushButton* fullTestSortButton;
@@ -283,14 +243,14 @@ private:
 	QComboBox* inManualTestAutoStandTestTimeComboBox;
 	QComboBox* outManualTestAutoStandTestTimeComboBox;
 	QSpacerItem* tripleButtonsSpacer;
+	QSpacerItem* sleepSpacer;
 	QSpacerItem* reportSpacer;
-	QSpacerItem* reportSpacerTwo;
+	QSpacerItem* semiautomaticSpacer;
 	QSpacerItem* footerSpacer;
 	QLabel* logoLabel;
 	QLabel* fileNameLabel;
 	QFrame* headerLine;
 	QFrame* footerLine;
-	QTableWidget* mainTableWidget;
 	QStringList* mainTableHeaderLabels;
 	QPixmap* logoLightPixmap;
 	QPixmap* logoDarkPixmap;
@@ -309,19 +269,18 @@ private:
 	QPixmap* noClockwiseLightPixmap;
 	QPixmap* noClockwiseDarkPixmap;
 
-	int fullTestSortType;
-	
+	SortType fullTestSortType;
+	WindowType testType;
 	bool isFullTestEnabled;
 
-	QString fileName;
-	WindowType testType;
-	TestBlockName testingBlock;
-	//Can* can;
 	std::vector<TestTableRowProperties*> cableRows;
-	QMap <int, int> m;
-	std::vector<QCheckBox*> manualChecks;
-	Cable *nextCheckCable;
+	QMap <int, int> offsetMap; // row - num    //  id - num in arr
+	TestTableRowProperties *nextCheckCable;
+	TestTableRowProperties* nextCheckCableSemiautomaticTest;
 	QTimer* rotateTimer;
+	QTimer* delayStartTimer;
+	QTimer* timerSemiautomaticTest;
+	QTimer* wochDogEndTestTimer;
 	int timerCounter;
 	std::vector<std::pair<int, QLabel*>> hallLabels;
 
@@ -408,7 +367,8 @@ private:
 	void resetTableRowsFullTestAutoStand();
 
 	void resetTheme();
-	void resetLanguage();
+	void resetLanguage(bool isFullReset);
+	void resetLanguageToolTipButtonTable(int RowNum, int columnStatus);
 	void createItemManualTestAutoStandTestTimeComboBox(QComboBox* comboBox);
 	void resetIconMoreButton(bool theme);
 
@@ -419,28 +379,210 @@ private:
 	void initMoreButton(int currentRowNum, QWidget* moreCellWidget);
 	void setStatusTableButtons(bool statusButton);
 	void resizeEvent(QResizeEvent* event);
-	void rewriteCableRows(std::vector<TestTableRowProperties*>* cableRows, int sortType);
+	void rewriteCableRows();
+	void checkNextCableSemiautomaticTest(TestTableRowProperties* nextCable);
 
+signals:
+	void signal_UpdateMoreWindow();
 public slots:
+	// BUTTON
+	// Слот срабатывающий при нажатии на кнопку Выйти "<"
+	// @name slot_backButton_clicked
+	// @return void
 	void slot_backButton_clicked();
+	// Слот срабатывающий при нажатии на кнопку Смена темы
+	// @name slot_switchThemeButton_clicked
+	// @return void
 	void slot_switchThemeButton_clicked();
+	// Слот срабатывающий при нажатии на кнопку Смена языка
+	// @name slot_switchLanguageButton_clicked
+	// @return void
 	void slot_switchLanguageButton_clicked();
+	// Слот срабатывающий при нажатии на кнопку Отчёт
+	// @name slot_reportButton_clicked
+	// @return void
 	void slot_reportButton_clicked();
+	// Слот срабатывающий при нажатии на кнопку Сон
+	// @name slot_sleepButton_clicked
+	// @return void
 	void slot_sleepButton_clicked();
-
-	void slot_autoStandConnectButton_clicked();
-	void slot_inManualTestAutoStandTestTimeComboBox_changed(int ind);
-	void slot_outManualTestAutoStandTestTimeComboBox_changed(int ind);
+	// Слот срабатывающий при нажатии на кнопку Старт тест
+	// @name slot_autoStandStartTestButton_clicked
+	// @return void
+	void slot_semiautomaticButton_clicked();
 	void slot_autoStandStartTestButton_clicked();
-
+	void on_backPushButtonSemiautomaticWindow_clicked();
+	// Слот срабатывающий при нажатии на кнопку Сортировка
+	// @name slot_fullTestSortButton_clicked
+	// @return void
 	void slot_fullTestSortButton_clicked();
 
+	// TABLE
+	// Слот срабатывающий при нажатии на ячейку таблицы
+	// @name slot_mainTableWidget_cellClicked
+	// @return void
 	void slot_mainTableWidget_cellClicked(int row, int column);
+	void slot_mainTableWidget_cellDoubleClicked(int row, int column);
 
-	void Slot_ChangedStatusStandConnect(bool statusConnect);
+	// Слот срабатывающий при изменение состоянии подключения к стендку/блоку
+	// @name slot_mainTableWidget_cellClicked
+	// @param bool false - false стенд/блок отключились
+	// @param bool true - true  стенд/блок подключились
+	// @return void
+	void Slot_ChangedStatusStandConnect(bool statusConnect, int idBord);
+	void Slot_ChangedStatusBlockConnect(bool statusConnect);
 	void Slot_AfterTest(int connector, int pin, std::vector<Measureds*> measureds);
 	void Slot_ChangedByte(int idCable, int newValue);
-	void selectCurrentCell(QString conector, QString pin);
+	void Slot_changeStatusCheckInformationBus(int id, bool status);
+	void selectCurrentCell(int id);
 
 	void on_rotateTimer_timeout();
+	void on_delayStartTimer();
+	void on_timerSemiautomaticTestTimer(); //{ checkNextCableSemiautomaticTest(nullptr); };
+	void on_wochDogEndTestTimer(); 
+private:
+	std::vector<std::pair<QString, TestTableRowProperties*>> sortComponents{ // Вектор необходим для сортировки таблицы по компонентам стенда
+															{QString("ARc5"),	nullptr }, // Входы
+															{QString("ARc7"),	nullptr }, 
+															{QString("ARc3"),	nullptr }, 
+															{QString("ARc2"),	nullptr }, 
+															{QString("ARc1"),	nullptr }, 
+															{QString("ARc4"),	nullptr }, 
+															{QString("Sw18"),	nullptr }, 
+															{QString("IHall4"),	nullptr }, 
+															{QString("Sw17"),	nullptr }, 
+															{QString("ARc8"),	nullptr }, 
+															{QString("Sw4"),	nullptr }, 
+															{QString("Sw24"),	nullptr }, 
+															{QString("Sw2"),	nullptr }, 
+															{QString("Sw8"),	nullptr }, 
+															{QString("ARc6"),	nullptr }, 
+															{QString("Sw16"),	nullptr }, 
+															{QString("ARv1"),	nullptr }, 
+															{QString("Sw23"),	nullptr }, 
+															{QString("Sw20"),	nullptr }, 
+															{QString("Sw3"),	nullptr }, 
+															{QString("Sw22"),	nullptr }, 
+															{QString("Sw12"),	nullptr }, 
+															{QString("Sw10"),	nullptr }, 
+															{QString("Sw19"),	nullptr }, 
+															{QString("Sw1"),	nullptr }, 
+															{QString("Sw15"),	nullptr }, 
+															{QString("Sw7"),	nullptr }, 
+															{QString("Sw14"),	nullptr }, 
+															{QString("Sw6"),	nullptr }, 
+															{QString("Sw13"),	nullptr }, 
+															{QString("Sw5"),	nullptr }, 
+															{QString("IHall1"),	nullptr }, 
+															{QString("IHall2"),	nullptr }, 
+															{QString("IHall3"),	nullptr }, 
+															{QString("IHall5"),	nullptr }, 
+															{QString("Enc1"),	nullptr }, 
+															{QString("Enc1"),	nullptr }, 
+															{QString("Enc2"),	nullptr }, 
+															{QString("Enc2"),	nullptr }, 
+															{QString("Enc3"),	nullptr }, 
+															{QString("Sw21"),	nullptr }, 
+															{QString("Sw11"),	nullptr }, 
+															{QString("Sw9"),	nullptr }, 
+															{QString("ARc9"),	nullptr }, 
+															{QString("ARv8"),	nullptr }, 
+															{QString("ARv3"),	nullptr }, 
+															{QString("ARv4"),	nullptr }, 
+															{QString("ARv7"),	nullptr }, 
+															{QString("ARv2"),	nullptr }, 
+															{QString("ARv5"),	nullptr }, 
+															{QString("ARv6"),	nullptr }, 
+															{QString("LOUT1"),	nullptr }, 
+															{QString("LOUT2"),	nullptr }, 
+															{QString("LOUT3"),	nullptr }, 
+															{QString("LOUT4"),	nullptr }, 
+															{QString("LOUT5"),	nullptr }, 
+															{QString("LOUT6"),	nullptr }, 
+															{QString("LOUT7"),	nullptr }, 
+															{QString("LOUT8"),	nullptr }, 
+															{QString("LOUT9"),	nullptr }, 
+															{QString("LOUT10"),	nullptr }, 
+															{QString("LOUT11"),	nullptr }, 
+															{QString("LOUT12"),	nullptr }, 
+															{QString("LOUT13"),	nullptr }, 
+															{QString("LOUT14"),	nullptr }, 
+															{QString("LOUT15"),	nullptr }, 
+															{QString("LOUT16"),	nullptr }, 
+															{QString("LOUT17"),	nullptr }, 
+															{QString("LOUT18"),	nullptr }, 
+															{QString("LOUT19"),	nullptr }, 
+															{QString("LOUT20"),	nullptr }, 
+															{QString("Hsd32"),	nullptr }, 
+															{QString("Hsd33"),	nullptr }, 
+															{QString("Hsd34"),	nullptr }, 
+															{QString("Hsd35"),	nullptr }, 
+															{QString("Hsd36"),	nullptr }, 
+															{QString("Hsd37"),	nullptr }, 
+															{QString("Hsd38"),	nullptr }, 
+															{QString("Hsd39"),	nullptr }, 
+															{QString("Hsd40"),	nullptr }, 
+															{QString("Hsd41"),	nullptr }, 
+															{QString("Hsd42"),	nullptr }, 
+															{QString("Hsd43"),	nullptr }, 
+															{QString("Hsd44"),	nullptr }, 
+															{QString("Hsd45"),	nullptr }, 
+															{QString("Hsd46"),	nullptr }, 
+															{QString("Hsd47"),	nullptr }, 
+															{QString("Hsd48"),	nullptr }, 
+															{QString("Hsd49"),	nullptr }, 
+															{QString("Hsd50"),	nullptr }, 
+															{QString("Hsd51"),	nullptr }, 
+															{QString("Hsd12"),	nullptr }, 
+															{QString("Hsd13"),	nullptr }, 
+															{QString("Hsd14"),	nullptr }, 
+															{QString("Hsd15"),	nullptr }, 
+															{QString("Hsd16"),	nullptr }, 
+															{QString("Hsd17"),	nullptr }, 
+															{QString("Hsd18"),	nullptr }, 
+															{QString("Hsd19"),	nullptr }, 
+															{QString("Hsd20"),	nullptr }, 
+															{QString("Hsd21"),	nullptr }, 
+															{QString("Hsd22"),	nullptr }, 
+															{QString("Hsd23"),	nullptr }, 
+															{QString("Hsd24"),	nullptr }, 
+															{QString("Hsd25"),	nullptr }, 
+															{QString("Hsd26"),	nullptr }, 
+															{QString("Hsd27"),	nullptr }, 
+															{QString("Hsd28"),	nullptr }, 
+															{QString("Hsd29"),	nullptr }, 
+															{QString("Hsd30"),	nullptr }, 
+															{QString("Hsd31"),	nullptr }, 
+															{QString("Br1"),	nullptr }, 
+															{QString("Br1"),	nullptr }, 
+															{QString("Br2"),	nullptr }, 
+															{QString("Br2"),	nullptr }, 
+															{QString("Br3"),	nullptr }, 
+															{QString("Br3"),	nullptr }, 
+															{QString("Br4"),	nullptr }, 
+															{QString("Br4"),	nullptr }, 
+															{QString("Br5"),	nullptr }, 
+															{QString("Br5"),	nullptr }, 
+															{QString("Br6"),	nullptr }, 
+															{QString("Br6"),	nullptr }, 
+															{QString("Br7"),	nullptr }, 
+															{QString("Br7"),	nullptr }, 
+															{QString("Br8"),	nullptr }, 
+															{QString("Br8"),	nullptr }, 
+															{QString("Br9"),	nullptr }, 
+															{QString("Br9"),	nullptr }, 
+															{QString("Br10"),	nullptr }, 
+															{QString("Br10"),	nullptr }, 
+															{QString("Hsd1"),	nullptr }, 
+															{QString("Hsd2"),	nullptr }, 
+															{QString("Hsd3"),	nullptr }, 
+															{QString("Hsd4"),	nullptr }, 
+															{QString("Hsd5"),	nullptr }, 
+															{QString("Hsd6"),	nullptr }, 
+															{QString("Hsd7"),	nullptr }, 
+															{QString("Hsd8"),	nullptr }, 
+															{QString("Hsd9"),	nullptr }, 
+															{QString("Hsd10"),	nullptr }, 
+															{QString("Hsd11"),	nullptr }};
+
 };

@@ -6,7 +6,7 @@
 
 #include <QMouseEvent>
 
-#define BORDER_SIZE 5
+#define BORDER_SIZE 10
 
 const QString appDarkIconPath = ":/Dark/icons/App_Logo_White.png";
 const QString closeDarkIconPath = ":/Dark/icons/Close_White.png";
@@ -38,10 +38,10 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 	initDarkStyleSheets();
 	resetTheme();
 
-	//ui->title->setText("PC-Tester");
 	setTitle(windowType);
 
-	setWindowFlags(Qt::Window | Qt::FramelessWindowHint | Qt::WindowMinimizeButtonHint);
+	this->windowType = windowType;
+	setWindowFlags(Qt::Window | Qt::FramelessWindowHint);
 	setAttribute(Qt::WA_TranslucentBackground);
 	if (child != nullptr) {
 		ui->body->layout()->addWidget(child);
@@ -50,6 +50,8 @@ WindowFrame::WindowFrame(WindowType windowType, QWidget* parent, QWidget* child)
 		resize(child->size());
 	}
 	mIsCollapse = false;
+	//child->setWindowModality(Qt::ApplicationModal);
+
 }
 
 /// @brief Destructor for the WindowFrame class.
@@ -133,6 +135,8 @@ void WindowFrame::showHeaderContextMenu(const QPoint& pos) {
 /// @brief Handler for the "Close" button click signal.
 void WindowFrame::on_close_clicked()
 {
+	if(windowType == WindowType::MAINWINDOW)
+		close();
 	mMainBody->close();
 }
 
@@ -218,14 +222,14 @@ void WindowFrame::on_collapse_clicked() {
 /// @param event Pointer to the QMouseEvent object containing event information.
 void WindowFrame::mousePressEvent(QMouseEvent* event) {
 	if (event->buttons() == Qt::LeftButton) {
-		QWidget* widget = childAt(event->x(), event->y());
+		QWidget* widget = childAt(event->position().x(), event->position().y());
 		if (widget == ui->LHeader || widget == ui->title || widget == ui->icon) {
-			mPosition.setX(event->x());
-			mPosition.setY(event->y());
+			mPosition.setX(event->position().x());
+			mPosition.setY(event->position().y());
 		}
 	}
 	if (event->button() == Qt::RightButton) {
-		QWidget* widget = childAt(event->x(), event->y());
+		QWidget* widget = childAt(event->position().x(), event->position().y());
 		if (widget == ui->LHeader || widget == ui->title || widget == ui->icon) {
 			showHeaderContextMenu(event->pos());
 		}
@@ -238,7 +242,7 @@ void WindowFrame::mousePressEvent(QMouseEvent* event) {
 void WindowFrame::mouseMoveEvent(QMouseEvent* event) {
 	if (event->buttons() == Qt::LeftButton) {
 		if (mPosition.x() != 0 || mPosition.y() != 0) {
-			move(event->globalX() - mPosition.x(), event->globalY() - mPosition.y());
+			move(event->globalPosition().x() - mPosition.x(), event->globalPosition().y() - mPosition.y());
 		}
 	}
 }
@@ -253,9 +257,10 @@ void WindowFrame::mouseReleaseEvent(QMouseEvent* event) {
 
 /// @brief Handler for the mouse double-click event within the window.
 /// @param event Pointer to the mouse double-click event object (QMouseEvent).
-void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) {
+void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) 
+{
 	if (event->buttons() == Qt::LeftButton) {
-		QWidget* widget = childAt(event->x(), event->y());
+		QWidget* widget = childAt(event->position().x(), event->position().y());
 		if (widget == ui->LHeader) {
 			if (isMaximized()) {
 				switch (viewWindowState->appTheme)
@@ -297,44 +302,55 @@ void WindowFrame::mouseDoubleClickEvent(QMouseEvent* event) {
 /// @param message Pointer to a structure containing event information (void*).
 /// @param result Pointer to a variable for returning the result (long*).
 /// @return The return value, true if the event was handled, otherwise false.
-bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, long* result) {
+bool WindowFrame::nativeEvent(const QByteArray& eventType, void* message, qintptr* result)
+{
+
 	Q_UNUSED(eventType)
 		MSG* param = static_cast<MSG*>(message);
 
 	if (param->message == WM_NCHITTEST) {
-		QPoint globalPos(GET_X_LPARAM(param->lParam), GET_Y_LPARAM(param->lParam));
-		QPoint localPos = mapFromGlobal(globalPos);
+		// Ð¤Ð¸Ð·Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ ÐºÑƒÑ€ÑÐ¾Ñ€Ð°
+		QPoint nativePos(GET_X_LPARAM(param->lParam), GET_Y_LPARAM(param->lParam));
+
+		// ÐŸÐ¾Ð»ÑƒÑ‡Ð°ÐµÐ¼ devicePixelRatio Ð´Ð»Ñ Ð¾ÐºÐ½Ð° (Ð¼Ð¾Ð¶ÐµÑ‚ Ð±Ñ‹Ñ‚ÑŒ Ñ€Ð°Ð·Ð½Ñ‹Ð¼ Ð½Ð° Ñ€Ð°Ð·Ð½Ñ‹Ñ… ÑÐºÑ€Ð°Ð½Ð°Ñ…)
+		qreal dpr = this->windowHandle() ? this->windowHandle()->devicePixelRatio() : 1.0;
+
+		// ÐŸÑ€ÐµÐ¾Ð±Ñ€Ð°Ð·ÑƒÐµÐ¼ Ñ„Ð¸Ð·Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ Ð² Ð»Ð¾Ð³Ð¸Ñ‡ÐµÑÐºÐ¸Ðµ
+		QPoint logicalGlobalPos = nativePos / dpr;
+
+		// ÐŸÑ€ÐµÐ¾Ð±Ñ€Ð°Ð·ÑƒÐµÐ¼ Ð² Ð»Ð¾ÐºÐ°Ð»ÑŒÐ½Ñ‹Ðµ ÐºÐ¾Ð¾Ñ€Ð´Ð¸Ð½Ð°Ñ‚Ñ‹ Ð¾ÐºÐ½Ð°
+		QPoint localPos = mapFromGlobal(logicalGlobalPos);
 
 		int nX = localPos.x();
 		int nY = localPos.y();
 
 		if (nX >= 0 && nX < mBorderSize) {
 			if (nY >= 0 && nY < mBorderSize) {
-				*result = HTTOPLEFT;
+				*result = HTTOPLEFT; // top left
 			}
 			else if (nY >= height() - mBorderSize) {
-				*result = HTBOTTOMLEFT;
+				*result = HTBOTTOMLEFT; // bottom left
 			}
 			else {
-				*result = HTLEFT;
+				*result = HTLEFT; // left
 			}
 		}
-		else if (nX >= width() - mBorderSize) {
+		else if ((nX >= width() - mBorderSize) && nX <= width()) {
 			if (nY >= 0 && nY < mBorderSize) {
-				*result = HTTOPRIGHT;
+				*result = HTTOPRIGHT; // top right
 			}
 			else if (nY >= height() - mBorderSize) {
-				*result = HTBOTTOMRIGHT;
+				*result = HTBOTTOMRIGHT; // bottom right
 			}
 			else {
-				*result = HTRIGHT;
+				*result = HTRIGHT; // right
 			}
 		}
 		else if (nY >= 0 && nY < mBorderSize) {
-			*result = HTTOP;
+			*result = HTTOP; // top 
 		}
 		else if (nY >= height() - mBorderSize) {
-			*result = HTBOTTOM;
+			*result = HTBOTTOM; // bottom
 		}
 		else {
 			return QWidget::nativeEvent(eventType, message, result);
@@ -382,7 +398,11 @@ void WindowFrame::setTitle(WindowType windowType) {
 	switch (viewWindowState->appLanguage)
 	{
 	case RUSSIAN_LANG:
-		tmpStr = QString::fromLocal8Bit(" | Äëÿ ðàçðàáîò÷èêà");
+#ifdef QT5
+		tmpStr = QString(" | Ð”Ð»Ñ Ñ€Ð°Ð·Ñ€Ð°Ð±Ð¾Ñ‚Ñ‡Ð¸ÐºÐ°");
+#elif QT6
+
+#endif // QT5
 		break;
 	case ENGLISH_LANG:
 		tmpStr = " | For developer";
@@ -396,51 +416,63 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester" + tmpStr);
+			ui->title->setText(NAME_PROGRAM + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
-			ui->title->setText(QString::fromLocal8Bit("Êîíôèãóðàòîð") + tmpStr);
+			ui->title->setText(QString("ÐšÐ¾Ð½Ñ„Ð¸Ð³ÑƒÑ€Ð°Ñ‚Ð¾Ñ€") + tmpStr);
 			break;
 
 		case WindowType::IN_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Âõîäû | Ðó÷íîé ñòåíä") + tmpStr);
+			ui->title->setText(QString("Ð’Ñ…Ð¾Ð´Ñ‹ | Ð ÑƒÑ‡Ð½Ð¾Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::OUT_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Âûõîäû | Ðó÷íîé ñòåíä") + tmpStr);
+			ui->title->setText(QString("Ð’Ñ‹Ñ…Ð¾Ð´Ñ‹ | Ð ÑƒÑ‡Ð½Ð¾Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_MANUAL_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Ïîëíàÿ ïðîâåðêà | Ðó÷íîé ñòåíä") + tmpStr);
+			ui->title->setText(QString("ÐŸÐ¾Ð»Ð½Ð°Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° | Ð ÑƒÑ‡Ð½Ð¾Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::IN_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Âõîäû ðó÷íàÿ ïðîâåðêà | Àâòîìàòè÷åñêèé ñòåíä") + tmpStr);
+			ui->title->setText(QString("Ð’Ñ…Ð¾Ð´Ñ‹ Ñ€ÑƒÑ‡Ð½Ð°Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° | ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Âûõîäû ðó÷íàÿ ïðîâåðêà | Àâòîìàòè÷åñêèé ñòåíä") + tmpStr);
+			ui->title->setText(QString("Ð’Ñ‹Ñ…Ð¾Ð´Ñ‹ Ñ€ÑƒÑ‡Ð½Ð°Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° | ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Âõîäû àâòîìàòè÷åñêàÿ ïðîâåðêà | Àâòîìàòè÷åñêèé ñòåíä") + tmpStr);
+			ui->title->setText(QString("Ð’Ñ…Ð¾Ð´Ñ‹ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° | ÐÐ²Ñ‚ÑŒÐ¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Âûõîäû àâòîìàòè÷åñêàÿÿ ïðîâåðêà | Àâòîìàòè÷åñêèé ñòåíä") + tmpStr);
+			ui->title->setText(QString("Ð’Ñ‹Ñ…Ð¾Ð´Ñ‹ Ð°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° | ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::FULL_TEST_AUTO_STAND:
-			ui->title->setText(QString::fromLocal8Bit("Ïîëíàÿ àâòîìàòè÷åñêàÿ ïðîâåðêà | Àâòîìàòè÷åñêèé ñòåíä") + tmpStr);
+			ui->title->setText(QString("ÐŸÐ¾Ð»Ð½Ð°Ñ Ð°Ð²Ñ‚Ð³Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ°Ñ Ð¿Ñ€Ð¾Ð²ÐµÑ€ÐºÐ° | ÐÐ²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ ÑÑ‚ÐµÐ½Ð´") + tmpStr);
 			break;
 
 		case WindowType::MOREWINDOW:
-			ui->title->setText(QString::fromLocal8Bit("Ïîäðîáíåå...") + tmpStr);
+			ui->title->setText(QString("ÐŸÐ¾Ð´Ñ€Ð¾Ð±Ð½ÐµÐµ...") + tmpStr);
 			break;
 
 		case WindowType::REPORTWINDOW:
-			ui->title->setText(QString::fromLocal8Bit("Îò÷¸ò") + tmpStr);
+			ui->title->setText(QString("ÐžÑ‚Ñ‡Ñ‘Ñ‚") + tmpStr);
+			break;
+		case WindowType::VERIFICATIONTEST:
+			ui->title->setText(QString("Ð’Ð°Ð»Ð¸Ð´Ð°Ñ†Ð¸Ð¾Ð½Ð½Ñ‹Ð¹ Ñ‚ÐµÑÑ‚") + tmpStr);
+			break;
+		case WindowType::ERASEWINDOW:
+			ui->title->setText(QString("Ð¡Ñ‚Ð¸Ñ€Ð°Ð½Ð¸Ðµ") + tmpStr);
+			break;
+		case WindowType::SEMIAUTOMATICWINDOW:
+			ui->title->setText(QString("ÐŸÐ¾Ð»ÑƒÐ°Ð²Ñ‚Ð¾Ð¼Ð°Ñ‚Ð¸Ñ‡ÐµÑÐºÐ¸Ð¹ Ñ‚ÐµÑÑ‚") + tmpStr);
+			break;
+		case WindowType::MOREMANUALWINDOW:
+			ui->title->setText(QString("ÐŸÐ¾Ñ€Ð¾Ð³Ð¸") + tmpStr);
 			break;
 		}
 		break;
@@ -449,7 +481,7 @@ void WindowFrame::setTitle(WindowType windowType) {
 		switch (windowType)
 		{
 		case WindowType::MAINWINDOW:
-			ui->title->setText("PC-Tester" + tmpStr);
+			ui->title->setText(NAME_PROGRAM + tmpStr);
 			break;
 
 		case WindowType::CONFIGURATOR:
@@ -494,6 +526,18 @@ void WindowFrame::setTitle(WindowType windowType) {
 
 		case WindowType::REPORTWINDOW:
 			ui->title->setText(QString("Report") + tmpStr);
+			break;
+		case WindowType::VERIFICATIONTEST:
+			ui->title->setText(QString("Verification test") + tmpStr);
+			break;
+		case WindowType::ERASEWINDOW:
+			ui->title->setText(QString("Erase") + tmpStr);
+			break;
+		case WindowType::SEMIAUTOMATICWINDOW:
+			ui->title->setText(QString("Semi-automatic test") + tmpStr);
+			break;
+		case WindowType::MOREMANUALWINDOW:
+			ui->title->setText(QString("Threshold") + tmpStr);
 			break;
 		}
 	}

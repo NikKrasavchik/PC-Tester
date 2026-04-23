@@ -147,6 +147,12 @@ void MainWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.alwaysActiveStandButton =
@@ -159,6 +165,12 @@ void MainWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 25px;
 			font-weight: 700;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -179,6 +191,12 @@ void MainWindow::initLightStyleSheets()
 
 		.QPushButton:hover:pressed {
 			background-color: #767676;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -201,6 +219,12 @@ void MainWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #373737;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.mainButtonNoActive =
@@ -214,6 +238,12 @@ void MainWindow::initLightStyleSheets()
 			font-size: 20px;
 			font-weight: 600;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.mainSubstrateButtons =
@@ -221,6 +251,12 @@ void MainWindow::initLightStyleSheets()
 		.QWidget {
 			border-radius: 10px;
 			background-color: #D3D3D3;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -235,22 +271,39 @@ void MainWindow::initLightStyleSheets()
 
 	lightStyles.settingComboBox =
 		R"(
-		background-color: #B0B0B0;
-		border-radius: 10px;
+		QWidget {
+			background-color: #B0B0B0;
+			border-radius: 10px;
 
-		color: black;
-		font-family: Kartika;
-		font-size: 12px;
-		font-weight: 600;
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.settingSelectText =
 		R"(
+		QWidget {
 			color: black;
+			background-color: #F0F0F0;
 			line-height: 1px;
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 }
 
@@ -275,6 +328,12 @@ void MainWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+		QToolTip {
+        color: #bebebe;
+        background-color: #3A3A3A;
+		border-radius: 5px;
+        border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.alwaysActiveStandButton =
@@ -287,6 +346,12 @@ void MainWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 25px;
 			font-weight: 700;
+		}
+		QToolTip {
+        color: #bebebe;
+        background-color: #3A3A3A;
+		border-radius: 5px;
+        border: 1px solid #bebebe;
 		}
 	)";
 
@@ -307,6 +372,12 @@ void MainWindow::initDarkStyleSheets()
 
 		.QPushButton:hover:pressed {
 			background-color: #858383;
+		}
+		QToolTip {
+        color: #bebebe;
+        background-color: #3A3A3A;
+		border-radius: 5px;
+        border: 1px solid #bebebe;
 		}
 	)";
 
@@ -329,6 +400,12 @@ void MainWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+		QToolTip {
+        color: #bebebe;
+        background-color: #3A3A3A;
+		border-radius: 5px;
+        border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.mainButtonNoActive =
@@ -342,6 +419,12 @@ void MainWindow::initDarkStyleSheets()
 			font-size: 20px;
 			font-weight: 600;
 		}
+		QToolTip {
+        color: #bebebe;
+        background-color: #3A3A3A;
+		border-radius: 5px;
+        border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.mainSubstrateButtons =
@@ -350,6 +433,13 @@ void MainWindow::initDarkStyleSheets()
 			border-radius: 10px;
 			background-color: #414141;
 		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
+
 	)";
 
 	darkStyles.mainText =
@@ -363,22 +453,40 @@ void MainWindow::initDarkStyleSheets()
 
 	darkStyles.settingComboBox =
 		R"(
-		background-color: #535353;
-		border-radius: 10px;
+		QWidget {
+			background-color: #535353;
+			border-radius: 10px;
 
-		color: white;
-		font-family: Kartika;
-		font-size: 12px;
-		font-weight: 600;
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
+
 	)";
 
 	darkStyles.settingSelectText =
 		R"(
+		QWidget {
 			color: white;
+			background-color: #3A3A3A;
 			line-height: 1px;
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+			}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+			}
 	)";
 }
 
@@ -405,6 +513,12 @@ void TestWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowConnectButtonStyleConnect =
@@ -419,6 +533,12 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 13px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -435,13 +555,19 @@ void TestWindow::initLightStyleSheets()
 			font-size: 13px;
 			font-weight: 600;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowButtonStyle =
 		R"(
 		.QPushButton {
 			margin: 3px;
-
+			padding: 3px;
 			border-radius: 10px;
 			background-color: #B0B0B0;
 
@@ -458,17 +584,31 @@ void TestWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowTestTimeComboBox =
 		R"(
-		background-color: #B0B0B0;
-		border-radius: 10px;
+		QWidget {
+			background-color: #B0B0B0;
+			border-radius: 10px;
 
-		color: black;
-		font-family: Kartika;
-		font-size: 12px;
-		font-weight: 600;
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowTableWidget =
@@ -516,6 +656,16 @@ void TestWindow::initLightStyleSheets()
 			font-size: 12px;
 			font-weight: 600;
 		}
+		
+		QLineEdit {
+			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
 
 		QPushButton {
 			border-radius: 4px;
@@ -534,10 +684,17 @@ void TestWindow::initLightStyleSheets()
 		QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
-	lightStyles.testwindowNameLineEdit =
+	lightStyles.reportwindowNameLineEdit =
 		R"(
+		QWidget {
 			color: black;
 			background-color: #D3D3D3;
 
@@ -545,16 +702,70 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
+	)";
+
+	lightStyles.reportwindowSerialLineEdit =
+		R"(
+		QWidget {
+			color: black;
+			background-color: #D3D3D3;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			font-size: 15px;
+			font-weight: 600;
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowLableBlock =
 		R"(
+		QWidget {
 			color: black;
 
 			line-height: 1px;
 			font-family: Kartika;
 			font-size: 30px;
 			font-weight: 800;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
+	)";
+
+	lightStyles.eraseWindowLable =
+		R"(
+		QWidget {
+			color: black;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 15px;
+			font-weight: 500;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.activeTableButton =
@@ -569,6 +780,12 @@ void TestWindow::initLightStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 400;
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 
@@ -593,6 +810,12 @@ void TestWindow::initLightStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #767676;
 		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
+		}
 	)";
 
 	lightStyles.testwindowManualCheckBox =
@@ -610,6 +833,12 @@ void TestWindow::initLightStyleSheets()
 		.QCheckBox::indicator:checked {
 			border: 3px solid rgb(135, 135, 135);
 			background-color: rgb(124, 199, 112);
+		}
+		QToolTip {
+			color: #3f3f3f;
+			background-color: #F0F0F0;
+			border-radius: 5px;
+			border: 1px solid #3f3f3f;
 		}
 	)";
 }
@@ -637,6 +866,12 @@ void TestWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowConnectButtonStyleConnect =
@@ -651,6 +886,12 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 13px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
 		}
 	)";
 
@@ -667,13 +908,19 @@ void TestWindow::initDarkStyleSheets()
 			font-size: 13px;
 			font-weight: 600;
 		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowButtonStyle =
 		R"(
 		.QPushButton {
 			margin: 3px;
-
+			padding: 3px;
 			border-radius: 10px;
 			background-color: #535353;
 
@@ -690,17 +937,31 @@ void TestWindow::initDarkStyleSheets()
 		.QPushButton:hover:pressed {
 			background-color: #858383;
 		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowTestTimeComboBox =
 		R"(
-		background-color: #535353;
-		border-radius: 10px;
+		QWidget {
+			background-color: #535353;
+			border-radius: 10px;
 
-		color: white;
-		font-family: Kartika;
-		font-size: 12px;
-		font-weight: 600;
+			color: white;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowTableWidget =
@@ -745,27 +1006,7 @@ void TestWindow::initDarkStyleSheets()
 			font-weight: 600;
 		}
 
-		QPushButton {
-			border-radius: 4px;
-			background-color: #474747;
-
-			color: white;
-			font-family: Kartika;
-			font-size: 13px;
-			font-weight: 600;
-		}
-
-		QPushButton:hover {
-			background-color: #6E6E6E;
-		}
-
-		QPushButton:hover:pressed {
-			background-color: #858383;
-		}
-	)";
-
-	darkStyles.testwindowNameLineEdit =
-		R"(
+		QLineEdit {
 			color: white;
 			background-color: #414141;
 
@@ -773,16 +1014,107 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 12px;
 			font-weight: 600;
+		}
+		
+		QPushButton {
+			border-radius: 4px;
+			background-color: #949494;
+
+			color: black;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 400;
+		}
+
+		QPushButton:hover {
+			background-color: #9D9D9D;
+		}
+		QPushButton:hover:pressed {
+			background-color: #858383;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
+			
+	)";
+
+	darkStyles.reportwindowNameLineEdit =
+		R"(
+		QWidget {
+			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
+	)";
+
+	darkStyles.reportwindowSerialLineEdit =
+		R"(
+		QWidget {
+			color: white;
+			background-color: #414141;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 12px;
+			font-weight: 600;
+		}
+		QToolTip {
+			font-size: 15px;
+			font-weight: 600;
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.testwindowLableBlock =
 		R"(
+		QWidget {
 			color: white;
 
 			line-height: 1px;
 			font-family: Kartika;
 			font-size: 30px;
 			font-weight: 800;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
+	)";
+
+	darkStyles.eraseWindowLable =
+		R"(
+		QWidget {
+			color: white;
+
+			line-height: 1px;
+			font-family: Kartika;
+			font-size: 15px;
+			font-weight: 500;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
+		}
 	)";
 
 	darkStyles.activeTableButton =
@@ -797,6 +1129,12 @@ void TestWindow::initDarkStyleSheets()
 			font-family: Kartika;
 			font-size: 13px;
 			font-weight: 600;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
 		}
 	)";
 
@@ -820,6 +1158,12 @@ void TestWindow::initDarkStyleSheets()
 
 		.QPushButton:hover:pressed {
 			background-color: #858383;
+		}
+		QToolTip {
+			color: #bebebe;
+			background-color: #3A3A3A;
+			border-radius: 5px;
+			border: 1px solid #bebebe;
 		}
 	)";
 }

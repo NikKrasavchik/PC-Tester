@@ -1,8 +1,23 @@
 #pragma once
+#define NAME_PROGRAM "PC-Tester_v6.3"
+#define PASSWORD "Zaqxcvbnm220033!!NAMI"
 
 //#define DEBUG
 //#define FOR_DEVELOPER
 //#define DEBUG_OUTPUT
+
+//#define VERIFACATION_TEST
+#define SEMIAUTOMATIC_TEST
+//#define SMXX_TEST
+
+
+#ifdef SMXX_TEST
+#define COUNT_PCB_STAND 2
+#else
+
+#define COUNT_PCB_STAND 1
+#endif // SMXX_TEST
+
 
 #define MIN_SCREEN_WIDTH    800
 #define MIN_SCREEN_HEIGHT   600
@@ -19,8 +34,10 @@
 #define RUSSIAN_LANG		0
 #define ENGLISH_LANG		1
 
+
 #define KVASER				0
 #define MARATHON			1
+#define PCAN				2
 
 #define FREQUENCY_50K		50000
 #define FREQUENCY_100K		100000
@@ -85,8 +102,10 @@ struct Styles
 	QString testwindowConnectButtonStyleDisconnected;
 	QString testwindowTestTimeComboBox;
 	QString testwindowTableWidget;
-	QString testwindowNameLineEdit;
+	QString reportwindowNameLineEdit;
+	QString reportwindowSerialLineEdit;
 	QString testwindowLableBlock;
+	QString eraseWindowLable;
 	QString testwindowManualCheckBox;
 
 	// TABLEBUTTON
@@ -99,32 +118,21 @@ struct Styles
 extern Styles darkStyles;
 extern Styles lightStyles;
 
-struct Size
+
+enum class ModelAdapter
 {
-	int width;
-	int height;
+	EMPTY = NOT_SET,
+	Kvase,
+	Marathon,
+	PCan
 };
 
 enum class TestBlockName
 {
 	EMPTY = NOT_SET,
 	DTM,
-	BCM
-};
-
-struct ViewWindowState
-{
-	bool appTheme;
-	bool appLanguage;
-	Size appSize;
-	QString actualVersion;
-	TestBlockName selectedBlock;
-};
-
-struct StandStatusFlags
-{
-	bool StatusConnected; // false - стенд отключён			true - стенд подключён
-	bool StatusTest;	  // false - тест не выполняеться	false - тест выполняется
+	BCM,
+	SMXX
 };
 
 enum class WindowType
@@ -140,7 +148,11 @@ enum class WindowType
 	OUT_AUTO_TEST_AUTO_STAND,
 	FULL_TEST_AUTO_STAND,
 	MOREWINDOW,
-	REPORTWINDOW
+	REPORTWINDOW,
+	VERIFICATIONTEST,
+	ERASEWINDOW,
+	SEMIAUTOMATICWINDOW,
+	MOREMANUALWINDOW
 };
 
 enum class TypeStand
@@ -166,6 +178,24 @@ enum class ConnectorId
 	K
 };
 
+enum class SortType
+{
+	SortIndex,
+	SortComponents,
+	SortType
+};
+
+enum class DiagInformation
+{
+	Application_NAME,
+	Calibration_NAME,
+	Equipment_NAME,
+	Manufacture_DATE,
+	Hardware_NUMBER,
+	Part_NUMBER,
+	Serial_NUMBER
+};
+
 enum class TypeResetTableButtonsTheme
 {
 	STAND_DISCONNECTED,
@@ -175,14 +205,17 @@ enum class TypeResetTableButtonsTheme
 
 #define PRIMARY_CONNECTOR_SYMBOL	64
 
-#define TYPE_COUNT					7
+#define TYPE_COUNT					10
 
 #define TYPE_DIGITAL				0
 #define TYPE_PWM					1
 #define TYPE_VNH					2
 #define TYPE_ANALOG					3
 #define TYPE_HALL					4
-#define TYPE_HLD					5
+#define TYPE_HLD					5	
+#define TYPE_CAN					6	
+#define TYPE_LIN					7	
+#define TYPE_SLEEP
 
 enum class TypeCable
 {
@@ -193,46 +226,74 @@ enum class TypeCable
 	DIG_OUT,
 	PWM_OUT,
 	VNH_OUT,
-	HLD_OUT
+	HLD_OUT,
+	CAN_OUT,
+	LIN_OUT,
+	SLEEP
 };
 
 #define DIRECTION_OUT			0
 #define DIRECTION_IN			1
 
+
+struct Size
+{
+	int width;
+	int height;
+};
+
+struct ViewWindowState
+{
+	bool appTheme;
+	bool appLanguage;
+	Size appSize;
+	QString actualVersion;
+	TestBlockName selectedBlock;
+};
 extern ViewWindowState* viewWindowState;
+
+struct StandStatusFlags
+{
+	bool StatusConnectedBlock; // false - стенд отключён			true - стенд подключён
+	bool StatusConnectedStand[COUNT_PCB_STAND];
+	bool StatusConnectedStandSumm;
+	bool StatusTest;	  // false - тест не выполняеться	false - тест выполняется
+};
+
 
 namespace Warnings
 {
 	enum class MainWindow
 	{
-		TEST_ACCESS_FILE_SEL,
-		TEST_ACCESS_FREQUENCY_SEL,
-		TEST_ACCESS_ADAPTER_SEL,
-		ADAPTERS_CHANGED,
-		SIZE_CABLE_NUL,
-		NOT_SELECTED_BLOCK,
-		FILE_NOT_FOUND
+		TEST_ACCESS_FILE_SEL,		// warning 0x001
+		TEST_ACCESS_FREQUENCY_SEL,	// warning 0x002
+		TEST_ACCESS_ADAPTER_SEL,	// warning 0x003
+		ADAPTERS_CHANGED,			// warning 0x004
+		SIZE_CABLE_NUL,				// warning 0x005
+		NOT_SELECTED_BLOCK,			// warning 0x006
+		FILE_NOT_FOUND				// warning 0x007
 	};
 
 	enum class ReportWindow
 	{
-		XLSX_SAVE_ERROR,
-		TYPE_CHANGE_ERROR,
-		INCORRECT_TEST_TYPE,
-		EMPTY_INITIALS,
-		EMPTY_SERIAL
+		XLSX_SAVE_ERROR,			// warning 0x101
+		TYPE_CHANGE_ERROR,			// warning 0x102
+		INCORRECT_TEST_TYPE,		// warning 0x103
+		EMPTY_INITIALS,				// warning 0x104
+		EMPTY_SERIAL				// warning 0x105
 	};
 
 	enum class MoreWindow
 	{
-		OPEN_FILE_ERROR,
-		FILE_NOT_FOUND
+		FILE_NOT_FOUND,				// warning 0x201
+		OPEN_FILE_ERROR,				// warning 0x202
+		NO_ACCESS_FILE				// warning 0x203
 	};
 
 	enum class TestWindow
 	{
-		OPEN_MORE_WINDOW,
-		INCORRECT_TEST_TYPE
+		OPEN_MORE_WINDOW,			// warning 0x301
+		INCORRECT_TEST_TYPE			// warning 0x302
 	};
 }
 
@@ -241,7 +302,9 @@ const QString appstylePath = ":/recources/style/appstyles.qss";
 const QString appLogoPath = ":/Dark/icons/App_Logo_White.png";
 
 #define COLOR_RED				"#FF8686"
-#define COLOR_GREEN				"#7CC770"
+#define COLOR_LIGNT_RED			"#EB634E"
+#define COLOR_GREEN				"#37EB00"
+#define COLOR_LIGHT_GREEN		"#7CC770"
 #define COLOR_WHITE				"#FFFFFF"
 #define COLOR_GREY				"#979797"
 #define COLOR_LIGHT_GREY		"#E8E8E8"

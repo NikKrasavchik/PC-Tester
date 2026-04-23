@@ -1,47 +1,113 @@
 #include "can.h"
 #include "Cable.h"
 #include "qmap.h"
+#include <iostream>
+#include <fstream>
 
 Can::modelAdapter *Can::kvaser = new modelAdapter;
 Can::modelAdapter *Can::marathon = new modelAdapter;
+Can::modelAdapter *Can::pcan = new modelAdapter;
 canHandle Can::hnd = 0;
+HANDLE Can::hEventPcan = 0;
+QTimer* Can::wakeBoot = new QTimer();
 QMap<int, std::vector<std::pair<Cable, int>>> Can::mapCable;
-bool Can::b_flagStatusConnection;
+bool Can::b_flagStatusConnectionBlock;
+bool Can::testSleep = false;
 
 Can::Can()
 {
 	b_adapterSelected = false;
 	b_frequencySelected = false;
-	b_flagStatusConnection = false;
+	b_flagStatusConnectionBlock = false;
 
 	counterConnectMsg = 0;
 	windowType = WindowType();
 
 	timerReadCan = new QTimer();
+	timerReadCan->setTimerType(Qt::PreciseTimer);
 	connect(timerReadCan, SIGNAL(timeout()), this, SLOT(Timer_ReadCan()));
-	timerCheckStandConnection = new QTimer();
-	connect(timerCheckStandConnection, SIGNAL(timeout()), this, SLOT(Timer_CheckStandConnection()));
-	timerSendConnectMsg = new QTimer();
-	connect(timerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsg()));
+	timerCheckBlockConnection = new QTimer();
+	connect(timerCheckBlockConnection, SIGNAL(timeout()), this, SLOT(Timer_CheckBlockConnection()));
+
+	for (int i = 0; i < COUNT_PCB_STAND; i++)
+	{
+		standConnect[i].TimerSendConnectMsg = new QTimer();
+		standConnect[i].TimerSendConnectMsg->setTimerType(Qt::PreciseTimer);
+		//standConnect[i].timerIdSend = standConnect[i].TimerSendConnectMsg->timerId();
+		connect(standConnect[i].TimerSendConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_SendConnectMsgStand()));
+
+		standConnect[i].TimerCheckConnectMsg = new QTimer();
+		//standConnect[i].timerIdCheck = standConnect[i].TimerCheckConnectMsg->timerId();
+		connect(standConnect[i].TimerCheckConnectMsg, SIGNAL(timeout()), this, SLOT(Timer_CheckStandConnection()));
+	}
+
+
+}
+
+void Can::checkInformationBus(int canId)
+{
+	if (b_flagStatusConnectionBlock && canId == 1)
+	{
+		mapCable[canId][0].second = -1;
+		return;
+	}
+	int msgSend[8] = { 1, 0, 0, 0, 0, 0, 0, 0 };
+	if(canId > 0x7FF)
+		writeCan(canId - 1, msgSend, canMSG_EXT);
+	else
+		writeCan(canId - 1, msgSend);
+	mapCable[canId][0].second = 3;
+
+}
+
+void Can::verificationStartStop(bool seq1, bool seq2, bool seq3, bool seq4, bool seq5, bool seq6, bool seq7, bool seq8, bool seq9, bool seq10)
+{
+	int byte1 = 0;
+	int byte2 = 0;
+	if (seq1)
+		byte1 += 128;
+	if (seq2)
+		byte1 += 64;
+	if (seq3)
+		byte1 += 32;
+	if (seq4)
+		byte1 += 16;
+	if (seq5)
+		byte1 += 8;
+	if (seq6)
+		byte1 += 4;
+	if (seq7)
+		byte1 += 2;
+	if (seq8)
+		byte1 += 1;
+	if (seq9)
+		byte2 += 128;
+	if (seq10)
+		byte2 += 64;
+
+	int msg[8] = { 0xBC, byte1, byte2, 0x0, 0x0, 0x0, 0x0, 0x0 };
+
+	writeCan(0x55, msg);
 }
 
 bool Can::initCan(WindowType windowType)
 {
+	int status = -1;
 	if (!b_adapterSelected)
 		return false;
 	
 	this->windowType = windowType;
-
+	testSleep = false;
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
-		// Дописать проверку ошибок kvasera
-		canInitializeLibrary(); // Инициализация api kvaser
-		hnd = canOpenChannel(kvaser->activeAdapter, canOPEN_ACCEPT_VIRTUAL); // Открытие канала связи по CAN.
-		canSetBusParams(hnd, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Установка параматров на CAN-шину.
-		canBusOn(hnd); // Запуск CAN-шины
+		// Г„Г®ГЇГЁГ±Г ГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г®ГёГЁГЎГ®ГЄ kvasera
+		canInitializeLibrary(); // Г€Г­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГї api kvaser
+		hnd = canOpenChannel(kvaser->activeAdapter, canOPEN_ACCEPT_VIRTUAL); // ГЋГІГЄГ°Г»ГІГЁГҐ ГЄГ Г­Г Г«Г  Г±ГўГїГ§ГЁ ГЇГ® CAN.
+		canSetBusParams(hnd, kvaser->p_frequency.first, 0, 0, 0, 0, 0); // Г“Г±ГІГ Г­Г®ГўГЄГ  ГЇГ Г°Г Г¬Г ГІГ°Г®Гў Г­Г  CAN-ГёГЁГ­Гі.
+		canBusOn(hnd); // Г‡Г ГЇГіГ±ГЄ CAN-ГёГЁГ­Г»
 	}
-	else
-	{ // Дописать проверку ошибок Marathon
+	else if(marathon->activeAdapter != NOT_SET)
+	{ // Г„Г®ГЇГЁГ±Г ГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г®ГёГЁГЎГ®ГЄ Marathon
 		auto statusTmp = CiInit();
 		statusTmp = CiOpen( marathon->activeAdapter, CIO_CAN11);
 		statusTmp = CiSetBaud(marathon->activeAdapter, marathon->p_frequency.first, marathon->p_frequency.second);
@@ -52,8 +118,16 @@ bool Can::initCan(WindowType windowType)
 		statusTmp = CiRcQueThreshold(marathon->activeAdapter, CI_CMD_SET, &threshold);
 		statusTmp = CiStart(marathon->activeAdapter);
 	}
+	else if (pcan->activeAdapter != NOT_SET)
+	{
+		status = CAN_Initialize(pcan->handlerChanel[pcan->activeAdapter], pcan->p_frequency.first);
+		hEventPcan = CreateEvent(NULL, FALSE, FALSE, NULL);
+		CAN_SetValue(pcan->handlerChanel[pcan->activeAdapter], PCAN_RECEIVE_EVENT, &hEventPcan, sizeof(hEventPcan));
+	}
 
-	timerReadCan->start(2); // И запустим таймер]
+
+
+	timerReadCan->start(2); // Г€ Г§Г ГЇГіГ±ГІГЁГ¬ ГІГ Г©Г¬ГҐГ°]
 	switch (windowType)
 	{
 	case WindowType::MAINWINDOW:
@@ -61,7 +135,8 @@ bool Can::initCan(WindowType windowType)
 	case WindowType::IN_TEST_MANUAL_STAND:
 	case WindowType::OUT_TEST_MANUAL_STAND:
 	case WindowType::FULL_TEST_MANUAL_STAND:
-		timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100); // И запустим таймер
+	case WindowType::VERIFICATIONTEST:
+		timerCheckBlockConnection->start(TIME_CHECKCONNECTION + 100); // Г€ Г§Г ГЇГіГ±ГІГЁГ¬ ГІГ Г©Г¬ГҐГ°
 		break;
 
 	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
@@ -69,8 +144,12 @@ bool Can::initCan(WindowType windowType)
 	case WindowType::IN_AUTO_TEST_AUTO_STAND:
 	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
 	case WindowType::FULL_TEST_AUTO_STAND:
-		timerSendConnectMsg->start(100); // И запустим таймер]
-		timerCheckStandConnection->start(TIME_CHECKCONNECTION); // И запустим таймер
+		for (int i = 0; i < COUNT_PCB_STAND; i++)
+		{
+			standConnect[i].TimerSendConnectMsg->start(300); // Г€ Г§Г ГЇГіГ±ГІГЁГ¬ ГІГ Г©Г¬ГҐГ°]
+			standConnect[i].timerIdSend = standConnect[i].TimerSendConnectMsg->timerId();
+		}
+		timerCheckBlockConnection->start(TIME_CHECKCONNECTION); // Г€ Г§Г ГЇГіГ±ГІГЁГ¬ ГІГ Г©Г¬ГҐГ°
 		break;
 
 	default:
@@ -87,16 +166,17 @@ bool Can::initCan(WindowType windowType)
 // ------------------------------------
 // Name: deinitCan
 // Return: bool
-//			false - в случае если b_adapterSelected == false, или ошибку драйверов адаптера.	
-//			true  - в слу	чае если can прошёл деинициализацию.
+//			false - Гў Г±Г«ГіГ·Г ГҐ ГҐГ±Г«ГЁ b_adapterSelected == false, ГЁГ«ГЁ Г®ГёГЁГЎГЄГі Г¤Г°Г Г©ГўГҐГ°Г®Гў Г Г¤Г ГЇГІГҐГ°Г .	
+//			true  - Гў Г±Г«Гі	Г·Г ГҐ ГҐГ±Г«ГЁ can ГЇГ°Г®ГёВёГ« Г¤ГҐГЁГ­ГЁГ¶ГЁГ Г«ГЁГ§Г Г¶ГЁГѕ.
 // ------------------------------------
 bool Can::deinitCan()
 {
 	timerReadCan->stop();
-	timerSendConnectMsg->stop();
-	timerCheckStandConnection->stop();
+	for (int i = 0; i < COUNT_PCB_STAND; i++)
+		standConnect[i].TimerSendConnectMsg->stop();
+	timerCheckBlockConnection->stop();
 
-	b_flagStatusConnection = false;
+	b_flagStatusConnectionBlock = false;
 
 	measureds.clear();
 	
@@ -104,29 +184,35 @@ bool Can::deinitCan()
 		return false;
 	if (kvaser->activeAdapter != NOT_SET) // kvaser 
 	{
-		canBusOff(hnd);  // Дописать проверку ошибок kvasera
+		canBusOff(hnd);  // Г„Г®ГЇГЁГ±Г ГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г®ГёГЁГЎГ®ГЄ kvasera
 		canClose(hnd);
 	}
-	else
+	else if(marathon->activeAdapter != NOT_SET)
 	{
-		CiStop(marathon->activeAdapter);  // Дописать проверку ошибок Marathon
+		CiStop(marathon->activeAdapter);  // Г„Г®ГЇГЁГ±Г ГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г®ГёГЁГЎГ®ГЄ Marathon
 		CiClose(marathon->activeAdapter);
+	}
+	else if (pcan->activeAdapter != NOT_SET)
+	{
+		CAN_Uninitialize(pcan->activeAdapter);
 	}
 	return true;
 }
   
-bool Can::writeCan(int id, int* msg)
+bool Can::writeCan(int id, int* msg, unsigned int flags)
 {
+	int status = -1;
+
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned char msgSendKvase[8];
 		for (int i = 0; i < 8; i++)
 			msgSendKvase[i] = msg[i];
-
-		canWrite(hnd, id, msgSendKvase, 8, 0); // Дописать проверку ошибок kvasera
+		
+		canWrite(hnd, id, msgSendKvase, 8, flags); // Г„Г®ГЇГЁГ±Г ГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г®ГёГЁГЎГ®ГЄ kvasera
 		return true;
 	}
-	else
+	else if(marathon->activeAdapter != NOT_SET)
 	{
 		static canmsg_t msgTransmit;
 		msgTransmit.id = id;
@@ -134,8 +220,24 @@ bool Can::writeCan(int id, int* msg)
 		for (int i = 0; i < 8; i++)
 			msgTransmit.data[i] = msg[i];
 		
-		auto statusTmp = CiTransmit(marathon->activeAdapter, &msgTransmit); // Дописать проверку ошибок Marathon
+		auto statusTmp = CiTransmit(marathon->activeAdapter, &msgTransmit); // Г„Г®ГЇГЁГ±Г ГІГј ГЇГ°Г®ГўГҐГ°ГЄГі Г®ГёГЁГЎГ®ГЄ Marathon
 		return true;
+	}
+	else if (pcan->activeAdapter != NOT_SET)
+	{
+
+		TPCANMsg msgPCAN;
+		msgPCAN.ID = id;
+		msgPCAN.LEN = 8;
+		if (id <= 0x7FF)
+			msgPCAN.MSGTYPE = PCAN_MESSAGE_STANDARD;
+		else
+			msgPCAN.MSGTYPE = PCAN_MESSAGE_EXTENDED;
+
+		for (int i = 0; i < 8; i++)
+			msgPCAN.DATA[i] = msg[i];
+		 status = CAN_Write(pcan->handlerChanel[pcan->activeAdapter], &msgPCAN);
+
 	}
 	return false;
 }
@@ -143,17 +245,18 @@ bool Can::writeCan(int id, int* msg)
 // ------------------------------------
 // Name: readWaitCan
 // Variables:
-//			int* id - указатель на переменную в которую запишеться id пришедшего can-сообщения.
-//			int* msg - указатель на переменную в которую запишеться сообщение пришедшее из can.
-//			int  timeout - время в миллисикундах сколько мы будем ждать сообщение из can-шыны.
+//			int* id - ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  ГЇГҐГ°ГҐГ¬ГҐГ­Г­ГіГѕ Гў ГЄГ®ГІГ®Г°ГіГѕ Г§Г ГЇГЁГёГҐГІГјГ±Гї id ГЇГ°ГЁГёГҐГ¤ГёГҐГЈГ® can-Г±Г®Г®ГЎГ№ГҐГ­ГЁГї.
+//			int* msg - ГіГЄГ Г§Г ГІГҐГ«Гј Г­Г  ГЇГҐГ°ГҐГ¬ГҐГ­Г­ГіГѕ Гў ГЄГ®ГІГ®Г°ГіГѕ Г§Г ГЇГЁГёГҐГІГјГ±Гї Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ ГЇГ°ГЁГёГҐГ¤ГёГҐГҐ ГЁГ§ can.
+//			int  timeout - ГўГ°ГҐГ¬Гї Гў Г¬ГЁГ«Г«ГЁГ±ГЁГЄГіГ­Г¤Г Гµ Г±ГЄГ®Г«ГјГЄГ® Г¬Г» ГЎГіГ¤ГҐГ¬ Г¦Г¤Г ГІГј Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ ГЁГ§ can-ГёГ»Г­Г».
 // Return: bool
-//			false - в случае если за время timeout не пришло сообщение на can-шину.
-//			true  - в случае если за время timeout пришло сообшение на can-шину.
+//			false - Гў Г±Г«ГіГ·Г ГҐ ГҐГ±Г«ГЁ Г§Г  ГўГ°ГҐГ¬Гї timeout Г­ГҐ ГЇГ°ГЁГёГ«Г® Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г­Г  can-ГёГЁГ­Гі.
+//			true  - Гў Г±Г«ГіГ·Г ГҐ ГҐГ±Г«ГЁ Г§Г  ГўГ°ГҐГ¬Гї timeout ГЇГ°ГЁГёГ«Г® Г±Г®Г®ГЎГёГҐГ­ГЁГҐ Г­Г  can-ГёГЁГ­Гі.
 // ------------------------------------
 canmsg_t msgReceive;
 bool Can::readWaitCan(int* id, int* msg, int timeout)
 {
-	//Can::coun++;
+	int status = -1;
+
 	if (kvaser->activeAdapter != NOT_SET) // kvaser
 	{
 		unsigned int* dlc = new unsigned int(), *flags = new unsigned int();
@@ -177,7 +280,7 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 		else
 			return false;
 	}
-	else
+	else if(marathon->activeAdapter != NOT_SET) // narathon
 	{
 		msgReceive.id = 0;
 		auto statusTmp = CiRead(marathon->activeAdapter, &msgReceive, 1);
@@ -191,14 +294,22 @@ bool Can::readWaitCan(int* id, int* msg, int timeout)
 		else
 			return false;
 	}
+	else if (pcan->activeAdapter != NOT_SET) // pcan
+	{
+
+		TPCANMsg msgPCAN;
+		if (CAN_Read(pcan->handlerChanel[pcan->activeAdapter], &msgPCAN, NULL) != 32)
+		{
+			*id = msgPCAN.ID;
+			for (int i = 0; i < 8; i++)
+				msg[i] = msgPCAN.DATA[i];
+			return true;
+		}
+		return false;
+	}
+	return false;
 }
 
-// ------------------------------------
-// Name: setSelectedAdapterNeme
-// Variables: 
-//			QString adapter - имя адаптера который будет выбран в качестве рабочего.
-//			Значения обезательно должно соответсвовать какому либо элементу полученному из метода getNameAdapters().
-// ------------------------------------
 void Can::setSelectedAdapterNeme(QString adapter)
 {
 	kvaser->activeAdapter = NOT_SET;
@@ -210,7 +321,7 @@ void Can::setSelectedAdapterNeme(QString adapter)
 		return;
 	}
 
-	for (int i = 0; i < kvaser->nameAdapters.size(); i++) // Проходим по kvaser
+	for (int i = 0; i < kvaser->nameAdapters.size(); i++)
 		if (kvaser->nameAdapters[i] == adapter)
 		{
 			kvaser->activeAdapter = i;
@@ -218,10 +329,17 @@ void Can::setSelectedAdapterNeme(QString adapter)
 			return;
 		}
 
-	for (int i = 0; i < marathon->nameAdapters.size(); i++) // Проходим по marathon
+	for (int i = 0; i < marathon->nameAdapters.size(); i++)
 		if (marathon->nameAdapters[i] == adapter)
 		{
 			marathon->activeAdapter = i;
+			b_adapterSelected = true;
+			return;
+		}
+	for (int i = 0; i < pcan->nameAdapters.size(); i++)
+		if (pcan->nameAdapters[i] == adapter)
+		{
+			pcan->activeAdapter = i;
 			b_adapterSelected = true;
 			return;
 		}
@@ -229,26 +347,40 @@ void Can::setSelectedAdapterNeme(QString adapter)
 	b_adapterSelected = false;
 }
 
+QString Can::getSelectedAdapterNeme()
+{
+	if (kvaser->activeAdapter != NOT_SET)
+		return QString(kvaser->nameAdapters[kvaser->activeAdapter]);
+	else if (marathon->activeAdapter != NOT_SET)
+		return QString(marathon->nameAdapters[marathon->activeAdapter]);
+	else if (pcan->activeAdapter != NOT_SET)
+		return QString(pcan->nameAdapters[pcan->activeAdapter]);
+	else
+		return QString();
+}
+
 // ------------------------------------
 // Name: setSelectedFrequency
-//		Установка выбранной частоты для работы can
+//		Г“Г±ГІГ Г­Г®ГўГЄГ  ГўГ»ГЎГ°Г Г­Г­Г®Г© Г·Г Г±ГІГ®ГІГ» Г¤Г«Гї Г°Г ГЎГ®ГІГ» can
 // Variables: 
-//			Qstring frequency: Выбираемая частота.
+//			Qstring frequency: Г‚Г»ГЎГЁГ°Г ГҐГ¬Г Гї Г·Г Г±ГІГ®ГІГ .
 // ------------------------------------
 void Can::setSelectedFrequency(QString frequency)
 {
 	if (frequency == "...")
 	{
-		kvaser->p_frequency = conversionFrequency(0, KVASER);
-		marathon->p_frequency = conversionFrequency(0, MARATHON);
+		kvaser->p_frequency = conversionFrequency(0, ModelAdapter::Kvase);
+		marathon->p_frequency = conversionFrequency(0, ModelAdapter::Marathon);
+		marathon->p_frequency = conversionFrequency(0, ModelAdapter::PCan);
 
 		b_frequencySelected = false;
 	}
 	else
 	{
-		frequency.remove(-4, 5);																// Обрезаем конец строки
-		kvaser->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), KVASER);		// Удаляем пробелы в строке, переводим строку в int, записываем частоту
-		marathon->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), MARATHON);
+		frequency.remove(-4, 5);																// ГЋГЎГ°ГҐГ§Г ГҐГ¬ ГЄГ®Г­ГҐГ¶ Г±ГІГ°Г®ГЄГЁ
+		kvaser->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::Kvase);		// Г“Г¤Г Г«ГїГҐГ¬ ГЇГ°Г®ГЎГҐГ«Г» Гў Г±ГІГ°Г®ГЄГҐ, ГЇГҐГ°ГҐГўГ®Г¤ГЁГ¬ Г±ГІГ°Г®ГЄГі Гў int, Г§Г ГЇГЁГ±Г»ГўГ ГҐГ¬ Г·Г Г±ГІГ®ГІГі
+		marathon->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::Marathon);
+		pcan->p_frequency = conversionFrequency(frequency.remove(' ').toInt(), ModelAdapter::PCan);
 
 		b_frequencySelected = true;
 	}
@@ -257,27 +389,29 @@ void Can::setSelectedFrequency(QString frequency)
 // ------------------------------------
 // Name: getNameAdapters
 // Return: std::vector<QString>
-//			Массив названий Can-адаптеров которые подключены к ПК и мы можем с ними работат.
-//			Примечание:
-//				У Kvaser есть косяк с которым не поборолись. Kvaser адаптер отключаем от ПК. Запускаем программу. 
-//				Подключаем адаптер. По идее он должен появится (как это делает marathon), но так это не происходит.
+//			ГЊГ Г±Г±ГЁГў Г­Г Г§ГўГ Г­ГЁГ© Can-Г Г¤Г ГЇГІГҐГ°Г®Гў ГЄГ®ГІГ®Г°Г»ГҐ ГЇГ®Г¤ГЄГ«ГѕГ·ГҐГ­Г» ГЄ ГЏГЉ ГЁ Г¬Г» Г¬Г®Г¦ГҐГ¬ Г± Г­ГЁГ¬ГЁ Г°Г ГЎГ®ГІГ ГІ.
+//			ГЏГ°ГЁГ¬ГҐГ·Г Г­ГЁГҐ:
+//				Г“ Kvaser ГҐГ±ГІГј ГЄГ®Г±ГїГЄ Г± ГЄГ®ГІГ®Г°Г»Г¬ Г­ГҐ ГЇГ®ГЎГ®Г°Г®Г«ГЁГ±Гј. Kvaser Г Г¤Г ГЇГІГҐГ° Г®ГІГЄГ«ГѕГ·Г ГҐГ¬ Г®ГІ ГЏГЉ. Г‡Г ГЇГіГ±ГЄГ ГҐГ¬ ГЇГ°Г®ГЈГ°Г Г¬Г¬Гі. 
+//				ГЏГ®Г¤ГЄГ«ГѕГ·Г ГҐГ¬ Г Г¤Г ГЇГІГҐГ°. ГЏГ® ГЁГ¤ГҐГҐ Г®Г­ Г¤Г®Г«Г¦ГҐГ­ ГЇГ®ГїГўГЁГІГ±Гї (ГЄГ ГЄ ГЅГІГ® Г¤ГҐГ«Г ГҐГІ marathon), Г­Г® ГІГ ГЄ ГЅГІГ® Г­ГҐ ГЇГ°Г®ГЁГ±ГµГ®Г¤ГЁГІ.
 // ------------------------------------
 std::vector<QString> Can::getNameAdapters()
 {
-	// Чистим массив с названияями адаптеров, для того что бы актуализировать подключенные адаптеры
+	// Г—ГЁГ±ГІГЁГ¬ Г¬Г Г±Г±ГЁГў Г± Г­Г Г§ГўГ Г­ГЁГїГїГ¬ГЁ Г Г¤Г ГЇГІГҐГ°Г®Гў, Г¤Г«Гї ГІГ®ГЈГ® Г·ГІГ® ГЎГ» Г ГЄГІГіГ Г«ГЁГ§ГЁГ°Г®ГўГ ГІГј ГЇГ®Г¤ГЄГ«ГѕГ·ГҐГ­Г­Г»ГҐ Г Г¤Г ГЇГІГҐГ°Г»
 	kvaser->nameAdapters.clear();
 	marathon->nameAdapters.clear();	
-
+	pcan->nameAdapters.clear();	
+	pcan->handlerChanel.clear();
 	std::vector<QString> resultVector;
 
 	// kvaser
-	int chanCount;					// Кол-во адаптеров kvaser
-	char charNameAdapter[255];		// Название адаптера
+	int chanCount;					// ГЉГ®Г«-ГўГ® Г Г¤Г ГЇГІГҐГ°Г®Гў kvaser
+	char charNameAdapter[255];		// ГЌГ Г§ГўГ Г­ГЁГҐ Г Г¤Г ГЇГІГҐГ°Г 
 
 	canInitializeLibrary();
 	canGetNumberOfChannels(&chanCount);
 	QString strNameAdapter;
-	for (int i = 0; i < chanCount; i++) {
+	for (int i = 0; i < chanCount; i++) 
+	{
 		canGetChannelData(i, canCHANNELDATA_CHANNEL_NAME, charNameAdapter, sizeof(charNameAdapter));
 		if (charNameAdapter[0] == 0)
 			continue;
@@ -324,10 +458,30 @@ std::vector<QString> Can::getNameAdapters()
 		}
 	}
 
+	//pcan
+
+	TPCANChannelInformation channelInfo[16]; // ГЎГіГґГҐГ° Г¤Г«Гї ГЁГ­ГґГ®Г°Г¬Г Г¶ГЁГЁ Г® ГЄГ Г­Г Г«Г Гµ
+	DWORD bufferSize = sizeof(channelInfo);
+	for (int i = 0; i < bufferSize / sizeof(TPCANChannelInformation); i++)
+		channelInfo[i].device_type = 0;
+	CAN_GetValue(PCAN_NONEBUS, PCAN_ATTACHED_CHANNELS, channelInfo, bufferSize);
+
+	int count = bufferSize / sizeof(TPCANChannelInformation);
+	for (int i = 0; i < count; i++)
+	{
+		TPCANChannelInformation& info = channelInfo[i];
+		if (info.device_type != 0)
+		{
+			pcan->nameAdapters.push_back(QString::fromStdString(info.device_name));
+			pcan->handlerChanel.push_back(info.channel_handle);
+			resultVector.push_back(QString::fromStdString(info.device_name));
+		}
+	}
+
 	return resultVector;
 }
 
-std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
+std::pair<int, int> Can::conversionFrequency(int frequency, ModelAdapter modelAdapter)
 {
 	std::pair<int, int> resultPair;
 	resultPair.first = 0;
@@ -336,65 +490,124 @@ std::pair<int, int> Can::conversionFrequency(int frequency, int modelAdapter)
 	switch (frequency)
 	{
 	case FREQUENCY_50K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_50K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_50K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_50K_bt0;
 			resultPair.second = BCI_50K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_50K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_100K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_100K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_100K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_100K_bt0;
 			resultPair.second = BCI_100K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_100K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_125K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_125K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_125K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_125K_bt0;
 			resultPair.second = BCI_125K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_125K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_250K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_250K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_250K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_250K_bt0;
 			resultPair.second = BCI_250K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_250K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_500K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_500K;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_500K;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_500K_bt0;
 			resultPair.second = BCI_500K_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_500K;
+			break;
+		default:
+			break;
 		}
 		break;
 
 	case FREQUENCY_1000K:
-		if (modelAdapter == KVASER)
-			resultPair.first = BAUD_1M;
-		else
+		switch (modelAdapter)
 		{
+		case ModelAdapter::EMPTY:
+			break;
+		case ModelAdapter::Kvase:
+			resultPair.first = BAUD_1M;
+			break;
+		case ModelAdapter::Marathon:
 			resultPair.first = BCI_1M_bt0;
 			resultPair.second = BCI_1M_bt1;
+			break;
+		case ModelAdapter::PCan:
+			resultPair.first = PCAN_BAUD_1M;
+			break;
+		default:
+			break;
 		}
 		break;
-
 	default:
 		break;
 	}
@@ -439,6 +652,7 @@ Measureds* getMeasureds(int* msg)
 
 	return measured;
 }
+int count = 0;
 
 void Can::Timer_ReadCan()
 {
@@ -449,31 +663,61 @@ void Can::Timer_ReadCan()
 	int id = NOT_SET;
 	int msgReceive[8];
 	bool isValueChange = false;
-	if (Can::readWaitCan(&id, msgReceive, 1))
+	if (Can::readWaitCan(&id, msgReceive, 20))
 	{
+		for (int key : mapCable.keys())
+		{
+			if (mapCable[key].size() == 1)
+			{
+				if (mapCable[key][0].second == -1 && key == 1)
+				{
+					Signal_ChangedByte(mapCable[key][0].first.getId(), 2);
+					mapCable[key][0].second = 400;
+					continue;
+				}
+
+				if (mapCable[key][0].second == 2)
+					continue;
+
+				mapCable[key][0].second++;
+				if (mapCable[key][0].second > 200 && mapCable[key][0].second < 202)
+					Signal_ChangedByte(mapCable[key][0].first.getId(), mapCable[key][0].second);
+			}
+		}
+
+		if (id == DIAG_ID_FROM_DMFL)
+		{
+			if (1)
+			{
+				1; // Г‘ГѕГ¤Г  Г­ГҐ Г¤Г®Г«Г¦Г­Г® Г§Г ГµГ®Г¤ГЁГІГј. Г€Г­Г Г·ГҐ Гў Г¬ГҐГІГ®Г¤ГҐ getDiagBlock ГЎГіГ¤ГҐГІ Г±ГЎГ®Г© Гў Г«Г®ГЈГЁГЄГҐ
+			}
+		}
 		switch (windowType)
 		{
 		case WindowType::IN_TEST_MANUAL_STAND:
 		case WindowType::OUT_TEST_MANUAL_STAND:
 		case WindowType::FULL_TEST_MANUAL_STAND:
-			if (id == ID_CAN_MANUALSTAND)// сообшение о конекте
+			if (id == ID_CAN_MANUALSTAND)// Г±Г®Г®ГЎГёГҐГ­ГЁГҐ Г® ГЄГ®Г­ГҐГЄГІГҐ
 			{
-				if(b_flagStatusConnection)
-					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
+				if (b_flagStatusConnectionBlock)
+					timerCheckBlockConnection->start(TIME_CHECKCONNECTION + 100);
 				else
 				{
-					Signal_ChangedStatusStandConnect(true);
-					b_flagStatusConnection = true;
-					timerCheckStandConnection->start(TIME_CHECKCONNECTION + 100);
+					Signal_ChangedStatusBlockConnect(true);
+					b_flagStatusConnectionBlock = true;
+					timerCheckBlockConnection->start(TIME_CHECKCONNECTION + 100);
 
 				}
 			}
 			for (int i = 0; i < mapCable[id].size(); i++)
+			{
+
 				if (mapCable[id][i].second != msgReceive[mapCable[id][i].first.getBit()])
 				{
 					mapCable[id][i].second = msgReceive[mapCable[id][i].first.getBit()];
-					Signal_ChangedByte(mapCable[id][i].first.getId(), mapCable[id][i].second);
+					Signal_ChangedByte(mapCable[id][i].first.getId(), msgReceive[mapCable[id][i].first.getBit()]);
 				}
+			}
 
 			break;
 
@@ -482,8 +726,20 @@ void Can::Timer_ReadCan()
 		case WindowType::IN_AUTO_TEST_AUTO_STAND:
 		case WindowType::OUT_AUTO_TEST_AUTO_STAND:
 		case WindowType::FULL_TEST_AUTO_STAND:
-			if (id == ID_CAN_AUTOSTAND && // сообшение о конекте
-				!b_flagStatusConnection &&
+			if (id == ID_CAN_MANUALSTAND)// Г±Г®Г®ГЎГёГҐГ­ГЁГҐ Г® ГЄГ®Г­ГҐГЄГІГҐ ГЃГ«Г®ГЄГ 
+			{
+				if (b_flagStatusConnectionBlock)
+					timerCheckBlockConnection->start(TIME_CHECKCONNECTION + 100);
+				else
+				{
+					Signal_ChangedStatusBlockConnect(true);
+					b_flagStatusConnectionBlock = true;
+					timerCheckBlockConnection->start(TIME_CHECKCONNECTION + 100);
+
+				}
+			}
+			if (id == ID_CAN_AUTOSTAND_RECEIVE && // Г±Г®Г®ГЎГёГҐГ­ГЁГҐ Г® ГЄГ®Г­ГҐГЄГІГҐ Г‘ГІГҐГ­Г¤
+				!standConnect[(msgReceive[7] & 0xF) - 1].standConnection &&
 				msgReceive[0] == 0x0 &&
 				msgReceive[1] == 0xAA &&
 				msgReceive[2] == 0x0 &&
@@ -491,45 +747,113 @@ void Can::Timer_ReadCan()
 				msgReceive[4] == 0x0 &&
 				msgReceive[5] == 0xAA &&
 				msgReceive[6] == 0x0 &&
-				msgReceive[7] == 0xFA)
+				(msgReceive[7] & 0xF0) == 0xF0)
 			{
-				Signal_ChangedStatusStandConnect(true);
-				b_flagStatusConnection = true;
-				timerCheckStandConnection->start(TIME_CHECKCONNECTION);
-				counterConnectMsg = 0;
-
+				int idBord = (msgReceive[7] & 0xF) - 1;
+				Signal_ChangedStatusStandConnect(true, idBord);
+				standConnect[idBord].standConnection = true;
+				standConnect[idBord].TimerCheckConnectMsg->start(TIME_CHECKCONNECTION);
+				standConnect[idBord].timerIdCheck = standConnect[idBord].TimerCheckConnectMsg->timerId();
+				standConnect[idBord].counterConnectMsg = 0;
+				standConnect[idBord].counterStandDisconnecting = 0;
+				standConnect[idBord].sandTestMsg = true;
 
 			}
-			else if (id == ID_CAN_AUTOSTAND && // переодическое сообшение о конекте
-				b_flagStatusConnection &&
-				msgReceive[0] == counterConnectMsg &&
+			else if (id == ID_CAN_AUTOSTAND_RECEIVE && // ГЇГҐГ°ГҐГ®Г¤ГЁГ·ГҐГ±ГЄГ®ГҐ Г±Г®Г®ГЎГёГҐГ­ГЁГҐ Г® ГЄГ®Г­ГҐГЄГІГҐ
+				standConnect[(msgReceive[7] & 0xF) - 1].standConnection &&
+				msgReceive[0] == standConnect[(msgReceive[7] & 0xF) - 1].counterConnectMsg &&
 				msgReceive[1] == 0xAA &&
 				msgReceive[2] == 0x0 &&
 				msgReceive[3] == 0xAA &&
 				msgReceive[4] == 0x0 &&
 				msgReceive[5] == 0xAA &&
 				msgReceive[6] == 0x0 &&
-				msgReceive[7] == 0xFA)
+				(msgReceive[7] & 0xF0) == 0xF0)
 			{
-				timerCheckStandConnection->start(TIME_CHECKCONNECTION);
-				counterConnectMsg++;
-#ifdef DEBUG_CAN
-				qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "I received a message about a periodic connection";
-#endif // DEBUG_CAN
+				int idBord = (msgReceive[7] & 0xF) - 1;
+				standConnect[idBord].TimerCheckConnectMsg->start(TIME_CHECKCONNECTION);
+				standConnect[idBord].timerIdCheck = standConnect[idBord].TimerCheckConnectMsg->timerId();
+				standConnect[idBord].counterConnectMsg++;
+				standConnect[idBord].counterStandDisconnecting = 0;
+				standConnect[idBord].sandTestMsg = true;
+
 			}
-			else if (id == 2 ) // Сообщение о результате теста
+			else if (id == ID_CAN_AUTOSTAND_RECEIVE && (msgReceive[7] & 0xF0) != 0xF0) // Г‘Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г® Г°ГҐГ§ГіГ«ГјГІГ ГІГҐ ГІГҐГ±ГІГ 
 			{
-				measureds.push_back(getMeasureds(msgReceive));
-				if ((msgReceive[2] & 0x01) == 1) // Конец теста
+				if (msgReceive[7] == 7)
 				{
-					if ((TypeCable)(msgReceive[2] >> 5) == TypeCable::ANALOG_IN) // Костыль
-					{
-						measureds.push_back(new Measureds(measureds[0]->current,-1));
-						measureds[0]->current = NOT_SET;
-					}
+					float v;
+					uint32_t tmp =
+						(static_cast<uint32_t>(msgReceive[2]) << 24) |
+						(static_cast<uint32_t>(msgReceive[3]) << 16) |
+						(static_cast<uint32_t>(msgReceive[4]) << 8) |
+						(static_cast<uint32_t>(msgReceive[5]) << 0);
+					std::memcpy(&v, &tmp, sizeof(float));
+
+					measureds.push_back(new Measureds(0, v, msgReceive[6]));
 					Signal_AfterTest(msgReceive[0], msgReceive[1], measureds);
 					measureds.clear();
+					testSleep = false;
 				}
+				if (msgReceive[2] < 6 && filled_ == 0)
+				{
+
+
+						for (int i = 0; i < msgReceive[2]; i++)
+							measureds.push_back(new Measureds(msgReceive[3 + i]));
+						Signal_AfterTest(msgReceive[0], msgReceive[1], measureds);
+						measureds.clear();
+
+				}
+				else
+				{
+				
+					uint8_t frame_num = expected_frame_;   // ГІГҐГЄГіГ№ГЁГ© Г®Г¦ГЁГ¤Г ГҐГ¬Г»Г©
+
+					uint8_t expected_filled = frame_num * 8;
+					if (expected_filled > 21) {
+						reset();
+						//return -1;
+						return;
+					}
+
+					uint8_t remaining = 21 - filled_;
+					uint8_t copy_len = (remaining > 8) ? 8 : remaining;
+
+					for (int i = 0; i < copy_len; i++)
+						buf_[expected_filled + i] = msgReceive[i];
+					filled_ += copy_len;
+
+					expected_frame_++;  // Г±Г«ГҐГ¤ГіГѕГ№ГЁГ© ГЄГ Г¤Г°
+
+					if (filled_ >= 21)
+						complete_ = true;
+
+					if (complete_)
+						get_payload();
+					//return 0;
+					return;
+				}
+
+			}
+			break;
+		case WindowType::VERIFICATIONTEST:
+			if (id == ID_CAN_MANUALSTAND)// Г±Г®Г®ГЎГёГҐГ­ГЁГҐ Г® ГЄГ®Г­ГҐГЄГІГҐ
+			{
+				if (b_flagStatusConnectionBlock)
+					timerCheckBlockConnection->start(TIME_CHECKCONNECTION + 100);
+				else
+				{
+					Signal_ChangedStatusBlockConnect(true);
+					b_flagStatusConnectionBlock = true;
+					timerCheckBlockConnection->start(TIME_CHECKCONNECTION + 100);
+
+				}
+			}
+			if (id == 0xAA &&
+				msgReceive[0] == 0xBC)
+			{
+				Signal_ReciveMsg(msgReceive);
 			}
 			break;
 		}
@@ -543,37 +867,134 @@ void Can::Timer_ReadCan()
 #endif
 }
 
-void Can::Timer_SendConnectMsg()
+void Can::Timer_SendConnectMsgStand()
 {
-	if (b_flagStatusConnection)
+	if (testSleep)
+		return;
+	QTimer* timer = qobject_cast<QTimer*>(sender());
+	for (int i = 0; i < COUNT_PCB_STAND; i++)
 	{
-		int msgSendConnect[8] = {counterConnectMsg, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0xAF };
-		writeCan(ID_CAN_AUTOSTAND, msgSendConnect);
-		counterConnectMsg++;
+		if (timer->timerId() == standConnect[i].timerIdSend)
+		{
+			if (standConnect[i].standConnection && standConnect[i].sandTestMsg)
+			{
+				int msgSendConnect[8] = { standConnect[i].counterConnectMsg, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, (((i+1) << 4) + 0xF)};
+				writeCan(ID_CAN_AUTOSTAND_SEND, msgSendConnect);
+				standConnect[i].counterConnectMsg++;
+				standConnect[i].sandTestMsg = false;
+			}
+			else if(!standConnect[i].standConnection)
+			{
+				int msgSendConnect[8] = { 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, (((i+1) << 4) + 0xF) };
+				writeCan(ID_CAN_AUTOSTAND_SEND, msgSendConnect);
+			}
+			
+		}
 	}
-	else
+}
+void Can::Timer_CheckBlockConnection()
+{
+	timerCheckBlockConnection->stop();
+	Signal_ChangedStatusBlockConnect(false);
+	b_flagStatusConnectionBlock = false;
+	
+}
+
+void Can::Timer_CheckStandConnection()
+{
+	QTimer* timer = qobject_cast<QTimer*>(sender());
+	for (int i = 0; i < COUNT_PCB_STAND; i++)
 	{
-		int msgSendConnect[8] = { 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0x0, 0xAA, 0xAF };
-		writeCan(ID_CAN_AUTOSTAND, msgSendConnect);
+		if (timer->timerId() == standConnect[i].timerIdCheck)
+		{
+
+				standConnect[i].TimerCheckConnectMsg->stop();
+				Signal_ChangedStatusStandConnect(false, i);
+				standConnect[i].standConnection = false;
+				standConnect[i].counterConnectMsg = 0;
+
+		}
 	}
 
 }
-void Can::Timer_CheckStandConnection()
-{
-	timerCheckStandConnection->stop();
-	Signal_ChangedStatusStandConnect(false);
-	b_flagStatusConnection = false;
-	
-#ifdef DEBUG_CAN
-	qDebug() << QTime::currentTime().toString("hh:mm:ss:z") << "Change";
-#endif // DEBUG_CAN
+
+float read_float_be(const uint8_t* src) {
+	uint32_t tmp =
+		(static_cast<uint32_t>(src[0]) << 24) |
+		(static_cast<uint32_t>(src[1]) << 16) |
+		(static_cast<uint32_t>(src[2]) << 8) |
+		(static_cast<uint32_t>(src[3]) << 0);
+	float v;
+	std::memcpy(&v, &tmp, sizeof(float));
+	return v;
 }
+
+void Can::get_payload()
+{
+
+	const uint8_t* buf = buf_.data();
+
+	float f1 = read_float_be(&buf[3]);
+	float f2 = read_float_be(&buf[7]);
+	int u1 = buf[11];
+	float f3 = read_float_be(&buf[12]);
+	float f4 = read_float_be(&buf[16]);
+	int u2 = buf[20];
+
+	measureds.push_back(new Measureds(read_float_be(&buf[3]), read_float_be(&buf[7]), buf[11]));
+	measureds.push_back(new Measureds(read_float_be(&buf[12]), read_float_be(&buf[16]), buf[20]));
+
+	Signal_AfterTest(buf[0], buf[1], measureds);
+	measureds.clear();
+
+	reset();
+}
+
+//int Can::process_frame(uint8_t* data) 
+//{  
+//	return 1;
+//}
+
+void Can::reset() 
+{
+	filled_ = 0;
+	expected_frame_ = 0;
+	complete_ = false;
+	buf_.fill(0);
+}
+
+int Can::parse_payload() 
+{
+	const uint8_t* buf = buf_.data();
+	if (buf[2] != 6) {
+		reset();
+		return -1;
+	}
+	reset();
+	return 1;
+}
+
 uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 {
 	uint8_t flags = 0;
 	// Block
-	flags += 1;
-	flags = flags << 3;
+	switch (nameBlock)
+	{
+	case TestBlockName::EMPTY:
+		break;
+	case TestBlockName::DTM:
+		flags = 1;
+		break;
+	case TestBlockName::BCM:
+		flags = 2;
+		break;
+	case TestBlockName::SMXX:
+		flags = 3;
+		break;
+	default:
+		break;
+	}
+	flags = flags << 4;
 	// Type
 	switch (typeCable)
 	{
@@ -604,8 +1025,12 @@ uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 	case TypeCable::HLD_OUT:
 		flags += 6;
 		break;
+	case TypeCable::SLEEP:
+		flags += 7;
+
+		break;
 	}
-	flags = flags << 4;
+
 
 	return flags;
 }
@@ -613,32 +1038,34 @@ uint8_t generateFlags(TypeCable typeCable, TestBlockName nameBlock)
 // ------------------------------------
 // Name: sendTestMsg
 // Variables: 
-//			ConnectorId pad - enum переедающий в себе идентификатор коложки (A - 1; B - 2; C - 3; C - 4; ...).
-//			int pin - номер пина в колодки.
-//			int type - bдентификатор показывающий какого типа пин.
+//			ConnectorId pad - enum ГЇГҐГ°ГҐГҐГ¤Г ГѕГ№ГЁГ© Гў Г±ГҐГЎГҐ ГЁГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г° ГЄГ®Г«Г®Г¦ГЄГЁ (A - 1; B - 2; C - 3; C - 4; ...).
+//			int pin - Г­Г®Г¬ГҐГ° ГЇГЁГ­Г  Гў ГЄГ®Г«Г®Г¤ГЄГЁ.
+//			int type - bГ¤ГҐГ­ГІГЁГґГЁГЄГ ГІГ®Г° ГЇГ®ГЄГ Г§Г»ГўГ ГѕГ№ГЁГ© ГЄГ ГЄГ®ГЈГ® ГІГЁГЇГ  ГЇГЁГ­.
 // Return: bool
-//			false - в случае если type == NOT_SET, или ошибку драйверов адаптера.	
-//			true  - в случае если сообщение отправилось.
+//			false - Гў Г±Г«ГіГ·Г ГҐ ГҐГ±Г«ГЁ type == NOT_SET, ГЁГ«ГЁ Г®ГёГЁГЎГЄГі Г¤Г°Г Г©ГўГҐГ°Г®Гў Г Г¤Г ГЇГІГҐГ°Г .	
+//			true  - Гў Г±Г«ГіГ·Г ГҐ ГҐГ±Г«ГЁ Г±Г®Г®ГЎГ№ГҐГ­ГЁГҐ Г®ГІГЇГ°Г ГўГЁГ«Г®Г±Гј.
 // ------------------------------------
-bool Can::sendTestMsg(ConnectorId pad, int pin, TypeCable typeCable, TestBlockName nameBlock)
+bool Can::sendTestMsg(ConnectorId pad, int pin, int canId, int byteCan, TypeCable typeCable, TestBlockName nameBlock)
 {
 	if ((int)typeCable == NOT_SET)
 		return false;
-
-	int msgSendConnect[8] = { (int)pad, pin, generateFlags(typeCable, nameBlock), 0, 0, 0, 0, 0 };
+	if (typeCable == TypeCable::SLEEP)
+		testSleep = true;
+	int msgSendConnect[8] = { (int)pad, pin, generateFlags(typeCable, nameBlock), (canId - 0x100), byteCan, 0, 0, 0 };
 	
-	writeCan(10, msgSendConnect); // Дописать проверку ошибок kvasera
+	writeCan(0x51, msgSendConnect);
+	Sleep(100);
 	return true;
 }
 
 // ------------------------------------
 // Name: sendTestMsg
-//		Отправка сообщения на can
+//		ГЋГІГЇГ°Г ГўГЄГ  Г±Г®Г®ГЎГ№ГҐГ­ГЁГї Г­Г  can
 // Variables: 
-//			ConnectorId pad: Коннектор отправляемого кабеля
-//			int pin: Пин отправляемого кабеля
-//			int digValue: Цифровое значение отправляемого кабеля
-//			int pwmValue: ШИМ значение отправляемого кабеля
+//			ConnectorId pad: ГЉГ®Г­Г­ГҐГЄГІГ®Г° Г®ГІГЇГ°Г ГўГ«ГїГҐГ¬Г®ГЈГ® ГЄГ ГЎГҐГ«Гї
+//			int pin: ГЏГЁГ­ Г®ГІГЇГ°Г ГўГ«ГїГҐГ¬Г®ГЈГ® ГЄГ ГЎГҐГ«Гї
+//			int digValue: Г–ГЁГґГ°Г®ГўГ®ГҐ Г§Г­Г Г·ГҐГ­ГЁГҐ Г®ГІГЇГ°Г ГўГ«ГїГҐГ¬Г®ГЈГ® ГЄГ ГЎГҐГ«Гї	
+//			int pwmValue: ГГ€ГЊ Г§Г­Г Г·ГҐГ­ГЁГҐ Г®ГІГЇГ°Г ГўГ«ГїГҐГ¬Г®ГЈГ® ГЄГ ГЎГҐГ«Гї
 // ------------------------------------
 void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 {
@@ -712,7 +1139,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 
 			}
 		}
-		else if (pad == ConnectorId::C && pin == 11) // С11
+		else if (pad == ConnectorId::C && pin == 11) // Г‘11
 		{
 			if (digValue == 0) // zero
 			{
@@ -734,7 +1161,7 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 
 			}
 		}
-		else if (pad == ConnectorId::C && pin == 12) // С12
+		else if (pad == ConnectorId::C && pin == 12) // Г‘12
 		{
 			if (digValue == 0) // zero
 			{
@@ -778,6 +1205,28 @@ void Can::sendTestMsg(ConnectorId pad, int pin, int digValue, int pwmValue)
 
 			}
 		}
+		else if (pad == ConnectorId::C && pin == 9) // C9
+		{
+		if (digValue == 0) // zero
+		{
+			Can::writeCan(0x55, msgSendConnect);
+			msgSendConnect[1] = 12;
+		}
+		else if (digValue == 1) // high
+		{
+			Can::writeCan(0x55, msgSendConnect);
+			msgSendConnect[1] = 12;
+			msgSendConnect[2] = 2;
+
+		}
+		else if (digValue == 2) // low
+		{
+			Can::writeCan(0x55, msgSendConnect);
+			msgSendConnect[1] = 12;
+			msgSendConnect[2] = 1;
+
+		}
+		}
 	}
 #endif // !FOR_DEVELOPER
 	Can::writeCan(0x55, msgSendConnect);
@@ -794,6 +1243,7 @@ void Can::sendGoToSleepMsg(bool isGoToSleep)
 
 void Can::setCable(std::vector<Cable> cable)
 {
+	mapCable.clear();
 	for (int i = 0; i < cable.size(); i++)
 	{
 		std::vector<std::pair<Cable, int>> tmpVector(mapCable[cable[i].getCanId()]);
@@ -808,13 +1258,478 @@ void Can::setCable(std::vector<Cable> cable)
 }
 void Can::clearOldValue()
 {
-	for (int j = 256; j < 266; j++)
+	for (int j : mapCable.keys())
 		for (int i = 0; i < mapCable[j].size(); i++)
 			mapCable[j][i].second = NOT_SET;
-	b_flagStatusConnection = false;
+	b_flagStatusConnectionBlock = false;
 }
 
-QString Can::getSerialNumber()
-{
-	return QString("123");
+int intToAscii(int number) {
+	return '0' + number;
 }
+
+QString Can::getDiagBlock(DiagInformation diagInf, TestBlockName blockName)
+{
+	int msgSend[8] = { 0, 0, 0, 0, 0, 0, 0, 0 };
+	QTime timeWork = QTime::currentTime().addMSecs(200); // Г‚Г°ГҐГ¬Гї Г¤Г«Гї Г ГўГ Г°ГЁГ­Г®ГЈГ® ГўГ»ГµГ®Г¤Г  ГЁГ§ Г¶ГЁГЄГ«Г .
+	int id;
+	int msg[8];
+	int counter = 0;
+	int sizeArr = 0;
+
+	QString ansverStr;
+	int idTmp = DIAG_ID_FROM_BLOCK(blockName);
+
+	switch (diagInf)
+	{
+	case DiagInformation::Application_NAME:
+		DIAG_GET_APP_NAME(msgSend);
+		sizeArr = 31;
+		break;
+	case DiagInformation::Calibration_NAME:
+		DIAG_GET_APP_CALIBRATION(msgSend);
+		sizeArr = 79;
+		break;
+	case DiagInformation::Equipment_NAME:
+		DIAG_GET_EQUIPMENT_NAME(msgSend);
+		sizeArr = 9;
+		break;
+	case DiagInformation::Manufacture_DATE:
+		DIAG_GET_DATA_MANUFACTURE(msgSend);
+		writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+		while (true)
+		{
+			if (readWaitCan(&id, msg, 20))
+				if (id == idTmp)
+				{
+					if (counter == 0)
+					{
+
+						ansverStr = QString::number(msg[5],16);
+						ansverStr += ".";
+						ansverStr += QString::number(msg[6],16);
+						ansverStr += ".";
+						ansverStr += QString::number(msg[7],16);
+	
+
+						counter++;
+						DIAG_VERIFICATION(msgSend);
+						writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+					}
+					else
+					{
+						ansverStr += QString::number(msg[1], 16);
+
+
+						return ansverStr;
+					}
+				}
+			if (QTime::currentTime() > timeWork)
+				return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("РћС€РёР±РєР°. Р”Р»РёС‚РµР»СЊРЅР°СЏ Р·Р°РґРµСЂР¶РєР°") : QString("Error. Long delay");
+
+		}
+		sizeArr = 15;
+		break;
+	case DiagInformation::Hardware_NUMBER:
+		DIAG_GET_NUMBER_HARDWARE(msgSend);
+		sizeArr = 15;
+		break;
+	case DiagInformation::Part_NUMBER:
+		DIAG_GET_NUMBER_PART(msgSend);
+		sizeArr = 26;
+		break;
+	case DiagInformation::Serial_NUMBER:
+		DIAG_GET_NUMBER_SERIAL(msgSend);
+		sizeArr = 19;
+		break;
+	}
+
+	writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+	while (true)
+	{
+		if (readWaitCan(&id, msg, 20))
+			if (id == idTmp)
+			{
+				if (counter == 0)
+				{
+					if(msg[5] != 0)
+						ansverStr += QChar(msg[5]);
+					if(msg[5] != 0)
+						ansverStr += QChar(msg[6]);
+					if(msg[7] != 0)
+						ansverStr += QChar(msg[7]);
+
+					counter = 3;
+					DIAG_VERIFICATION(msgSend);
+					writeCan(DIAG_ID_TO_BLOCK(blockName), msgSend);
+				}
+				else
+					for (int i = 1; i < 8; i++)
+					{
+						counter++;
+						if (msg[i] == 0)
+						{
+							if (counter > sizeArr)
+								return ansverStr;
+							continue;
+						}
+						ansverStr += QChar(msg[i]);
+						if (counter > sizeArr)
+							return ansverStr;
+					}
+			}
+		if (QTime::currentTime() > timeWork)
+			return viewWindowState->appLanguage == RUSSIAN_LANG ? QString("РћС€РёР±РєР°. Р”Р»РёС‚РµР»СЊРЅР°СЏ Р·Р°РґРµСЂР¶РєР°") : QString("Error. Long delay");
+	}
+
+
+}
+//DMxx
+const unsigned int _rot_dir_DMxx = 21;
+const unsigned int _rot_num_DMxx[] = { 12, 25, 13, 26 };
+const unsigned int _inv_type_DMxx[] = { 29, 3 };
+const unsigned int _bitwise_op_DMxx[] = { 2, 22 };
+const unsigned int _inv_bits_DMxx[3][3] = { {27,28,30}, {8,19,14}, {29,24,6} };
+//TM
+const unsigned int _rot_dir_TM = 21;
+const unsigned int _rot_num_TM[] = { 13, 19, 22, 8 };
+const unsigned int _inv_type_TM[] = { 15, 26 };
+const unsigned int _bitwise_op_TM[] = { 0, 29 };
+const unsigned int _inv_bits_TM[3][3] = { {19,28,7}, {26,12,16}, {17,2,24} };
+//BCM
+const unsigned int _rot_dir_BCM = 18;
+const unsigned int _rot_num_BCM[] = { 30, 11, 8, 19 };
+const unsigned int _inv_type_BCM[] = { 14, 13 };
+const unsigned int _bitwise_op_BCM[] = { 25, 5 };
+const unsigned int _inv_bits_BCM[3][3] = { {17,21,15}, {2,7,19}, {29,14,0} };
+//SMXX
+const unsigned int _rot_dir_SMXX = 29;
+const unsigned int _rot_num_SMXX[] = { 15, 3, 11, 16 };
+const unsigned int _inv_type_SMXX[] = { 9, 18 };
+const unsigned int _bitwise_op_SMXX[] = { 1, 2 };
+const unsigned int _inv_bits_SMXX[3][3] = { {31,12,21}, {3,19,9}, {24,9,26} };
+
+static unsigned int _bit_val(unsigned int num, unsigned int bit)
+{
+	return (num >> bit) & 1;
+}
+
+static unsigned int _field_val(unsigned int num, const unsigned int* field, unsigned int len)
+{
+	unsigned int res = 0;
+	for (unsigned int i = 0; i < len; i++)
+	{
+		res <<= 1;
+		res += _bit_val(num, field[i]);
+	}
+	return res;
+}
+
+enum VKeyGenResultEx_enum
+{
+	KGRE_Ok = 0,
+	KGRE_BufferToSmall = 1,
+	KGRE_SecurityLevelInvalid = 2,
+	KGRE_VariantInvalid = 3,
+	KGRE_UnspecifiedError = 4,
+	KGRE_BadDll = 5,
+	KGRE_FunctionNotFound = 6
+};
+
+uint32_t custom_bswap32(uint32_t value) {
+	return (value >> 24) | ((value << 8) & 0x00FF0000) | ((value >> 8) & 0x0000FF00) | (value << 24);
+}
+
+VKeyGenResultEx_enum GenerateKeyEx_TM(
+	const unsigned char* ipSeedArray, unsigned int iSeedArraySize,
+	unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize,
+	unsigned int* oActualKeyArraySize)
+{
+	if (iSeedArraySize != 4) return KGRE_BadDll;
+	if (iMaxKeyArraySize < 4) return KGRE_BufferToSmall;
+
+	unsigned int seed = custom_bswap32(*((unsigned int*)ipSeedArray));
+
+	unsigned int res;
+	unsigned int rot_num = _field_val(seed, _rot_num_TM, sizeof(_rot_num_TM) / sizeof(int));
+	if (_bit_val(seed, _rot_dir_TM)) { rot_num = (32 - rot_num); }
+	res = seed << rot_num;
+	res = (res & 0xFFFFFFFF) | (seed >> (32 - rot_num));
+
+	unsigned int inv_type = _field_val(seed, _inv_type_TM, sizeof(_inv_type_TM) / sizeof(int));
+	if (inv_type > 0)
+	{
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			res ^= (1 << _inv_bits_TM[inv_type - 1][i]);
+		}
+	}
+
+	unsigned int bitwise_op = _field_val(seed, _bitwise_op_TM, sizeof(_bitwise_op_TM) / sizeof(int));
+	if (1 == bitwise_op) { res &= seed; }
+	else if (2 == bitwise_op) { res ^= seed; }
+	else if (3 == bitwise_op) { res |= seed; }
+
+	*((unsigned int*)iopKeyArray) = custom_bswap32(res);
+	*oActualKeyArraySize = 4;
+	return KGRE_Ok;
+}
+
+VKeyGenResultEx_enum GenerateKeyEx_DMxx(
+	const unsigned char* ipSeedArray, unsigned int iSeedArraySize,
+	unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize,
+	unsigned int* oActualKeyArraySize)
+{
+	if (iSeedArraySize != 4) return KGRE_BadDll;
+	if (iMaxKeyArraySize < 4) return KGRE_BufferToSmall;
+
+	unsigned int seed = custom_bswap32(*((unsigned int*)ipSeedArray));
+
+	unsigned int res;
+	unsigned int rot_num = _field_val(seed, _rot_num_DMxx, sizeof(_rot_num_DMxx) / sizeof(int));
+	if (_bit_val(seed, _rot_dir_DMxx)) { rot_num = (32 - rot_num); }
+	res = seed << rot_num;
+	res = (res & 0xFFFFFFFF) | (seed >> (32 - rot_num));
+
+	unsigned int inv_type = _field_val(seed, _inv_type_DMxx, sizeof(_inv_type_DMxx) / sizeof(int));
+	if (inv_type > 0)
+	{
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			res ^= (1 << _inv_bits_DMxx[inv_type - 1][i]);
+		}
+	}
+
+	unsigned int bitwise_op = _field_val(seed, _bitwise_op_DMxx, sizeof(_bitwise_op_DMxx) / sizeof(int));
+	if (1 == bitwise_op) { res &= seed; }
+	else if (2 == bitwise_op) { res ^= seed; }
+	else if (3 == bitwise_op) { res |= seed; }
+
+	*((unsigned int*)iopKeyArray) = custom_bswap32(res);
+	*oActualKeyArraySize = 4;
+	return KGRE_Ok;
+}
+
+VKeyGenResultEx_enum GenerateKeyEx_BCM(
+	const unsigned char* ipSeedArray, unsigned int iSeedArraySize,
+	unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize,
+	unsigned int* oActualKeyArraySize)
+{
+	if (iSeedArraySize != 4) return KGRE_BadDll;
+	if (iMaxKeyArraySize < 4) return KGRE_BufferToSmall;
+
+	unsigned int seed = custom_bswap32(*((unsigned int*)ipSeedArray));
+
+	unsigned int res;
+	unsigned int rot_num = _field_val(seed, _rot_num_BCM, sizeof(_rot_num_BCM) / sizeof(int));
+	if (_bit_val(seed, _rot_dir_BCM)) { rot_num = (32 - rot_num); }
+	res = seed << rot_num;
+	res = (res & 0xFFFFFFFF) | (seed >> (32 - rot_num));
+
+	unsigned int inv_type = _field_val(seed, _inv_type_BCM, sizeof(_inv_type_BCM) / sizeof(int));
+	if (inv_type > 0)
+	{
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			res ^= (1 << _inv_bits_BCM[inv_type - 1][i]);
+		}
+	}
+
+	unsigned int bitwise_op = _field_val(seed, _bitwise_op_BCM, sizeof(_bitwise_op_BCM) / sizeof(int));
+	if (1 == bitwise_op) { res &= seed; }
+	else if (2 == bitwise_op) { res ^= seed; }
+	else if (3 == bitwise_op) { res |= seed; }
+
+	*((unsigned int*)iopKeyArray) = custom_bswap32(res);
+	*oActualKeyArraySize = 4;
+	return KGRE_Ok;
+}
+
+VKeyGenResultEx_enum GenerateKeyEx_SMXX(
+	const unsigned char* ipSeedArray, unsigned int iSeedArraySize,
+	unsigned char* iopKeyArray, unsigned int iMaxKeyArraySize,
+	unsigned int* oActualKeyArraySize)
+{
+	if (iSeedArraySize != 4) return KGRE_BadDll;
+	if (iMaxKeyArraySize < 4) return KGRE_BufferToSmall;
+
+	unsigned int seed = custom_bswap32(*((unsigned int*)ipSeedArray));
+
+	unsigned int res;
+	unsigned int rot_num = _field_val(seed, _rot_num_SMXX, sizeof(_rot_num_SMXX) / sizeof(int));
+	if (_bit_val(seed, _rot_dir_SMXX)) { rot_num = (32 - rot_num); }
+	res = seed << rot_num;
+	res = (res & 0xFFFFFFFF) | (seed >> (32 - rot_num));
+
+	unsigned int inv_type = _field_val(seed, _inv_type_SMXX, sizeof(_inv_type_SMXX) / sizeof(int));
+	if (inv_type > 0)
+	{
+		for (unsigned int i = 0; i < 3; i++)
+		{
+			res ^= (1 << _inv_bits_SMXX[inv_type - 1][i]);
+		}
+	}
+
+	unsigned int bitwise_op = _field_val(seed, _bitwise_op_SMXX, sizeof(_bitwise_op_SMXX) / sizeof(int));
+	if (1 == bitwise_op) { res &= seed; }
+	else if (2 == bitwise_op) { res ^= seed; }
+	else if (3 == bitwise_op) { res |= seed; }
+
+	*((unsigned int*)iopKeyArray) = custom_bswap32(res);
+	*oActualKeyArraySize = 4;
+	return KGRE_Ok;
+}
+
+QString Can::eraseApp(QString typeBlock)
+{
+	int idSend = 0;
+	int idReceive;
+	int idReceiveRef = 0;
+
+	int msgSend[8] = { 0x31, 0x31, 0x31, 0x00, 0x00, 0x00, 0x00, 0x00 };
+	int msgReceive[8];
+	QTime timeWork = QTime::currentTime().addMSecs(500); // Г‚Г°ГҐГ¬Гї Г¤Г«Гї Г ГўГ Г°ГЁГ©Г­Г®ГЈГ® ГўГ»ГµГ®Г¤Г  ГЁГ§ Г¶ГЁГЄГ«Г .
+
+
+	if (typeBlock == "DMFL_NAMI")
+	{
+		idSend = DIAG_ID_TO_DMFL;
+		idReceiveRef = DIAG_ID_FROM_DMFL;
+	}
+	else if (typeBlock == "DMFR_NAMI")
+	{
+		idSend = DIAG_ID_TO_DMFR;
+		idReceiveRef = DIAG_ID_FROM_DMFR;
+	}
+	else if (typeBlock == "DMRL_NAMI")
+	{
+		idSend = DIAG_ID_TO_DMRL;
+		idReceiveRef = DIAG_ID_FROM_DMRL;
+	}
+	else if (typeBlock == "DMRR_NAMI")
+	{
+		idSend = DIAG_ID_TO_DMRR;
+		idReceiveRef = DIAG_ID_FROM_DMRR;
+	}
+	else if (typeBlock == "TM_NAMI")
+	{
+		idSend = DIAG_ID_TO_TM;
+		idReceiveRef = DIAG_ID_FROM_TM;
+	}
+	else if (typeBlock == "BCM_NAMI")
+	{
+		idSend = DIAG_ID_TO_BCM;
+		idReceiveRef = DIAG_ID_FROM_BCM;
+	}
+	else if (typeBlock == "SMFL_NAMI")
+	{
+		idSend = DIAG_ID_TO_SMFL;
+		idReceiveRef = DIAG_ID_FROM_SMFL;
+	}
+	else if (typeBlock == "SMFR_NAMI")
+	{
+		idSend = DIAG_ID_TO_SMFR;
+		idReceiveRef = DIAG_ID_FROM_SMFR;
+	}
+	else if (typeBlock == "SMRL_NAMI")
+	{
+		idSend = DIAG_ID_TO_SMRL;
+		idReceiveRef = DIAG_ID_FROM_SMRL;
+	}
+	else if (typeBlock == "SMRR_NAMI")
+	{
+		idSend = DIAG_ID_TO_SMRR;
+		idReceiveRef = DIAG_ID_FROM_SMRR;
+	}
+
+	//wakeBoot->start(500); // Г‡Г ГЇГіГ±ГЄГ ГҐГ¬ ГІГ Г©Г¬ГҐГ°, ГЄГ®ГІГ®Г°Г»Г© Г­ГҐ ГўГ»ГЇГіГ±ГЄГ ГҐГІ ГЎГ«Г®ГЄ ГЁГ§ boot
+	writeCan(0x55, msgSend); // ГЇГҐГ°ГҐГµГ®Г¤ГЁГ¬ Гў boot
+	Sleep(50);
+
+
+	int msgSend_ProgrammingSession[8] = { 0x02, 0x10, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 }; // ГЇГҐГ°ГҐГµГ®Г¤ГЁГ¬ Гў programming session
+	writeCan(idSend, msgSend_ProgrammingSession);
+	while (true) // Г†Г¤ВёГ¬ Г®ГІГўГҐГІГ  Г® ГЇГҐГ°ГҐГµГ®Г¤ГҐ Гў programming session
+	{
+		if (readWaitCan(&idReceive, msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x50 && msgReceive[2] == 0x02 && msgReceive[3] == 0x00 && msgReceive[4] == 0x32 && msgReceive[5] == 0x01 && msgReceive[6] == 0xF4 && msgReceive[7] == 0xAA)
+				break;
+
+		if (QTime::currentTime() > timeWork)
+			return QString("No response about switching to programming session"); // ГўГ»ГµГ®Г¤ Г± Г®ГёГЁГЎГЄГ®Г©
+	}
+
+
+
+	int msgSend_RequestSeedKey[8] = { 0x02, 0x27, 0x01, 0x00, 0x00, 0x00, 0x00, 0x00 }; // Г§Г ГЇГ°Г ГёГЁГўГ ГҐГ¬ Гў Request seed key
+	writeCan(idSend, msgSend_RequestSeedKey);
+	while (true) // Г†Г¤ВёГ¬ ГЄГ«ГѕГ· Г®ГІ boot
+	{
+		if (readWaitCan(&idReceive, msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x06 && msgReceive[1] == 0x67 && msgReceive[2] == 0x01) // ГЏГ®Г«ГіГ·ГЁГ«ГЁ ГЄГ«ГѕГ·
+			{
+				int sendMsgKey[8] = { 0x06, 0x27, 0x02, 0x00, 0x00, 0x00, 0x00, 0x00 };
+				unsigned char* ipSeedArray = new unsigned char[4];
+				ipSeedArray[0] = msgReceive[3];
+				ipSeedArray[1] = msgReceive[4];
+				ipSeedArray[2] = msgReceive[5];
+				ipSeedArray[3] = msgReceive[6];
+				unsigned char* keyAnswer = new unsigned char[4];
+				unsigned int size;
+				if (typeBlock == "BCM_NAMI")
+					GenerateKeyEx_BCM(ipSeedArray, 4, keyAnswer, 4, &size);
+				else if (typeBlock == "TM_NAMI")
+					GenerateKeyEx_TM(ipSeedArray, 4, keyAnswer, 4, &size);
+				else if (typeBlock == "SMXX_NAMI")
+					GenerateKeyEx_SMXX(ipSeedArray, 4, keyAnswer, 4, &size);
+				else
+					GenerateKeyEx_DMxx(ipSeedArray, 4, keyAnswer, 4, &size);
+
+				sendMsgKey[3] = keyAnswer[0];
+				sendMsgKey[4] = keyAnswer[1];
+				sendMsgKey[5] = keyAnswer[2];
+				sendMsgKey[6] = keyAnswer[3];
+
+				writeCan(idSend, sendMsgKey); // Г®ГІГЇГ°Г ГўГ«ГїГҐГ¬ ГЄГ«ГѕГ·
+
+				break;
+			}
+		if (QTime::currentTime() > timeWork)
+			return QString("No answer with key");  // ГўГ»ГµГ®Г¤ Г± Г®ГёГЁГЎГЄГ®Г©
+	}
+	while (true) // Г†Г¤ВёГ¬ ГЇГ®Г¤ГІГўГҐГ°Г¦Г¤ГҐГ­ГЁГҐ Г® ГўГ Г«ГЁГ¤Г­Г®Г±ГІГЁ ГЄГ«ГѕГ·Г 
+	{
+		if (readWaitCan(&idReceive, msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x02 && msgReceive[1] == 0x67 && msgReceive[2] == 0x02)
+				break;
+		if (QTime::currentTime() > timeWork)
+			return QString("Didn't receive a response about the validity of the key");  // ГўГ»ГµГ®Г¤ Г± Г®ГёГЁГЎГЄГ®Г©
+	}
+
+
+	int msgSend_EraseMemory_1[8] = { 0x10, 0x0D, 0x31, 0x01, 0xFF, 0x00, 0x44, 0x80 }; // Г„ГҐГ«Г ГҐГ¬ ГіГ¤Г Г«ГҐГ­ГЁГҐ ГЇГ Г¬ГїГІГЁ
+	writeCan(idSend, msgSend_EraseMemory_1); 
+
+	while (true) // Г¦Г¤ВёГ¬ Г®ГІГўГҐГІ
+	{
+		if (readWaitCan(&idReceive, msgReceive, 20))
+			if (idReceive == idReceiveRef && msgReceive[0] == 0x30 && msgReceive[1] == 0x00 && msgReceive[2] == 0x01)
+				break;
+		if (QTime::currentTime() > timeWork)
+			return QString("Didn't receive a response about the validity of the key");
+	}
+	if (typeBlock == "BCM_NAMI")
+	{
+		int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x12, 0x00, 0x00 }; // Г„ГҐГ«Г ГҐГ¬ ГіГ¤Г Г«ГҐГ­ГЁГҐ ГЇГ Г¬ГїГІГЁ
+		writeCan(idSend, msgSend_EraseMemory_2);
+	}
+	else
+	{
+		int msgSend_EraseMemory_2[8] = { 0x21, 0x08, 0x00, 0x00, 0x00, 0x11, 0x00, 0x00 }; // Г„ГҐГ«Г ГҐГ¬ ГіГ¤Г Г«ГҐГ­ГЁГҐ ГЇГ Г¬ГїГІГЁ
+		writeCan(idSend, msgSend_EraseMemory_2);
+	}
+
+		return QString("GOOD");
+}
+
+

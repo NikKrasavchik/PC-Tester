@@ -28,7 +28,7 @@
       <UniqueIdentifier>{37b6fda7-2c4f-42e9-9558-230491806d78}</UniqueIdentifier>
     </Filter>
     <Filter Include="Xlsx">
-      <UniqueIdentifier>{10aeacdc-fd65-4bbb-9a34-07b022409f32}</UniqueIdentifier>
+      <UniqueIdentifier>{bbed8d8b-4473-4f32-bb2c-3bd9a34ff01b}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -45,6 +45,18 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ReportWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="verificationtest.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="EraseWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="SemiautomaticWindow.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="moremanualwindow.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>
@@ -121,6 +133,9 @@
     <ClCompile Include="Xlsx\xlsxcellformula.cpp">
       <Filter>Xlsx</Filter>
     </ClCompile>
+    <ClCompile Include="Xlsx\xlsxcelllocation.cpp">
+      <Filter>Xlsx</Filter>
+    </ClCompile>
     <ClCompile Include="Xlsx\xlsxcellrange.cpp">
       <Filter>Xlsx</Filter>
     </ClCompile>
@@ -143,6 +158,9 @@
       <Filter>Xlsx</Filter>
     </ClCompile>
     <ClCompile Include="Xlsx\xlsxdatavalidation.cpp">
+      <Filter>Xlsx</Filter>
+    </ClCompile>
+    <ClCompile Include="Xlsx\xlsxdatetype.cpp">
       <Filter>Xlsx</Filter>
     </ClCompile>
     <ClCompile Include="Xlsx\xlsxdocpropsapp.cpp">
@@ -202,6 +220,9 @@
     <ClCompile Include="Xlsx\xlsxzipwriter.cpp">
       <Filter>Xlsx</Filter>
     </ClCompile>
+    <ClCompile Include="verificationtest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="qsliderbutton.h">
@@ -224,6 +245,9 @@
     </QtMoc>
     <QtMoc Include="Xlsx\xlsxdocument.h">
       <Filter>Xlsx</Filter>
+    </QtMoc>
+    <QtMoc Include="verificationtest.h">
+      <Filter>Header Files</Filter>
     </QtMoc>
   </ItemGroup>
   <ItemGroup>
@@ -260,6 +284,9 @@
     <ClInclude Include="Xlsx\xlsxcellformula_p.h">
       <Filter>Xlsx</Filter>
     </ClInclude>
+    <ClInclude Include="Xlsx\xlsxcelllocation.h">
+      <Filter>Xlsx</Filter>
+    </ClInclude>
     <ClInclude Include="Xlsx\xlsxcellrange.h">
       <Filter>Xlsx</Filter>
     </ClInclude>
@@ -294,6 +321,9 @@
       <Filter>Xlsx</Filter>
     </ClInclude>
     <ClInclude Include="Xlsx\xlsxdatavalidation_p.h">
+      <Filter>Xlsx</Filter>
+    </ClInclude>
+    <ClInclude Include="Xlsx\xlsxdatetype.h">
       <Filter>Xlsx</Filter>
     </ClInclude>
     <ClInclude Include="Xlsx\xlsxdocpropsapp_p.h">

@@ -1,44 +1,23 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxchartsheet.cpp
+
 #include "xlsxchartsheet.h"
+
+#include "xlsxchart.h"
 #include "xlsxchartsheet_p.h"
-#include "xlsxworkbook.h"
-#include "xlsxutility_p.h"
 #include "xlsxdrawing_p.h"
 #include "xlsxdrawinganchor_p.h"
-#include "xlsxchart.h"
+#include "xlsxutility_p.h"
+#include "xlsxworkbook.h"
 
+#include <QDir>
 #include <QXmlStreamReader>
 #include <QXmlStreamWriter>
-#include <QDir>
 
 QT_BEGIN_NAMESPACE_XLSX
 
 ChartsheetPrivate::ChartsheetPrivate(Chartsheet *p, Chartsheet::CreateFlag flag)
     : AbstractSheetPrivate(p, flag)
-    , chart(0)
+    , chart(nullptr)
 {
 }
 
@@ -61,19 +40,18 @@ Chartsheet::Chartsheet(const QString &name, int id, Workbook *workbook, CreateFl
     setSheetType(ST_ChartSheet);
 
     if (flag == Chartsheet::F_NewFromScratch) {
-        d_func()->drawing = QSharedPointer<Drawing>(new Drawing(this, flag));
+        d_func()->drawing = std::make_shared<Drawing>(this, flag);
 
-        DrawingAbsoluteAnchor *anchor =
-            new DrawingAbsoluteAnchor(drawing(), DrawingAnchor::Picture);
+        auto anchor = new DrawingAbsoluteAnchor(drawing(), DrawingAnchor::Picture);
 
         anchor->pos = QPoint(0, 0);
         anchor->ext = QSize(9293679, 6068786);
 
-        QSharedPointer<Chart> chart = QSharedPointer<Chart>(new Chart(this, flag));
-        chart->setChartType(Chart::CT_Bar);
+        auto chart = std::shared_ptr<Chart>(new Chart(this, flag));
+        chart->setChartType(Chart::CT_BarChart);
         anchor->setObjectGraphicFrame(chart);
 
-        d_func()->chart = chart.data();
+        d_func()->chart = chart.get();
     }
 }
 
@@ -85,10 +63,10 @@ Chartsheet::Chartsheet(const QString &name, int id, Workbook *workbook, CreateFl
 
 Chartsheet *Chartsheet::copy(const QString &distName, int distId) const
 {
-    //:Todo
+    //: Todo
     Q_UNUSED(distName)
     Q_UNUSED(distId)
-    return 0;
+    return nullptr;
 }
 
 /*!
@@ -129,7 +107,7 @@ void Chartsheet::saveToXmlFile(QIODevice *device) const
     writer.writeAttribute(QStringLiteral("zoomToFit"), QStringLiteral("1"));
     writer.writeEndElement(); // sheetViews
 
-    int idx = d->workbook->drawings().indexOf(d->drawing.data());
+    int idx = d->workbook->drawings().indexOf(d->drawing.get());
     d->relationships->addWorksheetRelationship(
         QStringLiteral("/drawing"), QStringLiteral("../drawings/drawing%1.xml").arg(idx + 1));
 
@@ -150,11 +128,13 @@ bool Chartsheet::loadFromXmlFile(QIODevice *device)
         reader.readNextStartElement();
         if (reader.tokenType() == QXmlStreamReader::StartElement) {
             if (reader.name() == QLatin1String("drawing")) {
-                QString rId = reader.attributes().value(QStringLiteral("r:id")).toString();
+                QString rId  = reader.attributes().value(QStringLiteral("r:id")).toString();
                 QString name = d->relationships->getRelationshipById(rId).target;
-                QString path =
-                    QDir::cleanPath(splitPath(filePath())[0] + QLatin1String("/") + name);
-                d->drawing = QSharedPointer<Drawing>(new Drawing(this, F_LoadFromExists));
+
+                const auto parts = splitPath(filePath());
+                QString path     = QDir::cleanPath(parts.first() + QLatin1String("/") + name);
+
+                d->drawing = std::make_shared<Drawing>(this, F_LoadFromExists);
                 d->drawing->setFilePath(path);
             }
         }

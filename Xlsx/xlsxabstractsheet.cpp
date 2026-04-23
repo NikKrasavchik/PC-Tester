@@ -1,28 +1,7 @@
-/****************************************************************************
-** Copyright (c) 2013-2014 Debao Zhang <hello@debao.me>
-** All right reserved.
-**
-** Permission is hereby granted, free of charge, to any person obtaining
-** a copy of this software and associated documentation files (the
-** "Software"), to deal in the Software without restriction, including
-** without limitation the rights to use, copy, modify, merge, publish,
-** distribute, sublicense, and/or sell copies of the Software, and to
-** permit persons to whom the Software is furnished to do so, subject to
-** the following conditions:
-**
-** The above copyright notice and this permission notice shall be
-** included in all copies or substantial portions of the Software.
-**
-** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-** EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-** MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-** NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-** LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-** OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-** WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-**
-****************************************************************************/
+// xlsxabstractsheet.cpp
+
 #include "xlsxabstractsheet.h"
+
 #include "xlsxabstractsheet_p.h"
 #include "xlsxworkbook.h"
 
@@ -31,7 +10,7 @@ QT_BEGIN_NAMESPACE_XLSX
 AbstractSheetPrivate::AbstractSheetPrivate(AbstractSheet *p, AbstractSheet::CreateFlag flag)
     : AbstractOOXmlFilePrivate(p, flag)
 {
-    type = AbstractSheet::ST_WorkSheet;
+    type       = AbstractSheet::ST_WorkSheet;
     sheetState = AbstractSheet::SS_Visible;
 }
 
@@ -59,7 +38,7 @@ AbstractSheetPrivate::~AbstractSheetPrivate()
 
   \value SS_Visible
   \value SS_Hidden
-  \value SS_VeryHidden User cann't make a veryHidden sheet visible in normal way.
+  \value SS_VeryHidden User can't make a veryHidden sheet visible in normal way.
 */
 
 /*!
@@ -72,12 +51,14 @@ AbstractSheetPrivate::~AbstractSheetPrivate()
 /*!
  * \internal
  */
-AbstractSheet::AbstractSheet(const QString &name, int id, Workbook *workbook,
+AbstractSheet::AbstractSheet(const QString &name,
+                             int id,
+                             Workbook *workbook,
                              AbstractSheetPrivate *d)
     : AbstractOOXmlFile(d)
 {
-    d_func()->name = name;
-    d_func()->id = id;
+    d_func()->name     = name;
+    d_func()->id       = id;
     d_func()->workbook = workbook;
 }
 
@@ -157,7 +138,7 @@ bool AbstractSheet::isVisible() const
 }
 
 /*!
- * Make the sheet hiden or visible based on \a hidden.
+ * Make the sheet hidden or visible based on \a hidden.
  */
 void AbstractSheet::setHidden(bool hidden)
 {
@@ -191,7 +172,7 @@ int AbstractSheet::sheetId() const
 Drawing *AbstractSheet::drawing() const
 {
     Q_D(const AbstractSheet);
-    return d->drawing.data();
+    return d->drawing.get();
 }
 
 /*!

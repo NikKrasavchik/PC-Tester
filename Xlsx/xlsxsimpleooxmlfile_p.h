@@ -37,22 +37,24 @@
 //
 #include "xlsxabstractooxmlfile.h"
 
+#include <QIODevice>
 #include <QString>
-class QIODevice;
 
-namespace QXlsx {
+QT_BEGIN_NAMESPACE_XLSX
 
 class SimpleOOXmlFile : public AbstractOOXmlFile
 {
 public:
     SimpleOOXmlFile(CreateFlag flag);
 
-    void saveToXmlFile(QIODevice *device) const;
-    QByteArray saveToXmlData() const;
-    bool loadFromXmlData(const QByteArray &data);
-    bool loadFromXmlFile(QIODevice *device);
+    void saveToXmlFile(QIODevice *device) const override;
+    QByteArray saveToXmlData() const override;
+    bool loadFromXmlData(const QByteArray &data) override;
+    bool loadFromXmlFile(QIODevice *device) override;
 
     QByteArray xmlData;
 };
-}
+
+QT_END_NAMESPACE_XLSX
+
 #endif // XLSXSIMPLEOOXMLFILE_H

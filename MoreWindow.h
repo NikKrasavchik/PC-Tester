@@ -12,8 +12,10 @@
 #include <QString>
 #include <QFileDialog>
 #include <fstream>
+#include <QInputDialog>
 
 #include "TestWindow.h"
+#include <mainwindow.h>
 
 #define START_MOREWINDOW_WIDTH				900
 #define START_MOREWINDOW_HEIGHT				250
@@ -26,6 +28,7 @@
 #define MEASURED_OFFSET_DOUBLE				2
 #define MEASURED_OFFSET_TRIPPLE				3
 #define MEASURED_OFFSET_SEXTUPLE			6
+#define MEASURED_OFFSET_NINETUPLE			9
 
 #define ROW_OFFSET_DOUBLE					2
 #define ROW_OFFSET_TRIPPLE					3
@@ -40,8 +43,9 @@
 #define SPAN_HORIZONTAL_TRIPPLE				1, 3
 #define SPAN_HORIZONTAL_QUADRUPLE			1, 4
 #define SPAN_HORIZONTAL_SEXTUPLE			1, 6
+#define SPAN_HORIZONTAL_NINETUPLE			1, 9
 
-#define SPAN_SQUAD_DOUBLE					2, 2
+#define SPAN_SQUAD_DOUBLE					2, 3
 
 #define IND_ROW_BASE_SIGN					0
 #define IND_ROW_BASE_VALUE					1
@@ -93,50 +97,91 @@
 #define CELL_VALUE_BASE_NAME				IND_ROW_BASE_VALUE_NAME,		IND_COLUMN_BASE_NAME
 #define CELL_VALUE_BASE_COMMENT				IND_ROW_BASE_VALUE_COMMENT,		IND_COLUMN_BASE_COMMENT
 
+// OUT AUTOSTAND
 #define IND_OUT_ROW_SIGN_MEASURED				0
 #define IND_OUT_ROW_SIGN_MEASURED_VALUES		1
 #define IND_OUT_ROW_SIGN_MEASURED_CURRENT		3
 #define IND_OUT_ROW_SIGN_MEASURED_VOLTAGE		3
+#define IND_OUT_ROW_SIGN_MEASURED_ADC			3
 #define IND_OUT_ROW_SIGN_THRESHOLDS				1
 #define IND_OUT_ROW_SIGN_CURRENT				2
 #define IND_OUT_ROW_SIGN_VOLTAGE				2
+#define IND_OUT_ROW_SIGN_ADC					2
 #define IND_OUT_ROW_SIGN_MIN_CURRENT			3
 #define IND_OUT_ROW_SIGN_MAX_CURRENT			3
 #define IND_OUT_ROW_SIGN_MIN_VOLTAGE			3
 #define IND_OUT_ROW_SIGN_MAX_VOLTAGE			3
+#define IND_OUT_ROW_SIGN_MIN_ADC				3
+#define IND_OUT_ROW_SIGN_MAX_ADC				3
 
 #define IND_OUT_COLUMN_SIGN_MEASURED			5
 #define IND_OUT_COLUMN_SIGN_MEASURED_VALUES		5
-#define IND_OUT_COLUMN_SIGN_MEASURED_CURRENT	5
-#define IND_OUT_COLUMN_SIGN_MEASURED_VOLTAGE	6
-#define IND_OUT_COLUMN_SIGN_THRESHOLDS			7
-#define IND_OUT_COLUMN_SIGN_CURRENT				7
-#define IND_OUT_COLUMN_SIGN_VOLTAGE				9
-#define IND_OUT_COLUMN_SIGN_MIN_CURRENT			7
-#define IND_OUT_COLUMN_SIGN_MAX_CURRENT			8
-#define IND_OUT_COLUMN_SIGN_MIN_VOLTAGE			9
-#define IND_OUT_COLUMN_SIGN_MAX_VOLTAGE			10
+#define IND_OUT_COLUMN_SIGN_MEASURED_VOLTAGE	5
+#define IND_OUT_COLUMN_SIGN_MEASURED_CURRENT	6
+#define IND_OUT_COLUMN_SIGN_MEASURED_ADC		7
+#define IND_OUT_COLUMN_SIGN_THRESHOLDS			8
+#define IND_OUT_COLUMN_SIGN_CURRENT				8
+#define IND_OUT_COLUMN_SIGN_VOLTAGE				10
+#define IND_OUT_COLUMN_SIGN_ADC					12
+#define IND_OUT_COLUMN_SIGN_MIN_VOLTAGE			8
+#define IND_OUT_COLUMN_SIGN_MAX_VOLTAGE			9
+#define IND_OUT_COLUMN_SIGN_MIN_CURRENT			10
+#define IND_OUT_COLUMN_SIGN_MAX_CURRENT			11
+#define IND_OUT_COLUMN_SIGN_MIN_ADC				12
+#define IND_OUT_COLUMN_SIGN_MAX_ADC				13
 
 #define CELL_OUT_SIGN_MEASURED					IND_OUT_ROW_SIGN_MEASURED,			IND_OUT_COLUMN_SIGN_MEASURED
 #define CELL_OUT_SIGN_MEASURED_VALUES			IND_OUT_ROW_SIGN_MEASURED_VALUES,	IND_OUT_COLUMN_SIGN_MEASURED_VALUES
 #define CELL_OUT_SIGN_MEASURED_CURRENT			IND_OUT_ROW_SIGN_MEASURED_CURRENT,	IND_OUT_COLUMN_SIGN_MEASURED_CURRENT
 #define CELL_OUT_SIGN_MEASURED_VOLTAGE			IND_OUT_ROW_SIGN_MEASURED_VOLTAGE,	IND_OUT_COLUMN_SIGN_MEASURED_VOLTAGE
+#define CELL_OUT_SIGN_MEASURED_ADC				IND_OUT_ROW_SIGN_MEASURED_ADC,		IND_OUT_COLUMN_SIGN_MEASURED_ADC
 #define CELL_OUT_SIGN_THRESHOLDS				IND_OUT_ROW_SIGN_THRESHOLDS,		IND_OUT_COLUMN_SIGN_THRESHOLDS
 #define CELL_OUT_SIGN_THRESHOLDS_CURRENT		IND_OUT_ROW_SIGN_CURRENT,			IND_OUT_COLUMN_SIGN_CURRENT
 #define CELL_OUT_SIGN_THRESHOLDS_VOLTAGE		IND_OUT_ROW_SIGN_VOLTAGE,			IND_OUT_COLUMN_SIGN_VOLTAGE
+#define CELL_OUT_SIGN_THRESHOLDS_ADC			IND_OUT_ROW_SIGN_ADC,				IND_OUT_COLUMN_SIGN_ADC
 #define CELL_OUT_SIGN_MIN_CURRENT				IND_OUT_ROW_SIGN_MIN_CURRENT,		IND_OUT_COLUMN_SIGN_MIN_CURRENT
 #define CELL_OUT_SIGN_MAX_CURRENT				IND_OUT_ROW_SIGN_MAX_CURRENT,		IND_OUT_COLUMN_SIGN_MAX_CURRENT
 #define CELL_OUT_SING_MIN_VOLTAGE				IND_OUT_ROW_SIGN_MIN_VOLTAGE,		IND_OUT_COLUMN_SIGN_MIN_VOLTAGE
 #define CELL_OUT_SING_MAX_VOLTAGE				IND_OUT_ROW_SIGN_MAX_VOLTAGE,		IND_OUT_COLUMN_SIGN_MAX_VOLTAGE
+#define CELL_OUT_SING_MIN_ADC					IND_OUT_ROW_SIGN_MIN_ADC,			IND_OUT_COLUMN_SIGN_MIN_ADC
+#define CELL_OUT_SING_MAX_ADC					IND_OUT_ROW_SIGN_MAX_ADC,			IND_OUT_COLUMN_SIGN_MAX_ADC
 
 #define IND_OUT_ROW_VALUES						4
 
-#define CELL_OUT_VALUES_MEASURED_CURRENT		IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MEASURED_CURRENT
 #define CELL_OUT_VALUES_MEASURED_VOLTAGE		IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MEASURED_VOLTAGE
-#define CELL_OUT_VALUES_MIN_CURRENT				IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MIN_CURRENT
-#define CELL_OUT_VALUES_MAX_CURRENT				IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MAX_CURRENT
+#define CELL_OUT_VALUES_MEASURED_CURRENT		IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MEASURED_CURRENT
+#define CELL_OUT_VALUES_MEASURED_ADC			IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MEASURED_ADC
 #define CELL_OUT_VALUES_MIN_VOLTAGE				IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MIN_VOLTAGE
 #define CELL_OUT_VALUES_MAX_VOLTAGE				IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MAX_VOLTAGE
+#define CELL_OUT_VALUES_MIN_CURRENT				IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MIN_CURRENT
+#define CELL_OUT_VALUES_MAX_CURRENT				IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MAX_CURRENT
+#define CELL_OUT_VALUES_MIN_ADC					IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MIN_ADC
+#define CELL_OUT_VALUES_MAX_ADC					IND_OUT_ROW_VALUES,	IND_OUT_COLUMN_SIGN_MAX_ADC
+// OUT AUTOSTAND
+// 
+// MANUALSTAND	
+#define IND_OUT_ROW_SIGN_ADC_MANUALSTEND					0
+#define IND_OUT_ROW_SIGN_THRESHOLDS_MANUALSTEND				1
+#define IND_OUT_ROW_SIGN_MIN_THRESHOLDS_MANUALSTEND			2
+#define IND_OUT_ROW_SIGN_MAX_THRESHOLDS_MANUALSTEND			2
+
+#define IND_OUT_COLUMN_SIGN_ADC_MANUALSTEND					5
+#define IND_OUT_COLUMN_SIGN_THRESHOLDS_MANUALSTEND			5
+#define IND_OUT_COLUMN_SIGN_MIN_THRESHOLDS_MANUALSTAND		5
+#define IND_OUT_COLUMN_SIGN_MAX_THRESHOLDS_MANUALSTAND		6
+#define IND_OUT_COLUMN_SIGN_MIN_THRESHOLDS_MANUALSTEND		5
+#define IND_OUT_COLUMN_SIGN_MAX_THRESHOLDS_MANUALSTEND		6
+
+#define CELL_OUT_SIGN_ADC_MANUALSTEND						IND_OUT_ROW_SIGN_ADC_MANUALSTEND, IND_OUT_COLUMN_SIGN_ADC_MANUALSTEND
+#define CELL_OUT_SIGN_THRESHOLDS_MANUALSTEND				IND_OUT_ROW_SIGN_THRESHOLDS_MANUALSTEND, IND_OUT_COLUMN_SIGN_THRESHOLDS_MANUALSTEND
+#define CELL_OUT_SING_MIN_THRESHOLDS_MANUALSTAND			IND_OUT_ROW_SIGN_MIN_THRESHOLDS_MANUALSTEND, IND_OUT_COLUMN_SIGN_MIN_THRESHOLDS_MANUALSTAND	
+#define CELL_OUT_SING_MAX_THRESHOLDS_MANUALSTAND			IND_OUT_ROW_SIGN_MAX_THRESHOLDS_MANUALSTEND, IND_OUT_COLUMN_SIGN_MAX_THRESHOLDS_MANUALSTAND
+
+#define IND_OUT_ROW_VALUES_MANUALSTAND						3
+
+#define CELL_OUT_VALUES_MIN_THRESHOLDS_MANUALSTEND			IND_OUT_ROW_VALUES_MANUALSTAND, IND_OUT_COLUMN_SIGN_MIN_THRESHOLDS_MANUALSTEND
+#define CELL_OUT_VALUES_MAX_THRESHOLDS_MANUALSTEND			IND_OUT_ROW_VALUES_MANUALSTAND, IND_OUT_COLUMN_SIGN_MAX_THRESHOLDS_MANUALSTEND
+// MANUALSTAND
 
 #define	IND_IN_ROW_SIGN_MEASURED					0
 
@@ -180,6 +225,7 @@
 
 #define WINDOW_OUT_HEIGHT			300
 #define WINDOW_IN_HEIGHT			175
+#define WINDOW_MANUALSTEND_HEIGHT	150
 #define EMPTY_WINDOW_WIDTH			600
 #define WINDOW_MEASURED_WIDTH		300
 
@@ -194,39 +240,22 @@ public:
 	MoreWindow(TestTableRowProperties* row);
 	~MoreWindow();
 
-	// ------------------------------------
-	// Name: setValues
-	//		«апись значений кабел€ в таблицу
-	// ------------------------------------
 	virtual void setValues();
 
 protected:
 	QTableWidget* mainTableWidget;
 	QTextEdit* commentTextEdit;
 	QPushButton* saveChangesButton;
+	QPushButton* startTestButton;
 	QFont* font;
 
 	TestTableRowProperties* row;
 	int coutThresholds;
 	bool isAllInit;
 
-	// ------------------------------------
-	// Name: prepareItem
-	//		ѕодготовка €чейки дл€ записи в него данных
-	// Variables: 
-	//			int row: индекс строчки €чейки
-	//			int column: индекс столбца €чйки
-	//			int rowSpan: количество €чейек дл€ горизонтального соединени€
-	//			int columnSpan: количество €чейук дл€ вертикального соединени€
-	// ------------------------------------
+
 	void prepareItem(int row, int column, int rowSpan, int columnSpan);
 
-	// ------------------------------------
-	// Name: resetLanguage
-	//		ќбновление данных в €чейках под актуальный €зык
-	// Variables: 
-	//			int offset: «начение смещени€. ѕо умолчанию OFFSET_NULL
-	// ------------------------------------
 	void resetLanguage(int offset);
 
 private:
@@ -235,15 +264,13 @@ private:
 	void fillBaseTable();
 
 	void resizeEvent(QResizeEvent* event) { mainWidget->resize(geometry().width() - (PADDING_MAINWIDGET * 2), geometry().height() - PADDING_MAINWIDGET); };
-
-	void resaveFile();
+	bool resaveFile();
 	void generateWarning(Warnings::MoreWindow warning);
 
 	QWidget* mainWidget;
 	QVBoxLayout* mainVLayout;
 	QHBoxLayout* bottomHLayout;
 	QSpacerItem* bottomSpacer;
-	QPushButton* startTestButton;
 
 public slots:
 	void on_mainTableWidget_cellChanged(int row, int column);
@@ -251,10 +278,10 @@ public slots:
 	void on_startTestButton_clicked();
 };
 
-class MoreWindowOut : public MoreWindow
+class MoreWindowOut_AutoStend : public MoreWindow
 {
 public:
-	MoreWindowOut(TestTableRowProperties* row);
+	MoreWindowOut_AutoStend(TestTableRowProperties* row);
 
 private:
 	TestTableRowProperties* row;
@@ -264,10 +291,10 @@ private:
 	void setValues();
 };
 
-class MoreWindowIn : public MoreWindow
+class MoreWindowIn_AutoStend : public MoreWindow
 {
 public:
-	MoreWindowIn(TestTableRowProperties* row);
+	MoreWindowIn_AutoStend(TestTableRowProperties* row);
 
 private:
 	TestTableRowProperties* row;
@@ -277,10 +304,23 @@ private:
 	void setValues();
 };
 
-class MoreWindowInAnalog : public MoreWindow
+class MoreWindowInAnalog_AutoStend : public MoreWindow
 {
 public:
-	MoreWindowInAnalog(TestTableRowProperties* row);
+	MoreWindowInAnalog_AutoStend(TestTableRowProperties* row);
+
+private:
+	TestTableRowProperties* row;
+
+	void generateSigns();
+	void resetBlockLanguage(int measuredNum);
+	void setValues();
+};
+
+class MoreWindowOut_ManualStend : public MoreWindow
+{
+public:
+	MoreWindowOut_ManualStend(TestTableRowProperties* row);
 
 private:
 	TestTableRowProperties* row;

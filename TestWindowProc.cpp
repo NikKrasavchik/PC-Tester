@@ -5,25 +5,23 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 	for (int i = 0; i < cables.size(); i++)
 	{
 		cableRows.push_back(new TestTableRowProperties());
-		// Test
-		for (int j = 0; j < cables[i].getThresholds().size(); j++)
-		{
-			Measureds* tmpMeasured = new Measureds;
-			cableRows[i]->measureds.push_back(tmpMeasured);
-		}
-		// Test
+
 		cableRows[i]->id = cables[i].getId();
 		cableRows[i]->connectorStr = (char)(PRIMARY_CONNECTOR_SYMBOL + (int)cables[i].getConnector());
 		cableRows[i]->connectorInt = cables[i].getConnector();
 		cableRows[i]->pin = QString::number(cables[i].getPin());
 		cableRows[i]->name = cables[i].getName();
 		cableRows[i]->component = cables[i].getComponent();
-		for (int j = 0; j < cables[i].getThresholds().size(); j++)
-			cableRows[i]->thresholds.push_back(cables[i].getThresholds()[j]);
+		for (int j = 0; j < cables[i].getThresholdsManual().size(); j++)
+			cableRows[i]->thresholdsManual.push_back(cables[i].getThresholdsManual()[j]);
+		for (int j = 0; j < cables[i].getThresholdsAuto().size(); j++)
+			cableRows[i]->thresholdsAuto.push_back(cables[i].getThresholdsAuto()[j]);
 		cableRows[i]->stateDigital = BUTTON_NOT_SET;
 		cableRows[i]->statePWM = BUTTON_NOT_SET;
+		cableRows[i]->stateHLD = BUTTON_NOT_SET;
 		cableRows[i]->canId = cables[i].getCanId();
 		cableRows[i]->bit = cables[i].getBit();
+		//cableRows[i]->sleep = cables[i].getSleep();
 
 		switch (cables[i].getDirection())
 		{
@@ -46,68 +44,26 @@ void TestWindow::generateCableRows(WindowType testType, std::vector<Cable> cable
 			else if(cables[i].getType() == TYPE_ANALOG)
 				cableRows[i]->typeInt = TypeCable::ANALOG_IN;
 			else if (cables[i].getType() == TYPE_HALL)
+			{
 				cableRows[i]->typeInt = TypeCable::HALL_IN;
+				hallLabels.push_back(std::pair<int, QLabel*> {-1, new QLabel()});
+			}
+			break;
+		case NOT_SET:
+			if (cables[i].getType() == TYPE_CAN)
+				cableRows[i]->typeInt = TypeCable::CAN_OUT;
+			else if (cables[i].getType() == TYPE_LIN)
+				cableRows[i]->typeInt = TypeCable::LIN_OUT;
+			else if(cables[i].getType() == NOT_SET)
+				cableRows[i]->typeInt = TypeCable::SLEEP;
 			break;
 		}
 
-		if (testType == WindowType::IN_AUTO_TEST_AUTO_STAND ||
-			testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
-			testType == WindowType::IN_TEST_MANUAL_STAND ||
-			testType == WindowType::FULL_TEST_AUTO_STAND ||
-			testType == WindowType::FULL_TEST_MANUAL_STAND)
-			switch (cables[i].getType())
-			{
-			case TYPE_DIGITAL:
-				cableRows[i]->typeStr = "DIGITAL";
-				break;
 
-			case TYPE_ANALOG:
-				cableRows[i]->typeStr = "ANALOG";
-				break;
-
-			case TYPE_HALL:
-				cableRows[i]->typeStr = "HALL";
-				hallLabels.push_back(std::pair<int, QLabel*> {-1, new QLabel()});
-				break;
-
-			default:
-				break;
-			}
-
-		if (testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
-			testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
-			testType == WindowType::OUT_TEST_MANUAL_STAND ||
-			testType == WindowType::FULL_TEST_AUTO_STAND ||
-			testType == WindowType::FULL_TEST_MANUAL_STAND)
-		{
-			switch (cables[i].getType())
-			{
-			case TYPE_DIGITAL:
-				if (testType != WindowType::FULL_TEST_AUTO_STAND && testType != WindowType::FULL_TEST_MANUAL_STAND)
-					cableRows[i]->typeStr = "DIGITAL";
-				break;
-
-			case TYPE_PWM:
-				cableRows[i]->typeStr = "PWM";
-				break;
-
-			case TYPE_VNH:
-				cableRows[i]->typeStr = "VNH";
-				break;
-
-			case TYPE_HLD:
-				cableRows[i]->typeStr = "HLD";
-				break;
-
-			default:
-				break;
-			}
-		}
-
-		cableRows[i]->generateInteractionButtons(testType, cables[i].getType());
+		cableRows[i]->generateInteractionButtons(testType, this);
 		connect((cableRows[i]), &TestTableRowProperties::selectCurrentCell, this, &TestWindow::selectCurrentCell);
 
-		m[cableRows[i]->id] = i;
+		offsetMap[cableRows[i]->id] = i;
 	}
 }
 
@@ -122,38 +78,45 @@ TestTableRowProperties::TestTableRowProperties()
 	name = "";
 	component = "";
 	direction = "";
-	typeStr = "";
 	typeInt = TypeCable::EMPTY;
 	comment = "";
 	manualChecked = false;
 }
 
-void TestTableRowProperties::generateInteractionButtons(WindowType testType, int type)
+void TestTableRowProperties::generateInteractionButtons(WindowType testType, TestWindow *testwindow)
 {
-	if (testType == WindowType::OUT_TEST_MANUAL_STAND ||
-		testType == WindowType::FULL_TEST_MANUAL_STAND)
-		switch (type)
+	switch (testType)
+	{
+
+	case WindowType::OUT_TEST_MANUAL_STAND:
+	case WindowType::FULL_TEST_MANUAL_STAND:
+		switch (typeInt)
 		{
-		case TYPE_DIGITAL:
-			if (direction == "OUT")
-			{
-				buttons = new DigitalButtons();
-
-				((DigitalButtons*)buttons)->onButton = new QPushButton();
-				((DigitalButtons*)buttons)->onButton->setObjectName("onButton");
-				((DigitalButtons*)buttons)->onButton->setText("on");
-				((DigitalButtons*)buttons)->onButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
-				((DigitalButtons*)buttons)->onButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
-
-				((DigitalButtons*)buttons)->offButton = new QPushButton();
-				((DigitalButtons*)buttons)->offButton->setObjectName("offButton");
-				((DigitalButtons*)buttons)->offButton->setText("off");
-				((DigitalButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
-				((DigitalButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
-			}
+		case TypeCable::DIG_IN:
 			break;
+		case TypeCable::ANALOG_IN:
+			break;
+		case TypeCable::HALL_IN:
+			break;
+		case TypeCable::DIG_OUT:
+			buttons = new DigitalButtons();
 
-		case TYPE_PWM:
+			((DigitalButtons*)buttons)->onButton = new QPushButton();
+			((DigitalButtons*)buttons)->onButton->setObjectName("onButton");
+			((DigitalButtons*)buttons)->onButton->setText("on");
+			((DigitalButtons*)buttons)->onButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+			((DigitalButtons*)buttons)->onButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			((DigitalButtons*)buttons)->offButton = new QPushButton();
+			((DigitalButtons*)buttons)->offButton->setObjectName("offButton");
+			((DigitalButtons*)buttons)->offButton->setText("off");
+			((DigitalButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
+			((DigitalButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			connect(((DigitalButtons*)buttons)->onButton, &QPushButton::clicked, this, &TestTableRowProperties::on_onButton_clicked);
+			connect(((DigitalButtons*)buttons)->offButton, &QPushButton::clicked, this, &TestTableRowProperties::on_offButton_clicked);
+			break;
+		case TypeCable::PWM_OUT:
 			buttons = new PWMButtons();
 
 			((PWMButtons*)buttons)->load0Button = new QPushButton();
@@ -185,9 +148,14 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((PWMButtons*)buttons)->load100Button->setText("100%");
 			((PWMButtons*)buttons)->load100Button->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
 			((PWMButtons*)buttons)->load100Button->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
-			break;
 
-		case TYPE_VNH:
+			connect(((PWMButtons*)buttons)->load0Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load0Button_clicked);
+			connect(((PWMButtons*)buttons)->load25Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load25Button_clicked);
+			connect(((PWMButtons*)buttons)->load50Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load50Button_clicked);
+			connect(((PWMButtons*)buttons)->load75Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load75Button_clicked);
+			connect(((PWMButtons*)buttons)->load100Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load100Button_clicked);
+			break;
+		case TypeCable::VNH_OUT:
 			buttons = new VNHButtons();
 
 			((VNHButtons*)buttons)->load0Button = new QPushButton();
@@ -232,9 +200,16 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((VNHButtons*)buttons)->offButton->setText("off");
 			((VNHButtons*)buttons)->offButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((VNHButtons*)buttons)->offButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
-			break;
 
-		case TYPE_HLD:
+			connect(((VNHButtons*)buttons)->load0Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load0Button_clicked);
+			connect(((VNHButtons*)buttons)->load25Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load25Button_clicked);
+			connect(((VNHButtons*)buttons)->load50Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load50Button_clicked);
+			connect(((VNHButtons*)buttons)->load75Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load75Button_clicked);
+			connect(((VNHButtons*)buttons)->load100Button, &QPushButton::clicked, this, &TestTableRowProperties::on_load100Button_clicked);
+			connect(((VNHButtons*)buttons)->onButton, &QPushButton::clicked, this, &TestTableRowProperties::on_onButton_clicked);
+			connect(((VNHButtons*)buttons)->offButton, &QPushButton::clicked, this, &TestTableRowProperties::on_offButton_clicked);
+			break;
+		case TypeCable::HLD_OUT:
 			buttons = new HLDButtons();
 
 			((HLDButtons*)buttons)->highButton = new QPushButton();
@@ -248,58 +223,101 @@ void TestTableRowProperties::generateInteractionButtons(WindowType testType, int
 			((HLDButtons*)buttons)->lowButton->setText("Low");
 			((HLDButtons*)buttons)->lowButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((HLDButtons*)buttons)->lowButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
-			
+
 			((HLDButtons*)buttons)->zeroButton = new QPushButton();
 			((HLDButtons*)buttons)->zeroButton->setObjectName("zeroButton");
 			((HLDButtons*)buttons)->zeroButton->setText("Zero");
 			((HLDButtons*)buttons)->zeroButton->setFixedWidth(FIXED_CHECK_BUTTON_WIDTH);
 			((HLDButtons*)buttons)->zeroButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			connect(((HLDButtons*)buttons)->highButton, &QPushButton::clicked, this, &TestTableRowProperties::on_high_clicked);
+			connect(((HLDButtons*)buttons)->lowButton, &QPushButton::clicked, this, &TestTableRowProperties::on_low_clicked);
+			connect(((HLDButtons*)buttons)->zeroButton, &QPushButton::clicked, this, &TestTableRowProperties::on_zero_clicked);
+			break;
+		case TypeCable::CAN_OUT:
+		case TypeCable::LIN_OUT:
+			buttons = new CheckInfomationBus();
+
+			((CheckInfomationBus*)buttons)->checkButton = new QPushButton();
+			((CheckInfomationBus*)buttons)->checkButton->setText("Check");
+			((CheckInfomationBus*)buttons)->checkButton->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
+			((CheckInfomationBus*)buttons)->checkButton->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT);
+
+			((CheckInfomationBus*)buttons)->comboBox = new QComboBox();
+			((CheckInfomationBus*)buttons)->comboBox->setStyleSheet(lightStyles.settingComboBox);
+			((CheckInfomationBus*)buttons)->comboBox->setFixedWidth(FIXED_CHECK_WBUTTON_WIDTH);
+			((CheckInfomationBus*)buttons)->comboBox->setFixedHeight(FIXED_CHECK_BUTTON_HEIGHT + 10);
+
+
+			for(QString nameAdapter : Can::getNameAdapters())
+				if (Can::getSelectedAdapterNeme() != nameAdapter)
+					((CheckInfomationBus*)buttons)->comboBox->addItem(nameAdapter);
+
+
+			connect(((CheckInfomationBus*)buttons)->checkButton, &QPushButton::clicked, this, &TestTableRowProperties::on_check_clicked);
+			connect(this, &TestTableRowProperties::Signal_ChangedByte, testwindow, &TestWindow::Slot_ChangedByte);
+
 			break;
 
 		default:
 			break;
 		}
-	else if (testType == WindowType::OUT_MANUAL_TEST_AUTO_STAND ||
-			 testType == WindowType::IN_MANUAL_TEST_AUTO_STAND ||
-			 testType == WindowType::OUT_AUTO_TEST_AUTO_STAND ||
-			 testType == WindowType::FULL_TEST_AUTO_STAND)
-	{
+	case WindowType::IN_TEST_MANUAL_STAND:
+		manualCheckBox = new QCheckBox();
+		manualCheckBox->setStyleSheet(lightStyles.testwindowManualCheckBox);
+		connect(manualCheckBox, &QCheckBox::clicked, this, &TestTableRowProperties::on_manualCheckBox_clicked);
+		break;
+	case WindowType::IN_MANUAL_TEST_AUTO_STAND:
+	case WindowType::OUT_MANUAL_TEST_AUTO_STAND:
 		buttons = new CheckButton();
-
 		((CheckButton*)buttons)->checkButton = new QPushButton();
 		((CheckButton*)buttons)->checkButton->setObjectName("checkButton");
 		((CheckButton*)buttons)->checkButton->setFixedSize(FIXED_ACHECK_BUTTON_WIDTH, FIXED_ACHECK_BUTTON_HEIGHT);
 		connect(((CheckButton*)buttons)->checkButton, &QPushButton::clicked, this, &TestTableRowProperties::on_checkButton_clicked);
-	}
+		//break;
+	case WindowType::IN_AUTO_TEST_AUTO_STAND:
+	case WindowType::OUT_AUTO_TEST_AUTO_STAND:
+	case WindowType::FULL_TEST_AUTO_STAND:
+		moreButton = new QPushButton();
+		moreButton->setObjectName("moreButton");
+		moreButton->setFixedSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE);
 
-	moreButton = new QPushButton();
-	moreButton->setObjectName("moreButton");
-	moreButton->setFixedSize(FIXED_MORE_BUTTON_SIZE, FIXED_MORE_BUTTON_SIZE);
+		connect(moreButton, &QPushButton::clicked, this, &TestTableRowProperties::on_moreButton_clicked);
+
+		break;
+
+	}
 }
 
-void TestWindow::selectCurrentCell(QString connector, QString pin)
+void TestWindow::selectCurrentCell(int id)
 {
-	for (int i = 0; i < cableRows.size(); i++)
-		if (cableRows[i]->connectorStr == connector && cableRows[i]->pin == pin)
-			mainTableWidget->setCurrentCell(i, 0);
+	mainTableWidget->setCurrentCell(offsetMap[id], 2);
+
+	if (mainTableWidget->item(offsetMap[id], 0) != nullptr)
+		mainTableWidget->item(offsetMap[id], 0)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 1) != nullptr)
+		mainTableWidget->item(offsetMap[id], 1)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 2) != nullptr)
+		mainTableWidget->item(offsetMap[id], 2)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 3) != nullptr)
+		mainTableWidget->item(offsetMap[id], 3)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 4) != nullptr)
+		mainTableWidget->item(offsetMap[id], 4)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 5) != nullptr)
+		mainTableWidget->item(offsetMap[id], 5)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 6) != nullptr)
+		mainTableWidget->item(offsetMap[id], 6)->setSelected(true);
+	if (mainTableWidget->item(offsetMap[id], 8) != nullptr)
+		mainTableWidget->item(offsetMap[id], 8)->setSelected(true);
 }
 
 void TestTableRowProperties::switchButtonState(TestButtons testButton)
 {
-	Styles* currentStyles = nullptr;
-	switch (viewWindowState->appTheme)
-	{
-	case (LIGHT_THEME):
-		currentStyles = &lightStyles;
-		break;
+	Styles* currentStyles = &lightStyles;
 
-	case (DARK_THEME):
-		currentStyles = &darkStyles;
-		break;
-	}
-
-	if (typeStr == "DIGITAL")
+	switch (typeInt)
 	{
+	case TypeCable::DIG_OUT:
 		((DigitalButtons*)buttons)->onButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((DigitalButtons*)buttons)->offButton->setStyleSheet(currentStyles->inactiveTableButton);
 
@@ -321,13 +339,12 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		default:
 			break;
 		}
-	}
-	else if (typeStr == "PWM")
-	{
+		break;
+	case TypeCable::PWM_OUT:
 		((PWMButtons*)buttons)->load0Button->setStyleSheet(currentStyles->inactiveTableButton);
 		((PWMButtons*)buttons)->load25Button->setStyleSheet(currentStyles->inactiveTableButton);
 		((PWMButtons*)buttons)->load50Button->setStyleSheet(currentStyles->inactiveTableButton);
-		((PWMButtons*)buttons)->load75Button ->setStyleSheet(currentStyles->inactiveTableButton);
+		((PWMButtons*)buttons)->load75Button->setStyleSheet(currentStyles->inactiveTableButton);
 		((PWMButtons*)buttons)->load100Button->setStyleSheet(currentStyles->inactiveTableButton);
 
 		((PWMButtons*)buttons)->load0Button->setDisabled(false);
@@ -366,9 +383,8 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		default:
 			break;
 		}
-	}
-	else if (typeStr == "VNH")
-	{
+		break;
+	case TypeCable::VNH_OUT:
 		switch (testButton)
 		{
 		case TestButtons::BUTTON_ON:
@@ -436,9 +452,8 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 			}
 			break;
 		}
-	}
-	else if (typeStr == "HLD")
-	{
+		break;
+	case TypeCable::HLD_OUT:
 		((HLDButtons*)buttons)->highButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((HLDButtons*)buttons)->lowButton->setStyleSheet(currentStyles->inactiveTableButton);
 		((HLDButtons*)buttons)->zeroButton->setStyleSheet(currentStyles->inactiveTableButton);
@@ -467,7 +482,13 @@ void TestTableRowProperties::switchButtonState(TestButtons testButton)
 		default:
 			break;
 		}
+		break;
+
+	default:
+		break;
 	}
+
+
 }
 
 void TestTableRowProperties::on_onButton_clicked()
@@ -475,12 +496,12 @@ void TestTableRowProperties::on_onButton_clicked()
 	if (stateDigital == ON_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
 
 	switchButtonState(TestButtons::BUTTON_ON);
 	stateDigital = ON_BUTTON_PRESSED;
 
-	sendSignal();
+	selectCurrentCell(id);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
 void TestTableRowProperties::on_offButton_clicked()
@@ -488,12 +509,11 @@ void TestTableRowProperties::on_offButton_clicked()
 	if (stateDigital == OFF_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_OFF);
 	stateDigital = OFF_BUTTON_PRESSED;
 
-	sendSignal();
+	selectCurrentCell(id);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
 void TestTableRowProperties::on_load0Button_clicked()
@@ -501,12 +521,11 @@ void TestTableRowProperties::on_load0Button_clicked()
 	if (statePWM == LOAD0_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_0);
 	statePWM = LOAD0_BUTTON_PRESSED;
 
-	sendSignal();
+	selectCurrentCell(id);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
 void TestTableRowProperties::on_load25Button_clicked()
@@ -514,12 +533,11 @@ void TestTableRowProperties::on_load25Button_clicked()
 	if (statePWM == LOAD25_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_25);
 	statePWM = LOAD25_BUTTON_PRESSED;
 
-	sendSignal();
+	selectCurrentCell(id);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
 void TestTableRowProperties::on_load50Button_clicked()
@@ -527,12 +545,11 @@ void TestTableRowProperties::on_load50Button_clicked()
 	if (statePWM == LOAD50_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_50);
 	statePWM = LOAD50_BUTTON_PRESSED;
 
-	sendSignal();
+	selectCurrentCell(id);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
 void TestTableRowProperties::on_high_clicked()
@@ -540,11 +557,10 @@ void TestTableRowProperties::on_high_clicked()
 	if (stateHLD == HIGH_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_HIGH);
 	stateHLD = HIGH_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 1, 0);
 
 }
@@ -554,11 +570,10 @@ void TestTableRowProperties::on_low_clicked()
 	if (stateHLD == LOW_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_LOW);
 	stateHLD = LOW_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 2, 0);
 }
 
@@ -567,11 +582,10 @@ void TestTableRowProperties::on_zero_clicked()
 	if (stateHLD == ZERO_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_ZERO);
 	stateHLD = ZERO_BUTTON_PRESSED;
 
+	selectCurrentCell(id);
 	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), 0, 0);
 }
 
@@ -580,12 +594,11 @@ void TestTableRowProperties::on_load75Button_clicked()
 	if (statePWM == LOAD75_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_75);
 	statePWM = LOAD75_BUTTON_PRESSED;
 
-	sendSignal();
+	selectCurrentCell(id);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
 void TestTableRowProperties::on_load100Button_clicked()
@@ -593,17 +606,30 @@ void TestTableRowProperties::on_load100Button_clicked()
 	if (statePWM == LOAD100_BUTTON_PRESSED)
 		return;
 
-	selectCurrentCell(connectorStr, pin);
-
 	switchButtonState(TestButtons::BUTTON_LOAD_100);
 	statePWM = LOAD100_BUTTON_PRESSED;
 
-	sendSignal();
+	selectCurrentCell(id);
+	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
 }
 
-void TestTableRowProperties::sendSignal()
+void TestTableRowProperties::on_check_clicked()
 {
-	Can::sendTestMsg(this->connectorInt, this->pin.toInt(), stateDigital == NOT_SET ? 0 : stateDigital, statePWM == NOT_SET ? 0 : statePWM);
+	Signal_ChangedByte(id, NOT_SET);
+	Can::checkInformationBus(canId);
+	selectCurrentCell(id);
+
+
+}
+
+void TestTableRowProperties::on_manualCheckBox_clicked()
+{
+	if(manualCheckBox->isChecked())
+		manualCheckBox->setToolTip(QString("Элемент исправен"));
+	else
+		manualCheckBox->setToolTip(QString("Элемент неисправен"));
+
+	selectCurrentCell(id);
 }
 
 void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
@@ -630,8 +656,54 @@ void TestTableRowProperties::generateWarning(Warnings::TestWindow warning)
 
 void TestWindow::slot_mainTableWidget_cellClicked(int row, int column)
 {
-	if (column == mainTableWidget->columnCount() - 1)
-		manualChecks[row]->setChecked(!manualChecks[row]->isChecked());
+	if (testType == WindowType::IN_TEST_MANUAL_STAND || testType == WindowType::OUT_TEST_MANUAL_STAND || testType == WindowType::FULL_TEST_MANUAL_STAND)
+	{
+
+		if (mainTableWidget->item(row, 0) != nullptr)
+			mainTableWidget->item(row, 0)->setSelected(true);
+		if (mainTableWidget->item(row, 1) != nullptr)
+			mainTableWidget->item(row, 1)->setSelected(true);
+		if (mainTableWidget->item(row, 2) != nullptr)
+			mainTableWidget->item(row, 2)->setSelected(true);
+		if (mainTableWidget->item(row, 3) != nullptr)
+			mainTableWidget->item(row, 3)->setSelected(true);
+		if (mainTableWidget->item(row, 4) != nullptr)
+			mainTableWidget->item(row, 4)->setSelected(true);
+		if (mainTableWidget->item(row, 5) != nullptr)
+			mainTableWidget->item(row, 5)->setSelected(true);
+		if (mainTableWidget->item(row, 6) != nullptr)
+			mainTableWidget->item(row, 6)->setSelected(true);
+		if (mainTableWidget->item(row, 8) != nullptr)
+			mainTableWidget->item(row, 8)->setSelected(true);
+
+		if (column == mainTableWidget->columnCount() - 1)
+			cableRows[row]->manualCheckBox->setChecked(!cableRows[row]->manualCheckBox->isChecked());
+	}
+	else
+	{
+		if (mainTableWidget->item(row, 0) != nullptr)
+			mainTableWidget->item(row, 0)->setSelected(true);
+		if (mainTableWidget->item(row, 1) != nullptr)
+			mainTableWidget->item(row, 1)->setSelected(true);
+		if (mainTableWidget->item(row, 2) != nullptr)
+			mainTableWidget->item(row, 2)->setSelected(true);
+		if (mainTableWidget->item(row, 3) != nullptr)
+			mainTableWidget->item(row, 3)->setSelected(true);
+		if (mainTableWidget->item(row, 4) != nullptr)
+			mainTableWidget->item(row, 4)->setSelected(true);
+		//if (mainTableWidget->item(row, 5) != nullptr)
+		//	mainTableWidget->item(row, 5)->setSelected(true);
+		if (mainTableWidget->item(row, 6) != nullptr)
+			mainTableWidget->item(row, 6)->setSelected(true);
+	}
+}
+void TestWindow::slot_mainTableWidget_cellDoubleClicked(int row, int column)
+{
+	if (column == 7 && !(cableRows[row]->typeInt == TypeCable::CAN_OUT || cableRows[row]->typeInt == TypeCable::LIN_OUT))
+	{
+		cableRows[row]->createMoreWindow(WindowType::FULL_TEST_MANUAL_STAND);
+
+	}
 }
 
 void TestWindow::on_rotateTimer_timeout()
@@ -644,14 +716,13 @@ void TestWindow::on_rotateTimer_timeout()
 
 		hallLabels[i].second->setText("");
 		hallLabels[i].first++;
-		
-		if (hallLabels[i].second->pixmap() != nullptr)
-		{
-			QPixmap pixmap = *hallLabels[i].second->pixmap();
-			pixmap.transformed(QTransform().rotate(1));
-			hallLabels[i].second->setPixmap(pixmap);
-		}
-		
+
+
+		QPixmap pixmap = hallLabels[i].second->pixmap();
+		pixmap.transformed(QTransform().rotate(1));
+		hallLabels[i].second->setPixmap(pixmap);
+
+
 		if (hallLabels[i].first == 360)
 		{
 			hallLabels[i].first = -1;
@@ -665,6 +736,18 @@ void TestWindow::on_rotateTimer_timeout()
 				hallLabels[i].second->setPixmap(QPixmap(*noClockwiseLightPixmap));
 				break;
 			}
-		}	
+		}
 	}
+}
+
+void TestWindow::on_delayStartTimer()
+{
+	for (int i = 0; i < cableRows.size(); i++)
+		if (cableRows[i]->canId > 0x300)
+		{
+			Can::checkInformationBus(cableRows[i]->canId);
+			Sleep(25);
+		}
+
+	delayStartTimer->stop();
 }

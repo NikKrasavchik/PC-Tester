@@ -2,8 +2,8 @@
 
 #define COLUMN_COUNT			7
 
-#define COLUMN_COMPONENT		3
-#define COLUMN_TYPE				4
+#define COLUMN_TYPE				3
+#define COLUMN_COMPONENT		4
 #define COLUMN_STATUS			5
 #define COLUMN_MANUAL_CHECK		6
 
@@ -20,6 +20,7 @@ void TestWindow::initUiInTestManualStand()
 void TestWindow::initUiTableInTestManualStand()
 {
 	initUiTableHeaderInTestManualStand();
+	resetTableTypeLanguageInTestManualStand();
 	initUiTableRowsInTestManualStand();
 }
 
@@ -60,19 +61,9 @@ void TestWindow::initUiTableHeaderInTestManualStand()
 
 void TestWindow::resetLanguageInTestManualStand()
 {
-	std::vector<bool> checkedManualChecks;
-	for (int i = 0; i < manualChecks.size(); i++)
-		checkedManualChecks.push_back(manualChecks[i]->isChecked());
-	for (int i = 0; i < manualChecks.size(); i++)
-		delete manualChecks[i];
-	manualChecks.clear();
-
 	resetTableHeaderLanguageInTestManualStand();
 	resetTableTypeLanguageInTestManualStand();
 	initUiTableRowsInTestManualStand();
-
-	for (int i = 0; i < checkedManualChecks.size(); i++)
-		manualChecks[i]->setChecked(checkedManualChecks[i]);
 }
 
 void TestWindow::resetTableHeaderLanguageInTestManualStand()
@@ -82,13 +73,13 @@ void TestWindow::resetTableHeaderLanguageInTestManualStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ðàçú¸ì"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ïèí"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Íàçâàíèå"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Êîìïîíåíò"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Òèï"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ñòàòóñ"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Èñïðàâíî"));
+		mainTableHeaderLabels->push_back(QString("ÐšÐ¾Ð»Ð¾Ð´ÐºÐ°"));
+		mainTableHeaderLabels->push_back(QString("ÐŸÐ¸Ð½"));
+		mainTableHeaderLabels->push_back(QString("ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ"));
+		mainTableHeaderLabels->push_back(QString("Ð¢Ð¸Ð¿"));
+		mainTableHeaderLabels->push_back(QString("ÐšÐ¾Ð¼Ð¿Ð¾Ð½ÐµÐ½Ñ‚"));
+		mainTableHeaderLabels->push_back(QString("Ð¡Ñ‚Ð°Ñ‚ÑƒÑ"));
+		mainTableHeaderLabels->push_back(QString("Ð˜ÑÐ¿Ñ€Ð°Ð²Ð½Ð¾"));
 		mainTableHeaderLabels->push_back("");
 		break;
 
@@ -98,8 +89,8 @@ void TestWindow::resetTableHeaderLanguageInTestManualStand()
 		mainTableHeaderLabels->push_back("Connector");
 		mainTableHeaderLabels->push_back("Pin");
 		mainTableHeaderLabels->push_back("Name");
-		mainTableHeaderLabels->push_back("Component");
 		mainTableHeaderLabels->push_back("Type");
+		mainTableHeaderLabels->push_back("Component");
 		mainTableHeaderLabels->push_back("Status");
 		mainTableHeaderLabels->push_back("Correctly");
 		mainTableHeaderLabels->push_back("");
@@ -116,33 +107,77 @@ void TestWindow::resetTableTypeLanguageInTestManualStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Öèôðîâîé"));
-			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("ØÈÌ"));
-			else if (cableRows[currentRowNum]->typeStr == "VNH")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("VNH"));
-			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Àíàëîãîâûé"));
-			else if (cableRows[currentRowNum]->typeStr == "HALL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
-			else if (cableRows[currentRowNum]->typeStr == "HLD")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
+			switch (cableRows[currentRowNum]->typeInt)
+			{
+			case TypeCable::EMPTY:
+				break;
+			case TypeCable::DIG_IN:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¦Ð¸Ñ„Ñ€Ð¾Ð²Ð¾Ð¹"));
+				break;
+			case TypeCable::ANALOG_IN:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ÐÐ½Ð°Ð»Ð¾Ð³Ð¾Ð²Ð¾Ñ‹Ð¹"));
+				break;
+			case TypeCable::HALL_IN:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HALL"));
+				break;
+			case TypeCable::DIG_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¦Ð¸Ñ„Ñ€Ð¾Ð²Ð¾Ð¹"));
+				break;
+			case TypeCable::PWM_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¨Ð˜Ðœ"));
+				break;
+			case TypeCable::VNH_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("VNH"));
+				break;
+			case TypeCable::HLD_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HLD"));
+				break;
+			case TypeCable::CAN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+				break;
+			case TypeCable::LIN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
+				break;
+			default:
+				break;
+			}
 			break;
 
 		case ENGLISH_LANG:
-			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
+			switch (cableRows[currentRowNum]->typeInt)
+			{
+			case TypeCable::EMPTY:
+				break;
+			case TypeCable::DIG_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
-			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
-			else if (cableRows[currentRowNum]->typeStr == "VNH")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
-			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
+				break;
+			case TypeCable::ANALOG_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Analog");
-			else if (cableRows[currentRowNum]->typeStr == "HALL")
+				break;
+			case TypeCable::HALL_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
-			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				break;
+			case TypeCable::DIG_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
+				break;
+			case TypeCable::PWM_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
+				break;
+			case TypeCable::VNH_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
+				break;
+			case TypeCable::HLD_OUT:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HLD");
+				break;
+			case TypeCable::CAN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+				break;
+			case TypeCable::LIN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
+				break;
+			default:
+				break;
+			}
 			break;
 		}
 	}
@@ -156,7 +191,8 @@ void TestWindow::initUiTableRowsInTestManualStand()
 	{
 		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
 			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
+		if (cableRows[currentRowNum]->connectorInt != ConnectorId::EMPTY)
+			model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
 		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
 		model->setData(model->index(currentRowNum, COLUMN_COMPONENT), cableRows[currentRowNum]->component);
@@ -187,6 +223,6 @@ void TestWindow::initUiTableRowsInTestManualStand()
 				mainTableWidget->removeCellWidget(currentRowNum, COLUMN_STATUS);
 			mainTableWidget->setCellWidget(currentRowNum, COLUMN_STATUS, wiseWidget);
 		}
+		resetLanguageToolTipButtonTable(currentRowNum, COLUMN_STATUS);
 	}
-	resetTableTypeLanguageInTestManualStand();
 }

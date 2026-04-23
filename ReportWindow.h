@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ui_ReportWindow.h"
+#include "ui_EraseWindow.h"
 #include <QDialog>
 #include <QFormLayout>
 #include <qtablewidget.h>
@@ -10,6 +11,10 @@
 #include <QString>
 #include <QDateTime>
 #include <QCheckBox>
+#include <Windows.h>
+#include "QKeyEvent"
+#include <QProcess>
+
 
 #include "Components.h"
 #include "TestWindow.h"
@@ -22,13 +27,17 @@
 #define LEFT_PADDING_MAIN_WIDGET		10
 #define UP_PADDING_MAIN_WIDGET			10
 
+#define MEASUREMENT_OFFSET_ONE			1
 #define MEASUREMENT_OFFSET_DOUBLE		2
 #define MEASUREMENT_OFFSET_QUADRUPLE	4
 #define MEASUREMENT_OFFSET_SEXTUPLE		6
+#define MEASUREMENT_OFFSET_NINETUPEL	9
 
-#define MEASUREMENT_OFFSET_OUT			MEASUREMENT_OFFSET_SEXTUPLE
+#define MEASUREMENT_OFFSET_OUT			MEASUREMENT_OFFSET_NINETUPEL
 #define MEASUREMENT_OFFSET_IN			MEASUREMENT_OFFSET_DOUBLE
 #define MEASUREMENT_OFFSET_IN_ANALOG	MEASUREMENT_OFFSET_QUADRUPLE
+#define MEASUREMENT_OFFSET_INFORMATION	MEASUREMENT_OFFSET_DOUBLE
+
 
 #define ROW_COUNT_BASE_TABLE			1
 #define COLUMN_COUNT_BASE_TABLE			6
@@ -42,9 +51,11 @@
 #define SPAN_HORIZONTAL_TRIPPLE			1, 3
 #define SPAN_HORIZONTAL_QUADRUPLE		1, 4
 #define SPAN_HORIZONTAL_SEXTUPLE		1, 6
+#define SPAN_HORIZONTAL_NINETUPEL		1, 9
 
 #define SPAN_NONE						1, 1
 #define SPAN_SQUAD_DOUBLE				2, 2
+#define SPAN_SQUAD_TRIPL				2, 3
 
 #define SPAN_TYPE_OUT					4, 5
 #define SPAN_TYPE_IN					1, 5
@@ -54,7 +65,7 @@
 #define SPAN_TYPE_COMMENT_IN			1, 1
 #define SPAN_TYPE_COMMENT_IN_ANALOG		3, 1
 
-#define ROW_COUNT_SIGN_OUT				4
+#define ROW_COUNT_SIGN_OUT				4  
 #define ROW_COUNT_SIGN_IN_ANALOG		3
 
 #define IND_ROW_BASE_SIGN				0
@@ -85,8 +96,8 @@
 #define IND_COLUMN_MANUAL_VALUE			5
 
 // Save File
-#define HEIGHT_HEADERFILE				7	
-#define START_ROW_TABLE					9
+#define HEIGHT_HEADERFILE				11	
+#define START_ROW_TABLE					13
 
 class TestTableRowProperties;
 class TestWindow;
@@ -96,13 +107,15 @@ class ReportWindow : public QDialog
 
 public:
 	ReportWindow(std::vector<TestTableRowProperties*> cableRows, TestBlockName testingBlock);
-	ReportWindow(std::vector<TestTableRowProperties*> cableRows, std::vector<QCheckBox*> checkedState, TestBlockName testingBlock);
 	~ReportWindow();
 
-	void setTestingBlock(TestBlockName testingBlock) { this->testingBlock = testingBlock; }
 	void setTestingType(WindowType testType) { this->testType = testType; }
 
 private:
+	QDialog* dlgErase;
+	Ui::EraseWindowClass uiErase;
+
+
 	QWidget* mainWidget;
 	QWidget* footerWidget;
 	QWidget* reportDataWidget;
@@ -124,10 +137,13 @@ private:
 
 	std::vector<TestTableRowProperties*> cableRows;
 	std::vector<std::vector<TestTableRowProperties*>> typedCableRows;
-	std::vector<bool> checkedState;
 	std::vector<QTextEdit*> commentsTextEdits;
 	QString testerName;
 	QString serialNumber;
+	QString equipmentName;
+	bool startErase;
+	bool isCtrlPressed;
+
 
 	void initUi();
 	void initUiTable();
@@ -139,12 +155,14 @@ private:
 	void generateTableManual();
 	void generateTableSign(TypeCable type, int maxTypeOffset);
 	void generateXlsx();
+	void blockComXlsx(QString nameFile);
 	void generateWarning(Warnings::ReportWindow warning);
 
 	void fillTable(TypeCable type, std::vector<TestTableRowProperties*> cableRows);
 	void fillTableOut(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableIn(std::vector<TestTableRowProperties*> cableRows);
 	void fillTableInAnalog(std::vector<TestTableRowProperties*> cableRows);
+	void fillTableInformation(std::vector<TestTableRowProperties*> cableRows);
 	
 	void resaveComments();
 
@@ -155,5 +173,12 @@ private:
 	void resizeEvent(QResizeEvent* event);
 
 public slots:
+	// Слот срабатывающий при нажатии на кнопку Сохранить
+	// 
+	// @name on_saveButton_clicked
+	// 
+	// @return void
 	void on_saveButton_clicked();
+	void on_erasePushButton_clicked();
+	void on_cancelPushButton_clicked();
 };

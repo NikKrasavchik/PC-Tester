@@ -16,17 +16,18 @@
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformVersion Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">10.0.19041.0</WindowsTargetPlatformVersion>
     <QtMsBuild Condition="'$(QtMsBuild)'=='' OR !Exists('$(QtMsBuild)\qt.targets')">$(MSBuildProjectDirectory)\QtMsBuild</QtMsBuild>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <UseDebugLibraries>true</UseDebugLibraries>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v145</PlatformToolset>
     <UseDebugLibraries>false</UseDebugLibraries>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
@@ -36,12 +37,12 @@
     <Import Project="$(QtMsBuild)\qt_defaults.props" />
   </ImportGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="QtSettings">
-    <QtInstall>5.12.10_msvc2017_64</QtInstall>
+    <QtInstall>6.8.0_msvc2022_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>debug</QtBuildConfig>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="QtSettings">
-    <QtInstall>5.12.10_msvc2017_64</QtInstall>
+    <QtInstall>6.8.0_msvc2022_64</QtInstall>
     <QtModules>core;gui;widgets</QtModules>
     <QtBuildConfig>release</QtBuildConfig>
   </PropertyGroup>
@@ -65,24 +66,24 @@
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ClCompile>
-      <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495;4267</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>canlib32.lib;chai.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <ClCompile>
-      <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495</DisableSpecificWarnings>
-      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <DisableSpecificWarnings>4828;26451;26439;6011;6289;26812;26498;26495;4267</DisableSpecificWarnings>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\include;C:\Program Files %28x86%29\Kvaser\Canlib\INC;C:\Program Files %28x86%29\PCAN-Basic\Include;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>Default</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>canlib32.lib;chai.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\Program Files %28x86%29\CHAI-2.14.0\x64;C:\Program Files %28x86%29\Kvaser\Canlib\Lib\x64;C:\Program Files %28x86%29\PCAN-Basic\x64;C:\Users\zahar.mormil\Desktop\DTM_BCM\PC-Tester\libzip\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>canlib32.lib;chai.lib;linlib.lib;PCANBasic.lib;zip.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
@@ -136,11 +137,13 @@
     </ClCompile>
     <ClCompile Include="StyleSheets.cpp" />
     <ClCompile Include="TestWindowProc.cpp" />
+    <ClCompile Include="verificationtest.cpp" />
     <ClCompile Include="WindowFrame.cpp" />
     <ClCompile Include="Xlsx\xlsxabstractooxmlfile.cpp" />
     <ClCompile Include="Xlsx\xlsxabstractsheet.cpp" />
     <ClCompile Include="Xlsx\xlsxcell.cpp" />
     <ClCompile Include="Xlsx\xlsxcellformula.cpp" />
+    <ClCompile Include="Xlsx\xlsxcelllocation.cpp" />
     <ClCompile Include="Xlsx\xlsxcellrange.cpp" />
     <ClCompile Include="Xlsx\xlsxcellreference.cpp" />
     <ClCompile Include="Xlsx\xlsxchart.cpp" />
@@ -149,6 +152,7 @@
     <ClCompile Include="Xlsx\xlsxconditionalformatting.cpp" />
     <ClCompile Include="Xlsx\xlsxcontenttypes.cpp" />
     <ClCompile Include="Xlsx\xlsxdatavalidation.cpp" />
+    <ClCompile Include="Xlsx\xlsxdatetype.cpp" />
     <ClCompile Include="Xlsx\xlsxdocpropsapp.cpp" />
     <ClCompile Include="Xlsx\xlsxdocpropscore.cpp" />
     <ClCompile Include="Xlsx\xlsxdocument.cpp" />
@@ -169,13 +173,17 @@
     <ClCompile Include="Xlsx\xlsxzipreader.cpp" />
     <ClCompile Include="Xlsx\xlsxzipwriter.cpp" />
     <QtRcc Include="resources\resources.qrc" />
+    <QtUic Include="EraseWindow.ui" />
     <QtUic Include="MainWindow.ui" />
     <QtMoc Include="MainWindow.h" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="moremanualwindow.ui" />
     <QtUic Include="MoreWindow.ui" />
     <QtUic Include="ReportWindow.ui" />
+    <QtUic Include="SemiautomaticWindow.ui" />
     <QtUic Include="TestWindow.ui" />
+    <QtUic Include="verificationtest.ui" />
     <QtUic Include="WindowFrame.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +191,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Cable.h" />
+    <QtMoc Include="verificationtest.h" />
     <ClInclude Include="Xlsx\xlsxabstractooxmlfile.h" />
     <ClInclude Include="Xlsx\xlsxabstractooxmlfile_p.h" />
     <ClInclude Include="Xlsx\xlsxabstractsheet.h" />
@@ -190,6 +199,7 @@
     <ClInclude Include="Xlsx\xlsxcell.h" />
     <ClInclude Include="Xlsx\xlsxcellformula.h" />
     <ClInclude Include="Xlsx\xlsxcellformula_p.h" />
+    <ClInclude Include="Xlsx\xlsxcelllocation.h" />
     <ClInclude Include="Xlsx\xlsxcellrange.h" />
     <ClInclude Include="Xlsx\xlsxcellreference.h" />
     <ClInclude Include="Xlsx\xlsxcell_p.h" />
@@ -203,6 +213,7 @@
     <ClInclude Include="Xlsx\xlsxcontenttypes_p.h" />
     <ClInclude Include="Xlsx\xlsxdatavalidation.h" />
     <ClInclude Include="Xlsx\xlsxdatavalidation_p.h" />
+    <ClInclude Include="Xlsx\xlsxdatetype.h" />
     <ClInclude Include="Xlsx\xlsxdocpropsapp_p.h" />
     <ClInclude Include="Xlsx\xlsxdocpropscore_p.h" />
     <ClInclude Include="Xlsx\xlsxdocument_p.h" />

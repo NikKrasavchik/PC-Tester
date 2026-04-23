@@ -1,6 +1,8 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include "ui_mainwindow.h"
+
 #include <QFormLayout>
 #include <QLabel>
 #include <QPushButton>
@@ -12,14 +14,18 @@
 #include <QFile>
 #include <qmessagebox.h>
 #include <utility>
+#include <qtooltip.h>
+#include <qpalette.h>
+#include <zip.h>
+#include <QStandardPaths>
 
-#include "ui_mainwindow.h"
 #include "TestWindow.h"
 #include "qsliderbutton.h"
 #include "can.h"
 #include "WindowFrame.h"
 #include "Components.h"
 #include "mainwindow.h"
+#include "verificationtest.h"
 #include "Cable.h"
 
 #include <QDebug>
@@ -39,6 +45,8 @@ public:
 	//			WindowFrame* parentFrame: родительских элемент
 	// ------------------------------------
 	void setParentFrame(WindowFrame* parentFrame);
+	static QStringList  ReadFileFromArchiv();
+	static bool GenerateNewArchiv(QStringList filesToAdd);
 
 private:
 	Ui::MainWindowClass ui;
@@ -110,6 +118,7 @@ private:
 	QPushButton* outTestManualStandButton;
 	QPushButton* inTestManualStandButton;
 	QPushButton* fullTestManualStandButton;
+	QPushButton* verificationtestTestManualStandButton;
 	QPushButton* outManualTestAutoStandButton;
 	QPushButton* inManualTestAutoStandButton;
 	QPushButton* outAutoTestAutoStandButton;
@@ -117,6 +126,7 @@ private:
 	QPushButton* fullTestAutoStandButton;
 	QPushButton* leftBlockBCMButton;
 	QPushButton* leftBlockDMButton;
+	QPushButton* leftBlockSMXXutton;
 	QComboBox* selectBlockVersionComboBox;
 	QComboBox* selectAdapterComboBox;
 	QComboBox* selectFrequencyComboBox;
@@ -135,6 +145,7 @@ private:
 	QSpacerItem* manualStandMainBottomSpacer;
 	QSpacerItem* backgroundManualStandMainUpSpacer;
 	QSpacerItem* backgroundManualStandMainBottomSpacer;
+	QSpacerItem* backgroundManualStandMainBottomSecondSpacer;
 	QSpacerItem* backgroundManualStandMainRightSpacer;
 	QSpacerItem* backgroundManualStandMainLeftSpacer;
 	QSpacerItem* manualTestAutoStandLeftSpacer;
@@ -180,13 +191,15 @@ private:
 	QPixmap* checkAdapterDarkPixmap;
 	QPixmap* languageLightPixmap;
 	QPixmap* languageDarkPixmap;
-
+	
+	QPalette DarkPalette;
 	QTimer* timerCheckAdapter;
 
 	Can* can;
 	std::vector<Cable> cables;
 	std::vector<QString> blockVersionsDTM;
 	std::vector<QString> blockVersionsBCM;
+	std::vector<QString> blockVersionsSMXX;
 
 	bool isAllInit;
 	TypeStand selectedTypeStand;
@@ -195,8 +208,9 @@ private:
 	void initStyles();
 	void initLightStyleSheets();
 	void initDarkStyleSheets();
-	void initTexts();
 	void initIcons();
+	void initTips();
+
 	void initConnections();
 	void initBlockVersions();
 	void loadCables(TestBlockName block, QString version);
@@ -206,6 +220,7 @@ private:
 	void initUiTopHLayout();
 	void initUiLeftHLayout();
 	void initUiMainVLayout();
+	
 
 	void initUiSwitchType();
 	void initUiSwitchThemeLang();
@@ -217,6 +232,12 @@ private:
 	void initUiAutoStandManualTest();
 	void initUiAutoStandAutoTest();	
 	void initUiAutoStandFullTest();
+
+	void initConfig();
+	void resetConfig();
+
+	static bool RemoveArchiv();
+	
 
 	void fillComboBoxes();
 
@@ -243,6 +264,7 @@ private slots:
 	void slot_checkAdaptersButton_clicked();
 	void slot_leftBlockBCMButton_clicked();
 	void slot_leftBlockDMButton_clicked();
+	void slot_leftBlockSMXXutton_clicked();
 
 	// ComboBoxes
 	void slot_selectBlockVersionComboBox_changed(int index);
@@ -253,14 +275,13 @@ private slots:
 	void slot_outTestManualStandButton_clicked();
 	void slot_inTestManualStandButton_clicked();
 	void slot_fullTestManualStandButton_clicked();
+	void slot_verificationtestTestManualStandButton_clicked();
 	void slot_inManualTestAutoStandButton_clicked();
 	void slot_outManualTestAutoStandButton_clicked();
 	void slot_inAutoTestAutoStandButton_clicked();
 	void slot_outAutoTestAutoStandButton_clicked();
 	void slot_fullTestAutoStandButton_clicked();
 
-	// Timer
-	void Timer_CheckAdapter();
 
 
 signals:

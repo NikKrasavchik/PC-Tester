@@ -1,12 +1,11 @@
 #include "TestWindow.h"
 
-#define COLUMN_COUNT		8
+#define COLUMN_COUNT		7
 
 #define COLUMN_DIRECTION	3
 #define COLUMN_TYPE			4
-#define COLUMN_CHECK		5
-#define COLUMN_STATUS		6
-#define COLUMN_MORE			7
+#define COLUMN_STATUS		5
+#define COLUMN_MORE			6
 
 void TestWindow::initUiFullTestAutoStand()
 {
@@ -25,7 +24,7 @@ void TestWindow::initUiFullTestAutoStand()
 	fullTestSortButton->setObjectName("fullTestSortButton");
 	fullTestSortButton->setFixedSize(QSize(FIXED_HEADER_BUTTON_WIDTH, FIXED_HEADER_BUTTON_HEIGHT));
 	usefulSpaceHLayout->addWidget(fullTestSortButton);
-	fullTestSortType = SORT_TYPE_INDEX;
+	fullTestSortType = SortType::SortIndex;
 	
 	initUiTableFullTestAutoStand();
 }
@@ -48,7 +47,6 @@ void TestWindow::resetTableHeaderFullTestAutoStand()
 	mainTableWidget->setColumnWidth(COLUMN_PIN,		COLUMN_PIN_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_DIRECTION,	COLUMN_DIRECTION_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_TYPE,		COLUMN_TYPE_WIDTH);
-	mainTableWidget->setColumnWidth(COLUMN_CHECK,		COLUMN_AUTOCHECK_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_STATUS,		COLUMN_STATUS_WIDTH);
 	mainTableWidget->setColumnWidth(COLUMN_MORE,		COLUMN_MORE_WIDTH);
 
@@ -57,7 +55,6 @@ void TestWindow::resetTableHeaderFullTestAutoStand()
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_NAME,			QHeaderView::Stretch);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_DIRECTION,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_TYPE,			QHeaderView::Fixed);
-	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_CHECK,			QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_STATUS,		QHeaderView::Fixed);
 	mainTableWidget->horizontalHeader()->setSectionResizeMode(COLUMN_MORE,			QHeaderView::Fixed);
 
@@ -75,9 +72,9 @@ void TestWindow::resetTableHeaderFullTestAutoStand()
 
 void TestWindow::resetLanguageFullTestAutoStand()
 {
+	resetTableHeaderFullTestAutoStand();
 	resetTableHeaderLanguageFullTestAutoStand();
-	resetTableTypeLanguageFullTestAutoStand();
-	resetTableDirectionLanguageFullTestAutoStand();
+	resetTableRowsFullTestAutoStand();
 }
 
 void TestWindow::resetTableHeaderLanguageFullTestAutoStand()
@@ -87,13 +84,13 @@ void TestWindow::resetTableHeaderLanguageFullTestAutoStand()
 	case RUSSIAN_LANG:
 		delete mainTableHeaderLabels;
 		mainTableHeaderLabels = new QStringList();
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ðàçú¸ì"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ïèí"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Íàçâàíèå"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Íàïðàâëåíèå"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Òèï"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("Ñòåíä"));
-		mainTableHeaderLabels->push_back(QString::fromLocal8Bit("ÏÊ"));
+		mainTableHeaderLabels->push_back(QString("ÐšÐ¾Ð»Ð¾Ð´ÐºÐ°"));
+		mainTableHeaderLabels->push_back(QString("ÐŸÐ¸Ð½"));
+		mainTableHeaderLabels->push_back(QString("ÐÐ°Ð·Ð²Ð°Ð½Ð¸Ðµ"));
+		mainTableHeaderLabels->push_back(QString("ÐÐ°Ð¿Ñ€Ð°Ð²Ð»ÐµÐ½Ð¸Ðµ"));
+		mainTableHeaderLabels->push_back(QString("Ð¢Ð¸Ð¿"));
+		mainTableHeaderLabels->push_back(QString("Ð¡Ñ‚Ð°Ñ‚ÑƒÑ"));
+
 		mainTableHeaderLabels->push_back("");
 		break;
 
@@ -105,8 +102,7 @@ void TestWindow::resetTableHeaderLanguageFullTestAutoStand()
 		mainTableHeaderLabels->push_back("Name");
 		mainTableHeaderLabels->push_back("Direction");
 		mainTableHeaderLabels->push_back("Type");
-		mainTableHeaderLabels->push_back("Stand");
-		mainTableHeaderLabels->push_back("PC");
+		mainTableHeaderLabels->push_back("Status");
 		mainTableHeaderLabels->push_back("");
 		break;
 	}
@@ -121,10 +117,12 @@ void TestWindow::resetTableDirectionLanguageFullTestAutoStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
+
 			if (cableRows[currentRowNum]->direction == "OUT")
-				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString::fromLocal8Bit("Âûõîä"));
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString("Ð’Ñ‹Ñ…Ð¾Ð´"));
 			else if (cableRows[currentRowNum]->direction == "IN")
-				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString::fromLocal8Bit("Âõîä"));
+				model->setData(model->index(currentRowNum, COLUMN_DIRECTION), QString("Ð’Ñ…Ð¾Ð´"));
+
 			break;
 
 		case ENGLISH_LANG:
@@ -145,33 +143,77 @@ void TestWindow::resetTableTypeLanguageFullTestAutoStand()
 		switch (viewWindowState->appLanguage)
 		{
 		case RUSSIAN_LANG:
-			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Öèôðîâîé"));
-			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("ØÈÌ"));
-			else if (cableRows[currentRowNum]->typeStr == "VNH")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("VNH"));
-			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("Àíàëîãîâûé"));
-			else if (cableRows[currentRowNum]->typeStr == "HALL")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HALL"));
-			else if (cableRows[currentRowNum]->typeStr == "HLD")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString::fromLocal8Bit("HLD"));
+			switch (cableRows[currentRowNum]->typeInt)
+			{
+			case TypeCable::EMPTY:
+				break;
+			case TypeCable::DIG_IN:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¦Ð¸Ñ„Ñ€Ð¾Ð²Ð¾Ð¹"));
+				break;
+			case TypeCable::ANALOG_IN:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("ÐÐ½Ð°Ð»Ð¾Ð³Ð¾Ð²Ð¾Ñ‹Ð¹"));
+				break;
+			case TypeCable::HALL_IN:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HALL"));
+				break;
+			case TypeCable::DIG_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¦Ð¸Ñ„Ñ€Ð¾Ð²Ð¾Ð¹"));
+				break;
+			case TypeCable::PWM_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("Ð¨Ð˜Ðœ"));
+				break;
+			case TypeCable::VNH_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("VNH"));
+				break;
+			case TypeCable::HLD_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), QString("HLD"));
+				break;
+			case TypeCable::CAN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+				break;
+			case TypeCable::LIN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
+				break;
+			default:
+				break;
+			}
 			break;
 
 		case ENGLISH_LANG:
-			if (cableRows[currentRowNum]->typeStr == "DIGITAL")
+			switch (cableRows[currentRowNum]->typeInt)
+			{
+			case TypeCable::EMPTY:
+				break;
+			case TypeCable::DIG_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
-			else if (cableRows[currentRowNum]->typeStr == "PWM")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
-			else if (cableRows[currentRowNum]->typeStr == "VNH")
-				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
-			else if (cableRows[currentRowNum]->typeStr == "ANALOG")
+				break;
+			case TypeCable::ANALOG_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Analog");
-			else if (cableRows[currentRowNum]->typeStr == "HALL")
+				break;
+			case TypeCable::HALL_IN:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HALL");
-			else if (cableRows[currentRowNum]->typeStr == "HLD")
+				break;
+			case TypeCable::DIG_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "Digital");
+				break;
+			case TypeCable::PWM_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "PWM");
+				break;
+			case TypeCable::VNH_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "VNH");
+				break;
+			case TypeCable::HLD_OUT:
 				model->setData(model->index(currentRowNum, COLUMN_TYPE), "HLD");
+				break;
+			case TypeCable::CAN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "CAN");
+				break;
+			case TypeCable::LIN_OUT:
+				model->setData(model->index(currentRowNum, COLUMN_TYPE), "LIN");
+				break;
+			default:
+				break;
+			}
 			break;
 		}
 	}
@@ -184,22 +226,26 @@ void TestWindow::resetTableRowsFullTestAutoStand()
 	{
 		if (mainTableWidget->rowHeight(currentRowNum) < MIN_ROW_HEIGHT)
 			mainTableWidget->setRowHeight(currentRowNum, MIN_ROW_HEIGHT);
-		model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
-		model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
+		if (cableRows[currentRowNum]->connectorInt != ConnectorId::EMPTY)
+			model->setData(model->index(currentRowNum, COLUMN_CONNECTOR), cableRows[currentRowNum]->connectorStr + "\nXP" + QString::number((int)cableRows[currentRowNum]->connectorInt));
+		
+		if (cableRows[currentRowNum]->typeInt == TypeCable::CAN_OUT || cableRows[currentRowNum]->typeInt == TypeCable::LIN_OUT || (cableRows[currentRowNum]->typeInt == TypeCable::SLEEP && cableRows[currentRowNum]->pin.toInt() == -1))
+			model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->component);
+		else if(cableRows[currentRowNum]->pin.toInt() != NOT_SET)
+			model->setData(model->index(currentRowNum, COLUMN_PIN), cableRows[currentRowNum]->pin);
 		model->setData(model->index(currentRowNum, COLUMN_NAME), cableRows[currentRowNum]->name);
+
 
 		QWidget* autoCheckCellWidget = new QWidget(mainLayoutWidget);
 		QWidget* moreCellWidget = new QWidget(mainLayoutWidget);
 
-		initMoreButton(currentRowNum, moreCellWidget);
+		if( cableRows[currentRowNum]->typeInt != TypeCable::CAN_OUT &&
+			cableRows[currentRowNum]->typeInt != TypeCable::LIN_OUT)
+			initMoreButton(currentRowNum, moreCellWidget);
 
-		mainTableWidget->setCellWidget(currentRowNum, COLUMN_CHECK, autoCheckCellWidget);
 		mainTableWidget->setCellWidget(currentRowNum, COLUMN_MORE, moreCellWidget);
 	}
 	resetTableDirectionLanguageFullTestAutoStand();
 	resetTableTypeLanguageFullTestAutoStand();
 }
 
-void TestWindow::slot_autoStandConnectButton_clicked()
-{
-}
